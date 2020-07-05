@@ -1,0 +1,25 @@
+doctype html
+html
+  head
+    meta content=("text/html; charset=UTF-8") http-equiv="Content-Type"
+    title DbFrontend
+    = csrf_meta_tags
+    = csp_meta_tag
+    = stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track': 'reload'
+    = javascript_pack_tag 'application', 'data-turbolinks-track': 'reload'
+  body
+    #alerts
+      - flash.each do |type, msg|
+        .alert-group
+          div class="alert alert-#{bootstrap_class_for_flash(type)} alert-dismissable fade show global-alert"
+            button.close &times;
+            - if msg.is_a? Array
+              - msg.each do |line|
+                div = line
+            - else
+              = msg
+
+          .progress style="height: 2px;"
+            div class="progress-bar progress-bar-striped bg-#{bootstrap_class_for_flash(type)}" role="progressbar" style="width:0%;"
+    = yield
+
