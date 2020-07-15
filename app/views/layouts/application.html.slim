@@ -1,17 +1,23 @@
 doctype html
 html
   head
-    meta content=("text/html; charset=UTF-8") http-equiv="Content-Type"
-    title DbFrontend
+    title = yield :title
     = csrf_meta_tags
-    = csp_meta_tag
-    = stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track': 'reload'
-    = javascript_pack_tag 'application', 'data-turbolinks-track': 'reload'
-  body
+    = favicon_link_tag '/favicon.ico'
+    = render 'partials/assets'
+    = yield :head
+
+  - body_class = [controller_name]
+  - if page_is_dark?
+    - body_class << 'bg-dark'
+    - body_class << 'text-light'
+  body class=(body_class.join ' ')
+    = include_gon
+    / flash
     #alerts
       - flash.each do |type, msg|
         .alert-group
-          div class="alert alert-#{bootstrap_class_for_flash(type)} alert-dismissable fade show global-alert"
+          div class="alert #{bootstrap_alert_class_for_flash(type)} alert-dismissable fade show global-alert"
             button.close &times;
             - if msg.is_a? Array
               - msg.each do |line|
@@ -21,5 +27,10 @@ html
 
           .progress style="height: 2px;"
             div class="progress-bar progress-bar-striped bg-#{bootstrap_class_for_flash(type)}" role="progressbar" style="width:0%;"
-    = yield
 
+    = render 'partials/nav'
+    #wrapper
+      #main
+        = yield
+    = render 'partials/footer'
+    = yield :page_script

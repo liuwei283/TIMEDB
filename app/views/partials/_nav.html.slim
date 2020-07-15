@@ -1,0 +1,73 @@
+- use_dark = page_is_dark?
+#topbar.nav.navbar.navbar-expand-md class=(use_dark ? 'navbar-dark' : 'navbar-light')
+  .container
+    = link_to root_url, id: 'sidebarCollapse', class: 'navbar-brand'
+      / img.mr-2 src=(use_dark ? '/favicon-w.png' : '/favicon.png') alt="DOAP"
+      span.font-weight-bold Oral Microbiota
+    button.navbar-toggler type="button" data-toggle="collapse" data-target=".dual-collapse2"
+      span.navbar-toggler-icon
+
+    .collapse.navbar-collapse.order-1.order-md-0.dual-collapse2
+      ul.navbar-nav.ml-auto
+        - caret_icon = 'caret-down'
+        / - if user_signed_in?
+        /   li.nav-item
+        /     - if current_user.has_role? :developer
+        /       = link_to user_home_path, class: 'nav-link' do
+        /         = icon 'fa', 'home'
+        /         | Home
+        /     - elsif current_user.has_role? :researcher
+        /       = link_to user_projects_path, class: 'nav-link' do
+        /         = icon 'fa', 'home'
+        /         | Home
+        /     - else
+        /       = link_to user_data_path, class: 'nav-link' do
+        /         = icon 'fa', 'home'
+        /         | Home
+        li.nav-item
+          = link_to root_path, class: 'nav-link' do
+            = icon 'fa', 'home'
+            | Home
+        li.nav-item.dropdown
+          = link_to '#', class: 'nav-link dropdown-toggle', data: { toggle: 'dropdown' } do
+            = icon 'fa', 'database'
+            |  Database
+            = icon 'fas', caret_icon
+          .dropdown-menu
+            = link_to '/database/tc/', class: 'dropdown-item' do
+              / = icon 'fas', 'network-wired'
+              | Taxonomic Compositions
+            = link_to '/database/fc/', class: 'dropdown-item' do
+              / = icon 'fab', 'medium-m'
+              | Functional Categories
+            = link_to '/database/aa/', class: 'dropdown-item' do
+              / = icon 'fab', 'medium-m'
+              | Antibiotic Abilities
+          li.nav-item.dropdown
+            = link_to '#', class: 'nav-link dropdown-toggle', data: { toggle: 'dropdown' } do
+              = icon 'fa', 'upload'
+              |  Submit
+              = icon 'fas', caret_icon
+            .dropdown-menu
+              = link_to '#', class: 'dropdown-item' do
+                / = icon 'fas', 'network-wired'
+                | Analysis on Taxonomic Compositions
+              = link_to '#', class: 'dropdown-item' do
+                / = icon 'fab', 'medium-m'
+                | Analysis on Functional Categories
+              = link_to '#', class: 'dropdown-item' do
+                / = icon 'fab', 'medium-m'
+                | Analysis on Antibiotic Abilities
+          li.nav-item
+            = link_to '#', class: 'nav-link' do
+              = icon 'fa', 'file-alt'
+              | Tutorial
+          li.nav-item
+            = link_to '#', class: 'nav-link' do
+              = icon 'fa', 'phone'
+              | Contact
+          li.nav-item
+            = link_to '#', class: 'nav-link' do
+              = icon 'fa', 'question'
+              | FAQ
+
