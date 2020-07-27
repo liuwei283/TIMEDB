@@ -3,21 +3,29 @@ import 'bootstrap';
 import TurbolinksAdapter from 'vue-turbolinks';
 import Vue from 'vue';
 import $ from 'jquery';
+import VJstree from 'vue-jstree';
+import uploader from 'vue-simple-uploader';
 window.jQuery = $;
 window.gon = window.gon || {};
 
 Vue.use(TurbolinksAdapter);
+Vue.use(VJstree);
+Vue.use(uploader);
 const ALERT_TIMEOUT = 5000;
 
 import TC from '../database-tc.vue';
 import FC from '../database-fc.vue';
 import AA from '../database-aa.vue';
+import JobSubmit from '../job-submit.vue';
+import JobQuery from '../job-query.vue';
 
 document.addEventListener('turbolinks:load', () => {
     const vueLoadList = [
         ['#vapp-database-tc', TC, { type: 'module' }],
         ['#vapp-database-fc', FC, { type: 'module' }],
         ['#vapp-database-aa', AA, { type: 'module' }],
+        ['#vapp-job-submit', JobSubmit],
+        ['#vapp-job-query', JobQuery],
     ];
 
     $('[data-toggle="tooltip"]').tooltip();
@@ -45,7 +53,18 @@ document.addEventListener('turbolinks:load', () => {
         });
     });
 
-    if (localStorage.getItem(DOAP_COLLAPSE_SIDEBAR_KEY) === '1') {
-        setSidebarCollapsed(true);
-    }
+    $('#alerts .alert-group').each((i, el) => {
+        const alertGroup = $(el);
+        const bar = alertGroup.find('.progress-bar');
+
+        alertGroup.find('.close').on('click', () => {
+            alertGroup.slideUp(300);
+        });
+
+        bar.css('width', '100%');
+        setTimeout(() => {
+            alertGroup.slideUp(300);
+        }, ALERT_TIMEOUT);
+    });
+
 });

@@ -844,6 +844,13 @@
   resolved "https://registry.yarnpkg.com/@csstools/convert-colors/-/convert-colors-1.4.0.tgz#ad495dc41b12e75d588c6db8b9834f08fa131eb7"
   integrity sha512-5a6wqoJV/xEdbRNKVo6I4hO3VjyDq//8q2f9I6PBAvMesJHFauXDorcNCsr9RzvsZnaWi5NYCcfyqP1QeFHFbw==
 
+"@johmun/vue-tags-input@^1.5.5":
+  version "1.6.0"
+  resolved "https://registry.yarnpkg.com/@johmun/vue-tags-input/-/vue-tags-input-1.6.0.tgz#facf5c02919ef3bcbb328dcedc1e2563ca133592"
+  integrity sha512-R1lZXlyuTDDHdIgmwGRWv9Z+l0N4WdgkGQwIS5Rgf7m3erqlsudqYLSTq+oFuJNOf9YDL2rfgxPBGM2bwFXxPQ==
+  dependencies:
+    vue "^2.5.16"
+
 "@nuxt/opencollective@^0.3.0":
   version "0.3.0"
   resolved "https://registry.yarnpkg.com/@nuxt/opencollective/-/opencollective-0.3.0.tgz#11d8944dcf2d526e31660bb69570be03f8fb72b7"
@@ -4864,6 +4871,10 @@ object-keys@^1.0.11, object-keys@^1.0.12, object-keys@^1.1.1:
   resolved "https://registry.yarnpkg.com/object-keys/-/object-keys-1.1.1.tgz#1c47f272df277f3b1daf061677d9c82e2322c60e"
   integrity sha512-NuAESUOUMrlIXOfHKzD6bpPu3tYt3xvjNdRIQ+FeT0lNb4K8WR70CaDxhuNguS2XG+GjkyMwOzsN5ZktImfhLA==
 
+object-to-formdata@lhc70000/object-to-formdata:
+  version "1.5.2"
+  resolved "https://codeload.github.com/lhc70000/object-to-formdata/tar.gz/0ace3951793704288e665d3a440a5abfa104bb05"
+
 object-visit@^1.0.0:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/object-visit/-/object-visit-1.0.1.tgz#f79c4493af0c5377b59fe39d395e41042dd045bb"
@@ -6574,6 +6585,11 @@ simple-swizzle@^0.2.2:
   dependencies:
     is-arrayish "^0.3.1"
 
+simple-uploader.js@^0.4.2:
+  version "0.4.2"
+  resolved "https://registry.yarnpkg.com/simple-uploader.js/-/simple-uploader.js-0.4.2.tgz#93852eb75bfa5dcb5d8a27694fc60e939099214d"
+  integrity sha512-pbEjt8UgLqbo8DF2PNvlVFc/df8o71YqP03RkRaEI9yJbGsHuQnYwep4gboLnj284wLastFRt01P2xpJqZUcag==
+
 snapdragon-node@^2.0.1:
   version "2.1.1"
   resolved "https://registry.yarnpkg.com/snapdragon-node/-/snapdragon-node-2.1.1.tgz#6c175f86ff14bdb0724563e8f3c1b021a286853b"
@@ -7404,6 +7420,11 @@ vue-hot-reload-api@^2.3.0:
   resolved "https://registry.yarnpkg.com/vue-hot-reload-api/-/vue-hot-reload-api-2.3.4.tgz#532955cc1eb208a3d990b3a9f9a70574657e08f2"
   integrity sha512-BXq3jwIagosjgNVae6tkHzzIk6a8MHFtzAdwhnV5VlvPTFxDCvIttgSiHWjdGoTJvXtmRu5HacExfdarRcFhog==
 
+vue-jstree@^2.1.6:
+  version "2.1.6"
+  resolved "https://registry.yarnpkg.com/vue-jstree/-/vue-jstree-2.1.6.tgz#44827ad72953ed77da6590ce4e8f37f7787f8653"
+  integrity sha512-vtUmhLbfE2JvcnYNRXauJPkNJSRO/f9BTsbxV+ESXP/mMQPVUIYI4EkSHKSEOxVDHTU7SfLp/AxplmaAl6ctcg==
+
 vue-loader@^15.9.3:
   version "15.9.3"
   resolved "https://registry.yarnpkg.com/vue-loader/-/vue-loader-15.9.3.tgz#0de35d9e555d3ed53969516cac5ce25531299dda"
@@ -7419,6 +7440,13 @@ vue-property-decorator@^9.0.0:
   version "9.0.0"
   resolved "https://registry.yarnpkg.com/vue-property-decorator/-/vue-property-decorator-9.0.0.tgz#0a5f6d47d33ca62a8876108ccfa65c2c4fb7325a"
   integrity sha512-oegTNPItuHOkW0AP1MnbdNwkmyhfsUIIXvIRHpgC18tVoEo21/i6kItyeekjMs8JgZJeuHzsaTc/DZaJFH4IWQ==
+
+vue-simple-uploader@^0.5.4:
+  version "0.5.6"
+  resolved "https://registry.yarnpkg.com/vue-simple-uploader/-/vue-simple-uploader-0.5.6.tgz#ec94974be8f5f38388ac3b7ec128ca4114fef2e0"
+  integrity sha512-nEn2626Sn9zxI5nUTIJ4KTy38GesQjDwRNwYWfMqLwyZql4rdGXxZ9XlhLKzGbsc+HEOtjWqlqraAMyyAXjhzQ==
+  dependencies:
+    simple-uploader.js "^0.4.2"
 
 vue-style-loader@^4.1.0:
   version "4.1.2"
@@ -7448,7 +7476,7 @@ vue-turbolinks@^2.0.3:
   dependencies:
     vue "^2.2.4"
 
-vue@^2.2.4, vue@^2.6.11:
+vue@^2.2.4, vue@^2.5.16, vue@^2.6.11:
   version "2.6.11"
   resolved "https://registry.yarnpkg.com/vue/-/vue-2.6.11.tgz#76594d877d4b12234406e84e35275c6d514125c5"
   integrity sha512-VfPwgcGABbGAue9+sfrD4PuwFar7gPb1yl1UK1MwXoQPAw0BKSqWfoYCT/ThFrdEVWoI51dBuyCoiNU9bZDZxQ==

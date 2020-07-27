@@ -3,7 +3,7 @@
   .container
     = link_to root_url, id: 'sidebarCollapse', class: 'navbar-brand'
       / img.mr-2 src=(use_dark ? '/favicon-w.png' : '/favicon.png') alt="DOAP"
-      span.font-weight-bold Oral Microbiota
+      span.font-weight-bold Oral Microbiome
     button.navbar-toggler type="button" data-toggle="collapse" data-target=".dual-collapse2"
       span.navbar-toggler-icon
 
@@ -49,15 +49,18 @@
               |  Submit
               = icon 'fas', caret_icon
             .dropdown-menu
-              = link_to '#', class: 'dropdown-item' do
+              = link_to '/submit/1/', class: 'dropdown-item' do
                 / = icon 'fas', 'network-wired'
                 | Analysis on Taxonomic Compositions
-              = link_to '#', class: 'dropdown-item' do
+              = link_to '/submit/2/', class: 'dropdown-item' do
                 / = icon 'fab', 'medium-m'
                 | Analysis on Functional Categories
-              = link_to '#', class: 'dropdown-item' do
+              = link_to '/submit/3/', class: 'dropdown-item' do
                 / = icon 'fab', 'medium-m'
                 | Analysis on Antibiotic Abilities
+              = link_to '/job-query/', class: 'dropdown-item' do
+                / = icon 'fab', 'medium-m'
+                | Job Query
           li.nav-item
             = link_to '#', class: 'nav-link' do
               = icon 'fa', 'file-alt'
