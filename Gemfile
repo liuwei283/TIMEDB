@@ -54,6 +54,15 @@ group :development do
   gem 'spring'
   gem 'spring-watcher-listen', '~> 2.0.0'
   gem 'rubocop'
+  # Access an interactive console on exception pages or by calling 'console' anywhere in the code.
+  gem "capistrano", "~> 3.10", require: false
+  gem "capistrano-rails", "~> 1.3", require: false
+  gem 'capistrano-bundler', require: false
+  gem 'capistrano-rbenv', require: false
+  gem 'capistrano-yarn', require: false
+  gem 'capistrano3-puma'
+  gem 'capistrano-rails-console', require: false
+  gem 'capistrano-rails-db', require: false
 end
 
 group :test do
