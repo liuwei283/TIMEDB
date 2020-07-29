@@ -114,11 +114,11 @@ module LocalApi
       end
     end
 
-    def task_info(tid, type)
+    def task_info(uid, tid, type)
       connect do |server|
         write_to_socket server,
                         entry_point: EntryPoint::TASK_INFO,
-                        arguments: { tid: tid, type: type }
+                        arguments: { uid: uid, tid: tid, type: type }
         read_from_socket server
       end
     end

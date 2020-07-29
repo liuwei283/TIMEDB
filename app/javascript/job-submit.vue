@@ -4,86 +4,94 @@
         <div class="col-md-12">
             <div id="run-app">
                 <alert-center ref="alertCenter" />
-                <h3 class="text-center">{{ app.name }}
-                    <i class="fa  fa-question-circle" v-b-tooltip
-                                       :title="app.description"></i>
-                </h3>
-                <!-- Inputs -->
-                <div class="set-input-section" ref="inputSection">
-                    <h4>Set Input Data</h4>
-                    <template v-if="displayedInputs.length > 0">
-                        <div class="row">
-                            <div class="col-md-6" v-for="input in displayedInputs" :key="input.id">
-                                <label :for="`i-${input.id}`">{{ input.name }}
-                                    <span v-if="input.required" class="required">*</span>
-                                    <i class="fa  fa-question-circle" v-b-tooltip
-                                       :title="input.description"></i>
-                                </label>
-                                <b-form-file
-                                    :id="`i-${input.id}`"
-                                    v-model="files[`i-${input.id}`]"
-                                    :state="inputValid[`i-${input.id}`]"
-                                    placeholder="Choose a file or drop it here..."
-                                    drop-placeholder="Drop file here..."
-                                    :name="`i-${input.id}`"
-                                    :required="input.required"
-                                ></b-form-file>
-                            </div>
-                        </div>
-                    </template>
-                </div>
-            
-                <!-- Params -->
-                <div class="set-param-section mt-4">
-                    <h4>Set Parameters</h4>
-                    <template v-if="displayedParams.length > 0">
-                        <div class="row">
-                            <div class="col-md-6" v-for="param in displayedParams" :key="param.id">
-                                <label :for="`p-${param.id}`">{{ param.name }}
-                                    <span v-if="param.required" class="required">*</span>
-                                    <i class="fa  fa-question-circle" v-b-tooltip
-                                       :title="param.description"></i>
-                                </label>
-                                <div v-if="param.param_type === 'string'">
-                                    <b-form-input :id="`p-${param.id}`" :value="param.default" :required="param.required"
-                                                  :name="`p-${param.id}`" :state="inputValid[`p-${param.id}`]" />
-                                </div>
-                                <div v-else-if="param.param_type === 'int'">
-                                    <b-form-input :id="`p-${param.id}`" :value="param.default" type="number" step="1"
-                                                  :required="param.required" :name="`p-${param.id}`"
-                                                  :state="inputValid[`p-${param.id}`]"/>
-                                </div>
-                                <div v-else-if="param.param_type === 'float'">
-                                    <b-form-input :id="`p-${param.id}`" :value="param.default" type="number"
-                                                  step="0.01" :required="param.required"
-                                                  :name="`p-${param.id}`" :state="inputValid[`p-${param.id}`]"/>
-                                </div>
-                                <div v-else-if="param.param_type === 'boolean'">
-                                    <b-form-select :id="`p-${param.id}`" :options="boolSelectOpt" :required="param.required"
-                                                   :name="`p-${param.id}`" :state="inputValid[`p-${param.id}`]"/>
-                                </div>
-                                <div v-else-if="param.param_type === 'enum'">
-                                    <select :id="`p-${param.id}`" class="form-control custom-select" 
-                                            :required="param.required" :name="`p-${param.id}`" 
-                                            :state="inputValid[`p-${param.id}`]">
-                                        <option v-for="option in param.options" :value="option" :key="option"
-                                                :selected="param.default == option ? 'selected' : ''">
-                                            {{ option }}
-                                        </option>
-                                    </select>
-                                </div>
-                                <div v-else-if="param.param_type === 'splitchr'">
-                                    <b-form-select :id="`p-${param.id}`" :options="boolSelectOpt" 
-                                                   :required="param.required" :name="`p-${param.id}`" 
-                                                   :state="inputValid[`p-${param.id}`]" />
-                                </div>
-                            </div>
-                        </div>
-                    </template>
-                    <p v-if="displayedParams.length == 0">No Parameters.</p>
-                </div>
                 
-                <b-btn @click="submitTask" class="float-right mt-2"><i class="fa fa-location-arrow"></i> Submit</b-btn>
+                <!-- Inputs -->
+                <div v-if="!submitted">
+                    <h3 class="text-center">{{ app.name }}
+                        <i class="fa  fa-question-circle" v-b-tooltip
+                                       :title="app.description"></i>
+                    </h3>
+                    <div class="set-input-section" ref="inputSection">
+                        <h4>Set Input Data</h4>
+                        <template v-if="displayedInputs.length > 0">
+                            <div class="row">
+                                <div class="col-md-6" v-for="input in displayedInputs" :key="input.id">
+                                    <label :for="`i-${input.id}`">{{ input.name }}
+                                        <span v-if="input.required" class="required">*</span>
+                                        <i class="fa  fa-question-circle" v-b-tooltip
+                                        :title="input.description"></i>
+                                    </label>
+                                    <b-form-file
+                                        :id="`i-${input.id}`"
+                                        v-model="files[`i-${input.id}`]"
+                                        :state="inputValid[`i-${input.id}`]"
+                                        placeholder="Choose a file or drop it here..."
+                                        drop-placeholder="Drop file here..."
+                                        :name="`i-${input.id}`"
+                                        :required="input.required"
+                                    ></b-form-file>
+                                </div>
+                            </div>
+                        </template>
+                    </div>
+                
+                    <!-- Params -->
+                    <div class="set-param-section mt-4">
+                        <h4>Set Parameters</h4>
+                        <template v-if="displayedParams.length > 0">
+                            <div class="row">
+                                <div class="col-md-6" v-for="param in displayedParams" :key="param.id">
+                                    <label :for="`p-${param.id}`">{{ param.name }}
+                                        <span v-if="param.required" class="required">*</span>
+                                        <i class="fa  fa-question-circle" v-b-tooltip
+                                        :title="param.description"></i>
+                                    </label>
+                                    <div v-if="param.param_type === 'string'">
+                                        <b-form-input :id="`p-${param.id}`" :value="param.default" :required="param.required"
+                                                    :name="`p-${param.id}`" :state="inputValid[`p-${param.id}`]" />
+                                    </div>
+                                    <div v-else-if="param.param_type === 'int'">
+                                        <b-form-input :id="`p-${param.id}`" :value="param.default" type="number" step="1"
+                                                    :required="param.required" :name="`p-${param.id}`"
+                                                    :state="inputValid[`p-${param.id}`]"/>
+                                    </div>
+                                    <div v-else-if="param.param_type === 'float'">
+                                        <b-form-input :id="`p-${param.id}`" :value="param.default" type="number"
+                                                    step="0.01" :required="param.required"
+                                                    :name="`p-${param.id}`" :state="inputValid[`p-${param.id}`]"/>
+                                    </div>
+                                    <div v-else-if="param.param_type === 'boolean'">
+                                        <b-form-select :id="`p-${param.id}`" :options="boolSelectOpt" :required="param.required"
+                                                    :name="`p-${param.id}`" :state="inputValid[`p-${param.id}`]"/>
+                                    </div>
+                                    <div v-else-if="param.param_type === 'enum'">
+                                        <select :id="`p-${param.id}`" class="form-control custom-select" 
+                                                :required="param.required" :name="`p-${param.id}`" 
+                                                :state="inputValid[`p-${param.id}`]">
+                                            <option v-for="option in param.options" :value="option" :key="option"
+                                                    :selected="param.default == option ? 'selected' : ''">
+                                                {{ option }}
+                                            </option>
+                                        </select>
+                                    </div>
+                                    <div v-else-if="param.param_type === 'splitchr'">
+                                        <b-form-select :id="`p-${param.id}`" :options="boolSelectOpt" 
+                                                    :required="param.required" :name="`p-${param.id}`" 
+                                                    :state="inputValid[`p-${param.id}`]" />
+                                    </div>
+                                </div>
+                            </div>
+                        </template>
+                        <p v-if="displayedParams.length == 0">No Parameters.</p>
+                    </div>
+                    
+                    <b-btn @click="submitTask" class="float-right mt-2"><i class="fa fa-location-arrow"></i> Submit</b-btn>
+                </div>
+                <div v-else>
+                    <b-card class="text-center job-info">
+                        <p>Job submitted successfully. The job ID is <span class="text-danger">{{jobID}}</span>. You can check your job status via this job ID in job query page. Please write down the job ID in your note book.</p>
+                    </b-card>
+                </div>
             </div>
         </div>
     </div>
@@ -118,6 +126,8 @@
                     { value: false, text: 'No' },
                 ],
                 inputValid: {},
+                submitted: true,
+                jobID: '',
             };
         },
         created() {
@@ -197,11 +207,11 @@
                             },
                         },
                     ).then((response) => {
-                        // if (response.data.code) {
-                        //     window.location.href = `/user/projects/${this.project.id}/project_app_task_monitor/?app_id=${this.app.id}&task_id=${response.data.data.task_id}`;
-                        // } else {
-                        //     alertCenter.add('danger', response.data.data);
-                        // }
+                        if (response.data.code) {
+                            this.jobID = response.data.data.task_id;
+                        } else {
+                            alertCenter.add('danger', response.data.msg);
+                        }
                     }).catch((reason) => {
                         alertCenter.add('danger', `${reason}`);
                     }).finally(() => {
@@ -251,5 +261,10 @@
 
 #run-app .set-param-section label {
 	margin-top: 10px;
+}
+#run-app .job-info{
+    min-height: 200px;
+    padding: 100px 20px;
+    font-size: 30px;
 }
 </style>
