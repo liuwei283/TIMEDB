@@ -126,7 +126,7 @@
                     { value: false, text: 'No' },
                 ],
                 inputValid: {},
-                submitted: true,
+                submitted: false,
                 jobID: '',
             };
         },
@@ -209,6 +209,7 @@
                     ).then((response) => {
                         if (response.data.code) {
                             this.jobID = response.data.data.task_id;
+                            this.submitted = true;
                         } else {
                             alertCenter.add('danger', response.data.msg);
                         }
