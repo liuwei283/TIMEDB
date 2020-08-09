@@ -38,10 +38,10 @@ class SubmitController < ApplicationController
       end
     end
     # submit task
-    print("zenmehuishi~~~~~~~~~~~~")
+    Rails.logger.info("zenmehuishi~~~~~~~~~~~~")
     client = LocalApi::Client.new
     result = client.run_module(UID, PROJECT_ID, app_id, inputs, params)
-    print(result)
+    Rails.logger.info(result)
     if result['message']['code']
       result_json[:code] = true
       result_json[:data] = {
@@ -51,7 +51,7 @@ class SubmitController < ApplicationController
     else
       result_json[:code] = false
       result_json[:data] = {
-        'msg': result['message']['data']['msg']
+        'msg': result['message']
       }
     end
     # rescue StandardError => e
