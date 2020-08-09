@@ -15,47 +15,47 @@ class SubmitController < ApplicationController
       code: false,
       data: ''
     }
-    begin
-      app_id = params[:app_id]
-      app_inputs = params[:inputs]
-      app_params = params[:params]
-      inputs = Array.new
-      params = Array.new
+    # begin
+    app_id = params[:app_id]
+    app_inputs = params[:inputs]
+    app_params = params[:params]
+    inputs = Array.new
+    params = Array.new
 
-      # store input file to user's data folder
-      app_inputs&.each do |k, v|
-        uploader = JobInputUploader.new
-        uploader.store!(v)
-        inputs.push({
-          k => '/data/' + v.original_filename,
+    # store input file to user's data folder
+    app_inputs&.each do |k, v|
+      uploader = JobInputUploader.new
+      uploader.store!(v)
+      inputs.push({
+        k => '/data/' + v.original_filename,
+      })
+    end
+    app_params&.each do |p|
+      p.each do |k, v|
+        params.push({
+          k => v,
         })
       end
-      app_params&.each do |p|
-        p.each do |k, v|
-          params.push({
-            k => v,
-          })
-        end
-      end
-      # submit task
-      client = LocalApi::Client.new
-      result = client.run_module(UID, PROJECT_ID, app_id, inputs, params)
-      if result['message']['code']
-        result_json[:code] = true
-        result_json[:data] = {
-          'msg': result['message']['data']['msg'],
-          'task_id': encode(result['message']['data']['task_id'])
-        }
-      else
-        result_json[:code] = false
-        result_json[:data] = {
-          'msg': result['message']['data']['msg']
-        }
-      end
-    rescue StandardError => e
-      result_json[:code] = false
-      result_json[:data] = e.message
     end
+    # submit task
+    client = LocalApi::Client.new
+    result = client.run_module(UID, PROJECT_ID, app_id, inputs, params)
+    if result['message']['code']
+      result_json[:code] = true
+      result_json[:data] = {
+        'msg': result['message']['data']['msg'],
+        'task_id': encode(result['message']['data']['task_id'])
+      }
+    else
+      result_json[:code] = false
+      result_json[:data] = {
+        'msg': result['message']['data']['msg']
+      }
+    end
+    # rescue StandardError => e
+    #   result_json[:code] = false
+    #   result_json[:data] = e.message
+    # end
     render json: result_json
   end
 
