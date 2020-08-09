@@ -38,6 +38,7 @@ class SubmitController < ApplicationController
       end
     end
     # submit task
+    print("zenmehuishi~~~~~~~~~~~~")
     client = LocalApi::Client.new
     result = client.run_module(UID, PROJECT_ID, app_id, inputs, params)
     print(result)
