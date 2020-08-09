@@ -28,8 +28,9 @@
         </div>
         <div class="row">
             <div class="col">
-                <div>
+                <div class="text-center">
                     <b-img :src="image_url" fluid alt="Responsive image"></b-img>
+                    <figcaption class="figure-caption text-center" style="font-size:20px;">The distributions of functional categories of oral microbiome.</figcaption>
                 </div>
             </div>
         </div>

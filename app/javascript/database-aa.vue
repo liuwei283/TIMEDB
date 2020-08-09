@@ -27,9 +27,16 @@
             </div> -->
         </div>
         <div class="row">
-            <div class="col">
-                <div>
+            <div class="col-md-6">
+                <div class="text-center">
                     <b-img :src="image_url" fluid alt="Responsive image"></b-img>
+                    <figcaption class="figure-caption text-center" style="font-size:20px;">The distributions of antibiotic abilities of salivary microbiome in different populations.</figcaption>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="text-center">
+                    <b-img :src="image_url2" fluid alt="Responsive image"></b-img>
+                    <figcaption class="figure-caption text-center" style="font-size:20px;">Main antibiotic abilities of salivary microbiome and the corresponding species. </figcaption>
                 </div>
             </div>
         </div>
@@ -64,7 +71,8 @@ export default {
                 // 'Philippines': '/images/2.3PH_sample_bacteria.pdf',
                 // 'American': '/images/2.4USA_sample_bacteria.pdf'
             },
-            image_url: '/images/5.CARD.pdf'
+            image_url: '/images/5.CARD.pdf',
+            image_url2: '/images/6.CARD-Species.pdf',
         };
     },
     watch: {

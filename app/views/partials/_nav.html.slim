@@ -34,9 +34,15 @@
             |  Database
             = icon 'fas', caret_icon
           .dropdown-menu
+            = link_to '/database/sample/', class: 'dropdown-item' do
+              / = icon 'fas', 'network-wired'
+              | Sample Information
             = link_to '/database/tc/', class: 'dropdown-item' do
               / = icon 'fas', 'network-wired'
               | Taxonomic Compositions
+            = link_to '/database/char/', class: 'dropdown-item' do
+              / = icon 'fas', 'network-wired'
+              | Characteristics of Oral Microbiome
             = link_to '/database/fc/', class: 'dropdown-item' do
               / = icon 'fab', 'medium-m'
               | Functional Categories

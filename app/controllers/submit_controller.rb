@@ -20,6 +20,7 @@ class SubmitController < ApplicationController
       app_inputs = params[:inputs]
       app_params = params[:params]
       inputs = Array.new
+      params = Array.new
 
       # store input file to user's data folder
       app_inputs&.each do |k, v|
@@ -29,10 +30,16 @@ class SubmitController < ApplicationController
           k => '/data/' + v.original_filename,
         })
       end
-
+      app_params&.each do |p|
+        p.each do |k, v|
+          params.push({
+            k => v,
+          })
+        end
+      end
       # submit task
       client = LocalApi::Client.new
-      result = client.run_module(UID, PROJECT_ID, app_id, inputs, app_params)
+      result = client.run_module(UID, PROJECT_ID, app_id, inputs, params)
       if result['message']['code']
         result_json[:code] = true
         result_json[:data] = {

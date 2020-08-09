@@ -3,7 +3,9 @@ Rails.application.routes.draw do
   root 'welcome#index'
 
   # database pages
+  get 'database/sample'
   get 'database/tc'
+  get 'database/char'
   get 'database/fc'
   get 'database/aa'
   
