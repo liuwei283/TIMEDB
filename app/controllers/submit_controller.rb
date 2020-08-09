@@ -40,6 +40,7 @@ class SubmitController < ApplicationController
     # submit task
     client = LocalApi::Client.new
     result = client.run_module(UID, PROJECT_ID, app_id, inputs, params)
+    print(result)
     if result['message']['code']
       result_json[:code] = true
       result_json[:data] = {
