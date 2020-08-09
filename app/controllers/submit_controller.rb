@@ -38,9 +38,8 @@ class SubmitController < ApplicationController
       end
     end
     # submit task
-    Rails.logger.info("zenmehuishi~~~~~~~~~~~~")
     client = LocalApi::Client.new
-    result = client.run_module(UID, PROJECT_ID, app_id, inputs, params)
+    result = client.run_module(UID, PROJECT_ID, app_id.to_i, inputs, params)
     Rails.logger.info(result)
     if result['message']['code']
       result_json[:code] = true
