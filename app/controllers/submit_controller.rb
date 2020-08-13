@@ -2,7 +2,7 @@ class SubmitController < ApplicationController
   UID = 39
   PROJECT_ID = 259
   TASK_ID = 1371
-  info = {"status"=>"success", "message"=>{"status"=>"finished", "inputs"=>[{"id"=>945, "name"=>"MetaPhlan results", "desc"=>"MetaPhlan results", "files"=>[{"name"=>"PH_sample_bacteria.xls", "path"=>"/data"}]}], "outputs"=>[{"id"=>766, "name"=>"PCoA, Shannon diversity, Top10 compositions and Comparison", "desc"=>"PCoA, Shannon diversity, Top10 compositions and Comparison", "files"=>[{"name"=>"pcoa.pdf", "path"=>"/project/TestProject/task_20200809184940"}, {"name"=>"Shannon.pdf", "path"=>"/project/TestProject/task_20200809184940"}, {"name"=>"histogram.pdf", "path"=>"/project/TestProject/task_20200809184940"}, {"name"=>"Top10_boxplot.pdf", "path"=>"/project/TestProject/task_20200809184940"}]}], "params"=>[{"id"=>1711, "name"=>"Target region", "prefix"=>"-r", "default"=>"CHN", "desc"=>"Select the samples from the target region in this oral microbiome database, e.g. CHN, JPN, PH or USA.", "value"=>"CHN"}]}}
+  
   def index
     id = params[:id]
     gon.push id: id
@@ -61,6 +61,57 @@ class SubmitController < ApplicationController
     render json: result_json
   end
 
+  def query_app_task
+    result_json = {
+      code: false,
+      data: ''
+    }
+    begin
+      job_id = decode(params[:job_id])
+      
+      if job_id
+        # submit task
+        client = LocalApi::Client.new
+        result = client.task_info(UID, job_id.to_i, 'app')
+        Rails.logger.info(result)
+        result = {"status"=>"success", "message"=>{"status"=>"finished", "inputs"=>[{"id"=>945, "name"=>"MetaPhlan results", "desc"=>"MetaPhlan results", "files"=>[{"name"=>"PH_sample_bacteria.xls", "path"=>"/data"}]}], "outputs"=>[{"id"=>766, "name"=>"PCoA, Shannon diversity, Top10 compositions and Comparison", "desc"=>"PCoA, Shannon diversity, Top10 compositions and Comparison", "files"=>[{"name"=>"pcoa.pdf", "path"=>"/project/TestProject/task_20200809184940"}, {"name"=>"Shannon.pdf", "path"=>"/project/TestProject/task_20200809184940"}, {"name"=>"histogram.pdf", "path"=>"/project/TestProject/task_20200809184940"}, {"name"=>"Top10_boxplot.pdf", "path"=>"/project/TestProject/task_20200809184940"}]}], "params"=>[{"id"=>1711, "name"=>"Target region", "prefix"=>"-r", "default"=>"CHN", "desc"=>"Select the samples from the target region in this oral microbiome database, e.g. CHN, JPN, PH or USA.", "value"=>"CHN"}]}}
+        if result['status'] == 'success'
+          result_json[:code] = true
+          if result['message']['status'] = 'finished'
+            result_json[:data] = {
+              'msg': result['message'],
+              'task_id': params[:job_id]
+            }
+          elsif result['message']['status'] = 'failed'
+            result_json[:data] = {
+              'msg': 'Job failed! ' + result['message'],
+              'task_id': params[:job_id]
+            }
+          else
+            result_json[:data] = {
+              'msg': 'Your Job is still running.',
+              'task_id': params[:job_id]
+            }
+          end
+        else
+          result_json[:data] = {
+            'msg': result['messgae'],
+            'task_id': params[:job_id]
+          }
+        end
+      else
+        result_json[:code] = true
+        result_json[:data] = {
+          'msg': 'Job not found!',
+          'task_id': params[:job_id]
+        }
+      end
+    rescue StandardError => e
+      result_json[:code] = false
+      result_json[:data] = e.message
+    end
+    render json: result_json
+  end
 
   def encode(id)
     hashids = Hashids.new("this is my salt", 16)

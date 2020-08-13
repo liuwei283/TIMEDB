@@ -13,5 +13,6 @@ Rails.application.routes.draw do
   get 'submit/:id', to: 'submit#index', as: 'submit'
   get 'job-query', to: 'submit#query', as: 'query'
   post 'submit-app-task', to: 'submit#submit_app_task', format: 'json'
+  post 'query-app-task', to: 'submit#query_app_task', format: 'json'
   mount Deltadb::Engine => "/db"
 end
