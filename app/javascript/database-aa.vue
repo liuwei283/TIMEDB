@@ -66,13 +66,13 @@ export default {
             population: 'Chinese',
             populations: ['Chinese'],
             images: {
-                'Chinese': '/images/4.KEGG.pdf',
-                // 'Japanese': '/images/2.2JPN_sample_bacteria.pdf',
-                // 'Philippines': '/images/2.3PH_sample_bacteria.pdf',
-                // 'American': '/images/2.4USA_sample_bacteria.pdf'
+                'Chinese': '/images/4.KEGG.png',
+                // 'Japanese': '/images/2.2JPN_sample_bacteria.png',
+                // 'Philippines': '/images/2.3PH_sample_bacteria.png',
+                // 'American': '/images/2.4USA_sample_bacteria.png'
             },
-            image_url: '/images/5.CARD.pdf',
-            image_url2: '/images/6.CARD-Species.pdf',
+            image_url: '/images/5.CARD.png',
+            image_url2: '/images/6.CARD-Species.png',
         };
     },
     watch: {

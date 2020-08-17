@@ -39,7 +39,7 @@
                         <div class="col-md-12" v-for="output in data.outputs" :key="output.id">
                             <b-tab no-body :title="output.name" class="text-center">
                                 <div v-for="file in output['files']" :key="file.name">
-                                    <b-card-img bottom :src="`http://oral.deepomics.org/data${file.path}/${file.name}`" :alt="file.name" class="result-image"></b-card-img>
+                                    <b-embed bottom :src="`/data${file.path}/${file.name}`" :alt="file.name" class="result-image"></b-embed>
                                 </div>
                             </b-tab>
                         </div>
