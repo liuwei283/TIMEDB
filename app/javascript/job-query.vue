@@ -36,9 +36,11 @@
             >
                 <div v-if="code">
                     <b-tabs>
-                        <div class="col-md-12" v-for="output in data.outputs[0]['files']" :key="output.name">
+                        <div class="col-md-12" v-for="output in data.outputs" :key="output.id">
                             <b-tab no-body :title="output.name" class="text-center">
-                                <b-card-img bottom :src="`http://oral.deepomics.org/data${output.path}/${output.name}`" :alt="output.name" class="result-image"></b-card-img>
+                                <div v-for="file in output['files']" :key="file.name">
+                                    <b-card-img bottom :src="`http://oral.deepomics.org/data${file.path}/${file.name}`" :alt="file.name" class="result-image"></b-card-img>
+                                </div>
                             </b-tab>
                         </div>
                         <!-- <b-tab title="Job Information">
@@ -126,11 +128,12 @@ export default {
             this.submitted = false;
         },
         example_one(){
-            this.job_id = 'MObe2EAV4RGzKQlj';
+            this.job_id = 'yOLQ9xABM20vlp4j';
             this.searchJob();
         },
         example_two(){
-
+            this.job_id = 'PrpK9kd9MPdnyqb3';
+            this.searchJob();
         },
     },
     components: {
