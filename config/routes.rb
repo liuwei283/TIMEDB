@@ -3,7 +3,7 @@ Rails.application.routes.draw do
   root 'welcome#index'
   # get 'tutorial', to: 'welcome#tutorial', as: 'tutorial'
   get 'contact', to: 'welcome#contact', as: 'contact'
-  get 'tutorial', to: redirect('docs/index.html')
+  get 'docs', to: redirect('docs/index.html')
 
 
   # database pages
