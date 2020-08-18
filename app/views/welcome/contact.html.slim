@@ -2,31 +2,17 @@
   .container
     h1.display-4.font-weight-bold.text-center Contact us
 .container
-  .row.form-container
-    form.contact-form action='/welcome/send_contact_msg' method='post'
-      = hidden_field_tag :authenticity_token, form_authenticity_token
-      .col-md-12
-        p.lead.mt-4.font-weight-bold
-          | We welcome questions, feedback, and feature requests from users. Also, you can email 
-          a href="mailto:platform.cityu@gmail.com" target="_blank" rel="noopener" platform.cityu@gmail.com
-          |  to contact us.
-      .col-md-6
-        .form-group
-          label for='full_name'
-            | Full Name
-            span.text-danger *
-          input#full_name.form-control type='string' required='true' name='full_name'
-      .col-md-6
-        .form-group
-          label for='email'
-            | Email Address 
-            span.text-danger *
-          input#email.form-control type='email' required='true' name='email'
-      .col-md-12
-        .form-group
-          label for='message'
-            | Message 
-            span.text-danger *
-          textarea#message.form-control rows='10' required='true' name='message'
-      .col-md-12
-        button.btn.btn-success.float-right type='submit' Send
+  card.text-center
+    h3 Authors
+    li LI Yinhu, yinhuli2-c@my.cityu.edu.hk
+    li FENG Xikang, fxk@nwpu.edu.cn
+    li Yiqi Jiang, yiqijiang3-c@my.cityu.edu.hk 
+    li LI Shiying, cherineleee@gmail.com
+    li LI Shuai Cheng, shuaicli@cityu.edu.hk 
+
+    p If you have any questions or suggestions, you can contact us by sending an email to yinhuli2-c@my.cityu.edu.hk or shuaicli@cityu.edu.hk.
+
+    p All rights are reserved to Prof. LI Shuai Cheng.
+
+  div 
+    script type="text/javascript" src="//rf.revolvermaps.com/0/0/8.js?i=536ucelbrcc&amp;m=0&amp;c=ff0000&amp;cr1=ffffff&amp;f=arial&amp;l=33" async="async"
