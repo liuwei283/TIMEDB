@@ -128,11 +128,11 @@ export default {
             this.submitted = false;
         },
         example_one(){
-            this.job_id = 'yOLQ9xABM20vlp4j';
+            this.job_id = 'K7VXyBAOgoA1Yoq2';
             this.searchJob();
         },
         example_two(){
-            this.job_id = 'PrpK9kd9MPdnyqb3';
+            this.job_id = 'yOLQ9xABNOAvlp4j';
             this.searchJob();
         },
     },
