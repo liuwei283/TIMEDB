@@ -2,7 +2,7 @@
 lock "~> 3.14.1"
 
 set :application, "oral_microbiome_platform"
-set :repo_url, "git@gitlab.deepomics.org:xikanfeng2/oral-microbiome-platform.git"
+set :repo_url, "git@delta.cs.cityu.edu.hk:xikanfeng2/oral-microbiome-platform.git"
 
 # Default branch is :master
 # ask :branch, `git rev-parse --abbrev-ref HEAD`.chomp
