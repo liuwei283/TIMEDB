@@ -3,7 +3,7 @@
   .container
     = link_to root_url, id: 'sidebarCollapse', class: 'navbar-brand'
       / img.mr-2 src=(use_dark ? '/favicon-w.png' : '/favicon.png') alt="DOAP"
-      span.font-weight-bold Oral Microbiome
+      span.font-weight-bold Metagenomics
     button.navbar-toggler type="button" data-toggle="collapse" data-target=".dual-collapse2"
       span.navbar-toggler-icon
 
@@ -34,7 +34,7 @@
             |  Database
             = icon 'fas', caret_icon
           .dropdown-menu
-            = link_to '/database/sample/', class: 'dropdown-item' do
+            = link_to projects_path, class: 'dropdown-item' do
               / = icon 'fas', 'network-wired'
               | Sample Information
             = link_to '/database/tc/', class: 'dropdown-item' do

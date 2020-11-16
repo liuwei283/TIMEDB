@@ -1,4 +1,14 @@
 Rails.application.routes.draw do
+
+  resources :projects do
+    resources :samples do
+      collection { post :import }
+      collection {post :export_selected}
+      
+    end
+    collection { post :import }
+    collection {post :export_selected}
+  end
   # get 'welcome/index'
   root 'welcome#index'
   # get 'tutorial', to: 'welcome#tutorial', as: 'tutorial'

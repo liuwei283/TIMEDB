@@ -1,0 +1,99 @@
+<head>
+  
+  
+  <script src="https://cdn.staticfile.org/jquery/1.10.2/jquery.min.js"></script>
+  <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.22/js/jquery.dataTables.min.js"></script>
+  <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.22/css/jquery.dataTables.css">
+
+  <script type="text/javascript">
+    $(document).ready( function () { 
+      $('#Table').DataTable({
+        columnDefs: [{
+          targets: [0, -1],
+          orderable: false,
+        }],
+        scrollX: true
+
+      });
+    });
+
+    function toggle_checkall(field_name, state) {
+      var checkboxes = document.getElementsByTagName('input');
+      var count = checkboxes.length;
+      for (var i = 0; i < count; i++) {
+        if (checkboxes[i].type == "checkbox"
+            && checkboxes[i].name == field_name + "_ids[]") {
+          checkboxes[i].checked = state;
+        }
+      }
+    }
+  </script>
+
+  <style>
+    .table_cell {
+      max-height: 100px;
+      overflow: hidden;
+    }
+  </style>
+
+  
+</head>
+
+<body>
+
+<h1>Listing projects</h1>
+
+<p>
+  Download all projects information:
+  <%= link_to "CSV", projects_path(format: "csv") %>
+</p>
+
+<%= form_tag export_selected_projects_path(format: "csv"), multipart: true do %> 
+
+  <table id="Table" class="display">
+    <thead>
+      <th>
+        <input type="checkbox" onclick="toggle_checkall('project', this.checked);" />
+      </th>
+      <% @attrs.each do |attr| %>
+      <th> <%= attr.capitalize %> </th>
+      <% end %>
+      <th>Action</th>
+    </thead>
+
+    <tbody>
+      <% @projects.each do |project| %>
+      
+        <tr>
+          <td><%= check_box_tag "project_ids[]", project.id %></td>
+          <% @attrs.each do |attr| %>
+            <td> 
+              <div class="table_cell"> 
+                <%= project[attr] %> 
+              </div>
+            </td>
+          <% end %>
+          
+          <td>
+            <%= link_to 'Show', project_path(project) %>
+            <%= link_to 'Delete', project_path(project), method: :delete,
+                    data: { confirm: 'Are you sure?' } %>
+
+            <%= link_to 'Edit', edit_project_path(project) %>
+          </td>
+        </tr>
+      
+      <% end %>
+    </tbody>
+
+  </table>
+  <%= submit_tag "export selected" %>
+<% end %>
+
+
+<%#<%= link_to  "Add", "/projects/new" %>
+<%= form_tag import_projects_path, multipart: true do %>
+  <%= file_field_tag :file %>
+  <%= submit_tag "Import project from csv" %>
+<% end %>
+</body>

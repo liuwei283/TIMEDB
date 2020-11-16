@@ -1,0 +1,30 @@
+<%= form_for([@project, @sample]) do |f| %>
+
+  <% if @sample.errors.any? %>
+    <div id="error_explanation">
+      <h2>
+        <%= pluralize(@sample.errors.count, "error") %> prohibited
+        this sample from being saved:
+      </h2>
+      <ul>
+        <% @sample.errors.full_messages.each do |msg| %>
+          <li><%= msg %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+  
+  <p>
+    <%= f.label :name %><br>
+    <%= f.text_field :sample_name %>
+  </p>
+
+  <p>
+    <%= f.label :age %><br>
+    <%= f.text_field :host_age %>
+  </p>
+  
+  <p>
+    <%= f.submit %>
+  </p>
+<% end %>

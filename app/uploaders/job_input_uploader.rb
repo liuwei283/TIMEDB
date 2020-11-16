@@ -11,7 +11,7 @@ class JobInputUploader < CarrierWave::Uploader::Base
   # This is a sensible default for uploaders that are meant to be mounted:
   def store_dir
     # "uploads/#{model.class.to_s.underscore}/#{mounted_as}/#{model.id}"
-    "/home/platform/omics_rails/current/media/user/oral_microbiome_platform/data"
+    "/home/platform/omics_rails/current/media/user/meta_platform/data"
     # "~/Downloads"
     # nil
   end

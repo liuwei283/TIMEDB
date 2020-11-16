@@ -1,0 +1,125 @@
+<head>
+  
+  
+  <script src="https://cdn.staticfile.org/jquery/1.10.2/jquery.min.js"></script>
+  <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.22/js/jquery.dataTables.min.js"></script>
+  <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.22/css/jquery.dataTables.css">
+
+  <script type="text/javascript">
+    $(document).ready( function () { 
+      $('#Table').DataTable({
+        columnDefs: [{
+          targets: [0, -1],
+          orderable: false,
+        }],
+        scrollX: true
+      }); 
+    } );
+
+    function toggle_checkall(field_name, state) {
+      var checkboxes = document.getElementsByTagName('input');
+      var count = checkboxes.length;
+      for (var i = 0; i < count; i++) {
+        if (checkboxes[i].type == "checkbox"
+            && checkboxes[i].name == field_name + "_ids[]") {
+          checkboxes[i].checked = state;
+        }
+      }
+    }
+  </script>
+
+  <style>
+    .table_cell {
+      max-height: 100px;
+      overflow: hidden;
+    }
+  </style>
+
+  
+</head>
+
+<body>
+<h1>
+  Project Information
+</h1>
+<%= link_to 'Edit', edit_project_path(@project) %> 
+<%= link_to 'Back', projects_path %>
+<br/>
+
+<p>
+  <strong>Name:</strong>
+  <%= @project.name %>
+</p>
+ 
+<p>
+  <strong>Publication:</strong>
+  <%= @project.related_publications %>
+</p>
+
+<p>
+  <strong>Num:</strong>
+  <%= @project.num_of_samples %>
+</p>
+
+
+<br />
+
+<h2>Samples</h2>
+<p>
+  Download samples information:
+  <%= link_to "CSV", project_path(format: "csv") %>
+</p>
+
+
+<%= form_tag export_selected_project_samples_path(@project,format: "csv"), multipart: true do %>  
+  <table id="Table" class="display">
+
+    <thead>
+      <th>
+        <input type="checkbox" onclick="toggle_checkall('sample', this.checked);" />
+      </th>
+      <% @sample_attrs.each do |attr| %>
+      <th> <%= attr.capitalize %> </th>
+      <% end %>
+      <th>Action</th>
+    </thead>
+
+    <tbody>
+      <% @project.samples.each do |sample| %>
+      
+        <tr>
+          <td><%= check_box_tag "sample_ids[]", sample.id %></td>
+          <% @sample_attrs.each do |attr| %>
+            <td> 
+              <div class="table_cell"> 
+                <%= sample[attr] %> 
+              </div>
+            </td>
+          <% end %>
+          
+          <td>
+            <%= link_to 'Show', project_sample_path(sample.project, sample) %>
+            <%= link_to 'Delete', [sample.project, sample],
+              method: :delete,
+              data: { confirm: 'Are you sure to delete ' + sample.sample_name + '?'} %>
+            <%= link_to 'Edit', edit_project_sample_path(sample.project, sample.id) %> 
+          </td>
+        </tr>
+      
+      <% end %>
+    </tbody>
+
+  </table>
+  <%= submit_tag "export selected" %>
+<% end %>
+
+<%#<%=link_to 'Add', new_project_sample_path([@project]) %>
+
+<%= form_tag import_project_samples_path([@project]), multipart: true do %>
+  <%= file_field_tag :file %>
+  <%= submit_tag "Import by csv" %>
+<% end %>
+
+</body>
+
+
