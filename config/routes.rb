@@ -1,5 +1,6 @@
 Rails.application.routes.draw do
 
+  get 'discrete_heatmap/index'
   resources :projects do
     resources :samples do
       collection { post :import }
@@ -14,7 +15,9 @@ Rails.application.routes.draw do
   # get 'tutorial', to: 'welcome#tutorial', as: 'tutorial'
   get 'contact', to: 'welcome#contact', as: 'contact'
   get 'docs', to: redirect('docs/index.html')
-
+  # read local csv file 
+  # get 'data/:name', to: 'raw_files#index'
+  post 'data/multiple', to: 'raw_files#index'
 
   # database pages
   get 'database/sample'
