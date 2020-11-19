@@ -8,9 +8,10 @@ class Sample < ApplicationRecord
 
   def self.import(file, id)
     CSV.foreach(file.path, headers: true, encoding: 'bom|utf-8') do |row|
-      h = row.to_hash
-      h[:project_id] = id
-      Sample.create! h
+      sample = find_by_sample_name(row['sample_name'])|| new
+      sample.attributes = row.to_hash.slice(*column_names)
+      sample.project_id = id
+      sample.save!
     end
   end
 

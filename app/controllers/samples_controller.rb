@@ -42,9 +42,10 @@ class SamplesController < ApplicationController
         @sample = @project.samples.find(params[:id])
          
         if @sample.update(sample_params)
-          redirect_to @project
+            update_metadata
+            redirect_to @project
         else
-          render 'edit'
+            render 'edit'
         end
     end
 
@@ -52,6 +53,7 @@ class SamplesController < ApplicationController
         @project = Project.find(params[:project_id])
         Sample.import(params[:file],params[:project_id] )
         @project.update_attribute(:num_of_samples, @project.samples.count)
+        update_metadata
         redirect_to project_path(@project), notice: "Samples imported."
     end
 
@@ -64,6 +66,18 @@ class SamplesController < ApplicationController
 
 
     private
+        def update_metadata
+            @project = Project.find(params[:project_id])
+            db_samples_info_path = File.join Rails.root, 'app', 'data', 'db', params[:project_id] +'_samples_metadata.csv'
+            csv_file = @project.samples.to_csv
+            File.open(db_samples_info_path, 'w') do |file|
+                file << csv_file
+            end
+        end
+
+        def send_selected
+        end
+
         def sample_params
             params.require(:sample).permit(:sample_name, :host_age)
         end

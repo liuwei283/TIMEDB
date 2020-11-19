@@ -56,7 +56,9 @@
         <input type="checkbox" onclick="toggle_checkall('project', this.checked);" />
       </th>
       <% @attrs.each do |attr| %>
-      <th> <%= attr.capitalize %> </th>
+        <% if attr != 'id' && attr != 'created_at' && attr != 'updated_at' %>
+          <th> <%= attr.capitalize %> </th>
+        <% end %>
       <% end %>
       <th>Action</th>
     </thead>
@@ -67,11 +69,13 @@
         <tr>
           <td><%= check_box_tag "project_ids[]", project.id %></td>
           <% @attrs.each do |attr| %>
-            <td> 
-              <div class="table_cell"> 
-                <%= project[attr] %> 
-              </div>
-            </td>
+            <% if attr != 'id' && attr != 'created_at' && attr != 'updated_at' %>
+              <td> 
+                <div class="table_cell"> 
+                  <%= project[attr] %> 
+                </div>
+              </td>
+            <% end %>
           <% end %>
           
           <td>

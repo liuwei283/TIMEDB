@@ -13,23 +13,16 @@
       </ul>
     </div>
   <% end %>
- 
-  <p>
-    <%= f.label :name %><br>
-    <%= f.text_field :name %>
-  </p>
- 
-  <p>
-    <%= f.label :num_of_samples %><br>
-    <%= f.text_field :num_of_samples %>
-  </p>
 
-  <p>
-    <%= f.label :related_publications %><br>
-    <%= f.text_area :related_publications %>
-  </p>
+  <% @attrs.each do |attr| %>
+    <% if attr != 'id' && attr != 'created_at' && attr != 'updated_at' %>
+      <p> 
+        <%= f.label attr.capitalize %> <br>
+        <%= f.text_field attr %>
+      </p>
 
-
+    <% end %>
+  <% end %>
   <p>
     <%= f.submit %>
   </p>
