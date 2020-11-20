@@ -8,7 +8,9 @@ class Project < ApplicationRecord
 
   def self.import(file)
     CSV.foreach(file.path, headers: true, encoding: 'bom|utf-8') do |row|
-      Project.create! row.to_hash
+      project = find_by_name(row['name'])|| new
+      project.attributes = row.to_hash.slice(*column_names)
+      project.save!
     end
   end
 

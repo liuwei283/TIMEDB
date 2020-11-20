@@ -21,18 +21,19 @@ class ProjectsController < ApplicationController
     end
   
     def edit
+        @attrs = Project.column_names
         @project = Project.find(params[:id])
     end
   
     def destroy
         @project = Project.find(params[:id])
         @project.destroy
-         
         redirect_to projects_path
     end
 
     def import
         Project.import(params[:file])
+        update_metadata
         redirect_to projects_path, notice: "Projects imported."
     end
 
@@ -61,13 +62,26 @@ class ProjectsController < ApplicationController
         @project = Project.find(params[:id])
          
         if @project.update(project_params)
-          redirect_to @project
+            update_metadata
+            redirect_to @project
         else
-          render 'edit'
+            render 'edit'
         end
     end
   
     private 
+        def update_metadata
+            @projects = Project.order(:name)
+            db_projects_info_path = File.join Rails.root, 'app', 'data', 'db', 'projects_metadata.csv'
+            csv_file = @projects.to_csv
+            File.open(db_projects_info_path, 'w') do |file|
+                file << csv_file
+            end
+        end
+
+        def send_selected
+        end
+
         def project_params
             params.require(:project).permit(:name, :related_publications)
         end

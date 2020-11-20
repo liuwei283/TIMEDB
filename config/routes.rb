@@ -4,11 +4,14 @@ Rails.application.routes.draw do
   resources :projects do
     resources :samples do
       collection { post :import }
-      collection {post :export_selected}
-      
+      collection { post :export_selected}
+      member { post :upload_seq }
+      member { post :upload_abd }
+      member { get :download_seq }
+      member { get :download_abd }
     end
     collection { post :import }
-    collection {post :export_selected}
+    collection { post :export_selected }
   end
   # get 'welcome/index'
   root 'welcome#index'

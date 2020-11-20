@@ -42,9 +42,10 @@ class SamplesController < ApplicationController
         @sample = @project.samples.find(params[:id])
          
         if @sample.update(sample_params)
-          redirect_to @project
+            update_metadata
+            redirect_to @project
         else
-          render 'edit'
+            render 'edit'
         end
     end
 
@@ -52,6 +53,7 @@ class SamplesController < ApplicationController
         @project = Project.find(params[:project_id])
         Sample.import(params[:file],params[:project_id] )
         @project.update_attribute(:num_of_samples, @project.samples.count)
+        update_metadata
         redirect_to project_path(@project), notice: "Samples imported."
     end
 
@@ -62,9 +64,64 @@ class SamplesController < ApplicationController
         end
     end
 
+    def upload_seq
+        @project = Project.find(params[:project_id])
+        @sample = @project.samples.find(params[:id])
+        n1 = @project.name
+        n2 = @sample.sample_name
+        up_file = params[:seq_file]
+        uploader = SeqUploader.new(n1, n2)
+        uploader.store!(up_file)
+        redirect_to project_sample_path, notice: "Sequencing data uploaded."
+    end
+
+    def upload_abd
+        @project = Project.find(params[:project_id])
+        @sample = @project.samples.find(params[:id])
+        n1 = @project.name
+        n2 = @sample.sample_name
+        up_file = params[:abd_file]
+        uploader = AbdUploader.new(n1, n2)
+        uploader.store!(up_file)
+        redirect_to project_sample_path, notice: "Abundance data uploaded."
+    end
+
+    def download_seq
+        @project = Project.find(params[:project_id])
+        @sample = @project.samples.find(params[:id])
+        n1 = @project.name
+        n2 = @sample.sample_name
+        send_file(
+        "#{Rails.root}/app/data/seq/#{n1}_#{n2}.fasta",
+            filename: "#{n1}_#{n2}.fasta",
+        )
+    end
+
+    def download_abd
+        @project = Project.find(params[:project_id])
+        @sample = @project.samples.find(params[:id])
+        n1 = @project.name
+        n2 = @sample.sample_name
+        send_file(
+        "#{Rails.root}/app/data/abd_files/#{n1}_#{n2}.csv",
+            filename: "#{n1}_#{n2}.csv",
+        )
+    end
 
     private
+        def update_metadata
+            @project = Project.find(params[:project_id])
+            db_samples_info_path = File.join Rails.root, 'app', 'data', 'db', params[:project_id] +'_samples_metadata.csv'
+            csv_file = @project.samples.to_csv
+            File.open(db_samples_info_path, 'w') do |file|
+                file << csv_file
+            end
+        end
+
+        def send_selected
+        end
+
         def sample_params
-            params.require(:sample).permit(:sample_name, :host_age)
+            params.require(:sample).permit(:sample_name, :host_age, :seq_file)
         end
 end

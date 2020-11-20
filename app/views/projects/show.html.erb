@@ -79,7 +79,9 @@
         <input type="checkbox" onclick="toggle_checkall('sample', this.checked);" />
       </th>
       <% @sample_attrs.each do |attr| %>
-      <th> <%= attr.capitalize %> </th>
+        <% if attr != 'id' && attr != 'created_at' && attr != 'updated_at' %>
+          <th> <%= attr.capitalize %> </th>
+        <% end %>
       <% end %>
       <th>Action</th>
     </thead>
@@ -90,11 +92,13 @@
         <tr>
           <td><%= check_box_tag "sample_ids[]", sample.id %></td>
           <% @sample_attrs.each do |attr| %>
-            <td> 
-              <div class="table_cell"> 
-                <%= sample[attr] %> 
-              </div>
-            </td>
+            <% if attr != 'id' && attr != 'created_at' && attr != 'updated_at' %>
+              <td> 
+                <div class="table_cell"> 
+                  <%= sample[attr] %> 
+                </div>
+              </td>
+            <% end %>
           <% end %>
           
           <td>
