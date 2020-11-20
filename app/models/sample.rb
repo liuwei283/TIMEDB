@@ -1,4 +1,5 @@
 class Sample < ApplicationRecord
+  mount_uploader :seq_file, SeqUploader
   belongs_to :project
   validates :sample_name, presence: true, uniqueness: { 
     message: ->(object, data) do

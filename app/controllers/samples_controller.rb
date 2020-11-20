@@ -64,6 +64,17 @@ class SamplesController < ApplicationController
         end
     end
 
+    def upload_seq
+        @project = Project.find(params[:project_id])
+        @sample = @project.samples.find(params[:id])
+        n1 = @project.name
+        n2 = @sample.sample_name
+        up_file = params[:seq_file]
+        uploader = SeqUploader.new(n1, n2)
+        uploader.store!(up_file)
+        redirect_to project_sample_path
+    end
+
 
     private
         def update_metadata
@@ -79,6 +90,6 @@ class SamplesController < ApplicationController
         end
 
         def sample_params
-            params.require(:sample).permit(:sample_name, :host_age)
+            params.require(:sample).permit(:sample_name, :host_age, :seq_file)
         end
 end

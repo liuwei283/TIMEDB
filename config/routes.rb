@@ -4,6 +4,7 @@ Rails.application.routes.draw do
     resources :samples do
       collection { post :import }
       collection {post :export_selected}
+      member {post :upload_seq}
       
     end
     collection { post :import }
