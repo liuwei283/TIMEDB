@@ -72,9 +72,41 @@ class SamplesController < ApplicationController
         up_file = params[:seq_file]
         uploader = SeqUploader.new(n1, n2)
         uploader.store!(up_file)
-        redirect_to project_sample_path
+        redirect_to project_sample_path, notice: "Sequencing data uploaded."
     end
 
+    def upload_abd
+        @project = Project.find(params[:project_id])
+        @sample = @project.samples.find(params[:id])
+        n1 = @project.name
+        n2 = @sample.sample_name
+        up_file = params[:abd_file]
+        uploader = AbdUploader.new(n1, n2)
+        uploader.store!(up_file)
+        redirect_to project_sample_path, notice: "Abundance data uploaded."
+    end
+
+    def download_seq
+        @project = Project.find(params[:project_id])
+        @sample = @project.samples.find(params[:id])
+        n1 = @project.name
+        n2 = @sample.sample_name
+        send_file(
+        "#{Rails.root}/app/data/seq/#{n1}_#{n2}.fasta",
+            filename: "#{n1}_#{n2}.fasta",
+        )
+    end
+
+    def download_abd
+        @project = Project.find(params[:project_id])
+        @sample = @project.samples.find(params[:id])
+        n1 = @project.name
+        n2 = @sample.sample_name
+        send_file(
+        "#{Rails.root}/app/data/abd_files/#{n1}_#{n2}.csv",
+            filename: "#{n1}_#{n2}.csv",
+        )
+    end
 
     private
         def update_metadata
