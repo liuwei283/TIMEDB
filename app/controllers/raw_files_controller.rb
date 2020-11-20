@@ -1,30 +1,5 @@
 class RawFilesController < ApplicationController
   protect_from_forgery :only => [:update, :destroy, :create]
-    # def index
-    #   result_json = {
-    #     requestParams: ''
-    #   }
-    #   root_path = File.join Rails.root, 'data'
-    #   request_body = JSON.parse request.body.read
-    #   file_config = request_body['fileConfig']
-    #   result_data = {}
-    #   file_config.each do |config|
-    #     file_path = File.join root_path, config['path']
-    #     if File.exist?(file_path)
-    #       data_file = File.open(file_path)
-    #       result_data[config['data']] = data_file.read
-    #       data_file.close
-    #     else 
-    #       result_json['errorMessage'] = 'cannot find file: '+ file_path
-    #       break
-    #     end
-    #   end
-      
-    #   result_json['data'] = result_data
-    #   render json: result_json
-    #   # path = File.join Rails.root, 'data', params[:name] + ".csv"
-    #   # send_file path
-    # end
     def index
       result_json = {
         requestParams: ''
@@ -51,6 +26,11 @@ class RawFilesController < ApplicationController
       render json: result_json
       # path = File.join Rails.root, 'data', params[:name] + ".csv"
       # send_file path
+    end
+
+    def public
+      path = Base64.decode64(params[:path])
+      redirect_to path
     end
   end
   
