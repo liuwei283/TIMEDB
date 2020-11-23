@@ -1,5 +1,6 @@
 Rails.application.routes.draw do
 
+  get 'demo/index'
   get 'discrete_heatmap/index'
   resources :projects do
     resources :samples do
