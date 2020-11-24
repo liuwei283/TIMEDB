@@ -1,6 +1,6 @@
 class SubmitController < ApplicationController
   UID = 45
-  PROJECT_ID = 259
+  PROJECT_ID = 287
   
   def index
     id = params[:id]
