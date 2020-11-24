@@ -40,6 +40,7 @@ class SubmitController < ApplicationController
       # submit task
       client = LocalApi::Client.new
       result = client.run_module(UID, PROJECT_ID, app_id.to_i, inputs, params)
+      Rails.loger.info("========================>")
       Rails.logger.info(result)
       if result['message']['code']
         result_json[:code] = true
@@ -67,7 +68,7 @@ class SubmitController < ApplicationController
     }
     begin
       job_id = decode(params[:job_id])
-      
+      Rails.logger.info(job_id)
       if job_id
         # submit task
         client = LocalApi::Client.new
