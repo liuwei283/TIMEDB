@@ -24,7 +24,6 @@ class SubmitController < ApplicationController
 
       # store input file to user's data folder
       app_inputs&.each do |k, v|
-        Rails.logger.debug("========================>k: #{k}, v: #{v}")
         uploader = JobInputUploader.new
         uploader.store!(v)
         inputs.push({
@@ -42,6 +41,8 @@ class SubmitController < ApplicationController
       
       # submit task
       client = LocalApi::Client.new
+      Rails.logger.debug("========================>")
+      Rails.logger.info(inputs)
       Rails.logger.info(params)
       result = client.run_module(UID, PROJECT_ID, app_id.to_i, inputs, params)
       Rails.logger.info(result['message'])
