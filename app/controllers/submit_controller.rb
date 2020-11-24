@@ -42,7 +42,7 @@ class SubmitController < ApplicationController
       
       # submit task
       client = LocalApi::Client.new
-      
+      Rails.logger.info(params)
       result = client.run_module(UID, PROJECT_ID, app_id.to_i, inputs, params)
       Rails.logger.info(result['message'])
       if result['message']['code']
