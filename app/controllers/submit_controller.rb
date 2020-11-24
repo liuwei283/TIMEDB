@@ -24,12 +24,14 @@ class SubmitController < ApplicationController
 
       # store input file to user's data folder
       app_inputs&.each do |k, v|
+        Rails.logger.debug("========================>k: #{k}, v: #{v}")
         uploader = JobInputUploader.new
         uploader.store!(v)
         inputs.push({
           k => '/data/' + v.original_filename,
         })
       end
+      
       app_params&.each do |p|
         p.each do |k, v|
           params.push({
@@ -37,11 +39,12 @@ class SubmitController < ApplicationController
           })
         end
       end
+      
       # submit task
       client = LocalApi::Client.new
+      
       result = client.run_module(UID, PROJECT_ID, app_id.to_i, inputs, params)
-      Rails.loger.info("========================>")
-      Rails.logger.info(result)
+      Rails.logger.info(result['message'])
       if result['message']['code']
         result_json[:code] = true
         result_json[:data] = {
@@ -53,6 +56,7 @@ class SubmitController < ApplicationController
         result_json[:data] = {
           'msg': result['message']
         }
+        
       end
     rescue StandardError => e
       result_json[:code] = false
