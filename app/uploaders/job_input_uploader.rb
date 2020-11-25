@@ -12,6 +12,7 @@ class JobInputUploader < CarrierWave::Uploader::Base
   def store_dir
     # "uploads/#{model.class.to_s.underscore}/#{mounted_as}/#{model.id}"
     "/home/platform/omics_rails/current/media/user/meta_platform/data"
+    #"~/data"
     # "~/Downloads"
     # nil
   end

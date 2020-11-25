@@ -1,6 +1,6 @@
 class SubmitController < ApplicationController
-  UID = 39
-  PROJECT_ID = 259
+  UID = 45
+  PROJECT_ID = 287
   
   def index
     id = params[:id]
@@ -30,6 +30,7 @@ class SubmitController < ApplicationController
           k => '/data/' + v.original_filename,
         })
       end
+      
       app_params&.each do |p|
         p.each do |k, v|
           params.push({
@@ -37,10 +38,14 @@ class SubmitController < ApplicationController
           })
         end
       end
+      
       # submit task
       client = LocalApi::Client.new
+      Rails.logger.debug("========================>")
+      Rails.logger.info(inputs)
+      Rails.logger.info(params)
       result = client.run_module(UID, PROJECT_ID, app_id.to_i, inputs, params)
-      Rails.logger.info(result)
+      Rails.logger.info(result['message'])
       if result['message']['code']
         result_json[:code] = true
         result_json[:data] = {
@@ -52,6 +57,7 @@ class SubmitController < ApplicationController
         result_json[:data] = {
           'msg': result['message']
         }
+        
       end
     rescue StandardError => e
       result_json[:code] = false
@@ -67,7 +73,7 @@ class SubmitController < ApplicationController
     }
     begin
       job_id = decode(params[:job_id])
-      
+      Rails.logger.info(job_id)
       if job_id
         # submit task
         client = LocalApi::Client.new

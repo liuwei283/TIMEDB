@@ -1,6 +1,4 @@
 module.exports = {
     test: /\.(xml|bvt)$/,
-    use: [{
-        loader: 'raw-loader'
-    }]
+    use: 'raw-loader'
 }

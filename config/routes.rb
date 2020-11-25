@@ -18,6 +18,10 @@ Rails.application.routes.draw do
   get 'contact', to: 'welcome#contact', as: 'contact'
   get 'docs', to: redirect('docs/index.html')
 
+  # read local csv file 
+  # get 'data/:name', to: 'raw_files#index'
+  get 'api/local', to: 'raw_files#index'
+  get 'api/public', to: 'raw_files#public'
 
   # database pages
   get 'database/sample'
@@ -26,9 +30,12 @@ Rails.application.routes.draw do
   get 'database/fc'
   get 'database/aa'
   
+  get 'demo', to: 'demo#show'
+
   # submit pages
   get 'submit/:id', to: 'submit#index', as: 'submit'
   get 'job-query', to: 'submit#query', as: 'query'
+  get 'viz', to: 'submit#viz'
   post 'submit-app-task', to: 'submit#submit_app_task', format: 'json'
   post 'query-app-task', to: 'submit#query_app_task', format: 'json'
   mount Deltadb::Engine => "/db"
