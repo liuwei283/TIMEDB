@@ -1,7 +1,5 @@
 Rails.application.routes.draw do
 
-  get 'demo/index'
-  get 'discrete_heatmap/index'
   resources :projects do
     resources :samples do
       collection { post :import }
@@ -22,8 +20,8 @@ Rails.application.routes.draw do
 
   # read local csv file 
   # get 'data/:name', to: 'raw_files#index'
+  get 'api/local', to: 'raw_files#index'
   get 'api/public', to: 'raw_files#public'
-  post 'data/multiple', to: 'raw_files#index'
 
   # database pages
   get 'database/sample'
@@ -32,6 +30,8 @@ Rails.application.routes.draw do
   get 'database/fc'
   get 'database/aa'
   
+  get 'demo', to: 'demo#show'
+
   # submit pages
   get 'submit/:id', to: 'submit#index', as: 'submit'
   get 'job-query', to: 'submit#query', as: 'query'
