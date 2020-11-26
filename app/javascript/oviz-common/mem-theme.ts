@@ -11,6 +11,8 @@ export function saveTheme(isDark: boolean) {
 export function savedTheme(nameOrDark: string, light?: string) {
     if (arguments.length === 1) {
         return `${arguments[0]}-${isLightTheme() ? "light" : "dark"}`;
+    } else if (arguments.length === 2) {
+        return light;
     }
     return isLightTheme() ? light : nameOrDark;
 }
