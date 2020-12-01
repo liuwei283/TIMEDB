@@ -33,11 +33,32 @@ Oviz.use.theme("mh-light", {
     },
 });
 
+const dataList = ["heatmapData", "heatmapDataP", "groupData", "rowTreeData", "colTreeData"];
 
 const SignedHeatmap = {
-    initViz
+    initViz,
+    initVizWithDeepomics,
 }
+function initVizWithDeepomics(fileDefs :any[]){
+    const filePaths = {}
+    fileDefs.forEach(f => {
+        dataList.forEach( d => {
+            if (f.dataType === d) {
+                if (filePaths[d])
+                    console.log("!error, duplicate data found");
+                else // TODO: vunarable under different system, may need testing
+                    filePaths[d] = btoa(f.path+'/'+f.name);
+            }
+        });
+    });
+    const vizOpts = generateDefaultVizOpts();
+    dataList.forEach(data => {
+        if(vizOpts.loadData[data])
+            vizOpts.loadData[data].url = `api/public?path=${filePaths[data]||''}`
+    });
+    const {visualizer} = Oviz.visualize(vizOpts);
 
+}
 function initViz() {
 
     const filePath = btoa("/signed_heatmap/demo.csv");
@@ -177,6 +198,156 @@ function initViz() {
 
     return {vizOpts};
 }
+
+function generateDefaultVizOpts(): any {
+    const vizOpts = {
+        el: "#canvas",
+        template,
+        theme: savedTheme("mh", "mh-light"),
+        components: {SignedHeatMap, BinaryTree},
+        data: {
+            config: {
+                showPAnno: true,
+                rangeMin: 0,
+                rangeMax: 0,
+                isSym: true,
+                gridH: 15,
+                rowTree: {
+                    treeHeight: 200,
+                    depthUnit: 0,
+                    gravity: Gravity.Right,
+                },
+                colTree: {
+                    treeHeight: 200,
+                    depthUnit: 0,
+                    gravity: Gravity.Bottom,
+                },
+            },
+            colors: {
+                "origin": "white",
+                "positive range": "red",
+                "negative range": "green",
+                "group1": "#EC7063",
+                "group2": "#58D68D",
+            },
+            colTreeData: null,
+        },
+        loadData: {
+            heatmapData: {
+                type: "tsv",
+                loaded(d) {
+                    const rows = [];
+                    const data = {};
+                    let [min, max] = [0, 0];
+                    d.forEach(line => {
+                        const rowData = {};
+                        const rowAttr = line[""];
+                        rows.push(rowAttr);
+                        d.columns.forEach(col => {
+                            if (col === "") return;
+                            const h = {};
+                            h["r"] = line[col];
+                            if (parseFloat(line[col]) > max) max = line[col];
+                            if (parseFloat(line[col]) < min) min = line[col];
+                            rowData[col] = h;
+                        });
+                        data[rowAttr] = rowData;
+                    });
+                    return {rows, columns: d.columns.splice(1, d.columns.length), data,
+                        range: {min, max}};
+                },
+            },
+            heatmapDataP: {
+                type: "tsv",
+                dependsOn: ["heatmapData"],
+                optional: true,
+                loaded(d) {
+                    if (!d) return;
+                    this.data.heatmapData.rows.forEach(r => {
+                        d.forEach(line => {
+                            if (line[""] === r) {
+                                this.data.heatmapData.columns.forEach(c => {
+                                    this.data.heatmapData.data[r][c]["p"] = line[c];
+                                });
+                                return;
+                            }
+                        });
+                    });
+                    return null;
+                },
+            },
+            groupData: {
+                type: "tsv",
+                loaded: function l(d) {
+                    if (!d) return;
+                    const data = {};
+                    const phylums = {};
+                    this.data.heatmapData.rows.forEach(r => {
+                        d.forEach(line => {
+                            if (line.Species === r) {
+                                data[r] = {...line};
+                            }
+                        });
+                    });
+                    d.forEach( s => {
+                        if (!phylums[s.Phylum])
+                            phylums[s.Phylum] = [s.Genus];
+                        else if (!phylums[s.Phylum].includes(s.Genus))
+                                phylums[s.Phylum].push(s.Genus);
+                    });
+                    // name Unknown to Other [phylum]
+                    Object.keys(phylums).forEach( k => {
+                        phylums[k] = phylums[k].sort();
+                        if (phylums[k].indexOf("Unknown") > 0) {
+                            phylums[k].splice(phylums[k].indexOf("Unknown"), 1);
+                            phylums[k].push("Other " + k);
+                        }
+                    });
+                    phylums["Other"] = ["Unclassified"];
+                    this.data.phylums = phylums;
+                    this.data.familyColorMap = initializeFamilyColors(phylums);
+                    return data;
+                },
+            },
+            rowTreeData: {
+                type: "newick",
+                optional: true,
+                loaded(d) {
+                    if (!d) return;
+                    d.depth = 0;
+                    const {rootNode, nodeList} = processTreeData(d);
+                    // nodeList.forEach(node => {
+                    //     if (this.data.heatmapData.rows.indexOf(node) < 0) {
+                    //         console.log("Error!! tree data not mapped with heatmap data");
+                    //     }
+                    // });
+                    this.data.heatmapData.rows = [...nodeList];
+                    return rootNode;
+                },
+            },
+            // colTreeData: {
+            //     type: "newick",
+            //     optional: true,
+            //     loaded(d) {
+            //         if (!d) return;
+            //         d.depth = 0;
+            //         const {rootNode, nodeList} = processTreeData(d);
+            //         this.data.heatmapData.columns = [...nodeList];
+            //         return rootNode;
+            //     },
+            // },
+        },
+        setup() {
+            setUpRange(this);
+            if (this.data.rowTreeData) setUpRowTree(this);
+            if (this.data.colTreeData) setUpColTree(this);
+            if (this.data.heatmapData.rows.length > 100) this.data.config.gridH = 10;
+            else if (this.data.heatmapData.rows.length > 60) this.data.config.gridH = 12;
+        }
+    };
+    return vizOpts; 
+}
+
 /*
 * Control group species have negative correlation
 * Gout group species have positive correlation
@@ -209,23 +380,6 @@ function initializeFamilyColors(phylums): any {
     colorMap["Other"] = unknown;
     return colorMap;
 }
-
-// function computeNodePosition(d): any {
-//     if (d.children) {
-//         d.children[0].depth = d.depth + d.children[0].length;
-//         d.children[1].depth = d.depth + d.children[1].length;
-//         if (!d.children[0].position) d.children[0] = computeNodePosition(d.children[0]);
-//         if (!d.children[1].position) d.children[1] = computeNodePosition(d.children[1]);
-//         d.position = (d.children[0].position + d.children[1].position) / 2;
-//     } else {
-//         d.position = nodeSeq;
-//         if (treeHeight === 0 ) {
-//             treeHeight = d.depth;
-//         }
-//         nodeSeq++;
-//     }
-//     return d;
-// }
 
 function setUpRowTree(v) {
     v.data.config.rowTree.depthUnit = v.data.config.rowTree.treeHeight / v.data.rowTreeData.height;

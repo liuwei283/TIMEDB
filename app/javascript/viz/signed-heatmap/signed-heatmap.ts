@@ -82,6 +82,7 @@ export class SignedHeatMap extends Component<SignedHeatMapOption> {
             Rows { // legend area
                 x = 500; y = 20;
                 Component {
+                    height = 60
                     Columns {
                         @for i in 10 {
                             Component{
@@ -142,6 +143,7 @@ export class SignedHeatMap extends Component<SignedHeatMapOption> {
 
     protected computeRange(min, max, isSym): any {
         if (isSym) {
+            console.log({max,min})
             let bound = (max > -min) ? max : -min;
             bound = findBound(bound, 0, 2);
             return {min: -bound, max: bound};

@@ -34,7 +34,8 @@ function initViz(): any {
         },
         loadData: {
             heatmapData: {
-                url:`api/public?path={{filePath}}`,                   
+                url:`api/public?path={{filePath}}`,
+                // dataPath: `/data/drug used/T1_sample.xls`,                   
                 type: "tsv",
                 loader(load) {
                     const fileList = findFilesByDataName( vizDataList, "heatmapData");
@@ -45,6 +46,7 @@ function initViz(): any {
                     });
                 },
                 loaded(d) {
+                    console.log(d);
                     const values = [];
                     d = d.map(sample => {
                         const rows = [];
@@ -68,6 +70,14 @@ function initViz(): any {
                     return d;
                 },
             },
+            // testData: {
+            //     content: `{"prop1":{"hello"}}`,
+            //     dataPath: "/prop1",
+            //     // type:"text",
+            //     loaded(d) {
+            //         console.log("======>"+d)
+            //     }
+            // }
         },
     };
     return {vizOpts, editorConfig};

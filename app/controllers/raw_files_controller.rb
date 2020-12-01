@@ -35,7 +35,8 @@ class RawFilesController < ApplicationController
 
     def public
       path = Base64.decode64(params[:path])
-      redirect_to path
+      absPath = File.join '/data', path
+      redirect_to absPath
     end
   end
   
