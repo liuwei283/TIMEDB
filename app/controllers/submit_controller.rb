@@ -88,11 +88,12 @@ class SubmitController < ApplicationController
           'msg': result['message']['data']['msg'],
           'task_id': encode(result['message']['data']['task_id'])
         }
+        
         if @user.task_ids.nil? || @user.task_ids == ""
           @user.task_ids = result_json[:data] ['task_id']
         else
           @user.task_ids += ("," + result_json[:data] ['task_id'])
-        end
+        end/
 
       else
         result_json[:code] = false
