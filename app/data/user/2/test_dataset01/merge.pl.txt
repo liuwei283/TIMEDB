@@ -1,0 +1,28 @@
+$list = $ARGV[0];
+open LS,$list;
+while(<LS>){
+	chomp;
+	open IN,$_;
+	$h = <IN>;
+	chomp $h;
+	@h = split /\t/,$h;
+	push @sam,$h[1];
+	while(<IN>){
+		chomp;
+		@l = split /\t/;
+		$all{$l[0]}{$h[$i]} = $l[1];
+	}
+}
+$head = join("\t",@sam);
+print "Merge\t$head\n";
+foreach $tax(keys %all){
+	$out = $tax;
+	for($i=0;$i<@sam;$i++){
+		if(exists $all{$tax}{$sam[$i]}){
+			$out .= "\t$all{$tax}{$sam[$i]}";
+		}else{
+			$out .= "\t0";
+		}
+	}
+	print "$out\n";
+}

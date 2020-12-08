@@ -1,0 +1,3 @@
+id,sample_name,original_description,curated_description,project_name,run_id,second_run_id,meta_project_id,experiment_type,nr_reads_sequenced,instrument_model,disease_phenotype,is_disease_stage_available,disease_stage,more,more_info,country,collection_date,sex,host_age,diet,longitude,lattitude,BMI,associated_phenotype,QC_status,recent_antibiotics_use,antibiotics_used,antibiotics_dose,days_without_antibiotics_use,project_id,created_at,updated_at
+10,ERR475502,,,PRJEB6070,,,,Amplicon,702839,Illumina MiSeq,,,,,,France,,Male,73,,,,26.0,D000236,1,,,,,24,2020-12-04 07:31:12 UTC,2020-12-04 07:31:12 UTC
+9,ERR475501,,,PRJEB6070,,,,Amplicon,637951,Illumina MiSeq,,,,,,France,,Male,63,,,,22.0,D015179,1,,,,,24,2020-12-04 07:31:12 UTC,2020-12-04 07:31:12 UTC
