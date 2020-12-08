@@ -5,6 +5,7 @@ class SamplesController < ApplicationController
     $seq_dir = "#{Rails.root}/app/data/seq/"
     $abd_dir = "#{Rails.root}/app/data/abd_files/"
     $tmp_dir = "#{Rails.root}/app/data/tmp/"
+    $user_stor_dir = "#{Rails.root}/app/data/user"
 
     def new
         @project = Project.find(params[:project_id])

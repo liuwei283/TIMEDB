@@ -1,5 +1,5 @@
 class WelcomeController < ApplicationController
-  $user_stor_dir = "/Users/CHE/platform/user_meta"
+  $user_stor_dir = "#{Rails.root}/app/data/user"
   def index
     # check user
     if cookies.encrypted[:user]

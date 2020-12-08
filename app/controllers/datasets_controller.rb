@@ -1,10 +1,10 @@
 class DatasetsController < ApplicationController
-    $stor_dir = "/Users/CHE/platform/user_meta"
+    $user_stor_dir = "#{Rails.root}/app/data/user"
     def show
         id = cookies.encrypted[:user]
         @user = User.find(id)
         @dataset = @user.datasets.find(params[:id])
-        user_dir = File.join($stor_dir, id.to_s)
+        user_dir = File.join($user_stor_dir, id.to_s)
         ds_dir = File.join(user_dir, @dataset.name)
         Dir.mkdir(ds_dir) unless File.exists?(ds_dir)
         @file_list = Dir.entries(ds_dir)[2..-1]
@@ -14,7 +14,7 @@ class DatasetsController < ApplicationController
         id = cookies.encrypted[:user]
         @user = User.find(id)
         @dataset = @user.datasets.find(params[:id])
-        user_dir = File.join($stor_dir, id.to_s)
+        user_dir = File.join($user_stor_dir, id.to_s)
         ds_dir = File.join(user_dir, @dataset.name)
         @dataset.destroy
         FileUtils.rm_r(ds_dir)
@@ -31,7 +31,7 @@ class DatasetsController < ApplicationController
         id = cookies.encrypted[:user]
         @user = User.find(id)
         @dataset = @user.datasets.find(params[:id])
-        user_dir = File.join($stor_dir, id.to_s)
+        user_dir = File.join($user_stor_dir, id.to_s)
         old_dir = File.join(user_dir, @dataset.name)
          
         if @dataset.update(dataset_params)
@@ -47,7 +47,7 @@ class DatasetsController < ApplicationController
         id = cookies.encrypted[:user]
         @user = User.find(id)
         @dataset = @user.datasets.find(params[:id])
-        user_dir = File.join($stor_dir, id.to_s)
+        user_dir = File.join($user_stor_dir, id.to_s)
         ds_dir = File.join(user_dir, @dataset.name)
         file = File.join(ds_dir, params[:file_name])
         send_file file
@@ -64,7 +64,7 @@ class DatasetsController < ApplicationController
         @dataset = @user.datasets.create(dataset_params)
         @user.update_attribute(:dataset_n, @user.datasets.count)
         if @dataset.save
-            user_dir = File.join($stor_dir, id.to_s)
+            user_dir = File.join($user_stor_dir, id.to_s)
             ds_dir = File.join(user_dir, @dataset.name)
             Dir.mkdir(ds_dir)
             redirect_to user_dataset_path(:id => @dataset.id)
@@ -78,7 +78,7 @@ class DatasetsController < ApplicationController
         id = cookies.encrypted[:user]
         @user = User.find(id)
         @dataset = @user.datasets.find(params[:id])
-        user_dir = File.join($stor_dir, id.to_s)
+        user_dir = File.join($user_stor_dir, id.to_s)
         ds_dir = File.join(user_dir, @dataset.name)
         File.open(File.join(ds_dir, up_file.original_filename), 'wb') do |file|
             file.write(up_file.read)

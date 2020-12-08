@@ -1,7 +1,7 @@
 class SubmitController < ApplicationController
   UID = 45
   PROJECT_ID = 289
-  $user_stor_dir = "/Users/CHE/platform/user_meta"
+  $user_stor_dir = "#{Rails.root}/app/data/user"
   
   def index
     id = params[:id]
