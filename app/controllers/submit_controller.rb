@@ -90,9 +90,11 @@ class SubmitController < ApplicationController
         }
 
         if @user.task_ids.nil? || @user.task_ids == ""
-          @user.task_ids = result_json[:data] ['task_id']
+          @user.update_attribute(:task_ids, result_json[:data] ['task_id'])
         else
-          @user.task_ids += ("," + result_json[:data] ['task_id'])
+          current_ids = @user.task_ids
+          current_ids += ("," + result_json[:data] ['task_id'])
+          @user.update_attribute(:task_ids, current_ids)
         end
         @user.save
 
