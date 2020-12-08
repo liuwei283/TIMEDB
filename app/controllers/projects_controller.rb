@@ -2,6 +2,10 @@ class ProjectsController < ApplicationController
     http_basic_authenticate_with name: "admin", password: "chelijia",
     except: [:index, :show]
 
+    $seq_dir = "#{Rails.root}/app/data/seq/"
+    $abd_dir = "#{Rails.root}/app/data/abd_files/"
+    $tmp_dir = "#{Rails.root}/app/data/tmp/"
+
     def index
         @projects = Project.order(:name)
         @attrs = Project.column_names
@@ -14,6 +18,10 @@ class ProjectsController < ApplicationController
     def show
         @project = Project.find(params[:id])
         @sample_attrs = Sample.column_names
+        id = cookies.encrypted[:user]
+        @user = User.find(id)
+        user_dir = File.join($stor_dir, id.to_s)
+        @datasets = @user.datasets
         respond_to do |format|
             format.html
             format.csv { send_data @project.samples.to_csv }
@@ -39,9 +47,7 @@ class ProjectsController < ApplicationController
 
     def export_selected
         @projects = Project.order(:name)
-        respond_to do |format|
-            format.csv {send_data @projects.selected_to_csv(params[:project_ids])}
-        end
+        send_data @projects.selected_to_csv(params[:project_ids])
     end
 
     def new
@@ -56,6 +62,15 @@ class ProjectsController < ApplicationController
         else
             render 'new'
         end
+    end
+
+    def download_abd_table
+        @project = Project.find(params[:id])
+        name = @project.name
+        send_file(
+            "#{$abd_dir}#{name}.csv",
+                filename: "#{name}_abd.csv",
+        )
     end
   
     def update

@@ -1,16 +1,34 @@
 class SubmitController < ApplicationController
   UID = 45
-  PROJECT_ID = 287
+  PROJECT_ID = 289
+  $user_stor_dir = "/Users/CHE/platform/user_meta"
   
   def index
     id = params[:id]
     gon.push id: id
+    uid = cookies.encrypted[:user]
+    @user = User.find(uid)
+    user_dir = File.join($user_stor_dir, uid.to_s)
+    @datasets = @user.datasets
+    data = {}
+    @datasets.each do |ds|
+      ds_name = ds.name
+      ds_dir = File.join(user_dir, ds_name)
+      file_list = Dir.entries(ds_dir)[2..-1]
+      data[ds_name] = file_list
+    end
+    gon.push select_box_option: data
+
   end
 
   def query
   end
 
   def submit_app_task
+    uid = cookies.encrypted[:user]
+    @user = User.find(uid)
+    user_dir = File.join($user_stor_dir, uid.to_s)
+
     result_json = {
       code: false,
       data: ''
@@ -19,8 +37,24 @@ class SubmitController < ApplicationController
       app_id = params[:app_id]
       app_inputs = params[:inputs]
       app_params = params[:params]
+      app_selected = params[:selected]
       inputs = Array.new
       params = Array.new
+
+      # store selected file to user's data folder
+      app_selected&.each do |k, v|
+        file_name = v.split("/")[1]
+        ds_name = v.split("/")[0]
+        file_path = File.join(user_dir, ds_name, file_name)
+        file = File.open file_path
+        uploader = JobInputUploader.new
+        Rails.logger.info("=======>#{uploader}")
+        uploader.store!(file)
+        Rails.logger.info("=======>#{uploader}")
+        inputs.push({
+          k => '/data/' + file_name
+        })
+      end
 
       # store input file to user's data folder
       app_inputs&.each do |k, v|
@@ -39,6 +73,7 @@ class SubmitController < ApplicationController
         end
       end
       
+      
       # submit task
       client = LocalApi::Client.new
       Rails.logger.debug("========================>")
@@ -52,6 +87,12 @@ class SubmitController < ApplicationController
           'msg': result['message']['data']['msg'],
           'task_id': encode(result['message']['data']['task_id'])
         }
+        if @user.task_ids == ""
+          @user.task_ids = result_json[:data] ['task_id']
+        else
+          @user.task_ids += ("," + result_json[:data] ['task_id'])
+        end
+
       else
         result_json[:code] = false
         result_json[:data] = {

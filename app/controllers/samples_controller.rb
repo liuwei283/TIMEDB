@@ -2,6 +2,10 @@ class SamplesController < ApplicationController
     http_basic_authenticate_with name: "admin", password: "chelijia",
     except: [:show]
 
+    $seq_dir = "#{Rails.root}/app/data/seq/"
+    $abd_dir = "#{Rails.root}/app/data/abd_files/"
+    $tmp_dir = "#{Rails.root}/app/data/tmp/"
+
     def new
         @project = Project.find(params[:project_id])
         @sample = @project.samples.build
@@ -57,22 +61,179 @@ class SamplesController < ApplicationController
         redirect_to project_path(@project), notice: "Samples imported."
     end
 
-    def export_selected
+    def make_selected_file
+        if params[:metadata]
+            download_selected_metadata_file
+        elsif params[:abundance]
+            download_selected_abd_file
+        elsif params[:seqence]
+            "nothing"
+
+        elsif params[:metadata2ds]
+            export_selected_metadata_dataset
+
+        elsif params[:abd2ds]
+            export_selected_abd_dataset
+
+        elsif params[:seqence]
+            "nothing"
+
+        end
+
+    end
+
+    def export_selected_metadata_dataset
+        id = cookies.encrypted[:user]
+        @user = User.find(id)
+        user_dir = File.join($stor_dir, id.to_s)
+        ds_name = params[:ds_selected]  
+        ds_dir = File.join(user_dir, ds_name) 
         @samples = Sample.order(:sample_name)
-        respond_to do |format|
-            format.csv {send_data @samples.selected_to_csv(params[:sample_ids])}
+        content = @samples.selected_to_csv(params[:sample_ids])
+        time = Time.now
+        file_path = File.join(ds_dir, "selected_metadata_#{time}.csv")
+        File.open(file_path, 'w') do |file|
+            file << content
+        end
+        redirect_to @project
+    end
+
+    def export_selected_abd_dataset
+        id = cookies.encrypted[:user]
+        @user = User.find(id)
+        user_dir = File.join($stor_dir, id.to_s)
+        ds_name = params[:ds_selected]  
+        ds_dir = File.join(user_dir, ds_name) 
+        @project = Project.find(params[:project_id])
+        time = Time.now
+        file_path = File.join(ds_dir, "selected_abd_#{time}.csv")
+        len = params[:sample_ids].length()
+        if len<1
+            redirect_to @project
+        else
+            out_json = {}
+            params[:sample_ids].each_with_index do |id, index|
+                @sample = @project.samples.find(id)
+                n1 = @project.name
+                n2 = @sample.sample_name
+                file_current = "#{$abd_dir}#{n1}_#{n2}.tsv"
+                i = index
+                File.readlines(file_current).each_with_index do |line, index2|
+                    if index2 >0
+                        contents = line.split("\t")
+                        k = contents[0].chomp
+                        v = contents[1].chomp
+                        if !(out_json.key?(k))
+                            out_json[k] = Array.new(len, 0.0)
+                        end
+                        out_json[k][i] = v.to_f
+                    end
+                end
+            end
+            pj_name = @project.name
+            keys = out_json.keys
+
+
+            s1 = "#{pj_name}"
+            params[:sample_ids].each_with_index do |id, index|
+                @sample = @project.samples.find(id)
+                s_name = @sample.sample_name
+                s1 += "\t#{s_name}"
+            end
+
+            keys.each do |key|
+                s1 += "\n"
+                s1 += "#{key}"
+                i = 0
+                while i<len
+                    v = out_json[key][i]
+                    s1 += "\t#{v}"
+                    i = i+1
+                end
+            end
+            
+            File.open(file_path, 'w') do |file|
+                file << s1
+            end
+            redirect_to @project
+        end
+        
+        
+    end
+
+    
+
+
+    def download_selected_metadata_file
+        @samples = Sample.order(:sample_name)
+        send_data @samples.selected_to_csv(params[:sample_ids])
+    end
+
+    def download_selected_abd_file
+        @project = Project.find(params[:project_id])
+        file = Tempfile.new('selected_abundance.tsv')
+        len = params[:sample_ids].length()
+        if len<1
+            file.close
+            send_file file.path, :filename => "selected.tsv"
+        else
+            out_json = {}
+            params[:sample_ids].each_with_index do |id, index|
+                @sample = @project.samples.find(id)
+                n1 = @project.name
+                n2 = @sample.sample_name
+                file_current = "#{$abd_dir}#{n1}_#{n2}.tsv"
+                i = index
+                File.readlines(file_current).each_with_index do |line, index2|
+                    if index2 >0
+                        contents = line.split("\t")
+                        k = contents[0].chomp
+                        v = contents[1].chomp
+                        if !(out_json.key?(k))
+                            out_json[k] = Array.new(len, 0.0)
+                        end
+                        out_json[k][i] = v.to_f
+                    end
+                end
+            end
+            pj_name = @project.name
+            keys = out_json.keys
+
+
+            s1 = "#{pj_name}"
+            params[:sample_ids].each_with_index do |id, index|
+                @sample = @project.samples.find(id)
+                s_name = @sample.sample_name
+                s1 += "\t#{s_name}"
+            end
+
+            keys.each do |key|
+                s1 += "\n"
+                s1 += "#{key}"
+                i = 0
+                while i<len
+                    v = out_json[key][i]
+                    s1 += "\t#{v}"
+                    i = i+1
+                end
+            end
+            
+            file.write(s1)
+            file.close
+            send_file file.path, :filename => "selected.tsv"
+            /file.unlink/
         end
     end
 
-    def upload_seq
+    def download_selected_seq_file
         @project = Project.find(params[:project_id])
-        @sample = @project.samples.find(params[:id])
-        n1 = @project.name
-        n2 = @sample.sample_name
-        up_file = params[:seq_file]
-        uploader = SeqUploader.new(n1, n2)
-        uploader.store!(up_file)
-        redirect_to project_sample_path, notice: "Sequencing data uploaded."
+        params[:sample_ids].each do |id|
+            @sample = @project.samples.find(id)
+            n1 = @project.name
+            n2 = @sample.sample_name
+            send_file {"#{$seq_dir}/#{n1}_#{n2}.fasta"}
+
+        end
     end
 
     def upload_abd
@@ -81,7 +242,7 @@ class SamplesController < ApplicationController
         n1 = @project.name
         n2 = @sample.sample_name
         up_file = params[:abd_file]
-        uploader = AbdUploader.new(n1, n2)
+        uploader = AbdUploader.new("#{n1}_#{n2}")
         uploader.store!(up_file)
         redirect_to project_sample_path, notice: "Abundance data uploaded."
     end
@@ -103,9 +264,57 @@ class SamplesController < ApplicationController
         n1 = @project.name
         n2 = @sample.sample_name
         send_file(
-        "#{Rails.root}/app/data/abd_files/#{n1}_#{n2}.csv",
-            filename: "#{n1}_#{n2}.csv",
+        "#{Rails.root}/app/data/abd_files/#{n1}_#{n2}.tsv",
+            filename: "#{n1}_#{n2}.tsv",
         )
+    end
+
+    def import_abd_table
+        @project = Project.find(params[:project_id])
+        n1 = @project.name
+        up_file = params[:file]
+        uploader = AbdUploader.new(n1)
+        uploader.store!(up_file)
+        if up_file.respond_to?(:read)
+            data = up_file.read
+            lines = data.split("\n")
+            names = lines[0].chomp.split("\t")
+            n_sample = names.length() - 1
+            pj_name = names[0]
+            s_names = names[1..n_sample]
+            i = 1
+            all_json = {}
+            while i < lines.length()
+                line = lines[i]
+                buffer = line.split("\t")
+                key = buffer[0].chomp
+                all_json[key] = Array.new(n_sample, "NA")
+                for j in 1..n_sample
+                    v = buffer[j].chomp
+                    all_json[key][j-1] = v
+                end
+                i += 1
+            end
+
+            keys = all_json.keys
+            s_names.each_with_index do |s_name, index|
+                f_path = "#{$abd_dir}#{n1}_#{s_name}.tsv"
+                f = File.open(f_path, "w")
+                s = "#{n1}\t#{s_name}"
+                i = index
+                keys.each do |k|
+                    s += "\n"
+                    value = all_json[k][i]
+                    s += "#{k}\t#{value}"
+                end
+                f.write(s)
+                f.close
+            end
+
+        else
+            logger.error "Bad file_data: #{up_file.class.name}: #{up_file.inspect}"
+        end
+        redirect_to @project, notice: "ALL Abundance data uploaded."
     end
 
     private

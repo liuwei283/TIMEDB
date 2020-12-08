@@ -1,7 +1,8 @@
 class AbdUploader < CarrierWave::Uploader::Base
-  def initialize(n1, n2)
-    @name = n1 + "_" + n2
+  def initialize(n)
+    @name = n
   end
+
   # Include RMagick or MiniMagick support:
   # include CarrierWave::RMagick
   # include CarrierWave::MiniMagick
@@ -42,7 +43,7 @@ class AbdUploader < CarrierWave::Uploader::Base
   # Add a white list of extensions which are allowed to be uploaded.
   # For images you might use something like this:
   def extension_whitelist
-    %w(csv)
+    %w(tsv)
   end
 
   # Override the filename of the uploaded files:

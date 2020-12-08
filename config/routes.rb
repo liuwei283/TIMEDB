@@ -3,15 +3,28 @@ Rails.application.routes.draw do
   resources :projects do
     resources :samples do
       collection { post :import }
-      collection { post :export_selected}
+      collection { post :make_selected_file}
+      collection { post :import_abd_table}
       member { post :upload_seq }
       member { post :upload_abd }
       member { get :download_seq }
       member { get :download_abd }
     end
-    collection { post :import }
+    collection { post :import}
+    collection { post :download_selected_file }
     collection { post :export_selected }
+    member { post :download_abd_table} 
   end
+
+  resources :users do 
+    resources :datasets do
+      member { post :upload_file }
+      member { get :download_file}
+
+
+    end
+  end
+
   # get 'welcome/index'
   root 'welcome#index'
   # get 'tutorial', to: 'welcome#tutorial', as: 'tutorial'

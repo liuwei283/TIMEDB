@@ -1,11 +1,17 @@
 <head>
-  
+
   
   <script src="https://cdn.staticfile.org/jquery/1.10.2/jquery.min.js"></script>
   <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.22/js/jquery.dataTables.min.js"></script>
   <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.22/css/jquery.dataTables.css">
 
   <script type="text/javascript">
+    //debugger
+    console.log("=========")
+    $(window).unload(function() {
+      $.rails.enableFormElements($($.rails.formSubmitSelector));
+    });
+  
     $(document).ready( function () { 
       $('#Table').DataTable({
         columnDefs: [{
@@ -27,15 +33,6 @@
       }
     }
   </script>
-
-  <style>
-    .table_cell {
-      max-height: 100px;
-      overflow: hidden;
-    }
-  </style>
-
-  
 </head>
 
 <body>
@@ -68,10 +65,12 @@
 <p>
   Download samples information:
   <%= link_to "CSV", project_path(format: "csv") %>
+  Download all samples abundance:
+  <%#= link_to "", project_path(format: "csv") %>
 </p>
 
 
-<%= form_tag export_selected_project_samples_path(@project,format: "csv"), multipart: true do %>  
+<%= form_tag make_selected_file_project_samples_path(@project), multipart: true do %>  
   <table id="Table" class="display">
 
     <thead>
@@ -114,14 +113,34 @@
     </tbody>
 
   </table>
-  <%= submit_tag "export selected" %>
+
+
+
+  <%= submit_tag "dowload selected samples metadata to file", :name => 'metadata' %>
+  <%= submit_tag "download selected samples abundance to file", :name => 'abundance' %>
+  <%#= submit_tag "download selected samples sequence to file", :name => 'sequence' %>
+  <br />
+  <select id="select_box" name="ds_selected">
+    <option value="">--Please choose a file--</option>
+    <% @datasets.each do |ds|%>
+      <option value=<%=ds.name%>> <%=ds.name%></option>
+    <%end%>
+  </select>
+  <%= submit_tag "export selected metadata to dataset", :name => 'metadata2ds' %>
+  <%= submit_tag "export selected abundance to dataset", :name => 'abd2ds' %>
+
 <% end %>
 
-<%#<%=link_to 'Add', new_project_sample_path([@project]) %>
+<%#=link_to 'Download selected sequencing data', download_selected_abd_project_samples_path(@project.id) %>
 
 <%= form_tag import_project_samples_path([@project]), multipart: true do %>
   <%= file_field_tag :file %>
-  <%= submit_tag "Import by csv" %>
+  <%= submit_tag "Import metadata by csv" %>
+<% end %>
+
+<%= form_tag import_abd_table_project_samples_path([@project]), multipart: true do %>
+  <%= file_field_tag :file %>
+  <%= submit_tag "Import abundance by csv" %>
 <% end %>
 
 </body>

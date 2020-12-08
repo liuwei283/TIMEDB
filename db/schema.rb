@@ -10,10 +10,18 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_11_20_031407) do
+ActiveRecord::Schema.define(version: 2020_12_01_055516) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "datasets", force: :cascade do |t|
+    t.string "name"
+    t.bigint "user_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["user_id"], name: "index_datasets_on_user_id"
+  end
 
   create_table "deltadb_records", force: :cascade do |t|
     t.integer "kind", default: 0, null: false
@@ -78,9 +86,17 @@ ActiveRecord::Schema.define(version: 2020_11_20_031407) do
     t.bigint "project_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.string "seq_file"
     t.index ["project_id"], name: "index_samples_on_project_id"
   end
 
+  create_table "users", force: :cascade do |t|
+    t.string "name"
+    t.integer "dataset_n"
+    t.string "task_ids"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
+  add_foreign_key "datasets", "users"
   add_foreign_key "samples", "projects"
 end
