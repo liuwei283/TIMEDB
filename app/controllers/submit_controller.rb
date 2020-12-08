@@ -48,7 +48,6 @@ class SubmitController < ApplicationController
         file_path = File.join(user_dir, ds_name, file_name)
         file = File.open file_path
         uploader = JobInputUploader.new
-        Rails.logger.info("=======>#{uploader}")
         uploader.store!(file)
         Rails.logger.info("=======>#{uploader}")
         inputs.push({
@@ -60,9 +59,11 @@ class SubmitController < ApplicationController
       app_inputs&.each do |k, v|
         uploader = JobInputUploader.new
         uploader.store!(v)
-        inputs.push({
-          k => '/data/' + v.original_filename,
-        })
+	unless v.nil? || v == ""
+          inputs.push({
+            k => '/data/' + v.original_filename,
+          })
+	end
       end
       
       app_params&.each do |p|
@@ -87,7 +88,7 @@ class SubmitController < ApplicationController
           'msg': result['message']['data']['msg'],
           'task_id': encode(result['message']['data']['task_id'])
         }
-        if @user.task_ids == ""
+        if @user.task_ids.nil? || @user.task_ids == ""
           @user.task_ids = result_json[:data] ['task_id']
         else
           @user.task_ids += ("," + result_json[:data] ['task_id'])
