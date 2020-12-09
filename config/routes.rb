@@ -23,6 +23,12 @@ Rails.application.routes.draw do
   get 'api/local', to: 'raw_files#index'
   get 'api/public', to: 'raw_files#public'
 
+  get 'api/all_files/:id', to: 'viz_files#all_files'
+  get 'api/chosen_files/:id', to: 'viz_files#get_chosen_files'
+  post 'api/chosen_files/:id', to: 'viz_files#update_chosen_files'
+  post 'api/create_files/:id', to: 'viz_files#create_files'
+  get 'api/chosen_file_paths/:id', to: 'viz_files#chosen_file_paths'
+  
   # database pages
   get 'database/sample'
   get 'database/tc'
@@ -31,12 +37,18 @@ Rails.application.routes.draw do
   get 'database/aa'
   
   get 'demo', to: 'demo#show'
+  
+  scope '/visualizer' do
+    resources :analysis
+  end
 
   # submit pages
+  get 'submit/viz', to: 'submit#viz'
   get 'submit/:id', to: 'submit#index', as: 'submit'
   get 'job-query', to: 'submit#query', as: 'query'
-  get 'viz', to: 'submit#viz'
+  
   post 'submit-app-task', to: 'submit#submit_app_task', format: 'json'
   post 'query-app-task', to: 'submit#query_app_task', format: 'json'
+  post 'query-app-task-dummy', to: 'submit#query_app_task_dummy', format: 'json'
   mount Deltadb::Engine => "/db"
 end

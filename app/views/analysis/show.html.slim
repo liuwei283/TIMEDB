@@ -1,0 +1,10 @@
+- content_for :head
+    =javascript_pack_tag 'visualize-analysis'
+
+
+.viz-container
+    =render 'partials/viz_sidebar'
+    .vapp-container
+        #vapp
+/-pack_name = "viz/#{@analysis.js_module_name}"
+=javascript_pack_tag "viz/#{@analysis.js_module_name}"

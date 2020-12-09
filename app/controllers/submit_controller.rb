@@ -10,6 +10,99 @@ class SubmitController < ApplicationController
   def query
   end
 
+  def query_app_task_dummy
+    return_json_hash = {
+      status: 'success',
+      message: {
+        status: "finished",
+        outputs: [
+          {
+            id: 712,
+            name: "Pathway Enrichment",
+            files: [
+              {
+                name: "species_ko.cor.xls",
+                path: "/Pathway_enrichment"
+              },
+              {
+                name: "species.anno.xls",
+                path: "/Pathway_enrichment"
+              },
+              {
+                name: "exported_tree.newick",
+                path: "/Pathway_enrichment"
+              }
+            ]
+          },
+          {
+            id: 711,
+            name: "Drug Use",
+            desc: "Drug Use Analysis",
+            files: [
+              {
+                name: "T1_sample.xls",
+                path: "/drug_used"
+              },
+              {
+                name: "T2_sample.xls",
+                path: "/drug_used"
+              },
+              {
+                name: "T3_sample.xls",
+                path: "/drug_used"
+              }
+            ]
+          }
+        ]
+      }
+    }
+    result_json = {
+      code: true,
+      data: Array.new
+    }
+    return_json = JSON.parse(return_json_hash.to_json)
+    parsed_outputs = []
+    return_json['message']['outputs'].each do |otp|
+      
+      analysis = Analysis.find_by(name: otp['name'])
+      
+      source_files = {}
+      parsed_output = analysis.as_json
+      viz_source_files = analysis.viz_source_files.as_json
+      
+      parsed_output['files'] = {}
+      viz_source_files.each do |vsf|
+        parsed_vsf = {}
+        if vsf['allow_multiple']
+          
+          otp['files'].each do |f|
+            if vsf['output_file_name'].split.include? f['name']
+              if parsed_output['files'][vsf['data_type']]
+                parsed_output['files'][vsf['data_type']][:path].push File.join(f['path'], f['name'])
+              else
+                parsed_vsf[:path] = [File.join(f['path'], f['name'])]
+                parsed_output['files'][vsf['data_type']] = parsed_vsf
+              end
+            end
+          end
+        else
+          otp['files'].each do |f|
+            if vsf['output_file_name'] === f['name']
+              parsed_vsf[:path] =  File.join f['path'], f['name']
+              parsed_output['files'][vsf['data_type']] = parsed_vsf
+            end
+          end
+        end
+      end
+      
+      
+      result_json[:data].push(parsed_output)      
+    end
+    Rails.logger.debug("=========>#{result_json}")
+    
+    render json: result_json
+  end
+
   def submit_app_task
     result_json = {
       code: false,
@@ -41,9 +134,6 @@ class SubmitController < ApplicationController
       
       # submit task
       client = LocalApi::Client.new
-      Rails.logger.debug("========================>")
-      Rails.logger.info(inputs)
-      Rails.logger.info(params)
       result = client.run_module(UID, PROJECT_ID, app_id.to_i, inputs, params)
       Rails.logger.info(result['message'])
       if result['message']['code']

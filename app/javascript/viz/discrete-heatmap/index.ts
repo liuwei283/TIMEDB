@@ -3,10 +3,8 @@ import Vue from "vue";
 import * as Path from "path";
 
 import { editorConfig } from "./Editor";
-import { template } from "./template"
-import Editor from "vEditor.vue"
+import template from "./template.bvt"
 import {DiscreteHeatMap} from "oviz-components/discrete_heatmap" 
-
 
 import {testVizDataList, findFilesByDataName} from "utils/viz-class"
 
@@ -15,7 +13,8 @@ const defaultColors = ["white", "#C7C7C7", "red"];
 const defaultInfo = ["did not use drug", "unknown", "used drug"];
 
 const DiscreteHeatmap = {
-    initViz
+    initViz,
+    initVizWithDeepomics
 }
 
 function initViz(): any {
@@ -34,7 +33,7 @@ function initViz(): any {
         },
         loadData: {
             heatmapData: {
-                url:`api/public?path={{filePath}}`,
+                url:`/api/public?path={{filePath}}`,
                 // dataPath: `/data/drug used/T1_sample.xls`,                   
                 type: "tsv",
                 loader(load) {
@@ -46,7 +45,6 @@ function initViz(): any {
                     });
                 },
                 loaded(d) {
-                    console.log(d);
                     const values = [];
                     d = d.map(sample => {
                         const rows = [];
@@ -83,9 +81,12 @@ function initViz(): any {
     return {vizOpts, editorConfig};
 }
 
+function initVizWithDeepomics(fileDefs) {
+    
+}
+
 function genDefaultColorMap(values) {
     const colorMap = new Map();
-
     colorMap.set(0, "white");
     colorMap.set(0.5, "#C7C7C7");
     colorMap.set(1, "red");

@@ -10,10 +10,33 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_11_20_031407) do
+ActiveRecord::Schema.define(version: 2020_12_07_040957) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "analyses", force: :cascade do |t|
+    t.string "name", null: false
+    t.string "visualizer", null: false
+    t.text "desc"
+    t.bigint "analysis_category_id"
+    t.index ["analysis_category_id"], name: "index_analyses_on_analysis_category_id"
+  end
+
+  create_table "analysis_categories", force: :cascade do |t|
+    t.string "name", null: false
+  end
+
+  create_table "analysis_user_data", force: :cascade do |t|
+    t.bigint "visitor_id"
+    t.bigint "analysis_id"
+    t.text "chosen"
+    t.boolean "use_demo_file"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["analysis_id"], name: "index_analysis_user_data_on_analysis_id"
+    t.index ["visitor_id"], name: "index_analysis_user_data_on_visitor_id"
+  end
 
   create_table "deltadb_records", force: :cascade do |t|
     t.integer "kind", default: 0, null: false
@@ -41,6 +64,11 @@ ActiveRecord::Schema.define(version: 2020_11_20_031407) do
     t.integer "num_of_runs"
     t.integer "population"
     t.text "related_publications"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "raw_files", force: :cascade do |t|
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
   end
@@ -78,8 +106,37 @@ ActiveRecord::Schema.define(version: 2020_11_20_031407) do
     t.bigint "project_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.string "seq_file"
     t.index ["project_id"], name: "index_samples_on_project_id"
+  end
+
+  create_table "visitors", force: :cascade do |t|
+    t.string "session_string"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "viz_data_objects", force: :cascade do |t|
+    t.bigint "viz_source_file_id"
+    t.bigint "visitor_id"
+    t.string "file_name", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.text "file"
+    t.boolean "active"
+    t.index ["visitor_id"], name: "index_viz_data_objects_on_visitor_id"
+    t.index ["viz_source_file_id"], name: "index_viz_data_objects_on_viz_source_file_id"
+  end
+
+  create_table "viz_source_files", force: :cascade do |t|
+    t.string "name", null: false
+    t.text "desc"
+    t.string "output_file_name", null: false
+    t.string "data_type", null: false
+    t.boolean "allow_multiple"
+    t.boolean "optional"
+    t.bigint "analysis_id"
+    t.string "file_key", limit: 30
+    t.index ["analysis_id"], name: "index_viz_source_files_on_analysis_id"
   end
 
   add_foreign_key "samples", "projects"

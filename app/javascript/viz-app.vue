@@ -1,25 +1,32 @@
 <template>
-    <div>
-        <div>
-            <b-button @click="downloadSVG">Download</b-button>
-        </div>
-        <div v-if="hasEditor"> 
-            <OvizEditor :config = "conf" :editorWidth = "280"/>
-        </div>
-        <div>
-            <b-tabs>
-                    <div class="col-md-12" v-for="(output, index) in data.outputs" :key="output.id">
-                        <b-tab no-body @click="showViz(index)" :title="output.name" class="text-center">
-                        </b-tab>
+    <div v-if="submitted">
+        <b-card id="result-card" class="result-vizs"> 
+            <b-tabs pills card vertical id="result-container">
+                <div class="col-md-12" v-for="(output, index) in data.outputs" :key="output.id">
+                    <b-tab no-body @click="showViz(index)" :title="output.name" class="text-center">
+                    </b-tab>
+                </div>
+                <div> 
+                    <div id="tool-bar">
+                        <b-button @click="downloadSVG">Download</b-button>
+                        <b-button id="editor-conf" @click="toggleEditor()">Editor</b-button>
                     </div>
-                    <div id="canvas"/>
+                    <div id="viz-container"> 
+                        <div id="canvas"/>
+                        <OvizEditor :config = "conf" :is-shown="showEditor" :editorWidth = "280"/>
+                    </div>
+                </div>
             </b-tabs>
-        </div>
+        </b-card>
+    </div>
+    <div v-else>
+        <b-button @click="queryTask()">Dummy Test</b-button>
     </div>
 </template>
 
 <script>
     import Vue from 'vue';
+    import axios from 'axios';
     import BootstrapVue from 'bootstrap-vue';
     import OvizEditor from "oviz-editor";
     import {EditorDef, ItemDef} from "utils/editor-def"
@@ -27,6 +34,8 @@
     import {copyObject} from "utils/object"
     import {DiscreteHeatmap} from "viz"
     import {default as SignedHeatmap} from "viz/signed-heatmap"
+    import objectToFormData from 'object-to-formdata';
+    import { getVizByTaskOutput } from "viz"
     
 
     Vue.use(OvizEditor);
@@ -39,13 +48,24 @@
                 currentTab: 0,
                 valid_name: null,
                 willLoad: true,
+                firstRender: true,
                 submitted: false,
                 code: false,
-                hasEditor: false,
                 conf: {},
                 viz: null,
+                showEditor: true,
                 data: {
                     outputs: [
+                        {
+                            id: 210,
+                            name: "Drug Used",
+                            files: [
+                                {
+                                    name: "T1_sample.csv",
+                                    path: "/discrete-heatmap/",
+                                }
+                            ],
+                        },
                         {
                             id: 211,
                             name: "Pathway Enrichment",
@@ -76,28 +96,11 @@
                                     path: "/data/signed-heatmap/",
                                 },
                             ],
-                        },
-                        {
-                            id: 210,
-                            name: "Drug Used",
-                            files: [
-                                {
-                                    name: "T1_sample.csv",
-                                    path: "/discrete-heatmap/",
-                                }
-                            ],
-                        },
+                        }, 
                     ]
                 },
             };
         },
-        // props: {
-        //     // Must be one of 'module' or 'pipeline'
-        //     conf: {
-        //         type: EditorDef,
-        //         required: true,
-        //     },
-        // },
         methods: {
             downloadSVG() {
                 const svgContainerClone = document.getElementById("canvas").cloneNode(true) as HTMLElement;
@@ -105,51 +108,110 @@
                 const svgUrl = URL.createObjectURL(svgBlob);
                 const downloadLink = document.createElement("a");
                 downloadLink.href = svgUrl;
-                downloadLink.download = `demo.svg`;
+                downloadLink.download = `${this.data.outputs[this.currentTab].name}.svg`;
                 document.body.appendChild(downloadLink);
                 downloadLink.click();
                 document.body.removeChild(downloadLink);
             },
+            toggleEditor() {
+                this.showEditor=!this.showEditor
+            },
             showViz(outputIndex) {
-                if (outputIndex === this.currentTab) {
-                    return;
-                } else {
+                if (this.currentTab !== outputIndex) {
                     this.currentTab = outputIndex;
-                    if (outputIndex === 0) {
-                        this.viz = SignedHeatmap.initVizWithDeepomics(this.data.outputs[0].files); 
-                    } else {
-                        const viz = DiscreteHeatmap.initViz();
-                        const vizOpts = copyObject(viz.vizOpts);
-                        vizOpts.el = "#canvas";
-                        this.viz = Oviz.visualize(vizOpts).visualizer;
-                    }
+                    const {visualizer, editorConf} = getVizByTaskOutput(this.data.outputs[outputIndex]);
+                    this.viz = visualizer;
+                    this.conf = editorConf;
                 }
+            },
+            queryTask() {
+                axios.post(
+                    `/query-app-task-dummy/`,
+                    objectToFormData({'job_id': '1234355'}),
+                    {  
+                        headers: {
+                            'X-Requested-With': 'XMLHttpRequest',
+                            'X-CSRF-Token': document.head.querySelector('meta[name="csrf-token"]').content,
+                            'Content-Type': 'multipart/form-data',
+                        },
+                    },
+                ).then((response) => {
+                    console.log(response.data.data);
+                    this.data.outputs = response.data.data;
+                    this.submitted = true;
+                    // window.gon.urls = [];
+                    // window.gon.urls.chosen_file_paths = "dummytest";
+                    showViz(0);
+                }).catch((reason) => {
+                    console.log(`Error! query task failed with ${reason}`);
+                }).finally(() => {
+                    // setTimeout(() => { alertCenter.add('danger', ''); }, 2000);
+                });
             }
         },
         mounted(){
-            console.log(this.currentTab);
-            this.viz = SignedHeatmap.initVizWithDeepomics(this.data.outputs[0].files); 
-    
-            document.addEventListener("turbolinks:load", () => {
-                if ( this.willLoad ) {
-                    const viz = SignedHeatmap.initVizWithDeepomics(this.data.outputs[0].files); 
-                    this.willLoad = false;
-                }
+            if(this.submitted)
+                this.viz = SignedHeatmap.initVizWithDeepomics(this.data.outputs[0].files);
+            // document.addEventListener("turbolinks:load", () => {
+            //     if ( this.willLoad ) {
+            //         const viz = SignedHeatmap.initVizWithDeepomics(this.data.outputs[0].files); 
+            //         this.willLoad = false;
+            //     }
                 
-            })
+            // })
+        },
+        updated(){
+            if (this.firstRender) {
+                this.firstRender = false;
+                const {visualizer, editorConf} = getVizByTaskOutput(this.data.outputs[0]);
+                this.viz = visualizer;
+                this.conf = editorConf;
+            }
         }
-        // data() {
-        //  return {
-        //      conf: defaultEditorConfig(null)
-        //  }
-        // }
     }
 </script>
 
 <style scoped>
     button {
-        background: blue;
+        height:30px;
+        background: skyblue;
         color: white;
-        padding: 1rem;
+        border: none;
+        text-align:center;
+    }
+    #result-card {
+        width: 1400px;
+        height: 1000px;
+    }
+    #result-container {
+        width: 1300px;
+        height: 1000px;
+    }
+    #tool-bar {
+        height:30px;
+        background:lightgrey; 
+        position: relative;
+    }
+    #editor-conf {
+        position: absolute;
+        right: 0;
+    }
+    #canvas {
+        height: 950px;
+        width: 1100px;
+        overflow: scroll;
+    }
+    .col-md-12 {
+        width: 80px;
+    }
+    #viz-container {
+        position: relative;
+    }
+    .v-editor {
+        position: absolute;
+        top: 0;
+        right: 0;
+        z-index:20;
+        transition: all 0.3s
     }
 </style>
