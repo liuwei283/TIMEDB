@@ -1,6 +1,6 @@
 require 'test_helper'
 
-class RawFileTest < ActiveSupport::TestCase
+class AnalysisUserDatumTest < ActiveSupport::TestCase
   # test "the truth" do
   #   assert true
   # end

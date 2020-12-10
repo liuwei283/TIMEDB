@@ -19,11 +19,14 @@
                                     class="col-md-4 text-center"></b-form-input>
                 </div>
                 <p class='m-1'>Examples:
+                    <a href="javascript: void(0);" @click="example-zero">Drug Used</a>;
                     <a href="javascript: void(0);" @click="example_one">Taxonomic Compositions Analysis</a>;
                     <a href="javascript: void(0);" @click="example_two">Data Mount Evaluation</a>;
                 </p>
                 <b-button variant="secondary" class="mt-4" size="lg" 
                             @click="searchJob"><i class="fas fa-search"></i> Search</b-button>
+                <b-button variant="secondary" class="mt-4" size="lg" 
+                            @click="dummyDemo"><i class="fas fa-search"></i> Dummy Demo</b-button>
             </b-card>
         </div>
         <div v-else>
@@ -124,8 +127,42 @@ export default {
                 });
             }
         },
+        dummyDemo() {
+            axios.post(
+                    `/query-app-task/`,
+                    objectToFormData({'job_id': this.job_id}),
+                    {  
+                        headers: {
+                            'X-Requested-With': 'XMLHttpRequest',
+                            'X-CSRF-Token': document.head.querySelector('meta[name="csrf-token"]').content,
+                            'Content-Type': 'multipart/form-data',
+                        },
+                    },
+                ).then((response) => {
+                    console.log(response);
+                    this.submitted = true;
+                    if (response.data.code) {
+                        this.data = response.data.data.msg;
+                        if(this.data.status == 'finished'){
+                            this.code = true;
+                        }else{
+                            this.code = false;
+                        }
+                    } else {
+                        alertCenter.add('danger', response.data.data);
+                    }
+                }).catch((reason) => {
+                    alertCenter.add('danger', `${reason}`);
+                }).finally(() => {
+                    // setTimeout(() => { alertCenter.add('danger', ''); }, 2000);
+                });
+        },
         returnQuery(){
             this.submitted = false;
+        },
+        example_zero(){
+            this.job_id = 'yOLQ9xABNOAvlp4j';
+            this.searchJob();
         },
         example_one(){
             this.job_id = 'K7VXyBAOgoA1Yoq2';
