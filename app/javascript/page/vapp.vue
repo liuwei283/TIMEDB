@@ -43,7 +43,8 @@
                 const svgUrl = URL.createObjectURL(svgBlob);
                 const downloadLink = document.createElement("a");
                 downloadLink.href = svgUrl;
-                downloadLink.download = `demo.svg`;
+                console.log(window.gon.analysis_name)
+                downloadLink.download = `${window.gon.analysis_name || 'demo'}.svg`;
                 document.body.appendChild(downloadLink);
                 downloadLink.click();
                 document.body.removeChild(downloadLink);
@@ -53,7 +54,7 @@
             },
         },
         created() {
-            console.log("created");
+            debugger;
             event.rpcRegisterReceiver("getVue", () => this);
         }
 

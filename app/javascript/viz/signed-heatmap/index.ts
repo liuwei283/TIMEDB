@@ -40,7 +40,7 @@ const SignedHeatmap = {
 }
 
 function init() {
-    if (!window.gon || window.gon.visualizer !== 'signed-heatmap') return;
+    if (!window.gon || window.gon.module_name !== 'signed-heatmap') return;
     const vizOpts = generateDefaultVizOpts();
     const {visualizer} = Oviz.visualize(vizOpts);
     // return visualizer;

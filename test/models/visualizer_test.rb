@@ -1,6 +1,6 @@
 require 'test_helper'
 
-class VizDataObjectTest < ActiveSupport::TestCase
+class VisualizerTest < ActiveSupport::TestCase
   # test "the truth" do
   #   assert true
   # end

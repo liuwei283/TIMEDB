@@ -4,44 +4,31 @@ class AnalysisController < ApplicationController
     end
 
     def show 
-        # @analysis = Analysis.find(id:params[:id])
         @analysis = Analysis.find(params[:id])
-        required_source_files = @analysis.viz_source_files
-        required_data = []
-        required_source_files.each do |vsf|
-            # parsed_file = {
-            #     dataType: vsf.data_type,
-            #     fileName: vsf.name,
-            #     fileIndex: vsf.id,
-            #     optional: vsf.optional,
-            #     files: vsf.viz_data_objects
-            # }
-            required_data << vsf.data_type
-        end
-
+        files_info = @analysis.files_info
         if AnalysisUserDatum.where("visitor_id = ? AND analysis_id = ?",
                 session[:visitorid], params[:id]).blank?
             @analysisUserDatum = @analysis.analysis_user_data.new
-            default_chosen = {} 
-            required_source_files.each do |vsf|
-                next unless !vsf.optional
-                default_chosen[vsf.data_type] = nil
-            end
-            @analysisUserDatum.chosen =  default_chosen.as_json
+            default_chosen = {}.tap { |x|
+                files_info.each do |dataType, info|
+                    next unless !VizDataSource.find_by(data_type:dataType).optional
+                    x[dataType] = nil
+                end
+            } 
+            @analysisUserDatum.chosen =  default_chosen
             @analysisUserDatum.visitor = Visitor.find(session[:visitorid])
             @analysisUserDatum.save!
         end
 
 
-        gon.push visualizer: @analysis.visualizer,
-                 analysis_id: params[:id],
-                 visualizer: @analysis.js_module_name,
-                 required_data: required_data, 
+        gon.push module_name: @analysis.visualizer.js_module_name,
+                 analysis_name: @analysis.name,
+                 required_data: files_info.keys, 
                  urls: {
-                     all_files: "/api/all_files/#{@analysis.id}",
-                     chosen_files: "/api/chosen_files/#{@analysis.id}",
-                     chosen_file_paths: "/api/chosen_file_paths/#{@analysis.id}",
-                     create_file: "/api/create_files/#{@analysis.id}",
+                    create_file: api_analysis_create_files_path(@analysis),
+                    all_files: api_analysis_all_files_path(@analysis),
+                    chosen_files: api_analysis_chosen_files_path(@analysis),
+                    chosen_file_paths: api_analysis_chosen_file_paths_path(@analysis),
                  }
 
     end

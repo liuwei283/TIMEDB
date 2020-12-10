@@ -23,12 +23,15 @@ Rails.application.routes.draw do
   get 'api/local', to: 'raw_files#index'
   get 'api/public', to: 'raw_files#public'
 
-  get 'api/all_files/:id', to: 'viz_files#all_files'
-  get 'api/chosen_files/:id', to: 'viz_files#get_chosen_files'
-  post 'api/chosen_files/:id', to: 'viz_files#update_chosen_files'
-  post 'api/create_files/:id', to: 'viz_files#create_files'
-  get 'api/chosen_file_paths/:id', to: 'viz_files#chosen_file_paths'
-  
+  namespace :api do
+    resources :analyses, only: [] do
+      get 'all_files', to: 'viz_files#all_files', as: 'all_files'
+      get 'chosen_files', to: 'viz_files#get_chosen_files', as: 'chosen_files'
+      get 'chosen_file_paths', to: 'viz_files#chosen_file_paths', as: 'chosen_file_paths'
+      post 'chosen_files', to: 'viz_files#update_chosen_files', as: 'update_chosen_files'
+      post 'create_files', to: 'viz_files#create_files', as: 'create_files'
+    end
+  end
   # database pages
   get 'database/sample'
   get 'database/tc'

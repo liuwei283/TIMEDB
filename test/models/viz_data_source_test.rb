@@ -1,6 +1,6 @@
 require 'test_helper'
 
-class VizSourceFileTest < ActiveSupport::TestCase
+class VizDataSourceTest < ActiveSupport::TestCase
   # test "the truth" do
   #   assert true
   # end

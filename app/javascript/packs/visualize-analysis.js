@@ -1,5 +1,5 @@
 import Vue from "vue"
-import VApp from "vapp.vue"
+import VApp from "page/vapp.vue"
 import ColorPicker from "page/builtin/color-picker.vue";
 import SectionFiles from "page/builtin/section-files.vue";
 

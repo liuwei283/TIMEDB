@@ -510,7 +510,7 @@ export default class SectionFiles extends Vue {
         const result = allFiles.files
             .map(f => ({
                 value: f.id,
-                text: f.file_name,
+                text: f.name,
                 secondaryText: this.parseDate(f.created_at),
             }));
 
@@ -707,12 +707,11 @@ export default class SectionFiles extends Vue {
                     const fk: FileKey = {
                         fileIndex: f.id,
                         fileName: f.name,
-                        dataType: f.data_type,
+                        dataType: f.dataType,
                         optional: f.optional,
                         multiple: f.multiple,
                         files: f.files,
                     };
-                    console.log(fk);
                     this.fileKeys.push(fk);
                 })
 
@@ -723,8 +722,8 @@ export default class SectionFiles extends Vue {
                     fkey.files.forEach(f => {
                         this._fileById[f.id] = {
                             ...f,
-                            file_key: fkey.data_type,
-                            description: fkey.desc,
+                            file_key: fkey.dataType,
+                            // description: fkey.desc,
                             // belongs_to_sets: fileSetsContaining(f, fileSets),
                         };
                     });
@@ -733,7 +732,6 @@ export default class SectionFiles extends Vue {
                 const chosenFiles = chosen.data;
                 
                 this._appliedFiles = chosenFiles.chosen;
-                console.log(this._appliedFiles);
                 this.resetChosenFiles();
 
                 let needsUpload: any = false;
@@ -751,12 +749,12 @@ export default class SectionFiles extends Vue {
                                 break;
                             }
                             const file = this._fileById[chosenFileId];
-                            const status = file.status;
-                            if (status === "running") {
-                                needsUpload = { taskRunning: true };
-                            } else if (status === "error") {
-                                needsUpload = { taskError: true, jobid: file.jobid };
-                            }
+                            // const status = file.status;
+                            // if (status === "running") {
+                            //     needsUpload = { taskRunning: true };
+                            // } else if (status === "error") {
+                            //     needsUpload = { taskError: true, jobid: file.jobid };
+                            // }
                         }
                     }
                 }

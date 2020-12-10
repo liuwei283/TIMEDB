@@ -20,11 +20,4 @@ const environment = require('./environment')
 //         throw new Error(`The specified pack is not found.`);
 //     }
 // }
-Object.keys(environment.entry).forEach(k => {
-    console.log(`======>${k}`)
-    if (k.startsWith("viz/")) {
-        console.log(`======>${k}`)
-    }
-});
-
 module.exports = environment.toWebpackConfig()

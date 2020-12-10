@@ -9,6 +9,7 @@ declare global {
     interface GonInfo {
         urls?: any;
         required_data?: any; 
+        module_name?: string;
     }
     interface Window {
         gon: GonInfo;
