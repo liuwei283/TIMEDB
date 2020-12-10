@@ -5831,9 +5831,9 @@ osenv@0:
     os-homedir "^1.0.0"
     os-tmpdir "^1.0.0"
 
-"oviz-editor@file:../oviz-editor-v0.1.0.tgz":
+oviz-editor@../oviz-editor-v0.1.0.tgz:
   version "0.1.0"
-  resolved "file:../oviz-editor-v0.1.0.tgz#9dbf64e5ad51be1fc6e595aee1beba15c39b3988"
+  resolved "../oviz-editor-v0.1.0.tgz#9dbf64e5ad51be1fc6e595aee1beba15c39b3988"
   dependencies:
     bootstrap "^4.5.2"
     bootstrap-vue "^2.17.1"

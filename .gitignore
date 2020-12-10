@@ -271,5 +271,4 @@ tags
 
 # End of https://www.gitignore.io/api/vim,node,rails,emacs,macos,rubymine,visualstudiocode
 
-data
 uploads

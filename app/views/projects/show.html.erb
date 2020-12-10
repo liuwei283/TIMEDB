@@ -63,10 +63,14 @@
 
 <h2>Samples</h2>
 <p>
-  Download samples information:
-  <%= link_to "CSV", project_path(format: "csv") %>
-  Download all samples abundance:
-  <%#= link_to "", project_path(format: "csv") %>
+  <span class="download_span">
+    Download samples information:
+    <%= link_to "Metadata", project_path(format: "csv") %>
+  </span>
+  <span class="download_span">
+    Download all samples abundance:
+    <%= link_to "Abd", download_abd_table_project_path(format: "csv") %>
+  </span>
 </p>
 
 

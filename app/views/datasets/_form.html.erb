@@ -6,6 +6,7 @@
         <%= pluralize(@dataset.errors.count, "error") %> prohibited
         this dataset from being saved:
       </h2>
+      <br />
       <ul>
         <% @dataset.errors.full_messages.each do |msg| %>
           <li><%= msg %></li>
@@ -13,10 +14,10 @@
       </ul>
     </div>
   <% end %>
-
-  <p>
-    <%= f.label :name %><br>
-    <%= f.text_field :name %>
+  <br/>
+  <p >
+    <%= f.label :name, :class=>"form_label"%><br>
+    <%= f.text_field :name,  :class=>"form_box"%>
   </p>
-  <%= f.submit %>
+  <%= f.submit "Submit", :class=>"submit_buttom" %>
 <% end %>

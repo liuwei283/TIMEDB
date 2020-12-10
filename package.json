@@ -19,7 +19,7 @@
     "datatables.net-dt": "^1.10.22",
     "jquery": "^3.3.1",
     "object-to-formdata": "lhc70000/object-to-formdata",
-    "oviz-editor": "file:../oviz-editor-v0.1.0.tgz",
+    "oviz-editor": "../oviz-editor-v0.1.0.tgz",
     "raw-loader": "^0.5.1",
     "ts-loader": "^7.0.5",
     "turbolinks": "^5.2.0",
