@@ -1,5 +1,4 @@
 import Oviz from "crux";
-import {VisualizeOption} from "crux/visualizer"
 import template from "./template.bvt"
 import { processTreeData } from "./data";
 import { editorConfig } from "./editor";
@@ -100,7 +99,7 @@ function generateDefaultVizOpts() {
                     gravity: Gravity.Right,
                 },
                 colTree: {
-                    treeHeight: 200,
+                    treeHeight: 100,
                     depthUnit: 0,
                     gravity: Gravity.Bottom,
                 },
@@ -215,29 +214,26 @@ function generateDefaultDataSources() {
         rowTreeData: {
             type: "newick",
             fileKey: "rowTreeData",
+            dependsOn: ['heatmapData'],
             optional: true,
             loaded(d) {
                 if (!d) return;
                 d.depth = 0;
                 const {rootNode, nodeList} = processTreeData(d);
-                // nodeList.forEach(node => {
-                //     if (this.data.heatmapData.rows.indexOf(node) < 0) {
-                //         console.log("Error!! tree data not mapped with heatmap data");
-                //     }
-                // });
-                this.data.heatmapData.rows = [...nodeList];
+                this.data.heatmapData.rows = sortByTreeNodes(nodeList, this.data.heatmapData.rows);
                 return rootNode;
             },
         },
         colTreeData: {
             type: "newick",
             fileKey: "colTreeData",
+            dependsOn: ['heatmapData'],
             optional: true,
             loaded(d) {
                 if (!d) return;
                 d.depth = 0;
                 const {rootNode, nodeList} = processTreeData(d);
-                this.data.heatmapData.columns = [...nodeList];
+                this.data.heatmapData.columns = sortByTreeNodes(nodeList, this.data.heatmapData.columns);
                 return rootNode;
             },
         },
@@ -245,9 +241,8 @@ function generateDefaultDataSources() {
     if (window.gon && window.gon.required_data ) {
         const dataSources = {}
         window.gon.required_data.forEach(dt => {
-            dataSources[dt] = defaultDataSources[dt]
+            dataSources[dt] = defaultDataSources[dt];
         })
-        console.log(dataSources);
         return dataSources;
     } else 
         return defaultDataSources;
@@ -315,3 +310,18 @@ export function findBound(x, power, sigDigit) {
 export default SignedHeatmap;
 
 register(MODULE_NAME, init);
+
+
+function sortByTreeNodes(treeArr, heatmapArr ):string[] {
+    const sortedArr = [];
+    treeArr.forEach(node => {
+        heatmapArr.forEach((d, i) => {
+            const sortedD = d;
+            if (node.replace(/[^a-z]/ig,'') === d.replace(/[^a-z]/ig,'')){
+                sortedArr.push(sortedD);
+                heatmapArr.splice(i, 1);
+            }
+        })
+    })
+    return sortedArr;
+}
