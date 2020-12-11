@@ -1,7 +1,7 @@
 class SubmitController < ApplicationController
   UID = 45
   PROJECT_ID = 289
-  $user_stor_dir = "/Users/CHE/platform/user_meta"
+  $user_stor_dir = "#{Rails.root}/app/data/user"
   
   def index
     id = params[:id]
@@ -141,7 +141,6 @@ class SubmitController < ApplicationController
         file_path = File.join(user_dir, ds_name, file_name)
         file = File.open file_path
         uploader = JobInputUploader.new
-        Rails.logger.info("=======>#{uploader}")
         uploader.store!(file)
         Rails.logger.info("=======>#{uploader}")
         inputs.push({
@@ -153,9 +152,11 @@ class SubmitController < ApplicationController
       app_inputs&.each do |k, v|
         uploader = JobInputUploader.new
         uploader.store!(v)
-        inputs.push({
-          k => '/data/' + v.original_filename,
-        })
+	unless v.nil? || v == ""
+          inputs.push({
+            k => '/data/' + v.original_filename,
+          })
+	end
       end
       
       app_params&.each do |p|
@@ -171,18 +172,27 @@ class SubmitController < ApplicationController
       client = LocalApi::Client.new
       result = client.run_module(UID, PROJECT_ID, app_id.to_i, inputs, params)
       Rails.logger.info(result['message'])
+      tid = ""
       if result['message']['code']
         result_json[:code] = true
+	tid = encode(result['message']['data']['task_id'])
         result_json[:data] = {
           'msg': result['message']['data']['msg'],
-          'task_id': encode(result['message']['data']['task_id'])
+          'task_id': tid
         }
-        if @user.task_ids == ""
-          @user.task_ids = result_json[:data] ['task_id']
+	Rails.logger.info(result_json)
+        if @user.task_ids.nil? || @user.task_ids == ""
+	  Rails.logger.info("first branch")
+	  Rails.logger.info(result_json[:data] ['task_id'])
+          @user.update_attribute(:task_ids, tid)
         else
-          @user.task_ids += ("," + result_json[:data] ['task_id'])
+	  Rails.logger.info("second branch")
+          current_ids = @user.task_ids
+          current_ids += ("," + tid)
+          @user.update_attribute(:task_ids, current_ids)
         end
-
+        @user.save
+	Rails.logger.info(@user)
       else
         result_json[:code] = false
         result_json[:data] = {

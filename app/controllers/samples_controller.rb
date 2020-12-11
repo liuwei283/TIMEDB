@@ -5,6 +5,7 @@ class SamplesController < ApplicationController
     $seq_dir = "#{Rails.root}/app/data/seq/"
     $abd_dir = "#{Rails.root}/app/data/abd_files/"
     $tmp_dir = "#{Rails.root}/app/data/tmp/"
+    $user_stor_dir = "#{Rails.root}/app/data/user"
 
     def new
         @project = Project.find(params[:project_id])
@@ -85,7 +86,7 @@ class SamplesController < ApplicationController
     def export_selected_metadata_dataset
         id = cookies.encrypted[:user]
         @user = User.find(id)
-        user_dir = File.join($stor_dir, id.to_s)
+        user_dir = File.join($user_stor_dir, id.to_s)
         ds_name = params[:ds_selected]  
         ds_dir = File.join(user_dir, ds_name) 
         @samples = Sample.order(:sample_name)
@@ -101,7 +102,7 @@ class SamplesController < ApplicationController
     def export_selected_abd_dataset
         id = cookies.encrypted[:user]
         @user = User.find(id)
-        user_dir = File.join($stor_dir, id.to_s)
+        user_dir = File.join($user_stor_dir, id.to_s)
         ds_name = params[:ds_selected]  
         ds_dir = File.join(user_dir, ds_name) 
         @project = Project.find(params[:project_id])
