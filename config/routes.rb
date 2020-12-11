@@ -25,11 +25,13 @@ Rails.application.routes.draw do
 
   namespace :api do
     resources :analyses, only: [] do
+      get 'use_demo', to: 'viz_files#use_demo', as: 'use_demo'
       get 'all_files', to: 'viz_files#all_files', as: 'all_files'
       get 'chosen_files', to: 'viz_files#get_chosen_files', as: 'chosen_files'
       get 'chosen_file_paths', to: 'viz_files#chosen_file_paths', as: 'chosen_file_paths'
       post 'chosen_files', to: 'viz_files#update_chosen_files', as: 'update_chosen_files'
       post 'create_files', to: 'viz_files#create_files', as: 'create_files'
+      post 'batch_delete_files', to: 'viz_files#batch_delete_files', as: 'batch_delete_files'
     end
   end
   # database pages

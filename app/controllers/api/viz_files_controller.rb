@@ -1,6 +1,17 @@
 class Api::VizFilesController < ApplicationController
   before_action :instantiate_models
 
+    def use_demo
+        if @analysis_user_datum.use_demo_file
+            render json:{}
+            return
+        else
+            @analysis_user_datum.use_demo_file = true
+            @analysis_user_datum.save!
+        end
+        render json:{code:true}
+    end
+
     def all_files
         data = []
         files_info = @analysis.files_info
@@ -27,9 +38,18 @@ class Api::VizFilesController < ApplicationController
             demo_folder = File.join '/data/demo', @analysis.name.gsub!(' ','_')
             render json: {}.tap { |x|
                 files_info.each do |dataType, info|
-                    x[dataType] = {id: 0, 
-                        url: File.join(demo_folder, info['demoFileName']), 
-                        is_demo: true}
+                    Rails.logger.debug("===>#{info['demoFileName'].class}")
+                    if info['demoFileName'].class == String
+                        x[dataType] = {id: 0, 
+                            url: File.join(demo_folder, info['demoFileName']), 
+                            is_demo: true}
+                    else
+                        x[dataType] = info['demoFileName'].map do |fName|
+                            {id: 0, 
+                            url: File.join(demo_folder, fName), 
+                            is_demo: true}
+                        end
+                    end
                 end
             }
             return
@@ -103,6 +123,33 @@ class Api::VizFilesController < ApplicationController
         render json: { status: 'ok', files: result }
     end
 
+    def batch_delete_files
+        file_ids = params[:file_ids]
+        VizFileObject.find(file_ids).each do |file|
+          continue unless file.analysis == @analysis
+          # TODO: check file sets
+          file.destroy
+        end
+        # check if any analysis has selected deleted files.
+        # if so, set them to nil.
+        # Analysis.find_each do |analysis|
+        #   datum = AnalysisUserDatum.find_by project: @project, analysis: analysis
+        #   next if datum.nil?
+        #   changed = false
+        #   new_data = datum.chosen_files.transform_values do |fid|
+        #     if file_ids.include? fid
+        #       changed = true
+        #       next nil
+        #     end
+        #     fid
+        #   end
+        #   next unless changed
+        #   datum.chosen_files = new_data
+        #   datum.save
+        # end
+    
+        # @project.update_filesize
+    end
     # def demo_files
     #     data = {}
     #     if @analysis_user_datum.use_demo_file
