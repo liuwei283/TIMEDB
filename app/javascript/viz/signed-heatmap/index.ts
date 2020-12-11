@@ -9,6 +9,7 @@ import {savedTheme} from "oviz-common/mem-theme"
 
 import {copyObject} from "utils/object"
 import { event } from "crux/dist/utils";
+import {register} from "page/visualizers";
 
 // reigister default color theme
 Oviz.use.theme("mh-dark", {
@@ -33,6 +34,7 @@ Oviz.use.theme("mh-light", {
     },
 });
 
+const MODULE_NAME = 'signed-heatmap'
 
 const SignedHeatmap = {
     initViz,
@@ -40,7 +42,7 @@ const SignedHeatmap = {
 }
 
 function init() {
-    if (!window.gon || window.gon.module_name !== 'signed-heatmap') return;
+    if (!window.gon || window.gon.module_name !== MODULE_NAME) return;
     const vizOpts = generateDefaultVizOpts();
     const {visualizer} = Oviz.visualize(vizOpts);
     // return visualizer;
@@ -229,7 +231,7 @@ function generateDefaultDataSources() {
         },
         colTreeData: {
             type: "newick",
-            colTreeData: "colTreeData",
+            fileKey: "colTreeData",
             optional: true,
             loaded(d) {
                 if (!d) return;
@@ -245,6 +247,7 @@ function generateDefaultDataSources() {
         window.gon.required_data.forEach(dt => {
             dataSources[dt] = defaultDataSources[dt]
         })
+        console.log(dataSources);
         return dataSources;
     } else 
         return defaultDataSources;
@@ -311,4 +314,4 @@ export function findBound(x, power, sigDigit) {
 
 export default SignedHeatmap;
 
-document.addEventListener("turbolinks:load",init);
+register(MODULE_NAME, init);

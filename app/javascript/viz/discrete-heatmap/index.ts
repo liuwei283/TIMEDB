@@ -1,13 +1,11 @@
 import Oviz from "crux"
-import Vue from "vue";
-import * as Path from "path";
 
 import { editorConfig } from "./Editor";
 import template from "./template.bvt"
-import {DiscreteHeatMap} from "oviz-components/discrete_heatmap" 
+import {DiscreteHeatMap} from './discrete-heatmap'
+import {register} from "page/visualizers";
 
-import {testVizDataList, findFilesByDataName} from "utils/viz-class"
-
+const MODULE_NAME = "discrete-heatmap"
 const defaultValues = [0, 0.5, 1];
 const defaultColors = ["white", "#C7C7C7", "red"];
 const defaultInfo = ["did not use drug", "unknown", "used drug"];
@@ -17,10 +15,15 @@ const DiscreteHeatmap = {
     initVizWithDeepomics
 }
 
-function initViz(): any {
+function init() {
+    if (window.gon.module_name !== MODULE_NAME) return;
+    const {vizOpts} = initViz();
+    Oviz.visualize(vizOpts);
+}
 
-    const vizDataList = testVizDataList;
+function initViz(): any {
     const vizOpts = {
+        el:"#canvas",
         template,
         components: {DiscreteHeatMap},
         data: {
@@ -32,18 +35,10 @@ function initViz(): any {
             colorMap: genDefaultColorMap([]),
         },
         loadData: {
-            heatmapData: {
-                url:`/api/public?path={{filePath}}`,
-                // dataPath: `/data/drug used/T1_sample.xls`,                   
+            heatmapDataD: {
+                fileKey: 'heatmapDataD',                  
                 type: "tsv",
-                loader(load) {
-                    const fileList = findFilesByDataName( vizDataList, "heatmapData");
-                    fileList.forEach(f=> {
-                        let filePath = Path.join(f.path, f.name)
-                        filePath = btoa(filePath)
-                        load({filePath});
-                    });
-                },
+                multiple: true,
                 loaded(d) {
                     const values = [];
                     d = d.map(sample => {
@@ -68,14 +63,6 @@ function initViz(): any {
                     return d;
                 },
             },
-            // testData: {
-            //     content: `{"prop1":{"hello"}}`,
-            //     dataPath: "/prop1",
-            //     // type:"text",
-            //     loaded(d) {
-            //         console.log("======>"+d)
-            //     }
-            // }
         },
     };
     return {vizOpts, editorConfig};
@@ -102,3 +89,6 @@ function genDefaultValueMap() {
 }
 
 export default DiscreteHeatmap;
+
+register(MODULE_NAME, init);
+
