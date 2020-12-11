@@ -3,6 +3,7 @@ class CreateAnalyses < ActiveRecord::Migration[6.0]
     create_table :analyses do |t|
       t.string :name, null:false
       t.json :files_info
+      t.integer :mid
       t.belongs_to :analysis_category
       t.belongs_to :visualizer
     end
