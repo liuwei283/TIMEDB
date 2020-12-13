@@ -1,7 +1,7 @@
 import { ColorSchemeGradient, schemeGradient } from "crux/dist/color";
 import { Component, ComponentOption } from "crux/dist/element";
 import * as d3 from "d3";
-import { findBound } from ".";
+import { findBound } from "utils/maths";
 
 export interface SignedHeatMapOption extends ComponentOption {
     rows: [];
