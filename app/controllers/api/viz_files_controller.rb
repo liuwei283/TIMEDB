@@ -35,7 +35,7 @@ class Api::VizFilesController < ApplicationController
         
         files_info = @analysis.files_info
         if @analysis_user_datum.use_demo_file
-            demo_folder = File.join '/data/demo', @analysis.name.gsub!(' ','_')
+            demo_folder = File.join '/data/demo', @analysis.name.gsub(' ','_')
             render json: {}.tap { |x|
                 files_info.each do |dataType, info|
                     Rails.logger.debug("===>#{info['demoFileName'].class}")
