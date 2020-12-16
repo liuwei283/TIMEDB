@@ -45,6 +45,14 @@ export const cosmicPalettes = {
     },
 };
 
+export const signedChartColors = {
+    posRange: "green",
+    negRange: "red",
+    origin: "white"
+}
+
+export const groupedChartColors = ["green", "red"]
+
 export function withDefaultPalette(colors: string[], extraPalettes?: Dictionary<any>) {
     return {
         ...{ default: { name: "Default", colors }},
@@ -61,4 +69,12 @@ export function genDefaultPalette(colors: Record<string, string>, keyOrder?: str
         paletteMap[name] = i++;
     }
     return [Object.values(colors), paletteMap];
+}
+
+
+export function genPaletteMap(keys: string[]): Dictionary<string | number> {
+    const keyMap = {};
+    keys.forEach((k, i) => keyMap[k] = i);
+    return keyMap;
+
 }
