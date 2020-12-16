@@ -94,11 +94,13 @@ export class NetworkDiagram extends Component<NetworkDiagramOption<any[], any>> 
                 text = "Control Enrichment"
                 x = layoutConfig.groupWidth/2; y = 20
                 fontSize = 20
+                style:user-select = "none"
             }
             Text.centered {
                 text = "Gout Enrichment"
                 x = layoutConfig.groupWidth * 1.5; y = 20
                 fontSize = 20
+                style:user-select = "none"
             }
             @for (l, i) in _links {
                 Line {
@@ -131,6 +133,7 @@ export class NetworkDiagram extends Component<NetworkDiagramOption<any[], any>> 
                             html = parseText(d.NodeName)
                             fill = "black"
                             style:font-weight = "bold"
+                            style:user-select = "none"
                         }
                     }
                     Circle.centered{
