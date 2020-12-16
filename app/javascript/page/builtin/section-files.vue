@@ -2,7 +2,6 @@
     <div>
         <!-- File modal -->
 
-        <!--
         
         <b-modal size="lg" id="fmModal" ref="fmModal" title="Manage Files">
             <b-container fluid>
@@ -11,7 +10,7 @@
                         <b-card-header header-tag="header" role="tab">
                             <b-link
                                 v-b-toggle="`collapse-manageFile-${key.fileIndex}`"
-                            >{{ key.description }}</b-link>
+                            >{{ key.fileName }}</b-link>
                         </b-card-header>
                         <b-collapse visible :id="`collapse-manageFile-${key.fileIndex}`">
                             <b-card-body v-if="key.files.length === 0">
@@ -23,43 +22,32 @@
                                     :key="file.id"
                                     :variant="willBeDeleted(file) ? 'danger' : ''"
                                 >
+                                
                                     <div>
                                         <div>
                                             <i class="fa fa-file-excel" v-if="willBeDeleted(file)"></i>
                                             <i class="fa fa-file" v-else></i>
-                                            {{ file.filename }}
+                                            {{ file.name }}
                                             <span
-                                                v-if="file.genome_ref"
-                                                class="badge badge-info"
-                                            >{{ file.genome_ref }}</span>
-                                            <span
-                                                v-if="file.status === 'error'"
-                                                class="badge badge-danger"
-                                                data-container="body"
-                                                data-toggle="popover"
-                                                data-placement="top"
-                                            >Error</span>
-                                            <span
-                                                v-else-if="file.status === 'running'"
-                                                class="badge badge-info"
-                                            >Processing</span>
-                                            <span
-                                                v-else-if="file.status === 'finished'"
                                                 class="badge badge-success"
                                             >Processed</span>
+                                            <!--
                                             <span
                                                 class="ml-1 small text-muted"
                                             >{{ filesize(file.size) }}</span>
+                                            -->
                                         </div>
+                                        
                                         <div
                                             class="d-flex justify-content-between align-items-end action-container"
-                                        >
+                                                >
                                             <div style="padding-left:1.25rem">
                                                 <div>
                                                     <span
                                                         class="text-muted small"
                                                     >Uploaded at {{ parseDate(file.created_at) }}</span>
                                                 </div>
+                                                <!--
                                                 <div v-if="file.assoc.length">
                                                     <span class="small">Processed files:</span>
                                                     <a
@@ -73,6 +61,7 @@
                                                         {{ k }}
                                                     </a>
                                                 </div>
+                                                -->
                                             </div>
                                             <div class="d-flex">
                                                 <b-link
@@ -82,29 +71,7 @@
                                                 >
                                                     <i class="fa fa-download"></i>Download
                                                 </b-link>
-                                                <template
-                                                    v-if="_fileById[file.id].belongs_to_sets.length"
-                                                >
-                                                    <b-link
-                                                        class="px-2"
-                                                        :id="`del-popover-${file.id}`"
-                                                    >
-                                                        <i class="fa fa-ban"></i>Can't be deleted
-                                                    </b-link>
-                                                    <b-popover
-                                                        :target="`del-popover-${file.id}`"
-                                                        triggers="hover"
-                                                    >
-                                                        This file cannot be deleted because it belongs to the following file sets:
-                                                        <ul class="mt-1 mb-0">
-                                                            <li
-                                                                v-for="(set, index) in _fileById[file.id].belongs_to_sets"
-                                                                :key="index"
-                                                            >{{ set }}</li>
-                                                        </ul>
-                                                    </b-popover>
-                                                </template>
-                                                <template v-else>
+                                                <template>
                                                     <b-link
                                                         class="action-btn right"
                                                         @click="markAsDeleted(file)"
@@ -115,11 +82,13 @@
                                                 </template>
                                             </div>
                                         </div>
+                                        
                                     </div>
-                                    <div class="mt-1" v-if="Object.keys(file.metadata).length">
+                                
+                              <!--      <div class="mt-1" v-if="Object.keys(file.metadata).length">
                                         Metadata:
                                         <code>{{ JSON.stringify(file.metadata) }}</code>
-                                    </div>
+                                    </div> -->
                                 </b-list-group-item>
                             </b-list-group>
                         </b-collapse>
@@ -139,7 +108,6 @@
                 </b-btn>
             </div>
         </b-modal>
-        -->
         
         <!-- File set modal -->
         <!--
@@ -300,6 +268,8 @@
                     </div>
                 </div>
             </b-tab>
+
+    <!--            
             <b-tab title="File Sets">
                 <b-btn
                     block
@@ -336,6 +306,7 @@
                 <b-btn block size="sm" class="mb-1" v-b-modal.fsModal>Apply or Manage file sets</b-btn>
                 <small class="text-muted form-text">Apply an existing file set, or manage them.</small>
             </b-tab>
+    -->
         </b-tabs>
         <div class="px-2 py-1 text-muted small">
             We will not access your files without permission from you. Your file will be deleted entirely if you have been inactive for 24 hours.
@@ -668,6 +639,7 @@ export default class SectionFiles extends Vue {
     }
 
     public fmApplyChanges() {
+        debugger;
         this.fmApplyingChanges = true;
         const chosenSet = new Set(Object.values(this.filesChosen));
         const deletedChosenFile = this.filesToBeDeleted.some(f => chosenSet.has(f));

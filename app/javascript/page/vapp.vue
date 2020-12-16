@@ -2,6 +2,7 @@
      <div> 
         <div id="tool-bar">
             <b-button @click="downloadSVG">Download</b-button>
+            <b-button @click="useDemoFiles">Demo Files</b-button>
             <b-button id="editor-conf" @click="toggleEditor">Editor</b-button>
         </div>
         <div id="viz-container"> 
@@ -18,6 +19,7 @@
     import BootstrapVue from 'bootstrap-vue';
     import OvizEditor from "oviz-editor";
 
+    import axios from "axios";
     import {EditorDef, ItemDef} from "utils/editor-def"
     import Oviz from "crux"
     import {copyObject} from "utils/object"
@@ -49,15 +51,24 @@
                 downloadLink.click();
                 document.body.removeChild(downloadLink);
             },
+            useDemoFiles() {
+                axios.get(window.gon.urls.use_demo)
+                    .then(response => {
+                        const result = response.data;
+                        if (result.code)
+                            location.reload();
+                    })
+            },
             toggleEditor() {
                 this.showEditor=!this.showEditor;
             },
         },
         created() {
-            debugger;
             event.rpcRegisterReceiver("getVue", () => this);
-        }
-
+        },
+        mounted() {
+            event.emit(event.CANVAS_READY, this);
+        },
     }
 
 </script>

@@ -1,8 +1,7 @@
 // import { conf } from "app/gb/editor";
 // import { withDefaultPalette } from "common/palette";
 
-import {Editor} from "oviz-editor"
-import {EditorDef, ItemDef} from "utils/editor-def"
+import {EditorDef} from "utils/editor-def"
 
 export const conf: any = {
     sortBy: "a_name",

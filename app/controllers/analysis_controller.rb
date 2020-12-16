@@ -26,10 +26,12 @@ class AnalysisController < ApplicationController
                  analysis_name: @analysis.name,
                  required_data: files_info.keys, 
                  urls: {
+                    use_demo: api_analysis_use_demo_path(@analysis),
                     create_file: api_analysis_create_files_path(@analysis),
                     all_files: api_analysis_all_files_path(@analysis),
                     chosen_files: api_analysis_chosen_files_path(@analysis),
                     chosen_file_paths: api_analysis_chosen_file_paths_path(@analysis),
+                    batch_delete_files: api_analysis_batch_delete_files_path(@analysis),
                  }
 
     end

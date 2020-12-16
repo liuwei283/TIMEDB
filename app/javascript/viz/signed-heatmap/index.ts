@@ -1,5 +1,4 @@
 import Oviz from "crux";
-import {VisualizeOption} from "crux/visualizer"
 import template from "./template.bvt"
 import { processTreeData } from "./data";
 import { editorConfig } from "./editor";
@@ -9,6 +8,7 @@ import {savedTheme} from "oviz-common/mem-theme"
 
 import {copyObject} from "utils/object"
 import { event } from "crux/dist/utils";
+import {register} from "page/visualizers";
 
 // reigister default color theme
 Oviz.use.theme("mh-dark", {
@@ -33,6 +33,7 @@ Oviz.use.theme("mh-light", {
     },
 });
 
+const MODULE_NAME = 'signed-heatmap'
 
 const SignedHeatmap = {
     initViz,
@@ -40,7 +41,7 @@ const SignedHeatmap = {
 }
 
 function init() {
-    if (!window.gon || window.gon.module_name !== 'signed-heatmap') return;
+    if (!window.gon || window.gon.module_name !== MODULE_NAME) return;
     const vizOpts = generateDefaultVizOpts();
     const {visualizer} = Oviz.visualize(vizOpts);
     // return visualizer;
@@ -98,7 +99,7 @@ function generateDefaultVizOpts() {
                     gravity: Gravity.Right,
                 },
                 colTree: {
-                    treeHeight: 200,
+                    treeHeight: 100,
                     depthUnit: 0,
                     gravity: Gravity.Bottom,
                 },
@@ -213,29 +214,26 @@ function generateDefaultDataSources() {
         rowTreeData: {
             type: "newick",
             fileKey: "rowTreeData",
+            dependsOn: ['heatmapData'],
             optional: true,
             loaded(d) {
                 if (!d) return;
                 d.depth = 0;
                 const {rootNode, nodeList} = processTreeData(d);
-                // nodeList.forEach(node => {
-                //     if (this.data.heatmapData.rows.indexOf(node) < 0) {
-                //         console.log("Error!! tree data not mapped with heatmap data");
-                //     }
-                // });
-                this.data.heatmapData.rows = [...nodeList];
+                this.data.heatmapData.rows = sortByTreeNodes(nodeList, this.data.heatmapData.rows);
                 return rootNode;
             },
         },
         colTreeData: {
             type: "newick",
-            colTreeData: "colTreeData",
+            fileKey: "colTreeData",
+            dependsOn: ['heatmapData'],
             optional: true,
             loaded(d) {
                 if (!d) return;
                 d.depth = 0;
                 const {rootNode, nodeList} = processTreeData(d);
-                this.data.heatmapData.columns = [...nodeList];
+                this.data.heatmapData.columns = sortByTreeNodes(nodeList, this.data.heatmapData.columns);
                 return rootNode;
             },
         },
@@ -243,7 +241,7 @@ function generateDefaultDataSources() {
     if (window.gon && window.gon.required_data ) {
         const dataSources = {}
         window.gon.required_data.forEach(dt => {
-            dataSources[dt] = defaultDataSources[dt]
+            dataSources[dt] = defaultDataSources[dt];
         })
         return dataSources;
     } else 
@@ -296,19 +294,21 @@ function setUpRange(v) {
     v.data.config.rangeMax = v.data.heatmapData.range.max;
 }
 
-export function findBound(x, power, sigDigit) {
-    if (x <= 0) {
-        console.log("Only accept positive values");
-        return;
-    }
-    if (x < Math.pow(10, sigDigit - 1))
-        return findBound(10 * x, power + 1, sigDigit);
-    else if (x > Math.pow(10, sigDigit))
-        return findBound(x / 10, power - 1, sigDigit);
-    else
-        return Math.ceil(x) / Math.pow(10, power);
-}
-
 export default SignedHeatmap;
 
-document.addEventListener("turbolinks:load",init);
+register(MODULE_NAME, init);
+
+
+function sortByTreeNodes(treeArr, heatmapArr ):string[] {
+    const sortedArr = [];
+    treeArr.forEach(node => {
+        heatmapArr.forEach((d, i) => {
+            const sortedD = d;
+            if (node.replace(/[^a-z]/ig,'') === d.replace(/[^a-z]/ig,'')){
+                sortedArr.push(sortedD);
+                heatmapArr.splice(i, 1);
+            }
+        })
+    })
+    return sortedArr;
+}

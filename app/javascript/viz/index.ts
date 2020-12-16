@@ -1,8 +1,8 @@
 export interface Viz {
     vizOpts: any;
 }
-import {default as DiscreteHeatmap} from "./discrete-heatmap"
-import {default as SignedHeatmap} from "./signed-heatmap"
+import {default as DiscreteHeatmap} from "viz/discrete-heatmap"
+import {default as SignedHeatmap} from "viz/signed-heatmap"
 export {default as Demo} from "./demo"
 
 declare global {
