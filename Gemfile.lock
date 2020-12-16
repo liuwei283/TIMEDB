@@ -1,5 +1,5 @@
 GIT
-  remote: https://delta.cs.cityu.edu.hk/lhc/deltadb.git
+  remote: https://chelijia:00000000@delta.cs.cityu.edu.hk/lhc/deltadb.git
   revision: 11bb8dca062cb57d21327025d5a07000bb2085d9
   specs:
     deltadb (0.1.0)
