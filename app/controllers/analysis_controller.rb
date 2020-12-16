@@ -1,6 +1,7 @@
 class AnalysisController < ApplicationController
     before_action :instantiate_sidebar
     def index
+        @analyses = Analysis.all
     end
 
     def show 

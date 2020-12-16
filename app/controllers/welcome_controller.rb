@@ -1,5 +1,5 @@
 class WelcomeController < ApplicationController
-  $user_stor_dir = "#{Rails.root}/app/data/user"
+  $user_stor_dir = "#{Rails.root}/data/user"
   def index
     # check user
     if cookies.encrypted[:user]
@@ -14,11 +14,6 @@ class WelcomeController < ApplicationController
     end
     user_dir = File.join($user_stor_dir, @user.id.to_s)
     @dataset_list = @user.datasets
-    if @user.task_ids
-      @task_list = @user.task_ids.split(',')
-    else
-      @task_list = []
-    end
   end
 
   # def tutorial

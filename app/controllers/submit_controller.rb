@@ -1,7 +1,7 @@
 class SubmitController < ApplicationController
   UID = 45
   PROJECT_ID = 289
-  $user_stor_dir = "#{Rails.root}/app/data/user"
+  $user_stor_dir = "#{Rails.root}/data/user"
   
   def index
     id = params[:id]
@@ -22,6 +22,16 @@ class SubmitController < ApplicationController
   end
 
   def query
+    id = params[:id]
+    uid = cookies.encrypted[:user]
+    @user = User.find(uid)
+    user_dir = File.join($user_stor_dir, @user.id.to_s)
+    if @user.task_ids
+      @task_list = @user.task_ids.split(',')
+    else
+      @task_list = []
+    end
+    gon.push tasks: @task_list
   end
 
   def query_app_task_dummy

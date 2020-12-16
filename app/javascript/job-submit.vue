@@ -22,7 +22,7 @@
                                         :title="input.description"></i>
                                     </label>
 
-                                    <select class="select_box" 
+                                    <select class="form-control custom-select" 
                                         v-if="input.name=='second_i'"
                                         :id="`i-${input.id}`"
                                         :name="`i-${input.id}`"
@@ -319,12 +319,5 @@
     min-height: 200px;
     padding: 100px 20px;
     font-size: 30px;
-}
-.select_box{
-    width: 330px;
-    height: 30px;
-    text-align: left;
-    padding: 5.25px 10.5px;
-    margin-top: 12px;
 }
 </style>

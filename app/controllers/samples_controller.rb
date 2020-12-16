@@ -5,7 +5,7 @@ class SamplesController < ApplicationController
     $seq_dir = "#{Rails.root}/app/data/seq/"
     $abd_dir = "#{Rails.root}/app/data/abd_files/"
     $tmp_dir = "#{Rails.root}/app/data/tmp/"
-    $user_stor_dir = "#{Rails.root}/app/data/user"
+    $user_stor_dir = "#{Rails.root}/data/user"
 
     def new
         @project = Project.find(params[:project_id])
@@ -89,6 +89,7 @@ class SamplesController < ApplicationController
         user_dir = File.join($user_stor_dir, id.to_s)
         ds_name = params[:ds_selected]  
         ds_dir = File.join(user_dir, ds_name) 
+        @project = Project.find(params[:project_id])
         @samples = Sample.order(:sample_name)
         content = @samples.selected_to_csv(params[:sample_ids])
         time = Time.now
@@ -107,7 +108,7 @@ class SamplesController < ApplicationController
         ds_dir = File.join(user_dir, ds_name) 
         @project = Project.find(params[:project_id])
         time = Time.now
-        file_path = File.join(ds_dir, "selected_abd_#{time}.csv")
+        file_path = File.join(ds_dir, "selected_abd_#{time}.tsv")
         len = params[:sample_ids].length()
         if len<1
             redirect_to @project
@@ -167,7 +168,7 @@ class SamplesController < ApplicationController
 
     def download_selected_metadata_file
         @samples = Sample.order(:sample_name)
-        send_data @samples.selected_to_csv(params[:sample_ids])
+        send_data @samples.selected_to_csv(params[:sample_ids]), :filename => "selected_metadata.csv"
     end
 
     def download_selected_abd_file
@@ -176,7 +177,7 @@ class SamplesController < ApplicationController
         len = params[:sample_ids].length()
         if len<1
             file.close
-            send_file file.path, :filename => "selected.tsv"
+            send_file file.path, :filename => "selected_abd.tsv"
         else
             out_json = {}
             params[:sample_ids].each_with_index do |id, index|
@@ -221,7 +222,7 @@ class SamplesController < ApplicationController
             
             file.write(s1)
             file.close
-            send_file file.path, :filename => "selected.tsv"
+            send_file file.path, :filename => "selected_abd.tsv"
             /file.unlink/
         end
     end
@@ -328,8 +329,6 @@ class SamplesController < ApplicationController
             end
         end
 
-        def send_selected
-        end
 
         def sample_params
             params.require(:sample).permit(:sample_name, :host_age, :seq_file)

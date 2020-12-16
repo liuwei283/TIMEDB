@@ -1,5 +1,5 @@
 class UsersController < ApplicationController
-    $user_stor_dir = "#{Rails.root}/app/data/user"
+    $user_stor_dir = "#{Rails.root}/data/user"
 
     def show
         id = cookies.encrypted[:user]
@@ -20,4 +20,6 @@ class UsersController < ApplicationController
         end
 
     end
+
+    
 end

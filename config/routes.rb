@@ -51,6 +51,7 @@ Rails.application.routes.draw do
   get 'database/char'
   get 'database/fc'
   get 'database/aa'
+  get 'database/overview'
   
   get 'demo', to: 'demo#show'
   
@@ -67,4 +68,10 @@ Rails.application.routes.draw do
   post 'query-app-task', to: 'submit#query_app_task', format: 'json'
   post 'query-app-task-dummy', to: 'submit#query_app_task_dummy', format: 'json'
   mount Deltadb::Engine => "/db"
+
+  # admin
+  get '/admin', to: 'admin#index'
+  post "admin/modify_sample_metadata" => "admin#modify_sample_metadata", :as => "admin/modify_sample_metadata"
+  post "admin/modify_sample_abd" => "admin#modify_sample_abd", :as => "admin/modify_sample_abd"
+
 end

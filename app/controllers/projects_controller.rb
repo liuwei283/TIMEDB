@@ -5,7 +5,7 @@ class ProjectsController < ApplicationController
     $seq_dir = "#{Rails.root}/app/data/seq/"
     $abd_dir = "#{Rails.root}/app/data/abd_files/"
     $tmp_dir = "#{Rails.root}/app/data/tmp/"
-    $user_stor_dir = "#{Rails.root}/app/data/user"
+    $user_stor_dir = "#{Rails.root}/data/user"
 
     def index
         @projects = Project.order(:name)
@@ -17,6 +17,7 @@ class ProjectsController < ApplicationController
     end
   
     def show
+        @user = User.find(cookies.encrypted[:user])
         @project = Project.find(params[:id])
         @sample_attrs = Sample.column_names
         id = cookies.encrypted[:user]
