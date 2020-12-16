@@ -1,8 +1,8 @@
 # config valid for current version and patch releases of Capistrano
 lock "~> 3.14.1"
 
-set :application, "meta_platform"
-set :repo_url, "git@delta.cs.cityu.edu.hk:xikanfeng2/meta-platform.git"
+set :application, "gutmeta_platform"
+set :repo_url, "git@delta.cs.cityu.edu.hk:chelijia/meta_platform.git"
 
 # Default branch is :master
 # ask :branch, `git rev-parse --abbrev-ref HEAD`.chomp
