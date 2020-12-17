@@ -17,10 +17,10 @@ class ProjectsController < ApplicationController
     end
   
     def show
-        @user = User.find(cookies.encrypted[:user])
+        @user = User.find(session[:user_id])
         @project = Project.find(params[:id])
         @sample_attrs = Sample.column_names
-        id = cookies.encrypted[:user]
+        id = session[:user_id]
         @user = User.find(id)
         user_dir = File.join($user_stor_dir, id.to_s)
         @datasets = @user.datasets

@@ -84,7 +84,7 @@ class SamplesController < ApplicationController
     end
 
     def export_selected_metadata_dataset
-        id = cookies.encrypted[:user]
+        id = session[:user_id]
         @user = User.find(id)
         user_dir = File.join($user_stor_dir, id.to_s)
         ds_name = params[:ds_selected]  
@@ -101,7 +101,7 @@ class SamplesController < ApplicationController
     end
 
     def export_selected_abd_dataset
-        id = cookies.encrypted[:user]
+        id = session[:user_id]
         @user = User.find(id)
         user_dir = File.join($user_stor_dir, id.to_s)
         ds_name = params[:ds_selected]  

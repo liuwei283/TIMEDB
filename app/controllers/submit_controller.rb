@@ -6,7 +6,7 @@ class SubmitController < ApplicationController
   def index
     id = params[:id]
     gon.push id: id
-    uid = cookies.encrypted[:user]
+    uid = session[:user_id]
     @user = User.find(uid)
     user_dir = File.join($user_stor_dir, uid.to_s)
     @datasets = @user.datasets
@@ -23,7 +23,7 @@ class SubmitController < ApplicationController
 
   def query
     id = params[:id]
-    uid = cookies.encrypted[:user]
+    uid = session[:user_id]
     @user = User.find(uid)
     user_dir = File.join($user_stor_dir, @user.id.to_s)
     if @user.task_ids
@@ -128,7 +128,7 @@ class SubmitController < ApplicationController
   end
 
   def submit_app_task
-    uid = cookies.encrypted[:user]
+    uid = session[:user_id]
     @user = User.find(uid)
     user_dir = File.join($user_stor_dir, uid.to_s)
 
