@@ -2,13 +2,13 @@ class UsersController < ApplicationController
     $user_stor_dir = "#{Rails.root}/data/user"
 
     def show
-        id = cookies.encrypted[:user]
+        id = session[:user_id]
         @user = User.find(id)
     end
 
 
     def add_data_to_set(file_dict, dataset_name)
-        id = cookies.encrypted[:user]
+        id = session[:user_id]
         @user = User.find(id)
         user_dir = File.join($user_stor_dir, id)
         dataset_dir = File.join(user_dir, dataset_name)

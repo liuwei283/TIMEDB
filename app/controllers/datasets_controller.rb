@@ -1,7 +1,7 @@
 class DatasetsController < ApplicationController
     $user_stor_dir = "#{Rails.root}/data/user"
     def show
-        id = cookies.encrypted[:user]
+        id = session[:user_id]
         @user = User.find(id)
         @dataset = @user.datasets.find(params[:id])
         user_dir = File.join($user_stor_dir, id.to_s)
@@ -11,7 +11,7 @@ class DatasetsController < ApplicationController
     end
 
     def destroy
-        id = cookies.encrypted[:user]
+        id = session[:user_id]
         @user = User.find(id)
         @dataset = @user.datasets.find(params[:id])
         user_dir = File.join($user_stor_dir, id.to_s)
@@ -22,13 +22,13 @@ class DatasetsController < ApplicationController
     end
 
     def edit
-        id = cookies.encrypted[:user]
+        id = session[:user_id]
         @user = User.find(id)
         @dataset = @user.datasets.find(params[:id])
     end
     
     def update
-        id = cookies.encrypted[:user]
+        id = session[:user_id]
         @user = User.find(id)
         @dataset = @user.datasets.find(params[:id])
         user_dir = File.join($user_stor_dir, id.to_s)
@@ -44,7 +44,7 @@ class DatasetsController < ApplicationController
     end
 
     def download_file
-        id = cookies.encrypted[:user]
+        id = session[:user_id]
         @user = User.find(id)
         @dataset = @user.datasets.find(params[:id])
         user_dir = File.join($user_stor_dir, id.to_s)
@@ -59,7 +59,7 @@ class DatasetsController < ApplicationController
     end
 
     def create
-        id = cookies.encrypted[:user]
+        id = session[:user_id]
         @user = User.find(id)
         @dataset = @user.datasets.create(dataset_params)
         @user.update_attribute(:dataset_n, @user.datasets.count)
@@ -75,7 +75,7 @@ class DatasetsController < ApplicationController
 
     def upload_file
         up_file = params[:file]
-        id = cookies.encrypted[:user]
+        id = session[:user_id]
         @user = User.find(id)
         @dataset = @user.datasets.find(params[:id])
         user_dir = File.join($user_stor_dir, id.to_s)
