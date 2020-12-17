@@ -36,7 +36,8 @@ gem 'hashids'
 # Use Active Storage variant
 # gem 'image_processing', '~> 1.2'
 
-gem 'deltadb', git:'https://chelijia:00000000@delta.cs.cityu.edu.hk/lhc/deltadb.git'
+# gem 'deltadb', git:'https://chelijia:00000000@delta.cs.cityu.edu.hk/lhc/deltadb.git'
+gem 'deltadb', path: '../deltadb'
 
 # Reduces boot times through caching; required in config/boot.rb
 gem 'bootsnap', '>= 1.4.2', require: false

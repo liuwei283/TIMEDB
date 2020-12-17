@@ -1,6 +1,5 @@
-GIT
-  remote: https://chelijia:00000000@delta.cs.cityu.edu.hk/lhc/deltadb.git
-  revision: 11bb8dca062cb57d21327025d5a07000bb2085d9
+PATH
+  remote: ../deltadb
   specs:
     deltadb (0.1.0)
       rails (~> 6.0.2, >= 6.0.2.2)
