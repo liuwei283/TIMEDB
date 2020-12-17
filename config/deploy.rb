@@ -12,7 +12,17 @@ set :deploy_to, "/home/platform/meta_platform"
 
 # Default value for :format is :airbrussh.
 # set :format, :airbrussh
-
+before "deploy:assets:precompile", "deploy:yarn_install"
+namespace :deploy do
+  desc "Run rake yarn install"
+  task :yarn_install do
+    on roles(:web) do
+      within release_path do
+        execute("cd #{release_path} && yarn install --silent --no-progress --no-audit --no-optional")
+      end
+    end
+  end
+end
 # You can configure the Airbrussh format using :format_options.
 # These are the defaults.
 # set :format_options, command_output: true, log_file: "log/capistrano.log", color: :auto, truncate: :auto
@@ -26,7 +36,7 @@ append :linked_files, "config/master.key"
 # append :linked_files, "config/database.yml"
 
 # Default value for linked_dirs is []
-append :linked_dirs, "log", "tmp/pids", "tmp/cache", "tmp/sockets", "public/data"
+append :linked_dirs, "log", "tmp/pids", "tmp/cache", "tmp/sockets", "public/data", "public/packs", "node_modules"
 
 # Default value for default_env is {}
 # set :default_env, { path: "/opt/ruby/bin:$PATH" }
