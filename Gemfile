@@ -1,5 +1,6 @@
 source 'https://rubygems.org'
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
+gem "capistrano", "~> 2.15.9"
 
 ruby '2.7.1'
 
