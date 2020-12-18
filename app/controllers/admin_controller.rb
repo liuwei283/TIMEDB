@@ -14,7 +14,7 @@ class AdminController < ApplicationController
             Sample.import(params[:file],params[:project_id] )
             @project.update_attribute(:num_of_samples, @project.samples.count)
             update_metadata
-            redirect_to project_path(@project), notice: "Samples imported."
+            redirect_to '/user/admin', notice: "Samples imported."
         end
     end
 
@@ -64,7 +64,7 @@ class AdminController < ApplicationController
         else
             logger.error "Bad file_data: #{up_file.class.name}: #{up_file.inspect}"
         end
-        redirect_to @project, notice: "ALL Abundance data uploaded."
+        redirect_to '/user/admin', notice: "ALL Abundance data uploaded."
     end
 
     private
