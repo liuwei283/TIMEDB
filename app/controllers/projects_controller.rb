@@ -44,7 +44,7 @@ class ProjectsController < ApplicationController
     def import
         Project.import(params[:file])
         update_metadata
-        redirect_to projects_path, notice: "Projects imported."
+        redirect_to '/admin', notice: "Projects imported."
     end
 
     def export_selected
