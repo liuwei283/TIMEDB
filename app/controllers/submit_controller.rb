@@ -1,13 +1,37 @@
 class SubmitController < ApplicationController
   UID = 45
-  PROJECT_ID = 287
+  PROJECT_ID = 289
+  $user_stor_dir = "#{Rails.root}/data/user"
   
   def index
     id = params[:id]
     gon.push id: id
+    uid = session[:user_id]
+    @user = User.find(uid)
+    user_dir = File.join($user_stor_dir, uid.to_s)
+    @datasets = @user.datasets
+    data = {}
+    @datasets.each do |ds|
+      ds_name = ds.name
+      ds_dir = File.join(user_dir, ds_name)
+      file_list = Dir.entries(ds_dir)[2..-1]
+      data[ds_name] = file_list
+    end
+    gon.push select_box_option: data
+
   end
 
   def query
+    id = params[:id]
+    uid = session[:user_id]
+    @user = User.find(uid)
+    user_dir = File.join($user_stor_dir, @user.id.to_s)
+    if @user.task_ids
+      @task_list = @user.task_ids.split(',')
+    else
+      @task_list = []
+    end
+    gon.push tasks: @task_list
   end
 
   def query_app_task_dummy
@@ -104,6 +128,10 @@ class SubmitController < ApplicationController
   end
 
   def submit_app_task
+    uid = session[:user_id]
+    @user = User.find(uid)
+    user_dir = File.join($user_stor_dir, uid.to_s)
+
     result_json = {
       code: false,
       data: ''
@@ -112,16 +140,33 @@ class SubmitController < ApplicationController
       app_id = params[:app_id]
       app_inputs = params[:inputs]
       app_params = params[:params]
+      app_selected = params[:selected]
       inputs = Array.new
       params = Array.new
+
+      # store selected file to user's data folder
+      app_selected&.each do |k, v|
+        file_name = v.split("/")[1]
+        ds_name = v.split("/")[0]
+        file_path = File.join(user_dir, ds_name, file_name)
+        file = File.open file_path
+        uploader = JobInputUploader.new
+        uploader.store!(file)
+        Rails.logger.info("=======>#{uploader}")
+        inputs.push({
+          k => '/data/' + file_name
+        })
+      end
 
       # store input file to user's data folder
       app_inputs&.each do |k, v|
         uploader = JobInputUploader.new
         uploader.store!(v)
-        inputs.push({
-          k => '/data/' + v.original_filename,
-        })
+	unless v.nil? || v == ""
+          inputs.push({
+            k => '/data/' + v.original_filename,
+          })
+	end
       end
       
       app_params&.each do |p|
@@ -132,16 +177,32 @@ class SubmitController < ApplicationController
         end
       end
       
+      
       # submit task
       client = LocalApi::Client.new
       result = client.run_module(UID, PROJECT_ID, app_id.to_i, inputs, params)
       Rails.logger.info(result['message'])
+      tid = ""
       if result['message']['code']
         result_json[:code] = true
+	tid = encode(result['message']['data']['task_id'])
         result_json[:data] = {
           'msg': result['message']['data']['msg'],
-          'task_id': encode(result['message']['data']['task_id'])
+          'task_id': tid
         }
+	Rails.logger.info(result_json)
+        if @user.task_ids.nil? || @user.task_ids == ""
+	  Rails.logger.info("first branch")
+	  Rails.logger.info(result_json[:data] ['task_id'])
+          @user.update_attribute(:task_ids, tid)
+        else
+	  Rails.logger.info("second branch")
+          current_ids = @user.task_ids
+          current_ids += ("," + tid)
+          @user.update_attribute(:task_ids, current_ids)
+        end
+        @user.save
+	Rails.logger.info(@user)
       else
         result_json[:code] = false
         result_json[:data] = {

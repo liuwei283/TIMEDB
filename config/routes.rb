@@ -3,15 +3,28 @@ Rails.application.routes.draw do
   resources :projects do
     resources :samples do
       collection { post :import }
-      collection { post :export_selected}
+      collection { post :make_selected_file}
+      collection { post :import_abd_table}
       member { post :upload_seq }
       member { post :upload_abd }
       member { get :download_seq }
       member { get :download_abd }
     end
-    collection { post :import }
+    collection { post :import}
+    collection { post :download_selected_file }
     collection { post :export_selected }
+    member { post :download_abd_table} 
   end
+
+  resources :users do 
+    resources :datasets do
+      member { post :upload_file }
+      member { get :download_file}
+
+
+    end
+  end
+
   # get 'welcome/index'
   root 'welcome#index'
   # get 'tutorial', to: 'welcome#tutorial', as: 'tutorial'
@@ -40,6 +53,7 @@ Rails.application.routes.draw do
   get 'database/char'
   get 'database/fc'
   get 'database/aa'
+  get 'database/overview'
   
   get 'demo', to: 'demo#show'
   
@@ -56,4 +70,10 @@ Rails.application.routes.draw do
   post 'query-app-task', to: 'submit#query_app_task', format: 'json'
   post 'query-app-task-dummy', to: 'submit#query_app_task_dummy', format: 'json'
   mount Deltadb::Engine => "/db"
+
+  # admin
+  get '/admin', to: 'admin#index'
+  post "admin/modify_sample_metadata" => "admin#modify_sample_metadata", :as => "admin/modify_sample_metadata"
+  post "admin/modify_sample_abd" => "admin#modify_sample_abd", :as => "admin/modify_sample_abd"
+
 end

@@ -2,6 +2,11 @@ class ProjectsController < ApplicationController
     http_basic_authenticate_with name: "admin", password: "chelijia",
     except: [:index, :show]
 
+    $seq_dir = "#{Rails.root}/app/data/seq/"
+    $abd_dir = "#{Rails.root}/app/data/abd_files/"
+    $tmp_dir = "#{Rails.root}/app/data/tmp/"
+    $user_stor_dir = "#{Rails.root}/data/user"
+
     def index
         @projects = Project.order(:name)
         @attrs = Project.column_names
@@ -12,8 +17,13 @@ class ProjectsController < ApplicationController
     end
   
     def show
+        @user = User.find(session[:user_id])
         @project = Project.find(params[:id])
         @sample_attrs = Sample.column_names
+        id = session[:user_id]
+        @user = User.find(id)
+        user_dir = File.join($user_stor_dir, id.to_s)
+        @datasets = @user.datasets
         respond_to do |format|
             format.html
             format.csv { send_data @project.samples.to_csv }
@@ -34,14 +44,12 @@ class ProjectsController < ApplicationController
     def import
         Project.import(params[:file])
         update_metadata
-        redirect_to projects_path, notice: "Projects imported."
+        redirect_to '/admin', notice: "Projects imported."
     end
 
     def export_selected
         @projects = Project.order(:name)
-        respond_to do |format|
-            format.csv {send_data @projects.selected_to_csv(params[:project_ids])}
-        end
+        send_data @projects.selected_to_csv(params[:project_ids])
     end
 
     def new
@@ -56,6 +64,15 @@ class ProjectsController < ApplicationController
         else
             render 'new'
         end
+    end
+
+    def download_abd_table
+        @project = Project.find(params[:id])
+        name = @project.name
+        send_file(
+            "#{$abd_dir}#{name}.csv",
+                filename: "#{name}_abd.csv",
+        )
     end
   
     def update

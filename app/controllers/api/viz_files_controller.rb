@@ -18,7 +18,7 @@ class Api::VizFilesController < ApplicationController
         @viz_data_sources = @analysis.visualizer.viz_data_sources
         files_info.each do |dataType, info|
             vds = @viz_data_sources.find_by(data_type:dataType)
-            files = vds.viz_file_objects.where analysis:@analysis, visitor:@visitor
+            files = vds.viz_file_objects.where analysis:@analysis, user:@user
             data << {
                 id: vds.id,
                 name: info['name'],
@@ -106,7 +106,7 @@ class Api::VizFilesController < ApplicationController
         params.each do |key, file|
             next unless key.start_with? '_f_'
             dataType = key.delete_prefix('_f_')
-            vfo = @visitor.viz_file_objects.new
+            vfo = @user.viz_file_objects.new
             vfo.file = file
             vds = VizDataSource.find_by data_type:dataType
             vfo.viz_data_source = vds
@@ -161,7 +161,7 @@ class Api::VizFilesController < ApplicationController
 
     def instantiate_models
         @analysis = Analysis.find(params[:analysis_id])
-        @visitor = Visitor.find(session[:visitorid])
-        @analysis_user_datum = AnalysisUserDatum.find_by analysis:@analysis, visitor: @visitor
+        @user = User.find(session[:user_id])
+        @analysis_user_datum = AnalysisUserDatum.find_by analysis:@analysis, user: @user
     end
 end

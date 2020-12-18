@@ -10,6 +10,10 @@
                 </div>
                 <!-- <h3>Query Task</h3> -->
                 <p>Find your submitted job</p>
+                <div class="col-md-6" >
+                    <a v-for="task in tasks" href="javascript: void(0);" @click="token_search(task)">{{task}}</a>
+                </div>
+                <br/>
                 <div class="row justify-content-center">
                     <b-form-input v-model="job_id"
                                     type="text"
@@ -18,11 +22,11 @@
                                     placeholder="Search your job ID"
                                     class="col-md-4 text-center"></b-form-input>
                 </div>
-                <p class='m-1'>Examples:
+                <!--<p class='m-1'>Examples:
                     <a href="javascript: void(0);" @click="example-zero">Drug Used</a>;
                     <a href="javascript: void(0);" @click="example_one">Taxonomic Compositions Analysis</a>;
                     <a href="javascript: void(0);" @click="example_two">Data Mount Evaluation</a>;
-                </p>
+                </p> -->
                 <b-button variant="secondary" class="mt-4" size="lg" 
                             @click="searchJob"><i class="fas fa-search"></i> Search</b-button>
                 <b-button variant="secondary" class="mt-4" size="lg" 
@@ -90,6 +94,12 @@ export default {
             data: null,
         };
     },
+    created() {
+            this.tasks = [];
+            var tasks = window.gon.tasks;
+            this.tasks = tasks;
+            console.log(tasks)
+        },
     methods: {
         searchJob() {
             const { alertCenter } = this.$refs;
@@ -160,8 +170,14 @@ export default {
         returnQuery(){
             this.submitted = false;
         },
+        token_search(token){
+            console.log("=======")
+            this.job_id = token;
+            console.log(this.job_id)
+            this.searchJob();
+        },
         example_zero(){
-            this.job_id = 'yOLQ9xABNOAvlp4j';
+            this.job_id = 'yOLQ9xABNOAvlp4j';// 'yOLQ9xABNOAvlp4j,K7VXyBAOgoA1Yoq2'
             this.searchJob();
         },
         example_one(){

@@ -34,30 +34,31 @@
             |  Database
             = icon 'fas', caret_icon
           .dropdown-menu
+            = link_to '/database/overview/', class: 'dropdown-item' do
+              / = icon 'fas', 'network-wired'
+              | Database Information
             = link_to projects_path, class: 'dropdown-item' do
               / = icon 'fas', 'network-wired'
               | Sample Information
-            = link_to '/database/tc/', class: 'dropdown-item' do
-              / = icon 'fas', 'network-wired'
-              | Taxonomic Compositions
-            = link_to '/database/char/', class: 'dropdown-item' do
-              / = icon 'fas', 'network-wired'
-              | Characteristics of Oral Microbiome
-            = link_to '/database/fc/', class: 'dropdown-item' do
-              / = icon 'fab', 'medium-m'
-              | Functional Categories
-            = link_to '/database/aa/', class: 'dropdown-item' do
-              / = icon 'fab', 'medium-m'
-              | Antibiotic Abilities
+            
           li.nav-item.dropdown
             = link_to '#', class: 'nav-link dropdown-toggle', data: { toggle: 'dropdown' } do
               = icon 'fa', 'upload'
               |  Submit
               = icon 'fas', caret_icon
             .dropdown-menu
+              = link_to analysis_index_path, class: 'dropdown-item' do
+                | Analysis
+              
+              = link_to "/visualizer/analysis/1", class: 'dropdown-item' do
+                | Visualization
+                
               = link_to '/submit/622/', class: 'dropdown-item' do
                 / = icon 'fas', 'network-wired'
                 | Meta Viz Test
+              = link_to '/submit/624/', class: 'dropdown-item' do
+                / = icon 'fab', 'medium-m'
+                | Meta double input test
               = link_to '/submit/589/', class: 'dropdown-item' do
                 / = icon 'fab', 'medium-m'
                 | Data Mount Evaluation

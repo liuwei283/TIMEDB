@@ -21,7 +21,23 @@
                                         <i class="fa  fa-question-circle" v-b-tooltip
                                         :title="input.description"></i>
                                     </label>
+
+                                    <select class="form-control custom-select" 
+                                        v-if="input.name=='second_i'"
+                                        :id="`i-${input.id}`"
+                                        :name="`i-${input.id}`"
+                                        :required="input.required"
+                                        v-model="selected[`i-${input.id}`]"
+                                        :state="inputValid[`i-${input.id}`]"
+                                    >
+                                        <option value="">--Please choose a file--</option>
+                                        <option v-for="(option, index) in select_box_option" :key="index" :value="option.value" :disabled="option.disabled">
+                                            {{option.lable}}
+                                        </option>
+                                    </select>
+
                                     <b-form-file
+                                        v-else
                                         :id="`i-${input.id}`"
                                         v-model="files[`i-${input.id}`]"
                                         :state="inputValid[`i-${input.id}`]"
@@ -30,6 +46,9 @@
                                         :name="`i-${input.id}`"
                                         :required="input.required"
                                     ></b-form-file>
+
+
+
                                 </div>
                             </div>
                         </template>
@@ -106,6 +125,7 @@
     import VueTagsInput from '@johmun/vue-tags-input';
     import AlertCenter from 'components/alert-center.vue';
     import GlobalSaveButton from 'components/global-save-button.vue';
+    import path from 'path'
 
     Vue.use(BootstrapVue);
 
@@ -121,6 +141,7 @@
                 files: {
 
                 },
+                selected: {},
                 boolSelectOpt: [
                     { value: true, text: 'Yes' },
                     { value: false, text: 'No' },
@@ -131,6 +152,23 @@
             };
         },
         created() {
+            this.selected = {};
+            this.select_box_option = [];
+            var ds = window.gon.select_box_option;
+            var oplist = [];
+            for (var key in ds){
+                var fs = ds[key];
+                var op = {value: "", lable: "--- in " + key + "---", disabled: true};
+                oplist.push(op);
+                for (var i in fs){
+                    var f = fs[i];
+                    var ds_dir = path.join(key, f);
+                    var op = {value: ds_dir, lable: f, disabled: false};
+                    oplist.push(op);
+                }
+            }
+            this.select_box_option = oplist
+
             axios.get(`https://deepomics.org/api/apps/${this.id}/`).then((response) => {
                 this.app = response.data.app;
                 for (var k in this.app.inputs){
@@ -179,6 +217,7 @@
                             .map(({ name, value }) => ({ [name]: value}));
             },
             submitTask() {
+                // send selected file to files
                 const { alertCenter } = this.$refs;
                 let allRight = true;
                 document.querySelectorAll('input').forEach((input) => {
@@ -191,13 +230,13 @@
                     }
                 })
                 if (allRight) {
-                    console.log(this.files);
                     axios.post(
                         `/submit-app-task/`,
                        objectToFormData({
                             "app_id": this.app.id,
                             "inputs": this.files,
                             "params": this.formatParams(),
+                            "selected": this.selected,
                         }),
                         {
                             headers: {
@@ -219,6 +258,19 @@
                         // setTimeout(() => { alertCenter.add('danger', ''); }, 2000);
                     });
                 }
+            },
+
+            setSelectBox(){
+                var i = 0;
+                var s = "<option disabled vaule=''>Choose a file</option>";
+                var list = ["dataset1-data.csv", "dataset2-data.csv", "dataset3-data.csv"]
+
+                for(i=0; i<list.length; i++){
+                    s += "<option>" + list[i] + "</option>";
+                }
+
+                this.$refs.select_box = s
+
             },
         },
         components: {

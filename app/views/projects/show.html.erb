@@ -1,20 +1,40 @@
 <head>
-  
+
   
   <script src="https://cdn.staticfile.org/jquery/1.10.2/jquery.min.js"></script>
   <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.22/js/jquery.dataTables.min.js"></script>
   <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.22/css/jquery.dataTables.css">
 
   <script type="text/javascript">
+    //debugger
+    console.log("=========")
+    $(window).unload(function() {
+      $.rails.enableFormElements($($.rails.formSubmitSelector));
+    });
+  
     $(document).ready( function () { 
-      $('#Table').DataTable({
+      var table = $('#Table').DataTable({
         columnDefs: [{
           targets: [0, -1],
           orderable: false,
         }],
         scrollX: true
       }); 
+
+      $('button.toggle-vis').on( 'click', function (e) {
+        e.preventDefault();
+ 
+        // Get the column API object
+        var column = table.column( $(this).attr('data-column') );
+        // Toggle the visibility
+        column.visible( ! column.visible() );
     } );
+
+
+
+  } );
+
+    
 
     function toggle_checkall(field_name, state) {
       var checkboxes = document.getElementsByTagName('input');
@@ -27,15 +47,6 @@
       }
     }
   </script>
-
-  <style>
-    .table_cell {
-      max-height: 100px;
-      overflow: hidden;
-    }
-  </style>
-
-  
 </head>
 
 <body>
@@ -66,12 +77,27 @@
 
 <h2>Samples</h2>
 <p>
-  Download samples information:
-  <%= link_to "CSV", project_path(format: "csv") %>
+  <span class="download_span">
+    Download samples information:
+    <%= link_to "Metadata", project_path(format: "csv") %>
+  </span>
 </p>
 
+<div id='hidden_helper'>
+  Hide columns: 
+  <br />
+  <% i=1 %>
+  <% @sample_attrs.each do |attr| %>
+    <% if attr != 'id' && attr != 'created_at' && attr != 'updated_at' %>
+      <button class="toggle-vis" data-column='<%=i.to_s%>'> 
+        <%= attr.capitalize %>
+      </button>
+      <%i += 1%>
+    <%end%>
+  <%end%>
+</div>
 
-<%= form_tag export_selected_project_samples_path(@project,format: "csv"), multipart: true do %>  
+<%= form_tag make_selected_file_project_samples_path(@project), multipart: true do %>  
   <table id="Table" class="display">
 
     <thead>
@@ -103,10 +129,10 @@
           
           <td>
             <%= link_to 'Show', project_sample_path(sample.project, sample) %>
-            <%= link_to 'Delete', [sample.project, sample],
+            <%#= link_to 'Delete', [sample.project, sample],
               method: :delete,
               data: { confirm: 'Are you sure to delete ' + sample.sample_name + '?'} %>
-            <%= link_to 'Edit', edit_project_sample_path(sample.project, sample.id) %> 
+            <%#= link_to 'Edit', edit_project_sample_path(sample.project, sample.id) %> 
           </td>
         </tr>
       
@@ -114,15 +140,45 @@
     </tbody>
 
   </table>
-  <%= submit_tag "export selected" %>
-<% end %>
 
-<%#<%=link_to 'Add', new_project_sample_path([@project]) %>
 
-<%= form_tag import_project_samples_path([@project]), multipart: true do %>
-  <%= file_field_tag :file %>
-  <%= submit_tag "Import by csv" %>
+
+  <%= submit_tag "dowload selected samples metadata to file", :name => 'metadata', :class => "s_table_sub" %>
+  <%= submit_tag "download selected samples abundance to file", :name => 'abundance', :class => "s_table_sub"  %>
+  <%#= submit_tag "download selected samples sequence to file", :name => 'sequence' %>
+  <br />
+  
+  <%= submit_tag "export selected metadata to", :name => 'metadata2ds', :class => "s_table_sub"  %>
+  <%= submit_tag "export selected abundance to", :name => 'abd2ds', :class => "s_table_sub"  %>
+  <select id="select_box" name="ds_selected">
+    <option value="">--Please choose a dataset--</option>
+    <% @datasets.each do |ds|%>
+      <option value=<%=ds.name%>> <%=ds.name%></option>
+    <%end%>
+  </select>
 <% end %>
+<p>
+  If you do NOT have any dataset, create one here: 
+  <%=link_to 'Create new dataset', new_user_dataset_path(:user_id=>@user.id)%>
+</p>
+
+<p>
+  *To avoid frenquent download, please refresh the page to enable download again.
+</p>
+
+
+
+<%#=link_to 'Download selected sequencing data', download_selected_abd_project_samples_path(@project.id) %>
+
+<%#= form_tag import_project_samples_path([@project]), multipart: true do %>
+  <%#= file_field_tag :file %>
+  <%#= submit_tag "Import metadata by csv" %>
+<%# end %>
+
+<%#= form_tag import_abd_table_project_samples_path([@project]), multipart: true do %>
+  <%#= file_field_tag :file %>
+  <%#= submit_tag "Import abundance by tsv" %>
+<%# end %>
 
 </body>
 

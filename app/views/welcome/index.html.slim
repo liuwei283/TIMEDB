@@ -12,10 +12,63 @@ section.heading.bg-light.text-light
     p.text-white-50.index-more
       | Oral microbiome is closely related with human health, and dysbiotic oral microbiota have been discovered in individuals with oral and even systematic diseases in previous studies. In the database, we have collected public salivary metagenomic data from 154 Chinese, 36 Japanese and 30 Philippines, together with 5 Americans from the Human Microbiome Project (HMP).  Based on the metagenomic data, the microbial compositions, functional categories and antibiotic abilities of oral microbiota were detected. Generally, the oral microbiota database exhibits the characteristics of oral microbiota in different populations, and it supports the uploading and analyzing of customer data.
 
-    / a.btn.btn-xlg.btn-doap.btn-outline-light.text-uppercase.font-weight-bold href='/docs/index.html'
-    /   | Learn More
-/section.contact
+section#function_card
+  h2
+    | Function
+
+  #cards_wrapper
+    .card
+      .card_img
+        =link_to '/database/overview'
+          =image_tag "card_img.png", :alt=>"Human Gut Metagenomics.png"
+      .card_body
+        h5
+          |Human Gut Metagenomics Database
+        p
+          |Human Gut Metagenomics DatabaseOver 10,000 whole-genome human gut metagenomics sequencing data. Including published clinical information, relative abundance profling table (metaphlan2 & kraken2).    
+    .card
+      .card_img
+        =link_to analysis_index_path
+          =image_tag "card_img.png", :alt=>"Analysis.png"
+      .card_body
+        h5
+          |Analyses
+        p
+          |Commonly used metagenomics analysis modules and piplines. Include differential testing, PCA, PCoA, enrichment network.   
+    .card
+      .card_img
+        =link_to "#"
+          =image_tag "card_img.png" , :alt=>"Visualize your results.png"
+      .card_body
+        h5
+          |Visualize your results
+        p
+          |You can visualize your analysis or your personal results online. Contenets heatmap, differential taxonomy in circular tree, networks, boxplots.
+
+              
+
+
+
+
+
+section#dataset_list
+  h2
+    | My dataset
+
+   
+  .elemet_wrapper  
+    - @dataset_list.each do |dataset|
+      span.ds
+        = link_to dataset.name, user_dataset_path(:user_id=>@user.id, :id => dataset.id)
+    span#add_foler_icon
+      =link_to new_user_dataset_path(:user_id=>@user.id)
+        = image_tag 'folder-plus.svg'
+    
+      / a.btn.btn-xlg.btn-doap.btn-outline-light.text-uppercase.font-weight-bold href='/docs/index.html'
+      /   | Learn More
+section.contact
   .container
     .lead.w-100.text-center
       | DOAP's team works directly with researchers, developers and individual users.&nbsp;
       = link_to 'Speak with us to learn more.' ,'#'
+

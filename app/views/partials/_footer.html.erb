@@ -16,16 +16,17 @@
             <div class="col-md-3">
                 <h4>Database</h4>
                 <ul>
-                    <li><a href="#">Taxonomic Compositions</a></li>
-                    <li><a href="#">Functional Categories</a></li>
-                    <li><a href="#">Antibiotic Abilities</a></li>
+                    <li><a href='/database/overview/'>Database Information</a></li>
+                    <li><%=link_to 'Sample Information', projects_path%></li>
                 </ul>
             </div>
 
             <div class="col-md-3">
                 <h4>Submit</h4>
                 <ul>
-                    <li><a href="#">Taxonomic Compositions Analysis</a></li>
+                    <li><%=link_to 'Analysis', analysis_index_path%></li>
+                    <li><a href="/visualizer/analysis/1">Visualization</a></li>
+
                     <%
 =begin%>
                     <li><a href="#">Analysis on Functional Categories</a></li>
@@ -33,16 +34,15 @@
                     <%
 =end%>
                     <li><a href="#">Data Mount Evaluation</a></li>
-                    <li><a href="#">Job Query</a></li>
+                    <li><a href='/job-query/'>Job Query</a></li>
                 </ul>
             </div>
 
             <div class="col-md-3">
                 <h4>Support</h4>
                 <ul>
-                    <li><a href="#">Tutorial</a></li>
-                    <li><a href="#">Contact Us</a></li>
-                    <li><a href="#">FAQ</a></li>
+                    <li><a href='/docs'>Tutorial</a></li>
+                    <li><a href='/contact'>Contact Us</a></li>
                 </ul>
             </div>
 
