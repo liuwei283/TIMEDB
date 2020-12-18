@@ -7,14 +7,14 @@ class AdminController < ApplicationController
 
     def modify_sample_metadata
         if params[:project_id] == -1
-            redirect_to '/user/admin'
+            redirect_to '/admin'
         else
             #redirect_to import_project_samples_path(:project_id=>params[:project_id], :file=>params[:file])
             @project = Project.find(params[:project_id])
             Sample.import(params[:file],params[:project_id] )
             @project.update_attribute(:num_of_samples, @project.samples.count)
             update_metadata
-            redirect_to '/user/admin', notice: "Samples imported."
+            redirect_to '/admin', notice: "Samples imported."
         end
     end
 
@@ -64,7 +64,7 @@ class AdminController < ApplicationController
         else
             logger.error "Bad file_data: #{up_file.class.name}: #{up_file.inspect}"
         end
-        redirect_to '/user/admin', notice: "ALL Abundance data uploaded."
+        redirect_to '/admin', notice: "ALL Abundance data uploaded."
     end
 
     private
