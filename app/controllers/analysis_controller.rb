@@ -38,9 +38,10 @@ class AnalysisController < ApplicationController
 
     def instantiate_sidebar 
         @analysis_categories = AnalysisCategory.all
-        if session[:user_id].blank?
+        if session[:user_id].blank? || !User.exists?(session[:user_id])
             user = User.create
             session[:user_id] = user.id
+           
         end
     end
 end
