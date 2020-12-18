@@ -3,7 +3,7 @@ svg {
 	height = 800
 	Component {
 		XYPlot {
-            @let groupColorMap = clusters? @colorMap(clusters, colors) : @colorMap(groups, colors)
+            @let groupColorMap = scatterClusterData? @colorMap(clusters, colors) : @colorMap(groups, colors)
 			height = plotHeight; width = plotWidth;
 			x = 50; y = 50
 			valueRange = valueRange
@@ -58,35 +58,35 @@ svg {
             }
 
             @if !!scatterVectorData {
-                            @for (vector, i) in scatterVectorData {
-                Component {
-                    Arrow {
-                        key =`vector-${i}` 
-                        x = @scaled-x(0); y = @scaled-y(0)
-                        x2 = @scaled-x(vector[xLabel]); y2= @scaled-y(vector[yLabel])
-                    }
-                }
-                Component {
-                    x = @scaled-x(vector[xLabel] * 1.1) 
-					y = @scaled-y(vector[yLabel] * 1.1 ) 
-                   
-                    @if (vector[xLabel] > 0) {
-                        Text {
-                            text = vector[vectorLabel]
-                            anchor = @anchor("l","m")
-                        }
-                    } @else {
-                        Text {
-                            text = vector[vectorLabel]
-                            anchor = @anchor("r","m")
+                @for (vector, i) in scatterVectorData {
+                    Component {
+                        Arrow {
+                            key =`vector-${i}` 
+                            x = @scaled-x(0); y = @scaled-y(0)
+                            x2 = @scaled-x(vector[xLabel]); y2= @scaled-y(vector[yLabel])
                         }
                     }
+                    Component {
+                        x = @scaled-x(vector[xLabel] * 1.1) 
+                        y = @scaled-y(vector[yLabel] * 1.1 ) 
                     
+                        @if (vector[xLabel] > 0) {
+                            Text {
+                                text = vector[vectorLabel]
+                                anchor = @anchor("l","m")
+                            }
+                        } @else {
+                            Text {
+                                text = vector[vectorLabel]
+                                anchor = @anchor("r","m")
+                            }
+                        }
+                        
+                    }
                 }
-            }
             }
 
-            @if !!ovalData {
+            @if !!scatterClusterData {
                 @for oval in ovalData {
                     Component {
                         x = @scaled-x(oval.center.x) - oval.dx; y = @scaled-y(oval.center.y) - oval.dy
@@ -132,7 +132,7 @@ svg {
             
             Component {
                 x = 20; y = 20
-                height = 60; width = 100
+                height = 50; width = 70
                 Rect.full {
                     stroke = @color("line")
                     fill = "white"
@@ -141,7 +141,7 @@ svg {
                     @for (group, i) in groups {
                         Component {
                             height = 25
-                            @if clusters {
+                            @if scatterClusterData {
                                @if i === 0 {
                                     Circle.centered{
                                         x = 8; y = 12.5; r = 4; fill = colors[0]
@@ -161,8 +161,34 @@ svg {
                             }
                         }
                     }
+                }  
+            }
+
+            @if scatterClusterData {
+                Component {
+                    x = 20; y = 80
+                    height = 50; width = 70
+                    Rect.full {
+                        stroke = @color("line")
+                        fill = "white"
+                    }
+                    Rows {
+                        @for (cluster, i) in clusters {
+                            Component {
+                                height = 25
+
+                                Circle.centered{
+                                        x = 8; y = 12.5; r = 4; fill = colors[i]
+                                }
+                                
+                                Text(cluster) {
+                                    x = 15; y = 12.5; anchor = @anchor("l","m")
+                                }
+                            }
+                        }
+                    }
+                    
                 }
-                
             }
 		}
 	}
