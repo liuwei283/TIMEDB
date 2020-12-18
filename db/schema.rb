@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_12_09_035912) do
+ActiveRecord::Schema.define(version: 2020_12_18_035722) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -31,12 +31,12 @@ ActiveRecord::Schema.define(version: 2020_12_09_035912) do
   end
 
   create_table "analysis_user_data", force: :cascade do |t|
-    t.bigint "visitor_id"
+    t.bigint "user_id"
     t.bigint "analysis_id"
     t.json "chosen", null: false
     t.boolean "use_demo_file", default: true
     t.index ["analysis_id"], name: "index_analysis_user_data_on_analysis_id"
-    t.index ["visitor_id"], name: "index_analysis_user_data_on_visitor_id"
+    t.index ["user_id"], name: "index_analysis_user_data_on_user_id"
   end
 
   create_table "datasets", force: :cascade do |t|
@@ -113,15 +113,18 @@ ActiveRecord::Schema.define(version: 2020_12_09_035912) do
     t.index ["project_id"], name: "index_samples_on_project_id"
   end
 
+  create_table "task_outputs", force: :cascade do |t|
+    t.bigint "user_id"
+    t.string "task_id", null: false
+    t.integer "output_id", null: false
+    t.json "file_paths", null: false
+    t.index ["user_id"], name: "index_task_outputs_on_user_id"
+  end
+
   create_table "users", force: :cascade do |t|
     t.string "name"
     t.integer "dataset_n"
     t.string "task_ids"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-  end
-
-  create_table "visitors", force: :cascade do |t|
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
   end
@@ -141,14 +144,14 @@ ActiveRecord::Schema.define(version: 2020_12_09_035912) do
 
   create_table "viz_file_objects", force: :cascade do |t|
     t.bigint "analysis_id"
-    t.bigint "visitor_id"
+    t.bigint "user_id"
     t.bigint "viz_data_source_id"
     t.string "name", null: false
     t.text "file", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["analysis_id"], name: "index_viz_file_objects_on_analysis_id"
-    t.index ["visitor_id"], name: "index_viz_file_objects_on_visitor_id"
+    t.index ["user_id"], name: "index_viz_file_objects_on_user_id"
     t.index ["viz_data_source_id"], name: "index_viz_file_objects_on_viz_data_source_id"
   end
 

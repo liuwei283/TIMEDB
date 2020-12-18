@@ -7,8 +7,8 @@ class AnalysisController < ApplicationController
     def show 
         @analysis = Analysis.find(params[:id])
         files_info = @analysis.files_info
-        if AnalysisUserDatum.where("visitor_id = ? AND analysis_id = ?",
-                session[:visitorid], params[:id]).blank?
+        if AnalysisUserDatum.where("user_id = ? AND analysis_id = ?",
+                session[:user_id], params[:id]).blank?
             @analysisUserDatum = @analysis.analysis_user_data.new
             default_chosen = {}.tap { |x|
                 files_info.each do |dataType, info|
@@ -17,7 +17,7 @@ class AnalysisController < ApplicationController
                 end
             } 
             @analysisUserDatum.chosen =  default_chosen
-            @analysisUserDatum.visitor = Visitor.find(session[:visitorid])
+            @analysisUserDatum.user = User.find(session[:user_id])
             @analysisUserDatum.save!
         end
 
@@ -38,9 +38,9 @@ class AnalysisController < ApplicationController
 
     def instantiate_sidebar 
         @analysis_categories = AnalysisCategory.all
-        if session[:visitorid].blank?
-            visitor = Visitor.create
-            session[:visitorid] = visitor.id
+        if session[:user_id].blank?
+            user = User.create
+            session[:user_id] = user.id
         end
     end
 end

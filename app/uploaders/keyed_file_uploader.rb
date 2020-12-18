@@ -10,7 +10,7 @@ class KeyedFileUploader < CarrierWave::Uploader::Base
   # Override the directory where uploaded files will be stored.
   # This is a sensible default for uploaders that are meant to be mounted:
   def store_dir
-    "data/uploads/#{model.visitor_id}/#{model.analysis.name.gsub! ' ', '_'}/#{model.viz_data_source.data_type}"
+    "data/uploads/#{model.user_id}/#{model.analysis.name.gsub! ' ', '_'}/#{model.viz_data_source.data_type}"
   end
 
   # Provide a default URL as a default if there hasn't been a file uploaded:
