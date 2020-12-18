@@ -27,8 +27,8 @@ function init() {
             plotWidth: 400,
             colors: ["green", "red"],
             config: {
-                xAxisIndex:3,
-                yAxisIndex:1,
+                xAxisIndex:1,
+                yAxisIndex:2,
                 computeOval: false,
             },
             scatterVectorData: null,
@@ -43,10 +43,12 @@ function init() {
             const scatterData = this.data.scatterData;
             this.data.categoryRange = findBoundsForValues(scatterData.map(d=>(d[this.data.scatterColumns[xAxisIndex]])),1);
             this.data.valueRange = findBoundsForValues(scatterData.map(d=>(d[this.data.scatterColumns[yAxisIndex]])),1);
-            this.data.categoryRange = [-0.5,0.5];
-            this.data.valueRange = [-0.5,0.5];
+            // this.data.categoryRange = [-0.6,0.4];
+            // this.data.valueRange = [-0.6,0.4];
+
+            console.log(this.data.scatterColumns)
             this.data.xLabel = this.data.scatterColumns[xAxisIndex];
-            this.data.yLabel = this.data.scatterColumns[yAxisIndex]
+            this.data.yLabel = this.data.scatterColumns[yAxisIndex];
             this.data.usedAttrs = [this.data.scatterColumns[0], this.data.scatterColumns[xAxisIndex], 
                 this.data.scatterColumns[yAxisIndex]];
             if (this.data.groups) this.data.usedAttrs.push("group");

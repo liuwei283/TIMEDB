@@ -5,6 +5,7 @@ import { copyObject } from "utils/object";
 import { forEachChild } from "typescript";
 
 function run(v) {
+    console.log(v)
     v.data._changed = true;
     v.run();
 }
@@ -41,6 +42,7 @@ export function editorConfig(v): EditorDef {
                             value: {
                                 current: "2",
                                 callback(d) {
+                                    console.log(d)
                                     v.data.availableAxises.forEach(axis => {
                                         if(axis.string === d)
                                             v.data.config.xAxisIndex = axis.value;
@@ -82,9 +84,10 @@ export function editorConfig(v): EditorDef {
                                 title: "Customize colors",
                                 scheme: copyObject(v.data.colors),
                                 palettes: withDefaultPalette(defaultPalette, cbpPalette),
+                                paletteMap: {"0":0,"1":1},
                                 id: "pwcolor",
                                 callback(colors) {
-                                    v.data.colors = colors;
+                                    v.data.colors = [colors['0'], colors['1']];
                                     v.forceRedraw = true;
                                     run(v);
                                 },
