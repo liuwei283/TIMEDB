@@ -8,8 +8,9 @@ svg {
                width = 25 * data.columns.length
                drawRows = i === 0? true : false
                data = data.data
-               colorMap = colorMap
+               colors = colors
                valueMap = valueMap
+               values = values
                gridW = 25
                gridH = 15
                colName = config.colName

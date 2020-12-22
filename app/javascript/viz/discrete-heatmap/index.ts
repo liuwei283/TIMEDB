@@ -1,13 +1,13 @@
 import Oviz from "crux"
 
-import { editorConfig } from "./Editor";
+import { editorConfig } from "./editor";
 import template from "./template.bvt"
 import {DiscreteHeatMap} from './discrete-heatmap'
 import {register} from "page/visualizers";
+import { registerEditorConfig } from "utils/editor";
 
 const MODULE_NAME = "discrete-heatmap"
 const defaultValues = [0, 0.5, 1];
-const defaultColors = ["white", "#C7C7C7", "red"];
 const defaultInfo = ["did not use drug", "unknown", "used drug"];
 
 const DiscreteHeatmap = {
@@ -32,7 +32,7 @@ function initViz(): any {
             },
             values : defaultValues,
             valueMap: genDefaultValueMap(),
-            colorMap: genDefaultColorMap([]),
+            colors: ["white", "#C7C7C7", "red"],
         },
         loadData: {
             heatmapDataD: {
@@ -59,13 +59,15 @@ function initViz(): any {
                         return {rows, columns: sample.columns.splice(1, sample.columns.length), data};
                     });
                     this.data.values = values.sort();
-                    this.data.colorMap = genDefaultColorMap(this.data.values);
                     return d;
                 },
             },
         },
+        setup() {
+            registerEditorConfig(editorConfig(this));
+        }
     };
-    return {vizOpts, editorConfig};
+    return {vizOpts};
 }
 
 function initVizWithDeepomics(fileDefs) {
