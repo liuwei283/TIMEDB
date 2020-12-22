@@ -1,5 +1,6 @@
 import Oviz from "crux";
 import template from "./template.bvt"
+import {ComplexScatterplot} from "./complex-scatterplot"
 import { editorConfig } from "./editor";
 import { registerEditorConfig } from "utils/editor";
 import {savedTheme} from "oviz-common/mem-theme"
@@ -22,6 +23,7 @@ function init() {
     const {visualizer} = Oviz.visualize({
         el: "#canvas",
         template,
+        components: {ComplexScatterplot},
         data: {
             plotHeight: 400,
             plotWidth: 400,
@@ -30,56 +32,18 @@ function init() {
                 xAxisIndex:1,
                 yAxisIndex:2,
                 computeOval: false,
+                categoryRange: [null, null],
+                valueRange: [null, null],
             },
+            groups: null,
+            clusters: null,
+            vectorLabel: null,
             scatterVectorData: null,
             scatterClusterData: null,
         },
         loadData: genDefaultDataSources(),
         setup() {
             registerEditorConfig(editorConfig(this));
-            //select x, y axis
-            const xAxisIndex = this.data.config.xAxisIndex;
-            const yAxisIndex = this.data.config.yAxisIndex;
-            const scatterData = this.data.scatterData;
-            this.data.categoryRange = findBoundsForValues(scatterData.map(d=>(d[this.data.scatterColumns[xAxisIndex]])),1);
-            this.data.valueRange = findBoundsForValues(scatterData.map(d=>(d[this.data.scatterColumns[yAxisIndex]])),1);
-            // this.data.categoryRange = [-0.6,0.4];
-            // this.data.valueRange = [-0.6,0.4];
-
-            console.log(this.data.scatterColumns)
-            this.data.xLabel = this.data.scatterColumns[xAxisIndex];
-            this.data.yLabel = this.data.scatterColumns[yAxisIndex];
-            this.data.usedAttrs = [this.data.scatterColumns[0], this.data.scatterColumns[xAxisIndex], 
-                this.data.scatterColumns[yAxisIndex]];
-            if (this.data.groups) this.data.usedAttrs.push("group");
-            if (this.data.clusters) this.data.usedAttrs.push("cluster");
-            this.data.scatterData = this.data.scatterData.map(d => {
-                const datum = {};
-                this.data.usedAttrs.forEach(key => {
-                    datum[key] = d[key];
-                })
-                return datum;
-            })
-            
-             //config plot size
-             const xyRatio = (this.data.categoryRange[1] - this.data.categoryRange[0]) / (this.data.valueRange[1] - this.data.valueRange[0])
-             this.data.plotWidth = xyRatio > 1 || this.data.plotWidth; 
-             this.data.plotHeight = this.data.plotWidth/ xyRatio; 
-
-            const svgRatioX = this.data.plotWidth / (this.data.categoryRange[1] - this.data.categoryRange[0]);
-            const svgRatioY = this.data.plotHeight / (this.data.valueRange[1] - this.data.valueRange[0]);
-
-            // compute oval
-            if (this.data.clusters) {
-                const ovalData = groupBy(this.data.scatterData, "cluster");
-                this.data.ovalData = [];
-                this.data.clusters.forEach(key=> {
-                    const ellipseData = computeErrorEllipse(ovalData[key], this.data.usedAttrs[1], this.data.usedAttrs[2],
-                        svgRatioX, svgRatioY);
-                    ellipseData.cluster = key;
-                    this.data.ovalData.push(ellipseData);
-                });
-            }
         }
     }); 
     
@@ -92,14 +56,18 @@ function genDefaultDataSources() {
             fileKey: "scatterData",
             type: "tsv",
             dsvRowParser (row, index,columns) {
+                row.sampleId = row[columns[0]];
+                delete row[columns[0]];
                 for (let i = 1; i< columns.length; i++)
                     row[columns[i]] = parseFloat(row[columns[i]]);
                 return row;
             },
             loaded(data) {
                 this.data.scatterColumns = data.columns;
-                this.data.availableAxises = data.columns.filter((d,i) => {
-                    if(i>0) return {value: i, string: d};
+                this.data.scatterColumns[0] = "sampleId";
+                this.data.availableAxises = [];
+                data.columns.forEach((d,i) => {
+                    if(i>0) this.data.availableAxises.push({value: i, text: d});
                 })
             }
         },
@@ -159,6 +127,7 @@ function genDefaultDataSources() {
                     if (hasCluster) return d;
                 })
                 this.data.clusters = getGroups(data, "cluster");
+                return null;
             }
         }
     }
