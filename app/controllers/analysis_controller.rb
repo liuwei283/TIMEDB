@@ -7,10 +7,10 @@ class AnalysisController < ApplicationController
     def show 
         @analysis = Analysis.find(params[:id])
         files_info = @analysis.files_info
-        if AnalysisUserDatum.where("user_id = ? AND analysis_id = ?",
-                session[:user_id], params[:id]).blank?
-            @analysisUserDatum = AnalysisUserDatum.createDefaultDatum params[:id], session[:user_id]
-        end
+        
+        @analysisUserDatum = AnalysisUserDatum.findOrInitializeBy params[:id], session[:user_id]
+        @analysisUserDatum.task_output = nil
+        @analysisUserDatum.save!
 
         gon.push module_name: @analysis.visualizer.js_module_name,
                  analysis_name: @analysis.name,
