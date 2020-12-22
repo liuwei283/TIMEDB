@@ -9,18 +9,8 @@ class AnalysisController < ApplicationController
         files_info = @analysis.files_info
         if AnalysisUserDatum.where("user_id = ? AND analysis_id = ?",
                 session[:user_id], params[:id]).blank?
-            @analysisUserDatum = @analysis.analysis_user_data.new
-            default_chosen = {}.tap { |x|
-                files_info.each do |dataType, info|
-                    next unless !VizDataSource.find_by(data_type:dataType).optional
-                    x[dataType] = nil
-                end
-            } 
-            @analysisUserDatum.chosen =  default_chosen
-            @analysisUserDatum.user = User.find(session[:user_id])
-            @analysisUserDatum.save!
+            @analysisUserDatum = AnalysisUserDatum.createDefaultDatum params[:id], session[:user_id]
         end
-
 
         gon.push module_name: @analysis.visualizer.js_module_name,
                  analysis_name: @analysis.name,
