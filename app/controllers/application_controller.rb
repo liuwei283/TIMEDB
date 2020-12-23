@@ -10,7 +10,7 @@ class ApplicationController < ActionController::Base
             @user.save
             session[:user_id] = @user.id
             user_dir = File.join($user_stor_dir, @user.id.to_s)
-            unless File.directory?(directory)
+            unless File.directory?(user_dir)
                 Dir.mkdir(user_dir)
             end
         end
