@@ -1,7 +1,4 @@
 class SamplesController < ApplicationController
-    http_basic_authenticate_with name: "admin", password: "chelijia",
-    except: [:index, :show]
-
     $seq_dir = "#{Rails.root}/app/data/seq/"
     $abd_dir = "#{Rails.root}/app/data/abd_files/"
     $tmp_dir = "#{Rails.root}/app/data/tmp/"
