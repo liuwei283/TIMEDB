@@ -11,7 +11,7 @@
                 <!-- <h3>Query Task</h3> -->
                 <p>Find your submitted job</p>
                 <div class="col-md-6" >
-                    <a v-for="task in tasks" href="javascript: void(0);" @click="token_search(task)">{{task}}</a>
+                    <a class="task" v-for="task in tasks" href="javascript: void(0);" @click="token_search(task)">{{task}}</a>
                 </div>
                 <br/>
                 <div class="row justify-content-center">
@@ -214,5 +214,8 @@ export default {
 }
 #job-query .result-image {
     width: 70%;
+}
+.task{
+    margin: 1em
 }
 </style>

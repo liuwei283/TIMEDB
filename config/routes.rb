@@ -75,5 +75,8 @@ Rails.application.routes.draw do
   get '/admin', to: 'admin#index'
   post "admin/modify_sample_metadata" => "admin#modify_sample_metadata", :as => "admin/modify_sample_metadata"
   post "admin/modify_sample_abd" => "admin#modify_sample_abd", :as => "admin/modify_sample_abd"
-
+  post "admin/modify_viz" => "admin#modify_viz", :as => "admin/modify_viz"
+  post "admin/modify_ana_cate" => "admin#modify_ana_cate", :as => "admin/modify_ana_cate"
+  post "admin/modify_ana" => "admin#modify_ana", :as => "admin/modify_ana"
+  post "admin/modify_viz_source" => "admin#modify_viz_source", :as => "admin/modify_viz_source"
 end

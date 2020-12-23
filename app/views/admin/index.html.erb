@@ -3,56 +3,119 @@ Admin page
 </h1>
 
 <p>
-    This page is made for admin to add project metadata, sample metadata, sample abandance data, every operation need password.
+    This page is made for admin to :
+    <ul>
+      <li>add project metadata</li>
+      <li>add sample metadata</li>
+      <li>add sample abandance data</li>
+      <li>add analysis module</li>
+      <li>add visualization module</li>
+    </ul>
 </p>
 
 <hr />
 
 <br />
-<h4>
-Project management:
-</h4>
+
+<section class="admin_block">
+  <h4>
+  Project management:
+  </h4>
 
 
-<%= form_tag import_projects_path, multipart: true do %>
-  <%= file_field_tag :file %>
-  <%= submit_tag "Import project from csv" %>
-<% end %>
+  <%= form_tag import_projects_path, multipart: true do %>
+    <%= file_field_tag :file %>
+    <%= submit_tag "Import project from csv" %>
+  <% end %>
+</section>
+<hr />
+<section class="admin_block">
+  <h4>
+  Sample management:
+  </h4>
+  <br />
+  <h5>
+    Modify the metadata:
+  </h5>
 
-<br />
-<h4>
-Sample management:
-</h4>
-<br />
-<h5>
-  Modify the metadata:
-</h5>
+  <%= form_tag({action: :modify_sample_metadata}, multipart: true) do %>
+    <p>
+      Please select the project whose samples need to be modified
+    </p>
+    <%= select_tag :project_id, options_from_collection_for_select(@projects, :id, :name, -1) %>
+    <p> 
+      Please select csv file to be imported:
+    </p>
+    <%= file_field_tag 'file' %>
+    <%= submit_tag 'Submit'%>
+  <% end %>
 
-<%= form_tag({action: :modify_sample_metadata}, multipart: true) do %>
+  <br />
+  <h5>
+    Modify the abandance:
+  </h5>
+
+  <%= form_tag({action: :modify_sample_abd}, multipart: true) do %>
+    <p>
+      Please select the project whose samples need to be modified
+    </p>
+    <%= select_tag :project_id, options_from_collection_for_select(@projects, :id, :name, -1) %>
+    <p> 
+      Please select tsv file to be imported:
+    </p>
+    <%= file_field_tag 'file' %>
+    <%= submit_tag 'Submit'%>
+  <% end %>
+</section>
+<hr>
+<br/>
+<section class="admin_block">
+  <h4>
+  Analysis&Visualization management:
+  </h4>
   <p>
-    Please select the project whose samples need to be modified
+    <%=image_tag  "meta_viz_design.jpg" %>
+    <br/>
+    Analysis depends on visualization and analysis category. Please create them before creating analysis.
   </p>
-  <%= select_tag :project_id, options_from_collection_for_select(@projects, :id, :name, -1) %>
-  <p> 
-    Please select csv file to be imported:
-  </p>
-  <%= file_field_tag 'file' %>
-  <%= submit_tag 'Submit'%>
-<% end %>
+  <br />
+  <h5>
+    Modify visualization:
+  </h5>
 
-<br />
-<h5>
-  Modify the abandance:
-</h5>
+  <%= form_tag({action: :modify_viz}, multipart: true) do %>
+    <%= file_field_tag :file %>
+    <%= submit_tag "Import visualization from csv" %>
+  <% end %>
 
-<%= form_tag({action: :modify_sample_abd}, multipart: true) do %>
-  <p>
-    Please select the project whose samples need to be modified
-  </p>
-  <%= select_tag :project_id, options_from_collection_for_select(@projects, :id, :name, -1) %>
-  <p> 
-    Please select tsv file to be imported:
-  </p>
-  <%= file_field_tag 'file' %>
-  <%= submit_tag 'Submit'%>
-<% end %>
+  <h5>
+    Modify analysis categories:
+  </h5>
+
+  <%= form_tag({action: :modify_ana_cate}, multipart: true) do %>
+    <%= file_field_tag :file %>
+    <%= submit_tag "Import categories from csv" %>
+  <% end %>
+
+  <h5>
+    Modify analysis:
+  </h5>
+
+  <%= form_tag({action: :modify_ana}, multipart: true) do %>
+    <%= file_field_tag :file %>
+    <%= submit_tag "Import analyses from csv" %>
+  <% end %>
+
+
+  <h5>
+    Modify visualization source:
+  </h5>
+
+  <%= form_tag({action: :modify_viz_source}, multipart: true) do %>
+    <%= file_field_tag :file %>
+    <%= submit_tag "Import source from csv" %>
+  <% end %>
+
+
+
+</section>
