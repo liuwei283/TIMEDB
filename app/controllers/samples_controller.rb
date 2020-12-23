@@ -120,15 +120,17 @@ class SamplesController < ApplicationController
                 n2 = @sample.sample_name
                 file_current = "#{$abd_dir}#{n1}_#{n2}.tsv"
                 i = index
-                File.readlines(file_current).each_with_index do |line, index2|
-                    if index2 >0
-                        contents = line.split("\t")
-                        k = contents[0].chomp
-                        v = contents[1].chomp
-                        if !(out_json.key?(k))
-                            out_json[k] = Array.new(len, 0.0)
+                if (File.file?(file_current))
+                    File.readlines(file_current).each_with_index do |line, index2|
+                        if index2 >0
+                            contents = line.split("\t")
+                            k = contents[0].chomp
+                            v = contents[1].chomp
+                            if !(out_json.key?(k))
+                                out_json[k] = Array.new(len, 0.0)
+                            end
+                            out_json[k][i] = v.to_f
                         end
-                        out_json[k][i] = v.to_f
                     end
                 end
             end
@@ -186,16 +188,18 @@ class SamplesController < ApplicationController
                 n2 = @sample.sample_name
                 file_current = "#{$abd_dir}#{n1}_#{n2}.tsv"
                 i = index
-                File.readlines(file_current).each_with_index do |line, index2|
-                    if index2 >0
-                        contents = line.split("\t")
-                        k = contents[0].chomp
-                        v = contents[1].chomp
-                        if !(out_json.key?(k))
-                            out_json[k] = Array.new(len, 0.0)
+                if (File.file?(file_current))
+                    File.readlines(file_current).each_with_index do |line, index2| 
+                        if index2 >0
+                            contents = line.split("\t")
+                            k = contents[0].chomp
+                            v = contents[1].chomp
+                            if !(out_json.key?(k))
+                                out_json[k] = Array.new(len, 0.0)
+                            end
+                            out_json[k][i] = v.to_f
                         end
-                        out_json[k][i] = v.to_f
-                    end
+                    end            
                 end
             end
             pj_name = @project.name
@@ -254,10 +258,15 @@ class SamplesController < ApplicationController
         @sample = @project.samples.find(params[:id])
         n1 = @project.name
         n2 = @sample.sample_name
-        send_file(
-        "#{Rails.root}/app/data/seq/#{n1}_#{n2}.fasta",
-            filename: "#{n1}_#{n2}.fasta",
-        )
+        file_current = "#{Rails.root}/app/data/seq/#{n1}_#{n2}.fasta"
+        if File.file?(file_current)
+            send_file(
+            file_current,
+                filename: "#{n1}_#{n2}.tsv",
+            )
+        else
+            redirect_back fallback_location: @sample, notice: "File does NOT exist."
+        end
     end
 
     def download_abd
@@ -265,10 +274,15 @@ class SamplesController < ApplicationController
         @sample = @project.samples.find(params[:id])
         n1 = @project.name
         n2 = @sample.sample_name
-        send_file(
-        "#{Rails.root}/app/data/abd_files/#{n1}_#{n2}.tsv",
-            filename: "#{n1}_#{n2}.tsv",
-        )
+        file_current = "#{Rails.root}/app/data/abd_files/#{n1}_#{n2}.tsv"
+        if File.file?(file_current)
+            send_file(
+            file_current,
+                filename: "#{n1}_#{n2}.tsv",
+            )
+        else
+            redirect_back fallback_location: @sample, notice: "File does NOT exist."
+        end
     end
 
     def import_abd_table

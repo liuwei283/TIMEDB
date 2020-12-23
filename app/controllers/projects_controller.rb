@@ -70,8 +70,8 @@ class ProjectsController < ApplicationController
         @project = Project.find(params[:id])
         name = @project.name
         send_file(
-            "#{$abd_dir}#{name}.csv",
-                filename: "#{name}_abd.csv",
+            "#{$abd_dir}#{name}.tsv",
+                filename: "#{name}_abd.tsv",
         )
     end
   

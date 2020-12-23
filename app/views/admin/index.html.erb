@@ -102,6 +102,9 @@ Admin page
   </h5>
 
   <%= form_tag({action: :modify_ana}, multipart: true) do %>
+    <p> upload image file for analysis card:</p>
+    <%= file_field_tag :image_file %>
+    <p> upload csv:  *one analysis each time</p>
     <%= file_field_tag :file %>
     <%= submit_tag "Import analyses from csv" %>
   <% end %>

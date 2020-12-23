@@ -1,5 +1,5 @@
 class AdminController < ApplicationController
-    http_basic_authenticate_with name: "admin", password: "chelijia",
+    http_basic_authenticate_with name: "admin", password: "chelijia"
     def index
         @projects = Project.order(:name)
     end
@@ -78,6 +78,11 @@ class AdminController < ApplicationController
     
     def modify_ana
         Analysis.import(params[:file])
+        file = params[:image_file]
+        @filename = file.original_filename
+        File.open("#{Rails.root}/app/assets/images/#{@filename}", "wb") do |f|
+            f.write(file.read)
+        end
         redirect_to '/admin', notice: "Analysis module imported."
     end
 
