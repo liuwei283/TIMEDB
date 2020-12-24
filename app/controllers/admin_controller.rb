@@ -2,6 +2,12 @@ class AdminController < ApplicationController
     http_basic_authenticate_with name: "admin", password: "chelijia"
     def index
         @projects = Project.order(:name)
+        @ana_cate = AnalysisCategory.order(:name)
+        @ac_attrs = AnalysisCategory.column_names
+        @viz = Visualizer.order(:name)
+        @viz_attrs = Visualizer.column_names
+        @ana = Analysis.order(:name)
+        @a_attrs = Analysis.column_names
     end
 
     def modify_sample_metadata

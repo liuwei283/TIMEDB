@@ -1,3 +1,64 @@
+<head>
+  
+  
+  <script src="https://cdn.staticfile.org/jquery/1.10.2/jquery.min.js"></script>
+  <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.22/js/jquery.dataTables.min.js"></script>
+  <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.22/css/jquery.dataTables.css">
+  
+  <script type="text/javascript">
+    
+    $(document).ready( function () { 
+      var table = $('#Table').DataTable({
+        columnDefs: [{
+          targets: [0, -1],
+          orderable: false,
+        }],
+        // scrollX: true
+      }); 
+
+      var table = $('#Table2').DataTable({
+        columnDefs: [{
+          targets: [0, -1],
+          orderable: false,
+        }],
+        // scrollX: true
+      }); 
+
+      var table = $('#Table3').DataTable({
+        columnDefs: [{
+          targets: [0, -1],
+          orderable: false,
+        }],
+        // scrollX: true
+      }); 
+
+      $('button.toggle-vis').on( 'click', function (e) {
+        e.preventDefault();
+        $(this).toggleClass('clicked');
+        // Get the column API object
+        var column = table.column( $(this).attr('data-column') );
+        // Toggle the visibility
+        column.visible( ! column.visible() );
+    } );
+
+  });
+
+    function toggle_checkall(field_name, state) {
+      var checkboxes = document.getElementsByTagName('input');
+      var count = checkboxes.length;
+      for (var i = 0; i < count; i++) {
+        if (checkboxes[i].type == "checkbox"
+            && checkboxes[i].name == field_name + "_ids[]") {
+          checkboxes[i].checked = state;
+        }
+      }
+    }
+  </script>
+
+  
+</head>
+
+
 <h1>
 Admin page
 </h1>
@@ -80,26 +141,136 @@ Admin page
   </p>
   <br />
   <h5>
-    Modify visualization:
+    Modify visualizer:
   </h5>
+
+  <p>
+  Current visualizer:
+  </p>
+
+  <table id="Table" class="display">
+    <thead>
+      
+      <% @viz_attrs.each do |attr| %>
+        
+        <th> <%= attr.capitalize %> </th>
+        
+      <% end %>
+      
+    </thead>
+
+    <tbody>
+      <% @viz.each do |v| %>
+      
+        <tr>
+          <% @viz_attrs.each do |attr| %>
+            
+            <td> 
+              <div class="table_cell"> 
+                <%= v[attr] %> 
+              </div>
+            </td>
+           
+          <% end %>
+          
+        </tr>
+      
+      <% end %>
+    </tbody>
+
+  </table>
 
   <%= form_tag({action: :modify_viz}, multipart: true) do %>
     <%= file_field_tag :file %>
     <%= submit_tag "Import visualization from csv" %>
   <% end %>
-
+  
+  <br />
   <h5>
     Modify analysis categories:
   </h5>
+
+  <p>
+  Current categories:
+  </p>
+
+  <table id="Table2" class="display">
+    <thead>
+      
+      <% @ac_attrs.each do |attr| %>
+        
+        <th> <%= attr.capitalize %> </th>
+        
+      <% end %>
+      
+    </thead>
+
+    <tbody>
+      <% @ana_cate.each do |ac| %>
+      
+        <tr>
+          <% @ac_attrs.each do |attr| %>
+            
+            <td> 
+              <div class="table_cell"> 
+                <%= ac[attr] %> 
+              </div>
+            </td>
+           
+          <% end %>
+          
+        </tr>
+      
+      <% end %>
+    </tbody>
+
+  </table>
 
   <%= form_tag({action: :modify_ana_cate}, multipart: true) do %>
     <%= file_field_tag :file %>
     <%= submit_tag "Import categories from csv" %>
   <% end %>
 
+  <br />
   <h5>
-    Modify analysis:
+    Modify analyses:
   </h5>
+
+  <p>
+  Current analyses:
+  </p>
+
+  <table id="Table3" class="display">
+    <thead>
+      
+      <% @a_attrs.each do |attr| %>
+        
+        <th> <%= attr.capitalize %> </th>
+        
+      <% end %>
+      
+    </thead>
+
+    <tbody>
+      <% @ana.each do |a| %>
+      
+        <tr>
+          <% @a_attrs.each do |attr| %>
+            
+            <td> 
+              <div class="table_cell"> 
+                <%= a[attr] %> 
+              </div>
+            </td>
+           
+          <% end %>
+          
+        </tr>
+      
+      <% end %>
+    </tbody>
+
+  </table>
 
   <%= form_tag({action: :modify_ana}, multipart: true) do %>
     <p> upload image file for analysis card:</p>
@@ -109,7 +280,7 @@ Admin page
     <%= submit_tag "Import analyses from csv" %>
   <% end %>
 
-
+  <br />
   <h5>
     Modify visualization source:
   </h5>

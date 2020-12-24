@@ -12,13 +12,15 @@
       $.rails.enableFormElements($($.rails.formSubmitSelector));
     });
   
+    $.fn.dataTable.ext.errMode = 'throw';
+
     $(document).ready( function () { 
       var table = $('#Table').DataTable({
         columnDefs: [{
           targets: [0, -1],
           orderable: false,
         }],
-        scrollX: true
+        // scrollX: true
       }); 
 
       $('button.toggle-vis').on( 'click', function (e) {
