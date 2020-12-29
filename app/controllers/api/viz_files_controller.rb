@@ -2,11 +2,15 @@ class Api::VizFilesController < ApplicationController
   before_action :instantiate_models
 
     def use_task_output # analysis_id, task_output_id
-        if params[:task_output_id] == 'null'
+        if params[:task_output_id] == '0'
+            if @analysis_user_datum.task_output.nil?
+                render json:{}
+                return
+            end
             @analysis_user_datum.task_output = nil
             @analysis_user_datum.use_demo_file = true
             @analysis_user_datum.save!
-            render json:{}
+            render json:{code:true}
             return
         end
         @task_output = TaskOutput.find(params[:task_output_id])
