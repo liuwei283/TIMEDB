@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_12_18_035722) do
+ActiveRecord::Schema.define(version: 2020_12_22_084206) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -35,7 +35,9 @@ ActiveRecord::Schema.define(version: 2020_12_18_035722) do
     t.bigint "analysis_id"
     t.json "chosen", null: false
     t.boolean "use_demo_file", default: true
+    t.bigint "task_output_id"
     t.index ["analysis_id"], name: "index_analysis_user_data_on_analysis_id"
+    t.index ["task_output_id"], name: "index_analysis_user_data_on_task_output_id"
     t.index ["user_id"], name: "index_analysis_user_data_on_user_id"
   end
 
@@ -118,6 +120,8 @@ ActiveRecord::Schema.define(version: 2020_12_18_035722) do
     t.string "task_id", null: false
     t.integer "output_id", null: false
     t.json "file_paths", null: false
+    t.bigint "analysis_id"
+    t.index ["analysis_id"], name: "index_task_outputs_on_analysis_id"
     t.index ["user_id"], name: "index_task_outputs_on_user_id"
   end
 
@@ -155,6 +159,8 @@ ActiveRecord::Schema.define(version: 2020_12_18_035722) do
     t.index ["viz_data_source_id"], name: "index_viz_file_objects_on_viz_data_source_id"
   end
 
+  add_foreign_key "analysis_user_data", "task_outputs"
   add_foreign_key "datasets", "users"
   add_foreign_key "samples", "projects"
+  add_foreign_key "task_outputs", "analyses"
 end
