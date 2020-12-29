@@ -2,14 +2,15 @@
      <div> 
         <div id="tool-bar">
             <div v-if= "isAnalysis">
-                <b-button @click="downloadSVG">Download</b-button>
-                <b-button @click="useDemoFiles">Demo Files</b-button>
+                <b-button @click="downloadSVG" class="tool-bar-el"><i class="fa fa-download"></i>Download Chart</b-button>
+                
+                <!--<b-button @click="useDemoFiles">Demo Files</b-button>-->
                 
                 <dropdown-select
                     right
                     v-model="chosenOutput"
                     :options="taskOutputs"
-                    size="sm"
+                    :variant="outline"
                     class="tool-bar-el"/>
                 
                 <b-button id="editor-conf" @click="toggleEditor">Editor</b-button>
@@ -65,9 +66,10 @@
                 conf: {},
                 isAnalysis: true,
                 showEditor: true,
-                chosenOutput: null,
-                chosenOutputOld: null,
-                taskOutputs: [{value: "null", text: "--None--", secondaryText: ""}],
+                outline: "secondary",
+                chosenOutput: 0,
+                chosenOutputOld: 0,
+                taskOutputs: [{value: 0, text: "Demo Files", secondaryText: ""}],
             }
         },
         methods: {
@@ -100,12 +102,11 @@
         },        
         created() {
             event.rpcRegisterReceiver("getVue", () => this);
-            console.log(window.gon.viz_mode)
             this.isAnalysis = window.gon.viz_mode === viz_mode.ANALYSIS ? true : false
             
             if (this.isAnalysis) {
-                this.chosenOutput = window.gon.chosen_output
-                this.chosenOutputOld = window.gon.chosen_output
+                this.chosenOutput = window.gon.chosen_output || 0
+                this.chosenOutputOld = window.gon.chosen_output || 0
                 axios.get(window.gon.urls.all_task_outputs)
                     .then(response => {
                         const outputs = response.data;
@@ -135,28 +136,37 @@
 </script>
 
 <style scoped>
-    button {
-        height:30px;
-        background: skyblue;
-        color: white;
-        border: none;
+    #tool-bar div >* {
+        height: 100%;
+        color: darkgrey;
+        border-top: none;
+        border-left: 1px solid darkgrey;
+        border-bottom: none;
+        border-right: 1px solid darkgrey;
+        margin-bottom: 2px;
         text-align:center;
-    }
+        background-color: white;
+        border-radius: 0;
+    } 
     .tool-bar-el {
-        height:30px;
-        background: skyblue;
-        color: white;
-        border: none;
+        float: left;
+        padding-top:0;
+        height: 100%;
         text-align:center;
     }
-    #tool-bar {
-        height:30px;
-        background:lightgrey; 
+    .tool-bar-el /deep/ .btn-secondary {
+        border-radius: 0;
+        padding-top: 0;
+        margin-top: 0;
+    }
+    #tool-bar div{
+        height:2.5em;
+        background-color: white;
         position: relative;
+        border: 1px solid  #ced4da;
     }
     #editor-conf {
-        position: absolute;
-        right: 0;
+        float: right;
     }
     #canvas {
         height: calc(100vh - 31px);
