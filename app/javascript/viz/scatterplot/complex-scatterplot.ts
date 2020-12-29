@@ -18,6 +18,8 @@ export interface ComplexScatterplotOption extends ComponentOption{
     groups: string[],
     xAxisIndex: number,
     yAxisIndex: number,
+    scatterSize: number,
+    hollow: boolean,
     showErrorEllipse: boolean,
 }
 export interface ErrorEllipseDatum {
@@ -46,6 +48,8 @@ export class ComplexScatterplot extends Component<ComplexScatterplotOption> {
 
     private shapeMap:Map<string, string>;
     private colorMap:Map<string|number, string>;
+
+    private legendPos: {x,y};
     render() {
         return this.t`	Component 
         {
@@ -75,11 +79,22 @@ export class ComplexScatterplot extends Component<ComplexScatterplotOption> {
     
                 @for (scatter, i) in scatterData {
                     @if (!scatter.cluster) {
+                        @let scatterProps = {
+                            key : "scatter" + i,
+                            r : prop.scatterSize/2,
+                            fill : (prop.hollow ? "none" : colorMap.get(scatter.group)),
+                            strokeWidth : 2,
+                            stroke : colorMap.get(scatter.group),
+                        }
                         Component {
                            
                             Circle.centered{ 
-                                key = "scatter" + i; x = @scaled-x(scatter[xLabel]); y = @scaled-y(scatter[yLabel]); r = 4
-                                fill = colorMap.get(scatter.group)
+                                x = @scaled-x(scatter[xLabel]); y = @scaled-y(scatter[yLabel])
+                                // key = "scatter" + i; x = @scaled-x(scatter[xLabel]); y = @scaled-y(scatter[yLabel])
+                                // width = prop.scatterSize; height = prop.scatterSize
+                                // fill = colorMap.get(scatter.group)
+                                // strokeWidth = 2
+                                @props scatterProps
                                 behavior:tooltip {
                                     content = generateScatterContent(scatter)
                                 }
@@ -87,10 +102,25 @@ export class ComplexScatterplot extends Component<ComplexScatterplotOption> {
                         }
                     } @else {
                         @let shape = shapeMap.get(scatter.group)
+                        @let scatterProps = {
+                            key : "scatter" + i,
+                            width : prop.scatterSize,
+                            height : prop.scatterSize,
+                            fill : (prop.hollow ? "none" : colorMap.get(scatter.cluster)),
+                            strokeWidth : 2,
+                            stroke : colorMap.get(scatter.cluster),
+                            r: prop.scatterSize/2
+                        }
                         Component(shape) {
                             key = "scatter"+i
-                            x = @scaled-x(scatter[xLabel]); y = @scaled-y(scatter[yLabel]); fill = colorMap.get(scatter.cluster)
-                            width = 8; height = 8
+                            x = @scaled-x(scatter[xLabel]); y = @scaled-y(scatter[yLabel])
+                            // fill = (prop.hollow ? "none" : colorMap.get(scatter.cluster))
+                            // width = prop.scatterSize; height = prop.scatterSize
+                            // r = prop.scatterSize/2
+                            // strokeWidth = 2
+                            // stroke = colorMap.get(scatter.cluster)
+                            // width = 8; height = 8
+                            @props scatterProps
                             anchor = @anchor("m", "c")
                             behavior:tooltip {
                                 content = generateScatterContent(scatter)
@@ -179,71 +209,82 @@ export class ComplexScatterplot extends Component<ComplexScatterplotOption> {
                     }    
                 }
                 
-                // Component {
-                //     x = 20; y = 20
-                //     height = 50; width = 70
-                //     Rect.full {
-                //         stroke = @color("line")
-                //         fill = "white"
-                //     }
-                //     Rows {
-                //         @for (group, i) in prop.groups {
-                //             Component {
-                //                 height = 25
-                //                 @if scatterClusterData {
-                //                    @if i === 0 {
-                //                         Circle.centered{
-                //                             x = 8; y = 12.5; r = 4; fill = prop.colors[0]
-                //                         }
-                //                    } @else {
-                //                        Rect.centered {
-                //                            x = 8; y = 12.5; height = 8; width = 8; fill = prop.colors[0]
-                //                        }
-                //                    }
-                //                 } @else {
-                //                     Circle.centered{
-                //                             x = 8; y = 12.5; r = 4; fill = prop.colors[i]
-                //                     }
-                //                 }
-                //                 Text(group) {
-                //                     x = 15; y = 12.5; anchor = @anchor("l","m")
-                //                 }
-                //             }
-                //         }
-                //     }  
-                // }
+                Component {
+                    x = legendPos.x; y = legendPos.y
+                    height = 50; width = 70
+                    key = "legend1"
+                    Rect.full {
+                        stroke = @color("line")
+                        fill = "white"
+                        on:mousedown = $el.stage = "active"
+                        on:mousemove = (ev,el) => dragLegend(ev,el)
+                        on:mouseup = $el.stage = null
+                    }
+                    Rows {
+                        @for (group, i) in prop.groups {
+                            Component {
+                                height = 25
+                                @if clusterData {
+                                   @if i === 0 {
+                                        Circle.centered{
+                                            x = 8; y = 12.5; r = 4; fill = prop.colors[0]
+                                        }
+                                   } @else {
+                                       Rect.centered {
+                                           x = 8; y = 12.5; height = 8; width = 8; fill = prop.colors[0]
+                                       }
+                                   }
+                                } @else {
+                                    Circle.centered{
+                                            x = 8; y = 12.5; r = 4; fill = prop.colors[i]
+                                    }
+                                }
+                                Text(group) {
+                                    x = 15; y = 12.5; anchor = @anchor("l","m")
+                                }
+                            }
+                        }
+                    }  
+                    // Rect.full {
+                    //     fill = "white"
+                    //     fillOpacity = 0.01
+                    //     on:mousedown = $parent.stage = "active"
+                    //     // on:mousemove = (ev,el,$parent) => dragNode(ev,el,d.NodeGroup)
+                    //     on:mouseup = $parent.stage = null
+                    // }
+                }
     
-                // @if scatterClusterData {
-                //     Component {
-                //         x = 20; y = 80
-                //         height = 50; width = 70
-                //         Rect.full {
-                //             stroke = @color("line")
-                //             fill = "white"
-                //         }
-                //         Rows {
-                //             @for (cluster, i) in clusters {
-                //                 Component {
-                //                     height = 25
+                @if clusterData {
+                    Component {
+                        x = 20; y = 80
+                        height = 50; width = 70
+                        Rect.full {
+                            stroke = @color("line")
+                            fill = "white"
+                        }
+                        Rows {
+                            @for (cluster, i) in prop.clusters {
+                                Component {
+                                    height = 25
     
-                //                     Circle.centered{
-                //                             x = 8; y = 12.5; r = 4; fill = prop.colors[i]
-                //                     }
-                                    
-                //                     Text(cluster) {
-                //                         x = 15; y = 12.5; anchor = @anchor("l","m")
-                //                     }
-                //                 }
-                //             }
-                //         }
+                                    Circle.centered{
+                                            x = 8; y = 12.5; r = 4; fill = prop.colors[i]
+                                    }
+                                    Text("cluster"+cluster) {
+                                        x = 15; y = 12.5; anchor = @anchor("l","m")
+                                    }
+                                }
+                            }
+                        }
                         
-                //     }
-                // }
+                    }
+                }
             }
         }`;
     }
 
     didCreate() {
+        this.legendPos = {x:20, y:20}
         this.vectorData = this.prop.vectorData;
         this.scatterColumns = this.prop.scatterColumns;
         const shapes = ["Circle", "Rect", "Triangle"];
@@ -287,6 +328,11 @@ export class ComplexScatterplot extends Component<ComplexScatterplotOption> {
                 clusterData[key] = clusterDatum;
             })
             this.clusterData = clusterData;
+        }
+        if (this.prop.clusters) {
+            this.colorMap = this.getMap(this.prop.clusters, this.prop.colors);
+        } else if (this.prop.groups) {
+            this.colorMap = this.getMap(this.prop.groups, this.prop.colors);
         }
     }
 
@@ -350,5 +396,15 @@ export class ComplexScatterplot extends Component<ComplexScatterplotOption> {
             map.set(key, valueArray[i]);
         });
         return map;
+    }
+
+    protected dragLegend(ev, el) {
+        if(el.stage === "active") {
+            console.log(el.parent.parent);
+            const [newX, newY] = Oviz.utils.mouse(el.parent.parent, ev);
+            this.legendPos.x = newX;
+            this.legendPos.y = newY;
+            this.setState(this.legendPos);
+        }
     }
 }

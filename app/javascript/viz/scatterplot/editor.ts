@@ -166,35 +166,26 @@ export function editorConfig(v): EditorDef {
                             },
                         },
                         {
-                            title: "X Axis Lower Bound",
+                            title: "Scatter Size: ",
                             type: "input",
-                            bind: {
-                                object: conf,
-                                path: "max",
-                                callback() {
-                                    v.data.config.rangeMax = conf.max;
+                            value: {
+                                current: v.data.config.scatterSize,
+                                callback(d) {
+                                    v.data.config.scatterSize = parseFloat(d);
+                                    v.forceRedraw = true;
                                     run(v);
                                 },
-                            },
-                            value: {
-                                current: v.data.config.rangeMax,
-                                callback() {},
                             },
                         },
                         {
-                            title: "X Axis Upper Bound",
-                            type: "input",
-                            bind: {
-                                object: conf,
-                                path: "min",
-                                callback() {
-                                    v.data.config.rangeMin = conf.min;
+                            title: "Hollow Scatter",
+                            type: "checkbox",
+                            value: {
+                                current: v.data.config.hollow,
+                                callback(d) {
+                                    v.data.config.hollow = d;
                                     run(v);
                                 },
-                            },
-                            value: {
-                                current: v.data.config.rangeMin,
-                                callback() {},
                             },
                         },
                     ],

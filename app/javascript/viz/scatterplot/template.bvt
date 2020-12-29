@@ -2,6 +2,7 @@ svg {
 	width = auto
 	height = 800
 	Component {
+        @expr console.log(scatterColumns)
 
         ComplexScatterplot {
             x = 50; y = 50
@@ -11,6 +12,8 @@ svg {
             categoryRange = config.categoryRange
             xAxisIndex = config.xAxisIndex
             yAxisIndex = config.yAxisIndex
+            scatterSize = config.scatterSize
+            hollow = config.hollow
             scatterData = scatterData
             scatterColumns =scatterColumns
             vectorData = scatterVectorData

@@ -34,6 +34,8 @@ function init() {
                 computeOval: false,
                 categoryRange: [null, null],
                 valueRange: [null, null],
+                scatterSize: 8,
+                hollow: false,
             },
             groups: null,
             clusters: null,
@@ -139,55 +141,6 @@ function genDefaultDataSources() {
         return dataSources;
     } else 
         return defaultDataSources;
-}
-
-function computeErrorEllipse(samples, xIndex, yIndex, svgRatioX, svgRatioY) {
-    debugger;
-    const ellipseData = {cx:0, cy:0, rx:0, ry:0, rotationAngle:0};
-    const s = 5.991;
-    const statX = new Oviz.algo.Statistics(samples.map(x => x[xIndex]));
-    const statY = new Oviz.algo.Statistics(samples.map(y => y[yIndex]));
-    
-    ellipseData.cx =  statX.mean();
-    ellipseData.cy = statY.mean();
-
-    
-    let varX = 0, varY = 0, cov = 0;
-    samples.forEach(d => {
-        varX += Math.pow( (d[xIndex] - statX.mean()) * svgRatioX, 2) / (samples.length-1);
-        varY += Math.pow( (d[yIndex] - statY.mean()) * svgRatioY, 2) / (samples.length-1);
-        cov += (d[xIndex] - statX.mean()) * svgRatioX * (d[yIndex] - statY.mean()) * svgRatioY / (samples.length-1);
-    })
-
-    const eParams = {a: 1, b: -(varX+varY), c: varX*varY - Math.pow(cov, 2)};
-    const eigenValue1 = (-eParams.b + Math.sqrt(Math.pow(eParams.b,2) - 4*eParams.a*eParams.c))/(2*eParams.a);
-    const eigenValue2 = (-eParams.b - Math.sqrt(Math.pow(eParams.b,2) - 4*eParams.a*eParams.c))/(2*eParams.a);
-    ellipseData.rx = Math.sqrt(s * Math.abs(eigenValue1));
-    ellipseData.ry = Math.sqrt(s * Math.abs(eigenValue2));
-    
-    const rotationRad = Math.atan((varX -eigenValue1)/cov);
-    console.log(`${eigenValue1} === ${eigenValue2}`)
-    ellipseData.rotationAngle  = rotationRad*180/Math.PI;
-    const triFunctions = {
-        sin(r) {return r * Math.sin(rotationRad)}, 
-        cos(r) {return r * Math.cos(rotationRad)}
-    };
-    const dx = triFunctions.cos(ellipseData.rx);
-    const dy = triFunctions.sin(ellipseData.rx);
-    const path = `M 0 0 
-                  A ${ellipseData.rx} ${ellipseData.ry} ${ellipseData.rotationAngle} 0 1 ${2*dx} ${2*dy}
-                  A ${ellipseData.rx} ${ellipseData.ry} ${ellipseData.rotationAngle} 0 1 0 0 Z`;
-    const center = {x:statX.mean(), y:statY.mean()};
-    const ovalPathData = {
-        cluster:null,
-        path,
-        xAxisPath: `M 0 0 L ${2*dx} ${2*dy}`,
-        // yAxisPath: `M ${dx - triFunctions.sin(ellipseData.ry)} ${dy - triFunctions.cos(ellipseData.ry)} L ${dx + triFunctions.sin(ellipseData.ry)} ${dy + triFunctions.cos(ellipseData.ry)}`,
-        yAxisPath: `M ${dx - Math.abs(triFunctions.sin(ellipseData.ry))} ${dy - Math.abs(triFunctions.cos(ellipseData.ry))} L ${dx + Math.abs(triFunctions.sin(ellipseData.ry))} ${dy + Math.abs(triFunctions.cos(ellipseData.ry))}`,
-        
-        center, dx, dy
-    }
-    return ovalPathData;
 }
 
 
