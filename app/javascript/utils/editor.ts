@@ -27,11 +27,11 @@ export const defaultLayoutConf: any = {
 //         setupVue(vue);
 //     });
 // }
-export function registerEditorConfig(editorConf) {
+export function registerEditorConfig(editorConf, editorRef?) {
     const vue = event.rpc("getVue");
     if (vue) {
         vue.conf = editorConf;
-        vue.$root.$data.editorRef = {};
+        if (editorRef) vue.$root.$data.editorRef = editorRef;
     }
 }
 export { EditorDef, ToolbarDef };
