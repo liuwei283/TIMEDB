@@ -5,7 +5,6 @@ import { copyObject } from "utils/object";
 import { forEachChild } from "typescript";
 
 function run(v) {
-    console.log(v)
     v.data._changed = true;
     v.run();
 }
@@ -21,6 +20,7 @@ const cbpPalette = {
 
 export function editorConfig(v): EditorDef {
     const [defaultPalette] = genDefaultPalette(v.data.colors);
+    console.log(v.data.availableAxises);
     return {
         sections: [
             {
@@ -31,43 +31,115 @@ export function editorConfig(v): EditorDef {
             {
                 id: "data",
                 title: "Data",
-                layout: "single-page",
-                view: {
-                    type: "list",
-                    items: [
-                        {
-                            title: "X-Axis",
-                            type: "select",
-                            options: v.data.availableAxises,
-                            value: {
-                                current: "2",
-                                callback(d) {
-                                    console.log(d)
-                                    v.data.availableAxises.forEach(axis => {
-                                        if(axis.string === d)
-                                            v.data.config.xAxisIndex = axis.value;
-                                    })
-                                    
-                                    v.forceRedraw = true;
-                                    run(v);
+                layout: "tabs",
+                tabs: [
+                    {
+                        id: "xData",
+                        name: "X-Axis Data",
+                        view: {
+                            type: "list",
+                            items: [
+                                {
+                                    title: "X-Axis",
+                                    type: "select",
+                                    options: v.data.availableAxises,
+                                    value: {
+                                        current: v.data.config.xAxisIndex.toString(),
+                                        callback(d) {
+                                            v.data.config.xAxisIndex = parseInt(d);
+                                            v.forceRedraw = true;
+                                            run(v);
+                                        },
+                                    },
                                 },
-                            },
-                        },
-                        {
-                            title: "Y-Axis",
-                            type: "select",
-                            options: v.data.availableAxises,
-                            value: {
-                                current: "1",
-                                callback(i) {
-                                    v.data.config.yAxisIndex = parseInt(i);
-                                    v.forceRedraw = true;
-                                    run(v);
+                                {
+                                    title: "X Range Lower Bound",
+                                    type: "input",
+                                    value: {
+                                        current: 0,
+                                        callback(d) {
+                                            v.data.config.categoryRange[0] = parseFloat(d);
+                                            if (!!v.data.config.categoryRange[0] 
+                                                && !!v.data.config.categoryRange[1]) {
+                                                    v.forceRedraw = true;
+                                                    run(v);
+                                                }
+                                            
+                                        },
+                                    },
                                 },
-                            },
-                        },
-                    ]
-                }
+                                {
+                                    title: "X Range Upper Bound",
+                                    type: "input",
+                                    value: {
+                                        current: 0,
+                                        callback(d) {
+                                            v.data.config.categoryRange[1] = parseFloat(d);
+                                            if (!!v.data.config.categoryRange[0] 
+                                                && !!v.data.config.categoryRange[1]) {
+                                                    v.forceRedraw = true;
+                                                    run(v);
+                                                }
+                                        },
+                                    },
+                                },
+                            ]
+                        }
+                    },
+                    {
+                        id: "yData",
+                        name: "Y-Axis Data",
+                        view: {
+                            type: "list",
+                            items: [
+                                {
+                                    title: "Y-Axis",
+                                    type: "select",
+                                    options: v.data.availableAxises,
+                                    value: {
+                                        current: v.data.config.yAxisIndex.toString(),
+                                        callback(d) {
+                                            v.data.config.yAxisIndex = parseInt(d);
+                                            v.forceRedraw = true;
+                                            run(v);
+                                        },
+                                    },
+                                },
+                                {
+                                    title: "Y Range Lower Bound",
+                                    type: "input",
+                                    value: {
+                                        current: 0,
+                                        callback(d) {
+                                            v.data.config.valueRange[0] = parseFloat(d);
+                                            if (!!v.data.config.valueRange[0] 
+                                                && !!v.data.config.valueRange[1]) {
+                                                    v.forceRedraw = true;
+                                                    run(v);
+                                                }
+                                            
+                                        },
+                                    },
+                                },
+                                {
+                                    title: "Y Range Upper Bound",
+                                    type: "input",
+                                    value: {
+                                        current: 0,
+                                        callback(d) {
+                                            v.data.config.valueRange[1] = parseFloat(d);
+                                            if (!!v.data.config.valueRange[0] 
+                                                && !!v.data.config.valueRange[1]) {
+                                                    v.forceRedraw = true;
+                                                    run(v);
+                                                }
+                                        },
+                                    },
+                                },
+                            ]
+                        }
+                    }
+                ]
             },
             {
                 id: "settings",
@@ -94,35 +166,26 @@ export function editorConfig(v): EditorDef {
                             },
                         },
                         {
-                            title: "Range Upper Bound",
+                            title: "Scatter Size: ",
                             type: "input",
-                            bind: {
-                                object: conf,
-                                path: "max",
-                                callback() {
-                                    v.data.config.rangeMax = conf.max;
+                            value: {
+                                current: v.data.config.scatterSize,
+                                callback(d) {
+                                    v.data.config.scatterSize = parseFloat(d);
+                                    v.forceRedraw = true;
                                     run(v);
                                 },
-                            },
-                            value: {
-                                current: v.data.config.rangeMax,
-                                callback() {},
                             },
                         },
                         {
-                            title: "Range Lower Bound",
-                            type: "input",
-                            bind: {
-                                object: conf,
-                                path: "min",
-                                callback() {
-                                    v.data.config.rangeMin = conf.min;
+                            title: "Hollow Scatter",
+                            type: "checkbox",
+                            value: {
+                                current: v.data.config.hollow,
+                                callback(d) {
+                                    v.data.config.hollow = d;
                                     run(v);
                                 },
-                            },
-                            value: {
-                                current: v.data.config.rangeMin,
-                                callback() {},
                             },
                         },
                     ],

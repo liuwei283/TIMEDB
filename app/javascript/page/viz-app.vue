@@ -7,14 +7,7 @@
                     </b-tab>
                 </div>
                 <div> 
-                    <div id="tool-bar">
-                        <b-button @click="downloadSVG">Download</b-button>
-                        <b-button id="editor-conf" @click="toggleEditor()">Editor</b-button>
-                    </div>
-                    <div id="viz-container"> 
-                        <div id="canvas"/>
-                        <OvizEditor :config = "conf" :is-shown="showEditor" :editorWidth = "280"/>
-                    </div>
+                    <VApp/>
                 </div>
             </b-tabs>
         </b-card>
@@ -29,6 +22,7 @@
     import axios from 'axios';
     import BootstrapVue from 'bootstrap-vue';
     import OvizEditor from "oviz-editor";
+    import VApp from "./vapp.vue";
     import {EditorDef, ItemDef} from "utils/editor-def"
     import Oviz from "crux"
     import {copyObject} from "utils/object"
@@ -36,8 +30,9 @@
     import {default as SignedHeatmap} from "viz/signed-heatmap"
     import objectToFormData from 'object-to-formdata';
     import { getVizByTaskOutput } from "viz"
+    import { event } from "crux/dist/utils";
     
-
+    Vue.component("VApp", VApp);
     Vue.use(OvizEditor);
     Vue.use(BootstrapVue);
 
@@ -102,26 +97,9 @@
             };
         },
         methods: {
-            downloadSVG() {
-                const svgContainerClone = document.getElementById("canvas").cloneNode(true) as HTMLElement;
-                const svgBlob = new Blob([svgContainerClone.innerHTML], { type: "image/svg+xml;charset=utf-8" });
-                const svgUrl = URL.createObjectURL(svgBlob);
-                const downloadLink = document.createElement("a");
-                downloadLink.href = svgUrl;
-                downloadLink.download = `${this.data.outputs[this.currentTab].name}.svg`;
-                document.body.appendChild(downloadLink);
-                downloadLink.click();
-                document.body.removeChild(downloadLink);
-            },
-            toggleEditor() {
-                this.showEditor=!this.showEditor
-            },
             showViz(outputIndex) {
                 if (this.currentTab !== outputIndex) {
-                    this.currentTab = outputIndex;
-                    const {visualizer, editorConf} = getVizByTaskOutput(this.data.outputs[outputIndex]);
-                    this.viz = visualizer;
-                    this.conf = editorConf;
+                    window.gon.module_name = this.data.outputs[outputIndex].module_name
                 }
             },
             queryTask() {
@@ -136,22 +114,25 @@
                         },
                     },
                 ).then((response) => {
-                    console.log(response.data.data);
-                    this.data.outputs = response.data.data;
+                    this.data.outputs = response.data;
+                    this.updateGon(this.data.outputs[0]);
                     this.submitted = true;
-                    // window.gon.urls = [];
-                    // window.gon.urls.chosen_file_paths = "dummytest";
-                    showViz(0);
                 }).catch((reason) => {
                     console.log(`Error! query task failed with ${reason}`);
                 }).finally(() => {
                     // setTimeout(() => { alertCenter.add('danger', ''); }, 2000);
                 });
+            },
+            updateGon(output) {
+                window.gon.module_name = output.module_name;
+                window.gon.required_data = output.required_data;
+                if (!window.gon.urls) window.gon.urls = {};
+                window.gon.urls.chosen_file_paths = `/api/analysis/${output.analysis_id}/chosen_file_paths`
             }
         },
         mounted(){
-            if(this.submitted)
-                this.viz = SignedHeatmap.initVizWithDeepomics(this.data.outputs[0].files);
+            window.gon.viz_mode = "task-output"
+            
             // document.addEventListener("turbolinks:load", () => {
             //     if ( this.willLoad ) {
             //         const viz = SignedHeatmap.initVizWithDeepomics(this.data.outputs[0].files); 
@@ -161,11 +142,8 @@
             // })
         },
         updated(){
-            if (this.firstRender) {
-                this.firstRender = false;
-                const {visualizer, editorConf} = getVizByTaskOutput(this.data.outputs[0]);
-                this.viz = visualizer;
-                this.conf = editorConf;
+            if(this.submitted) {
+                event.emit("GMT:query-finished", this);
             }
         }
     }

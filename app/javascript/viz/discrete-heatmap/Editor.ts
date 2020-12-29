@@ -1,12 +1,7 @@
-// import { conf } from "app/gb/editor";
-// import { withDefaultPalette } from "common/palette";
-
-import {EditorDef} from "utils/editor-def"
-
-export const conf: any = {
-    sortBy: "a_name",
-    treeScale: "scale",
-};
+import {defaultLayoutConf as conf} from "utils/editor"
+import { genDefaultPalette, withDefaultPalette } from "oviz-common/palette";
+import { EditorDef } from "utils/editor";
+import { copyObject } from "utils/object";
 
 function run(v) {
     v.data._changed = true;
@@ -14,7 +9,19 @@ function run(v) {
 }
 export const editorRef = {} as any;
 
+function genPaltteeMapForArray(values) {
+    const map = {};
+    values.forEach((v, i)=> map[`data${v}`] = i);
+    return map;
+}
+function convertColorsMapToArray(colorMap) {
+    const colors = [];
+    Object.keys(colorMap).forEach(k=> colors.push(colorMap[k]));
+    return colors;
+}
 export function editorConfig(v):EditorDef {
+    const [defaultPalette] = genDefaultPalette(v.data.colors, v.data.values);
+    console.log(defaultPalette);
     return {
         sections: [
             {
@@ -24,6 +31,24 @@ export function editorConfig(v):EditorDef {
                 view: {
                     type: "list",
                     items: [
+                        {
+                            type: "vue",
+                            title: "",
+                            component: "color-picker",
+                            data: {
+                                title: "Customize colors",
+                                scheme: copyObject(v.data.colors),
+                                //names: genPaltteeMapForArray(v.data.values),
+                                palettes: withDefaultPalette(defaultPalette),
+                                paletteMap: genPaltteeMapForArray(v.data.values),
+                                id: "pwcolor",
+                                callback(colors) {
+                                    v.data.colors = convertColorsMapToArray(colors);
+                                    v.forceRedraw = true;
+                                    run(v);
+                                },
+                            },
+                        },
                         {
                             title: "Column Label Rotation Angle",
                             type: "input",

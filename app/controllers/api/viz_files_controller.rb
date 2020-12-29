@@ -1,6 +1,29 @@
 class Api::VizFilesController < ApplicationController
   before_action :instantiate_models
 
+    def use_task_output # analysis_id, task_output_id
+        if params[:task_output_id] == '0'
+            if @analysis_user_datum.task_output.nil?
+                render json:{}
+                return
+            end
+            @analysis_user_datum.task_output = nil
+            @analysis_user_datum.use_demo_file = true
+            @analysis_user_datum.save!
+            render json:{code:true}
+            return
+        end
+        @task_output = TaskOutput.find(params[:task_output_id])
+        if @task_output == @analysis_user_datum.task_output
+            render json:{}
+            return
+        end
+        @analysis_user_datum.task_output = @task_output
+        @analysis_user_datum.use_demo_file = false
+        @analysis_user_datum.save!       
+        render json:{code:true}
+    end
+
     def use_demo
         if @analysis_user_datum.use_demo_file
             render json:{}
@@ -31,14 +54,23 @@ class Api::VizFilesController < ApplicationController
         render json: data
     end
 
+    def all_task_outputs
+        @task_outputs = TaskOutput.where("user_id = ? and analysis_id = ?",
+                                        @user.id, @analysis.id)
+        render json: @task_outputs.map { |opt|
+             {id: opt.id, task_id: opt.task_id}
+        }
+        
+    end
+
     def chosen_file_paths
         
         files_info = @analysis.files_info
+
         if @analysis_user_datum.use_demo_file
             demo_folder = File.join '/data/demo', @analysis.name.gsub(' ','_')
             render json: {}.tap { |x|
                 files_info.each do |dataType, info|
-                    Rails.logger.debug("===>#{info['demoFileName'].class}")
                     if info['demoFileName'].class == String
                         x[dataType] = {id: 0, 
                             url: File.join(demo_folder, info['demoFileName']), 
@@ -54,7 +86,10 @@ class Api::VizFilesController < ApplicationController
             }
             return
         end
-        
+        if !@analysis_user_datum.task_output.blank?
+            render json:@analysis_user_datum.task_output.file_paths
+            return
+        end
         render json: {}.tap { |x|
             @analysis.files_info.each do |dataType, info|
                 if @analysis_user_datum.chosen[dataType].blank? 

@@ -8,13 +8,15 @@ export interface DiscreteHeatMapOption extends ComponentOption {
     colName: string;
     gridW: number;
     gridH: number;
-    colorMap: any;
+    colors: string[];
+    values: any[];
     valueMap: any;
     drawRows: boolean;
     colLabelRotaton: number; // the rotation angle for column labels
 }
 
 export class DiscreteHeatMap extends Component<DiscreteHeatMapOption> {
+    private colorMap: Map<number | string, string> = new Map();
     render() {
         return this.t`
         Component{
@@ -39,7 +41,7 @@ export class DiscreteHeatMap extends Component<DiscreteHeatMapOption> {
                                     height = 100%; width = 100%;
                                     stroke = "black"
                                     strokeWidth = 1
-                                    fill = prop.colorMap.get(d)
+                                    fill = colorMap.get(d)
                                     behavior:tooltip { content = getTooltipContent(d, i, j) }
                                 }
                             }
@@ -65,6 +67,11 @@ export class DiscreteHeatMap extends Component<DiscreteHeatMapOption> {
 
     }
 
+    willRender() {
+        this.prop.values.forEach((d, i)=> {
+            this.colorMap.set(d, this.prop.colors[i]);
+        })
+    }
     protected getTooltipContent(d, i, j) {
         return `${this.prop.rowName}: ${this.prop.rows[i]}</br>
             ${this.prop.colName}: ${this.prop.columns[j]}</br>

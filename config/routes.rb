@@ -1,5 +1,6 @@
 Rails.application.routes.draw do
 
+  get 'test', to: 'demo#test'
   resources :projects do
     resources :samples do
       collection { post :import }
@@ -37,9 +38,11 @@ Rails.application.routes.draw do
   get 'api/public', to: 'raw_files#public'
 
   namespace :api do
-    resources :analyses, only: [] do
+    resources :analysis, only: [] do
       get 'use_demo', to: 'viz_files#use_demo', as: 'use_demo'
+      get 'use_task_output', to: 'viz_files#use_task_output', as: 'use_task_output'
       get 'all_files', to: 'viz_files#all_files', as: 'all_files'
+      get 'all_task_outputs', to: 'viz_files#all_task_outputs', as: 'all_task_outputs'
       get 'chosen_files', to: 'viz_files#get_chosen_files', as: 'chosen_files'
       get 'chosen_file_paths', to: 'viz_files#chosen_file_paths', as: 'chosen_file_paths'
       post 'chosen_files', to: 'viz_files#update_chosen_files', as: 'update_chosen_files'
