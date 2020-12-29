@@ -13,22 +13,18 @@ Vue.use(VJstree);
 Vue.use(uploader);
 const ALERT_TIMEOUT = 5000;
 
-import TC from '../database-tc.vue';
-import FC from '../database-fc.vue';
-import AA from '../database-aa.vue';
 import JobSubmit from '../job-submit.vue';
 import JobQuery from '../job-query.vue';
 
 document.addEventListener('turbolinks:load', () => {
     const vueLoadList = [
-        ['#vapp-database-tc', TC, { type: 'module' }],
-        ['#vapp-database-fc', FC, { type: 'module' }],
-        ['#vapp-database-aa', AA, { type: 'module' }],
         ['#vapp-job-submit', JobSubmit],
         ['#vapp-job-query', JobQuery],
     ];
 
     $('[data-toggle="tooltip"]').tooltip();
+
+
 
     $('#alerts .alert-group').each((i, el) => {
         const alertGroup = $(el);

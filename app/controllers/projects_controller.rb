@@ -1,7 +1,4 @@
 class ProjectsController < ApplicationController
-    http_basic_authenticate_with name: "admin", password: "chelijia",
-    except: [:index, :show]
-
     $seq_dir = "#{Rails.root}/app/data/seq/"
     $abd_dir = "#{Rails.root}/app/data/abd_files/"
     $tmp_dir = "#{Rails.root}/app/data/tmp/"
@@ -70,8 +67,8 @@ class ProjectsController < ApplicationController
         @project = Project.find(params[:id])
         name = @project.name
         send_file(
-            "#{$abd_dir}#{name}.csv",
-                filename: "#{name}_abd.csv",
+            "#{$abd_dir}#{name}.tsv",
+                filename: "#{name}_abd.tsv",
         )
     end
   

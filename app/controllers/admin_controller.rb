@@ -1,8 +1,13 @@
 class AdminController < ApplicationController
-    http_basic_authenticate_with name: "admin", password: "chelijia",
-    except: [:show]
+    http_basic_authenticate_with name: "admin", password: "chelijia"
     def index
         @projects = Project.order(:name)
+        @ana_cate = AnalysisCategory.order(:name)
+        @ac_attrs = AnalysisCategory.column_names
+        @viz = Visualizer.order(:name)
+        @viz_attrs = Visualizer.column_names
+        @ana = Analysis.order(:name)
+        @a_attrs = Analysis.column_names
     end
 
     def modify_sample_metadata
@@ -13,7 +18,7 @@ class AdminController < ApplicationController
             @project = Project.find(params[:project_id])
             Sample.import(params[:file],params[:project_id] )
             @project.update_attribute(:num_of_samples, @project.samples.count)
-            update_metadata
+            update_sample
             redirect_to '/admin', notice: "Samples imported."
         end
     end
@@ -67,8 +72,33 @@ class AdminController < ApplicationController
         redirect_to '/admin', notice: "ALL Abundance data uploaded."
     end
 
+    def modify_viz
+        Visualizer.import(params[:file])
+        redirect_to '/admin', notice: "Visualization imported."
+    end
+
+    def modify_ana_cate
+        AnalysisCategory.import(params[:file])
+        redirect_to '/admin', notice: "Analysis category imported."
+    end
+    
+    def modify_ana
+        Analysis.import(params[:file])
+        file = params[:image_file]
+        @filename = file.original_filename
+        File.open("#{Rails.root}/app/assets/images/#{@filename}", "wb") do |f|
+            f.write(file.read)
+        end
+        redirect_to '/admin', notice: "Analysis module imported."
+    end
+
+    def modify_viz_source
+        VizDataSource.import(params[:file])
+        redirect_to '/admin', notice: "Visualization source imported."
+    end
+
     private
-        def update_metadata
+        def update_sample
             @project = Project.find(params[:project_id])
             db_samples_info_path = File.join Rails.root, 'app', 'data', 'db', params[:project_id] +'_samples_metadata.csv'
             csv_file = @project.samples.to_csv

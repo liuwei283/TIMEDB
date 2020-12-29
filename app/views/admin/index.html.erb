@@ -1,58 +1,295 @@
+<head>
+  
+  
+  <script src="https://cdn.staticfile.org/jquery/1.10.2/jquery.min.js"></script>
+  <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.22/js/jquery.dataTables.min.js"></script>
+  <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.22/css/jquery.dataTables.css">
+  
+  <script type="text/javascript">
+    
+    $(document).ready( function () { 
+      var table = $('#Table').DataTable({
+        columnDefs: [{
+          targets: [0, -1],
+          orderable: false,
+        }],
+        // scrollX: true
+      }); 
+
+      var table = $('#Table2').DataTable({
+        columnDefs: [{
+          targets: [0, -1],
+          orderable: false,
+        }],
+        // scrollX: true
+      }); 
+
+      var table = $('#Table3').DataTable({
+        columnDefs: [{
+          targets: [0, -1],
+          orderable: false,
+        }],
+        // scrollX: true
+      }); 
+
+      $('button.toggle-vis').on( 'click', function (e) {
+        e.preventDefault();
+        $(this).toggleClass('clicked');
+        // Get the column API object
+        var column = table.column( $(this).attr('data-column') );
+        // Toggle the visibility
+        column.visible( ! column.visible() );
+    } );
+
+  });
+
+    function toggle_checkall(field_name, state) {
+      var checkboxes = document.getElementsByTagName('input');
+      var count = checkboxes.length;
+      for (var i = 0; i < count; i++) {
+        if (checkboxes[i].type == "checkbox"
+            && checkboxes[i].name == field_name + "_ids[]") {
+          checkboxes[i].checked = state;
+        }
+      }
+    }
+  </script>
+
+  
+</head>
+
+
 <h1>
 Admin page
 </h1>
 
 <p>
-    This page is made for admin to add project metadata, sample metadata, sample abandance data, every operation need password.
+    This page is made for admin to :
+    <ul>
+      <li>add project metadata</li>
+      <li>add sample metadata</li>
+      <li>add sample abandance data</li>
+      <li>add analysis module</li>
+      <li>add visualization module</li>
+    </ul>
 </p>
 
 <hr />
 
 <br />
-<h4>
-Project management:
-</h4>
+
+<section class="admin_block">
+  <h4>
+  Project management:
+  </h4>
 
 
-<%= form_tag import_projects_path, multipart: true do %>
-  <%= file_field_tag :file %>
-  <%= submit_tag "Import project from csv" %>
-<% end %>
+  <%= form_tag import_projects_path, multipart: true do %>
+    <%= file_field_tag :file %>
+    <%= submit_tag "Import project from csv" %>
+  <% end %>
+</section>
+<hr />
+<section class="admin_block">
+  <h4>
+  Sample management:
+  </h4>
+  <br />
+  <h5>
+    Modify the metadata:
+  </h5>
 
-<br />
-<h4>
-Sample management:
-</h4>
-<br />
-<h5>
-  Modify the metadata:
-</h5>
+  <%= form_tag({action: :modify_sample_metadata}, multipart: true) do %>
+    <p>
+      Please select the project whose samples need to be modified
+    </p>
+    <%= select_tag :project_id, options_from_collection_for_select(@projects, :id, :name, -1) %>
+    <p> 
+      Please select csv file to be imported:
+    </p>
+    <%= file_field_tag 'file' %>
+    <%= submit_tag 'Submit'%>
+  <% end %>
 
-<%= form_tag({action: :modify_sample_metadata}, multipart: true) do %>
+  <br />
+  <h5>
+    Modify the abandance:
+  </h5>
+
+  <%= form_tag({action: :modify_sample_abd}, multipart: true) do %>
+    <p>
+      Please select the project whose samples need to be modified
+    </p>
+    <%= select_tag :project_id, options_from_collection_for_select(@projects, :id, :name, -1) %>
+    <p> 
+      Please select tsv file to be imported:
+    </p>
+    <%= file_field_tag 'file' %>
+    <%= submit_tag 'Submit'%>
+  <% end %>
+</section>
+<hr>
+<br/>
+<section class="admin_block">
+  <h4>
+  Analysis&Visualization management:
+  </h4>
   <p>
-    Please select the project whose samples need to be modified
+    <%=image_tag  "meta_viz_design.jpg" %>
+    <br/>
+    Analysis depends on visualization and analysis category. Please create them before creating analysis.
   </p>
-  <%= select_tag :project_id, options_from_collection_for_select(@projects, :id, :name, -1) %>
-  <p> 
-    Please select csv file to be imported:
-  </p>
-  <%= file_field_tag 'file' %>
-  <%= submit_tag 'Submit'%>
-<% end %>
+  <br />
+  <h5>
+    Modify visualizer:
+  </h5>
 
-<br />
-<h5>
-  Modify the abandance:
-</h5>
-
-<%= form_tag({action: :modify_sample_abd}, multipart: true) do %>
   <p>
-    Please select the project whose samples need to be modified
+  Current visualizer:
   </p>
-  <%= select_tag :project_id, options_from_collection_for_select(@projects, :id, :name, -1) %>
-  <p> 
-    Please select tsv file to be imported:
+
+  <table id="Table" class="display">
+    <thead>
+      
+      <% @viz_attrs.each do |attr| %>
+        
+        <th> <%= attr.capitalize %> </th>
+        
+      <% end %>
+      
+    </thead>
+
+    <tbody>
+      <% @viz.each do |v| %>
+      
+        <tr>
+          <% @viz_attrs.each do |attr| %>
+            
+            <td> 
+              <div class="table_cell"> 
+                <%= v[attr] %> 
+              </div>
+            </td>
+           
+          <% end %>
+          
+        </tr>
+      
+      <% end %>
+    </tbody>
+
+  </table>
+
+  <%= form_tag({action: :modify_viz}, multipart: true) do %>
+    <%= file_field_tag :file %>
+    <%= submit_tag "Import visualization from csv" %>
+  <% end %>
+  
+  <br />
+  <h5>
+    Modify analysis categories:
+  </h5>
+
+  <p>
+  Current categories:
   </p>
-  <%= file_field_tag 'file' %>
-  <%= submit_tag 'Submit'%>
-<% end %>
+
+  <table id="Table2" class="display">
+    <thead>
+      
+      <% @ac_attrs.each do |attr| %>
+        
+        <th> <%= attr.capitalize %> </th>
+        
+      <% end %>
+      
+    </thead>
+
+    <tbody>
+      <% @ana_cate.each do |ac| %>
+      
+        <tr>
+          <% @ac_attrs.each do |attr| %>
+            
+            <td> 
+              <div class="table_cell"> 
+                <%= ac[attr] %> 
+              </div>
+            </td>
+           
+          <% end %>
+          
+        </tr>
+      
+      <% end %>
+    </tbody>
+
+  </table>
+
+  <%= form_tag({action: :modify_ana_cate}, multipart: true) do %>
+    <%= file_field_tag :file %>
+    <%= submit_tag "Import categories from csv" %>
+  <% end %>
+
+  <br />
+  <h5>
+    Modify analyses:
+  </h5>
+
+  <p>
+  Current analyses:
+  </p>
+
+  <table id="Table3" class="display">
+    <thead>
+      
+      <% @a_attrs.each do |attr| %>
+        
+        <th> <%= attr.capitalize %> </th>
+        
+      <% end %>
+      
+    </thead>
+
+    <tbody>
+      <% @ana.each do |a| %>
+      
+        <tr>
+          <% @a_attrs.each do |attr| %>
+            
+            <td> 
+              <div class="table_cell"> 
+                <%= a[attr] %> 
+              </div>
+            </td>
+           
+          <% end %>
+          
+        </tr>
+      
+      <% end %>
+    </tbody>
+
+  </table>
+
+  <%= form_tag({action: :modify_ana}, multipart: true) do %>
+    <p> upload image file for analysis card:</p>
+    <%= file_field_tag :image_file %>
+    <p> upload csv:  *one analysis each time</p>
+    <%= file_field_tag :file %>
+    <%= submit_tag "Import analyses from csv" %>
+  <% end %>
+
+  <br />
+  <h5>
+    Modify visualization source:
+  </h5>
+
+  <%= form_tag({action: :modify_viz_source}, multipart: true) do %>
+    <%= file_field_tag :file %>
+    <%= submit_tag "Import source from csv" %>
+  <% end %>
+
+
+
+</section>
