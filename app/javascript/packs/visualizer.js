@@ -56,6 +56,6 @@ document.addEventListener("turbolinks:before-cache", () => {
     packLoaded = false;
     canvasMounted = false;
     vizLoaded = false;
-    ouputsLoaded = false;
+    outputsLoaded = false;
 });
 
