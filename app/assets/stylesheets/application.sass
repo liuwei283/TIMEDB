@@ -58,9 +58,15 @@ a.no-link:hover
     .progress-bar
         transition: width 5s linear
 
+$nav-height: 70px
 #topbar
+    background-color: $gray-900
+    height: $nav-height
+    span
+        color: white
     .nav-link
         padding: 1rem 1rem
+        color: white
     .dropdown-menu
         box-shadow: 0 0 8px rgba(0,0,0,.1)
     .dropdown-toggle
@@ -71,7 +77,7 @@ a.no-link:hover
 
 // Sidebar
 
-$nav-height: 50px
+
 #topbar
     &.topbar-app
         font-family: 'Roboto Condensed', sans-serif
@@ -156,9 +162,9 @@ $nav-height: 50px
     margin: -1rem
     iframe
         border: none
-@import "./*"
 
 // #main 
 //     margin: 2em
 
 
+@import "./*"
