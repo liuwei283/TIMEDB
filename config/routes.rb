@@ -37,6 +37,9 @@ Rails.application.routes.draw do
   get 'api/local', to: 'raw_files#index'
   get 'api/public', to: 'raw_files#public'
 
+  # draw on overview page
+  get 'data/static_viz_data/:name', to: 'raw_files#viz_file'
+
   namespace :api do
     resources :analysis, only: [] do
       get 'use_demo', to: 'viz_files#use_demo', as: 'use_demo'
@@ -56,7 +59,7 @@ Rails.application.routes.draw do
   get 'database/char'
   get 'database/fc'
   get 'database/aa'
-  get 'database/overview'
+  get 'database/overview', to: 'database#overview'
   
   get 'demo', to: 'demo#show'
   
@@ -82,4 +85,7 @@ Rails.application.routes.draw do
   post "admin/modify_ana_cate" => "admin#modify_ana_cate", :as => "admin/modify_ana_cate"
   post "admin/modify_ana" => "admin#modify_ana", :as => "admin/modify_ana"
   post "admin/modify_viz_source" => "admin#modify_viz_source", :as => "admin/modify_viz_source"
+  post "admin/add_img" => "admin#add_img", :as => "admin/add_img"
+
+
 end

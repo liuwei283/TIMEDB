@@ -1,6 +1,7 @@
 class ApplicationController < ActionController::Base
     before_action :require_cookie
 
+    $user_stor_dir = "#{Rails.root}/data/user" 
     private
 
     def require_cookie

@@ -84,12 +84,17 @@ class AdminController < ApplicationController
     
     def modify_ana
         Analysis.import(params[:file])
+        redirect_to '/admin', notice: "Analysis module imported."
+    end
+
+    def add_img
         file = params[:image_file]
         @filename = file.original_filename
         File.open("#{Rails.root}/app/assets/images/#{@filename}", "wb") do |f|
             f.write(file.read)
         end
-        redirect_to '/admin', notice: "Analysis module imported."
+        redirect_to '/admin', notice: "Image added."
+
     end
 
     def modify_viz_source
