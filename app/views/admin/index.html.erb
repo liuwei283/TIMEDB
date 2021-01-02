@@ -273,12 +273,19 @@ Admin page
   </table>
 
   <%= form_tag({action: :modify_ana}, multipart: true) do %>
-    <p> upload image file for analysis card:</p>
-    <%= file_field_tag :image_file %>
-    <p> upload csv:  *one analysis each time</p>
     <%= file_field_tag :file %>
     <%= submit_tag "Import analyses from csv" %>
   <% end %>
+
+  <br/>
+
+  <h6> You may want to add description image to the analysis card </h6>
+  <%= form_tag({action: :add_img}, multipart: true) do %>
+    <p> upload image file for analysis card:</p>
+    <%= file_field_tag :image_file %>
+    <%= submit_tag "Add image" %>
+  <% end %>
+
 
   <br />
   <h5>
