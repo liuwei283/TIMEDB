@@ -17,5 +17,16 @@ class RawFilesController < ApplicationController
       send_file path
     end
   
+
+    def demo
+      path = File.join Rails.root, 'data/demo', full_path
+      send_file path
+    end
+
+    def uploads
+      path = File.join Rails.root, 'data/uploads', full_path
+      send_file path
+    end
+
   end
   
