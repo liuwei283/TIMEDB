@@ -87,5 +87,8 @@ Rails.application.routes.draw do
   post "admin/modify_viz_source" => "admin#modify_viz_source", :as => "admin/modify_viz_source"
   post "admin/add_img" => "admin#add_img", :as => "admin/add_img"
 
+  # serve files
+  match '/data/uploads/*path', to: 'raw_files#uploads', as: 'get_uploads', via: :get
+  match '/data/demo/*path', to: 'raw_files#demo', as: 'get_demo', via: :get
 
 end
