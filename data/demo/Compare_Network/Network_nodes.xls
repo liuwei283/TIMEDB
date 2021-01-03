@@ -1,0 +1,135 @@
+NodeName	NodeSize	NodeGroup	NodePhylum	NodeGenus
+Alistipes shahii(68)	22.4187256176853	Control	Bacteroidetes	Alistipes	
+Alistipes sp.(121)	20.260078023407	Gout	Bacteroidetes	Alistipes	
+Alistipes sp.(86)	21.3263979193758	Gout	Bacteroidetes	Alistipes	
+Alistipes sp.(95)	20.8582574772432	Gout	Bacteroidetes	Alistipes	
+Bacteroides caccae(125)	20.1560468140442	Gout	Bacteroidetes	Bacteroides	
+Bacteroides caccae(36)	26.3459037711313	Gout	Bacteroidetes	Bacteroides	
+Bacteroides caecimuris(129)	20.0780234070221	Gout	Bacteroidetes	Bacteroides	
+Bacteroides cellulosilyticus(19)	36.6710013003901	Control	Bacteroidetes	Bacteroides	
+Bacteroides cellulosilyticus(38)	25.0975292587776	Control	Bacteroidetes	Bacteroides	
+Bacteroides cellulosilyticus(61)	22.8348504551365	Control	Bacteroidetes	Bacteroides	
+Bacteroides coprocola(5)	63.4850455136541	Gout	Bacteroidetes	Bacteroides	
+Bacteroides coprocola(55)	23.2249674902471	Gout	Bacteroidetes	Bacteroides	
+Bacteroides coprophilus(122)	20.2080624187256	Gout	Bacteroidetes	Bacteroides	
+Bacteroides coprophilus(40)	25.0195058517555	Gout	Bacteroidetes	Bacteroides	
+Bacteroides ovatus(81)	21.7165149544863	Gout	Bacteroidetes	Bacteroides	
+Bacteroides salyersiae(116)	20.3120936280884	Gout	Bacteroidetes	Bacteroides	
+Bacteroides sp.(100)	20.6762028608583	Gout	Bacteroidetes	Bacteroides	
+Bacteroides sp.(101)	20.6762028608583	Control	Bacteroidetes	Bacteroides	
+Bacteroides sp.(134)	20	Gout	Bacteroidetes	Bacteroides	
+Bacteroides sp.(48)	23.7191157347204	Gout	Bacteroidetes	Bacteroides	
+Bacteroides sp.(65)	22.6527958387516	Gout	Bacteroidetes	Bacteroides	
+Bacteroides sp.(67)	22.444733420026	Gout	Bacteroidetes	Bacteroides	
+Bacteroides sp.(69)	22.3927178153446	Gout	Bacteroidetes	Bacteroides	
+Bacteroides sp.(99)	20.702210663199	Gout	Bacteroidetes	Bacteroides	
+Bacteroides stercoris(78)	21.8205461638492	Gout	Bacteroidetes	Bacteroides	
+Bacteroides thetaiotaomicron(66)	22.4967490247074	Gout	Bacteroidetes	Bacteroides	
+Bacteroides uniformis(44)	24.0572171651495	Gout	Bacteroidetes	Bacteroides	
+Bacteroides vulgatus(109)	20.3641092327698	Gout	Bacteroidetes	Bacteroides	
+Bacteroides vulgatus(50)	23.5630689206762	Gout	Bacteroidetes	Bacteroides	
+Bacteroides vulgatus(54)	23.2769830949285	Gout	Bacteroidetes	Bacteroides	
+Bifidobacterium adolescentis(62)	22.8088426527958	Gout	Actinobacteria	Bifidobacterium	
+Bifidobacterium longum(73)	21.9765929778934	Gout	Actinobacteria	Bifidobacterium	
+Bilophila wadsworthia(58)	22.9908972691808	Control	Proteobacteria	Bilophila	
+Blautia sp.(92)	21.0143042912874	Gout	Firmicutes	Blautia	
+Citrobacter sp.(112)	20.3381014304291	Control	Proteobacteria	Citrobacter	
+Citrobacter sp.(128)	20.1300390117035	Control	Proteobacteria	Citrobacter	
+Collinsella sp.(111)	20.3381014304291	Gout	Actinobacteria	Collinsella	
+Collinsella sp.(20)	35.4486345903771	Gout	Actinobacteria	Collinsella	
+Collinsella sp.(34)	27.2041612483745	Gout	Actinobacteria	Collinsella	
+Control-10	54.9544863459038	Control	Firmicutes	Faecalibacterium	
+Control-103	20.6501950585176	Control	Firmicutes	Anaerotignum	
+Control-106	20.4681404421326	Control	Firmicutes	Oscillibacter	
+Control-115	20.3120936280884	Control	NA	NA	
+Control-118	20.260078023407	Control	Firmicutes	Intestinimonas	
+Control-119	20.260078023407	Control	Firmicutes	NA	
+Control-12	52.4837451235371	Control	Firmicutes	Eubacterium	
+Control-120	20.260078023407	Control	Firmicutes	Blautia	
+Control-13	47.9063719115735	Control	Firmicutes	Roseburia	
+Control-130	20.0780234070221	Control	Proteobacteria	NA	
+Control-133	20	Control	Firmicutes	Faecalibacterium	
+Control-15	45.9817945383615	Control	Firmicutes	Lachnoclostridium	
+Control-16	45.9297789336801	Control	Firmicutes	Pseudoflavonifractor	
+Control-17	40.7802340702211	Control	Firmicutes	Oscillibacter	
+Control-18	39.479843953186	Control	Firmicutes	Ruminiclostridium	
+Control-23	32.1196358907672	Control	Proteobacteria	Salmonella	
+Control-24	31.6775032509753	Control	Bacteroidetes	Alistipes	
+Control-26	29.9609882964889	Control	Firmicutes	Coprococcus	
+Control-27	29.7529258777633	Control	Firmicutes	Faecalibacterium	
+Control-28	29.5708712613784	Control	Bacteroidetes	Bacteroides	
+Control-29	29.4148244473342	Control	Firmicutes	Butyricicoccus	
+Control-3	69.518855656697	Control	Firmicutes	Faecalibacterium	
+Control-30	28.8686605981795	Control	Firmicutes	Flavonifractor	
+Control-31	28.6605981794538	Control	Firmicutes	Lachnoclostridium	
+Control-32	28.4265279583875	Control	Firmicutes	Lachnoclostridium	
+Control-37	25.7997399219766	Control	Firmicutes	Ruminococcus	
+Control-41	24.9674902470741	Control	Bacteroidetes	Bacteroides	
+Control-43	24.1352405721717	Control	Firmicutes	Flavonifractor	
+Control-45	23.9531859557867	Control	Firmicutes	Ruminococcus	
+Control-47	23.8491547464239	Control	Bacteroidetes	Prevotella	
+Control-52	23.4330299089727	Control	Bacteroidetes	Prevotella	
+Control-53	23.4330299089727	Control	Firmicutes	Roseburia	
+Control-56	23.1209362808843	Control	Firmicutes	Oscillibacter	
+Control-7	59.4018205461638	Control	Firmicutes	Phascolarctobacterium	
+Control-79	21.7945383615085	Control	NA	NA	
+Control-8	57.2431729518856	Control	Firmicutes	Coprococcus	
+Control-98	20.7282184655397	Control	Firmicutes	Eubacterium	
+Coprococcus eutactus(84)	21.4564369310793	Control	Firmicutes	Coprococcus	
+Escherichia coli(1)	100	Control	Proteobacteria	Escherichia	
+Escherichia coli(82)	21.5344603381014	Control	Proteobacteria	Escherichia	
+Faecalibacterium prausnitzii(77)	21.8205461638492	Control	Firmicutes	Faecalibacterium	
+Faecalibacterium prausnitzii(89)	21.0663198959688	Control	Firmicutes	Faecalibacterium	
+Faecalibacterium sp.(11)	53.9921976592978	Control	Firmicutes	Faecalibacterium	
+Flavonifractor sp.(96)	20.7802340702211	Gout	Firmicutes	Flavonifractor	
+Fusicatenibacter saccharivorans(110)	20.3641092327698	Gout	Firmicutes	Fusicatenibacter	
+Fusobacterium mortiferum(4)	64.6814044213264	Gout	Fusobacteria	Fusobacterium	
+Gout-105	20.520156046814	Gout	Bacteroidetes	Bacteroides	
+Gout-107	20.4161248374512	Gout	Firmicutes	Ruminococcus	
+Gout-113	20.3381014304291	Gout	NA	NA	
+Gout-114	20.3120936280884	Gout	Fusobacteria	Fusobacterium	
+Gout-117	20.3120936280884	Gout	NA	NA	
+Gout-124	20.1820546163849	Gout	Firmicutes	Erysipelatoclostridium	
+Gout-126	20.1560468140442	Gout	Firmicutes	Ruminococcus	
+Gout-132	20.0520156046814	Gout	NA	NA	
+Gout-14	47.5422626788036	Gout	Bacteroidetes	Bacteroides	
+Gout-21	34.3302990897269	Gout	Bacteroidetes	Bacteroides	
+Gout-25	31.1833550065019	Gout	Proteobacteria	Sutterella	
+Gout-33	28.1924577373212	Gout	Proteobacteria	Duodenibacillus	
+Gout-35	26.6059817945384	Gout	Bacteroidetes	Bacteroides	
+Gout-42	24.8634590377113	Gout	Proteobacteria	Duodenibacillus	
+Gout-57	23.0429128738622	Gout	Proteobacteria	Duodenibacillus	
+Gout-60	22.8608582574772	Gout	Firmicutes	Gemmiger	
+Gout-75	21.8725617685306	Gout	Bacteroidetes	Odoribacter	
+Gout-76	21.8465539661899	Gout	Bacteroidetes	Bacteroides	
+Gout-80	21.7165149544863	Gout	Actinobacteria	Collinsella	
+Gout-93	20.9362808842653	Gout	Bacteroidetes	Bacteroides	
+Klebsiella pneumoniae(127)	20.1560468140442	Control	Proteobacteria	Klebsiella	
+Klebsiella pneumoniae(2)	95.0585175552666	Control	Proteobacteria	Klebsiella	
+Klebsiella pneumoniae(97)	20.7542262678804	Control	Proteobacteria	Klebsiella	
+Lactobacillus rogosae(90)	21.0663198959688	Gout	Firmicutes	Lactobacillus	
+Megamonas funiformis(6)	61.2743823146944	Gout	Firmicutes	Megamonas	
+Megamonas sp.(102)	20.6762028608583	Gout	Firmicutes	Megamonas	
+Parabacteroides distasonis(74)	21.924577373212	Gout	Bacteroidetes	Parabacteroides	
+Parabacteroides johnsonii(70)	22.3407022106632	Gout	Bacteroidetes	Parabacteroides	
+Parabacteroides sp.(123)	20.2080624187256	Gout	Bacteroidetes	Parabacteroides	
+Parabacteroides sp.(51)	23.4590377113134	Gout	Bacteroidetes	Parabacteroides	
+Parasutterella excrementihominis(59)	22.9388816644993	Control	Proteobacteria	Parasutterella	
+Parasutterella excrementihominis(87)	21.2483745123537	Control	Proteobacteria	Parasutterella	
+Prevotella copri(63)	22.7828348504551	Gout	Bacteroidetes	Prevotella	
+Prevotella sp.(94)	20.9362808842653	Gout	Bacteroidetes	Prevotella	
+Roseburia faecis(91)	21.0403120936281	Gout	Firmicutes	Roseburia	
+Ruminococcus bicirculans(9)	57.0871261378414	Control	Firmicutes	Ruminococcus	
+Ruminococcus callidus(104)	20.520156046814	Control	Firmicutes	Ruminococcus	
+Ruminococcus lactaris(88)	21.2483745123537	Control	Firmicutes	Ruminococcus	
+Shigella flexneri(39)	25.0975292587776	Gout	Proteobacteria	Shigella	
+Streptococcus salivarius(72)	22.1066319895969	Gout	Firmicutes	Streptococcus	
+Streptococcus sp.(85)	21.3784135240572	Gout	Firmicutes	Streptococcus	
+Succinatimonas hippei(64)	22.704811443433	Gout	Proteobacteria	Succinatimonas	
+Sutterella wadsworthensis(131)	20.0780234070221	Gout	Proteobacteria	Sutterella	
+Sutterella wadsworthensis(49)	23.667100130039	Gout	Proteobacteria	Sutterella	
+[Clostridium] glycyrrhizinilyticum(71)	22.184655396619	Gout	Firmicutes	Lachnoclostridium	
+[Eubacterium] hallii(46)	23.8751625487646	Control	Firmicutes	Eubacterium	
+[Ruminococcus] gnavus(83)	21.5084525357607	Gout	Firmicutes	Blautia	
+[Ruminococcus] torques(108)	20.3641092327698	Gout	Firmicutes	Blautia	
+butyrate-producing bacterium SS3/4(22)	33.6540962288687	Control	Firmicutes	Unclassified	
