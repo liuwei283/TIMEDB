@@ -1,5 +1,5 @@
 <template>
-     <div> 
+     <div id = "vapp"> 
         <div id="tool-bar">
             <div v-if= "isAnalysis">
                 <b-button @click="downloadSVG" class="tool-bar-el"><i class="fa fa-download"></i>Download Chart</b-button>
@@ -136,6 +136,9 @@
 </script>
 
 <style scoped>
+    #vapp {
+        height: 100%;
+    }
     #tool-bar div >* {
         height: 100%;
         color: darkgrey;
@@ -153,6 +156,7 @@
         padding-top:0;
         height: 100%;
         text-align:center;
+        border: none;
     }
     .tool-bar-el /deep/ .btn-secondary {
         border-radius: 0;
@@ -169,7 +173,8 @@
         float: right;
     }
     #canvas {
-        height: calc(100vh - 31px);
+        /*height: 100vh;*/
+        height: 968px;
         width: calc(100vw - 270px);
         overflow: scroll;
     }
@@ -178,6 +183,7 @@
     }
     #viz-container {
         position: relative;
+        height: calc(100vh - 31px);
     }
     #v-editor {
         position: absolute;
