@@ -76,15 +76,16 @@ export class ComplexScatterplot extends Component<ComplexScatterplotOption> {
                     orientation = "vertical"
                     dashArray = "1, 2"
                 }
-    
+            
                 @for (scatter, i) in scatterData {
                     @if (!scatter.cluster) {
+                        @let scatterColor = prop.groups ? colorMap.get(scatter.group) : prop.colors[0]
                         @let scatterProps = {
                             key : "scatter" + i,
                             r : prop.scatterSize/2,
-                            fill : (prop.hollow ? "none" : colorMap.get(scatter.group)),
+                            fill : (prop.hollow ? "none" : scatterColor),
                             strokeWidth : 2,
-                            stroke : colorMap.get(scatter.group),
+                            stroke : scatterColor,
                         }
                         Component {
                            
@@ -208,50 +209,44 @@ export class ComplexScatterplot extends Component<ComplexScatterplotOption> {
                         fontSize = 15
                     }    
                 }
-                
-                Component {
-                    x = legendPos.x; y = legendPos.y
-                    height = 50; width = 70
-                    key = "legend1"
-                    Rect.full {
-                        stroke = @color("line")
-                        fill = "white"
-                        on:mousedown = $el.stage = "active"
-                        on:mousemove = (ev,el) => dragLegend(ev,el)
-                        on:mouseup = $el.stage = null
-                    }
-                    Rows {
-                        @for (group, i) in prop.groups {
-                            Component {
-                                height = 25
-                                @if clusterData {
-                                   @if i === 0 {
-                                        Circle.centered{
-                                            x = 8; y = 12.5; r = 4; fill = prop.colors[0]
+                @if prop.groups {
+                    Component {
+                        x = legendPos.x; y = legendPos.y
+                        height = 50; width = 70
+                        key = "legend1"
+                        Rect.full {
+                            stroke = @color("line")
+                            fill = "white"
+                            on:mousedown = $el.stage = "active"
+                            on:mousemove = (ev,el) => dragLegend(ev,el)
+                            on:mouseup = $el.stage = null
+                        }
+                        Rows {
+                            @for (group, i) in prop.groups {
+                                Component {
+                                    height = 25
+                                    @if clusterData {
+                                    @if i === 0 {
+                                            Circle.centered{
+                                                x = 8; y = 12.5; r = 4; fill = prop.colors[0]
+                                            }
+                                    } @else {
+                                        Rect.centered {
+                                            x = 8; y = 12.5; height = 8; width = 8; fill = prop.colors[0]
                                         }
-                                   } @else {
-                                       Rect.centered {
-                                           x = 8; y = 12.5; height = 8; width = 8; fill = prop.colors[0]
-                                       }
-                                   }
-                                } @else {
-                                    Circle.centered{
-                                            x = 8; y = 12.5; r = 4; fill = prop.colors[i]
+                                    }
+                                    } @else {
+                                        Circle.centered{
+                                                x = 8; y = 12.5; r = 4; fill = prop.colors[i]
+                                        }
+                                    }
+                                    Text(group) {
+                                        x = 15; y = 12.5; anchor = @anchor("l","m")
                                     }
                                 }
-                                Text(group) {
-                                    x = 15; y = 12.5; anchor = @anchor("l","m")
-                                }
                             }
-                        }
-                    }  
-                    // Rect.full {
-                    //     fill = "white"
-                    //     fillOpacity = 0.01
-                    //     on:mousedown = $parent.stage = "active"
-                    //     // on:mousemove = (ev,el,$parent) => dragNode(ev,el,d.NodeGroup)
-                    //     on:mouseup = $parent.stage = null
-                    // }
+                        }  
+                    }
                 }
     
                 @if clusterData {
@@ -387,9 +382,18 @@ export class ComplexScatterplot extends Component<ComplexScatterplotOption> {
 
 
     protected generateScatterContent(scatter){
-        return Object.keys(scatter).reduce(((acc, cur) => acc + `${cur}: ${scatter[cur]}<br>` ), "");
+        return Object.keys(scatter)
+                     .reduce(((acc, cur) => {
+                        if (!!scatter[cur]) 
+                            if (typeof scatter[cur] === "number")
+                                return acc + `${cur}: ${scatter[cur].toFixed(3)}<br>`;
+                            else
+                                return acc + `${cur}: ${scatter[cur]}<br>`;
+                        else return acc;
+                }), "");
     }
 
+    
     protected getMap(keyArray, valueArray) {
         const map = new Map();
         keyArray.forEach((key,i) => {

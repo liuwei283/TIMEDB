@@ -79,6 +79,7 @@ function genDefaultDataSources() {
             optional: true,
             dependsOn: ["scatterData"],
             loaded(data) {
+                if (!data) return;
                 this.data.groups = getGroups(data, data.columns[1]);
                 this.data.scatterData = this.data.scatterData.map((d,i) => {
                     if(data[i][data.columns[0]] === d[this.data.scatterData.columns[0]]) 
@@ -100,6 +101,7 @@ function genDefaultDataSources() {
                 return row;
             },
             loaded(data) {
+                if (!data) return;
                 this.data.vectorLabel = data.columns[0];
             }
         },
@@ -116,6 +118,7 @@ function genDefaultDataSources() {
                 };
             },
             loaded(data) {
+                if (!data) return;
                 this.data.scatterData = this.data.scatterData.filter(d => {
                     let hasCluster = false;
                     const sample = d[this.data.scatterColumns[0]]
