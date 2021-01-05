@@ -22,6 +22,12 @@ class DatabaseController < ApplicationController
             end
             @data.push(current_json)
         end
+
+       
+
+        
+
+
         
     end
 
