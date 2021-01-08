@@ -26,7 +26,6 @@ export default function init(id, path) {
                     data.forEach(d => {
                         result.push([d[xAxisKey], d[yAxisKey]]);
                     });
-                    console.log(result);
                     return result;
                 },
             },

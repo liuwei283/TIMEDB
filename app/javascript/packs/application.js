@@ -1,14 +1,12 @@
 import 'bootstrap';
-
-import TurbolinksAdapter from 'vue-turbolinks';
 import Vue from 'vue';
 import $ from 'jquery';
 import VJstree from 'vue-jstree';
 import uploader from 'vue-simple-uploader';
+
 window.jQuery = $;
 window.gon = window.gon || {};
 
-Vue.use(TurbolinksAdapter);
 Vue.use(VJstree);
 Vue.use(uploader);
 const ALERT_TIMEOUT = 5000;
@@ -16,7 +14,7 @@ const ALERT_TIMEOUT = 5000;
 import JobSubmit from '../job-submit.vue';
 import JobQuery from '../job-query.vue';
 
-document.addEventListener('turbolinks:load', () => {
+document.addEventListener('DOMContentLoaded', (event) =>  {
     const vueLoadList = [
         ['#vapp-job-submit', JobSubmit],
         ['#vapp-job-query', JobQuery],
