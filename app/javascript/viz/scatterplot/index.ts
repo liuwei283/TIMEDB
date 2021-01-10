@@ -12,8 +12,6 @@ import {register} from "page/visualizers";
 
 
 const sampleIndex = 0;
-// const xAxisIndex = 1;
-// const yAxisIndex = 2;
 
 const MODULE_NAME = 'scatterplot'
 
@@ -131,7 +129,7 @@ function genDefaultDataSources() {
                     })
                     if (hasCluster) return d;
                 })
-                this.data.clusters = getGroups(data, "cluster");
+                this.data.clusters = getGroups(data, "cluster").sort();
                 return null;
             }
         }

@@ -30,8 +30,13 @@ export function computeLog(number, base):number {
     return Math.log(number) / Math.log(base);
 }
 
-export function findBoundsForValues(values: number[], sigDigit, isSym:boolean = false) {
-    const [min, max] = minmax(values);
+export function findBoundsForValues(values: number[], sigDigit, isSym:boolean = false, padding: number = 0) {
+    let [min, max] = minmax(values);
+    if (padding !== 0) {
+        const range = max - min;
+        min = min - range * padding;
+        max = max + range * padding;
+    }
     let lowerBound, upperBound;
     if (min < 0 && max >0) {
         if (isSym) {
