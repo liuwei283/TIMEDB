@@ -194,7 +194,7 @@ export class ComplexScatterplot extends Component<ComplexScatterplotOption> {
                 Component {
                     y = 50% 
                     Text(yLabel) {
-                        x = -15
+                        x = -25
                         rotation = @rotate(-90)
                         anchor = @anchor("m", "c")
                         fontSize = 15
@@ -217,29 +217,29 @@ export class ComplexScatterplot extends Component<ComplexScatterplotOption> {
                         Rect.full {
                             stroke = @color("line")
                             fill = "white"
-                            on:mousedown = $el.stage = "active"
-                            on:mousemove = (ev,el) => dragLegend(ev,el)
-                            on:mouseup = $el.stage = null
+                            // on:mousedown = $el.stage = "active"
+                            // on:mousemove = (ev,el) => dragLegend(ev,el)
+                            // on:mouseup = $el.stage = null
                         }
                         Rows {
                             @for (group, i) in prop.groups {
                                 Component {
                                     height = 25
                                     @if clusterData {
-                                    @if i === 0 {
+                                        @if i === 0 {
                                             Circle.centered{
-                                                x = 8; y = 12.5; r = 4; fill = prop.colors[0]
+                                                x = 8; y = 12.5; r = 4; fill = "grey"
                                             }
-                                    } @else {
-                                        Rect.centered {
-                                            x = 8; y = 12.5; height = 8; width = 8; fill = prop.colors[0]
+                                        } @else {
+                                            Rect.centered {
+                                                x = 8; y = 12.5; height = 8; width = 8; fill = "grey"
+                                            }
                                         }
-                                    }
-                                    } @else {
-                                        Circle.centered{
-                                                x = 8; y = 12.5; r = 4; fill = prop.colors[i]
+                                        } @else {
+                                            Circle.centered{
+                                                    x = 8; y = 12.5; r = 4; fill = prop.colors[i]
+                                            }
                                         }
-                                    }
                                     Text(group) {
                                         x = 15; y = 12.5; anchor = @anchor("l","m")
                                     }
@@ -306,10 +306,17 @@ export class ComplexScatterplot extends Component<ComplexScatterplotOption> {
         this.plotWidth = this.prop.plotSize.w;
         this.plotHeight = this.prop.plotSize.h;
 
-        this.categoryRange = this.rangeIsValid(this.prop.categoryRange) ?  this.prop.categoryRange
+        if (this.prop.clusters) {
+            this.categoryRange = this.rangeIsValid(this.prop.categoryRange) ?  this.prop.categoryRange
+                : findBoundsForValues(this.scatterData.map(d => d[this.xLabel]), 1, false, 0.1);
+            this.valueRange = this.rangeIsValid(this.prop.valueRange) ? this.prop.valueRange
+                : findBoundsForValues(this.scatterData.map(d => d[this.yLabel]), 1, false, 0.1);
+        } else {
+            this.categoryRange = this.rangeIsValid(this.prop.categoryRange) ?  this.prop.categoryRange
             : findBoundsForValues(this.scatterData.map(d => d[this.xLabel]), 1);
-        this.valueRange = this.rangeIsValid(this.prop.valueRange) ? this.prop.valueRange
-            : findBoundsForValues(this.scatterData.map(d => d[this.yLabel]), 1);;
+            this.valueRange = this.rangeIsValid(this.prop.valueRange) ? this.prop.valueRange
+                : findBoundsForValues(this.scatterData.map(d => d[this.yLabel]), 1);
+        }
 
         const svgRatioX = this.plotWidth / (this.categoryRange[1] - this.categoryRange[0]);
         const svgRatioY = this.plotHeight / (this.valueRange[1] - this.valueRange[0]);
