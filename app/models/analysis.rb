@@ -1,7 +1,7 @@
 class Analysis < ApplicationRecord
     has_many :viz_file_objects
     has_many :analysis_user_data
-    has_many :task_outputs
+    has_many :tasks
     belongs_to :analysis_category
     belongs_to :visualizer
 
