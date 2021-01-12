@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_12_22_084206) do
+ActiveRecord::Schema.define(version: 2021_01_11_132034) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -120,15 +120,23 @@ ActiveRecord::Schema.define(version: 2020_12_22_084206) do
     t.string "task_id", null: false
     t.integer "output_id", null: false
     t.json "file_paths", null: false
-    t.bigint "analysis_id"
-    t.index ["analysis_id"], name: "index_task_outputs_on_analysis_id"
     t.index ["user_id"], name: "index_task_outputs_on_user_id"
+  end
+
+  create_table "tasks", force: :cascade do |t|
+    t.bigint "user_id"
+    t.bigint "analysis_id"
+    t.integer "tid", null: false
+    t.string "status", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["analysis_id"], name: "index_tasks_on_analysis_id"
+    t.index ["user_id"], name: "index_tasks_on_user_id"
   end
 
   create_table "users", force: :cascade do |t|
     t.string "name"
     t.integer "dataset_n"
-    t.string "task_ids"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
   end
@@ -162,5 +170,4 @@ ActiveRecord::Schema.define(version: 2020_12_22_084206) do
   add_foreign_key "analysis_user_data", "task_outputs"
   add_foreign_key "datasets", "users"
   add_foreign_key "samples", "projects"
-  add_foreign_key "task_outputs", "analyses"
 end

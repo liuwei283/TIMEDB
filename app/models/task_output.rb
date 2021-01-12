@@ -1,6 +1,5 @@
 class TaskOutput < ApplicationRecord
-    belongs_to :user
-    belongs_to :analysis
+    belongs_to :tasks
     has_one :analysis_user_datum
 
     # def self.find_or_store(user_id, output, task_id)

@@ -141,6 +141,8 @@ class SubmitController < ApplicationController
       app_inputs = params[:inputs]
       app_params = params[:params]
       app_selected = params[:selected]
+      @analysis = Analysis.find_by mid:params[:mid]
+
       inputs = Array.new
       params = Array.new
 
@@ -182,27 +184,19 @@ class SubmitController < ApplicationController
       client = LocalApi::Client.new
       result = client.run_module(UID, PROJECT_ID, app_id.to_i, inputs, params)
       Rails.logger.info(result['message'])
-      tid = ""
       if result['message']['code']
         result_json[:code] = true
-	tid = encode(result['message']['data']['task_id'])
+        @task  = @user.tasks.new
+        @task.analysis = @analysis
+        @task.status = 'submitted'
+        @task.tid = result['message']['data']['task_id']
+        @task.save!
+        @user.updated_at = Time.now
+        @user.save!
         result_json[:data] = {
           'msg': result['message']['data']['msg'],
-          'task_id': tid
-        }
-	Rails.logger.info(result_json)
-        if @user.task_ids.nil? || @user.task_ids == ""
-	  Rails.logger.info("first branch")
-	  Rails.logger.info(result_json[:data] ['task_id'])
-          @user.update_attribute(:task_ids, tid)
-        else
-	  Rails.logger.info("second branch")
-          current_ids = @user.task_ids
-          current_ids += ("," + tid)
-          @user.update_attribute(:task_ids, current_ids)
-        end
-        @user.save
-	Rails.logger.info(@user)
+          'task_id': @task.id
+        }  
       else
         result_json[:code] = false
         result_json[:data] = {
