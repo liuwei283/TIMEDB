@@ -3,13 +3,17 @@ Rails.application.routes.draw do
   get 'test', to: 'demo#test'
   resources :projects do
     resources :samples do
-      collection { post :import }
-      collection { post :make_selected_file}
-      collection { post :import_abd_table}
-      member { post :upload_seq }
-      member { post :upload_abd }
-      member { get :download_seq }
-      member { get :download_abd }
+      collection do
+        post :import 
+        post :make_selected_file
+        post :import_abd_table
+      end
+      member do
+        post :upload_seq
+        post :upload_abd
+        get :download_seq
+        get :download_abd
+      end
     end
     collection { post :import}
     collection { post :download_selected_file }
