@@ -1,4 +1,5 @@
 import Oviz from "crux";
+import { Visualizer } from "crux/dist/visualizer/visualizer"
 import * as d3 from "d3-hierarchy";
 import { parseNewick } from "crux/dist/utils";
 import { group } from "d3";
@@ -509,18 +510,14 @@ export function main(_data) {
     });
 
     dataOpt.isRadical = (leaves.length > 20) ? true : false ;
-
     const branchShouldStayOnTop = (l, t) => {
         if (l.target.data.data.qvalue < dataOpt.maxQvalue)
             return true;
         return false;
     }
-
-    this.data.branchShouldStayOnTop = branchShouldStayOnTop;
-
+    if(!!this) this.data.branchShouldStayOnTop = branchShouldStayOnTop;
     return {treeData, dataOpt, leave_box_dict, mean_info_box, max_mean, min_mean, library, allNodes, leaves, distinct_leaves, leave_link_dict, _data, max, min};
 }
-
 function parseTreeData(tree) {
     if (library.matrix_dict[tree.name]) tree.data = library.matrix_dict[tree.name];
     if (tree.children) {
@@ -529,4 +526,14 @@ function parseTreeData(tree) {
         });
     }  
     return tree;
+}
+
+export function updateBranchZIndex(v) {
+    if (!v || !v.data) return;
+    const branchShouldStayOnTop = (l, t) => {
+        if (l.target.data.data.qvalue < v.data.main.dataOpt.maxQvalue)
+            return true;
+        return false;
+    }
+    v.data.branchShouldStayOnTop = branchShouldStayOnTop;
 }
