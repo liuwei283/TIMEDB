@@ -1,8 +1,7 @@
 export interface Viz {
     vizOpts: any;
 }
-import {default as DiscreteHeatmap} from "viz/discrete-heatmap"
-import {default as SignedHeatmap} from "viz/signed-heatmap"
+import {registerSignedHeatmap} from "./signed-heatmap";
 export {default as Demo} from "./demo"
 
 declare global {
@@ -15,17 +14,13 @@ declare global {
         gon: GonInfo;
     }
 }
-export function getVizByTaskOutput(output: any){
-    switch (output.visualizer) {
-        case "DiscreteHeatmap":
-            console.log("=>DiscreteHeatmap");
-            return DiscreteHeatmap.initVizWithDeepomics(output.files);
-        case "SignedHeatmap":
-            console.log("=>SignedHeatmap");
-            return SignedHeatmap.initVizWithDeepomics(output.files);
-        default:
+export function registerViz(moduleName) {
+    switch(moduleName){
+        case "signed-heatmap":
+            registerSignedHeatmap();
             break;
     }
+
 }
 
 
