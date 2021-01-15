@@ -28,7 +28,7 @@ export function init(id, path, config) {
                         const num = parseFloat(Object.values(d)[valueIndex]);
                         const p = parseFloat(Object.values(d)[valueIndex]) / sum;
                         const name = `${Object.values(d)[categoryIndex]} - ${(p * 100).toFixed(2)}%`;
-                        const c = Color.hsl((i%12)*60, 80+Math.floor((i/6))*10, 60+Math.floor((i/6))*10) ;
+                        const c = Color.hsl((i%6)*60, 60+Math.floor((i/6))*10, 60+Math.floor((i/6))*10) ;
                         pieData.push({color: c, num: num, value: p, name: name});
                         legendData.push({fill:c.string, label:name});
                     });
