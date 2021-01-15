@@ -22,11 +22,6 @@ export function editorConfig(v): EditorDef {
     return {
         sections: [
             {
-                id: "files",
-                title: "Files",
-                builtin: "files"
-            },
-            {
                 id: "settings",
                 title: "Settings",
                 layout: "single-page",

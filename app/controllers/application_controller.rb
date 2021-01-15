@@ -15,7 +15,7 @@ class ApplicationController < ActionController::Base
         end
         # check user
         id = session[:user_id]
-        if User.exists(id)
+        if User.exists? id
             
             @user = User.find(id)
             @user.touch

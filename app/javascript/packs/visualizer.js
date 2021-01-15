@@ -16,6 +16,7 @@ function checkResource() {
     if (document.getElementById("canvas")) {
         canvasMounted = true;
     }
+    console.log(`${packLoaded} - ${canvasMounted}`);
     if (packLoaded && canvasMounted && !vizLoaded) {
         if (window.gon.viz_mode === viz_mode.TASK_OUTPUT && !outputsLoaded) return;
         vizLoaded = true;
@@ -36,7 +37,8 @@ event.on(event.CANVAS_READY, () => {
 });
 event.on("bvd3-resource-loaded", () => { 
     console.log("bvd3-resource-loaded");
-    packLoaded = true; checkResource(); 
+    packLoaded = true; 
+    checkResource(); 
     console.log(vizLoaded);
 });
 event.on("GMT:query-finished", ()=> {
@@ -45,7 +47,19 @@ event.on("GMT:query-finished", ()=> {
     checkResource();
     console.log(vizLoaded)
 });
-
+event.on("GMT:reset-query", () => {
+    console.log("GMT:reset-query");
+    const canvas = document.getElementById("canvas");
+    if (!canvas) { return; }
+    const svgElm = canvas.getElementsByTagName("svg");
+    if (svgElm.length) svgElm[0].remove();
+    const canvasElm = canvas.getElementsByTagName("canvas");
+    if (canvasElm.length) canvasElm[0].remove();
+    packLoaded = false;
+    canvasMounted = false;
+    vizLoaded = false;
+    outputsLoaded = false;
+});
 document.addEventListener("turbolinks:before-cache", () => {
     const canvas = document.getElementById("canvas");
     if (!canvas) { return; }

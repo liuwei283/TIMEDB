@@ -1,6 +1,6 @@
 class AnalysisUserDatum < ApplicationRecord
     belongs_to :analysis
-    belongs_to :user
+    belongs_to :user, touch: true
     belongs_to :task_output, optional: true
 
     def self.findOrInitializeBy (analysis_id, user_id)

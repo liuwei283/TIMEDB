@@ -13,7 +13,7 @@ class RawFilesController < ApplicationController
     end
 
     def viz_file
-      path = File.join Rails.root, 'data', "static_viz_data", params[:path]+ '.' + params[:format] 
+      path = File.join Rails.root, 'data', "static_viz_data", full_path 
       send_file path
     end
   
@@ -22,8 +22,7 @@ class RawFilesController < ApplicationController
       path = File.join Rails.root, 'data/demo', full_path
       send_file path
     end
-
-
+    
     def uploads
       path = File.join Rails.root, 'data/uploads', full_path
       send_file path

@@ -18,7 +18,7 @@ class AnalysisController < ApplicationController
         
         @analysisUserDatum = AnalysisUserDatum.findOrInitializeBy params[:id], session[:user_id]
         chosen_output = nil
-        chosen_output = @analysisUserDatum.task_output.id if !@analysisUserDatum.task_output.blank?
+        chosen_output = @analysisUserDatum.task_output.task.id if !@analysisUserDatum.task_output.blank?
         gon.push module_name: @analysis.visualizer.js_module_name,
                 viz_mode: "analysis",
                 analysis_name: @analysis.name,

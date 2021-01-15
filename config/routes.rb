@@ -76,9 +76,12 @@ Rails.application.routes.draw do
   get 'submit/:id', to: 'submit#index', as: 'submit'
   get 'job-query', to: 'submit#query', as: 'query'
   
-  post 'submit-app-task', to: 'submit#submit_app_task', format: 'json'
+  # post 'submit-app-task', to: 'submit#submit_app_task', format: 'json'
   post 'query-app-task', to: 'submit#query_app_task', format: 'json'
   post 'query-app-task-dummy', to: 'submit#query_app_task_dummy', format: 'json'
+  post 'submit-app-task', to: 'submit#submit_app_task_dummy', format: 'json'
+  post 'query-all-tasks', to: 'submit#query_all', format: 'json'
+  post 'remove-task', to: 'submit#remove_task', format: 'json'
   mount Deltadb::Engine => "/db"
 
   # admin
@@ -95,5 +98,5 @@ Rails.application.routes.draw do
   match '/data/uploads/*path', to: 'raw_files#uploads', as: 'get_uploads', via: :get
   match '/data/demo/*path', to: 'raw_files#demo', as: 'get_demo', via: :get
   match 'data/static_viz_data/*path', to: 'raw_files#viz_file', via: :get
-
+  match '/data/worldmap/*path', to: 'raw_files#world_map', as: 'get_worldmap', via: :get
 end
