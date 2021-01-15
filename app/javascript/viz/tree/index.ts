@@ -6,7 +6,6 @@ import { editorConfig, editorRef } from "./editor";
 
 
 import template from "./template.bvt";
-import {TaxonomyTree} from "./taxonomy-tree";
 
 import {annoLoaded, main, matrixLoaded} from "./data";
 
@@ -19,7 +18,6 @@ function init() {
         el: "#canvas",
         template,
         renderer: "svg",
-        components: {TaxonomyTree},
         height: 1400,
         width: 2000,
         theme: "light",

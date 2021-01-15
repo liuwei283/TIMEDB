@@ -2,7 +2,7 @@ svg {
 	width = 1500; height = 1000
 	XYPlot {
 		height = 500
-		width = plotWidth
+		width = config.plotWidth
 		padding-y = 20
 		padding-l = 40
 		data = {

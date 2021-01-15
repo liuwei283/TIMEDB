@@ -1,0 +1,46 @@
+svg {
+	width = auto
+	height = 500
+	Component {
+		y = 40
+		x = -30
+		Text {
+			x = @geo(50, -50)
+			text = title
+			anchor = @anchor("top","center")
+		}
+		PieChart {
+			//colorScheme = myColors 
+			height = @geo(100, -100)
+			width = @geo(100, -100)
+			padding = 20
+			data = pieData
+			pieProps = {
+				stroke: "white"
+			}
+			:legend(d) {
+				Legend {
+					@expr console.log(legendData)
+					x = @geo(95, -50)
+					@expr console.log(d)
+					//d.fill = d.data.r
+					data = legendData
+				}
+			}
+			:children(d) {
+				Arc {
+					behavior:tooltip {
+                        content = d.data.name + ": " + `${d.data.raw.num}`
+                    }
+                    x1 = d.start; x2 = d.end
+                    r1 = 50%
+                    r2 = 90%
+					@expr console.log(d)
+                    fill = d.data.raw.color.string
+                            
+                }
+			}
+			
+		}
+	}
+}

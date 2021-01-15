@@ -42,7 +42,7 @@ Rails.application.routes.draw do
   get 'api/public', to: 'raw_files#public'
 
   # draw on overview page
-  get 'data/static_viz_data/:name', to: 'raw_files#viz_file'
+  
 
   namespace :api do
     resources :analysis, only: [] do
@@ -94,5 +94,6 @@ Rails.application.routes.draw do
   # serve files
   match '/data/uploads/*path', to: 'raw_files#uploads', as: 'get_uploads', via: :get
   match '/data/demo/*path', to: 'raw_files#demo', as: 'get_demo', via: :get
+  match 'data/static_viz_data/*path', to: 'raw_files#viz_file', via: :get
 
 end

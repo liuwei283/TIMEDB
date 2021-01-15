@@ -15,4 +15,11 @@ class User < ApplicationRecord
         end
         Rails.logger.info "inactive user #{cleaned_user} cleared successfully"
     end
+
+    def self.exists(id)
+        self.find(id)
+        false
+      rescue
+        true
+    end
 end

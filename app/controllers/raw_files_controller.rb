@@ -13,7 +13,7 @@ class RawFilesController < ApplicationController
     end
 
     def viz_file
-      path = File.join Rails.root, 'data', "static_viz_data", params[:name] + ".csv"
+      path = File.join Rails.root, 'data', "static_viz_data", params[:path]+ '.' + params[:format] 
       send_file path
     end
   

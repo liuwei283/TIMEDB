@@ -1,0 +1,10 @@
+age,number
+Baby(0~3),1006
+Young(3~13),1459
+Young(13~20),800
+Young Adult(20~29),3832
+Young Adult(30~39),4859
+Middle-aged Adults(40~49),4473
+Middle-aged Adults(50~59),5204
+Old Adults(>60),7130
+NA,34067
