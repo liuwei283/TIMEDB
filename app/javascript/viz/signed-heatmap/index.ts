@@ -1,7 +1,7 @@
 import Oviz from "crux";
 import template from "./template.bvt"
 import { processTreeData } from "./data";
-import { editorConfig } from "./editor";
+import { editorConfig, editorRef } from "./editor";
 import { SignedHeatMap } from "./signed-heatmap";
 import { BinaryTree, Gravity } from "./binary-tree";
 import {savedTheme} from "oviz-common/mem-theme"
@@ -9,6 +9,7 @@ import {savedTheme} from "oviz-common/mem-theme"
 import {copyObject} from "utils/object"
 import { event } from "crux/dist/utils";
 import {register} from "page/visualizers";
+import { registerEditorConfig } from "utils/editor";
 
 // reigister default color theme
 Oviz.use.theme("mh-dark", {
@@ -72,14 +73,6 @@ function initViz() {
     return visualizer;
 }
 
-
-function registerEditorConfig(editorConf) {
-    const vue = event.rpc("getVue");
-    if (vue) {
-        vue.conf = editorConf;
-        vue.$root.$data.editorRef = {};
-    }
-}
 function generateDefaultVizOpts() {
     const vizOpts = {
         el: "#canvas",
@@ -119,7 +112,7 @@ function generateDefaultVizOpts() {
         loadData: generateDefaultDataSources(),
         setup() {
             setUpRange(this);
-            registerEditorConfig(editorConfig(this));
+            registerEditorConfig(editorConfig(this), editorRef);
             if (this.data.rowTreeData) setUpRowTree(this);
             if (this.data.colTreeData) setUpColTree(this);
             if (this.data.heatmapData.rows.length > 100) this.data.config.gridH = 10;
@@ -294,10 +287,13 @@ function setUpRange(v) {
     v.data.config.rangeMax = v.data.heatmapData.range.max;
 }
 
-export default SignedHeatmap;
+// export default SignedHeatmap;
 
 register(MODULE_NAME, init);
 
+export function registerSignedHeatmap(){
+    register(MODULE_NAME, init);
+}
 
 function sortByTreeNodes(treeArr, heatmapArr ):string[] {
     const sortedArr = [];
