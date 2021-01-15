@@ -10,7 +10,7 @@ import * as text_size from "crux/dist/utils/text-size";
 export let dataOpt = {
     allLevel: ["r", "k", "p", "c", "o", "f", "g", "s"],
     allRank: ["Root", "Kingdom", "Phylum", "Class", "Order", "Family", "Genus", "Species"],
-    level : 3,
+    level : 7,
     treeDepth: 4,
     maxTextLength: 0,
     treeRadius: 400,

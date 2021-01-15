@@ -2,7 +2,12 @@ class DatabaseController < ApplicationController
     $db_data_dir = File.join(Rails.root, "data", "static_viz_data")
 
     def overview
-        table_json = {'histo_test1': 'histo_test1.csv',  'histo_test2': 'histo_test2.csv'};
+        table_json = {
+            'hist1': 'BMI.stat.csv',  
+            'hist2': 'host_age.stat.csv',
+            'hist3': 'sex.stat.csv',  
+            'hist4': 'country.stat.csv',
+        };
         @table_data = {};
         table_json.each do |key, path|
             p = File.join($db_data_dir, path)
