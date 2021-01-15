@@ -22,6 +22,7 @@
     "object-to-formdata": "lhc70000/object-to-formdata",
     "oviz-editor": "../oviz-editor-v0.1.0.tgz",
     "raw-loader": "^0.5.1",
+    "topojson": "^3.0.2",
     "ts-loader": "^7.0.5",
     "turbolinks": "^5.2.0",
     "typescript": "^3.9.6",
