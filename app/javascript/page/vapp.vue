@@ -1,5 +1,5 @@
 <template>
-     <div id = "vapp"> 
+     <div id = "vapp" :class= "{'ana': isAnalysis, 'task': !isAnalysis}"> 
         <div id="tool-bar">
             <div v-if= "isAnalysis">
                 <b-button @click="downloadSVG" class="tool-bar-el"><i class="fa fa-download"></i>Download Chart</b-button>
@@ -139,6 +139,12 @@
     #vapp {
         height: 100%;
     }
+    .task {
+        width: 100%;
+    }
+    .ana {
+        width: calc(100vw - 270px);
+    }
     #tool-bar div >* {
         height: 100%;
         color: darkgrey;
@@ -174,8 +180,10 @@
     }
     #canvas {
         /*height: 100vh;*/
-        height: 968px;
-        width: calc(100vw - 270px);
+        /*height: 968px;
+        width: calc(100vw - 270px);*/
+        height: 100%;
+        width: 100%;
         overflow: scroll;
     }
     .col-md-12 {
