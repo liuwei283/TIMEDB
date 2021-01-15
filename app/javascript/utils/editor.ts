@@ -1,5 +1,6 @@
 import { event } from "crux/dist/utils";
 import { EditorDef, ToolbarDef } from "./editor-def";
+import {viz_mode} from "page/visualizers";
 
 const record: Record<string, [EditorDef, ToolbarDef]> = {};
 
@@ -27,9 +28,17 @@ export const defaultLayoutConf: any = {
 //         setupVue(vue);
 //     });
 // }
+const fileConf = {
+    id: "files",
+    title: "Files",
+    builtin: "files"
+};
+
 export function registerEditorConfig(editorConf, editorRef?) {
     const vue = event.rpc("getVue");
     if (vue) {
+        console.log(`registered`);
+        if (window.gon.viz_mode === viz_mode.ANALYSIS) editorConf.sections = [fileConf, ...editorConf.sections];
         vue.conf = editorConf;
         if (editorRef) vue.$root.$data.editorRef = editorRef;
     }
