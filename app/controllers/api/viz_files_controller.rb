@@ -13,12 +13,12 @@ class Api::VizFilesController < ApplicationController
             render json:{code:true}
             return
         end
-        @task_output = TaskOutput.find(params[:task_output_id])
-        if @task_output == @analysis_user_datum.task_output
+        @task = Task.find(params[:task_output_id])
+        if @task.task_outputs[0] == @analysis_user_datum.task_output
             render json:{}
             return
         end
-        @analysis_user_datum.task_output = @task_output
+        @analysis_user_datum.task_output = @task.task_outputs[0]
         @analysis_user_datum.use_demo_file = false
         @analysis_user_datum.save!       
         render json:{code:true}
@@ -55,10 +55,10 @@ class Api::VizFilesController < ApplicationController
     end
 
     def all_task_outputs
-        @task_outputs = TaskOutput.where("user_id = ? and analysis_id = ?",
+        @tasks = Task.where("user_id = ? and analysis_id = ?",
                                         @user.id, @analysis.id)
-        render json: @task_outputs.map { |opt|
-             {id: opt.id, task_id: opt.task_id}
+        render json: @tasks.map { |t|
+             {id: t.id, task_id: t.id}
         }
         
     end
@@ -193,6 +193,20 @@ class Api::VizFilesController < ApplicationController
     #     render json: data
     # end
 
+    def download_data_files
+    
+        paths = ['data/test.txt', 'data/test.tsv']
+        zip_file_path = 'data/viz_data.zip'
+        Zip::ZipFile.open zip_file_path, Zip::ZipFile::CREATE do |zip|
+            paths.each do |path|
+                path = File.join Rails.root, path
+                zip.add(path, path)
+            end
+        end
+
+        send_file zip_file_path
+
+    end
 
     def instantiate_models
         @analysis = Analysis.find(params[:analysis_id])

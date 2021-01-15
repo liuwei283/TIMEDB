@@ -237,6 +237,7 @@
                             "inputs": this.files,
                             "params": this.formatParams(),
                             "selected": this.selected,
+                            "mid": this.id,
                         }),
                         {
                             headers: {
