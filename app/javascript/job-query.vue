@@ -162,10 +162,14 @@ export default {
                         },
                     },
                 ).then((response) => {
-                    this.data.outputs = response.data;
-                    console.log(this.data.outputs[0]);
-                    this.updateGon(this.data.outputs[0]);
-                    this.submitted = true;
+                    if (response.data.code === false) {
+                        this.submitted = false;
+                        alertCenter.add('danger', `${response.data.data}`);
+                    } else {
+                        this.data.outputs = response.data;
+                        this.updateGon(this.data.outputs[0]);
+                        this.submitted = true;
+                    }
                 }).catch((error) => {
                     const message = error.response && error.response.status === 404 ? "The task does not exist" : error;
                     alertCenter.add('danger', `${message}`);
@@ -204,6 +208,7 @@ export default {
                 });
         },
         deleteJob(jobId){
+            const { alertCenter } = this.$refs;
             axios.post(
                 `/remove-task/`,
                 objectToFormData({'job_id': jobId}),
