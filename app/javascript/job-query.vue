@@ -152,7 +152,7 @@ export default {
                 this.valid_name = false;
             }else {
                 axios.post(
-                    `/query-app-task-dummy/`,
+                    `/query-app-task/`,
                     objectToFormData({'job_id': this.job_id}),
                     {  
                         headers: {
