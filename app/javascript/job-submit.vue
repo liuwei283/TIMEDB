@@ -222,17 +222,13 @@
                 let allRight = true;
                 document.querySelectorAll('input').forEach((input) => {
                     if(input.required) {
-                        console.log(input.value);
-                        console.log(_.trim(input.value));
                         const valid = !!input.value && !!_.trim(input.value);
                         Vue.set(this.inputValid, input.name, valid);
                         if (!valid) {
                             allRight = false;
                         }
-                        console.log("process successfully");
                     }
                 })
-                console.log(allRight);
                 if (allRight) {
                     axios.post(
                         `/submit-app-task/`,
