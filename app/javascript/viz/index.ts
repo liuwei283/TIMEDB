@@ -21,7 +21,7 @@ export function registerViz(moduleName) {
             registerSignedHeatmap();
             break;
         case "scatterplot":
-            registerSignedHeatmap();
+            registerScatterplot();
             break;
     }
 
