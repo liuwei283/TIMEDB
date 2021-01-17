@@ -269,6 +269,7 @@ class SubmitController < ApplicationController
         end
         response_body = []
         @task_output = {}
+        @analysis = @task.analysis
         if TaskOutput.where(task_id:@task.id).exists? 
           task_outputs = TaskOutput.where(task_id:@task.id)
           task_outputs.each do |otp|
@@ -277,7 +278,6 @@ class SubmitController < ApplicationController
             response_body << parsed_output
           end
         elsif result['message']['status'] == 'finished'
-          @analysis = @task.analysis
           result['message']['outputs'].each do |otp|
             @task_output = create_task_output(otp)
             parsed_output = processTaskOutput()
