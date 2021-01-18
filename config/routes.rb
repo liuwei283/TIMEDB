@@ -94,8 +94,18 @@ Rails.application.routes.draw do
   post "admin/modify_viz_source" => "admin#modify_viz_source", :as => "admin/modify_viz_source"
   post "admin/add_img" => "admin#add_img", :as => "admin/add_img"
 
+  namespace :admin do
+    post :update_analysis_category_position, to: 'analysis_categories#update_position'
+    resources :analysis_categories, except: :show do
+      post :update_position, to: 'analyses#update_position', as: 'update_analysis_position'
+      resources :analyses, expect: %i[indewx show]
+    end
+    get 'analyses', to: 'analyses#index'
+  end
+
   # serve files
   match 'data/uploads/*path', to: 'raw_files#uploads', as: 'get_uploads', via: :get
   match 'data/demo/*path', to: 'raw_files#demo', as: 'get_demo', via: :get
   match 'data/static_viz_data/*path', to: 'raw_files#viz_file', via: :get
+
 end
