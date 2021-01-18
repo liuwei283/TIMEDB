@@ -13,4 +13,8 @@ class Analysis < ApplicationRecord
           a.save!
         end
     end
+
+    def files_info_json
+      JSON.pretty_generate self.files_info
+    end
 end
