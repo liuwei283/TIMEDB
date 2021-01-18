@@ -97,10 +97,11 @@ Rails.application.routes.draw do
   namespace :admin do
     post :update_analysis_category_position, to: 'analysis_categories#update_position'
     resources :analysis_categories, except: :show do
-      post :update_position, to: 'analyses#update_position', as: 'update_analysis_position'
       resources :analyses, expect: %i[indewx show]
     end
     get 'analyses', to: 'analyses#index'
+    # get 'visualizers', to: 'visualizers#index'
+    resources :visualizers
   end
 
   # serve files
