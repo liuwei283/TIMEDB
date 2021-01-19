@@ -278,7 +278,9 @@ class SubmitController < ApplicationController
       # submit task
       client = LocalApi::Client.new
       result = client.run_module(UID, PROJECT_ID, app_id.to_i, inputs, params)
-      Rails.logger.info(result['message'])
+      # Rails.logger.info(result['message'])
+      Rails.logger.debug "===========>"
+      Rails.logger.info(result)
       if result['message']['code']
         result_json[:code] = true
         @task  = @user.tasks.new
