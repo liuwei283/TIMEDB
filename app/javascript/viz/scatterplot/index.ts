@@ -144,5 +144,8 @@ function genDefaultDataSources() {
         return defaultDataSources;
 }
 
-
 register(MODULE_NAME, init);
+
+export function registerScatterplot(){
+    register(MODULE_NAME, init);
+}

@@ -10,6 +10,7 @@ let outputsLoaded = false;
 
 function checkResource() {
     const moduleName = window.gon.module_name;
+    console.log(window.gon.module_name);
     if (window.__BVD3_visualizers[moduleName]) {
         packLoaded = true;
     }

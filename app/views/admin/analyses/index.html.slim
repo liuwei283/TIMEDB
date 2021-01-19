@@ -1,0 +1,45 @@
+- content_for :title
+  | Admin::Analyses
+
+.container
+  ol.breadcrumb
+    li.breadcrumb-item
+      = link_to 'Admin home', '/admin'
+    li.breadcrumb-item
+      = link_to 'Analysis Categories', admin_analysis_categories_path
+    li.breadcrumb-item
+      = link_to 'Analyses', admin_analyses_path
+    li.breadcrumb-item
+      = link_to 'Visualizers', admin_visualizers_path
+
+  .card
+    .card-body
+      h2.card-title Analyses
+    - @analysis_categories.each do |c|
+      .card-body.analysis-category-name
+        .d-flex
+          div
+            b
+              = icon 'fa', 'folder'
+              = c.name
+          div.ml-4 style="margin-top:-0.15rem"
+            = link_to new_admin_analysis_category_analysis_path(c), class: 'btn btn-sm btn-secondary' do
+              = icon 'fas', 'plus'
+              | Add Analysis
+        - if c.analyses.empty?
+          p.text-muted No analysis. Click "Add Analysis" button above to add.
+      - unless c.analyses.empty?
+        ul.sortable-list.list-group.list-group-flush 
+          - c.analyses.each do |a|
+            li.list-group-item.justify-content-between.d-flex data-id="#{a.id}"
+              div
+                = icon 'fa', 'bars', class: 'drag-handle'
+                = a.name
+                /span.text-muted.ml-2 = "(#{a.js_module_name})"
+              div
+                = link_to edit_admin_analysis_category_analysis_path(c, a), class: 'btn btn-sm btn-secondary mr-2' do
+                  = icon 'fas', 'edit'
+                  | Edit
+                = link_to admin_analysis_category_analysis_path(c, a), method: :delete, class: 'btn btn-sm btn-danger', data: {confirm: "Are you sure?"} do
+                  = icon 'fas', 'trash'
+                  | Delete
