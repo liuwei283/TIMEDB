@@ -7,6 +7,7 @@ class SamplesController < ApplicationController
     def new
         @project = Project.find(params[:project_id])
         @sample = @project.samples.build
+        @sample_attrs = Sample.column_names
     end
 
     def show
@@ -37,6 +38,7 @@ class SamplesController < ApplicationController
     def edit
         @project = Project.find(params[:project_id])
         @sample = @project.samples.find(params[:id])
+        @sample_attrs = Sample.column_names
     end
     
     def update

@@ -30,12 +30,13 @@ class ProjectsController < ApplicationController
     def edit
         @attrs = Project.column_names
         @project = Project.find(params[:id])
+        @sample_attrs = Sample.column_names
     end
   
     def destroy
         @project = Project.find(params[:id])
         @project.destroy
-        redirect_to projects_path
+        redirect_to "/admin"
     end
 
     def import
@@ -51,6 +52,7 @@ class ProjectsController < ApplicationController
 
     def new
         @project = Project.new
+        @attrs = Project.column_names
     end
   
     def create        
