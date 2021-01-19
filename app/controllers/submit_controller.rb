@@ -38,6 +38,15 @@ class SubmitController < ApplicationController
     @tasks = Task.where("user_id = ?", session[:user_id])
     parsed_jobs = []
     @tasks.each do |t|
+      # submit task
+      if t.status == 'submitted'
+        client = LocalApi::Client.new
+        result = client.task_info(UID, t.tid, 'app')
+        if result['statues'] == 'success'
+          t.status = result['message']['status']
+          t.save!
+        end
+      end
       parsed_jobs.push({
         jobName: t.analysis.name,
         jobId: t.id,
@@ -138,16 +147,16 @@ class SubmitController < ApplicationController
         response_body << parsed_output
       end
     else
-      parsed_outputs = [{
-        id: 0,
-        files: []
-      }]
+      # parsed_outputs = [{
+      #   id: 0,
+      #   files: []
+      # }]
+      # result['message']['outputs'].each do |otp|
+      #   parsed_outputs[0][:files] << otp['files'][0]
+      # end
+      # parsed_outputs = JSON.parse(parsed_outputs.to_json)
+      # Rails.logger.debug parsed_outputs
       result['message']['outputs'].each do |otp|
-        parsed_outputs[0][:files] << otp['files'][0]
-      end
-      parsed_outputs = JSON.parse(parsed_outputs.to_json)
-      Rails.logger.debug parsed_outputs
-      parsed_outputs.each do |otp|
         @task_output = create_task_output(otp)
         parsed_output = processTaskOutput()
         response_body << parsed_output
@@ -385,6 +394,7 @@ class SubmitController < ApplicationController
           end
         end
       end
+      
     end
     task_output.file_paths = file_paths
     task_output.save!
