@@ -42,7 +42,7 @@ class SubmitController < ApplicationController
       if t.status == 'submitted'
         client = LocalApi::Client.new
         result = client.task_info(UID, t.tid, 'app')
-        if result['statues'] == 'success'
+        if result['status'] == 'success'
           t.status = result['message']['status']
           t.save!
         end
@@ -61,73 +61,63 @@ class SubmitController < ApplicationController
     return_json_hash = {
       "status":"success",
       "message":{
-        "status":"finished",
-        "inputs":[
-          {
-            "id":1010,
-            "name":"Profiling_table",
-            "desc":"",
-            "files":[
-              {
-                "name":"     LiJ_2014.xls",
-                "path":"/data"
-              }
-            ]
-          },
-          {
-            "id":1011,
-            "name":"Group_info",
-            "desc":"",
-            "files":[
-              {
-                "name":"group.tsv",
-                "path":"/data"
-              }
-            ]
-          }
-        ],
-        "outputs":[
-          {
-            "id":854,
-            "name":"Cluster_result",
-            "desc":"",
-            "files":[
-              {
-                "name":"cluster.res     ult.xls",
-                "path":"/project/platform_task_test/task_20210117191835"
-              }
-            ]
-          },
-          {
-            "id":853,
-            "name":"Coordinate_file",
-            "desc":"",
-            "files":[
-              {
-                "name":"coordinate.xls",
-                "path":"/project/platform_task_test/task_20210117191835"
-              }
-            ]
-          },
-          {
-            "id":852,
-            "name":"Group_info",
-            "desc":"",
-            "files":[
-              {
-                "name":"group.txt",
-                "path":"/project/platform_task_test/task_20210117191835"
-              }
-            ]
-          }
-        ],
-        "params":[
-          
-        ]
+         "status":"finished",
+         "inputs":[
+            {
+               "id":1010,
+               "name":"Profiling_table",
+               "desc":"",
+               "files":[
+                  {
+                     "name":"LiJ_2014.xls",
+                     "path":"/data"
+                  }
+               ]
+            },
+            {
+               "id":1011,
+               "name":"Group_info",
+               "desc":"",
+               "files":[
+                  {
+                     "name":"group.tsv",
+                     "path":"/data"
+                  }
+               ]
+            }
+         ],
+         "outputs":[
+            {
+               "id":854,
+               "name":"Cluster_result",
+               "desc":"",
+               "files":[
+                  {
+                     "name":"shell",
+                     "path":"/project/platform_task_test/task_20210119170627"
+                  },
+                  {
+                     "name":"cluster.result.xls",
+                     "path":"/project/platform_task_test/task_20210119170627"
+                  },
+                  {
+                     "name":"coordinate.xls",
+                     "path":"/project/platform_task_test/task_20210119170627"
+                  },
+                  {
+                     "name":"group.txt",
+                     "path":"/project/platform_task_test/task_20210119170627"
+                  }
+               ]
+            }
+         ],
+         "params":[
+            
+         ]
       }
-    }
+   }
     # @task = Task.find_by! id:params[:job_id], user_id:session[:user_id]
-    @task = Task.find_by! id:1, user_id:22
+    @task = Task.find_by! id:4, user_id:52
 
     # Rails.logger.debug @task
     result = JSON.parse(return_json_hash.to_json)
@@ -147,15 +137,6 @@ class SubmitController < ApplicationController
         response_body << parsed_output
       end
     else
-      # parsed_outputs = [{
-      #   id: 0,
-      #   files: []
-      # }]
-      # result['message']['outputs'].each do |otp|
-      #   parsed_outputs[0][:files] << otp['files'][0]
-      # end
-      # parsed_outputs = JSON.parse(parsed_outputs.to_json)
-      # Rails.logger.debug parsed_outputs
       result['message']['outputs'].each do |otp|
         @task_output = create_task_output(otp)
         parsed_output = processTaskOutput()
@@ -278,7 +259,9 @@ class SubmitController < ApplicationController
       # submit task
       client = LocalApi::Client.new
       result = client.run_module(UID, PROJECT_ID, app_id.to_i, inputs, params)
-      Rails.logger.info(result['message'])
+      # Rails.logger.info(result['message'])
+      Rails.logger.debug "===========>"
+      Rails.logger.info(result)
       if result['message']['code']
         result_json[:code] = true
         @task  = @user.tasks.new
@@ -335,16 +318,7 @@ class SubmitController < ApplicationController
             response_body << parsed_output
           end
         elsif result['message']['status'] == 'finished'
-          parsed_outputs = [{
-            id: 0,
-            files: []
-          }]
           result['message']['outputs'].each do |otp|
-            parsed_outputs[0][:files] << otp['files'][0]
-          end
-          parsed_outputs = JSON.parse(parsed_outputs.to_json)
-          Rails.logger.debug parsed_outputs
-          parsed_outputs.each do |otp|
             @task_output = create_task_output(otp)
             parsed_output = processTaskOutput()
             response_body << parsed_output
