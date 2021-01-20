@@ -32,13 +32,34 @@
   
 <%end%>
 
+<ol class="breadcrumb">
+  <li class="breadcrumb-item">
+    <%=link_to 'Admin home', '/admin' %>
+  </li> 
+  <li class="breadcrumb-item">
+    <%=link_to 'Projects', '#project_admin' %>
+  </li> 
+  <li class="breadcrumb-item">
+    <%=link_to 'Samples', '#sample_admin' %>
+  </li> 
+  <li class="breadcrumb-item">
+    <%=link_to 'Analysis Categories', admin_analysis_categories_path %>
+  </li> 
+  <li class="breadcrumb-item">
+    <%=link_to 'Admin home', '/admin' %>
+  </li> 
+  <li class="breadcrumb-item">
+    <%=link_to 'Analyses', admin_analyses_path %>
+  </li> 
+  
+</ol>
 
 <h1>
 Admin page
 </h1>
 
 <p>
-    This page is made for admin to :
+    This is made for admin to :
     <ul>
       <li>add project metadata</li>
       <li>add sample metadata</li>
@@ -49,6 +70,7 @@ Admin page
 </p>
 
 <hr />
+
 
 <br />
 
@@ -161,7 +183,7 @@ Admin page
 </section>
 <hr>
 <br/>
-
+<!--
 <section id="Analysis_Viz_admin" class="admin_block">
   <h4>
   Analysis&Visualization management:
@@ -332,3 +354,4 @@ Admin page
 
 
 </section>
+-->
