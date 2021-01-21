@@ -12,7 +12,7 @@
           orderable: false,
         }],
         fixedHeader: true,
-        // scrollX: true
+        scrollX: true
       }); 
 
       $('button.toggle-vis').on( 'click', function (e) {
@@ -40,80 +40,81 @@
 <% end %>
 
 
+<div class="container">
+  <h1>Listing projects</h1>
 
-<h1>Listing projects</h1>
+  <p>
+    Download all projects information:
+    <%= link_to "CSV", projects_path(format: "csv") %>
+  </p>
 
-<p>
-  Download all projects information:
-  <%= link_to "CSV", projects_path(format: "csv") %>
-</p>
-
-<div id='hidden_helper'>
-  Hide columns: 
-  <br />
-  <% i=1 %>
-  <% @attrs.each do |attr| %>
-    <% if attr != 'id' && attr != 'created_at' && attr != 'updated_at' %>
-      <button class="toggle-vis" data-column='<%=i.to_s%>'> 
-        <%= attr.capitalize %>
-      </button>
-      <%i += 1%>
+  <div id='hidden_helper'>
+    Hide columns: 
+    <br />
+    <% i=1 %>
+    <% @attrs.each do |attr| %>
+      <% if attr != 'id' && attr != 'created_at' && attr != 'updated_at' %>
+        <button class="toggle-vis" data-column='<%=i.to_s%>'> 
+          <%= attr.capitalize %>
+        </button>
+        <%i += 1%>
+      <%end%>
     <%end%>
-  <%end%>
-</div>
+  </div>
 
-<%= form_tag export_selected_projects_path(format: "csv"), multipart: true do %> 
+  <%= form_tag export_selected_projects_path(format: "csv"), multipart: true do %> 
 
-  <table id="Table" class="display">
-    <thead>
-      <th>
-        <input type="checkbox" onclick="toggle_checkall('project', this.checked);" />
-      </th>
-      <% @attrs.each do |attr| %>
-        <% if attr != 'id' && attr != 'created_at' && attr != 'updated_at' %>
-          <th> <%= attr.capitalize %> </th>
-        <% end %>
-      <% end %>
-      <th>Action</th>
-    </thead>
-
-    <tbody>
-      <% @projects.each do |project| %>
-      
-        <tr>
-          <td><%= check_box_tag "project_ids[]", project.id %></td>
-          <% @attrs.each do |attr| %>
-            <% if attr != 'id' && attr != 'created_at' && attr != 'updated_at' %>
-              <td> 
-                <div class="table_cell"> 
-                  <%= project[attr] %> 
-                </div>
-              </td>
-            <% end %>
+    <table id="Table" class="display">
+      <thead>
+        <th>
+          <input type="checkbox" onclick="toggle_checkall('project', this.checked);" />
+        </th>
+        <% @attrs.each do |attr| %>
+          <% if attr != 'id' && attr != 'created_at' && attr != 'updated_at' %>
+            <th> <%= attr.capitalize %> </th>
           <% end %>
-          
-          <td>
-            <%= link_to 'Show', project_path(project) %>
-            <%#= link_to 'Delete', project_path(project), method: :delete,
-                    data: { confirm: 'Are you sure?' } %>
+        <% end %>
+        <th>Action</th>
+      </thead>
 
-            <%#= link_to 'Edit', edit_project_path(project) %>
-          </td>
-        </tr>
-      
-      <% end %>
-    </tbody>
+      <tbody>
+        <% @projects.each do |project| %>
+        
+          <tr>
+            <td><%= check_box_tag "project_ids[]", project.id %></td>
+            <% @attrs.each do |attr| %>
+              <% if attr != 'id' && attr != 'created_at' && attr != 'updated_at' %>
+                <td> 
+                  <div class="table_cell"> 
+                    <%= project[attr] %> 
+                  </div>
+                </td>
+              <% end %>
+            <% end %>
+            
+            <td>
+              <%= link_to 'Show', project_path(project) %>
+              <%#= link_to 'Delete', project_path(project), method: :delete,
+                      data: { confirm: 'Are you sure?' } %>
 
-  </table>
-  <%= submit_tag "Download selected metadata" %>
-<% end %>
+              <%#= link_to 'Edit', edit_project_path(project) %>
+            </td>
+          </tr>
+        
+        <% end %>
+      </tbody>
+
+    </table>
+    <%= submit_tag "Download selected metadata" %>
+  <% end %>
 
 
-<%#<%= link_to  "Add", "/projects/new" %>
-<%#= form_tag import_projects_path, multipart: true do %>
-  <%#= file_field_tag :file %>
-  <%#= submit_tag "Import project from csv" %>
-<%# end %>
-<p>
-  *To avoid frenquent download, please refresh the page to enable download again.
-</p>
+  <%#<%= link_to  "Add", "/projects/new" %>
+  <%#= form_tag import_projects_path, multipart: true do %>
+    <%#= file_field_tag :file %>
+    <%#= submit_tag "Import project from csv" %>
+  <%# end %>
+  <p>
+    *To avoid frenquent download, please refresh the page to enable download again.
+  </p>
+</div>

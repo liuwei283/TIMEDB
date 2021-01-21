@@ -1,40 +1,53 @@
 var struct_data = [
-    {"TV": [{
-        "BMI": "BMI_hist",
-        "host age": "age_hist",
-        "sex": "sex_hist",
-        "country": "country_hist" 
+    {"HTV": [{
+        "BMI": "BMI_pie",
+        "host age": "age_pie",
+        "sex": "sex_pie",
+        "country": "country_pie" 
         }]
     },
-    {"V": [{
+    {"HV": [{
         "CRC": "CRC"
         },
         {
         "species": "species"
         }]
     },
-    {"V": []
+    {"HV": []
 
     }
 ];
 
+var head_relation = {
+    "pie": "pie",
+    "boxplot": "boxplot",
+    "tree": "tree"
+};
+
 var table_relation = {
-    "BMI_hist": "hist1",
-    "age_hist": "hist2",
-    "sex_hist": "hist3",
-    "country_hist": "hist4"
+    "BMI_pie": "pie1",
+    "age_pie": "pie2",
+    "sex_pie": "pie3",
+    "country_pie": "pie4"
 };
 
 var viz_relation = {
-    "BMI_hist": "dn1",
-    "age_hist": "dn2",
-    "sex_hist": "dn3",
-    "country_hist": "dn4",
+    "BMI_pie": "dn1",
+    "age_pie": "dn2",
+    "sex_pie": "dn3",
+    "country_pie": "dn4",
     "CRC_species": "bp1",
     "tree1": "tr1"
 };
 
 var text_relation = {
+
+};
+
+var des_data = {
+    "pie": "<p> this is the description for this pie chart</p>",
+    "boxplot": "<p> this is the description for this boxplot</p>",
+    "tree": "<p> this is the description for this tree </p>",
 
 };
 
@@ -79,22 +92,27 @@ var table_data = window.gon.table_data;
 
 
 var init_data = {
-    "T0B0": "BMI_hist",
-    "V1B0": "BMI_hist",
+    "T0B0": "BMI_pie",
+    "V1B0": "BMI_pie",
     "V0B1": "CRC_species",
-    "V0B2": "tree1"
+    "V0B2": "tree1",
+    "HB0": "pie",
+    "HB1": "boxplot",
+    "HB2": "tree"
 };
 
 var relation_data = {
     "v": viz_relation,
     "t": table_relation,
-    "x": text_relation
+    "x": text_relation,
+    "h": head_relation
 };
 
 var content_data = {
     "v": viz_data,
     "t": table_data,
-    "x": text_data
+    "x": text_data,
+    "h": des_data
 }
 
 export var data = {
