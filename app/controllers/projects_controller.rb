@@ -1,4 +1,5 @@
 class ProjectsController < ApplicationController
+    http_basic_authenticate_with name: "admin", password: "chelijia", only: [:new, :create, :edit, :new, :update, :destroy]
     $seq_dir = "#{Rails.root}/app/data/seq/"
     $abd_dir = "#{Rails.root}/app/data/abd_files/"
     $tmp_dir = "#{Rails.root}/app/data/tmp/"
@@ -16,6 +17,7 @@ class ProjectsController < ApplicationController
     def show
         @user = User.find(session[:user_id])
         @project = Project.find(params[:id])
+        @attrs = Project.column_names
         @sample_attrs = Sample.column_names
         id = session[:user_id]
         @user = User.find(id)
@@ -30,12 +32,13 @@ class ProjectsController < ApplicationController
     def edit
         @attrs = Project.column_names
         @project = Project.find(params[:id])
+        @sample_attrs = Sample.column_names
     end
   
     def destroy
         @project = Project.find(params[:id])
         @project.destroy
-        redirect_to projects_path
+        redirect_to "/admin"
     end
 
     def import
@@ -51,6 +54,7 @@ class ProjectsController < ApplicationController
 
     def new
         @project = Project.new
+        @attrs = Project.column_names
     end
   
     def create        

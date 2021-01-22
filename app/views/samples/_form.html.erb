@@ -14,16 +14,15 @@
     </div>
   <% end %>
   
-  <p>
-    <%= f.label :name %><br>
-    <%= f.text_field :sample_name %>
-  </p>
+  <% @sample_attrs.each do |attr| %>
+    <% if attr != 'id' && attr != 'created_at' && attr != 'updated_at' %>
+      <p> 
+        <%= f.label attr.capitalize %> <br>
+        <%= f.text_field attr %>
+      </p>
 
-  <p>
-    <%= f.label :age %><br>
-    <%= f.text_field :host_age %>
-  </p>
-  
+    <% end %>
+  <% end %>
   <p>
     <%= f.submit %>
   </p>

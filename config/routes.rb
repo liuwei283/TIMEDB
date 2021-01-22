@@ -59,10 +59,6 @@ Rails.application.routes.draw do
   end
   # database pages
   get 'database/sample'
-  get 'database/tc'
-  get 'database/char'
-  get 'database/fc'
-  get 'database/aa'
   get 'database/overview', to: 'database#overview'
   
   get 'demo', to: 'demo#show'
@@ -108,5 +104,6 @@ Rails.application.routes.draw do
   match 'data/uploads/*path', to: 'raw_files#uploads', as: 'get_uploads', via: :get
   match 'data/demo/*path', to: 'raw_files#demo', as: 'get_demo', via: :get
   match 'data/static_viz_data/*path', to: 'raw_files#viz_file', via: :get
+  match 'app/data/abd_files/*path', to: 'raw_files#viz_abd_file', via: :get
 
 end

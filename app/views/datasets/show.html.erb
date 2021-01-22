@@ -1,24 +1,26 @@
-<h1>
-    <%= @dataset.name %>
-</h1>
+<div class="container">
+    <h1>
+        <%= @dataset.name %>
+    </h1>
 
-<ul>
-    <% @file_list.each do |file_name| %>
-        <li>
-            <%= link_to file_name, download_file_user_dataset_path(:file_name => file_name) %>
-        </li>
-    <% end %>
-</ul>
+    <ul>
+        <% @file_list.each do |file_name| %>
+            <li>
+                <%= link_to file_name, download_file_user_dataset_path(:file_name => file_name) %>
+            </li>
+        <% end %>
+    </ul>
 
-<p>
-    <%#= form_tag upload_file_user_dataset_path, :multipart =>true do %>
-        <%#= file_field_tag :file %>
-        <%#= submit_tag "upload new file" %>
-    <%# end %> 
-    <%= link_to 'Delete dataset', [@dataset.user, @dataset], method: :delete,
-    data: { comfirm: 'Are you sure to delete this dataset?'} %>
-    <br />
-    <%= link_to 'Change dataset Name', edit_user_dataset_path(@dataset.user, @dataset.id) %> 
-    <br />
-    <%= link_to 'Go to add data', projects_path %> 
-</p>
+    <p>
+        <%#= form_tag upload_file_user_dataset_path, :multipart =>true do %>
+            <%#= file_field_tag :file %>
+            <%#= submit_tag "upload new file" %>
+        <%# end %> 
+        <%= link_to 'Delete dataset', [@dataset.user, @dataset], method: :delete,
+        data: { comfirm: 'Are you sure to delete this dataset?'} %>
+        <br />
+        <%= link_to 'Change dataset Name', edit_user_dataset_path(@dataset.user, @dataset.id) %> 
+        <br />
+        <%= link_to 'Go to add data', projects_path %> 
+    </p>
+</div>
