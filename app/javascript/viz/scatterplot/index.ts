@@ -3,14 +3,11 @@ import template from "./template.bvt"
 import {ComplexScatterplot} from "./complex-scatterplot"
 import { editorConfig } from "./editor";
 import { registerEditorConfig } from "utils/editor";
-import {savedTheme} from "oviz-common/mem-theme"
 
 import {getGroups, groupBy}from "utils/array"
-import {findBoundsForValues} from "utils/maths";
-import { event } from "crux/dist/utils";
 import {register} from "page/visualizers";
 
-
+import * as _ from "lodash";
 const sampleIndex = 0;
 
 const MODULE_NAME = 'scatterplot'
@@ -79,9 +76,12 @@ function genDefaultDataSources() {
             loaded(data) {
                 if (!data) return;
                 this.data.groups = getGroups(data, data.columns[1]);
-                this.data.scatterData = this.data.scatterData.map((d,i) => {
-                    if(data[i][data.columns[0]] === d[this.data.scatterData.columns[0]]) 
-                        d.group = data[i][data.columns[1]];
+                this.data.scatterData = this.data.scatterData.map(d => {
+                    data.forEach(group => {
+                        if(group[data.columns[0]] === d[this.data.scatterData.columns[0]]) 
+                        d.group = group[data.columns[1]] ;
+                    })
+                    
                     return d;
                 })
                 this.data.groupLabel = "group";
@@ -93,7 +93,7 @@ function genDefaultDataSources() {
             type: "tsv",
             optional: true,
             dependsOn: ["scatterData"],
-            dsvRowParser (row, index,columns) {
+            dsvRowParser (row, _,columns) {
                 for (let i = 1; i< columns.length; i++)
                     row[columns[i]] = parseFloat(row[columns[i]]);
                 return row;
@@ -117,6 +117,7 @@ function genDefaultDataSources() {
             },
             loaded(data) {
                 if (!data) return;
+                this.data.clusters = Object.keys(_.groupBy(data, "cluster"));
                 this.data.scatterData = this.data.scatterData.filter(d => {
                     let hasCluster = false;
                     const sample = d[this.data.scatterColumns[0]]
@@ -127,9 +128,8 @@ function genDefaultDataSources() {
                             arr.splice(j,1);
                         }
                     })
-                    if (hasCluster) return d;
+                    return hasCluster;
                 })
-                this.data.clusters = getGroups(data, "cluster").sort();
                 return null;
             }
         }
