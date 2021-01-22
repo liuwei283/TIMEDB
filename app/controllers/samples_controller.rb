@@ -14,6 +14,10 @@ class SamplesController < ApplicationController
     def show
         @project = Project.find(params[:project_id])
         @sample = @project.samples.find(params[:id])
+        @attrs = Sample.column_names
+        abd_name = "#{@project.name}_#{@sample.sample_name}.tsv"
+        abd_path = File.join("/app/data/abd_files/", abd_name)
+        gon.push file: abd_path
     end
 
     def create

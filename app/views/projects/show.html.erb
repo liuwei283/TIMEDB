@@ -7,7 +7,6 @@
 
   <script type="text/javascript">
     //debugger
-    console.log("=========")
     $(window).unload(function() {
       $.rails.enableFormElements($($.rails.formSubmitSelector));
     });
@@ -55,26 +54,20 @@
   <h1>
     Project Information
   </h1>
-  <%= link_to 'Edit', edit_project_path(@project) %> 
+  <%#= link_to 'Edit', edit_project_path(@project) %> 
   <%= link_to 'Back', projects_path %>
   <br/>
 
-  <p>
-    <strong>Name:</strong>
-    <%= @project.name %>
-  </p>
-  
-  <p>
-    <strong>Publication:</strong>
-    <%= @project.related_publications %>
-  </p>
-
-  <p>
-    <strong>Num:</strong>
-    <%= @project.num_of_samples %>
-  </p>
-
-
+  <div class="row">
+    <% @attrs.each do |attr| %>
+      <% if attr != 'id' && attr != 'created_at' && attr != 'updated_at'%>
+        <div class="col-md-6">
+          <strong><%=attr.capitalize %>: </strong>
+          <%= @project[attr] %>
+        </div>
+      <% end %>
+    <% end %>
+  </div>
   <br />
 
   <h2>Samples</h2>

@@ -3,7 +3,6 @@ import Oviz from "crux";
 import { registerDefaultBioInfoComponents } from "crux/dist/element/global";
 import {annoLoaded, main, matrixLoaded} from "viz/tree/data";
 
-
 export function init(id, path, config) {
     Oviz.visualize({
         el: id,

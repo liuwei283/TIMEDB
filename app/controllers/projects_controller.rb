@@ -17,6 +17,7 @@ class ProjectsController < ApplicationController
     def show
         @user = User.find(session[:user_id])
         @project = Project.find(params[:id])
+        @attrs = Project.column_names
         @sample_attrs = Sample.column_names
         id = session[:user_id]
         @user = User.find(id)
