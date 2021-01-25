@@ -1,32 +1,34 @@
-<h1>
-    Analyses
-</h1>
-<br />
+<div class="container">
+    <h1>
+        Analyses
+    </h1>
+    <br />
 
 
-<div id="analyses_list" class=".container-fluid">
-    <div class="row">
-        <% @analyses.each do |analysis| %>
-            <div class="col-md-4 module_card">
-                <div class="card_img">
-                    <% name = analysis.mid.to_s + ".png"%>
-                    <% target = "/submit/" + analysis.mid.to_s + '/'%>
-                    <%=link_to image_tag(name), target%>
+    <div id="analyses_list" class=".container-fluid">
+        <div class="row">
+            <% @analyses.each do |analysis| %>
+                <div class="col-md-4 module_card">
+                    <div class="card_img">
+                        <% name = analysis.mid.to_s + ".png"%>
+                        <% target = "/submit/" + analysis.mid.to_s + '/'%>
+                        <%=link_to image_tag(name), target%>
+                    </div>
+
+                    <div class="card_body">
+                        <h5>
+                            <%=analysis.name%>
+                        </h5>
+
+                        <p>
+                            <%=analysis.description%>
+                        </p>
+                    </div>
+                        
                 </div>
+            <%end %>
 
-                <div class="card_body">
-                    <h5>
-                        <%=analysis.name%>
-                    </h5>
-
-                    <p>
-                        <%=analysis.description%>
-                    </p>
-                </div>
-                    
-            </div>
-        <%end %>
+        </div>
 
     </div>
-
 </div>

@@ -3,10 +3,10 @@ class DatabaseController < ApplicationController
 
     def overview
         table_json = {
-            'hist1': 'BMI.stat.csv',  
-            'hist2': 'host_age.stat.csv',
-            'hist3': 'sex.stat.csv',  
-            'hist4': 'country.stat.csv',
+            'pie1': 'BMI.stat.csv',  
+            'pie2': 'host_age.stat.csv',
+            'pie3': 'sex.stat.csv',  
+            'pie4': 'country.stat.csv',
         };
         @table_data = {};
         table_json.each do |key, path|

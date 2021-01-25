@@ -20,9 +20,9 @@ svg {
 			}
 			:legend(d) {
 				Legend {
-					@expr console.log(legendData)
+					
 					x = @geo(95, -50)
-					@expr console.log(d)
+					
 					//d.fill = d.data.r
 					data = legendData
 				}
@@ -35,7 +35,7 @@ svg {
                     x1 = d.start; x2 = d.end
                     r1 = 50%
                     r2 = 90%
-					@expr console.log(d)
+					
                     fill = d.data.raw.color.string
                             
                 }

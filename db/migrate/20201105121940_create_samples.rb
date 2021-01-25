@@ -2,8 +2,6 @@ class CreateSamples < ActiveRecord::Migration[6.0]
   def change
     create_table :samples do |t|
       t.string :sample_name
-      t.text :original_description
-      t.text :curated_description
       t.string :project_name
       t.string :run_id
       t.string :second_run_id
@@ -30,6 +28,8 @@ class CreateSamples < ActiveRecord::Migration[6.0]
       t.text :antibiotics_used
       t.text :antibiotics_dose
       t.integer :days_without_antibiotics_use
+      t.text :original_description
+      t.text :curated_description
       t.references :project, null: false, foreign_key: true
 
       t.timestamps

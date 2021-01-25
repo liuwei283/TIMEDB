@@ -33,9 +33,9 @@ ActiveRecord::Schema.define(version: 2021_01_11_132034) do
   create_table "analysis_user_data", force: :cascade do |t|
     t.bigint "user_id"
     t.bigint "analysis_id"
+    t.bigint "task_output_id"
     t.json "chosen", null: false
     t.boolean "use_demo_file", default: true
-    t.bigint "task_output_id"
     t.index ["analysis_id"], name: "index_analysis_user_data_on_analysis_id"
     t.index ["task_output_id"], name: "index_analysis_user_data_on_task_output_id"
     t.index ["user_id"], name: "index_analysis_user_data_on_user_id"
@@ -69,20 +69,18 @@ ActiveRecord::Schema.define(version: 2021_01_11_132034) do
     t.string "name"
     t.string "project_id1"
     t.string "project_id2"
-    t.text "original_description"
     t.text "curated_description"
     t.integer "num_of_samples"
     t.integer "num_of_runs"
     t.integer "population"
     t.text "related_publications"
+    t.text "original_description"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
   end
 
   create_table "samples", force: :cascade do |t|
     t.string "sample_name"
-    t.text "original_description"
-    t.text "curated_description"
     t.string "project_name"
     t.string "run_id"
     t.string "second_run_id"
@@ -109,6 +107,8 @@ ActiveRecord::Schema.define(version: 2021_01_11_132034) do
     t.text "antibiotics_used"
     t.text "antibiotics_dose"
     t.integer "days_without_antibiotics_use"
+    t.text "original_description"
+    t.text "curated_description"
     t.bigint "project_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
@@ -167,7 +167,6 @@ ActiveRecord::Schema.define(version: 2021_01_11_132034) do
     t.index ["viz_data_source_id"], name: "index_viz_file_objects_on_viz_data_source_id"
   end
 
-  add_foreign_key "analysis_user_data", "task_outputs"
   add_foreign_key "datasets", "users"
   add_foreign_key "samples", "projects"
 end

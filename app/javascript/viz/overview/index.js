@@ -33,6 +33,10 @@ export function viz(vid, vdata){
 
 }
 
+export function description(hid, des_data){
+    document.getElementById(hid).innerHTML = des_data;
+}
+
 export function table(tid, tb_data){
     //create table
     var tb = document.createElement("table");
@@ -78,7 +82,6 @@ export function selector(sid, slt_data){
     slt.className = "form-select col";
     slt.id = sid;
     slt.name = sid;
-    var options = Object.keys(slt_data);
     // create options
     var first = true;
     for(var option in slt_data){
@@ -112,23 +115,39 @@ export function construct_block(Bid, block_data){
     var key = keys[0];
     var selects = block_data[key];
 
+    var ncontent = key.length;
+    var i = 0;
+
+    // create text description if any
+    if(key[0]=="H"){
+        var cid = "H"+Bid
+        var head_block = document.createElement("div");
+        head_block.id = cid;
+        head_block.className = "row description";
+        block_div.appendChild(head_block);
+        key = key.substring(1);
+        ncontent -= 1;
+    }
+
+
     // first create selects row
     var slt_row = document.createElement("div");
     slt_row.className = "select_bar form-inline row";
     var nslt = selects.length;
 
     // create select element
-    for(var i=0; i<nslt; i++){
-        var sid = 'S'+i+Bid;
-        var slt = selector(sid, selects[i]);
+    for(var j=0; j<nslt; j++){
+        var sid = 'S'+j+Bid;
+        var slt = selector(sid, selects[j]);
         slt_row.appendChild(slt);
     }
     block_div.appendChild(slt_row);
 
+    
+    
     // then create content
     var block = document.createElement("div");
     block.className = "row";
-    var ncontent = key.length;
     
     for(var i=0; i<ncontent; i++){
         var type = key[i];
@@ -154,6 +173,14 @@ export function makeHTMLframe(body, struct_data){
 
 // fill in the block with data, (table, text, viz for default value)
 export function fillinblock(cid, relation_key, relation_data, content_data){
+    // is description
+    if(cid[0] == 'H'){
+        var hdk = relation_data['h'][relation_key];
+        var hdata = content_data['h'][hdk];
+        var hid = cid;
+        description(hid, hdata);
+    }
+    
     // have graph
     if(cid[0] == 'V'){
         var vdk = relation_data["v"][relation_key];
@@ -184,6 +211,7 @@ export function fillinblock(cid, relation_key, relation_data, content_data){
         container.appendChild(text);
 
     }
+
     
 }
 
@@ -205,7 +233,7 @@ export function initPage(main_id, data, tids){
 export function catch_change(data, tids){
     
     $('select').on('change', function() {
-        console.log(data);
+        //console.log(data);
         var struct_data = data["struct"];
         var relation_data = data["relation"];
         var content_data = data["content"];
@@ -220,11 +248,17 @@ export function catch_change(data, tids){
             new_k += bro[i].value;  
         }
         var B_i = parseInt(outer_block.id[1]);
-        console.log(B_i);
-        console.log(struct_data);
-        console.log(struct_data[B_i]);
+        //console.log(B_i);
+        //console.log(struct_data[B_i]);
         var type_key = Object.keys(struct_data[B_i])[0];
+        
         var ntype = type_key.length;
+        if(type_key[0]=="H"){
+            ntype -= 1;
+            type_key = type_key.substring(1);
+        }
+        
+        //console.log(type_key);
         for (var i=0; i<ntype; i++){
             var cid = type_key[i] + i + outer_block.id;
             fillinblock(cid, new_k, relation_data, content_data);

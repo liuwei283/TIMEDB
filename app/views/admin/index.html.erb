@@ -1,4 +1,4 @@
-<head>
+<% content_for:head do%>
   
   
   <script src="https://cdn.staticfile.org/jquery/1.10.2/jquery.min.js"></script>
@@ -8,29 +8,13 @@
   <script type="text/javascript">
     
     $(document).ready( function () { 
-      var table = $('#Table').DataTable({
+      var table = $('table.display').DataTable({
         columnDefs: [{
           targets: [0, -1],
           orderable: false,
         }],
-        // scrollX: true
-      }); 
-
-      var table = $('#Table2').DataTable({
-        columnDefs: [{
-          targets: [0, -1],
-          orderable: false,
-        }],
-        // scrollX: true
-      }); 
-
-      var table = $('#Table3').DataTable({
-        columnDefs: [{
-          targets: [0, -1],
-          orderable: false,
-        }],
-        // scrollX: true
-      }); 
+        scrollX: true
+      });
 
       $('button.toggle-vis').on( 'click', function (e) {
         e.preventDefault();
@@ -39,24 +23,37 @@
         var column = table.column( $(this).attr('data-column') );
         // Toggle the visibility
         column.visible( ! column.visible() );
-    } );
+       } ); 
 
   });
 
-    function toggle_checkall(field_name, state) {
-      var checkboxes = document.getElementsByTagName('input');
-      var count = checkboxes.length;
-      for (var i = 0; i < count; i++) {
-        if (checkboxes[i].type == "checkbox"
-            && checkboxes[i].name == field_name + "_ids[]") {
-          checkboxes[i].checked = state;
-        }
-      }
-    }
   </script>
 
   
-</head>
+<%end%>
+
+<div class="container">
+<ol class="breadcrumb">
+  <li class="breadcrumb-item">
+    <%=link_to 'Admin home', '/admin' %>
+  </li> 
+  <li class="breadcrumb-item">
+    <%=link_to 'Projects', '#project_admin' %>
+  </li> 
+  <li class="breadcrumb-item">
+    <%=link_to 'Samples', '#sample_admin' %>
+  </li> 
+  <li class="breadcrumb-item">
+    <%=link_to 'Analysis Categories', admin_analysis_categories_path %>
+  </li> 
+  <li class="breadcrumb-item">
+    <%=link_to 'Admin home', '/admin' %>
+  </li> 
+  <li class="breadcrumb-item">
+    <%=link_to 'Analyses', admin_analyses_path %>
+  </li> 
+  
+</ol>
 
 
 <h1>
@@ -64,7 +61,7 @@ Admin page
 </h1>
 
 <p>
-    This page is made for admin to :
+    This is made for admin to :
     <ul>
       <li>add project metadata</li>
       <li>add sample metadata</li>
@@ -76,21 +73,79 @@ Admin page
 
 <hr />
 
+
 <br />
 
-<section class="admin_block">
+<section id="project_admin" class="admin_block">
   <h4>
   Project management:
   </h4>
 
+  <div id='hidden_helper'>
+  Hide columns: 
+  <br />
+  <% i=0 %>
+  <% @projects.column_names.each do |attr| %>
+    
+    <button class="toggle-vis" data-column='<%=i.to_s%>'> 
+      <%= attr.capitalize %>
+    </button>
+    <%i += 1%>
+    
+  <%end%>
+</div>
+
+  <table id="pj_table" class="display">
+    <thead>
+      
+      <% @projects.column_names.each do |attr| %>
+        
+        <th> <%= attr.capitalize %> </th>
+        
+      <% end %>
+      <th>
+        Action
+      </th>
+      
+    </thead>
+
+    <tbody>
+      <% @projects.each do |pj| %>
+      
+        <tr>
+          <% @projects.column_names.each do |attr| %>
+            
+            <td> 
+              <div class="table_cell"> 
+                <%= pj[attr] %> 
+              </div>
+            </td>
+           
+          <% end %>
+          <td>
+            <%= link_to 'Show', project_path(pj) %>
+            <%= link_to 'Delete', project_path(pj), method: :delete,
+                    data: { confirm: 'Are you sure?' } %>
+
+            <%= link_to 'Edit', edit_project_path(pj) %>
+          </td>
+          
+        </tr>
+      
+      <% end %>
+    </tbody>
+
+  </table>
+
+  <%= link_to  "Add one project", "/projects/new" %>
 
   <%= form_tag import_projects_path, multipart: true do %>
     <%= file_field_tag :file %>
-    <%= submit_tag "Import project from csv" %>
+    <%= submit_tag "Import projects from csv" %>
   <% end %>
 </section>
 <hr />
-<section class="admin_block">
+<section id="sample_admin" class="admin_block">
   <h4>
   Sample management:
   </h4>
@@ -130,7 +185,8 @@ Admin page
 </section>
 <hr>
 <br/>
-<section class="admin_block">
+<!--
+<section id="Analysis_Viz_admin" class="admin_block">
   <h4>
   Analysis&Visualization management:
   </h4>
@@ -300,3 +356,5 @@ Admin page
 
 
 </section>
+-->
+</div>

@@ -1,4 +1,5 @@
 class SamplesController < ApplicationController
+    http_basic_authenticate_with name: "admin", password: "chelijia", only: [:new, :create, :edit, :new, :update, :destroy]
     $seq_dir = "#{Rails.root}/app/data/seq/"
     $abd_dir = "#{Rails.root}/app/data/abd_files/"
     $tmp_dir = "#{Rails.root}/app/data/tmp/"
@@ -7,11 +8,16 @@ class SamplesController < ApplicationController
     def new
         @project = Project.find(params[:project_id])
         @sample = @project.samples.build
+        @sample_attrs = Sample.column_names
     end
 
     def show
         @project = Project.find(params[:project_id])
         @sample = @project.samples.find(params[:id])
+        @attrs = Sample.column_names
+        abd_name = "#{@project.name}_#{@sample.sample_name}.tsv"
+        abd_path = File.join("/app/data/abd_files/", abd_name)
+        gon.push file: abd_path
     end
 
     def create
@@ -37,6 +43,7 @@ class SamplesController < ApplicationController
     def edit
         @project = Project.find(params[:project_id])
         @sample = @project.samples.find(params[:id])
+        @sample_attrs = Sample.column_names
     end
     
     def update
