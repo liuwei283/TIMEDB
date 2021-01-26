@@ -52,15 +52,12 @@ function init() {
                         })
                         parsedData[cls] = groupBy(cData, data.columns[1]);
                     })
-                    console.log(parsedData)
                     const boxData = [{values: [], outliers: [], means: [], categories: categories.map(d=> ` ${d} `)}, 
                         {values: [], outliers: [], means: [], categories: categories.map(d=> ` ${d} `)}];
-                    const colors = Object.values(Oviz.color.schemeCategory("light", classifications).colors);
                     categories.forEach((ctg, i) => {
                         classifications.forEach((cls, j) => {
                             if (!parsedData[cls][ctg]) return;
                             const initialData = parsedData[cls][ctg].map(d => d[data.columns[2]]);
-                            if (i + j < 3) console.log(initialData)
                             const result = [];
                             const stat1 = new Oviz.algo.Statistics(initialData);
                             const interQuartileRange = stat1.Q3() - stat1.Q1();
@@ -75,6 +72,12 @@ function init() {
                             boxData[j].values.push([stat2.min(), stat2.Q1(), stat2.median(), stat2.Q3(), stat2.max()]);
                             boxData[j].means.push(stat2.mean());
                         });
+                    });
+                    //const div = Math.ceil(categories.length/10);
+                    this.data.xTicks = [];
+                    categories.filter((d, i, arr) => {
+                        if (i === 0 || d % 10 === 0 || i === arr.length - 1)
+                            this.data.xTicks.push({value: d, index: i});
                     });
                     this.data.boxData = boxData.sort((a,b)=> - a.values.length - b.values.length);
                     this.data.classifications = classifications;
