@@ -68,17 +68,16 @@ class Api::VizFilesController < ApplicationController
         files_info = @analysis.files_info
 
         if @analysis_user_datum.use_demo_file
-            demo_folder = File.join '/data/demo', @analysis.name.gsub(' ','_')
             render json: {}.tap { |x|
                 files_info.each do |dataType, info|
-                    if info['demoFileName'].class == String
+                    if info['demoFilePath'].class == String
                         x[dataType] = {id: 0, 
-                            url: File.join(demo_folder, info['demoFileName']), 
+                            url: info['demoFilePath'], 
                             is_demo: true}
                     else
-                        x[dataType] = info['demoFileName'].map do |fName|
+                        x[dataType] = info['demoFilePath'].map do |fPath|
                             {id: 0, 
-                            url: File.join(demo_folder, fName), 
+                            url: fPath, 
                             is_demo: true}
                         end
                     end

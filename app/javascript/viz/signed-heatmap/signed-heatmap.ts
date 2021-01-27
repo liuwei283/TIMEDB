@@ -132,6 +132,9 @@ export class SignedHeatMap extends Component<SignedHeatMapOption> {
 
     }
 
+    public didCreate() {
+        if (this.prop.rows.length * this.prop.gridH > 950) this.$v.size.height = this.prop.rows.length * this.prop.gridH + 150
+    }
     public willRender() {
         this.range = this.computeRange(this.prop.dataRange[0],
             this.prop.dataRange[1], this.prop.symRange);
