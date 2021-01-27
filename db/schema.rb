@@ -49,22 +49,6 @@ ActiveRecord::Schema.define(version: 2021_01_11_132034) do
     t.index ["user_id"], name: "index_datasets_on_user_id"
   end
 
-  create_table "deltadb_records", force: :cascade do |t|
-    t.integer "kind", default: 0, null: false
-    t.json "data"
-    t.bigint "deltadb_table_id"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-    t.index ["deltadb_table_id"], name: "index_deltadb_records_on_deltadb_table_id"
-  end
-
-  create_table "deltadb_tables", force: :cascade do |t|
-    t.string "name"
-    t.json "data"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-  end
-
   create_table "projects", force: :cascade do |t|
     t.string "name"
     t.string "project_id1"
