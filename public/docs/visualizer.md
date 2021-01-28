@@ -17,7 +17,7 @@
 
 The platform has 2 viz mode:
 1. query_task
-2. visualization - anlaysis
+2. visualization - anlaysis (standalone)
 
 **Javscript Code Structure Overview**
 
@@ -35,14 +35,17 @@ The platform has 2 viz mode:
                   └───data.ts
                   └───complex-scatterplot.ts
 
+
 **Database Design Overview**
+![Database Design](_images/db_design.png)
+
 
 Some concepts:
 1. Visualizer is the chart, e.g. scatterplot, heatmap...
 2. Analysis refers to the deep omics analyis module, it has the concrete meaning. e.g. PCA, pathway enrichment...
 3. A visualizer can be used by multiple analyses, for example, the scatterplot can be used by PCA and CCA.
 4. A visualizer takes the analysis output files as input, these files called data sources in visualizer module.
-5. An analyis may only use parts of the data sources. e.g. PCA won't have vector data. The binding of analysis to viz data sources is done by the files_info field of analyses.
+5. An analysis may only use parts of the data sources. e.g. PCA won't have vector data. The binding of analysis to viz data sources is done by the files_info field (json) of analyses.
 
 **important conventions**
 
@@ -92,32 +95,33 @@ The visualizer folder should contains these files,
 
 Now we have created our visualizer module, we need to tell the task_query module and analyis module how to use it.
 
-1. register for task_query
+1. register for task_query mode
 Open 'app/javascript/viz/index.ts', inside `registerViz` function, add your case.
-2. register for analysis
-Create a new js file under 'app/javascript/packs', the js name should named by the MODULE_NAME
+2. register for standalone analysis mode
+Create a new js file under 'app/javascript/packs', the js name should be the same as the `MODULE_NAME`
 
 #### 2.4: Set the demo files
 
+Go to `$project_root/data/demo`, create a new folder and put all the demo files of your analyses in it. **Note that demo files must be place under this root.**
 
 
 ### 3: Add configs in admin panel.
 
 #### 3.1 Add the visualizer and required viz data sources
 
-Start the server, go to [admin:visualizer](localhost:3000/admin/visualizers). Please contact the project admin for account and password.
+Start the server, go to [admin:visualizer](). Please contact the project admin for account and password.
 
 Click add visualizer to create a new visualizer, 
 - fill in the name, 
-- the js_module_name is your js pack name, this field must be , otherwise the platform cannot found the correct script file to load; 
-- add the data sources you use, note that the dataType name must be the same as the dataType and fileKey in your code
+- the `js_module_name` is your js pack file's name, otherwise the platform cannot found the correct script file to load; 
+- add the data sources you use, note that the `dataType` name must be the same as the `dataType` and `fileKey` in your code
 
 Click `Create Visualizer` to submit the creation.
 
 
 #### 3.2 Add the analysis
 
-Go to [admin:analysis_categories](localhost:3000/admin/analysis_categoreis). If the analysis belongs to a existing analysis category, you can , otherwise you need to first create the analyis category, then create the analysis under that category.
+Go to [admin:analysis_categories](). If the analysis belongs to a existing analysis category, you can , otherwise you need to first create the analyis category, then create the analysis under that category.
 
 Click add analysis to create a new analysis,
 - fill in the name
@@ -126,16 +130,33 @@ Click add analysis to create a new analysis,
 - fill in the files_info json, the json format is : 
 ```json 
 {
-  "networkEdges": { // the data type
-    "name": "Edges Data", //the data name displayed in file uploads panel
-    "outputFileName": "Network_edges.xls", // the output file name by deep omics
-    "demoFileName": "Network_edges.xls" // the demo file name
+  "scatterData": { // the data type
+    "name": "PCA Score", //the data name displayed in file uploads panel
+    "outputFileName": "coordinate.xls", // the output file name by deep omics
+    "demoFilePath": "/data/demo/PCA/Control_Gout_PCA.coordinate.xls" // the demo file name
   },
   ...
+}
+```
+```json 
+{
+  "heatmapDataD": { // if the data source allow multiple files
+    "name": "Sample Data",
+    "outputFileName": [ // the outputFileName and the demoFilePath
+      "T1_sample.xls", // should be an array of strings
+      "T2_sample.xls",
+      "T3_sample.xls"
+    ],
+    "demoFilePath": [
+      "/data/demo/Drug_Use/T1_sample.xls",
+      "/data/demo/Drug_Use/T2_sample.xls",
+      "/data/demo/Drug_Use/T3_sample.xls"
+    ]
+  }
 }
 ```
 
 Click `Create Analysis`
 
 ### Finished
-  You can go to [localhost:3000/visualizer/analysis/{id}]() to see the chart.
+  You can go to [localhost:3000/visualizer/analysis/{id}]() to see the demo chart.
