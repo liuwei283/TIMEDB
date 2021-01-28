@@ -109,7 +109,7 @@ Go to `$project_root/data/demo`, create a new folder and put all the demo files 
 
 #### 3.1 Add the visualizer and required viz data sources
 
-Start the server, go to [admin:visualizer](localhost:3000/admin/visualizers). Please contact the project admin for account and password.
+Start the server, go to [admin:visualizer](). Please contact the project admin for account and password.
 
 Click add visualizer to create a new visualizer, 
 - fill in the name, 
@@ -121,7 +121,7 @@ Click `Create Visualizer` to submit the creation.
 
 #### 3.2 Add the analysis
 
-Go to [admin:analysis_categories](localhost:3000/admin/analysis_categoreis). If the analysis belongs to a existing analysis category, you can , otherwise you need to first create the analyis category, then create the analysis under that category.
+Go to [admin:analysis_categories](). If the analysis belongs to a existing analysis category, you can , otherwise you need to first create the analyis category, then create the analysis under that category.
 
 Click add analysis to create a new analysis,
 - fill in the name
