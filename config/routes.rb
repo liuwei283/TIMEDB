@@ -78,7 +78,6 @@ Rails.application.routes.draw do
   post 'submit-app-task', to: 'submit#submit_app_task', format: 'json'
   post 'query-all-tasks', to: 'submit#query_all', format: 'json'
   post 'remove-task', to: 'submit#remove_task', format: 'json'
-  mount Deltadb::Engine => "/db"
 
   # admin
   get '/admin', to: 'admin#index'

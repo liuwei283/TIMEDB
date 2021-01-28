@@ -3,29 +3,7 @@
   <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.22/js/jquery.dataTables.min.js"></script>
   <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.22/css/jquery.dataTables.css">
   
-  <script type="text/javascript">
-    
-    $(document).ready( function () { 
-      var table = $('#Table').DataTable({
-        columnDefs: [{
-          targets: [0, -1],
-          orderable: false,
-        }],
-        fixedHeader: true,
-        // scrollX: true
-      }); 
-
-      $('button.toggle-vis').on( 'click', function (e) {
-        e.preventDefault();
-        $(this).toggleClass('clicked');
-        // Get the column API object
-        var column = table.column( $(this).attr('data-column') );
-        // Toggle the visibility
-        column.visible( ! column.visible() );
-    } );
-
-  });
-  </script>
+  <%= javascript_pack_tag "table_style" %>
 <% end %>
 
 <div class="container">
