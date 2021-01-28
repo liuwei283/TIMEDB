@@ -1,45 +1,78 @@
 svg {
-    height = 1200
+    height = 1000
+    width = 1300
     Component {
+        Circle.centered {
+            x = 3; y = 3; r = 3; fill = "red"
+        }
+        Circle.centered {
+            x = 3; y = 997; r = 3; fill = "red"
+        }
+        Circle.centered {
+            x = 1197; y = 3; r = 3; fill = "red"
+        }
+        Circle.centered {
+            x = 1197; y = 997; r = 3; fill = "red"
+        }
         @if (tree.dataOpt.isRadical) {
             @let radius = tree.dataOpt.treeRadius
             Tree {
-                y = 30
+                y = 500
+                x = 200
                 r = radius
-                width = 1400
-                height = 800
+                width = 900
+                // height = 600
                 data = tree.treeData
                 direction = "radical"
                 link.on:mouseenter = $el.stage = "active"
                 link.on:mouseleave = $el.stage = null
-                branchShouldStayOnTop = branchShouldStayOnTop
-                    
-                
+                deg = 350
+                // treeRotation = 90
                 :node(n){
                     Component{
-                        zIndex = 2
+                        //zIndex = 2
                         Circle.centered{
-                            // r =  8
-                            r =  (n.node.data.name === "r__Root") ? tree.max_mean : tree.mean_info_box[n.node.data.name]
+                            r =  (n.node.data.name === "r__Root") ? 5 : tree.mean_info_box[n.node.data.name]
                             fill = tree.library.color_dict.colorNodes[n.node.data.name]
+                            //fillOpacity = 0.8
+                            stroke = tree.library.color_dict.colorLinks[n.node.data.name]
                             behavior:tooltip {
                                 content = n.node.data.name.substring(3) + '<br>' + 'group: ' + tree.library.matrix_dict[n.node.data.name].enriched + '<br>' +  'q_value: ' + tree.library.matrix_dict[n.node.data.name].qvalue
                             }
-                            @props prop.opt.node
+                            //@props prop.opt.node
                         }
+                        //@if ()
                     }
                 }
                 :leaf(l){
                     Component{
+                        @let name = l.leaf.data.name.substring(3)
                         Circle.centered{
                             // r =  8
+                            //@expr console.log(l);
                             r = tree.mean_info_box[l.leaf.data.name]
                             fill = tree.library.color_dict.colorNodes[l.leaf.data.name]
+                            stroke = tree.library.color_dict.colorLinks[l.leaf.data.name]
                             behavior:tooltip {
                                 content = l.leaf.data.name.substring(3) + '<br>' + 'group: ' + tree.library.matrix_dict[l.leaf.data.name].enriched + '<br>' +  'q_value: ' + tree.library.matrix_dict[l.leaf.data.name].qvalue
                             }
                         }
-                        @props prop.opt.leaf
+                        Container {
+                            //@expr console.log(l.leaf.data)
+                            anchor = l.tree.leafAnchor(l.leaf)
+                            padding = 15
+                            //@expr console.log(l.leaf.data.data.q_value < tree.dataOpt.maxQvalue)
+                            Text(name){
+                                fill = tree.library.color_dict.colorLinks[l.leaf.data.name]
+                            }
+                            @if (l.leaf.data.data.qvalue < tree.dataOpt.maxQvalue) {
+                                Rect {
+                                    width = name.length * 6; height = 15; fill = "none"
+                                    stroke = tree.library.color_dict.colorNodes[l.leaf.data.name]
+                                    strokeWidth = 2; borderRadius = 2
+                                }
+                            }
+                        }
                     }
                 }  
                 :link(l){
@@ -58,150 +91,12 @@ svg {
                         Path {
                             stroke = isActive ? "black" : (isGroupLink ? (isGroupLink === 1) ? 
                                 "red" : "blue" : (tree.library.color_dict.depthPathNodes[l.link.source.data.name]) ? 
-                                    tree.library.color_dict.colorNodes[tree.library.color_dict.depthPathNodes[l.link.source.data.name]] : "#aaa")
-                            strokeWidth = isGroupLink ? 6 : (isActive ? 6 : 4)
+                                    tree.library.color_dict.colorLinks[tree.library.color_dict.depthPathNodes[l.link.source.data.name]] : "#444")
+
+                            strokeWidth = isGroupLink ? 3 : (isActive ? 3 : 2)
                             fill = "none"
                             d = l.tree.getPath(...l.pos)
-                            @props isActive ? prop.opt.activeLink : prop.opt.link
-                        }
-                    }
-                }
-            }
-            @if (tree.dataOpt.showDistinctNodeName) {
-                Component {
-                    @let stroke_width = 1.5
-                    Component {
-                        x = 30
-                        y = 25
-                        @for (node, i) in tree.distinct_leaves.UL.nodes {
-                            Line {
-                                x1 = tree.leave_link_dict[node.name].x - 25
-                                y1 = tree.leave_link_dict[node.name].y - 25 + 5
-                                x2 = 695 - (450)
-                                y2 = tree.leave_link_dict[node.name].y - 25 + 5
-                                stroke = tree.library.color_dict.colorNodes[node.name]
-                                strokeWidth = stroke_width
-                            }
-                            Line {
-                                x1 = 695 - (450)
-                                y1 = tree.leave_link_dict[node.name].y - 25 + 5
-                                x2 = 220
-                                y2 = node.y
-                                stroke = tree.library.color_dict.colorNodes[node.name]
-                                strokeWidth = stroke_width
-                            }
-                            Text {
-                                x = node.x
-                                y = node.y
-                                text = node.name.substring(3)
-                                anchor = @anchor("l", "m")
-                            }
-                            Circle.centered {
-                                x = 220
-                                y = node.y
-                                r = 5
-                                fill = tree.library.color_dict.colorNodes[node.name]
-                            }
-                        }
-                    }
-                    Component {
-                        x = 30
-                        y = 100
-                        @for (node, i) in tree.distinct_leaves.DL.nodes {
-                            Line {
-                                x1 = tree.leave_link_dict[node.name].x - 25
-                                y1 = tree.leave_link_dict[node.name].y - 100 + 5
-                                x2 = 695 - (450)
-                                y2 = tree.leave_link_dict[node.name].y - 100 + 5
-                                stroke = tree.library.color_dict.colorNodes[node.name]
-                                strokeWidth = stroke_width
-                            }
-                            Line {
-                                x1 = 695 - (450)
-                                y1 = tree.leave_link_dict[node.name].y - 100 + 5
-                                x2 = 220
-                                y2 = node.y
-                                stroke = tree.library.color_dict.colorNodes[node.name]
-                                strokeWidth = stroke_width
-                            }
-                            Text {
-                                x = node.x
-                                y = node.y
-                                text = node.name.substring(3)
-                                anchor = @anchor("l", "m")
-                            }
-                            Circle.centered {
-                                x = 220
-                                y = node.y
-                                r = 5
-                                fill = tree.library.color_dict.colorNodes[node.name]
-                            }
-                        }
-                    }
-                    Component {
-                        x = 1150
-                        y = 100
-                        @for (node, i) in tree.distinct_leaves.DR.nodes {
-                            Line {
-                                x1 = tree.leave_link_dict[node.name].x - 1150 + 5
-                                y1 = tree.leave_link_dict[node.name].y - 100 + 5
-                                x2 = 695 + (450) - 1200
-                                y2 = tree.leave_link_dict[node.name].y - 100 + 5
-                                stroke = tree.library.color_dict.colorNodes[node.name]
-                                strokeWidth = stroke_width
-                            }
-                            Line {
-                                x1 = 695 + (450) - 1200
-                                y1 = tree.leave_link_dict[node.name].y - 100 + 5
-                                x2 = node.x + 30 + 5
-                                y2 = node.y + 5
-                                stroke = tree.library.color_dict.colorNodes[node.name]
-                                strokeWidth = stroke_width
-                            }
-                            Text {
-                                x = 50
-                                y = node.y
-                                text = node.name.substring(3)
-                            }
-                            Circle {
-                                x = node.x + 30
-                                y = node.y
-                                r = 5
-                                fill = tree.library.color_dict.colorNodes[node.name]
-                            }
-                        }
-                    }
-                    Component {
-                        x = 1150
-                        y = 25
-                        @for (node, i) in tree.distinct_leaves.UR.nodes {
-                            Line {
-                                x1 = tree.leave_link_dict[node.name].x - 1150 + 5
-                                y1 = tree.leave_link_dict[node.name].y - 25 + 5
-                                x2 = 695 + (450) - 1200
-                                y2 = tree.leave_link_dict[node.name].y - 25 + 5
-                                stroke = tree.library.color_dict.colorNodes[node.name]
-                                strokeWidth = stroke_width
-                            }
-                            Line {
-                                x1 = 695 + (450) - 1200
-                                y1 = tree.leave_link_dict[node.name].y - 25 + 5
-                                x2 = node.x + 30 + 5
-                                y2 = node.y + 5
-                                stroke = tree.library.color_dict.colorNodes[node.name]
-                                strokeWidth = stroke_width
-                            }
-                            Text {
-                                x = 50
-                                y = node.y
-                                text = node.name.substring(3)
-                            }
-                            Circle {
-                                x = node.x + 30
-                                y = node.y
-                                r = 5
-                                fill = tree.library.color_dict.colorNodes[node.name]
-                            }
+                           // @props isActive ? prop.opt.activeLink : prop.opt.link
                         }
                     }
                 }
@@ -640,6 +535,10 @@ svg {
                     }
                 }
             }
+        }
+    
+        Circle.centered {
+            r = 3; fill = "red"; x = 650; y = 450
         }
     }
 }

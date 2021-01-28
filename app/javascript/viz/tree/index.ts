@@ -18,8 +18,6 @@ function init() {
         el: "#canvas",
         template,
         renderer: "svg",
-        height: 1400,
-        width: 2000,
         theme: "light",
         loadData: {
             anno: {
