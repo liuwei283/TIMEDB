@@ -97,7 +97,9 @@ class SamplesController < ApplicationController
         @samples = Sample.order(:sample_name)
         content = @samples.selected_to_csv(params[:sample_ids])
         time = Time.now
-        file_path = File.join(ds_dir, "selected_metadata_#{time}.csv")
+        time_str = time.strftime("%Y_%m_%d")       
+        time_str += ("_" + time.strftime("%k_%M")) 
+        file_path = File.join(ds_dir, "selected_metadata_#{time_str}.csv")
         File.open(file_path, 'w') do |file|
             file << content
         end
@@ -112,7 +114,9 @@ class SamplesController < ApplicationController
         ds_dir = File.join(user_dir, ds_name) 
         @project = Project.find(params[:project_id])
         time = Time.now
-        file_path = File.join(ds_dir, "selected_abd_#{time}.tsv")
+        time_str = time.strftime("%Y_%m_%d")       
+        time_str += ("_" + time.strftime("%k_%M")) 
+        file_path = File.join(ds_dir, "selected_abd_#{time_str}.tsv")
         len = params[:sample_ids].length()
         if len<1
             redirect_to @project

@@ -57,8 +57,8 @@ Rails.application.routes.draw do
       post 'batch_delete_files', to: 'viz_files#batch_delete_files', as: 'batch_delete_files'
     end
   end
+
   # database pages
-  get 'database/sample'
   get 'database/overview', to: 'database#overview'
   
   get 'demo', to: 'demo#show'
