@@ -6,6 +6,35 @@ import { group } from "d3";
 
 import * as text_size from "crux/dist/utils/text-size";
 
+const groupColors = ["#908CA8",
+"#D49C98",
+"#EBCFB9",
+"#BA93A1",
+"#687B9F",
+"#8A7F89",
+"#A08279",
+"#B5AEB3",
+"#A97D61",
+"#826C94"];
+
+const rainbow = [ "hsl(340, 82%, 76%)",
+"hsl(0, 73%, 77%)",
+"hsl(14, 100%, 78%)",
+"hsl(36, 100%, 75%)",
+"hsl(45, 100%, 75%)",
+"hsl(54, 90%, 72%)",//"hsl(54, 100%, 81%)",
+"hsl(66, 71%, 77%)",
+"hsl(88, 50%, 76%)",
+"hsl(122, 37%, 74%)",
+"hsl(174, 42%, 65%)",
+"hsl(187, 72%, 71%)",
+"hsl(199, 92%, 74%)",
+"hsl(207, 90%, 77%)",
+"hsl(207, 90%, 77%)",
+"hsl(231, 44%, 74%)",
+"hsl(261, 46%, 74%)",
+"hsl(291, 47%, 71%)",
+];
 
 export let dataOpt = {
     allLevel: ["r", "k", "p", "c", "o", "f", "g", "s"],
@@ -13,7 +42,7 @@ export let dataOpt = {
     level : 7,
     treeDepth: 4,
     maxTextLength: 0,
-    treeRadius: 400,
+    treeRadius: 350,
     treeLeafSize: 20,
     treeHeight: 0,
     boxLegend: 8,
@@ -176,7 +205,40 @@ export function getLinkColor(nodes, treeDepth) {
 
     const depthNodesLegend = [];
     const colorNodes = [];
+    const colorLinks = [];
     const depthPathNodes = [];
+
+    const nodeColor = (hslString : string) => {
+        const attrs = hslString.split("(")[1].substring(0, hslString.length - 1);
+        const h = parseFloat(attrs.split(",")[0]);
+        const s = parseInt(attrs.split(",")[1].substring(0, hslString.length - 1)) - 10;
+        const l = parseInt(attrs.split(",")[2].substring(0, hslString.length - 1)) + 20;
+        return `hsl(${h},${s}%,${l}%)`;
+        //return hslString;
+    }
+
+    const linkColor = (hslString : string) => {
+        const attrs = hslString.split("(")[1].substring(0, hslString.length - 1);
+        const h = parseFloat(attrs.split(",")[0]);
+        const s = parseInt(attrs.split(",")[1].substring(0, hslString.length - 1)) + 30;
+        const l = parseInt(attrs.split(",")[2].substring(0, hslString.length - 1)) - 20;
+        return `hsl(${h},${s}%,${l}%)`;
+    }
+
+    const dark30 = (hslString : string) => {
+        const attrs = hslString.split("(")[1].substring(0, hslString.length - 1);
+        const h = parseFloat(attrs.split(",")[0]);
+        const s = parseInt(attrs.split(",")[1]);
+        const l = parseInt(attrs.split(",")[2].substring(0, hslString.length - 1)) - 30;
+        return `hsl(${h},${s}%,${l}%)`;
+    }
+    const dark50 = (hslString : string) => {
+        const attrs = hslString.split("(")[1].substring(0, hslString.length - 1);
+        const h = parseFloat(attrs.split(",")[0]);
+        const s = parseInt(attrs.split(",")[1]);
+        const l = parseInt(attrs.split(",")[2].substring(0, hslString.length - 1)) - 40;
+        return `hsl(${h},${s}%,${l}%)`;
+    }
 
     let c = 0;
     depthNodes.forEach ((d , i) => {
@@ -184,7 +246,7 @@ export function getLinkColor(nodes, treeDepth) {
             name: d.data.name,
             x: 0,
             y: 0,
-            color: color.get(i),
+            color: nodeColor( color.get(i)),
         };
 
         c = dataOpt.showDistinctNodeName ? 1 : (Math.floor(len / 10) < 2) ? 1 : 2;
@@ -200,6 +262,7 @@ export function getLinkColor(nodes, treeDepth) {
     nodes.forEach(d => {
         if (d.depth < treeDepth) {
             colorNodes[d.data.name] = "#aaa";
+            colorLinks[d.data.name] = "#777";
         } else  {
             const node_name = d.data.name;
             let tempNode = d;
@@ -209,14 +272,17 @@ export function getLinkColor(nodes, treeDepth) {
             depthPathNodes[d.data.name] = tempNode.data.name;
             depthNodes.forEach((d, j) => {
                 if (d.data.name === tempNode.data.name) {
-                    colorNodes[node_name] = color.get(j);
+                    //colorNodes[node_name] = nodeColor( color.get(j));
+                    //colorLinks[node_name] = linkColor( color.get(j));
+                    colorNodes[node_name] = rainbow[j] || rainbow[j-10];
+                    colorLinks[node_name] = dark50(rainbow[j] || rainbow[j-10]);
                     return true;
                 }
             });
         }
     });
 
-    return {colorNodes, depthPathNodes, depthNodesLegend};
+    return {colorNodes, colorLinks, depthPathNodes, depthNodesLegend};
 }
 
 export function loadTreeData(data) { // only contains the nodes have at least one S level child
@@ -373,9 +439,8 @@ export function main(_data) {
 
 
     const treeNewick = parseNewick(newick);
-    console.log(treeNewick);
     const treeData = parseTreeData(treeNewick);
-    console.log(treeData);
+
     const hierarchy = d3.hierarchy(treeData).sum(d => d.length);
 
     const allNodes = [];
@@ -430,8 +495,8 @@ export function main(_data) {
                 });
 
                 leave_link_dict[n.data.name] = {
-                    x: (dataOpt.treeRadius - dataOpt.treeLeafSize) * Math.sin(((i * 2 + 1) * basic_angle) * 0.017453293) + 695,
-                    y: - (dataOpt.treeRadius - dataOpt.treeLeafSize) * Math.cos(((i * 2 + 1) * basic_angle) * 0.017453293) + 425,
+                    x: (dataOpt.treeRadius - dataOpt.treeLeafSize) * Math.sin(((i * 2 + 1) * basic_angle) * 0.017453293) + 680,
+                    y: - (dataOpt.treeRadius - dataOpt.treeLeafSize) * Math.cos(((i * 2 + 1) * basic_angle) * 0.017453293) + 395,
                 };
 
             } else if (i < leaves.length * 0.5) {
@@ -516,6 +581,8 @@ export function main(_data) {
         return false;
     }
     if(!!this) this.data.branchShouldStayOnTop = branchShouldStayOnTop;
+
+    console.log(treeData.children[0].data);
     return {treeData, dataOpt, leave_box_dict, mean_info_box, max_mean, min_mean, library, allNodes, leaves, distinct_leaves, leave_link_dict, _data, max, min};
 }
 function parseTreeData(tree) {

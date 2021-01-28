@@ -1,5 +1,5 @@
 import { EditorDef } from "utils/editor";
-import { getLinkColor, main } from "./data";
+import { getLinkColor, main, updateBranchZIndex } from "./data";
 
 export const editorRef: any = {};
 
@@ -80,6 +80,7 @@ export function editorConfig(v: any): EditorDef {
                                     v.data.tree.dataOpt.maxTextLength = 0;
                                     console.log(v.data.tree);
                                     v.data.tree = main(v.data.tree._data);
+                                    // updateBranchZIndex(v);
                                     console.log(v.data.tree);
                                     if (v.data.tree.leaves.length < 20) {
                                         v.data.tree.dataOpt.isRadical = conf.displayCircularTree;
@@ -136,6 +137,7 @@ export function editorConfig(v: any): EditorDef {
                                 callback() {
                                     v.data.tree.dataOpt.distinctNodeOnly = conf.distinctNodeOnly;
                                     v.data.tree = main(v.data.tree._data);
+                                    // updateBranchZIndex(v);
 
                                     if (conf.distinctNodeOnly) {
                                         editorRef.showNameSelect.value = 2;
@@ -191,6 +193,7 @@ export function editorConfig(v: any): EditorDef {
                                         } else {
                                             v.data.tree.dataOpt.maxQvalue = val;
                                             v.data.tree = main(v.data.tree._data);
+                                            // updateBranchZIndex(v);
                                         }
                                         v.run();
                                     },
