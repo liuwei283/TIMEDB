@@ -4,6 +4,8 @@
 
 - [How to obtain the analysis results](query.md)
 
+- [How to add a new visulization module](visualizer.md)
+
 
 <!-- - Developer guide
 
