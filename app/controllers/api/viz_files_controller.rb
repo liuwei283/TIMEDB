@@ -93,16 +93,8 @@ class Api::VizFilesController < ApplicationController
                 all_viz_data.each do |dataType| 
                     if info[dataType].blank? 
                         x[dataType] = nil
-                    elsif info[dataType].class == String
-                        x[dataType] = {id: 0, 
-                            url: info[dataType], 
-                            is_demo: true}
                     else
-                        x[dataType] = info[dataType].map do |fPath|
-                            {id: 0, 
-                            url: fPath, 
-                            is_demo: true}
-                        end
+                        x[dataType] = info[dataType]
                     end
                 end
             }
