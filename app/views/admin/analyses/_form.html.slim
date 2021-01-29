@@ -8,7 +8,7 @@ hr
 = f.input :files_info, as: :text, input_html: {value: f.object.files_info_json, data: {'ace': true, 'ace-mode': 'json'}}
 hr
 = f.error_notification
-=f.input :cover_img, as: :image_preview, input_html: { preview_url: image_url }
+=f.input :cover_img, as: :file
 hr
 = f.button :submit
 
