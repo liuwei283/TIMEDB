@@ -2,18 +2,6 @@ svg {
     height = 1000
     width = 1300
     Component {
-        Circle.centered {
-            x = 3; y = 3; r = 3; fill = "red"
-        }
-        Circle.centered {
-            x = 3; y = 997; r = 3; fill = "red"
-        }
-        Circle.centered {
-            x = 1197; y = 3; r = 3; fill = "red"
-        }
-        Circle.centered {
-            x = 1197; y = 997; r = 3; fill = "red"
-        }
         @if (tree.dataOpt.isRadical) {
             @let radius = tree.dataOpt.treeRadius
             Tree {
@@ -535,10 +523,6 @@ svg {
                     }
                 }
             }
-        }
-    
-        Circle.centered {
-            r = 3; fill = "red"; x = 650; y = 450
         }
     }
 }
