@@ -411,7 +411,6 @@ export class ComplexScatterplot extends Component<ComplexScatterplotOption> {
 
     protected dragLegend(ev, el) {
         if(el.stage === "active") {
-            console.log(el.parent.parent);
             const [newX, newY] = Oviz.utils.mouse(el.parent.parent, ev);
             this.legendPos.x = newX;
             this.legendPos.y = newY;
