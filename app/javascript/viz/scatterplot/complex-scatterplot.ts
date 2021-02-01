@@ -1,27 +1,25 @@
 import Oviz from "crux";
-import { Color } from "crux/dist/color";
 import { Component, ComponentOption } from "crux/dist/element";
-import * as d3 from "d3";
 import { findBoundsForValues } from "utils/maths";
+import template from "./template.bvt";
 
-export interface ComplexScatterplotOption extends ComponentOption{
-    // figure attr
-    plotSize: {w:number, h:number},
-    colors: string[],
-    valueRange: Array<number>,
-    categoryRange: Array<number>,
-    scatterData: any[],
-    scatterColumns: string[],
-    vectorData: any[],
-    vectorLabel?: string,
-    clusters: string[],
-    groups: string[],
-    xAxisIndex: number,
-    yAxisIndex: number,
-    scatterSize: number,
-    hollow: boolean,
-    showErrorEllipse: boolean,
-}
+// export interface ComplexScatterplotOption extends ComponentOption{
+//     plotSize: {w:number, h:number},
+//     colors: string[],
+//     valueRange: Array<number>,
+//     categoryRange: Array<number>,
+//     scatterData: any[],
+//     scatterColumns: string[],
+//     vectorData: any[],
+//     vectorLabel?: string,
+//     clusters: string[],
+//     groups: string[],
+//     xAxisIndex: number,
+//     yAxisIndex: number,
+//     scatterSize: number,
+//     hollow: boolean,
+//     showErrorEllipse: boolean,
+// }
 export interface ErrorEllipseDatum {
     dx: number,
     dy: number,
@@ -29,313 +27,99 @@ export interface ErrorEllipseDatum {
     xAxisPath: string,
     yAxisPath: string,
 }
+
 export interface ScatterClusterDatum {
     center: {x,y},
     ellipseData: ErrorEllipseDatum 
 }
-export class ComplexScatterplot extends Component<ComplexScatterplotOption> {
-    private scatterColumns: any[];
-    private scatterData: any[];
-    private vectorData: any[];
-    private clusterData: Record<string, ScatterClusterDatum>;
+export class ComplexScatterplot extends Component<ComponentOption> {
+
+    public dataChanged: boolean = true;
+    public config: any;
+    public colors: string;
+    
+    public scatterColumns: any[];
+    public scatterData: any[];
+    public vectorData: any[];
+    public groups: string[];
+    public clusters: string[];
+    public clusterData: any[];
+
+    private parsedScatterData: any[];
+    private parsedClusterData: Record<string, ScatterClusterDatum>;
     private xLabel;
     private categoryRange;
     private yLabel;
     private valueRange;
 
-    private plotWidth;
-    private plotHeight;
 
     private shapeMap:Map<string, string>;
     private colorMap:Map<string|number, string>;
 
-    private legendPos: {x,y};
-    render() {
-        return this.t`	Component 
-        {
-            XYPlot {
-                height = plotHeight; width = plotWidth;
-                x = 50; y = 50
-                valueRange = valueRange
-                categoryRange = categoryRange
-                hasPadding = false
-                data = scatterData
-                dataHandler = {
-                    default: {
-                        values: d => d,
-                        pos: d => d[xLabel],
-                        value: d => d[yLabel],
-                    }
-                }
-                Rect { fill = "none"; stroke = "#000" }
-        
-                AxisBackground {
-                    dashArray = "1, 2"
-                }
-                AxisBackground {
-                    orientation = "vertical"
-                    dashArray = "1, 2"
-                }
-            
-                @for (scatter, i) in scatterData {
-                    @if (!scatter.cluster) {
-                        @let scatterColor = prop.groups ? colorMap.get(scatter.group) : prop.colors[0]
-                        @let scatterProps = {
-                            key : "scatter" + i,
-                            r : prop.scatterSize/2,
-                            fill : (prop.hollow ? "none" : scatterColor),
-                            strokeWidth : 2,
-                            stroke : scatterColor,
-                        }
-                        Component {
-                           
-                            Circle.centered{ 
-                                x = @scaled-x(scatter[xLabel]); y = @scaled-y(scatter[yLabel])
-                                // key = "scatter" + i; x = @scaled-x(scatter[xLabel]); y = @scaled-y(scatter[yLabel])
-                                // width = prop.scatterSize; height = prop.scatterSize
-                                // fill = colorMap.get(scatter.group)
-                                // strokeWidth = 2
-                                @props scatterProps
-                                behavior:tooltip {
-                                    content = generateScatterContent(scatter)
-                                }
-                            }
-                        }
-                    } @else {
-                        @let shape = shapeMap.get(scatter.group)
-                        @let scatterProps = {
-                            key : "scatter" + i,
-                            width : prop.scatterSize,
-                            height : prop.scatterSize,
-                            fill : (prop.hollow ? "none" : colorMap.get(scatter.cluster)),
-                            strokeWidth : 2,
-                            stroke : colorMap.get(scatter.cluster),
-                            r: prop.scatterSize/2
-                        }
-                        Component(shape) {
-                            key = "scatter"+i
-                            x = @scaled-x(scatter[xLabel]); y = @scaled-y(scatter[yLabel])
-                            // fill = (prop.hollow ? "none" : colorMap.get(scatter.cluster))
-                            // width = prop.scatterSize; height = prop.scatterSize
-                            // r = prop.scatterSize/2
-                            // strokeWidth = 2
-                            // stroke = colorMap.get(scatter.cluster)
-                            // width = 8; height = 8
-                            @props scatterProps
-                            anchor = @anchor("m", "c")
-                            behavior:tooltip {
-                                content = generateScatterContent(scatter)
-                            }
-                        }
-                        Line {
-                            x1 = @scaled-x(clusterData[scatter.cluster].center.x); y1 = @scaled-y(clusterData[scatter.cluster].center.y)
-                            x2 = @scaled-x(scatter[xLabel]); y2 = @scaled-y(scatter[yLabel])
-                            stroke = colorMap.get(scatter.cluster); strokeWidth = 1
-                        }
-                    }
-                    
-                }
-    
-                @if !!vectorData {
-                    @for (vector, i) in vectorData {
-                        Component {
-                            Arrow {
-                                key ="vector"+i
-                                x = @scaled-x(0); y = @scaled-y(0)
-                                x2 = @scaled-x(vector[xLabel]); y2= @scaled-y(vector[yLabel])
-                            }
-                        }
-                        Component {
-                            x = @scaled-x(vector[xLabel] * 1.1) 
-                            y = @scaled-y(vector[yLabel] * 1.1 ) 
-                        
-                            @if (vector[xLabel] > 0) {
-                                Text {
-                                    text = vector[prop.vectorLabel]
-                                    anchor = @anchor("l","m")
-                                }
-                            } @else {
-                                Text {
-                                    text = vector[prop.vectorLabel]
-                                    anchor = @anchor("r","m")
-                                }
-                            }
-                            
-                        }
-                    }
-                }
-    
-                @if !!clusterData {
-                    @for (k, i) in Object.keys(clusterData) {
-                        Component {
-                            x = @scaled-x(clusterData[k].center.x) - clusterData[k].ellipseData.dx
-                            y = @scaled-y(clusterData[k].center.y) - clusterData[k].ellipseData.dy
-                            Path {
-                                d = clusterData[k].ellipseData.ellipsePath
-                                strokeWidth = 2
-                                fill = "none"
-                                 stroke = colorMap.get(k)
-                            }
-                            Path {
-                                d = clusterData[k].ellipseData.xAxisPath; dashArray = "1, 2"
-                                stroke = colorMap.get(k)
-                            }
-                            Path {
-                                d = clusterData[k].ellipseData.yAxisPath; dashArray = "1, 2"
-                                stroke = colorMap.get(k)
-                            }
-                        }
-                    }
-                }
-                
-                Axis("bottom") { y = 100% }
-                Axis("left") {}
-    
-                Component {
-                    y = 50% 
-                    Text(yLabel) {
-                        x = -25
-                        rotation = @rotate(-90)
-                        anchor = @anchor("m", "c")
-                        fontSize = 15
-                    }    
-                }
-    
-                Component {
-                    x = 50%; y = 100% 
-                    Text(xLabel) {
-                        y = 15
-                        anchor = @anchor("m", "c")
-                        fontSize = 15
-                    }    
-                }
-                @if prop.groups {
-                    Component {
-                        x = legendPos.x; y = legendPos.y
-                        height = 50; width = 70
-                        key = "legend1"
-                        Rect.full {
-                            stroke = @color("line")
-                            fill = "white"
-                            // on:mousedown = $el.stage = "active"
-                            // on:mousemove = (ev,el) => dragLegend(ev,el)
-                            // on:mouseup = $el.stage = null
-                        }
-                        Rows {
-                            @for (group, i) in prop.groups {
-                                Component {
-                                    height = 25
-                                    @if clusterData {
-                                        @if i === 0 {
-                                            Circle.centered{
-                                                x = 8; y = 12.5; r = 4; fill = "grey"
-                                            }
-                                        } @else {
-                                            Rect.centered {
-                                                x = 8; y = 12.5; height = 8; width = 8; fill = "grey"
-                                            }
-                                        }
-                                        } @else {
-                                            Circle.centered{
-                                                    x = 8; y = 12.5; r = 4; fill = prop.colors[i]
-                                            }
-                                        }
-                                    Text(group) {
-                                        x = 15; y = 12.5; anchor = @anchor("l","m")
-                                    }
-                                }
-                            }
-                        }  
-                    }
-                }
-    
-                @if clusterData {
-                    Component {
-                        x = 20; y = 80
-                        height = 50; width = 70
-                        Rect.full {
-                            stroke = @color("line")
-                            fill = "white"
-                        }
-                        Rows {
-                            @for (cluster, i) in prop.clusters {
-                                Component {
-                                    height = 25
-    
-                                    Circle.centered{
-                                            x = 8; y = 12.5; r = 4; fill = prop.colors[i]
-                                    }
-                                    Text("cluster"+cluster) {
-                                        x = 15; y = 12.5; anchor = @anchor("l","m")
-                                    }
-                                }
-                            }
-                        }
-                        
-                    }
-                }
-            }
-        }`;
-    }
+    private legend2Pos: {x:number, y:number};
 
-    didCreate() {
-        this.legendPos = {x:20, y:20}
-        this.vectorData = this.prop.vectorData;
-        this.scatterColumns = this.prop.scatterColumns;
-        const shapes = ["Circle", "Rect", "Triangle"];
-        if (this.prop.clusters) {
-            this.colorMap = this.getMap(this.prop.clusters, this.prop.colors);
-            if (this.prop.groups) {                
-                this.shapeMap = this.getMap(this.prop.groups, shapes);
-            }
-        } else if (this.prop.groups) {
-            this.colorMap = this.getMap(this.prop.groups, this.prop.colors);
-        }
-        
-    }
+    private legend1Pos: {x:number, y:number};
+
+    public render = Oviz.t`${template}`;
 
     willRender() {
-        this.xLabel = this.scatterColumns[this.prop.xAxisIndex];
-        this.yLabel = this.scatterColumns[this.prop.yAxisIndex];
-        this.scatterData = this.prop.scatterData.map(d => {
-            const datum = {sampleId: d.sampleId, group: d.group, cluster: d.cluster};
-            datum[this.xLabel] = d[this.xLabel];
-            datum[this.yLabel] = d[this.yLabel];
-            return datum;
-        });
-        this.plotWidth = this.prop.plotSize.w;
-        this.plotHeight = this.prop.plotSize.h;
-
-        if (this.prop.clusters) {
-            this.categoryRange = this.rangeIsValid(this.prop.categoryRange) ?  this.prop.categoryRange
-                : findBoundsForValues(this.scatterData.map(d => d[this.xLabel]), 1, false, 0.1);
-            this.valueRange = this.rangeIsValid(this.prop.valueRange) ? this.prop.valueRange
-                : findBoundsForValues(this.scatterData.map(d => d[this.yLabel]), 1, false, 0.1);
-        } else {
-            this.categoryRange = this.rangeIsValid(this.prop.categoryRange) ?  this.prop.categoryRange
-            : findBoundsForValues(this.scatterData.map(d => d[this.xLabel]), 1);
-            this.valueRange = this.rangeIsValid(this.prop.valueRange) ? this.prop.valueRange
-                : findBoundsForValues(this.scatterData.map(d => d[this.yLabel]), 1);
+        if (this._firstRender) {
+            this.legend1Pos = {x:45, y:115};
+            this.legend2Pos = {x:45, y:55};
+            const shapes = ["Circle", "Rect", "Triangle"];
+            if (this.clusters) {
+                this.colorMap = this.getMap(this.clusters, this.colors);
+                if (this.groups) {                
+                    this.shapeMap = this.getMap(this.groups, shapes);
+                }
+            } else if (this.groups) {
+                this.colorMap = this.getMap(this.groups, this.colors);
+            }
         }
 
-        const svgRatioX = this.plotWidth / (this.categoryRange[1] - this.categoryRange[0]);
-        const svgRatioY = this.plotHeight / (this.valueRange[1] - this.valueRange[0]);
+        if (this.dataChanged) {
+            this.xLabel = this.scatterColumns[this.config.xAxisIndex];
+            this.yLabel = this.scatterColumns[this.config.yAxisIndex];
+            this.parsedScatterData = this.scatterData.map(d => {
+                const datum = {sampleId: d.sampleId, group: d.group, cluster: d.cluster};
+                datum[this.xLabel] = d[this.xLabel];
+                datum[this.yLabel] = d[this.yLabel];
+                return datum;
+            });
 
-        if (this.prop.clusters) {
-            const clusterData = {};
-            this.prop.clusters.forEach(key => {
-                const initialData = this.scatterData.filter(d => d.cluster === key);
-                const clusterDatum = this.computeErrorEllipse(initialData, this.xLabel, this.yLabel,
-                    svgRatioX, svgRatioY);
-                clusterData[key] = clusterDatum;
-            })
-            this.clusterData = clusterData;
+            if (this.clusters) {
+                this.categoryRange = this.rangeIsValid(this.config.categoryRange) ?  this.config.categoryRange
+                    : findBoundsForValues(this.scatterData.map(d => d[this.xLabel]), 1, false, 0.1);
+                this.valueRange = this.rangeIsValid(this.config.valueRange) ? this.config.valueRange
+                    : findBoundsForValues(this.scatterData.map(d => d[this.yLabel]), 1, false, 0.1);
+            } else {
+                this.categoryRange = this.rangeIsValid(this.config.categoryRange) ?  this.config.categoryRange
+                : findBoundsForValues(this.scatterData.map(d => d[this.xLabel]), 1);
+                this.valueRange = this.rangeIsValid(this.config.valueRange) ? this.config.valueRange
+                    : findBoundsForValues(this.scatterData.map(d => d[this.yLabel]), 1);
+            }        
+
+            const svgRatioX = this.config.plotWidth / (this.categoryRange[1] - this.categoryRange[0]);
+            const svgRatioY = this.config.plotHeight / (this.valueRange[1] - this.valueRange[0]);
+
+            if (this.clusters) {
+                const parsedData = {};
+                this.clusters.forEach(key => {
+                    const initialData = this.parsedScatterData.filter(d => d.cluster === key);
+                    const clusterDatum = this.computeErrorEllipse(initialData, this.xLabel, this.yLabel,
+                        svgRatioX, svgRatioY);
+                        parsedData[key] = clusterDatum;
+                })
+                this.parsedClusterData = parsedData;
+            }
+            if (this.clusters) {
+                this.colorMap = this.getMap(this.clusters, this.colors);
+            } else if (this.groups) {
+                this.colorMap = this.getMap(this.groups, this.colors);
+            }
+            this.dataChanged = false;
         }
-        if (this.prop.clusters) {
-            this.colorMap = this.getMap(this.prop.clusters, this.prop.colors);
-        } else if (this.prop.groups) {
-            this.colorMap = this.getMap(this.prop.groups, this.prop.colors);
-        }
+        
     }
 
     protected rangeIsValid(range:Array<Number>) :boolean {
@@ -409,12 +193,22 @@ export class ComplexScatterplot extends Component<ComplexScatterplotOption> {
         return map;
     }
 
-    protected dragLegend(ev, el) {
-        if(el.stage === "active") {
-            const [newX, newY] = Oviz.utils.mouse(el.parent.parent, ev);
-            this.legendPos.x = newX;
-            this.legendPos.y = newY;
-            this.setState(this.legendPos);
+    protected dragStart(_, el) {
+        el.$parent.$on['mousemove'] = (evp, elp) => {
+            let [newX, newY] = Oviz.utils.mouse(elp, evp);
+            if (el.id === "legend1") {
+                this.legend1Pos = {x: newX, y: newY};
+            } else {
+                this.legend2Pos = {x: newX, y: newY};
+            }
+            this.setState({newX, newY});
         }
+        el.stage = "dragging";
+    }
+
+    protected dragEnd(_, el) {
+        delete el.$parent.$on['mousemove'];
+        el.stage = null;
+        this.setState({newX:null, newY:null});
     }
 }
