@@ -99,8 +99,8 @@ Component {
             
         }
     
-        @if !!vectorData {
-            @for (vector, i) in vectorData {
+        @if !!scatterVectorData {
+            @for (vector, i) in scatterVectorData {
                 Component {
                     Arrow {
                         key ="vector"+i
@@ -114,12 +114,12 @@ Component {
                 
                     @if (vector[xLabel] > 0) {
                         Text {
-                            text = vector[prop.vectorLabel]
+                            text = vector[vectorLabel]
                             anchor = @anchor("l","m")
                         }
                     } @else {
                         Text {
-                            text = vector[prop.vectorLabel]
+                            text = vector[vectorLabel]
                             anchor = @anchor("r","m")
                         }
                     }

@@ -40,7 +40,8 @@ export class ComplexScatterplot extends Component<ComponentOption> {
     
     public scatterColumns: any[];
     public scatterData: any[];
-    public vectorData: any[];
+    public scatterVectorData: any[];
+    public vectorLabel: string;
     public groups: string[];
     public clusters: string[];
     public clusterData: any[];
