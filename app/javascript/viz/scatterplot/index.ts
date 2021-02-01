@@ -16,13 +16,13 @@ function init() {
 
     const {visualizer} = Oviz.visualize({
         el: "#canvas",
-        template,
-        components: {ComplexScatterplot},
+        renderer: "svg",
+        root: new ComplexScatterplot(),
         data: {
-            plotHeight: 400,
-            plotWidth: 400,
             colors: ["green", "red"],
             config: {
+                plotHeight: 500,
+                plotWidth: 500,
                 xAxisIndex:1,
                 yAxisIndex:2,
                 computeOval: false,
@@ -30,12 +30,9 @@ function init() {
                 valueRange: [null, null],
                 scatterSize: 8,
                 hollow: false,
+                showErrorEllipse: true,
             },
-            groups: null,
-            clusters: null,
             vectorLabel: null,
-            scatterVectorData: null,
-            scatterClusterData: null,
         },
         loadData: {
             scatterData: {
@@ -124,6 +121,7 @@ function init() {
             }
         },
         setup() {
+            console.log(this["_data"]);
             registerEditorConfig(editorConfig(this));
         }
     }); 
