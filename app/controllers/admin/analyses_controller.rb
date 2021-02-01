@@ -63,8 +63,10 @@ class Admin::AnalysesController < ApplicationController
   private
 
   def analysis_params
-    File.open("#{Rails.root}/app/assets/images/#{params[:analysis][:mid]}.png", "wb") do |f|
-        f.write(params[:analysis][:cover_img].read)
+    if !params[:analysis][:cover_img].blank?
+      File.open("#{Rails.root}/app/assets/images/#{params[:analysis][:mid]}.png", "wb") do |f|
+          f.write(params[:analysis][:cover_img].read)
+      end
     end
     params.require(:analysis).permit(:name, :visualizer_id, :files_info,
                                      :mid, :analysis_category_id)
@@ -76,6 +78,7 @@ class Admin::AnalysesController < ApplicationController
 
   def set_analysis
     @analysis = @analysis_category.analyses.unscoped.find(params[:id])
+    # @img_url = "app/assets/images/#{@analysis.mid}.png"
   end
 
 end
