@@ -19,7 +19,7 @@
     <% @attrs.each do |attr| %>
       <% if attr != 'id' && attr != 'created_at' && attr != 'updated_at'%>
         <div class="col-md-6">
-          <strong><%=attr.capitalize %>: </strong>
+          <strong><%=attr%>: </strong>
           <%= @project[attr] %>
         </div>
       <% end %>
@@ -42,7 +42,7 @@
     <% @sample_attrs.each do |attr| %>
       <% if attr != 'id' && attr != 'created_at' && attr != 'updated_at' %>
         <button class="toggle-vis" data-column='<%=i.to_s%>'> 
-          <%= attr.capitalize %>
+          <%= attr%>
         </button>
         <%i += 1%>
       <%end%>
@@ -58,7 +58,7 @@
         </th>
         <% @sample_attrs.each do |attr| %>
           <% if attr != 'id' && attr != 'created_at' && attr != 'updated_at' %>
-            <th> <%= attr.capitalize %> </th>
+            <th> <%= attr %> </th>
           <% end %>
         <% end %>
         <th>Action</th>
