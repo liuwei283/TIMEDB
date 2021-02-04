@@ -512,7 +512,7 @@ export default class SectionFiles extends Vue {
         
         this.newFileNames = {};
         _.forOwn(this.filesForUpload, (file, key) => {
-            debugger;
+            // debugger;
             const filename = file.name;
             if (this._fileKeyByName[key].files.some(f => f.filename === filename)) {
                 const pos = filename.lastIndexOf(".");
@@ -559,7 +559,7 @@ export default class SectionFiles extends Vue {
     }
 
     public applyChosenFiles(isFileSet: boolean = false, fileSet = null) {
-        debugger;
+        // debugger;
         if (isFileSet) {
             fileSet.files.forEach(f => {
                 const file = this._fileById[f.id];
@@ -639,7 +639,7 @@ export default class SectionFiles extends Vue {
     }
 
     public fmApplyChanges() {
-        debugger;
+        // debugger;
         this.fmApplyingChanges = true;
         const chosenSet = new Set(Object.values(this.filesChosen));
         const deletedChosenFile = this.filesToBeDeleted.some(f => chosenSet.has(f));
@@ -710,7 +710,7 @@ export default class SectionFiles extends Vue {
                 if (!chosenFiles.use_demo) {
                     for (const f of allFiles) {
                         if (f.optional) continue;
-                        debugger;
+                        // debugger;
                         if (f.files.length === 0) {
                             needsUpload = { noData: true };
                             break;

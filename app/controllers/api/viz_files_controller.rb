@@ -66,16 +66,18 @@ class Api::VizFilesController < ApplicationController
     def chosen_file_paths
         
         files_info = @analysis.files_info
-
+        all_viz_data = @analysis.visualizer.viz_data_sources.map{|d| d.data_type}
         if @analysis_user_datum.use_demo_file
             render json: {}.tap { |x|
-                files_info.each do |dataType, info|
-                    if info['demoFilePath'].class == String
+                all_viz_data.each do |dataType| 
+                    if files_info[dataType].blank? 
+                        x[dataType] = nil
+                    elsif files_info[dataType]['demoFilePath'].class == String
                         x[dataType] = {id: 0, 
-                            url: info['demoFilePath'], 
+                            url: files_info[dataType]['demoFilePath'], 
                             is_demo: true}
                     else
-                        x[dataType] = info['demoFilePath'].map do |fPath|
+                        x[dataType] = files_info[dataType]['demoFilePath'].map do |fPath|
                             {id: 0, 
                             url: fPath, 
                             is_demo: true}
@@ -86,11 +88,20 @@ class Api::VizFilesController < ApplicationController
             return
         end
         if !@analysis_user_datum.task_output.blank?
-            render json:@analysis_user_datum.task_output.file_paths
+            info = @analysis_user_datum.task_output.file_paths
+            render json:{}.tap { |x|
+                all_viz_data.each do |dataType| 
+                    if info[dataType].blank? 
+                        x[dataType] = nil
+                    else
+                        x[dataType] = info[dataType]
+                    end
+                end
+            }
             return
         end
         render json: {}.tap { |x|
-            @analysis.files_info.each do |dataType, info|
+            all_viz_data.each do |dataType, info|
                 if @analysis_user_datum.chosen[dataType].blank? 
                     x[dataType] = nil
                 else

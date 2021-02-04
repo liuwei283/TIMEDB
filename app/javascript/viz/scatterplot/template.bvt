@@ -1,215 +1,222 @@
-svg {
-	width = auto
-	height = 800
-	Component {
-        @expr console.log(scatterColumns)
-
-        ComplexScatterplot {
-            x = 50; y = 50
-            plotSize = {w: plotWidth, h: plotHeight}
-            colors = colors
-            valueRange = config.valueRange
-            categoryRange = config.categoryRange
-            xAxisIndex = config.xAxisIndex
-            yAxisIndex = config.yAxisIndex
-            scatterSize = config.scatterSize
-            hollow = config.hollow
-            scatterData = scatterData
-            scatterColumns =scatterColumns
-            vectorData = scatterVectorData
-            vectorLabel = vectorLabel
-            clusters = clusters
-            groups = groups
-            showErrorEllipse = true
+Component {
+    XYPlot {
+        height = config.plotHeight; width = config.plotWidth;
+        x = 50; y = 50
+        valueRange = valueRange
+        categoryRange = categoryRange
+        hasPadding = false
+        data = parsedScatterData
+        dataHandler = {
+            default: {
+                values: d => d,
+                pos: d => d[xLabel],
+                value: d => d[yLabel],
+            }
         }
-		// XYPlot {
-        //     @let groupColorMap = scatterClusterData? @colorMap(clusters, colors) : @colorMap(groups, colors)
-		// 	height = plotHeight; width = plotWidth;
-		// 	x = 50; y = 50
-		// 	valueRange = valueRange
-		// 	categoryRange = categoryRange
-		// 	hasPadding = false
-		// 	data = scatterData
-        //     dataHandler = {
-        //         default: {
-        //             values: d => d,
-        //             pos: d => d[xLabel],
-        //             value: d => d[yLabel],
-        //         }
-        //     }
-		// 	Rect { fill = "none"; stroke = "#000" }
-    
-        //     AxisBackground {
-        //         dashArray = "1, 2"
-        //     }
-        //     AxisBackground {
-        //         orientation = "vertical"
-        //         dashArray = "1, 2"
-        //     }
+        Rect { fill = "none"; stroke = "#000" }
 
-        //     @for (scatter, i) in scatterData {
-        //         @if (!scatter.cluster) {
-        //             Circle.centered{ 
-        //                 key = `scatter-${i}`; x = @scaled-x(scatter[xLabel]); y = @scaled-y(scatter[yLabel]); r = 4
-        //                 fill = groupColorMap.get(scatter[groupLabel])
-        //                 behavior:tooltip {
-        //                     content = Object.keys(scatter).reduce(((acc, cur) => acc + `${cur}: ${scatter[cur]}<br>` ), "") 
-        //                 }
-        //             }
-        //         } @elsif (scatter[groupLabel] == groups[0]) {
-        //             Circle.centered{ 
-        //                 key = `scatter-${i}`; x = @scaled-x(scatter[xLabel]); y = @scaled-y(scatter[yLabel]); r = 4
-        //                 fill = groupColorMap.get(scatter.cluster)
-        //                 behavior:tooltip {
-        //                     content = Object.keys(scatter).reduce(((acc, cur) => acc + `${cur}: ${scatter[cur]}<br>` ), "") 
-        //                 }
-        //             }
-        //         } @else {
-        //             Rect.centered {
-        //                 key = `scatter-${i}`
-        //                 x = @scaled-x(scatter[xLabel]); y = @scaled-y(scatter[yLabel]); fill = groupColorMap.get(scatter.cluster)
-        //                 width = 8; height = 8
-        //                 behavior:tooltip {
-        //                     content = Object.keys(scatter).reduce(((acc, cur) => acc + `${cur}: ${scatter[cur]}<br>` ), "") 
-        //                 }
-        //             }
-        //         }
-                
-        //     }
+        AxisBackground {
+            dashArray = "1, 2"
+        }
+        AxisBackground {
+            orientation = "vertical"
+            dashArray = "1, 2"
+        }
 
-        //     @if !!scatterVectorData {
-        //         @for (vector, i) in scatterVectorData {
-        //             Component {
-        //                 Arrow {
-        //                     key =`vector-${i}` 
-        //                     x = @scaled-x(0); y = @scaled-y(0)
-        //                     x2 = @scaled-x(vector[xLabel]); y2= @scaled-y(vector[yLabel])
-        //                 }
-        //             }
-        //             Component {
-        //                 x = @scaled-x(vector[xLabel] * 1.1) 
-        //                 y = @scaled-y(vector[yLabel] * 1.1 ) 
-                    
-        //                 @if (vector[xLabel] > 0) {
-        //                     Text {
-        //                         text = vector[vectorLabel]
-        //                         anchor = @anchor("l","m")
-        //                     }
-        //                 } @else {
-        //                     Text {
-        //                         text = vector[vectorLabel]
-        //                         anchor = @anchor("r","m")
-        //                     }
-        //                 }
-                        
-        //             }
-        //         }
-        //     }
+        Axis("bottom") { y = 100% }
+        Axis("left") {}
 
-        //     @if !!scatterClusterData {
-        //         @for oval in ovalData {
-        //             Component {
-        //                 x = @scaled-x(oval.center.x) - oval.dx; y = @scaled-y(oval.center.y) - oval.dy
-        //                 Path {
-        //                     d = oval.path
-        //                     strokeWidth = 2
-        //                     fill = "none"
-        //                     stroke = groupColorMap.get(oval.cluster)
-        //                 }
-        //                 Path {
-        //                     d = oval.xAxisPath; dashArray = "1, 2"
-        //                     stroke = groupColorMap.get(oval.cluster)
-        //                 }
-        //                 // Path {
-        //                 //     d = oval.yAxisPath; dashArray = "1, 2"
-        //                 //     stroke = groupColorMap.get(oval.cluster)
-        //                 // }
-        //             }
-        //         }
-        //     }
-			
-		// 	Axis("bottom") { y = 100% }
-		// 	Axis("left") {}
+        Component {
+            y = 50% 
+            Text(yLabel) {
+                x = -25
+                rotation = @rotate(-90)
+                anchor = @anchor("m", "c")
+                fontSize = 15
+            }    
+        }
 
-        //     Component {
-        //         y = 50% 
-        //         Text(yLabel) {
-        //             x = -15
-        //             rotation = @rotate(-90)
-        //             anchor = @anchor("m", "c")
-        //             fontSize = 15
-        //         }    
-        //     }
-
-        //     Component {
-        //         x = 50%; y = 100% 
-        //         Text(xLabel) {
-        //             y = 15
-        //             anchor = @anchor("m", "c")
-        //             fontSize = 15
-        //         }    
-        //     }
+        Component {
+            x = 50%; y = 100% 
+            Text(xLabel) {
+                y = 15
+                anchor = @anchor("m", "c")
+                fontSize = 15
+            }    
+        }
             
-        //     Component {
-        //         x = 20; y = 20
-        //         height = 50; width = 70
-        //         Rect.full {
-        //             stroke = @color("line")
-        //             fill = "white"
-        //         }
-        //         Rows {
-        //             @for (group, i) in groups {
-        //                 Component {
-        //                     height = 25
-        //                     @if scatterClusterData {
-        //                        @if i === 0 {
-        //                             Circle.centered{
-        //                                 x = 8; y = 12.5; r = 4; fill = colors[0]
-        //                             }
-        //                        } @else {
-        //                            Rect.centered {
-        //                                x = 8; y = 12.5; height = 8; width = 8; fill = colors[0]
-        //                            }
-        //                        }
-        //                     } @else {
-        //                         Circle.centered{
-        //                                 x = 8; y = 12.5; r = 4; fill = colors[i]
-        //                         }
-        //                     }
-        //                     Text(group) {
-        //                         x = 15; y = 12.5; anchor = @anchor("l","m")
-        //                     }
-        //                 }
-        //             }
-        //         }  
-        //     }
-
-        //     @if scatterClusterData {
-        //         Component {
-        //             x = 20; y = 80
-        //             height = 50; width = 70
-        //             Rect.full {
-        //                 stroke = @color("line")
-        //                 fill = "white"
-        //             }
-        //             Rows {
-        //                 @for (cluster, i) in clusters {
-        //                     Component {
-        //                         height = 25
-
-        //                         Circle.centered{
-        //                                 x = 8; y = 12.5; r = 4; fill = colors[i]
-        //                         }
-                                
-        //                         Text(cluster) {
-        //                             x = 15; y = 12.5; anchor = @anchor("l","m")
-        //                         }
-        //                     }
-        //                 }
-        //             }
+        @for (scatter, i) in parsedScatterData {
+            @if (!scatter.cluster) {
+                @let scatterColor = groups ? colorMap.get(scatter.group) : colors[0]
+                @let scatterProps = {
+                    key : "scatter" + i,
+                    r : config.scatterSize/2,
+                    fill : (config.hollow ? "none" : scatterColor),
+                    strokeWidth : 2,
+                    stroke : scatterColor,
+                }
+                Component {
                     
-        //         }
-        //     }
-		// }
-	}
+                    Circle.centered{ 
+                        x = @scaled-x(scatter[xLabel]); y = @scaled-y(scatter[yLabel])
+                        // key = "scatter" + i; x = @scaled-x(scatter[xLabel]); y = @scaled-y(scatter[yLabel])
+                        // width = prop.scatterSize; height = prop.scatterSize
+                        // fill = colorMap.get(scatter.group)
+                        // strokeWidth = 2
+                        @props scatterProps
+                        behavior:tooltip {
+                            content = generateScatterContent(scatter)
+                        }
+                    }
+                }
+            } @else {
+                @let shape = shapeMap.get(scatter.group)
+                @let scatterProps = {
+                    key : "scatter" + i,
+                    width : config.scatterSize,
+                    height : config.scatterSize,
+                    fill : (config.hollow ? "none" : colorMap.get(scatter.cluster)),
+                    strokeWidth : 2,
+                    stroke : colorMap.get(scatter.cluster),
+                    r: config.scatterSize/2
+                }
+                Component(shape) {
+                    key = "scatter"+i                    
+                    x = @scaled-x(scatter[xLabel]); y = @scaled-y(scatter[yLabel])
+                    @props scatterProps
+                    anchor = @anchor("m", "c")
+                    behavior:tooltip {
+                        content = generateScatterContent(scatter)
+                    }
+                }
+                Line {
+                    x1 = @scaled-x(parsedClusterData[scatter.cluster].center.x)
+                    y1 = @scaled-y(parsedClusterData[scatter.cluster].center.y)
+                    x2 = @scaled-x(scatter[xLabel]); y2 = @scaled-y(scatter[yLabel])
+                    stroke = colorMap.get(scatter.cluster); strokeWidth = 1
+                }
+            }
+            
+        }
+    
+        @if !!scatterVectorData {
+            @for (vector, i) in scatterVectorData {
+                Component {
+                    Arrow {
+                        key ="vector"+i
+                        x = @scaled-x(0); y = @scaled-y(0)
+                        x2 = @scaled-x(vector[xLabel]); y2= @scaled-y(vector[yLabel])
+                    }
+                }
+                Component {
+                    x = @scaled-x(vector[xLabel] * 1.1) 
+                    y = @scaled-y(vector[yLabel] * 1.1 ) 
+                
+                    @if (vector[xLabel] > 0) {
+                        Text {
+                            text = vector[vectorLabel]
+                            anchor = @anchor("l","m")
+                        }
+                    } @else {
+                        Text {
+                            text = vector[vectorLabel]
+                            anchor = @anchor("r","m")
+                        }
+                    }
+                    
+                }
+            }
+        }
+    
+        @if !!parsedClusterData {
+            @for (k, i) in Object.keys(parsedClusterData) {
+                Component {
+                    x = @scaled-x(parsedClusterData[k].center.x) - parsedClusterData[k].ellipseData.dx
+                    y = @scaled-y(parsedClusterData[k].center.y) - parsedClusterData[k].ellipseData.dy
+                    Path {
+                        d = parsedClusterData[k].ellipseData.ellipsePath
+                        strokeWidth = 2
+                        fill = "none"
+                            stroke = colorMap.get(k)
+                    }
+                    Path {
+                        d = parsedClusterData[k].ellipseData.xAxisPath; dashArray = "1, 2"
+                        stroke = colorMap.get(k)
+                    }
+                    Path {
+                        d = parsedClusterData[k].ellipseData.yAxisPath; dashArray = "1, 2"
+                        stroke = colorMap.get(k)
+                    }
+                }
+            }
+        }
+        @if groups {
+            Component {
+                x = legend1Pos.x-25; y = legend1Pos.y -35
+                height = 50; width = 70
+                key = "legend1"
+                on:mousedown = (ev, el) => dragStart(ev, el)
+                on:mouseup = (ev, el) => dragEnd(ev, el)
+                Rect.full {
+                    stroke = @color("line")
+                    fill = "white"
+                }
+                Rows {
+                    @for (group, i) in groups {
+                        Component {
+                            height = 25
+                            @if parsedClusterData {
+                                @if i === 0 {
+                                    Circle.centered{
+                                        x = 8; y = 12.5; r = 4; fill = "grey"
+                                    }
+                                } @else {
+                                    Rect.centered {
+                                        x = 8; y = 12.5; height = 8; width = 8; fill = "grey"
+                                    }
+                                }
+                                } @else {
+                                    Circle.centered{
+                                            x = 8; y = 12.5; r = 4; fill = colors[i]
+                                    }
+                                }
+                            Text(group) {
+                                x = 15; y = 12.5; anchor = @anchor("l","m")
+                                style:user-select = "none"
+                            }
+                        }
+                    }
+                }  
+            }
+        }
+    
+        @if parsedClusterData {
+            Component {
+                key = "legend2"
+                x = legend2Pos.x - 25; y = legend2Pos.y -35
+                on:mousedown = (ev, el) => dragStart(ev, el)
+                on:mouseup = (ev, el) => dragEnd(ev, el)
+                height = 50; width = 70
+                Rect.full {
+                    stroke = @color("line")
+                    fill = "white"
+                }
+                Rows {
+                    @for (cluster, i) in clusters {
+                        Component {
+                            height = 25
+                            Circle.centered{
+                                    x = 8; y = 12.5; r = 4; fill = colors[i]
+                            }
+                            Text("cluster"+cluster) {
+                                x = 15; y = 12.5; anchor = @anchor("l","m")
+                                style:user-select = "none"
+                            }
+                        }
+                    }
+                }
+                
+            }
+        }
+    }
 }

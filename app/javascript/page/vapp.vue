@@ -3,9 +3,7 @@
         <div id="tool-bar">
             <div v-if= "isAnalysis">
                 <b-button @click="downloadSVG" class="tool-bar-el"><i class="fa fa-download"></i>Download Chart</b-button>
-                
-                <!--<b-button @click="useDemoFiles">Demo Files</b-button>-->
-                
+                <b-button @click="useDemoFiles" class="tool-bar-el">Use Demo</b-button>
                 <dropdown-select
                     right
                     v-model="chosenOutput"
@@ -55,10 +53,6 @@
     Vue.component("section-files", SectionFiles)
     Vue.component("color-picker", ColorPicker)
     Vue.component("dropdown-select", DropDownSelect)
-    // @Component({
-    //     name: "vapp",
-    //     components: { ColorPicker, SectionFiles },
-    // });
 
     export default {
         data() {
@@ -92,13 +86,12 @@
                             location.reload();
                     })
             },
+            useDemo() {
+                console.log("useD")
+            },
             toggleEditor() {
                 this.showEditor=!this.showEditor;
             },
-            // allTaskOutputs() {
-            //     const result = [...this.defaultOutput]
-            //     return result;
-            // }
         },        
         created() {
             event.rpcRegisterReceiver("getVue", () => this);
