@@ -35,9 +35,10 @@ export interface ScatterClusterDatum {
 export class ComplexScatterplot extends Component<ComponentOption> {
 
     public dataChanged: boolean = true;
+    public mainDict;
     public config: any;
     public colors: string;
-    
+    public ranks: any[];
     public scatterColumns: any[];
     public scatterData: any[];
     public scatterVectorData: any[];
@@ -48,6 +49,7 @@ export class ComplexScatterplot extends Component<ComponentOption> {
 
     private parsedScatterData: any[];
     private parsedClusterData: Record<string, ScatterClusterDatum>;
+    private rankLabel;
     private xLabel;
     private categoryRange;
     private yLabel;
@@ -79,6 +81,8 @@ export class ComplexScatterplot extends Component<ComponentOption> {
         }
 
         if (this.dataChanged) {
+            this.rankLabel = this.ranks[this.config.rankIndex].text;
+            this.scatterData = this.mainDict[this.rankLabel];
             this.xLabel = this.scatterColumns[this.config.xAxisIndex];
             this.yLabel = this.scatterColumns[this.config.yAxisIndex];
             this.parsedScatterData = this.scatterData.map(d => {
@@ -120,7 +124,7 @@ export class ComplexScatterplot extends Component<ComponentOption> {
             }
             this.dataChanged = false;
         }
-        
+        console.log(this.scatterData);
     }
 
     protected rangeIsValid(range:Array<Number>) :boolean {

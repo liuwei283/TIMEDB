@@ -350,13 +350,16 @@ class SubmitController < ApplicationController
       @viz_data_source = VizDataSource.find_by(data_type:dataType)
       if @viz_data_source.allow_multiple
         files_to_do.each do |of1|
-          if info['outputFileName'].include? of1['name']
-            file_paths[dataType] = [] if file_paths[dataType].blank?
-            file_paths[dataType] << {id: 0, 
-                                    url: File.join('/data', of1['path'], of1['name']), 
-                                    is_demo: true}
-            files_to_do.delete(of1)
+          info['outputFileName'].each do |fName|
+            if matchPattern(of1['name'], fName)
+              file_paths[dataType] = [] if file_paths[dataType].blank?
+              file_paths[dataType] << {id: 0, 
+                                      url: File.join('/data', of1['path'], of1['name']), 
+                                      is_demo: true}
+              files_to_do.delete(of1)
+            end
           end
+          
         end
       else
         files_to_do.each do |of1|
@@ -405,5 +408,17 @@ class SubmitController < ApplicationController
   def decode(id)
     hashids = Hashids.new("this is my salt", 16)
     hashids.decode(id)[0]
+  end
+
+  def matchPattern(name, pattern)
+    if pattern.include? "*"
+      p = pattern.split "*"
+      p.each do |x|
+        return false if !name.include? x
+      end
+      return true
+    else 
+      return pattern == name
+    end
   end
 end

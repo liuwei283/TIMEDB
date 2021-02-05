@@ -8,6 +8,7 @@ import {getGroups, groupBy}from "utils/array"
 import {register} from "page/visualizers";
 
 import * as _ from "lodash";
+import Vue from "vue"
 
 const MODULE_NAME = 'scatterplot'
 
@@ -23,6 +24,7 @@ function init() {
             config: {
                 plotHeight: 500,
                 plotWidth: 500,
+                rankIndex: 0,
                 xAxisIndex:1,
                 yAxisIndex:2,
                 computeOval: false,
@@ -38,6 +40,7 @@ function init() {
             scatterData: {
                 fileKey: "scatterData",
                 type: "tsv",
+                multiple: true,
                 dsvRowParser (row, index,columns) {
                     row.sampleId = row[columns[0]];
                     delete row[columns[0]];
@@ -45,13 +48,20 @@ function init() {
                         row[columns[i]] = parseFloat(row[columns[i]]);
                     return row;
                 },
-                loaded(data) {
-                    this.data.scatterColumns = data.columns;
+                loaded(d) {
+                    this.data.ranks = d.map((x, i) => ({value: i, text: x.columns[0]}));
+                    const mainDict = {};
+                    d.forEach(data => {
+                        mainDict[data.columns[0]] = data;
+                    })
+                    this.data.scatterColumns = d[0].columns;
                     this.data.scatterColumns[0] = "sampleId";
                     this.data.availableAxises = [];
-                    data.columns.forEach((d,i) => {
-                        if(i>0) this.data.availableAxises.push({value: i, text: d});
-                    })
+                    this.data.scatterColumns.forEach((x,i) => {
+                        if(i>0) this.data.availableAxises.push({value: i, text: x});
+                    });
+                    this.data.mainDict = mainDict;
+                    return mainDict[this.data.ranks[0].text];
                 }
             },
             scatterGroupData: {
@@ -64,7 +74,7 @@ function init() {
                     this.data.groups = getGroups(data, data.columns[1]);
                     this.data.scatterData = this.data.scatterData.map(d => {
                         data.forEach(group => {
-                            if(group[data.columns[0]] === d[this.data.scatterData.columns[0]]) 
+                            if(group[data.columns[0]] === d.sampleId) 
                             d.group = group[data.columns[1]] ;
                         })
                         

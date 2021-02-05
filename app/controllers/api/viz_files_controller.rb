@@ -67,6 +67,7 @@ class Api::VizFilesController < ApplicationController
         
         files_info = @analysis.files_info
         all_viz_data = @analysis.visualizer.viz_data_sources.map{|d| d.data_type}
+        
         if @analysis_user_datum.use_demo_file
             render json: {}.tap { |x|
                 all_viz_data.each do |dataType| 
@@ -100,10 +101,21 @@ class Api::VizFilesController < ApplicationController
             }
             return
         end
+        all_viz_data = @analysis.visualizer.viz_data_sources
         render json: {}.tap { |x|
-            all_viz_data.each do |dataType, info|
+            all_viz_data.each do |viz_data|
+                dataType = viz_data.data_type
                 if @analysis_user_datum.chosen[dataType].blank? 
                     x[dataType] = nil
+                elsif viz_data.allow_multiple
+                    x[dataType] = [] 
+                    all_files = VizFileObject.where("user_id = ? AND analysis_id = ?", @analysis_user_datum.user.id,
+                        @analysis_user_datum.analysis.id)
+                    all_files.each do |vFile| 
+                        x[dataType].push({ id: vFile.id,
+                            url: vFile.file.url 
+                        })
+                    end
                 else
                     fileId = @analysis_user_datum.chosen[dataType]
                     x[dataType] = { id: fileId,
