@@ -6,6 +6,7 @@ import { registerEditorConfig } from "utils/editor";
 
 import {getGroups, groupBy}from "utils/array"
 import {register} from "page/visualizers";
+import {rankDict} from "utils/bio-info.ts";
 
 import * as _ from "lodash";
 
@@ -48,11 +49,15 @@ function init() {
                     return row;
                 },
                 loaded(d) {
-                    this.data.ranks = d.map((x, i) => ({value: i, text: x.columns[0]}));
+                    const rankKeys = Object.keys(rankDict);
+                    this.data.ranks = d.map(x => x.columns[0])
+                                    .sort((a, b) => rankKeys.indexOf(a) - rankKeys.indexOf(b))
+                                    .map((x, i) =>  ({value: i, text: rankDict[x]}))
+                    // this.data.ranks = d.map((x, i) => ({value: i, text: x.columns[0]}));
                     this.data.samples = d[0].map(x => x["sampleId"]);
                     const mainDict = {};
                     d.forEach(data => {
-                        mainDict[data.columns[0]] = data;
+                        mainDict[rankDict[data.columns[0]]] = data;
                     });
                     const selectedDataCols = d[0].columns;
                     this.data.availableAxises = selectedDataCols.filter((_, i) => i > 0)
