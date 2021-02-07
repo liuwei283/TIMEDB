@@ -222,8 +222,10 @@ class SubmitController < ApplicationController
       inputs = Array.new
       params = Array.new
 
+      
       # store selected file to user's data folder
       app_selected&.each do |k, v|
+        next unless !v.blank?
         file_name = v.split("/")[1]
         ds_name = v.split("/")[0]
         file_path = File.join(user_dir, ds_name, file_name)
