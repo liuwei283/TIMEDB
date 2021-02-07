@@ -76,14 +76,17 @@ function init() {
                     if (!data) return;
                     console.log(data);
                     this.data.groups = getGroups(data, data.columns[1]);
-                    data.forEach((group, i, arr) => 
-                        this.data.sampleInfo.forEach(s => {
+                    
+                    this.data.sampleInfo.forEach(s => {
+                        data.forEach((group, i, arr) => {
+                            console.log(`-${group[data.columns[0]]}-${s["sampleId"]}-`);
                             if(group[data.columns[0]] === s["sampleId"]){
+                                console.log(`-${group[data.columns[0]]}-${s["sampleId"]}-`);
                                 s.group = group[data.columns[1]];
                                 arr.slice(i, 1);
                             }
                         })
-                    );
+                    });
                     return null;
                 }
             },
