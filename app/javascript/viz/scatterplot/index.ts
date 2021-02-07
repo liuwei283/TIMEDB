@@ -8,8 +8,6 @@ import {getGroups, groupBy}from "utils/array"
 import {register} from "page/visualizers";
 
 import * as _ from "lodash";
-import Vue from "vue"
-import { convertCompilerOptionsFromJson } from "typescript";
 
 const MODULE_NAME = 'scatterplot'
 
@@ -25,7 +23,7 @@ function init() {
             config: {
                 plotHeight: 500,
                 plotWidth: 500,
-                rankIndex: 2,
+                rankIndex: 1,
                 xAxisIndex:0,
                 yAxisIndex:1,
                 computeOval: false,
