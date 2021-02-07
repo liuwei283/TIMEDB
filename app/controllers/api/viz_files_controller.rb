@@ -186,8 +186,15 @@ class Api::VizFilesController < ApplicationController
         file_ids = params[:file_ids]
         VizFileObject.find(file_ids).each do |file|
           continue unless file.analysis == @analysis
-          # TODO: check file sets
+          dataType = file.viz_data_source.data_type
+          chosen_json = @analysis_user_datum.chosen
+          if (chosen_json[dataType] == file.id)
+            chosen_json[dataType] = nil
+            @analysis_user_datum.chosen = chosen_json
+            @analysis_user_datum.save!
+          end
           file.destroy
+        
         end
         # check if any analysis has selected deleted files.
         # if so, set them to nil.
