@@ -56,14 +56,13 @@ function init() {
                     d.forEach(data => {
                         mainDict[data.columns[0]] = data;
                     });
-                    
                     const selectedDataCols = d[0].columns;
                     this.data.availableAxises = selectedDataCols.filter((_, i) => i > 0)
                                 .map((x,i) => ({"value": i, "text": x}));
                     this.data.mainDict = mainDict;
                     this.data.rankLabel = this.data.ranks[0].text;
-                    this.data.sampleInfo = this.data.samples
-                                    .map(x => ({"sampleId": x}));
+                    this.data.sampleInfoDict = {};
+                    this.data.samples.forEach(k =>this.data.sampleInfoDict[k] = {});
                     return mainDict[this.data.rankLabel];
                 }
             },
@@ -77,12 +76,10 @@ function init() {
                     console.log(data);
                     this.data.groups = getGroups(data, data.columns[1]);
                     
-                    this.data.sampleInfo.forEach(s => {
+                    this.data.samples.forEach(s => {
                         data.forEach((group, i, arr) => {
-                            console.log(`-${group[data.columns[0]]}-${s["sampleId"]}-`);
-                            if(group[data.columns[0]] === s["sampleId"]){
-                                console.log(`-${group[data.columns[0]]}-${s["sampleId"]}-`);
-                                s.group = group[data.columns[1]];
+                            if(group[data.columns[0]] === s){
+                                this.data.sampleInfoDict[s].group = group[data.columns[1]];
                                 arr.slice(i, 1);
                             }
                         })
@@ -121,9 +118,9 @@ function init() {
                     if (!data) return;
                     this.data.clusters = Object.keys(_.groupBy(data, "cluster"));
                     data.forEach((cluster, i, arr) => 
-                        this.data.sampleInfo.forEach(s => {
-                            if(cluster["sampleId"] === s["sampleId"]){
-                                s.cluster = cluster.cluster;
+                        this.data.samples.forEach(s => {
+                            if(cluster["sampleId"] === s){
+                                this.data.sampleInfoDict[s].cluster = cluster.cluster;
                                 arr.slice(i, 1);
                             }
                         })
