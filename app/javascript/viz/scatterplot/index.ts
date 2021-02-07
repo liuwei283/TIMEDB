@@ -74,6 +74,7 @@ function init() {
                 dependsOn: ["scatterData"],
                 loaded(data) {
                     if (!data) return;
+                    console.log(data);
                     this.data.groups = getGroups(data, data.columns[1]);
                     data.forEach((group, i, arr) => 
                         this.data.sampleInfo.forEach(s => {
