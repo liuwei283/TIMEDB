@@ -109,8 +109,10 @@ class Api::VizFilesController < ApplicationController
                     x[dataType] = nil
                 elsif viz_data.allow_multiple
                     x[dataType] = [] 
-                    all_files = VizFileObject.where("user_id = ? AND analysis_id = ?", @analysis_user_datum.user.id,
-                        @analysis_user_datum.analysis.id)
+                    all_files = VizFileObject.where("user_id = ? AND analysis_id = ? AND viz_data_source_id = ?", 
+                        @analysis_user_datum.user.id,
+                        @analysis_user_datum.analysis.id,
+                        viz_data.id)
                     all_files.each do |vFile| 
                         x[dataType].push({ id: vFile.id,
                             url: vFile.file.url 
