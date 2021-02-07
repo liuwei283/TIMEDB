@@ -70,7 +70,6 @@ Component {
                     }
                 }
             } @else {
-                @let shape = shapeMap.get(scatter.group)
                 @let scatterProps = {
                     key : "scatter" + i,
                     width : config.scatterSize,
@@ -80,6 +79,8 @@ Component {
                     stroke : colorMap.get(scatter.cluster),
                     r: config.scatterSize/2
                 }
+                @let shape = groups ? shapeMap.get(scatter.group) : "Circle"
+                    
                 Component(shape) {
                     key = "scatter"+i                    
                     x = @scaled-x(scatter[xLabel]); y = @scaled-y(scatter[yLabel])

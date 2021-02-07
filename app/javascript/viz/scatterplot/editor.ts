@@ -43,6 +43,7 @@ export function editorConfig(v): EditorDef {
                                         current: v.data.config.rankIndex.toString(),
                                         callback(d) {
                                             v.data.config.rankIndex = parseInt(d);
+                                            v.root.rankChanged = true;
                                             v.forceRedraw = true;
                                             run(v);
                                         },
@@ -58,6 +59,7 @@ export function editorConfig(v): EditorDef {
                             type: "list",
                             items: [
                                 {
+                                    ref: "xAxis",
                                     title: "X-Axis",
                                     type: "select",
                                     options: v.data.availableAxises,
@@ -114,6 +116,7 @@ export function editorConfig(v): EditorDef {
                             type: "list",
                             items: [
                                 {
+                                    ref: "yAxis",
                                     title: "Y-Axis",
                                     type: "select",
                                     options: v.data.availableAxises,
