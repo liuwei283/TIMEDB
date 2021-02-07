@@ -39,9 +39,10 @@ class SubmitController < ApplicationController
     parsed_jobs = []
     @tasks.each do |t|
       # submit task
-      if t.status == 'submitted'
+      if t.status == 'running' || t.status = "submitted"
         client = LocalApi::Client.new
         result = client.task_info(UID, t.tid, 'app')
+        Rails.logger.debug "===>#{result}"
         if result['status'] == 'success'
           t.status = result['message']['status']
           t.save!
@@ -116,8 +117,9 @@ class SubmitController < ApplicationController
          ]
       }
    }
+   return_json_hash = {"status":"success", "message":{"status":"finished", "inputs":[{"id":1018, "name":"user_abd", "desc":"abd from metaphlan2", "files":[{      "name":"user_abd.tsv", "path":"/data"}]}, {"id":1044, "name":"group_info", "desc":"group information", "files":[{"name":"anno.tsv", "path":"/data"}]}], "outputs":[{"id":862, "name":"PCOA_result", "desc":"", "files":[{      "name":"shell", "path":"/project/platform_task_test/task_20210207154208"}, {"name":"tmp.csv", "path":"/project/platform_task_test/task_20210207154208"}, {"name":"k_PCOA.coordinate.tsv", "path":"/project/platform_task_test/ta      sk_20210207154208"}, {"name":"p_PCOA.coordinate.tsv", "path":"/project/platform_task_test/task_20210207154208"}, {"name":"c_PCOA.coordinate.tsv", "path":"/project/platform_task_test/task_20210207154208"}, {"name":"o_PCOA.coor      dinate.tsv", "path":"/project/platform_task_test/task_20210207154208"}, {"name":"f_PCOA.coordinate.tsv", "path":"/project/platform_task_test/task_20210207154208"}, {"name":"g_PCOA.coordinate.tsv", "path":"/project/platform_ta      sk_test/task_20210207154208"}, {"name":"s_PCOA.coordinate.tsv", "path":"/project/platform_task_test/task_20210207154208"}, {"name":"t_PCOA.coordinate.tsv", "path":"/project/platform_task_test/task_20210207154208"}, {"name":"group_info.tsv", "path":"/project/platform_task_test/task_20210207154208"}]}], "params":[]}}
     # @task = Task.find_by! id:params[:job_id], user_id:session[:user_id]
-    @task = Task.find_by! id:4, user_id:52
+    @task = Task.find_by! id:6, user_id:57
 
     # Rails.logger.debug @task
     result = JSON.parse(return_json_hash.to_json)

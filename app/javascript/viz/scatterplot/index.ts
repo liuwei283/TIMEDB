@@ -60,6 +60,7 @@ function init() {
                     const selectedDataCols = d[0].columns;
                     this.data.availableAxises = selectedDataCols.filter((_, i) => i > 0)
                                 .map((x,i) => ({"value": i, "text": x}));
+                    console.log(this.data.availableAxises.map(x => x.text));                                
                     this.data.mainDict = mainDict;
                     this.data.rankLabel = this.data.ranks[0].text;
                     this.data.sampleInfo = this.data.samples
