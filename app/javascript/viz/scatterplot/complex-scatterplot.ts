@@ -34,7 +34,7 @@ export class ComplexScatterplot extends Component<ComponentOption> {
 
 
     public mainDict: Record<string, any>;
-    public sampleInfo: any[];
+    public sampleInfoDict: any;
 
     private parsedScatterData: any[];
     private parsedClusterData: Record<string, ScatterClusterDatum>;
@@ -87,8 +87,8 @@ export class ComplexScatterplot extends Component<ComponentOption> {
             this.yLabel = this.availableAxises[this.config.yAxisIndex].text;
             this.parsedScatterData = this.scatterData.map((d, i) => {
                 const datum = {sampleId: d.sampleId, 
-                    group: this.sampleInfo[i].group,
-                    cluster: this.sampleInfo[i].cluster};
+                    group: this.sampleInfoDict[d.sampleId].group,
+                    cluster: this.sampleInfoDict[d.sampleId].cluster};
                 datum[this.xLabel] = d[this.xLabel];
                 datum[this.yLabel] = d[this.yLabel];
                 return datum;
