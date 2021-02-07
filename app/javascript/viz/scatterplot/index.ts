@@ -25,7 +25,7 @@ function init() {
             config: {
                 plotHeight: 500,
                 plotWidth: 500,
-                rankIndex: 0,
+                rankIndex: 2,
                 xAxisIndex:0,
                 yAxisIndex:1,
                 computeOval: false,
@@ -60,7 +60,6 @@ function init() {
                     const selectedDataCols = d[0].columns;
                     this.data.availableAxises = selectedDataCols.filter((_, i) => i > 0)
                                 .map((x,i) => ({"value": i, "text": x}));
-                    console.log(this.data.availableAxises.map(x => x.text));                                
                     this.data.mainDict = mainDict;
                     this.data.rankLabel = this.data.ranks[0].text;
                     this.data.sampleInfo = this.data.samples
