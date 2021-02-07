@@ -34,7 +34,7 @@
             li.list-group-item.justify-content-between.d-flex data-id="#{a.id}"
               div
                 = icon 'fa', 'bars', class: 'drag-handle'
-                = a.name
+                =  "#{a.name} #{"(#{a.mid})" if !a.mid.blank?}"
                 /span.text-muted.ml-2 = "(#{a.js_module_name})"
               div
                 = link_to edit_admin_analysis_category_analysis_path(c, a), class: 'btn btn-sm btn-secondary mr-2' do
