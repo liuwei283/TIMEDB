@@ -2,24 +2,7 @@ import Oviz from "crux";
 import { Component, ComponentOption } from "crux/dist/element";
 import { findBoundsForValues } from "utils/maths";
 import template from "./template.bvt";
-
-// export interface ComplexScatterplotOption extends ComponentOption{
-//     plotSize: {w:number, h:number},
-//     colors: string[],
-//     valueRange: Array<number>,
-//     categoryRange: Array<number>,
-//     scatterData: any[],
-//     scatterColumns: string[],
-//     vectorData: any[],
-//     vectorLabel?: string,
-//     clusters: string[],
-//     groups: string[],
-//     xAxisIndex: number,
-//     yAxisIndex: number,
-//     scatterSize: number,
-//     hollow: boolean,
-//     showErrorEllipse: boolean,
-// }
+import { editorRef } from "./editor";
 export interface ErrorEllipseDatum {
     dx: number,
     dy: number,
@@ -35,19 +18,27 @@ export interface ScatterClusterDatum {
 export class ComplexScatterplot extends Component<ComponentOption> {
 
     public dataChanged: boolean = true;
+    public rankChanged: boolean;
+    public axisChanged: boolean;
     public config: any;
     public colors: string;
+
+    public ranks: Array<{ value: string; text: string }>;
+    public availableAxises: Array<{ value: string; text: string }>;
     
-    public scatterColumns: any[];
-    public scatterData: any[];
+    public scatterData: any;
     public scatterVectorData: any[];
     public vectorLabel: string;
     public groups: string[];
     public clusters: string[];
-    public clusterData: any[];
+
+
+    public mainDict: Record<string, any>;
+    public sampleInfo: any[];
 
     private parsedScatterData: any[];
     private parsedClusterData: Record<string, ScatterClusterDatum>;
+    private rankLabel;
     private xLabel;
     private categoryRange;
     private yLabel;
@@ -78,11 +69,26 @@ export class ComplexScatterplot extends Component<ComponentOption> {
             }
         }
 
-        if (this.dataChanged) {
-            this.xLabel = this.scatterColumns[this.config.xAxisIndex];
-            this.yLabel = this.scatterColumns[this.config.yAxisIndex];
-            this.parsedScatterData = this.scatterData.map(d => {
-                const datum = {sampleId: d.sampleId, group: d.group, cluster: d.cluster};
+        if (this.rankChanged) {
+            this.rankLabel = this.ranks[this.config.rankIndex].text;
+            this.scatterData = this.mainDict[this.rankLabel];
+            this.availableAxises = this.scatterData.columns.filter((_, i) => i > 0)
+                                .map((x,i) => ({"value": i, "text": x}));
+            this.config.xAxisIndex = editorRef.xAxis.value = 0;
+            this.config.yAxisIndex = editorRef.yAxis.value = 1;
+            
+            editorRef.xAxis.config.options = editorRef.yAxis.config.options = this.availableAxises;
+            
+            this.rankChanged = false;
+        }
+
+        if (this._firstRender || this.dataChanged) {
+            this.xLabel = this.availableAxises[this.config.xAxisIndex].text;
+            this.yLabel = this.availableAxises[this.config.yAxisIndex].text;
+            this.parsedScatterData = this.scatterData.map((d, i) => {
+                const datum = {sampleId: d.sampleId, 
+                    group: this.sampleInfo[i].group,
+                    cluster: this.sampleInfo[i].cluster};
                 datum[this.xLabel] = d[this.xLabel];
                 datum[this.yLabel] = d[this.yLabel];
                 return datum;
@@ -106,7 +112,7 @@ export class ComplexScatterplot extends Component<ComponentOption> {
             if (this.clusters) {
                 const parsedData = {};
                 this.clusters.forEach(key => {
-                    const initialData = this.parsedScatterData.filter(d => d.cluster === key);
+                    const initialData = this.parsedScatterData.filter(x => x.cluster === key);
                     const clusterDatum = this.computeErrorEllipse(initialData, this.xLabel, this.yLabel,
                         svgRatioX, svgRatioY);
                         parsedData[key] = clusterDatum;
@@ -120,7 +126,6 @@ export class ComplexScatterplot extends Component<ComponentOption> {
             }
             this.dataChanged = false;
         }
-        
     }
 
     protected rangeIsValid(range:Array<Number>) :boolean {

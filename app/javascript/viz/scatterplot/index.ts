@@ -1,13 +1,15 @@
 import Oviz from "crux";
 import template from "./template.bvt"
 import {ComplexScatterplot} from "./complex-scatterplot"
-import { editorConfig } from "./editor";
+import { editorRef, editorConfig } from "./editor";
 import { registerEditorConfig } from "utils/editor";
 
 import {getGroups, groupBy}from "utils/array"
 import {register} from "page/visualizers";
 
 import * as _ from "lodash";
+import Vue from "vue"
+import { convertCompilerOptionsFromJson } from "typescript";
 
 const MODULE_NAME = 'scatterplot'
 
@@ -23,8 +25,9 @@ function init() {
             config: {
                 plotHeight: 500,
                 plotWidth: 500,
-                xAxisIndex:1,
-                yAxisIndex:2,
+                rankIndex: 0,
+                xAxisIndex:0,
+                yAxisIndex:1,
                 computeOval: false,
                 categoryRange: [null, null],
                 valueRange: [null, null],
@@ -38,20 +41,30 @@ function init() {
             scatterData: {
                 fileKey: "scatterData",
                 type: "tsv",
-                dsvRowParser (row, index,columns) {
-                    row.sampleId = row[columns[0]];
+                multiple: true,
+                dsvRowParser (row, _, columns) {
+                    row["sampleId"] = row[columns[0]];
                     delete row[columns[0]];
                     for (let i = 1; i< columns.length; i++)
                         row[columns[i]] = parseFloat(row[columns[i]]);
                     return row;
                 },
-                loaded(data) {
-                    this.data.scatterColumns = data.columns;
-                    this.data.scatterColumns[0] = "sampleId";
-                    this.data.availableAxises = [];
-                    data.columns.forEach((d,i) => {
-                        if(i>0) this.data.availableAxises.push({value: i, text: d});
-                    })
+                loaded(d) {
+                    this.data.ranks = d.map((x, i) => ({value: i, text: x.columns[0]}));
+                    this.data.samples = d[0].map(x => x["sampleId"]);
+                    const mainDict = {};
+                    d.forEach(data => {
+                        mainDict[data.columns[0]] = data;
+                    });
+                    
+                    const selectedDataCols = d[0].columns;
+                    this.data.availableAxises = selectedDataCols.filter((_, i) => i > 0)
+                                .map((x,i) => ({"value": i, "text": x}));
+                    this.data.mainDict = mainDict;
+                    this.data.rankLabel = this.data.ranks[0].text;
+                    this.data.sampleInfo = this.data.samples
+                                    .map(x => ({"sampleId": x}));
+                    return mainDict[this.data.rankLabel];
                 }
             },
             scatterGroupData: {
@@ -62,15 +75,14 @@ function init() {
                 loaded(data) {
                     if (!data) return;
                     this.data.groups = getGroups(data, data.columns[1]);
-                    this.data.scatterData = this.data.scatterData.map(d => {
-                        data.forEach(group => {
-                            if(group[data.columns[0]] === d[this.data.scatterData.columns[0]]) 
-                            d.group = group[data.columns[1]] ;
+                    data.forEach((group, i, arr) => 
+                        this.data.sampleInfo.forEach(s => {
+                            if(group[data.columns[0]] === s["sampleId"]){
+                                s.group = group[data.columns[1]];
+                                arr.slice(i, 1);
+                            }
                         })
-                        
-                        return d;
-                    })
-                    this.data.groupLabel = "group";
+                    );
                     return null;
                 }
             },
@@ -97,32 +109,28 @@ function init() {
                 dsvHasHeader: false,
                 dsvRowParser(row) {
                     return {
-                        "sample": row[0], 
+                        "sampleId": row[0], 
                         cluster: row[1]
                     };
                 },
                 loaded(data) {
                     if (!data) return;
                     this.data.clusters = Object.keys(_.groupBy(data, "cluster"));
-                    this.data.scatterData = this.data.scatterData.filter(d => {
-                        let hasCluster = false;
-                        const sample = d[this.data.scatterColumns[0]]
-                        data.forEach((c, j, arr) => {
-                            if(c.sample === sample) {
-                                hasCluster = true;
-                                d.cluster = c.cluster;
-                                arr.splice(j,1);
+                    data.forEach((cluster, i, arr) => 
+                        this.data.sampleInfo.forEach(s => {
+                            if(cluster["sampleId"] === s["sampleId"]){
+                                s.cluster = cluster.cluster;
+                                arr.slice(i, 1);
                             }
                         })
-                        return hasCluster;
-                    })
+                    );
                     return null;
                 }
             }
         },
         setup() {
             console.log(this["_data"]);
-            registerEditorConfig(editorConfig(this));
+            registerEditorConfig(editorConfig(this), editorRef);
         }
     }); 
     

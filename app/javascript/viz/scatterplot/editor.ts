@@ -6,6 +6,7 @@ import { forEachChild } from "typescript";
 
 function run(v) {
     v.data._changed = true;
+    v.root.dataChanged = true;
     v.run();
 }
 export const editorRef = {} as any;
@@ -29,12 +30,36 @@ export function editorConfig(v): EditorDef {
                 layout: "tabs",
                 tabs: [
                     {
-                        id: "xData",
-                        name: "X-Axis Data",
+                        id: "gData",
+                        name: "General",
                         view: {
                             type: "list",
                             items: [
                                 {
+                                    title: "Taxonomic rank",
+                                    type: "select",
+                                    options: v.data.ranks,
+                                    value: {
+                                        current: v.data.config.rankIndex.toString(),
+                                        callback(d) {
+                                            v.data.config.rankIndex = parseInt(d);
+                                            v.root.rankChanged = true;
+                                            v.forceRedraw = true;
+                                            run(v);
+                                        },
+                                    },
+                                },
+                            ]
+                        }
+                    },
+                    {
+                        id: "xData",
+                        name: "X-Axis",
+                        view: {
+                            type: "list",
+                            items: [
+                                {
+                                    ref: "xAxis",
                                     title: "X-Axis",
                                     type: "select",
                                     options: v.data.availableAxises,
@@ -42,6 +67,7 @@ export function editorConfig(v): EditorDef {
                                         current: v.data.config.xAxisIndex.toString(),
                                         callback(d) {
                                             v.data.config.xAxisIndex = parseInt(d);
+                                            v.root.dataChanged = true;
                                             v.forceRedraw = true;
                                             run(v);
                                         },
@@ -57,6 +83,7 @@ export function editorConfig(v): EditorDef {
                                             if (!!v.data.config.categoryRange[0] 
                                                 && !!v.data.config.categoryRange[1]) {
                                                     v.forceRedraw = true;
+                                                    v.root.dataChanged = true;
                                                     run(v);
                                                 }
                                             
@@ -73,6 +100,7 @@ export function editorConfig(v): EditorDef {
                                             if (!!v.data.config.categoryRange[0] 
                                                 && !!v.data.config.categoryRange[1]) {
                                                     v.forceRedraw = true;
+                                                    v.root.dataChanged = true;
                                                     run(v);
                                                 }
                                         },
@@ -83,11 +111,12 @@ export function editorConfig(v): EditorDef {
                     },
                     {
                         id: "yData",
-                        name: "Y-Axis Data",
+                        name: "Y-Axis",
                         view: {
                             type: "list",
                             items: [
                                 {
+                                    ref: "yAxis",
                                     title: "Y-Axis",
                                     type: "select",
                                     options: v.data.availableAxises,
@@ -96,6 +125,7 @@ export function editorConfig(v): EditorDef {
                                         callback(d) {
                                             v.data.config.yAxisIndex = parseInt(d);
                                             v.forceRedraw = true;
+                                            v.root.dataChanged = true;
                                             run(v);
                                         },
                                     },
@@ -160,6 +190,19 @@ export function editorConfig(v): EditorDef {
                                 },
                             },
                         },
+                        // {
+                        //     type: "vue",
+                        //     title: "Range",
+                        //     component: "slider-input",
+                        //     data: {
+                        //         id: "slider",
+                        //         value: 0,
+                        //         range: [0,100],
+                        //         callback() {
+                        //             console.log("???");
+                        //         },
+                        //     },
+                        // },
                         {
                             title: "Scatter Size: ",
                             type: "input",
