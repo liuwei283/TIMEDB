@@ -45,6 +45,8 @@ export class ComplexScatterplot extends Component<ComponentOption> {
     private yLabel;
     private valueRange;
 
+    private groupLegendData;
+
 
     private shapeMap:Map<string, string>;
     private colorMap:Map<string|number, string>;
@@ -64,6 +66,9 @@ export class ComplexScatterplot extends Component<ComponentOption> {
                 this.colorMap = this.getMap(this.clusters, this.colors);
                 if (this.groups) {                
                     this.shapeMap = this.getMap(this.groups, shapes);
+                    this.groupLegendData = this.groups.map((x, i) => {
+                        return {type: "custom", label: x, fill: "grey"}
+                    });
                 }
             } else if (this.groups) {
                 this.colorMap = this.getMap(this.groups, this.colors);

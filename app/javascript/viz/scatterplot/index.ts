@@ -4,6 +4,7 @@ import {ComplexScatterplot} from "./complex-scatterplot"
 import { editorRef, editorConfig } from "./editor";
 import { registerEditorConfig } from "utils/editor";
 
+import {rainbow} from "oviz-common/palette";
 import {getGroups, groupBy}from "utils/array"
 import {register} from "page/visualizers";
 import {rankDict} from "utils/bio-info.ts";
@@ -20,7 +21,7 @@ function init() {
         renderer: "svg",
         root: new ComplexScatterplot(),
         data: {
-            colors: ["green", "red"],
+            colors: rainbow.slice(0,3),
             config: {
                 plotHeight: 500,
                 plotWidth: 500,

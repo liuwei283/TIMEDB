@@ -153,66 +153,49 @@ Component {
         }
         @if groups {
             Component {
-                x = legend1Pos.x-25; y = legend1Pos.y -35
-                height = 50; width = 70
+                @let padY = 9 * groups.length
+                x = legend1Pos.x-25; y = legend1Pos.y - padY
+                height = 50; width = 80
                 key = "legend1"
                 on:mousedown = (ev, el) => dragStart(ev, el)
                 on:mouseup = (ev, el) => dragEnd(ev, el)
-                Rect.full {
-                    stroke = @color("line")
-                    fill = "white"
-                }
-                Rows {
-                    @for (group, i) in groups {
+                Legend {
+                    data =groupLegendData
+                    lineHeight = 18
+                    :legend(data) {
                         Component {
-                            height = 25
-                            @if parsedClusterData {
-                                @if i === 0 {
-                                    Circle.centered{
-                                        x = 8; y = 12.5; r = 4; fill = "grey"
-                                    }
-                                } @else {
-                                    Rect.centered {
-                                        x = 8; y = 12.5; height = 8; width = 8; fill = "grey"
-                                    }
-                                }
-                                } @else {
-                                    Circle.centered{
-                                            x = 8; y = 12.5; r = 4; fill = colors[i]
-                                    }
-                                }
-                            Text(group) {
-                                x = 15; y = 12.5; anchor = @anchor("l","m")
-                                style:user-select = "none"
-                            }
+                            height = 100%; width = 100%
+                        @let shape = shapeMap.get(data.label)
+                        Component(shape) {
+                            anchor = @anchor("m", "c")
+                            x = 50%; y = 50%; r = config.scatterSize/2; width = config.scatterSize
+                            height = config.scatterSize
+                            stroke = data.stroke; fill = data.fill
+                        }
                         }
                     }
-                }  
+                }
             }
         }
     
         @if parsedClusterData {
             Component {
+                @let padY = 9 * clusters.length
                 key = "legend2"
-                x = legend2Pos.x - 25; y = legend2Pos.y -35
+                x = legend2Pos.x - 25; y = legend2Pos.y - padY
                 on:mousedown = (ev, el) => dragStart(ev, el)
                 on:mouseup = (ev, el) => dragEnd(ev, el)
-                height = 50; width = 70
-                Rect.full {
-                    stroke = @color("line")
-                    fill = "white"
-                }
-                Rows {
-                    @for (cluster, i) in clusters {
-                        Component {
-                            height = 25
-                            Circle.centered{
-                                    x = 8; y = 12.5; r = 4; fill = colors[i]
-                            }
-                            Text("cluster"+cluster) {
-                                x = 15; y = 12.5; anchor = @anchor("l","m")
-                                style:user-select = "none"
-                            }
+                height = 50; width = 80
+                Legend {
+                    @let map = @colorMap(clusters, colors)
+                    @let clusterLegendData = map.legendData()
+                    @expr clusterLegendData.forEach(x => {x.type = "custom"; x.label = `cluster ${x.label}`})
+                    data =clusterLegendData
+                    lineHeight = 18
+                    :legend(data) {
+                        Circle.centered {
+                            x = 50%; y = 50%; r = config.scatterSize/2
+                            stroke = data.stroke; fill = data.fill
                         }
                     }
                 }
