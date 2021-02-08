@@ -5,6 +5,20 @@ class SamplesController < ApplicationController
     $tmp_dir = "#{Rails.root}/app/data/tmp/"
     $user_stor_dir = "#{Rails.root}/data/user"
 
+    def index
+        @samples = Sample.order(:sample_name)
+        @sample_attrs = Sample.column_names
+        @user = User.find(session[:user_id])
+        id = session[:user_id]
+        @user = User.find(id)
+        user_dir = File.join($user_stor_dir, id.to_s)
+        @datasets = @user.datasets
+        respond_to do |format|
+            format.html
+            format.csv { send_data @samples.to_csv }
+        end
+    end
+
     def new
         @project = Project.find(params[:project_id])
         @sample = @project.samples.build
@@ -66,6 +80,26 @@ class SamplesController < ApplicationController
         redirect_to project_path(@project), notice: "Samples imported."
     end
 
+    def make_project_seleted_file
+        if params[:metadata]
+            download_selected_metadata_file
+        elsif params[:abundance]
+            download_selected_abd_file
+        elsif params[:seqence]
+            "nothing"
+
+        elsif params[:metadata2ds]
+            export_selected_metadata_dataset
+
+        elsif params[:abd2ds]
+            export_selected_abd_dataset
+
+        elsif params[:seqence]
+            "nothing"
+
+        end
+    end
+
     def make_selected_file
         if params[:metadata]
             download_selected_metadata_file
@@ -93,15 +127,28 @@ class SamplesController < ApplicationController
         user_dir = File.join($user_stor_dir, id.to_s)
         ds_name = params[:ds_selected]  
         ds_dir = File.join(user_dir, ds_name) 
-        @project = Project.find(params[:project_id])
+        # @project = Project.find(params[:project_id])
+        if params[:project_id]
+            redict = 'pj'
+        else
+            redict = 'sp'
+        end
         @samples = Sample.order(:sample_name)
         content = @samples.selected_to_csv(params[:sample_ids])
         time = Time.now
-        file_path = File.join(ds_dir, "selected_metadata_#{time}.csv")
+        time_str = time.strftime("%Y_%m_%d")       
+        time_str += ("_" + time.strftime("%k_%M")) 
+        file_path = File.join(ds_dir, "selected_metadata_#{time_str}.csv")
         File.open(file_path, 'w') do |file|
             file << content
         end
-        redirect_to @project
+        if redict == 'pj'
+            @project = Project.find(params[:project_id])
+            redirect_to @project
+        else
+            redirect_to samples_path
+        end
+            
     end
 
     def export_selected_abd_dataset
@@ -110,16 +157,26 @@ class SamplesController < ApplicationController
         user_dir = File.join($user_stor_dir, id.to_s)
         ds_name = params[:ds_selected]  
         ds_dir = File.join(user_dir, ds_name) 
-        @project = Project.find(params[:project_id])
+        # @project = Project.find(params[:project_id])
+        if params[:project_id]
+            redict = 'pj'
+        else
+            redict = 'sp'
+        end
         time = Time.now
-        file_path = File.join(ds_dir, "selected_abd_#{time}.tsv")
+        time_str = time.strftime("%Y_%m_%d")       
+        time_str += ("_" + time.strftime("%k_%M")) 
+        file_path = File.join(ds_dir, "selected_abd_#{time_str}.tsv")
         len = params[:sample_ids].length()
         if len<1
             redirect_to @project
         else
             out_json = {}
             params[:sample_ids].each_with_index do |id, index|
-                @sample = @project.samples.find(id)
+                # @sample = @project.samples.find(id)
+                # n1 = @project.name
+                @sample = Sample.find(id)
+                @project = Project.find(@sample.project_id)
                 n1 = @project.name
                 n2 = @sample.sample_name
                 file_current = "#{$abd_dir}#{n1}_#{n2}.tsv"
@@ -138,13 +195,18 @@ class SamplesController < ApplicationController
                     end
                 end
             end
-            pj_name = @project.name
+            if params[:project_id]
+                pj_name = @project.name
+            else
+                pj_name = 'selected'
+            end
             keys = out_json.keys
 
 
             s1 = "#{pj_name}"
             params[:sample_ids].each_with_index do |id, index|
-                @sample = @project.samples.find(id)
+                # @sample = @project.samples.find(id)
+                @sample = Sample.find(id)
                 s_name = @sample.sample_name
                 s1 += "\t#{s_name}"
             end
@@ -163,7 +225,13 @@ class SamplesController < ApplicationController
             File.open(file_path, 'w') do |file|
                 file << s1
             end
-            redirect_to @project
+
+            if redict == 'pj'
+                @project = Project.find(params[:project_id])
+                redirect_to @project
+            else
+                redirect_to samples_path
+            end
         end
         
         
@@ -178,7 +246,7 @@ class SamplesController < ApplicationController
     end
 
     def download_selected_abd_file
-        @project = Project.find(params[:project_id])
+        # @project = Project.find(params[:project_id])
         file = Tempfile.new('selected_abundance.tsv')
         len = params[:sample_ids].length()
         if len<1
@@ -187,7 +255,10 @@ class SamplesController < ApplicationController
         else
             out_json = {}
             params[:sample_ids].each_with_index do |id, index|
-                @sample = @project.samples.find(id)
+                # @sample = @project.samples.find(id)
+                # n1 = @project.name
+                @sample = Sample.find(id)
+                @project = Project.find(@sample.project_id)
                 n1 = @project.name
                 n2 = @sample.sample_name
                 file_current = "#{$abd_dir}#{n1}_#{n2}.tsv"
@@ -206,13 +277,18 @@ class SamplesController < ApplicationController
                     end            
                 end
             end
-            pj_name = @project.name
+            if params[:project_id]
+                pj_name = @project.name
+            else
+                pj_name = 'selected'
+            end
             keys = out_json.keys
 
 
             s1 = "#{pj_name}"
             params[:sample_ids].each_with_index do |id, index|
-                @sample = @project.samples.find(id)
+                # @sample = @project.samples.find(id)
+                @sample = Sample.find(id)
                 s_name = @sample.sample_name
                 s1 += "\t#{s_name}"
             end

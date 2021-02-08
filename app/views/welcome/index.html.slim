@@ -3,14 +3,34 @@ section.heading.bg-light.text-light
     path d="M0,0 L0,2700 L400,2820 L1920,2620 L1920,0 Z" fill="#343a40"
   .container
     h1
-      | Oral&nbsp;
+      | Gut&nbsp;
       span.em Microbiome
       br
       | Analysis Platform
     / p.index-lead
     /   | With the Focus on Cancer Studies
-    p.text-white-50.index-more
-      | Oral microbiome is closely related with human health, and dysbiotic oral microbiota have been discovered in individuals with oral and even systematic diseases in previous studies. In the database, we have collected public salivary metagenomic data from 154 Chinese, 36 Japanese and 30 Philippines, together with 5 Americans from the Human Microbiome Project (HMP).  Based on the metagenomic data, the microbial compositions, functional categories and antibiotic abilities of oral microbiota were detected. Generally, the oral microbiota database exhibits the characteristics of oral microbiota in different populations, and it supports the uploading and analyzing of customer data.
+    p
+      | Gut microbiome analysis platform (GMAP) contains three major features:
+      ul
+        li 
+          | curated metagenomics database Human Gut Metagenomics Database of over 10,000 samples
+        li 
+          | analysis and visualize the results of your data
+        li
+          | co-analysis and visualizing user data with the samples in our databases
+      
+      | We collected over 10,000 samples of whole-genome shotgun sequencing metagenomics data in the dataset,
+      | curated process the data to taxonomy abundance and functional profiling abundance. 
+      | The analysis pipeline had been implemented on Deepomics.org, 
+      | which allow you to upload your data to process the analysis online and 
+      | get interactive visualization online. Further, you can create your sub dataset 
+      | from our database by searching and selecting on our database page. 
+      | You can then co-analyze your data with the subset you built to process 
+      | our online analysis and visualization. The visualization modules allow you to upload results 
+      | of a single analysis treated by yourself or visualize other commonly used graph used in 
+      | metagenomics analysis.
+
+
 
 section#function_card
   .container
@@ -21,36 +41,30 @@ section#function_card
     .card
       .card_img
         =link_to '/database/overview'
-          =image_tag "card_img.png", :alt=>"Human Gut Metagenomics.png"
+          =image_tag "research.png", :alt=>"Human Gut Metagenomics.png"
       .card_body
         h5
           |Human Gut Metagenomics Database
         p
-          |Human Gut Metagenomics DatabaseOver 10,000 whole-genome human gut metagenomics sequencing data. Including published clinical information, relative abundance profling table (metaphlan2 & kraken2).    
+          |curated database with over 10,000 metagenomics sequencing data
     .card
       .card_img
         =link_to analysis_index_path
-          =image_tag "card_img.png", :alt=>"Analysis.png"
+          =image_tag "bioinformatics.png", :alt=>"Analyze you data.png"
       .card_body
         h5
-          |Analyses
+          |Analyze your data
         p
-          |Commonly used metagenomics analysis modules and piplines. Include differential testing, PCA, PCoA, enrichment network.   
+          |contains diversity analysis, differential testing, diseases classifier, PCA, functional enrichments and so on.
     .card
       .card_img
         =link_to "/visualizer/analysis/1"
-          =image_tag "card_img.png" , :alt=>"Visualize your results.png"
+          =image_tag "bacteria.png" , :alt=>"Visualize your results.png"
       .card_body
         h5
-          |Visualize your results
+          |Visualize your results 
         p
-          |You can visualize your analysis or your personal results online. Contenets heatmap, differential taxonomy in circular tree, networks, boxplots.
-
-              
-
-
-
-
+          |contains  corresponding visualization of analysis result and basic sample information visualization and so on
 
 section#dataset_list
     .container

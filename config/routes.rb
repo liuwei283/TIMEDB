@@ -5,8 +5,8 @@ Rails.application.routes.draw do
     resources :samples do
       collection do
         post :import 
-        post :make_selected_file
         post :import_abd_table
+        post :make_project_seleted_file
       end
       member do
         post :upload_seq
@@ -19,6 +19,12 @@ Rails.application.routes.draw do
     collection { post :download_selected_file }
     collection { post :export_selected }
     member { post :download_abd_table} 
+  end
+
+  resources :samples do
+    collection do
+      post :make_selected_file
+    end
   end
 
   resources :users do 
@@ -57,10 +63,9 @@ Rails.application.routes.draw do
       post 'batch_delete_files', to: 'viz_files#batch_delete_files', as: 'batch_delete_files'
     end
   end
+
   # database pages
-  get 'database/sample'
   get 'database/overview', to: 'database#overview'
-  
   get 'demo', to: 'demo#show'
   
   scope '/visualizer' do

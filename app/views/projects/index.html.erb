@@ -4,11 +4,23 @@
   <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.22/css/jquery.dataTables.css">
   
   <%= javascript_pack_tag "table_style" %>
+  <script>
+    function toggle_checkall(field_name, state) {
+      var checkboxes = document.getElementsByTagName('input');
+      var count = checkboxes.length;
+      for (var i = 0; i < count; i++) {
+        if (checkboxes[i].type == "checkbox"
+            && checkboxes[i].name == field_name + "_ids[]") {
+          checkboxes[i].checked = state;
+        }
+      }
+    } 
+</script>
 <% end %>
 
 
 <div class="container">
-  <h1>Listing projects</h1>
+  <h1>Projects Information</h1>
 
   <p>
     Download all projects information:
@@ -22,7 +34,7 @@
     <% @attrs.each do |attr| %>
       <% if attr != 'id' && attr != 'created_at' && attr != 'updated_at' %>
         <button class="toggle-vis" data-column='<%=i.to_s%>'> 
-          <%= attr.capitalize %>
+          <%= attr %>
         </button>
         <%i += 1%>
       <%end%>
@@ -38,7 +50,7 @@
         </th>
         <% @attrs.each do |attr| %>
           <% if attr != 'id' && attr != 'created_at' && attr != 'updated_at' %>
-            <th> <%= attr.capitalize %> </th>
+            <th> <%= attr %> </th>
           <% end %>
         <% end %>
         <th>Action</th>
