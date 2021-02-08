@@ -39,7 +39,10 @@
               | Database Information
             = link_to projects_path, class: 'dropdown-item' do
               / = icon 'fas', 'network-wired'
-              | Sample Information
+              | Projects Detail
+            = link_to samples_path, class: 'dropdown-item' do
+              / = icon 'fas', 'network-wired'
+              | Samples Detail
             
           li.nav-item.dropdown
             = link_to '#', class: 'nav-link dropdown-toggle', data: { toggle: 'dropdown' } do
