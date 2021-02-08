@@ -6,15 +6,19 @@ var struct_data = [
         "country": "country_pie" 
         }]
     },
+    
+    {"HV": [{
+        "CRC": "CRC"
+        }]
+
+    },
+
     {"HV": [{
         "CRC": "CRC"
         },
         {
         "species": "species"
         }]
-    },
-    {"HV": []
-
     }
 ];
 
@@ -45,9 +49,9 @@ var text_relation = {
 };
 
 var des_data = {
-    "pie": "<p> this is the description for this pie chart</p>",
-    "boxplot": "<p> this is the description for this boxplot</p>",
-    "tree": "<p> this is the description for this tree </p>",
+    "pie": "<h2> Sample metadata statistic </h2>",
+    "boxplot": "<h2> Diseases related taxonomy details</h2>",
+    "tree": "<h2> Diseases related taxonomy overview </h2>",
 
 };
 
@@ -94,11 +98,11 @@ var table_data = window.gon.table_data;
 var init_data = {
     "T0B0": "BMI_pie",
     "V1B0": "BMI_pie",
-    "V0B1": "CRC_species",
-    "V0B2": "tree1",
+    "V0B1": "tree1",
+    "V0B2": "CRC_species",
     "HB0": "pie",
-    "HB1": "boxplot",
-    "HB2": "tree"
+    "HB1": "tree",
+    "HB2": "boxplot"
 };
 
 var relation_data = {

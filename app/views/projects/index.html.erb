@@ -4,6 +4,18 @@
   <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.22/css/jquery.dataTables.css">
   
   <%= javascript_pack_tag "table_style" %>
+  <script>
+    function toggle_checkall(field_name, state) {
+      var checkboxes = document.getElementsByTagName('input');
+      var count = checkboxes.length;
+      for (var i = 0; i < count; i++) {
+        if (checkboxes[i].type == "checkbox"
+            && checkboxes[i].name == field_name + "_ids[]") {
+          checkboxes[i].checked = state;
+        }
+      }
+    } 
+</script>
 <% end %>
 
 
