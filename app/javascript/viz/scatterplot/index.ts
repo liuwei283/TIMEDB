@@ -4,6 +4,7 @@ import {ComplexScatterplot} from "./complex-scatterplot"
 import { editorRef, editorConfig } from "./editor";
 import { registerEditorConfig } from "utils/editor";
 
+import {rainbow} from "oviz-common/palette";
 import {getGroups, groupBy}from "utils/array"
 import {register} from "page/visualizers";
 import {rankDict} from "utils/bio-info.ts";
@@ -20,11 +21,11 @@ function init() {
         renderer: "svg",
         root: new ComplexScatterplot(),
         data: {
-            colors: ["green", "red"],
+            colors: rainbow.slice(0,3),
             config: {
                 plotHeight: 500,
                 plotWidth: 500,
-                rankIndex: 1,
+                rankIndex: 0,
                 xAxisIndex:0,
                 yAxisIndex:1,
                 computeOval: false,
@@ -109,25 +110,32 @@ function init() {
                 fileKey: "scatterClusterData",
                 type: "tsv",
                 optional: true,
+                multiple: true,
                 dependsOn: ["scatterData"],
-                dsvHasHeader: false,
-                dsvRowParser(row) {
-                    return {
-                        "sampleId": row[0], 
-                        cluster: row[1]
-                    };
-                },
-                loaded(data) {
-                    if (!data) return;
-                    this.data.clusters = Object.keys(_.groupBy(data, "cluster"));
-                    data.forEach((cluster, i, arr) => 
-                        this.data.samples.forEach(s => {
-                            if(cluster["sampleId"] === s){
-                                this.data.sampleInfoDict[s].cluster = cluster.cluster;
-                                arr.slice(i, 1);
-                            }
-                        })
-                    );
+                loaded(d) {
+                    if (!d) return;
+                    this.data.clusterDict = {};
+                    d.forEach(x => {
+                        const rankK = rankDict[x.columns[0]];
+                        const sampleK = x.columns[0];
+                        const clusterK = x.columns[1];
+                        x.forEach(r => {
+                            if (!this.data.clusterDict[r[sampleK]])
+                                this.data.clusterDict[r[sampleK]] = {};
+                            this.data.clusterDict[r[sampleK]][rankK] = r[clusterK];
+                        });
+                    });
+                    const chosenRank = this.data.ranks[0].text;
+                    const data = Object.keys(this.data.clusterDict).map(k => this.data.clusterDict[k]);
+                    this.data.clusters = Object.keys(_.groupBy(data, chosenRank));
+                    // data.forEach((cluster, i, arr) => 
+                    //     this.data.samples.forEach(s => {
+                    //         if(cluster["sampleId"] === s){
+                    //             this.data.sampleInfoDict[s].cluster = cluster.cluster;
+                    //             arr.slice(i, 1);
+                    //         }
+                    //     })
+                    // );
                     return null;
                 }
             }

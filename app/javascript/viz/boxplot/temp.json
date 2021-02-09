@@ -1,0 +1,12 @@
+{
+  "scatterData": {
+    "name": "Species Score",
+    "outputFileName": "*_PCA.coordinate.tsv",
+    "demoFilePath": ["/data/demo/enterotype/s_PCA.coordinate.tsv","/data/demo/enterotype/t_PCA.coordinate.tsv"]
+  },
+  "scatterGroupData": {
+    "name": "Cluster data",
+    "outputFileName": "*_cluster.tsv",
+    "demoFilePath": ["/data/demo/enterotype/s_cluster.tsv","/data/demo/enterotype/t_cluster.tsv"]
+  }
+}
