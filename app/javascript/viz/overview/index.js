@@ -154,7 +154,16 @@ export function construct_block(Bid, block_data){
         var cid = type+i+Bid
         var content_block = document.createElement("div");
         content_block.id = cid;
-        content_block.className = "col";
+        if(ncontent>1 && i==0){
+            content_block.className = "col-md-4";
+        }
+        else if(ncontent>1 && i==1){
+            content_block.className = "col-md-8";
+        }
+        else{
+            content_block.className = "col";
+        }
+        
         block.appendChild(content_block);
     }
     block_div.appendChild(block);

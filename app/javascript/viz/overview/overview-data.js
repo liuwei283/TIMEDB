@@ -1,9 +1,11 @@
 var struct_data = [
     {"HTV": [{
         "BMI": "BMI_pie",
-        "host age": "age_pie",
+        "age": "age_pie",
         "sex": "sex_pie",
-        "country": "country_pie" 
+        "country": "country_pie",
+        "phenotype": "phenotype_pie"
+
         }]
     },
     
@@ -29,10 +31,11 @@ var head_relation = {
 };
 
 var table_relation = {
-    "BMI_pie": "pie1",
-    "age_pie": "pie2",
-    "sex_pie": "pie3",
-    "country_pie": "pie4"
+    "BMI_pie": "BMI",
+    "age_pie": "age",
+    "sex_pie": "sex",
+    "country_pie": "country",
+    "phenotype_pie": "phenotype"
 };
 
 var viz_relation = {
@@ -40,6 +43,7 @@ var viz_relation = {
     "age_pie": "dn2",
     "sex_pie": "dn3",
     "country_pie": "dn4",
+    "phenotype_pie": "dn5",
     "CRC_species": "bp1",
     "tree1": "tr1"
 };
@@ -58,23 +62,28 @@ var des_data = {
 var viz_data = {
     "dn1" : {
         "type": "donghnut",
-        "file": ["/data/static_viz_data/BMI.stat.csv"],
-        "config": {"title": "BMI distribution"}
+        "file": ["/data/static_viz_data/pie_HMGDB_bmi_class.tsv"],
+        "config": {"title": "BMI distribution", "xlabel": "BMI", "ylabel": "number"}
     },
     "dn2": {
         "type": "donghnut",
-        "file": ["/data/static_viz_data/host_age.stat.csv"],
-        "config": {"title": "age distribution"}
+        "file": ["/data/static_viz_data/pie_HMGDB_age_class.tsv"],
+        "config": {"title": "age distribution", "xlabel": "age", "ylabel": "number"}
     },
     "dn3": {
         "type": "donghnut",
-        "file": ["/data/static_viz_data/sex.stat.csv"],
-        "config": {"title": "sex distribution"}
+        "file": ["/data/static_viz_data/pie_GMREPO_sex.tsv"],
+        "config": {"title": "sex distribution", "xlabel": "sex", "ylabel": "number"}
     },
     "dn4": {
         "type": "donghnut",
-        "file": ["/data/static_viz_data/country.stat.csv"],
+        "file": ["/data/static_viz_data/pie_GMREPO_country.tsv"],
         "config": {"title": "samples in different country", "xlabel": "country", "ylabel": "number"}
+    },
+    "dn5": {
+        "type": "donghnut",
+        "file": ["/data/static_viz_data/pie_GMREPO_phenotype_v.tsv"],
+        "config": {"title": "phenotype distribution", "xlabel": "phenotype", "ylabel": "number"}
     },
     "bp1": {
         "type": "boxplot",
