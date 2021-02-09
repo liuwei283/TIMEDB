@@ -12,9 +12,12 @@ const width = 960,
     paddingB = 100,
     colors = {
         background: "white",
-        activeStroke: "#F4FA58",
-        rangeMin: "#F8EFFB",
-        rangeMax: "#77095A",
+        // activeStroke: "#F4FA58",
+        activeStroke: "orange",
+        rangeMin: "rgb(200,210,230)",
+        // rangeMin: "#F8EFFB",
+        // rangeMax: "#77095A",
+        rangeMax: "#3262a8"
     };
 var svg = d3.select("#world-map")
             .append("svg:svg")
@@ -26,6 +29,8 @@ const projection = d3.geoNaturalEarth1();
 const pathGenerator = d3.geoPath().projection(projection);
 const g = d3.select("#container").append("g").attr('id',"zoom-area");
 
+const otherG = d3.select("#container").append("g").attr("id", "other")
+    .attr("transform", `translate(50, ${ height - 100})`)
 const legendG = d3.select("#container").append("g").attr("id", "legend")
     .attr("transform", `translate(0, ${ height})`)
 legendG.append("rect")
@@ -54,9 +59,9 @@ var gradientDef = svg.append("defs")
 legendG.append("rect")
         .style("fill", "url(#gradient)")
         .attr("x",250)
-        .attr("y", paddingB/2)
+        .attr("y", paddingB/4)
         .attr("width", width - 500)
-        .attr("height", paddingB/4);
+        .attr("height", paddingB/5);
 const grad = schemeGradient(colors.rangeMin, colors.rangeMax);
 
 const reset =() => {
@@ -71,22 +76,25 @@ g.append('path')
     .attr('d', pathGenerator({type: 'Sphere'}))
     .attr("fill", colors.background)
     .on("click", reset);
-axios.all([axios.get('/data/static_viz_data/world_map/countries-110m.json'), axios.get('/data/static_viz_data/world_map/sample.txt')])
+axios.all([axios.get('/data/static_viz_data/world_map/countries-110m.json'), axios.get('/data/static_viz_data/world_map/country.tsv')])
   .then(axios.spread((topo, stat) => {
     const countries = feature(topo.data, topo.data.objects.countries).features;
     const data = d3.tsvParse(stat.data);
-    const dict = _.groupBy(data, "country");
+    const dict = {};
     const numbers = [];
-    Object.keys(dict).forEach(k => {
-        dict[k] = dict[k].length;
-        numbers.push(dict[k]);
+    data.forEach(x => {
+        dict[x.country] = parseInt(x.number);
+        numbers.push(parseInt(x.number));
     });
+
     legendG.append("text")
         .text("0")
         .attr("x", 240)
         .attr("y", paddingB/2);
     
-    const [min, max] = findBoundsForValues(numbers.map(d=> Math.log(d)), 2);
+    // const [min, max] = findBoundsForValues(numbers.map(d=> Math.sqrt(d)), 2);
+    const [min, max] = findBoundsForValues(numbers, 2);
+    console.log(max);
     legendG.append("text")
         .text(findBound(_.max(numbers), 0, 2))
         .attr("x", width - 248)
@@ -107,7 +115,8 @@ axios.all([axios.get('/data/static_viz_data/world_map/countries-110m.json'), axi
         .attr('d', pathGenerator)
         .attr("fill", (d)=> {
             const name = d.properties.name;
-            if (dict[name]) return grad.get(myScale(Math.log(dict[name])));
+            // if (dict[name]) return grad.get(myScale(Math.sqrt(dict[name])));
+            if (dict[name]) return grad.get(myScale(dict[name]));
             else return "lightgrey";
         })
         .attr("opacity", 0.9)
@@ -118,7 +127,7 @@ axios.all([axios.get('/data/static_viz_data/world_map/countries-110m.json'), axi
             div.transition()		
                 .duration(200)		
                 .style("opacity", 1);
-            div.html("<strong>Country: </strong><span class='details'>" + d.properties.name + "<br></span>" + "<strong>Number: </strong><span class='details'>" + dict[d.properties.name] +"</span>")	
+            div.html("<strong>Country: </strong><span class='details'>" + d.properties.name + "<br></span>" + "<strong>Sample number: </strong><span class='details'>" + dict[d.properties.name] +"</span>")	
                 .style("left", (d3.event.pageX + 15) + "px")		
                 .style("top", (d3.event.pageY + 15) + "px")
                 .style("padding", "5px")
@@ -143,6 +152,13 @@ axios.all([axios.get('/data/static_viz_data/world_map/countries-110m.json'), axi
               .style("stroke",colors.background)
               .style("stroke-width",1);
           });
+    // otherG.append("rect")
+    //       .attr("width", 100)
+    //       .attr("height", 70)
+    //       .attr("fill", 'white')
+    //       .attr("stroke", "black");
+    otherG.append("text").text(`Unknown: ${dict["NULL"]}`)
+          .attr("x", 0).attr("y", 20);
   }));
 
 const zoom = d3.zoom()
