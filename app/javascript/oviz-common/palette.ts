@@ -45,13 +45,39 @@ export const cosmicPalettes = {
     },
 };
 
+export const rainbowL = [ "hsl(340, 82%, 76%)",
+"hsl(0, 73%, 77%)",
+"hsl(14, 100%, 78%)",
+"hsl(36, 100%, 75%)",
+"hsl(45, 100%, 75%)",
+"hsl(54, 90%, 72%)",//"hsl(54, 100%, 81%)",
+"hsl(66, 71%, 77%)",
+"hsl(88, 50%, 76%)",
+"hsl(122, 37%, 74%)",
+"hsl(174, 42%, 65%)",
+"hsl(187, 72%, 71%)",
+"hsl(199, 92%, 74%)",
+"hsl(207, 90%, 77%)",
+"hsl(207, 90%, 77%)",
+"hsl(231, 44%, 74%)",
+"hsl(261, 46%, 74%)",
+"hsl(291, 47%, 71%)",
+];
+
+export const groupedChartColors = ["#f06748",
+"#3CC145",
+"#6748f0",
+"#48d1f0",
+"#bb48f0",
+"#f0bb48"];
+
 export const signedChartColors = {
     posRange: "green",
     negRange: "red",
     origin: "white"
 }
 
-export const groupedChartColors = ["green", "red"]
+// export const groupedChartColors = ["green", "red"]
 
 export function withDefaultPalette(colors: string[], extraPalettes?: Dictionary<any>) {
     return {

@@ -5,9 +5,6 @@ import { editorConfig, editorRef } from "./editor";
 import { SignedHeatMap } from "./signed-heatmap";
 import { BinaryTree, Gravity } from "./binary-tree";
 import {savedTheme} from "oviz-common/mem-theme"
-
-import {copyObject} from "utils/object"
-import { event } from "crux/dist/utils";
 import {register} from "page/visualizers";
 import { registerEditorConfig } from "utils/editor";
 
@@ -36,45 +33,9 @@ Oviz.use.theme("mh-light", {
 
 const MODULE_NAME = 'signed-heatmap'
 
-const SignedHeatmap = {
-    initViz,
-    initVizWithDeepomics,
-}
-
 function init() {
     if (!window.gon || window.gon.module_name !== MODULE_NAME) return;
-    const vizOpts = generateDefaultVizOpts();
-    const {visualizer} = Oviz.visualize(vizOpts);
-    // return visualizer;
-}
-
-
-function initVizWithDeepomics(fileDefs :any){
-    const vizOpts = copyObject(generateDefaultVizOpts());
-    Object.keys(vizOpts.loadData).forEach( dataType => {
-        console.log(dataType);
-        if (vizOpts.loadData[dataType].fileKey) vizOpts.loadData[dataType].fileKey = null;
-        if (fileDefs[dataType])
-            vizOpts.loadData[dataType].url =  `/api/public?path=${btoa(fileDefs[dataType].path)}`
-        else {
-            delete vizOpts.loadData[dataType];
-            vizOpts.data[dataType] = null;
-        }
-    })
-    Object.keys(vizOpts.loadData).forEach( dataType => {console.log(vizOpts.loadData[dataType])})
-    const {visualizer} = Oviz.visualize(vizOpts);
-    return {visualizer, editorConf: editorConfig(visualizer)};
-
-}
-
-function initViz() {
-    const vizOpts = copyObject(generateDefaultVizOpts());
-    const {visualizer} = Oviz.visualize(vizOpts);
-    return visualizer;
-}
-
-function generateDefaultVizOpts() {
-    const vizOpts = {
+    const {visualizer} = Oviz.visualize({
         el: "#canvas",
         template,
         theme: savedTheme("mh", "mh-light"),
@@ -109,7 +70,114 @@ function generateDefaultVizOpts() {
             rowTreeData: null,
             colTreeData: null,
         },
-        loadData: generateDefaultDataSources(),
+        loadData: {
+            heatmapData: {
+                type: "tsv",
+                fileKey: "heatmapData",
+                loaded(d) {
+                    if (!d) return;
+                    const rows = [];
+                    const data = {};
+                    let [min, max] = [0, 0];
+                    d.forEach(line => {
+                        const rowData = {};
+                        const rowAttr = line[""];
+                        rows.push(rowAttr);
+                        d.columns.forEach(col => {
+                            if (col === "") return;
+                            const h = {};
+                            h["r"] = line[col];
+                            if (parseFloat(line[col]) > max) max = line[col];
+                            if (parseFloat(line[col]) < min) min = line[col];
+                            rowData[col] = h;
+                        });
+                        data[rowAttr] = rowData;
+                    });
+                    return {rows, columns: d.columns.splice(1, d.columns.length), data,
+                        range: {min, max}};
+                },
+            },
+            heatmapDataP: {
+                type: "tsv",
+                fileKey: "heatmapDataP",
+                dependsOn: ["heatmapData"],
+                optional: true,
+                loaded(d) {
+                    if (!d) return;
+                    this.data.heatmapData.rows.forEach(r => {
+                        d.forEach(line => {
+                            if (line[""] === r) {
+                                this.data.heatmapData.columns.forEach(c => {
+                                    this.data.heatmapData.data[r][c]["p"] = line[c];
+                                });
+                                return;
+                            }
+                        });
+                    });
+                    return null;
+                },
+            },
+            groupData: {
+                type: "tsv",
+                fileKey: "groupData",
+                loaded: function l(d) {
+                    if (!d) return;
+                    const data = {};
+                    const phylums = {};
+                    this.data.heatmapData.rows.forEach(r => {
+                        d.forEach(line => {
+                            if (line.Species === r) {
+                                data[r] = {...line};
+                            }
+                        });
+                    });
+                    d.forEach( s => {
+                        if (!phylums[s.Phylum])
+                            phylums[s.Phylum] = [s.Genus];
+                        else if (!phylums[s.Phylum].includes(s.Genus))
+                                phylums[s.Phylum].push(s.Genus);
+                    });
+                    // name Unknown to Other [phylum]
+                    Object.keys(phylums).forEach( k => {
+                        phylums[k] = phylums[k].sort();
+                        if (phylums[k].indexOf("Unknown") > 0) {
+                            phylums[k].splice(phylums[k].indexOf("Unknown"), 1);
+                            phylums[k].push("Other " + k);
+                        }
+                    });
+                    phylums["Other"] = ["Unclassified"];
+                    this.data.phylums = phylums;
+                    this.data.familyColorMap = initializeFamilyColors(phylums);
+                    return data;
+                },
+            },
+            rowTreeData: {
+                type: "newick",
+                fileKey: "rowTreeData",
+                dependsOn: ['heatmapData'],
+                optional: true,
+                loaded(d) {
+                    if (!d) return;
+                    d.depth = 0;
+                    const {rootNode, nodeList} = processTreeData(d);
+                    this.data.heatmapData.rows = sortByTreeNodes(nodeList, this.data.heatmapData.rows);
+                    return rootNode;
+                },
+            },
+            colTreeData: {
+                type: "newick",
+                fileKey: "colTreeData",
+                dependsOn: ['heatmapData'],
+                optional: true,
+                loaded(d) {
+                    if (!d) return;
+                    d.depth = 0;
+                    const {rootNode, nodeList} = processTreeData(d);
+                    this.data.heatmapData.columns = sortByTreeNodes(nodeList, this.data.heatmapData.columns);
+                    return rootNode;
+                },
+            },
+        },
         setup() {
             setUpRange(this);
             registerEditorConfig(editorConfig(this), editorRef);
@@ -118,127 +186,8 @@ function generateDefaultVizOpts() {
             if (this.data.heatmapData.rows.length > 100) this.data.config.gridH = 10;
             else if (this.data.heatmapData.rows.length > 60) this.data.config.gridH = 12;
         }
-    };
-    return vizOpts; 
-}
-
-function generateDefaultDataSources() {
-    const defaultDataSources = {
-        heatmapData: {
-            type: "tsv",
-            fileKey: "heatmapData",
-            loaded(d) {
-                if (!d) return;
-                const rows = [];
-                const data = {};
-                let [min, max] = [0, 0];
-                d.forEach(line => {
-                    const rowData = {};
-                    const rowAttr = line[""];
-                    rows.push(rowAttr);
-                    d.columns.forEach(col => {
-                        if (col === "") return;
-                        const h = {};
-                        h["r"] = line[col];
-                        if (parseFloat(line[col]) > max) max = line[col];
-                        if (parseFloat(line[col]) < min) min = line[col];
-                        rowData[col] = h;
-                    });
-                    data[rowAttr] = rowData;
-                });
-                return {rows, columns: d.columns.splice(1, d.columns.length), data,
-                    range: {min, max}};
-            },
-        },
-        heatmapDataP: {
-            type: "tsv",
-            fileKey: "heatmapDataP",
-            dependsOn: ["heatmapData"],
-            optional: true,
-            loaded(d) {
-                if (!d) return;
-                this.data.heatmapData.rows.forEach(r => {
-                    d.forEach(line => {
-                        if (line[""] === r) {
-                            this.data.heatmapData.columns.forEach(c => {
-                                this.data.heatmapData.data[r][c]["p"] = line[c];
-                            });
-                            return;
-                        }
-                    });
-                });
-                return null;
-            },
-        },
-        groupData: {
-            type: "tsv",
-            fileKey: "groupData",
-            loaded: function l(d) {
-                if (!d) return;
-                const data = {};
-                const phylums = {};
-                this.data.heatmapData.rows.forEach(r => {
-                    d.forEach(line => {
-                        if (line.Species === r) {
-                            data[r] = {...line};
-                        }
-                    });
-                });
-                d.forEach( s => {
-                    if (!phylums[s.Phylum])
-                        phylums[s.Phylum] = [s.Genus];
-                    else if (!phylums[s.Phylum].includes(s.Genus))
-                            phylums[s.Phylum].push(s.Genus);
-                });
-                // name Unknown to Other [phylum]
-                Object.keys(phylums).forEach( k => {
-                    phylums[k] = phylums[k].sort();
-                    if (phylums[k].indexOf("Unknown") > 0) {
-                        phylums[k].splice(phylums[k].indexOf("Unknown"), 1);
-                        phylums[k].push("Other " + k);
-                    }
-                });
-                phylums["Other"] = ["Unclassified"];
-                this.data.phylums = phylums;
-                this.data.familyColorMap = initializeFamilyColors(phylums);
-                return data;
-            },
-        },
-        rowTreeData: {
-            type: "newick",
-            fileKey: "rowTreeData",
-            dependsOn: ['heatmapData'],
-            optional: true,
-            loaded(d) {
-                if (!d) return;
-                d.depth = 0;
-                const {rootNode, nodeList} = processTreeData(d);
-                this.data.heatmapData.rows = sortByTreeNodes(nodeList, this.data.heatmapData.rows);
-                return rootNode;
-            },
-        },
-        colTreeData: {
-            type: "newick",
-            fileKey: "colTreeData",
-            dependsOn: ['heatmapData'],
-            optional: true,
-            loaded(d) {
-                if (!d) return;
-                d.depth = 0;
-                const {rootNode, nodeList} = processTreeData(d);
-                this.data.heatmapData.columns = sortByTreeNodes(nodeList, this.data.heatmapData.columns);
-                return rootNode;
-            },
-        },
-    }
-    if (window.gon && window.gon.required_data ) {
-        const dataSources = {}
-        window.gon.required_data.forEach(dt => {
-            dataSources[dt] = defaultDataSources[dt];
-        })
-        return dataSources;
-    } else 
-        return defaultDataSources;
+    });
+    return visualizer;
 }
 
 /*
