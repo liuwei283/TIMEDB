@@ -7,8 +7,9 @@ import { registerEditorConfig } from "utils/editor";
 import { editorConfig } from "./editor";
 import { groupedChartColors} from "oviz-common/palette"
 import { findBoundsForValues, computeLog } from "utils/maths";
-const ylabel = "Relative abundance(log10)";
-const title = "grouped box plot"
+import { Color } from "crux/dist/color";
+const ylabel = "Beta diversity";
+const title = "Beta Diversity"
 //please change the displayed value range in the template by the prop: valueRange.
 const MODULE_NAME = 'boxplot'
 
@@ -29,9 +30,15 @@ function init() {
                 rankIndex: 0,
                 plotWidth: 1000,
                 showOutliers: true,
+                showP: true,
                 xLabelRotation: 45,
             },
-            colors: groupedChartColors,
+            colors: groupedChartColors.slice(0,1),
+            boxColor: {
+                // default: (x) =>  x,
+                stroke: (x) => Color.literal(x).darken(30).string,
+                fill: (x) => Color.literal(x).lighten(10).string,
+            },
         },
         loadData: {
             boxMain: {
@@ -61,7 +68,17 @@ function init() {
                 type: "tsv",
                 multiple: true,
                 loaded(data) {
-                    console.log(data);
+                    this.data.pDict = {};
+                    data.forEach(d => {
+                        const rankLabel = rankDict[d.columns[0]];
+                        // const parsedData = 
+                        this.data.pDict[rankLabel] = d.map(r => {
+                            const [source, target] = r[d.columns[0]].split(":");
+                            const pValue = parseFloat(r[d.columns[1]]);
+                            return {source, target, pValue};
+                        });
+                    });
+                    return null;
                 }
             }
         },
@@ -75,13 +92,15 @@ function init() {
 }
 function processRawData(data: any[]) {
     const rawData = {};
+    const allValues = [];
     data.forEach(d => {
         rawData[d[0]] = d.splice(1, d.length).map(x => parseFloat(x));
+        allValues.push(...rawData[d[0]]);
     });
-    const boxData = {categories: Object.keys(rawData), valueRange: null,
-        values: [], outliers: [], means: [],};
+    const boxData = {categories: Object.keys(rawData), 
+        valueRange: findBoundsForValues(allValues, 2, false, 0.5),
+        values: [], outliers: [], means: [], max: Math.max(...allValues)};
     boxData.categories.forEach((k, i) => {
-        boxData.valueRange = findBoundsForValues(rawData[k], 2, false, 0.2);
         const stat1 = new Oviz.algo.Statistics(rawData[k]);
         const interQuartileRange = stat1.Q3() - stat1.Q1();
         const result = [];

@@ -17,16 +17,18 @@ svg {
 			stroke = "#000"
 			fill = "none"
 		}
-		@let boxColor = "red"
+        
         Boxes {
             data = "boxData"
             showMean = true
             showNotch = false
+            @let boxFill = boxColor.fill(colors[0])
+            @let boxStroke = boxColor.stroke(colors[0])
             :box (_d) {
                 Rect.full  {
-                    fill = boxColor
-                    stroke = boxColor
-                    fillOpacity = 0.001
+                    fill = boxFill
+                    stroke = boxFill
+                    // fillOpacity = 0.001
                     behavior:tooltip {
                         content = (`min: ${_d.data[0].toFixed(2)} <br>
                                     first quartile: ${_d.data[1].toFixed(2)} <br>
@@ -43,26 +45,53 @@ svg {
                     height = 100%
                     Line { 
                         x = 50%; y2 = 100%
-                        stroke = boxColor
+                        stroke = boxStroke
                     }
-                    Line { x1 = 35%; x2 = 65%; y = 0; stroke = boxColor}
-                    Line { x1 = 35%; x2 = 65%; y = 100%; stroke = boxColor}
                 }
                 
             }
             :outlier{
                 @if config.showOutliers {
-                    Circle.centered { r = 2; fill = boxColor }
+                    Circle.centered { r = 2; fill = boxStroke }
                 } @else {
                     Circle.centered { fill = "none" }
                 }
             }
             :mean(means) {
-                Line {x1 = 20%; x2 = 80%; stroke = boxColor}
+                Line {x1 = 20%; x2 = 80%; stroke = "white"}
             }
             :median(d) {}
         }
-		
+		@let w = @scaled-x(1) - @scaled-x(0)
+        @if config.showP {
+            @for pair in pDict[ranks[config.rankIndex].text] {
+            Component {
+                @let sourceIndex = boxData.categories.indexOf(pair.source)
+                @let targetIndex = boxData.categories.indexOf(pair.target)
+                @let sourceX = @scaled-x(sourceIndex) + (sourceIndex === 1 ? 5 : 0)
+                @let targetX =  @scaled-x(targetIndex) + (targetIndex === 1 ? -5 : 0)
+                y = @scaled-y(boxData.max)+ (Math.abs(sourceIndex - targetIndex) > 1 ? -40: -20)
+                Line {
+                    x = sourceX; y2 = 10
+                }
+                Line {
+                    x = targetX; y2 = 10
+                }
+                Line {
+                    x1 = sourceX; x2 = targetX;
+                }
+                Text {
+                    x = (targetX + sourceX)/2; y = -2; anchor = @anchor("c", "b")
+                    text = pair.pValue.toFixed(3)
+                }
+                // x = @scaled-x(i) + w /2; y = @scaled-y(boxData.max[i])
+                // Circle.centered {
+                //     r = 5; fill = "magenta"
+                // }
+            }
+        }
+        }
+
 		Axis("left");
 		Axis("bottom") {
 			y = 100%

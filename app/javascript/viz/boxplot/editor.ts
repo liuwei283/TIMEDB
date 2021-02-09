@@ -19,7 +19,6 @@ const cbpPalette = {
 
 export function editorConfig(v): EditorDef {
     const [defaultPalette] = genDefaultPalette(v.data.colors);
-    console.log(v.data.availableAxises);
     return {
         sections: [
             {
@@ -93,7 +92,7 @@ export function editorConfig(v): EditorDef {
                                 paletteMap: {"0":0,"1":1},
                                 id: "pwcolor",
                                 callback(colors) {
-                                    v.data.colors = [colors['0'], colors['1']];
+                                    v.data.colors = [colors['0']];
                                     run(v);
                                 },
                             },
@@ -116,6 +115,17 @@ export function editorConfig(v): EditorDef {
                                 current: v.data.config.showOutliers,
                                 callback(d) {
                                     v.data.config.showOutliers = d;
+                                    run(v);
+                                },
+                            },
+                        },
+                        {
+                            title: "P-value",
+                            type: "checkbox",
+                            value: {
+                                current: v.data.config.showP,
+                                callback(d) {
+                                    v.data.config.showP = d;
                                     run(v);
                                 },
                             },

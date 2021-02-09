@@ -31,9 +31,10 @@ svg {
 				x = -4 + 8 * index
 				:box (_d) {
 					Rect.full  {
-						fill = colors[index]
+						zIndex = 1
+						fill = "white"
 						stroke = colors[index]
-						fillOpacity = 0.01
+						// fillOpacity = 
 						behavior:tooltip {
 							content = (`min: ${_d.data[0].toFixed(2)} <br>
 										first quartile: ${_d.data[1].toFixed(2)} <br>
@@ -100,7 +101,7 @@ svg {
 			x = 5%; y = 80%
 			@for (item, index) in classifications{
 				Line { key = index; x1 = 7.5; x2 = 7.5; y1 = 24 * index - 10; y2 = 24 * index + 10; stroke = colors[index] }
-				Line { key = [index, 1]; x1 = 0; x2 = 15; y1 = 24 * index; y2 = 24 * index; stroke = colors[index] }
+				
 				Rect {
 					key = index
 					x = 0
@@ -108,9 +109,10 @@ svg {
 					height = 10
 					width = 15
 					anchor = @anchor("middle","left")
-					fill = "none"
+					fill = "white"
 					stroke = colors[index]
 				}
+				Line { key = [index, 1]; x1 = 0; x2 = 15; y1 = 24 * index; y2 = 24 * index; stroke = colors[index] }
 				Text{
 					x = 20
 					y = index * 24
