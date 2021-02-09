@@ -89,12 +89,12 @@
         </div>
         <div v-else class="viz-result">
             <div>
-            <b-button class="btn col-md-4" @click="returnQuery"><i class="fas fa-arrow-left"></i> Back to query
+            <b-button class="btn col-md-2" variant = "primary" @click="returnQuery"><i class="fas fa-arrow-left"></i> Back to query
             </b-button>
-            <b-button class="btn col-md-4" @click="returnQuery"></i>{{data.outputs[0].name}}
+            <b-button class="btn col-md-4" disabled >{{data.outputs[0].name}}
             </b-button>
             </div>
-            <div> 
+            <div id = "viz-card"> 
                 <VApp/>
             </div>
         </div>
@@ -128,7 +128,7 @@ export default {
             fields: ["index", "jobName", "jobId", "created", "status", "operation"],
             showTable:  true,
             valid_name: null,
-            submitted: false,
+            submitted: true,
             code: false,
             data: {outputs: []},
         };
@@ -305,6 +305,10 @@ export default {
 }
 #viz-container {
     position: relative;
+}
+#viz-card {
+    border: 1px solid #999;
+    height: 835px;
 }
 .v-editor {
     position: absolute;
