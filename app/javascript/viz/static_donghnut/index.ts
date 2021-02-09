@@ -15,7 +15,7 @@ export function init(id, path, config) {
         loadData: {
             pieData: {
                 url: path,
-                type: "csv",
+                type: "tsv",
                 dsvHasHeader: true,
                 loaded(data) {
                     const pieData = [];

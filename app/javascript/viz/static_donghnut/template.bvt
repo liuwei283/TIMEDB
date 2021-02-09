@@ -3,11 +3,12 @@ svg {
 	height = 500
 	Component {
 		y = 40
-		x = -30
+		x = -150
 		Text {
 			x = @geo(50, -50)
 			text = title
 			anchor = @anchor("top","center")
+			fontSize = 18
 		}
 		PieChart {
 			//colorScheme = myColors 
@@ -21,9 +22,11 @@ svg {
 			:legend(d) {
 				Legend {
 					
-					x = @geo(95, -50)
-					
-					//d.fill = d.data.r
+					x = @geo(90, -50)
+					// anchor = @anchor("right","top")
+					// x = 100%
+					// anchor = @anchor("right","top")
+					// d.fill = d.data.r
 					data = legendData
 				}
 			}
@@ -33,7 +36,7 @@ svg {
                         content = d.data.name + ": " + `${d.data.raw.num}`
                     }
                     x1 = d.start; x2 = d.end
-                    r1 = 50%
+                    r1 = 40%
                     r2 = 90%
 					
                     fill = d.data.raw.color.string
