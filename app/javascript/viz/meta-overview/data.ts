@@ -2,9 +2,10 @@ import Oviz from "crux";
 import { minmax } from "crux/dist/utils/math";
 import { ColorScheme, ColorSchemeCategory, ColorSchemeGradient } from "crux/dist/color";
 import { schemeSet3 } from "d3-scale-chromatic";
+import { cosmicPalettes, groupedChartColors,groupedColors2 } from "oviz-common/palette";
 import * as d3 from "d3";
 
-const schemeSet = schemeSet3;
+const schemeSet = groupedColors2;
 
 let nodeList: string[];
 
@@ -85,8 +86,15 @@ export function main(d) {
                 otherData[sm] += spDict[sp][sm];
         });
     });
-    this.data.hist.colorMap = Oviz.color.schemeCategory("dark", top5species).colors;
-    this.data.hist.colors = Object.values(this.data.hist.colorMap);
+    // this.data.hist.colorMap = Oviz.color.schemeCategory("light", top5species).colors;
+    // console.log(this.data.hist.colorMap);
+    // this.data.hist.colors = Object.values(this.data.hist.colorMap);
+
+    this.data.hist.colors = schemeSet;
+    this.data.hist.colorMap = {};
+    top5species.forEach((x, i) => {
+        this.data.hist.colorMap[x] = schemeSet[i];
+    })
     // this.data.hist.result.other = Object.keys(otherData)
     //                         .map(x => [x, otherData[x]]);
 }
@@ -115,8 +123,13 @@ export function meta(d) {
                 if (a.indexOf(x) < 0 && x !== "NA") a.push(x);
                 return a;
             }, []);
-            this.data.metaInfo[k] = new MetaInfo(k, false, null, null, values);
-            this.data.metaData[k] = this.data.samples.map(x => this.data.metaDict[x][k]);
+            if (values.length> 6) {
+                alert(`Meta info "${k}" contains more than 6 categories, will not be drawn`);
+            } else {
+                this.data.metaInfo[k] = new MetaInfo(k, false, null, null, values);
+                this.data.metaData[k] = this.data.samples.map(x => this.data.metaDict[x][k]);
+            }
+            
         }
     });
     // compute left boxplot

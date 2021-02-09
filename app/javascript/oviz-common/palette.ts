@@ -70,7 +70,14 @@ export const groupedChartColors = ["#f06748",
 "#48d1f0",
 "#bb48f0",
 "#f0bb48"];
-
+export const groupedColors2 = [
+    "hsl(0, 73%, 70%)",
+    "hsl(45, 100%, 70%)",
+    "hsl(199, 92%, 70%)",
+    "hsl(231, 44%, 70%)",
+    "hsl(291, 47%, 70%)",
+    "hsl(340, 82%, 70%)",
+]
 export const signedChartColors = {
     posRange: "green",
     negRange: "red",

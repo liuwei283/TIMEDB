@@ -41,7 +41,7 @@ export class MetaOverview extends Oviz.Component {
                     return "#aaa";
                 else {
                     return d3.scaleLinear()
-                        .range(["yellow", "red"])
+                        .range(["hsl(50, 80%, 60%)", "hsl(10, 80%, 60%)"])
                         .domain([Math.log10(min) , Math.log10(max)])(Math.log10(d));
                 }
             };
