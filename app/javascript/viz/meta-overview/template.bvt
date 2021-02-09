@@ -9,18 +9,15 @@ Component {
     XYPlot {
         static = true
         discreteCategory = true
-        x = offsetX; y = 20
+        x = offsetX + 3; y = 20
         width = gridW * samples.length
-        height = offsetY - 20
+        height = offsetY - 23
         data = hist.result
         stackedData = {
             stacked: hist.indexes
         }
         // gap = 1
         padding = 0
-        Rect.full {
-            fill = "none"; stroke = "white"
-        }
         StackedBars {
             data = "stacked" 
             on:click = (ev, el) => debugFunc(ev, el)
@@ -214,7 +211,8 @@ Component {
             //@for (k, i) in Object.keys(m)
             Rows {
                 @for (f, i) in metaFeatures {
-                    Component {
+                    @if !!metaInfo[f] {
+                        Component {
                         height = 12
                         Component { // legend area
                             x = 10; height = 100%
@@ -290,6 +288,8 @@ Component {
                         }
                         }
                     }
+                    }
+                    
                 }  
             }
         }
