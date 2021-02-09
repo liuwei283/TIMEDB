@@ -113,7 +113,8 @@ export function meta(d) {
     });
     this.data.metaData = {};
     this.data.metaInfo = {};
-    this.data.metaFeatures.forEach(k => {
+    this.data.discaredFeatures = [];
+    this.data.metaFeatures.forEach((k, i) => {
         if (k === "Age" || k === "BMI") {
             const [min, max] = minmax(d.map(x => x[k]));
             this.data.metaInfo[k] = new MetaInfo(k, true, min, max, []);
@@ -124,7 +125,10 @@ export function meta(d) {
                 return a;
             }, []);
             if (values.length> 6) {
-                alert(`Meta info "${k}" contains more than 6 categories, will not be drawn`);
+                this.data.discaredFeatures.push(k);
+                this.data.metaFeatures.splice(i, 1);
+                console.log(this.data.metaFeatures);
+                // alert(`Meta info "${k}" contains more than 6 categories, will not be drawn`);
             } else {
                 this.data.metaInfo[k] = new MetaInfo(k, false, null, null, values);
                 this.data.metaData[k] = this.data.samples.map(x => this.data.metaDict[x][k]);

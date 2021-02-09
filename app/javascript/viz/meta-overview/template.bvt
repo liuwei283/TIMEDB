@@ -86,14 +86,17 @@ Component {
         Component {
             @let height = mainHeight / species.length
             x = offsetX; static = true
-            @for (species, i) in mainHeatmap {
-                @for (sample, j) in species {
+            @for (r, i) in mainHeatmap {
+                @for (sample, j) in r {
                     Rect {
                         key = `main-${i}-${j}`
                         height = height - 1; width = gridW - 1; x = gridW * j; y = height * i
                         fill = mainColorGetter(sample)
-                        // on:mouseenter = setActive(gridW * j, gridH * i)
-                        // on:mouseleave = setActive(null, null)
+                        on:mouseenter = setActive(gridW * j + offsetX, height * i)
+                        on:mouseleave = setActive(null, null)
+                        behavior:tooltip {
+                            content = `sample: ${samples[j]}<br>species: ${species[i]}<br>relative abundance: ${sample.toExponential(2)}`
+                        }
                     }
                 }
             }
@@ -118,6 +121,7 @@ Component {
             }
             @for (item, index) in boxplot.boxData{
                 Boxes {
+                    @let color = index === 0 ? colors.control : colors.gout
                     key = index
                     data = "boxData" + (index + 1).toString()
                     showMean = true
@@ -125,29 +129,28 @@ Component {
                     y = -gridH/6 + gridH * index /3
                     :box (_d) {
                         Rect.full  {
-                            fill = colors[index]
-                            stroke = colors[index]
-                            fillOpacity = 0.01
+                            fill = color
+                            stroke = color
                             behavior:tooltip {
-                                content = (`min: ${_d.data[0].toFixed(2)} <br>
-                                            first quartile: ${_d.data[1].toFixed(2)} <br>
-                                            median: ${_d.data[2].toFixed(2)} <br>
-                                            third quartile: ${_d.data[3].toFixed(2)} <br>
-                                            max: ${_d.data[4].toFixed(2)} <br>`)
+                                content = (`min: ${_d.data[0].toExponential(2)} <br>
+                                            first quartile: ${_d.data[1].toExponential(2)} <br>
+                                            median: ${_d.data[2].toExponential(2)} <br>
+                                            third quartile: ${_d.data[3].toExponential(2)} <br>
+                                            max: ${_d.data[4].toExponential(2)} <br>`)
                             }
                             y = 33%
                             height = 33%
                         }
                     }
                     :whiskle (d) {
-                        Line { x2 = 100%; y = 50%; stroke = colors[index];
+                        Line { x2 = 100%; y = 50%; stroke = color;
                         }
                     }
                     :outlier{
-                        Circle.centered { r = 2; fill = colors[index] }
+                        Circle.centered { r = 2; fill = color }
                     }
                     :mean(means) {
-                        Line {y1 = 33%; y2 = 66%; stroke = colors[index]}
+                        Line {y1 = 33%; y2 = 66%; stroke = "#fff"}
                     }
                     :median(d) {}
                 }
@@ -158,36 +161,40 @@ Component {
 	    }
         }
         Component {
-            @if state.activeX !== null && state.activeY !== null {
+            @if state.activeX !== null {
                 Rect {
-                    x = state.activeX + offsetX; y = 0
+                    x = state.activeX; y = 0
                     width = gridW
                     height = gridH * species.length
                     // stroke = @color("highlight")
-                    stroke = "white"
+                    stroke = "#000"
                     strokeWidth = 2
                     fill = "none"
                     events = "none"
                 }
+            }
+            @if state.activeY !== null {
                 Rect {
-                    x = 0; y = state.activeY
+                    x = offsetX; y = state.activeY
                     width = gridW * samples.length
-                    height = gridH
+                    height =  mainHeight / species.length
                     // stroke = @color("highlight")
-                    stroke = "white"
+                    stroke = "#000"
                     strokeWidth = 2
                     fill = "none"
                     events = "none"
                 }
-                Rect {
+                @if mainHeight/species.length > 10{
+                    Rect {
                     x = samples.length * gridW + 10 + offsetX; y = state.activeY
                     width = 300
                     height = gridH
                     // stroke = @color("highlight")
-                    stroke = "white"
+                    stroke = "#000"
                     strokeWidth = 2
                     fill = "none"
                     events = "none"
+                }
                 }
             }
         }
@@ -231,7 +238,7 @@ Component {
                                 }
                                 @if !metaInfo[f].useNumber {
                                     @let rectW = (offsetX - 10 - 20) / metaInfo[f].values.length 
-                                @for cat in metaInfo[f].values {
+                                @for (cat, j) in metaInfo[f].values {
                                     Component {
                                         width = rectW
                                         Rect {
@@ -271,7 +278,14 @@ Component {
                         Component {
                             x = offsetX; height = 100%
                         @for (d, j) in metaData[f] {
-                            @let metaFill = metaInfo[f].color(d)
+                            Component {
+                                height = 100%; width = 100%
+                                on:mouseenter = setActive(gridW * j + offsetX, null)
+                                on:mouseleave = setActive(null, null)
+                                 behavior:tooltip {
+                                    content = `sample: ${samples[j]}<br>${f}: ${d}`
+                                }
+                                @let metaFill = metaInfo[f].color(d)
                             @if !!metaFill {
                                 Rect {
                                     height = 95%; width = gridW - 1; x = gridW * j; fill = metaFill
@@ -284,6 +298,8 @@ Component {
                                     x1 = gridW * j; x2 = gridW * j + gridW; y1 = 95%; y2 = 0; stroke = "red"
                                 }
                             }
+                            }
+                            
                             
                         }
                         }
@@ -297,11 +313,11 @@ Component {
         Component {
             @if state.activeX !== null {
                 Rect {
-                    x = state.activeX + offsetX; y = 20
+                    x = state.activeX; y = 20
                     width = gridW
-                    height = gridH * metaFeatures.length
+                    height = 12 * metaFeatures.length
                     // stroke = @color("highlight")
-                    stroke = "white"
+                    stroke = "#000"
                     strokeWidth = 2
                     fill = "none"
                     events = "none"

@@ -5,21 +5,18 @@ import { getLeafOrder, main, meta } from "./data";
 import { registerEditorConfig } from "utils/editor";
 import { editorConfig, editorRef } from "./editor";
 
+import {controlGroupColors} from "oviz-common/palette";
 import Vue from "vue";
-// import ColorPicker from "app/mutated/color-picker.vue";
 // import CommentEdit from "app/mutated/comment-edit.vue";
 // import FilterSample from "app/mutated/filter-sample.vue";
 // import GroupEdit from "app/mutated/group-edit.vue";
-// import MetaInfo from "app/mutated/meta-info.vue";
 // import PanelEdit from "app/mutated/panel-edit.vue";
 // import ReorderSample from "app/mutated/reorder-sample.vue";
 // import Reorder from "app/mutated/reorder.vue";
-// Vue.component("meta-info", MetaInfo);
 // Vue.component("reorder", Reorder);
 // Vue.component("group-edit", GroupEdit);
 // Vue.component("panel-edit", PanelEdit);
 // Vue.component("comment-edit", CommentEdit);
-// Vue.component("color-picker", ColorPicker);
 // Vue.component("reorder-sample", ReorderSample);
 // Vue.component("filter-sample", FilterSample);
 
@@ -35,7 +32,10 @@ function init() {
         root: new MetaOverview(),
         theme: "light",
         data: {
-            
+            colors: {
+                control: controlGroupColors[0],
+                gout: controlGroupColors[1]
+            }
         },
         loadData: {
             ovTree: {
@@ -61,7 +61,7 @@ function init() {
         },
         setup() {
             console.log(this["_data"]);
-            // registerEditorConfig(MODULE_NAME, editorConfig(this), [], editorRef);
+            registerEditorConfig({sections:[]}, editorRef);
         },
     });
     return visualizer;

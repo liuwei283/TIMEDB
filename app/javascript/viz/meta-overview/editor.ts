@@ -1,6 +1,7 @@
 // import { showMsgBox } from "packs/vapp";
 import { EditorDef, ToolbarDef } from "utils/editor";
 import { copyObject } from "utils/object";
+import { defaultEditorConfig } from "viz/discrete-heatmap/editor";
 // import { filterSamples, updateCommentColor, updateGensStat } from "./data";
 
 export const editorRef: any = {};

@@ -78,6 +78,10 @@ export const groupedColors2 = [
     "hsl(291, 47%, 70%)",
     "hsl(340, 82%, 70%)",
 ]
+
+export const controlGroupColors = [
+    "#27AE60", "#E74C3C"
+];
 export const signedChartColors = {
     posRange: "green",
     negRange: "red",

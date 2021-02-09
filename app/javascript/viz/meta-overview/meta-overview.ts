@@ -4,6 +4,7 @@ import { minmax, max } from "crux/dist/utils/math";
 import * as d3 from "d3";
 
 export class MetaOverview extends Oviz.Component {
+    public colors:any;
     public ovMain: any;
     public ovTree: any;
     public mainHeatmap: number[][];
@@ -22,7 +23,7 @@ export class MetaOverview extends Oviz.Component {
     public sampleOrderChanged = true;
     
     private valueRange;
-    private colors = ["pink", "skyblue"];
+    // private colors = ["pink", "skyblue"];
     private fullDisplay = false;
 
     private yPos = 0;
@@ -41,7 +42,8 @@ export class MetaOverview extends Oviz.Component {
                     return "#aaa";
                 else {
                     return d3.scaleLinear()
-                        .range(["hsl(50, 80%, 60%)", "hsl(10, 80%, 60%)"])
+                        // .range(["hsl(50, 80%, 60%)", "hsl(10, 80%, 60%)"])
+                        .range(["#FFEB3B", "#8E24AA"])
                         .domain([Math.log10(min) , Math.log10(max)])(Math.log10(d));
                 }
             };
