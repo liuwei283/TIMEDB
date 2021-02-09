@@ -3,10 +3,11 @@ class DatabaseController < ApplicationController
 
     def overview
         table_json = {
-            'pie1': 'BMI.stat.csv',  
-            'pie2': 'host_age.stat.csv',
-            'pie3': 'sex.stat.csv',  
-            'pie4': 'country.stat.csv',
+            'country': 'pie_GMREPO_country.tsv',  
+            'phenotype': 'pie_GMREPO_phenotype.tsv',
+            'sex': 'pie_GMREPO_sex.tsv',  
+            'BMI': 'pie_HMGDB_bmi_class.tsv',
+            'age': 'pie_HMGDB_age_class.tsv'
         };
         @table_data = {};
         table_json.each do |key, path|
@@ -14,7 +15,8 @@ class DatabaseController < ApplicationController
             if(File.file?(p))
                 current_json = {}
                 File.readlines(p).each_with_index do |line, i|
-                    contents = line.chomp.split(",")
+                    line = line.gsub(/"/, '' )
+                    contents = line.chomp.split("\t")
                     if i == 0
                         current_json['head'] = contents
                     elsif current_json['body']
