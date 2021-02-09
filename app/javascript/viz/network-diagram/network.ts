@@ -83,7 +83,7 @@ export class NetworkDiagram extends Component<NetworkDiagramOption<any[], any>> 
 
     render() {
         return this.t`Component{
-            width = 1500; height = 800;
+            width = 1500; height = 800; id = "network"
             Line {
                 x1 = layoutConfig.groupWidth; x2 = layoutConfig.groupWidth; y1 = 0; y2 = 700
                 strokeWidth = 2
@@ -116,14 +116,15 @@ export class NetworkDiagram extends Component<NetworkDiagramOption<any[], any>> 
             @for d in _nodes {
                 Component {
                     id = d.NodeName
-                    x = d._x; y = d._y
-                    on:mousedown = $el.stage = "active"
-                    on:mousemove = (ev,el) => dragNode(ev,el,d.NodeGroup)
-                    on:mouseup = $el.stage = null
-                    // on:mouseleave = $el.stage = null
+                    x = d._x
+                    y = d._y
+                    on:mousedown = (ev, el) => dragStart(ev, el, d.NodeGroup)
+                    on:mouseup = (ev, el) => dragEnd(ev, el)
+                    
                     behavior:tooltip {
                         content = [nodeDetail, d]
                     }
+                    
                     Circle.centered{
                         r =  Math.sqrt(d.NodeSize) * 3.14
                         fill = getFillByPhylumAndGenus(d)
@@ -135,11 +136,6 @@ export class NetworkDiagram extends Component<NetworkDiagramOption<any[], any>> 
                             style:font-weight = "bold"
                             style:user-select = "none"
                         }
-                    }
-                    Circle.centered{
-                        r =  Math.sqrt(d.NodeSize) * 3.14
-                        fill = "white"
-                        fillOpacity = 0.01
                     }
                 }
             }
@@ -168,11 +164,18 @@ export class NetworkDiagram extends Component<NetworkDiagramOption<any[], any>> 
         details += `<br>Correlation: ${parseFloat(l.correlation).toFixed(3)}`;
         return details;
     }
-    dragNode(ev, el, group) {
-        if (el.stage === "active") {
-            let [newX, newY] = Oviz.utils.mouse(el, ev);
-            newX = newX += el._prop.x;
-            newY = newY += el._prop.y;
+
+    protected dragEnd(_, el) {
+        delete this.$on['mousemove'];
+        el.stage = null;
+        this._updateNode = null;
+        // this.setState(null);
+    }
+
+    protected dragStart(_, el, group) {
+        this.$on['mousemove'] = (evp, elp) => {
+            let [newX, newY] = Oviz.utils.mouse(elp, evp);
+            console.log(`${newX} - ${newY}`)
             if (newY < 50 || newY > 700) {
                 el.stage = null;
                 return;
@@ -189,10 +192,12 @@ export class NetworkDiagram extends Component<NetworkDiagramOption<any[], any>> 
                 }
             }
             this._updateNode = {nid: el._prop.id, newX, newY};
-            this.setState(this._updateNode);
+            this.setState({
+                ...this._updateNode,
+            });
         }
+        el.stage = "dragging";
     }
-
     didCreate() {
         this.edgeColor = {
             group1: Color.literal("red").desaturate(30).string,
