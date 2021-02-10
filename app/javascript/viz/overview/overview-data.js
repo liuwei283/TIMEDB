@@ -345,7 +345,7 @@ var viz_data = {
     },
     "D008545": {
         "type": "tree",
-        "file": {"anno":"/data/static_viz_data/tree__anno.tsv", "matrix":"/data/static_viz_data/tree_D008545_test.tsv", "tree":"/data/static_viz_data/tree_D008545_abd.tsv"},
+        "file": {"anno":"/data/static_viz_data/tree_D008545_anno.tsv", "matrix":"/data/static_viz_data/tree_D008545_test.tsv", "tree":"/data/static_viz_data/tree_D008545_abd.tsv"},
         "config": {}
     },
     "D009765": {
