@@ -37,4 +37,6 @@
 
     
 </div>
-<%= javascript_pack_tag "sample_abd" %>
+<%if @abd_exist %>
+    <%= javascript_pack_tag "sample_abd" %>
+<%end%>
