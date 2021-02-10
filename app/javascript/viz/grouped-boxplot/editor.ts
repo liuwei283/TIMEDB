@@ -29,6 +29,20 @@ export function editorConfig(v): EditorDef {
                     type: "list",
                     items: [
                         {
+                            title: "Taxonomic rank",
+                            type: "select",
+                            options: v.data.ranks,
+                            value: {
+                                current: v.data.config.rankIndex.toString(),
+                                callback(d) {
+                                    v.data.config.rankIndex = parseInt(d);
+                                    v.data.boxData = v.data.boxDict[v.data.ranks[parseInt(d)].text];
+                                    v.forceRedraw = true;
+                                    run(v);
+                                },
+                            },
+                        },
+                        {
                             type: "vue",
                             title: "",
                             component: "color-picker",
