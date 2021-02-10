@@ -1,6 +1,7 @@
 import Oviz from "crux"
-import template from "../grouped-boxplot/template.bvt"
+import template from "./template.bvt"
 import { groupedChartColors} from "oviz-common/palette"
+import { findBoundsForValues } from "utils/maths";
 
 const ylabel = "Relative abundance";
 const classifiedIndex = 0;
@@ -12,7 +13,7 @@ export function init(id, path, config) {
     Oviz.visualize({
         el: id,
         template,
-        data: {ylabel, valueRange, title,
+        data: {ylabel, title,
             config: {
                 plotWidth: 1000,
                 showOutliers: true,
@@ -32,9 +33,11 @@ export function init(id, path, config) {
                         return self.indexOf(item) === index; });
                     const boxData = [{values: [], outliers: [], means: [], categories}, {values: [], outliers: [], means: [], categories}];
                     const colors = Object.values(Oviz.color.schemeCategory("light", classifications).colors);
+                    const allValues = [];
                     categories.forEach((arr, i) => {
                         const initialData = [[], []];
                         data.forEach(d => {
+                            allValues.push(parseFloat(d[arr]));
                             if (d[classifiedKey] === classifications[0]) {
                                 initialData[0].push(parseFloat(d[arr]));
                             } else {
@@ -57,6 +60,7 @@ export function init(id, path, config) {
                             boxData[j].means.push(stat2.mean());
                         });
                     });
+                    this.data.valueRange = findBoundsForValues(allValues, 2, false, 0.5);
                     this.data.boxData = boxData;
                     this.data.classifications = classifications;
                     this.data.categories = categories;
