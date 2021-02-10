@@ -3,13 +3,13 @@ svg {
 	XYPlot {
 		height = 500
 		width = config.plotWidth
+		valueRange = boxData.valueRange
 		padding-y = 20
 		padding-l = 40
 		data = {
-			boxData1: boxData[0],
-			boxData2: boxData[1]
+			boxData1: boxData.boxData[0],
+			boxData2: boxData.boxData[1]
 		}
-		// valueRange = valueRange
 		AxisBackground { dashArray = "1, 2" }
 		AxisBackground {
 			orientation = "vertical"
@@ -22,7 +22,7 @@ svg {
 			stroke = "#000"
 			fill = "none"
 		}
-		@for (item, index) in boxData{
+		@for (item, index) in boxData.boxData{
 			Boxes {
 				key = index
 				data = "boxData" + (index + 1).toString()
@@ -31,6 +31,7 @@ svg {
 				x = -4 + 8 * index
 				:box (_d) {
 					Rect.full  {
+						@expr console.log(_d)
 						zIndex = 1
 						fill = "white"
 						stroke = colors[index]
@@ -98,8 +99,8 @@ svg {
 		// 	}
 		// }
 		Component{
-			x = 5%; y = 80%
-			@for (item, index) in classifications{
+			x = 5%; y = 90%
+			@for (item, index) in boxData.classifications{
 				Line { key = index; x1 = 7.5; x2 = 7.5; y1 = 24 * index - 10; y2 = 24 * index + 10; stroke = colors[index] }
 				
 				Rect {
