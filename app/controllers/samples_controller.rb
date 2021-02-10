@@ -138,7 +138,8 @@ class SamplesController < ApplicationController
         content = @samples.selected_to_csv(params[:sample_ids])
         time = Time.now
         time_str = time.strftime("%Y_%m_%d")       
-        time_str += ("_" + time.strftime("%k_%M")) 
+        time_str += ("_" + time.strftime("%k_%M"))
+        time_str = time_str.gsub(' ','') 
         file_path = File.join(ds_dir, "selected_metadata_#{time_str}.csv")
         File.open(file_path, 'w') do |file|
             file << content
@@ -167,6 +168,7 @@ class SamplesController < ApplicationController
         time = Time.now
         time_str = time.strftime("%Y_%m_%d")       
         time_str += ("_" + time.strftime("%k_%M")) 
+        time_str = time_str.gsub(' ','')
         file_path = File.join(ds_dir, "selected_abd_#{time_str}.tsv")
         len = params[:sample_ids].length()
         if len<1
