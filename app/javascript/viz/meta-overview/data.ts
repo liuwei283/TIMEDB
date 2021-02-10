@@ -104,11 +104,12 @@ export function getLeafOrder(rootNode): string[] {
     return nodeList;
 }
 export function meta(d) {
+    const sampleIdKey = d.columns[0];
     this.data.metaFeatures = d.columns.slice(1, d.columns.length);
     this.data.metaDict = {};
     d.forEach(x => {
-        const sampleId = x["Sample_ID"];
-        delete x["Sample_ID"];
+        const sampleId = x[sampleIdKey];
+        delete x[sampleIdKey];
         this.data.metaDict[sampleId] = x;
     });
     this.data.metaData = {};

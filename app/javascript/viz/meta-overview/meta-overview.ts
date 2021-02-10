@@ -70,6 +70,7 @@ export class MetaOverview extends Oviz.Component {
             });
             this.sampleOrderChanged = false;
         }
+        this.$v.size.width = 8 * this.samples.length + 400;
     }
 
     protected state = {
