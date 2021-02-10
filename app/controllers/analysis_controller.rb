@@ -1,7 +1,7 @@
 class AnalysisController < ApplicationController
     before_action :instantiate_sidebar
     def index
-        @analyses = Analysis.all
+        @analyses = Analysis.where "mid is not null"
         # check the card image
         dir = File.join(Rails.root, "app", "assets", "images")
         sample_img = File.join(dir, "600.png")
