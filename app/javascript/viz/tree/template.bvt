@@ -20,7 +20,7 @@ svg {
                     Component{
                         //zIndex = 2
                         Circle.centered{
-                            r =  (n.node.data.name === "r__Root") ? 5 : tree.mean_info_box[n.node.data.name]
+                            r =  (n.node.data.name === "r__Root") ? 5 : tree.mean_info_box[n.node.data.name] * 0.7
                             fill = tree.library.color_dict.colorNodes[n.node.data.name]
                             //fillOpacity = 0.8
                             stroke = tree.library.color_dict.colorLinks[n.node.data.name]
@@ -38,7 +38,7 @@ svg {
                         Circle.centered{
                             // r =  8
                             //@expr console.log(l);
-                            r = tree.mean_info_box[l.leaf.data.name]
+                            r = tree.mean_info_box[l.leaf.data.name] * 0.7
                             fill = tree.library.color_dict.colorNodes[l.leaf.data.name]
                             stroke = tree.library.color_dict.colorLinks[l.leaf.data.name]
                             behavior:tooltip {

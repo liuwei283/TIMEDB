@@ -562,17 +562,19 @@ export function main(_data) {
 
     library.color_dict = getLinkColor(allNodes, dataOpt.treeDepth);
 
-    const max = Math.max(...box_values) + dataOpt.logPara;
-    const min = Math.min(...box_values) + dataOpt.logPara;
+    const max =0;
+    const min = 0;
+    // const max = Math.max(...box_values) + dataOpt.logPara;
+    // const min = Math.min(...box_values) + dataOpt.logPara;
 
-    const leave_box_dict = [];
+    // const leave_box_dict = [];
 
-    leaves.some(l => {
-        leave_box_dict[l.data.name] = {
-            group1: boxPlotValue(all_info_box[l.data.name].group1, max, min),
-            group2: boxPlotValue(all_info_box[l.data.name].group2, max, min),
-        };
-    });
+    // leaves.some(l => {
+    //     leave_box_dict[l.data.name] = {
+    //         group1: boxPlotValue(all_info_box[l.data.name].group1, max, min),
+    //         group2: boxPlotValue(all_info_box[l.data.name].group2, max, min),
+    //     };
+    // });
 
     dataOpt.isRadical = (leaves.length > 20) ? true : false ;
     const branchShouldStayOnTop = (l, t) => {
@@ -583,7 +585,7 @@ export function main(_data) {
     if(!!this) this.data.branchShouldStayOnTop = branchShouldStayOnTop;
 
     console.log(treeData.children[0].data);
-    return {treeData, dataOpt, leave_box_dict, mean_info_box, max_mean, min_mean, library, allNodes, leaves, distinct_leaves, leave_link_dict, _data, max, min};
+    return {treeData, dataOpt, leave_box_dict: null, mean_info_box, max_mean, min_mean, library, allNodes, leaves, distinct_leaves, leave_link_dict, _data, max, min};
 }
 function parseTreeData(tree) {
     if (library.matrix_dict[tree.name]) tree.data = library.matrix_dict[tree.name];
