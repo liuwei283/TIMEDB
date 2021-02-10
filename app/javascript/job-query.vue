@@ -128,7 +128,7 @@ export default {
             fields: ["index", "jobName", "jobId", "created", "status", "operation"],
             showTable:  true,
             valid_name: null,
-            submitted: true,
+            submitted: false,
             code: false,
             data: {outputs: []},
         };
