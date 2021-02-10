@@ -64,8 +64,9 @@ export const rainbowL = [ "hsl(340, 82%, 76%)",
 "hsl(291, 47%, 71%)",
 ];
 
-export const groupedChartColors = ["#f06748",
+export const groupedChartColors = [
 "#3CC145",
+"#f06748",
 "#6748f0",
 "#48d1f0",
 "#bb48f0",

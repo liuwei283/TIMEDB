@@ -72,6 +72,9 @@ export class ComplexScatterplot extends Component<ComponentOption> {
                 }
             } else if (this.groups) {
                 this.colorMap = this.getMap(this.groups, this.colors);
+                this.groupLegendData = this.groups.map((x, i) => {
+                    return {type: "custom", label: x, fill: this.colors[i]}
+                });
             }
         }
 
@@ -94,7 +97,7 @@ export class ComplexScatterplot extends Component<ComponentOption> {
             this.parsedScatterData = this.scatterData.map((d, i) => {
                 const datum = {sampleId: d.sampleId, 
                     group: this.sampleInfoDict[d.sampleId].group,
-                    cluster: this.clusterDict[d.sampleId][this.rankLabel]};
+                    cluster: this.clusterDict ? this.clusterDict[d.sampleId][this.rankLabel] :null};
                 datum[this.xLabel] = d[this.xLabel];
                 datum[this.yLabel] = d[this.yLabel];
                 return datum;
