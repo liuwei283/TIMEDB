@@ -2,7 +2,7 @@ import Oviz from "crux";
 import { minmax } from "crux/dist/utils/math";
 import { ColorScheme, ColorSchemeCategory, ColorSchemeGradient } from "crux/dist/color";
 import { schemeSet3 } from "d3-scale-chromatic";
-import { cosmicPalettes, groupedChartColors,groupedColors2 } from "oviz-common/palette";
+import { cosmicPalettes, groupedChartColors,groupedColors2, rainbowL} from "oviz-common/palette";
 import * as d3 from "d3";
 
 const schemeSet = groupedColors2;
@@ -59,7 +59,7 @@ export function main(d) {
         this.data.mainHeatmap.push(row);
     });
     const top5species = spComp.sort((a, b) => a.sum - b.sum)
-          .splice(0, 5)
+          .splice(0, 21)
           .map(x => x.id);
     const spDict = {};
     d.forEach(x => {
@@ -93,7 +93,7 @@ export function main(d) {
     this.data.hist.colors = schemeSet;
     this.data.hist.colorMap = {};
     top5species.forEach((x, i) => {
-        this.data.hist.colorMap[x] = schemeSet[i];
+        this.data.hist.colorMap[x] = rainbowL[i % 16];
     })
     // this.data.hist.result.other = Object.keys(otherData)
     //                         .map(x => [x, otherData[x]]);

@@ -93,6 +93,11 @@ export class ComplexScatterplot extends Component<ComponentOption> {
 
         if (this._firstRender || this.dataChanged) {
             this.xLabel = this.availableAxises[this.config.xAxisIndex].text;
+            if (this.config.yAxisIndex === 1 && this.availableAxises.length === 1){
+                this.yLabel = this.availableAxises[0].text;
+                this.config.yAxisIndex = 0;
+            }
+                
             this.yLabel = this.availableAxises[this.config.yAxisIndex].text;
             this.parsedScatterData = this.scatterData.map((d, i) => {
                 const datum = {sampleId: d.sampleId, 
