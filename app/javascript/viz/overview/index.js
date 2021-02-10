@@ -272,7 +272,9 @@ export function catch_change(data, tids){
             var cid = type_key[i] + i + outer_block.id;
             fillinblock(cid, new_k, relation_data, content_data);
         }
-
-        assign_tb_style(tids);        
+        if (Object.keys(struct_data[B_i])[0].includes("T")){
+            assign_tb_style(tids);
+        }
+                
     });
 }

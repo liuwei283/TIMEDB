@@ -2,9 +2,9 @@ import Oviz from "crux"
 import template from "../grouped-boxplot/template.bvt"
 import { groupedChartColors} from "oviz-common/palette"
 
-const ylabel = "Relative abundance(log10)";
+const ylabel = "Relative abundance";
 const classifiedIndex = 0;
-const valueRange = [-8, 2];
+const valueRange = [-10, 110];
 const title = "grouped box plot"
 
 export function init(id, path, config) {

@@ -1,0 +1,100 @@
+{
+    "struct_data":[
+        {"HTV": [{
+            "BMI": "BMI_pie",
+            "age": "age_pie",
+            "sex": "sex_pie",
+            "country": "country_pie",
+            "phenotype": "phenotype_pie"
+
+            }]
+        },
+        
+        {"HV": [{
+            "CRC": "CRC"
+            }]
+
+        },
+
+        {"HV": [{
+            "CRC": "CRC"
+            },
+            {
+            "species": "species"
+            }]
+        }
+    ],
+
+    "head_relation": {
+    "pie": "pie",
+    "boxplot": "boxplot",
+    "tree": "tree"
+    },
+
+    "table_relation" : {
+    "BMI_pie": "BMI",
+    "age_pie": "age",
+    "sex_pie": "sex",
+    "country_pie": "country",
+    "phenotype_pie": "phenotype"
+    },
+
+    "viz_relation": {
+    "BMI_pie": "dn1",
+    "age_pie": "dn2",
+    "sex_pie": "dn3",
+    "country_pie": "dn4",
+    "phenotype_pie": "dn5",
+    "CRC_species": "bp1",
+    "tree1": "tr1"
+    },
+
+    "text_relation": {
+
+    },
+
+    "des_data": {
+    "pie": "<h2> Sample metadata statistic </h2>",
+    "boxplot": "<h2> Diseases related taxonomy details</h2>",
+    "tree": "<h2> Diseases related taxonomy overview </h2>",
+
+    },
+
+    "viz_data": {
+        "dn1" : {
+            "type": "donghnut",
+            "file": ["/data/static_viz_data/pie_HMGDB_bmi_class.tsv"],
+            "config": {"title": "BMI distribution", "xlabel": "BMI", "ylabel": "number"}
+        },
+        "dn2": {
+            "type": "donghnut",
+            "file": ["/data/static_viz_data/pie_HMGDB_age_class.tsv"],
+            "config": {"title": "age distribution", "xlabel": "age", "ylabel": "number"}
+        },
+        "dn3": {
+            "type": "donghnut",
+            "file": ["/data/static_viz_data/pie_GMREPO_sex.tsv"],
+            "config": {"title": "sex distribution", "xlabel": "sex", "ylabel": "number"}
+        },
+        "dn4": {
+            "type": "donghnut",
+            "file": ["/data/static_viz_data/pie_GMREPO_country.tsv"],
+            "config": {"title": "samples in different country", "xlabel": "country", "ylabel": "number"}
+        },
+        "dn5": {
+            "type": "donghnut",
+            "file": ["/data/static_viz_data/pie_GMREPO_phenotype_v.tsv"],
+            "config": {"title": "phenotype distribution", "xlabel": "phenotype", "ylabel": "number"}
+        },
+        "bp1": {
+            "type": "boxplot",
+            "file": ["/data/static_viz_data/species.profile.tsv"],
+            "config": {}
+        },
+        "tr1": {
+            "type": "tree",
+            "file": {"anno":"/data/static_viz_data/YuJ_2015.anno.tsv", "matrix":"/data/static_viz_data/YuJ_2015.CRC-HC.wilcox.test.tsv", "tree":"/data/static_viz_data/YuJ_2015.tsv"},
+            "config": {}
+        }
+    }
+}
