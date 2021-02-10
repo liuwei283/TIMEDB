@@ -369,8 +369,8 @@ class SamplesController < ApplicationController
         @project = Project.find(params[:project_id])
         n1 = @project.name
         up_file = params[:file]
-        uploader = AbdUploader.new(n1)
-        uploader.store!(up_file)
+        # uploader = AbdUploader.new(n1)
+        # uploader.store!(up_file)
         if up_file.respond_to?(:read)
             data = up_file.read
             lines = data.split("\n")
@@ -399,9 +399,11 @@ class SamplesController < ApplicationController
                 s = "#{n1}\t#{s_name}"
                 i = index
                 keys.each do |k|
-                    s += "\n"
                     value = all_json[k][i]
-                    s += "#{k}\t#{value}"
+                    if value.to_f != 0
+                        s += "\n"
+                        s += "#{k}\t#{value}"
+                    end
                 end
                 f.write(s)
                 f.close

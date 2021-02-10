@@ -1,5 +1,6 @@
 class AdminController < ApplicationController
     http_basic_authenticate_with name: "admin", password: "chelijia"
+    $abd_dir = "#{Rails.root}/app/data/abd_files/"
     def index
         @projects = Project.order(:name)
         @ana_cate = AnalysisCategory.order(:name)
@@ -28,8 +29,8 @@ class AdminController < ApplicationController
         @project = Project.find(params[:project_id])
         n1 = @project.name
         up_file = params[:file]
-        uploader = AbdUploader.new(n1)
-        uploader.store!(up_file)
+        # uploader = AbdUploader.new(n1)
+        # uploader.store!(up_file)
         if up_file.respond_to?(:read)
             data = up_file.read
             lines = data.split("\n")
@@ -58,9 +59,11 @@ class AdminController < ApplicationController
                 s = "#{n1}\t#{s_name}"
                 i = index
                 keys.each do |k|
-                    s += "\n"
                     value = all_json[k][i]
-                    s += "#{k}\t#{value}"
+                    if value.to_f != 0
+                        s += "\n"
+                        s += "#{k}\t#{value}"
+                    end
                 end
                 f.write(s)
                 f.close
@@ -107,7 +110,7 @@ class AdminController < ApplicationController
             @project = Project.find(params[:project_id])
             db_samples_info_path = File.join Rails.root, 'app', 'data', 'db', params[:project_id] +'_samples_metadata.csv'
             csv_file = @project.samples.to_csv
-            File.open(db_samples_info_path, 'w') do |file|
+            File.open(db_samples_info_path, 'a') do |file|
                 file << csv_file
             end
         end
