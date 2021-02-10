@@ -9,7 +9,7 @@ svg {
 			boxData1: boxData[0],
 			boxData2: boxData[1]
 		}
-		valueRange = valueRange
+		// valueRange = valueRange
 		AxisBackground { dashArray = "1, 2" }
 		AxisBackground {
 			orientation = "vertical"
