@@ -3,9 +3,9 @@ import template from "./template.bvt"
 import { groupedChartColors} from "oviz-common/palette"
 import { findBoundsForValues } from "utils/maths";
 
-const ylabel = "Relative abundance";
+const ylabel = "Relative abundance(log10)";
 const classifiedIndex = 0;
-const valueRange = [-10, 110];
+const valueRange = [-9, 3];
 const title = "grouped box plot"
 
 export function init(id, path, config) {
