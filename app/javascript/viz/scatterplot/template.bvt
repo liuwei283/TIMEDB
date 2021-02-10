@@ -159,13 +159,14 @@ Component {
                 key = "legend1"
                 on:mousedown = (ev, el) => dragStart(ev, el)
                 on:mouseup = (ev, el) => dragEnd(ev, el)
+                @expr console.log(groupLegendData)
                 Legend {
                     data =groupLegendData
                     lineHeight = 18
                     :legend(data) {
                         Component {
                             height = 100%; width = 100%
-                        @let shape = shapeMap.get(data.label)
+                        @let shape = shapeMap ? shapeMap.get(data.label) : "Circle"
                         Component(shape) {
                             anchor = @anchor("m", "c")
                             x = 50%; y = 50%; r = config.scatterSize/2; width = config.scatterSize
