@@ -10,7 +10,6 @@ import { findBoundsForValues, computeLog } from "utils/maths";
 import { Color } from "crux/dist/color";
 const ylabel = "Beta diversity";
 const title = "Beta Diversity"
-//please change the displayed value range in the template by the prop: valueRange.
 const MODULE_NAME = 'boxplot'
 
 interface BoxplotData {
