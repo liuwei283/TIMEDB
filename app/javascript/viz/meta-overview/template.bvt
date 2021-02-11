@@ -165,7 +165,7 @@ Component {
                 Rect {
                     x = state.activeX; y = 0
                     width = gridW
-                    height = gridH * species.length
+                    height = mainHeight
                     // stroke = @color("highlight")
                     stroke = "#000"
                     strokeWidth = 2
@@ -188,7 +188,7 @@ Component {
                     Rect {
                     x = samples.length * gridW + 10 + offsetX; y = state.activeY
                     width = 300
-                    height = gridH
+                    height = mainHeight / species.length
                     // stroke = @color("highlight")
                     stroke = "#000"
                     strokeWidth = 2
@@ -313,6 +313,7 @@ Component {
         Component {
             @if state.activeX !== null {
                 Rect {
+                    //@expr console.log(metaFeatures.length)
                     x = state.activeX; y = 20
                     width = gridW
                     height = 12 * metaFeatures.length

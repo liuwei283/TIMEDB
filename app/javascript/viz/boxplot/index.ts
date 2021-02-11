@@ -90,6 +90,10 @@ function init() {
     
     return visualizer;
 }
+
+export function registerBoxplot() {
+    register(MODULE_NAME, init);
+}
 function processRawData(data: any[]) {
     const rawData = {};
     const allValues = [];
