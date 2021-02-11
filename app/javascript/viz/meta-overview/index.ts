@@ -6,19 +6,7 @@ import { registerEditorConfig } from "utils/editor";
 import { editorConfig, editorRef } from "./editor";
 
 import {controlGroupColors} from "oviz-common/palette";
-import Vue from "vue";
-// import CommentEdit from "app/mutated/comment-edit.vue";
-// import FilterSample from "app/mutated/filter-sample.vue";
-// import GroupEdit from "app/mutated/group-edit.vue";
-// import PanelEdit from "app/mutated/panel-edit.vue";
-// import ReorderSample from "app/mutated/reorder-sample.vue";
-// import Reorder from "app/mutated/reorder.vue";
-// Vue.component("reorder", Reorder);
-// Vue.component("group-edit", GroupEdit);
-// Vue.component("panel-edit", PanelEdit);
-// Vue.component("comment-edit", CommentEdit);
-// Vue.component("reorder-sample", ReorderSample);
-// Vue.component("filter-sample", FilterSample);
+
 
 const MODULE_NAME = "meta-overview";
 
