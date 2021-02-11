@@ -81,8 +81,9 @@ svg {
                     x1 = sourceX; x2 = targetX;
                 }
                 Text {
+                    // @expr console.log(pair.pValue.toExponential(3))
                     x = (targetX + sourceX)/2; y = -2; anchor = @anchor("c", "b")
-                    text = pair.pValue.toExponential(3)
+                    text = pair.pValue.toExponential(2)
                 }
                 // x = @scaled-x(i) + w /2; y = @scaled-y(boxData.max[i])
                 // Circle.centered {
