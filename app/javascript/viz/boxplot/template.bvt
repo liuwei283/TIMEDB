@@ -82,7 +82,7 @@ svg {
                 }
                 Text {
                     x = (targetX + sourceX)/2; y = -2; anchor = @anchor("c", "b")
-                    text = pair.pValue.toFixed(3)
+                    text = pair.pValue.toExponential(3)
                 }
                 // x = @scaled-x(i) + w /2; y = @scaled-y(boxData.max[i])
                 // Circle.centered {

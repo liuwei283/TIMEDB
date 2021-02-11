@@ -237,7 +237,7 @@ Component {
                                     }
                                 }
                                 @if !metaInfo[f].useNumber {
-                                    @let rectW = (offsetX - 10 - 20) / metaInfo[f].values.length 
+                                    @let rectW = (offsetX - 15 - 20) / metaInfo[f].values.length 
                                 @for (cat, j) in metaInfo[f].values {
                                     Component {
                                         width = rectW
@@ -256,7 +256,7 @@ Component {
                                 } @else {
                                     Component {
                                     @let div = (metaInfo[f].rangeMax - metaInfo[f].rangeMin) / 20
-                                    @let rectW = (offsetX - 10 - 20) / 20
+                                    @let rectW = (offsetX - 15 - 20) / 20
                                     @for i in 20 {
                                         Rect {
                                             height = 11; width = rectW; x = rectW * i
@@ -267,7 +267,7 @@ Component {
                                         anchor = @anchor("l", "t"); x = 2; fill = "#000"
                                     }
                                     Text(metaInfo[f].rangeMax) {
-                                        anchor = @anchor("right", "top"); x = offsetX - 12 - 20; fill = "#000"
+                                        anchor = @anchor("right", "top"); x = offsetX - 17 - 20; fill = "#000"
                                     }
                                     }
                                 }
@@ -302,6 +302,9 @@ Component {
                             
                             
                         }
+                        }
+                        Text(f) {
+                            x = offsetX + gridW * samples.length + 5; y = 6; anchor = @anchor("m", "l"); fontSize = 11
                         }
                     }
                     }
