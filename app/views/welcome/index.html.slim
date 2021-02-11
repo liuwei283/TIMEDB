@@ -45,8 +45,10 @@ section#function_card
       .card_body
         h5
           |Human Gut Metagenomics Database
-        p
-          |curated database with over 10,000 metagenomics sequencing data
+        p.card_des
+          |curated database with over 10,000 
+          br 
+          |metagenomics sequencing data
     .card
       .card_img
         =link_to analysis_index_path
@@ -54,8 +56,12 @@ section#function_card
       .card_body
         h5
           |Analyze your data
-        p
-          |contains diversity analysis, differential testing, diseases classifier, PCA, functional enrichments and so on.
+        p.card_des
+          |contains diversity analysis, differential testing, 
+          br
+          |diseases classifier, PCA,
+          br 
+          |functional enrichments and so on.
     .card
       .card_img
         =link_to "/visualizer/analysis/1"
@@ -63,8 +69,10 @@ section#function_card
       .card_body
         h5
           |Visualize your results 
-        p
-          |contains  corresponding visualization of analysis result and basic sample information visualization and so on
+        p.card_des
+          |contains  corresponding visualization of analysis result and basic sample and
+          br
+          |basic sample information visualization and so on
 
 section#dataset_list
     .container

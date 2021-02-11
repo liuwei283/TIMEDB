@@ -31,6 +31,7 @@ class SamplesController < ApplicationController
         @attrs = Sample.column_names
         abd_name = "#{@project.name}_#{@sample.sample_name}.tsv"
         abd_path = File.join("/app/data/abd_files/", abd_name)
+        @abd_exist = File.exist?(abd_path)
         gon.push file: abd_path
     end
 
