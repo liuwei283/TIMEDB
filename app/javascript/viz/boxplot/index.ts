@@ -11,7 +11,7 @@ import { Color } from "crux/dist/color";
 const ylabel = "Beta diversity";
 const title = "Beta Diversity"
 const MODULE_NAME = 'boxplot'
-
+//
 interface BoxplotData {
     values: any[], 
     outliers: any[], 
