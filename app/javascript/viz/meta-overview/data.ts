@@ -116,7 +116,7 @@ export function meta(d) {
     this.data.metaInfo = {};
     this.data.discaredFeatures = [];
     this.data.metaFeatures.forEach((k, i) => {
-        if (k === "Age" || k === "BMI") {
+        if (k === "Age" || k === "age" || k === "BMI") {
             const [min, max] = minmax(d.map(x => x[k]));
             this.data.metaInfo[k] = new MetaInfo(k, true, min, max, []);
             this.data.metaData[k] = this.data.samples.map(x => this.data.metaDict[x][k]);

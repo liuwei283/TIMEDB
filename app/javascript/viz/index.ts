@@ -3,6 +3,7 @@ export interface Viz {
 }
 import {registerSignedHeatmap} from "./signed-heatmap";
 import {registerScatterplot} from "./scatterplot";
+import { registerBoxplot} from "./boxplot";
 export {default as Demo} from "./demo"
 
 declare global {
@@ -22,6 +23,9 @@ export function registerViz(moduleName) {
             break;
         case "scatterplot":
             registerScatterplot();
+            break;
+        case "boxplot":
+            registerBoxplot();
             break;
     }
 
