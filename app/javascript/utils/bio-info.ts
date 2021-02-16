@@ -11,3 +11,7 @@ export const rankDict = {
  export function sortByRankKey(a: string, b: string): number {
     return Object.keys(rankDict).indexOf(a) - Object.keys(rankDict).indexOf(b);
  }
+
+ export function sortByRank(a: string, b: string): number {
+    return Object.values(rankDict).indexOf(a) - Object.values(rankDict).indexOf(b);
+ }
