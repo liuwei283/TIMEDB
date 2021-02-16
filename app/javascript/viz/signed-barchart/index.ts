@@ -24,7 +24,7 @@ function init() {
             },
             config : {
                 plotHeight: 600,
-                plotWdith: 400,
+                plotWidth: 800,
                 barWidth: 15,
             }
         },
