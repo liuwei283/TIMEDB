@@ -84,8 +84,8 @@ export const controlGroupColors = [
     "#27AE60", "#E74C3C"
 ];
 export const signedChartColors = {
-    posRange: "green",
-    negRange: "red",
+    posRange: "#27AE60",
+    negRange: "#E74C3C",
     origin: "white"
 }
 
