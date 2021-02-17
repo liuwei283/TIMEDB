@@ -1,13 +1,15 @@
 // import { showMsgBox } from "packs/vapp";
 import { EditorDef, ToolbarDef } from "utils/editor";
 import { copyObject } from "utils/object";
-import { defaultEditorConfig } from "viz/discrete-heatmap/editor";
 // import { filterSamples, updateCommentColor, updateGensStat } from "./data";
+import { filterSamples } from "./data";
+import { event } from "crux/dist/utils";
+import { viz_mode } from "page/visualizers";
 
 export const editorRef: any = {};
 
 const conf: any = {
-    sampleSortBy: ["Age"],
+    sampleSortBy: ["age"],
 };
 
 function updateHistoData(v, idx) {
@@ -30,9 +32,8 @@ function updateHistoLegendData(v) {
 
 const samplesVueData: any = {};
 
-function updateSampleSorting(v, keys, bisectNegValues: any[], bisectPosValues: any[], bisectGenes: any[], sortPos: boolean, sortNeg: boolean) {
+function updateSampleSorting(v, keys) {
     const getters = [];
-    bisectNegValues.push("-");
 
     for (const sampleSortBy of keys) {
         const sOrder = sampleSortBy[0];
@@ -41,42 +42,34 @@ function updateSampleSorting(v, keys, bisectNegValues: any[], bisectPosValues: a
         let getter: any;
         switch (sKey) {
             case "id":
-                getter = s => s.SampleID;
-                break;
-            case "bis":
-                // encode the bisect values into a string; a- for positive vales and -Z for negative values.
-                getter = s => {
-                    return bisectGenes
-                        .map(g => {
-                            const values = s[`g_${g}`];
-                            const posIdx = bisectPosValues.findIndex(p => values.some(v => v === p));
-                            const negIdx = bisectNegValues.findIndex(p => values.some(v => v === p));
-                            return posIdx < 0 ? (sortNeg ? String.fromCharCode(90 - negIdx) : "0") : sortPos ? String.fromCharCode(97 + posIdx) : "1";
-                        })
-                        .join("");
-                };
+                getter = s => s;
                 break;
             default:
                 const s = sKey.indexOf("_");
-                const panel = sKey.substr(0, s);
+                // const panel = sKey.substr(0, s);
                 const key = sKey.substr(s + 1);
-                if (panel === "^hist") {
-                    const k = parseInt(key);
-                    getter = s => s._histo[k].__max;
-                    break;
-                }
-                const isNumber = panel.match(/^ht\d*(\(.+?\))?$/) ? true : panel === "pw" ? false : v.data.extraPanelData[panel][key].isNumber;
-                if (isNumber) {
-                    getter = s => (s[sKey] === "N/A" ? Number.MAX_VALUE : parseFloat(s[sKey]));
+                if (key === "age" || key === "BMI") {
+                    getter = s => Number.isNaN(v.data.metaDict[s][key]) ? Number.MAX_VALUE : v.data.metaDict[s][key];
                 } else {
-                    getter = s => s[sKey];
+                    getter = s => v.data.metaDict[s][key];
                 }
+                
         }
         getters.push([getter, sOrder === "a"]);
     }
-    v.data.samples = samplesVueData.array = sort(v.data.data, getters);
-    // filterSamples(v);
+    v.data.samples = sort(v.data, getters);
+    filterSamples(v);
     update(v);
+}
+function sort(data: any, getters: [any, boolean][]) {
+    return data.samples.sort((a, b) => {
+        let result = 0;
+        for (const getter of getters) {
+            result = compare(a, b, getter[0], getter[1]);
+            if (result !== 0) break;
+        }
+        return result;
+    });
 }
 
 function selectGenes(genes: any[], str: string) {
@@ -110,19 +103,6 @@ function compare(a: any, b: any, getter: any, asc: boolean) {
     if (va < vb) return -1;
     else if (va > vb) return 1;
     else return 0;
-}
-
-function sort(data: any[], getters: [any, boolean][]) {
-    return data
-        .sort((a, b) => {
-            let result = 0;
-            for (const getter of getters) {
-                result = compare(a, b, getter[0], getter[1]);
-                if (result !== 0) break;
-            }
-            return result;
-        })
-        .map(x => x.SampleID);
 }
 
 function update(v) {
@@ -170,13 +150,13 @@ export function editorConfig(v: any): EditorDef {
         // ["bis", "Bisection"],
         // ...d.histoKeys.map((h, i) => [`^hist_${i}`, `Histogram ${h[0].name}: Total`]),
         // ...d.histoKeys.flat().map(k => [k.rawKey, k.key, `Histogram ${k.name}`]),
-        ...d.metaFeatures.map(k => [`mt_${k}`, k, "Pathway"]),
+        ...d.metaFeatures.map(k => [`mt_${k}`, k, "Meta info"]),
     ]
         .flatMap(([k, name, p]) => [
             { value: `a${k}`, text: `${p ? `${p}: ` : ""}${name} ↑` },
             { value: `d${k}`, text: `${p ? `${p}: ` : ""}${name} ↓` },
         ]);
-
+    
     // const histoDefs = d.histoKeys.map((k, i) => histoPanelDef(v, k, i));
 
     // const pathwayPanelDef = d.pathways.length
@@ -279,45 +259,42 @@ export function editorConfig(v: any): EditorDef {
                                         keys: Array.from(conf.sampleSortBy),
                                         // mutTypes: Array.from(v.data.mutTypes),
                                         callback: (s, neg, pos, g, sortPos, sortNeg) => {
-                                            // const bisetGenes = selectGenes(v.data.genes, g);
-                                            // if (!Array.isArray(bisetGenes)) {
-                                            //     alert(`The input "${g}" is not valid`);
-                                            //     return;
-                                            // }
-                                            // updateSampleSorting(v, s, neg, pos, bisetGenes, sortPos, sortNeg);
+                                            updateSampleSorting(v, s);
                                         },
                                     },
                                 },
-                                {
-                                    type: "vue",
-                                    component: "reorder",
-                                    title: "Reorder samples",
-                                    data: samplesVueData,
-                                },
-                                {
-                                    type: "vue",
-                                    component: "filter-sample",
-                                    title: "Filter Samples",
-                                    ref: "filterSample",
-                                    data: {
-                                        get samples() {
-                                            return Array.from(v.data.samples);
-                                        },
-                                        callback(hiddenSamples) {
-                                            v.data.hiddenSamples = new Set(hiddenSamples);
-                                            // filterSamples(v);
-                                            update(v);
-                                        },
-                                    },
-                                },
-                                {
-                                    type: "button",
-                                    title: "Show ordered sample list",
-                                    action() {
-                                        const hidden = v.data.hiddenSamples;
-                                        // showMsgBox("Sample List", v.data.samples.map(s => (hidden.has(s) ? `${s} (hidden)` : s)).join("<br>"), true);
-                                    },
-                                },
+                                // {
+                                //     type: "vue",
+                                //     component: "reorder",
+                                //     title: "Reorder samples",
+                                //     data: samplesVueData,
+                                // },
+                                // {
+                                //     type: "vue",
+                                //     component: "filter-sample",
+                                //     title: "Filter Samples",
+                                //     ref: "filterSample",
+                                //     data: {
+                                //         get samples() {
+                                //             return Array.from(v.data.samples);
+                                //         },
+                                //         callback(hiddenSamples) {
+                                //             v.data.hiddenSamples = new Set(hiddenSamples);
+                                //             filterSamples(v);
+                                //             update(v);
+                                //         },
+                                //     },
+                                // },
+                                // {
+                                //     type: "button",
+                                //     title: "Show ordered sample list",
+                                //     action() {
+                                //         const hidden = v.data.hiddenSamples;
+                                //         event.emit("show-msgbox", {title:"Sample List", 
+                                //             content: v.data.samples.map(s => (hidden.has(s) ? `${s} (hidden)` : s)).join("<br>"),
+                                //             html: true});
+                                //     },
+                                // },
                             ],
                         },
                     },

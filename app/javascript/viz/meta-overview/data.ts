@@ -2,7 +2,7 @@ import Oviz from "crux";
 import { minmax } from "crux/dist/utils/math";
 import { ColorScheme, ColorSchemeCategory, ColorSchemeGradient } from "crux/dist/color";
 import { schemeSet3 } from "d3-scale-chromatic";
-import { cosmicPalettes, groupedChartColors,groupedColors2, rainbowL} from "oviz-common/palette";
+import { rainbowL,groupedColors2, rainbow1} from "oviz-common/palette";
 import * as d3 from "d3";
 
 const schemeSet = groupedColors2;
@@ -80,8 +80,7 @@ export function main(d) {
     const otherData = {};
     Object.keys(spDict).forEach(sp => {
         Object.keys(spDict[sp]).forEach(sm => {
-            if (!otherData[sm])
-                otherData[sm] = spDict[sp][sm];
+            if (!otherData[sm])                otherData[sm] = spDict[sp][sm];
             else
                 otherData[sm] += spDict[sp][sm];
         });
@@ -94,7 +93,7 @@ export function main(d) {
     this.data.hist.colorMap = {};
     top5species.forEach((x, i) => {
         this.data.hist.colorMap[x] = rainbowL[i % 16];
-    })
+    });
     // this.data.hist.result.other = Object.keys(otherData)
     //                         .map(x => [x, otherData[x]]);
 }
@@ -128,22 +127,22 @@ export function meta(d) {
             if (values.length> 6) {
                 this.data.discaredFeatures.push(k);
                 this.data.metaFeatures.splice(i, 1);
-                console.log(this.data.metaFeatures);
                 // alert(`Meta info "${k}" contains more than 6 categories, will not be drawn`);
             } else {
                 this.data.metaInfo[k] = new MetaInfo(k, false, null, null, values);
                 this.data.metaData[k] = this.data.samples.map(x => this.data.metaDict[x][k]);
             }
-            
         }
     });
     // compute left boxplot
     const categories = [...this.data.species];
     const classifications = this.data.metaInfo["Group"].values;
     const boxData = [{values: [], outliers: [], means: [], categories}, {values: [], outliers: [], means: [], categories}];
+    const allValues = [];
     categories.forEach((c, i) => {
         const initialData = [[], []];
         this.data.samples.forEach(s => {
+            allValues.push(this.data.mainDict[c][s]);
             if (this.data.metaDict[s].Group === classifications[0]) {
                 initialData[0].push(this.data.mainDict[c][s]);
                 // initialData[0].push(Math.log10(parseFloat(mainDict[c][s])));
@@ -168,7 +167,8 @@ export function meta(d) {
             boxData[j].means.push(stat2.mean());
         });
     });
-    this.data.boxplot = {categories, classifications, boxData};
+    const valueRange = minmax(allValues);
+    this.data.boxplot = {categories, classifications, boxData, valueRange};
 }
 
 export class MetaInfo {
@@ -248,7 +248,7 @@ export class MetaInfo {
     }
 
     public color(c: number | string) {
-        if (c === "NA") return null;
+        if (c === "NA" || Number.isNaN(c) ) return NaN;
         return this.scheme.get(c);
     }
 
@@ -286,6 +286,23 @@ function sortTree(d): any {
     } else {
         nodeList.push(d.name);
     }
+}
+
+export function filterSamples(v: any) {
+    const hidden: Set<string> = v.data.hiddenSamples;
+    v.data.filteredSamples = v.data.samples.filter(s => !hidden.has(s));
+    console.log(v.data.filteredSamples);
+    v.data.sampleCount = v.data.filteredSamples.length;
+    Object.keys(v.data.hist.result).forEach(k => {
+        v.data.hist.result[k] = v.data.filteredSamples.map(x => [x, v.data.mainDict[k][x]]);
+    });
+    Object.keys(v.data.metaData).forEach(k => {
+        v.data.metaData[k] = v.data.filteredSamples.map(x => v.data.metaDict[x][k])
+    });
+    v.data.mainHeatmap = v.data.mainHeatmap.map((_, i) => {
+        return v.data.filteredSamples.map(s => 
+            v.data.mainDict[v.data.species[i]][s]);
+    });
 }
 
 export class GradientBar {

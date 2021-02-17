@@ -1,6 +1,6 @@
 svg {
-	width = 1000
-	height = 1000
+	width = 800
+	height = 800
 	
 	XYPlot {
 		padding = 50
@@ -27,7 +27,7 @@ svg {
 			Text {
 				text = d.Level
 				anchor = d.Zscore > 0 ? @anchor("r", "t") : @anchor("l","t")
-				x = @scaled-x(0)
+				x = @scaled-x(0) + (d.Zscore < 0 ? 5 : 0)
 				y = (i/barchartData.length * 100)%
 			}
 		}
