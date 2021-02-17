@@ -34,8 +34,10 @@
     "vue-loader": "^15.9.3",
     "vue-property-decorator": "^9.0.0",
     "vue-simple-uploader": "^0.5.4",
+    "vue-slider-component": "^3.2.11",
     "vue-template-compiler": "^2.6.11",
-    "vue-turbolinks": "^2.0.3"
+    "vue-turbolinks": "^2.0.3",
+    "vuedraggable": "^2.24.3"
   },
   "version": "0.1.0",
   "devDependencies": {
