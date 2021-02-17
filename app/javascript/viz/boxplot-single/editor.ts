@@ -35,13 +35,14 @@ export function editorConfig(v): EditorDef {
                                 {
                                     title: "Taxonomic rank",
                                     type: "select",
-                                    options: v.data.ranks,
+                                    options: v.data.ranks.map((x, i)=> ({value: i, text: x})),
                                     value: {
-                                        current: 0,
+                                        current: 3,
                                         callback(d) {
                                             v.data.config.rankIndex = parseInt(d);
-                                            const rankLabel = v.data.ranks[parseInt(d)].text;
+                                            const rankLabel = v.data.ranks[parseInt(d)];
                                             v.data.boxData = v.data.mainDict[rankLabel];
+                                            v.data.pValue = v.data.pDict[rankLabel];
                                             v.forceRedraw = true;
                                             run(v);
                                         },

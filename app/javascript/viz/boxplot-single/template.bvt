@@ -22,7 +22,6 @@ svg {
             @let boxStroke = (colors[0])
             :box (_d) {
                 Rect.full  {
-                    @expr console.log(_d.data)
                     fill = colors[0]
                     stroke = colors[0]
                     // fillOpacity = 0.001
@@ -42,7 +41,7 @@ svg {
                     height = 100%
                     Line { 
                         x = 50%; y2 = 100%
-                        stroke = boxStroke
+                        stroke = boxStroke; strokeWidth = 2
                     }
                 }
                 
@@ -55,12 +54,36 @@ svg {
                 }
             }
             :mean(means) {
-                Line {x1 = 20%; x2 = 80%; stroke = "white"}
+                Line {x1 = 20%; x2 = 80%; stroke = "white"; strokeWidth = 2}
             }
             :median(d) {}
         }
 		@let w = @scaled-x(1) - @scaled-x(0)
         
+        @if config.showP {
+            Component {
+                @let sourceX = @scaled-x(0)
+                @let targetX = @scaled-x(1)
+                y = @scaled-y(boxData.max) - 20
+                Line {
+                    x = sourceX; y2 = 10
+                }
+                Line {
+                    x = targetX; y2 = 10
+                }
+                Line {
+                    x1 = sourceX; x2 = targetX;
+                }
+                Text {
+                    x = (targetX + sourceX)/2; y = -2; anchor = @anchor("c", "b")
+                    text = pValue < 0.001 ? "p < 0.001" : `p = ${pValue.toFixed(3)}`
+                }
+                // x = @scaled-x(i) + w /2; y = @scaled-y(boxData.max[i])
+                // Circle.centered {
+                //     r = 5; fill = "magenta"
+                // }
+            }
+        }
 
 		Axis("left");
 		Axis("bottom") {

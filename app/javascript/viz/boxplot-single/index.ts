@@ -29,6 +29,7 @@ function init() {
             config: {
                 plotWidth: 1000,
                 showOutliers: true,
+                showP: true,
                 xLabelRotation: 45,
             },
             colors: groupedChartColors,
@@ -41,10 +42,8 @@ function init() {
                 dependsOn: ["boxSingleGroup"],
                 dsvHasHeader: true,
                 loaded(data) {
-                    console.log(data);
                     const samples = data.columns.slice(1);
                     const rankKey = data.columns[0];
-                    
                     this.data.ranks = [];
                     this.data.mainDict = {};
                     data.forEach(d => {
@@ -55,7 +54,6 @@ function init() {
                         samples.forEach(s => {
                             const v = parseFloat(d[s]);
                             allValues.push(v);
-                            console.log(this.data.groupDict[s]);
                             if (this.data.groupDict[s] === this.data.groups[0])
                                 initialData[0].push(v);
                             else 
@@ -64,7 +62,6 @@ function init() {
                         const boxData = { categories: [...this.data.groups],
                             valueRange: findBoundsForValues(allValues, 2, false, 0.5),
                             values: [], outliers: [], means: [], max: Math.max(...allValues)};
-                        console.log(initialData);
                         this.data.groups.forEach((group, i) => {
                             const result = [];
                             const stat1 = new Oviz.algo.Statistics(initialData[i]);
@@ -104,8 +101,14 @@ function init() {
                 fileKey: "boxSingleP",
                 type: "tsv",
                 dsvHasHeader: true,
+                dependsOn: ["boxSingleMain"],
                 loaded(data) {
-                    console.log(data);
+                    this.data.pDict = {};
+                    data.forEach(d => {
+                        const rankLabel = rankDict[d[data.columns[0]]]; 
+                        this.data.pDict[rankLabel] = parseFloat(d[data.columns[1]]);
+                    });
+                    this.data.pValue = this.data.pDict[this.data.ranks[3]];
                 }
             }
         },
