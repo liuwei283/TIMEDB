@@ -175,7 +175,7 @@ Component {
                             on:mouseenter = setActive(gridW * j + offsetX, gridH * i + offsetY)
                             on:mouseleave = setActive(null, null)
                             behavior:tooltip {
-                                content = `sample: ${samples[j]}<br>species: ${species[i]}<br>relative abundance: ${sample.toExponential(2)}`
+                                content = `sample: ${filteredSamples[j]}<br>species: ${species[i]}<br>relative abundance: ${sample.toExponential(2)}`
                             }
                         }
                     }
@@ -326,7 +326,7 @@ Component {
                                 on:mouseenter = setActive(gridW * j + offsetX, null)
                                 on:mouseleave = setActive(null, null)
                                 behavior:tooltip {
-                                    content = `sample: ${samples[j]}<br>${f}: ${d}`
+                                    content = `sample: ${filteredSamples[j]}<br>${f}: ${d}`
                                 }
                                 @let metaFill = metaInfo[f].color(d)
                             @if !!metaFill {
@@ -347,7 +347,7 @@ Component {
                         }
                         }
                         Text(f) {
-                            x = offsetX + gridW * samples.length + 5; y = 6; anchor = @anchor("m", "l"); fontSize = 11
+                            x = offsetX + gridW * filteredSamples.length + 5; y = 6; anchor = @anchor("m", "l"); fontSize = 11
                         }
                     }
                     }
@@ -485,7 +485,7 @@ Component {
     @if state.activeY !== null {
         Rect {
             x = offsetX; y = state.activeY
-            width = gridW * samples.length
+            width = gridW * filteredSamples.length
             height =  mainHeight / species.length
             // stroke = @color("highlight")
             stroke = "#000"

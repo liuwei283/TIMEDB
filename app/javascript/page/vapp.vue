@@ -22,6 +22,12 @@
             <div id="canvas"/>
             <div id="v-editor" v-show="showEditor">
                 <OvizEditor :config = "conf" :editorWidth = "280"/>
+                <b-modal id="msg-box-modal" ref="msgBox" :title="msgBoxTitle">
+                    <p v-if="msgBoxUseHTML" class="my-2" v-html="msgBoxContent"></p>
+                    <p v-else class="my-2">
+                        <pre>{{msgBoxContent}}</pre>
+                </p>
+            </b-modal>
             </div>
         </div>
     </div>
@@ -45,7 +51,7 @@
 
     import ColorPicker from "page/builtin/color-picker.vue";
     import SectionFiles from "page/builtin/section-files.vue";
-    import DropDownSelect from "page/builtin/dropdown-select";
+    import DropDownSelect from "page/builtin/dropdown-select.vue";
 
     Vue.use(OvizEditor);
     Vue.use(BootstrapVue);
@@ -63,6 +69,9 @@
                 outline: "secondary",
                 chosenOutput: 0,
                 chosenOutputOld: 0,
+                msgBoxTitle: "",
+                msgBoxContent: "",
+                msgBoxUseHTML: false,
                 taskOutputs: [{value: 0, text: "Demo Files", secondaryText: ""}],
             }
         },
@@ -111,6 +120,16 @@
                         });
                     });
             }
+            event.on(
+                "show-msgbox",
+                (_, { title, content, html }) => {
+                    this.msgBoxTitle = title;
+                    this.msgBoxContent = content;
+                    this.msgBoxUseHTML = html;
+                    (this.$refs.msgBox as any).show();
+                },
+                "vapp-show-msg-box",
+            );
         },
         mounted() {
             event.emit(event.CANVAS_READY, this);
