@@ -30,7 +30,7 @@ const rainbow = [ "hsl(340, 82%, 76%)",
 
 export function main(d) {
     const speciesLabel = d.columns[0];
-    this.data.samples = d.columns.splice(1, d.columns.length - 1);
+    this.data.samples = this.data.filteredSamples = d.columns.splice(1, d.columns.length - 1);
     this.data.mainDict = {};
     d.forEach(x => {
         const temp = {...x};
@@ -291,7 +291,6 @@ function sortTree(d): any {
 export function filterSamples(v: any) {
     const hidden: Set<string> = v.data.hiddenSamples;
     v.data.filteredSamples = v.data.samples.filter(s => !hidden.has(s));
-    console.log(v.data.filteredSamples);
     v.data.sampleCount = v.data.filteredSamples.length;
     Object.keys(v.data.hist.result).forEach(k => {
         v.data.hist.result[k] = v.data.filteredSamples.map(x => [x, v.data.mainDict[k][x]]);

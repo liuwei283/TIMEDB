@@ -8,7 +8,7 @@ export class MetaOverview extends Oviz.Component {
     public ovMain: any;
     public ovTree: any;
     public mainHeatmap: number[][];
-    public samples: string[];
+    public filteredSamples: string[];
     public species: string[];
     public mainColorGetter: any;
 
@@ -24,7 +24,7 @@ export class MetaOverview extends Oviz.Component {
     
     private valueRange;
     // private colors = ["pink", "skyblue"];
-    private fullDisplay = false;
+    private fullDisplay = true;
 
     private sizeSettings = {
         offsetX: 150,
@@ -89,11 +89,11 @@ export class MetaOverview extends Oviz.Component {
             } else {
                 this.gridH = this.mainHeight / this.species.length; 
             }
-            const mainW = this.samples.length * this.gridW;
+            const mainW = this.filteredSamples.length * this.gridW;
             if (mainW < this.mainWidth) {
                 this.mainWidth = this.sizeSettings.mainWidth = mainW;
             } else {
-                this.gridW = this.mainWidth / this.samples.length; 
+                this.gridW = this.mainWidth / this.filteredSamples.length; 
             }
             this.boxLegendPos = {x: this.sizeSettings.offsetX + this.mainWidth 
                         + this.sizeSettings.boxHeight,
@@ -101,6 +101,10 @@ export class MetaOverview extends Oviz.Component {
         }
         if (this._sizeUpdated) {
             this._sizeUpdated = false;
+            this.mainWidth = this.filteredSamples.length * this.gridW;
+            this.boxLegendPos = {x: this.sizeSettings.offsetX + this.mainWidth 
+                        + this.sizeSettings.boxHeight,
+                    y: this.sizeSettings.barHeight + this.sizeSettings.padding };
             this.$v.size.width = this.mainWidth + this.sizeSettings.boxHeight 
                 + this.offsetX + this.sizeSettings.gapX + 2 * this.sizeSettings.padding;
         } 
@@ -131,7 +135,6 @@ export class MetaOverview extends Oviz.Component {
         const newHeight = (1 - ev.deltaY  / 1000) * this.mainHeight;
         this.mainHeight = newHeight > this.species.length * this.gridH ? this.species.length * this.gridH
                         : newHeight < 300 ? 300 : newHeight;
-        console.log(this.mainHeight);
         this.setState({newHeight: this.mainHeight});
     }
     private updatePos(ev) {

@@ -213,19 +213,19 @@ export function editorConfig(v: any): EditorDef {
                         view: {
                             type: "list",
                             items: [
-                                {
-                                    title: "Grid width",
-                                    type: "input",
-                                    format: "int",
-                                    bind: {
-                                        object: conf,
-                                        path: "columnWidth",
-                                        callback() {
-                                            v.data.columnWidth = parseFloat(conf.columnWidth);
-                                            update(v);
-                                        },
-                                    },
-                                },
+                                // {
+                                //     title: "Grid width",
+                                //     type: "input",
+                                //     format: "int",
+                                //     bind: {
+                                //         object: conf,
+                                //         path: "columnWidth",
+                                //         callback() {
+                                //             v.data.columnWidth = parseFloat(conf.columnWidth);
+                                //             update(v);
+                                //         },
+                                //     },
+                                // },
                                 {
                                     type: "vue",
                                     component: "color-picker",
@@ -269,32 +269,33 @@ export function editorConfig(v: any): EditorDef {
                                 //     title: "Reorder samples",
                                 //     data: samplesVueData,
                                 // },
-                                // {
-                                //     type: "vue",
-                                //     component: "filter-sample",
-                                //     title: "Filter Samples",
-                                //     ref: "filterSample",
-                                //     data: {
-                                //         get samples() {
-                                //             return Array.from(v.data.samples);
-                                //         },
-                                //         callback(hiddenSamples) {
-                                //             v.data.hiddenSamples = new Set(hiddenSamples);
-                                //             filterSamples(v);
-                                //             update(v);
-                                //         },
-                                //     },
-                                // },
-                                // {
-                                //     type: "button",
-                                //     title: "Show ordered sample list",
-                                //     action() {
-                                //         const hidden = v.data.hiddenSamples;
-                                //         event.emit("show-msgbox", {title:"Sample List", 
-                                //             content: v.data.samples.map(s => (hidden.has(s) ? `${s} (hidden)` : s)).join("<br>"),
-                                //             html: true});
-                                //     },
-                                // },
+                                {
+                                    type: "vue",
+                                    component: "filter-sample",
+                                    title: "Filter Samples",
+                                    ref: "filterSample",
+                                    data: {
+                                        get samples() {
+                                            return Array.from(v.data.samples);
+                                        },
+                                        callback(hiddenSamples) {
+                                            v.data.hiddenSamples = new Set(hiddenSamples);
+                                            filterSamples(v);
+                                            v.root._sizeUpdated = true;
+                                            update(v);
+                                        },
+                                    },
+                                },
+                                {
+                                    type: "button",
+                                    title: "Show ordered sample list",
+                                    action() {
+                                        const hidden = v.data.hiddenSamples;
+                                        event.emit("show-msgbox", {title:"Sample List", 
+                                            content: v.data.samples.map(s => (hidden.has(s) ? `${s} (hidden)` : s)).join("<br>"),
+                                            html: true});
+                                    },
+                                },
                             ],
                         },
                     },
