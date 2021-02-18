@@ -24,6 +24,10 @@ Component {
                     fill = hist.colorMap[d.key]
                     // width = 40; x = 50%
                     anchor = @anchor("top","center")
+                    on:mouseenter = setActive(d.data.data[0], null)
+                    behavior:tooltip {
+                        content = `sample ID: ${d.data.data[0]}<br>species: ${d.key}<br> relative abundance: ${d.data.data[1]}%`
+                    }
                 }
             }
             width = 100%

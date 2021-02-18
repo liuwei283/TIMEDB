@@ -119,8 +119,12 @@ export class MetaOverview extends Oviz.Component {
         updated: null,
     };
 
-    private setActive(x: number, y: number) {
-        this.setState({ activeX: x, activeY: y });
+    private setActive(x: number|string, y: number = null) {
+        if (typeof x === "string") {
+            const xPos = this.filteredSamples.indexOf(x) * this.gridW + this.offsetX;
+            this.setState({activeX: xPos});
+        } else 
+            this.setState({ activeX: x, activeY: y });
     }
 
     private controlMain(ev) {
