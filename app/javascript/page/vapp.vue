@@ -18,7 +18,11 @@
                 <b-button id="editor-conf" @click="toggleEditor">Editor</b-button>
             </div>
         </div>
-        <div id="viz-container"> 
+        <div id="viz-container">
+            <div class="need-upload" v-if="isLoading">
+                <i class="fas fa-circle-notch fa-spin fa-5x m-0"></i>
+                <h4 class="mt-4">Loading data……</h4>
+            </div>
             <div id="canvas"/>
             <div id="v-editor" v-show="showEditor">
                 <OvizEditor :config = "conf" :editorWidth = "280"/>
@@ -64,6 +68,7 @@
         data() {
             return {
                 conf: {},
+                isLoading: true,
                 isAnalysis: true,
                 showEditor: true,
                 outline: "secondary",
@@ -120,6 +125,14 @@
                         });
                     });
             }
+            event.on(
+                event.DATA_LOADING_FINISHED,
+                () => {
+                    this.isLoading = false;
+                    this.$root.$emit("data-loaded");
+                },
+                "vapp-load-finished",
+            );
             event.on(
                 "show-msgbox",
                 (_, { title, content, html }) => {
@@ -211,5 +224,11 @@
         z-index:20;
         transition: all 0.3s;
         right: 10px;
+    }
+    .need-upload {
+        margin: 0 1px;
+        padding: 8rem 4rem;
+        text-align: center;
+        color: #999;
     }
 </style>
