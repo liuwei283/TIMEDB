@@ -16,8 +16,16 @@
 **Visualization mode**
 
 The platform has 2 viz mode:
-1. query_task
-2. visualization - anlaysis (standalone)
+1. **Query_task** : 
+- user submit an anlysis task to deepomics, and view the visualization result in query_app page.
+- has editor
+- user can download the svg chart
+2. **visualization - anlaysis (standalone)**:  
+- user go to submit/visualization page for the charts
+- user can upload their own data for visualization
+- user can view the demo chart and his/her task result
+- has editor
+- user can download the svg chart
 
 **Javscript Code Structure Overview**
 
