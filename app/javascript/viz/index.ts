@@ -4,7 +4,6 @@ export interface Viz {
 import {registerSignedHeatmap} from "./signed-heatmap";
 import {registerScatterplot} from "./scatterplot";
 import { registerBoxplot} from "./boxplot";
-export {default as Demo} from "./demo"
 
 declare global {
     interface GonInfo {
