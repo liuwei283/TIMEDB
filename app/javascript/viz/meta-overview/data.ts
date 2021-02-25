@@ -3,6 +3,7 @@ import { minmax } from "crux/dist/utils/math";
 import { ColorScheme, ColorSchemeCategory, ColorSchemeGradient } from "crux/dist/color";
 import { schemeSet3 } from "d3-scale-chromatic";
 import { rainbowL,groupedColors2, rainbow1} from "oviz-common/palette";
+import { findBoundsForValues} from "utils/maths";
 import * as d3 from "d3";
 
 const schemeSet = groupedColors2;
@@ -92,7 +93,16 @@ export function main(d) {
     this.data.hist.colors = schemeSet;
     this.data.hist.colorMap = {};
     top5species.forEach((x, i) => {
-        this.data.hist.colorMap[x] = rainbowL[i % 16];
+        let hslString = rainbowL[i % 16];
+        if (i >= 16) {
+            const div = Math.floor(i / 16);
+            const attrs = hslString.split("(")[1].substring(0, hslString.length - 1);
+            const h = parseFloat(attrs.split(",")[0]);
+            const s = parseInt(attrs.split(",")[1].substring(0, hslString.length - 1)) + 5;
+            const l = parseInt(attrs.split(",")[2].substring(0, hslString.length - 1)) - 10;
+            hslString =  `hsl(${h},${s}%,${l}%)`;
+        }
+        this.data.hist.colorMap[x] = hslString;
     });
     // this.data.hist.result.other = Object.keys(otherData)
     //                         .map(x => [x, otherData[x]]);
@@ -167,7 +177,7 @@ export function meta(d) {
             boxData[j].means.push(stat2.mean());
         });
     });
-    const valueRange = minmax(allValues);
+    const valueRange = findBoundsForValues(allValues, 2);
     this.data.boxplot = {categories, classifications, boxData, valueRange};
 }
 

@@ -46,6 +46,7 @@ export class MetaOverview extends Oviz.Component {
     private controllerMode = "scroll";
     private offsetX = 150;
 
+    private histLegendLabels;
     private mainRange = [];
     private mainGradientFills = [];
     private boxLegendPos = {x: 1000, y: 210};
@@ -57,6 +58,18 @@ export class MetaOverview extends Oviz.Component {
 
     public willRender() {
         if (this._firstRender) {
+            
+            this.histLegendLabels = this.species.filter(s => s !== "Other")
+                    .map(s => {
+                        const labels = [null, s];
+                        const names = s.split("|");
+                        const name = names[names.length - 1]; 
+                        labels[0] = name.split("_")[2];
+                        return labels;
+                    }).sort();
+                    
+            if (this.species.indexOf("Other")) this.histLegendLabels.push(["Other", "Other"]);
+            
             const [min, max] = minmax(this.mainHeatmap.flat().filter(x => x > 0));
             this.mainRange = [Math.log10(min) , Math.log10(max)];
             const gradient = d3.scaleLinear()
@@ -106,7 +119,7 @@ export class MetaOverview extends Oviz.Component {
                         + this.sizeSettings.boxHeight,
                     y: this.sizeSettings.barHeight + this.sizeSettings.padding };
             this.$v.size.width = this.mainWidth + this.sizeSettings.boxHeight 
-                + this.offsetX + this.sizeSettings.gapX + 2 * this.sizeSettings.padding;
+                + this.offsetX + 2 * this.sizeSettings.gapX + 2 * this.sizeSettings.padding;
         } 
     }
 
@@ -119,8 +132,12 @@ export class MetaOverview extends Oviz.Component {
         updated: null,
     };
 
-    private setActive(x: number, y: number) {
-        this.setState({ activeX: x, activeY: y });
+    private setActive(x: number|string, y: number = null) {
+        if (typeof x === "string") {
+            const xPos = this.filteredSamples.indexOf(x) * this.gridW + this.offsetX;
+            this.setState({activeX: xPos});
+        } else 
+            this.setState({ activeX: x, activeY: y });
     }
 
     private controlMain(ev) {

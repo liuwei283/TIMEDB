@@ -42,16 +42,16 @@ The platform has 2 viz mode:
 
 Some concepts:
 1. Visualizer is the chart, e.g. scatterplot, heatmap...
-2. Analysis refers to the deep omics analyis module, it has the concrete meaning. e.g. PCA, pathway enrichment...
-3. A visualizer can be used by multiple analyses, for example, the scatterplot can be used by PCA and CCA.
+2. Analysis has the concrete meaning. e.g. CCA, pathway enrichment... An analysis can refer to a deepomics module, which is by the **mid** field.
+3. A visualizer can be used by multiple analyses, for example, scatterplot can be used by entrotype and CCA.
 4. A visualizer takes the analysis output files as input, these files called data sources in visualizer module.
-5. An analysis may only use parts of the data sources. e.g. PCA won't have vector data. The binding of analysis to viz data sources is done by the files_info field (json) of analyses.
+5. An analysis may only use parts of the data sources. e.g. CCA won't have vector data. The binding of analysis to viz data sources is done by the files_info field (json) of analysis.
 
 **important conventions**
 
-1. visualizer module name: 
+1. **visualizer module name**: 
     The module name is used to distinguish visualizers. The viz folder name, `MODULE_NAME` in index.ts, js pack name should all have the same name.
-2. data type: 
+2. **data type**: 
     The `dataType` is the key of data sources. If you had used bvd-rails before, you should notice that the fileKey system design is different in meta_platform. In meta, the data source type should be the same as the fileKey of the data source, which means, one file can only be used for one visualizer and one analysis.
 
 ## Add a new visualizer
@@ -63,7 +63,7 @@ Some concepts:
 
 ### 2: Add file.
 
-#### 2.1: Develop you visualizer
+#### 2.1: File structure
 
 The visualizer folder should contains these files, 
 1. index.ts, the main javascript logic.
@@ -89,7 +89,6 @@ The visualizer folder should contains these files,
       register(MODULE_NAME, init);
   }
   ```
-
 
 #### 2.3: Register the visualizer
 
