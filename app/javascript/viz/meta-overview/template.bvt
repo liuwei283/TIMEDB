@@ -24,7 +24,8 @@ Component {
                     fill = hist.colorMap[d.key]
                     // width = 40; x = 50%
                     anchor = @anchor("top","center")
-                    on:mouseenter = setActive(d.data.data[0], null)
+                    on:mouseenter = setActive(d.data.data[0])
+                    on:mouseleave = setActive(null)
                     behavior:tooltip {
                         content = `sample ID: ${d.data.data[0]}<br>species: ${d.key}<br> relative abundance: ${d.data.data[1]}%`
                     }
@@ -147,7 +148,7 @@ Component {
 
     //main area
     Component {
-        height = displayH
+        height = displayH + 15
         clip = @clip("bound"); y = offsetY
         Component {
             y = yPos
@@ -194,8 +195,8 @@ Component {
                 XYPlot {
                     valueRange = boxplot.valueRange
                     invertValueAxis = true
-                    height = mainHeight
-                    width = 100%
+                    height = displayH
+                    width = sizeSettings.boxHeight
                     flip = true
                     data = {
                         boxData1: boxplot.boxData[0],
@@ -365,23 +366,26 @@ Component {
     Component {
         key = "histLegend"
         static = true;
-        height = 75; width = 125; 
-        x = offsetX + displayW + sizeSettings.gapX; y = 30
+        height = 156; width = 200; 
+        x = offsetX + displayW + sizeSettings.gapX; y = 20
         Rect.full {
             fill = "#fff"; stroke = "#000"; strokeWidth = 0.5
         }
-        Rows {
-            @for i in 5 {
-                Columns {
-                    height = 15
-                    @for j in 5 {
-                        @if (i * 5 + j < species.length) {
+        Columns {
+            @for i in 2 {
+                Rows {
+                    width = 100
+                    @for j in 12 {
+                        @if (i * 12 + j < species.length) {
                             Component {
-                                width = 25
+                                height = 13
                                 Rect {
-                                    height = 10; width = 15; x = 5; y = 2.5
-                                    fill = hist.colorMap[species[i * 5 + j]]
-                                    behavior:tooltip {content = species[i * 5 + j]}
+                                    height = 8; width = 6; x = 2; y = 2
+                                    fill = hist.colorMap[histLegendLabels[i * 12 + j][1]]
+                                }
+                                Text {
+                                    fontSize = 10; x = 10; y = 1
+                                    text = histLegendLabels[i * 12 + j][0]
                                 }
                             }
                         }
@@ -394,34 +398,34 @@ Component {
     Component {
         key = "mainLegend"
         static = true;
-        x = offsetX + displayW + sizeSettings.gapX; y = sizeSettings.barHeight - 60
-        height = 50; width = 150
+        x = offsetX + displayW + sizeSettings.gapX + 100; y = sizeSettings.barHeight - 40
+        height = 50; width = 100
         Rect.full {
             strokeWidth = 0.5; fill = "#fff"; stroke = "#000"
         }
         Component {
             Text("x = 0") {
-                fontSize = 11; anchor = @anchor("m", "r"); y = 10; x = 35
+                fontSize = 10; anchor = @anchor("m", "r"); y = 10; x = 35
             }
             Rect {
-                fill = colors.na; anchor = @anchor("m", "l"); y = 10; x = 40; width = 20; height = 12
+                fill = colors.na; anchor = @anchor("m", "l"); y = 10; x = 40; width = 10; height = 10
             }
             Text {
                 text = "log(x)"; y = 25
-                x = 35;  fontSize = 11; anchor = @anchor("r","m")
+                x = 35;  fontSize = 10; anchor = @anchor("r","m")
             }
             Text {
                 text = mainRange[0].toFixed(2); x = 40; y = 36; 
                 anchor = @anchor("c", "t"); fontSize = 10
             }
             Text {
-                text = mainRange[1].toFixed(2); x = 124; y = 36; 
+                text = mainRange[1].toFixed(2); x = 80; y = 36; 
                 anchor = @anchor("c", "t"); fontSize = 10
             }
             @for (f, i) in mainGradientFills {
                 Rect.centered {
                     fill = f; y = 25
-                    x = 40 + i * 4; width = 4; height = 12
+                    x = 40 + i * 2; width = 2; height = 12
                 }
             }
         }
@@ -456,6 +460,7 @@ Component {
         }
     }
 
+    //highlight bar
     @if state.activeX !== null {
         Rect { // hist highlight
             x = state.activeX; y = sizeSettings.gapY

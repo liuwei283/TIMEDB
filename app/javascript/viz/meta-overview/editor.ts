@@ -301,203 +301,29 @@ export function editorConfig(v: any): EditorDef {
                     },
                 ],
             },
-            // ...histoDefs,
-            // {
-            //     id: "gene",
-            //     title: "Gene panel",
-            //     layout: "tabs",
-            //     tabs: [
-            //         {
-            //             id: "main",
-            //             name: "Main",
-            //             view: {
-            //                 type: "list",
-            //                 items: [
-            //                     {
-            //                         title: "Reorder",
-            //                         type: "vue",
-            //                         component: "reorder",
-            //                         data: {
-            //                             title: "Reorder genes",
-            //                             array: Array.from(v.data.genes),
-            //                             compact: true,
-            //                             callback(array) {
-            //                                 v.data.genes = array;
-            //                                 update(v);
-            //                             },
-            //                         },
-            //                     },
-            //                     {
-            //                         title: "Groups",
-            //                         type: "vue",
-            //                         component: "group-edit",
-            //                         data: {
-            //                             groups: v.data.groups.map(copyObject),
-            //                             mutTypes: Array.from(v.data.mutTypes),
-            //                             callback(groups) {
-            //                                 v.data.groups = groups;
-            //                                 updateGensStat(v, v.data.groups, v.data.genes, v.data.data);
-            //                                 update(v);
-            //                             },
-            //                         },
-            //                     },
-            //                     {
-            //                         type: "vue",
-            //                         component: "color-picker",
-            //                         data: {
-            //                             title: "Customize mutation colors",
-            //                             scheme: copyObject(v.data.colorScales.mut.colors),
-            //                             id: "group",
-            //                             callback(colors, naColor) {
-            //                                 v.data.colorScales.mut.colors = colors;
-            //                                 update(v);
-            //                             },
-            //                         },
-            //                     },
-            //                     {
-            //                         type: "vue",
-            //                         component: "comment-edit",
-            //                         data: {
-            //                             info: copyObject(v.data.geneInfo.comment),
-            //                             colors: Array.from(v.data.commentColor.map(copyObject)),
-            //                             keys: Array.from(v.data.geneInfo.commentKeys.map(x => x)),
-            //                             callback(cmts) {
-            //                                 v.data.geneInfo.commentKeys.length = 0;
-            //                                 v.data.commentColor.length = 0;
-            //                                 cmts.forEach((cmt, i) => {
-            //                                     v.data.geneInfo.commentKeys[i] = Array.from(cmt.keys);
-            //                                     v.data.commentColor[i] = copyObject(cmt.color);
-            //                                 });
-            //                                 updateCommentColor(v);
-            //                                 update(v);
-            //                             },
-            //                         },
-            //                     },
-            //                 ],
-            //             },
-            //         },
-            //         {
-            //             id: "left",
-            //             name: "Left",
-            //             view: {
-            //                 type: "list",
-            //                 items: [
-            //                     // {
-            //                     //     type: "vue",
-            //                     //     component: "color-picker",
-            //                     //     ref: "groupColor",
-            //                     //     data: () => ({
-            //                     //         title: "Customize group colors",
-            //                     //         scheme: copyObject(v.data.colorScales.group.colors),
-            //                     //         id: "group",
-            //                     //         callback(colors) {
-            //                     //             v.data.colorScales.group.colors = colors;
-            //                     //             update(v);
-            //                     //         },
-            //                     //     }),
-            //                     // },
-            //                     {
-            //                         type: "input",
-            //                         title: 'Max value ("-" for no limit)',
-            //                         value: {
-            //                             get current() {
-            //                                 return conf.geneLeftMaxValue;
-            //                             },
-            //                             callback(val) {
-            //                                 if (val === "-") {
-            //                                     v.data.geneLeftMaxValue = null;
-            //                                 } else {
-            //                                     const value = parseFloat(val);
-            //                                     if (isNaN(value)) {
-            //                                         window.alert("Invalid value.");
-            //                                         this.$nextTick(() => this.update());
-            //                                         return;
-            //                                     }
-            //                                     v.data.geneLeftMaxValue = value;
-            //                                 }
-            //                                 update(v);
-            //                             },
-            //                         },
-            //                     },
-            //                     {
-            //                         type: "input",
-            //                         title: "Label",
-            //                         bind: {
-            //                             object: conf,
-            //                             path: "geneLeftLabel",
-            //                             callback() {
-            //                                 v.data.geneLeftLabel = conf.geneLeftLabel;
-            //                                 update(v);
-            //                             },
-            //                         },
-            //                     },
-            //                 ],
-            //             },
-            //         },
-            //         {
-            //             id: "right",
-            //             name: "Right",
-            //             view: {
-            //                 type: "list",
-            //                 items: [
-            //                     {
-            //                         title: "Right side",
-            //                         type: "select",
-            //                         options: genePanelRightInfoOptions
-            //                             .map(([k, l]) => (v.data.geneInfo[k] ? { text: l, value: k } : null))
-            //                             .filter(x => x)
-            //                             .concat([{ text: "-", value: "none" }]),
-            //                         bind: {
-            //                             object: conf,
-            //                             path: "genePanelRightInfo",
-            //                             callback() {
-            //                                 v.data.geneInfo.display = conf.genePanelRightInfo;
-            //                                 update(v);
-            //                             },
-            //                         },
-            //                     },
-            //                     {
-            //                         type: "input",
-            //                         title: 'Max value ("-" for no limit)',
-            //                         value: {
-            //                             get current() {
-            //                                 return conf.geneRightMaxValue;
-            //                             },
-            //                             callback(val) {
-            //                                 if (val === "-") {
-            //                                     v.data.geneRightMaxValue = null;
-            //                                 } else {
-            //                                     const value = parseFloat(val);
-            //                                     if (isNaN(value)) {
-            //                                         window.alert("Invalid value.");
-            //                                         this.$nextTick(() => this.update());
-            //                                         return;
-            //                                     }
-            //                                     v.data.geneRightMaxValue = value;
-            //                                 }
-            //                                 update(v);
-            //                             },
-            //                         },
-            //                     },
-            //                     {
-            //                         type: "input",
-            //                         title: "Threshold for P/Q-value",
-            //                         bind: {
-            //                             object: conf,
-            //                             path: "qValueLine",
-            //                             callback() {
-            //                                 v.data.qValueLine = parseFloat(conf.qValueLine);
-            //                                 update(v);
-            //                             },
-            //                         },
-            //                     },
-            //                 ],
-            //             },
-            //         },
-            //     ],
-            // },
-            // ...pathwayPanelDef,
-            // ...panelDefs,
+            {
+                id: "meta",
+                title: "Meta Panel",
+                layout: "single-page",
+                view: {
+                    type: "list",
+                    items: [
+                        {
+                            title: "Reorder meta features",
+                            type: "vue",
+                            component: "reorder",
+                            data: {
+                                title: `Reorder`,
+                                array: v.data.metaFeatures,
+                                callback(array) {
+                                    v.data.metaFeatures = array;
+                                    update(v);
+                                },
+                            },
+                        },
+                    ],
+                },
+            },
         ],
     };
 }
