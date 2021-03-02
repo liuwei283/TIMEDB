@@ -93,6 +93,7 @@ Rails.application.routes.draw do
   post "admin/modify_ana" => "admin#modify_ana", :as => "admin/modify_ana"
   post "admin/modify_viz_source" => "admin#modify_viz_source", :as => "admin/modify_viz_source"
   post "admin/add_img" => "admin#add_img", :as => "admin/add_img"
+  post "admin/update_all_samples" => "admin#update_all_samples", :as => "admin/update_all_samples"
 
   namespace :admin do
     post :update_analysis_category_position, to: 'analysis_categories#update_position'

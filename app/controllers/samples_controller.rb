@@ -16,6 +16,7 @@ class SamplesController < ApplicationController
         respond_to do |format|
             format.html
             format.csv { send_data @samples.to_csv }
+            format.json { render json: SampleDatatable.new(view_context) }
         end
     end
 
@@ -66,7 +67,6 @@ class SamplesController < ApplicationController
         @sample = @project.samples.find(params[:id])
          
         if @sample.update(sample_params)
-            update_metadata
             redirect_to @project
         else
             render 'edit'
@@ -77,7 +77,6 @@ class SamplesController < ApplicationController
         @project = Project.find(params[:project_id])
         Sample.import(params[:file],params[:project_id] )
         @project.update_attribute(:num_of_samples, @project.samples.count)
-        update_metadata
         redirect_to project_path(@project), notice: "Samples imported."
     end
 
@@ -135,7 +134,7 @@ class SamplesController < ApplicationController
             redict = 'sp'
         end
         @samples = Sample.order(:sample_name)
-        content = @samples.selected_to_csv(params[:sample_ids])
+        content = @samples.selected_to_csv(params[:selected_ids])
         time = Time.now
         time_str = time.strftime("%Y_%m_%d")       
         time_str += ("_" + time.strftime("%k_%M"))
@@ -170,12 +169,12 @@ class SamplesController < ApplicationController
         time_str += ("_" + time.strftime("%k_%M")) 
         time_str = time_str.gsub(' ','')
         file_path = File.join(ds_dir, "selected_abd_#{time_str}.tsv")
-        len = params[:sample_ids].length()
+        len = params[:selected_ids].length()
         if len<1
             redirect_to @project
         else
             out_json = {}
-            params[:sample_ids].each_with_index do |id, index|
+            params[:selected_ids].each_with_index do |id, index|
                 # @sample = @project.samples.find(id)
                 # n1 = @project.name
                 @sample = Sample.find(id)
@@ -207,7 +206,7 @@ class SamplesController < ApplicationController
 
 
             s1 = "#{pj_name}"
-            params[:sample_ids].each_with_index do |id, index|
+            params[:selected_ids].each_with_index do |id, index|
                 # @sample = @project.samples.find(id)
                 @sample = Sample.find(id)
                 s_name = @sample.sample_name
@@ -245,19 +244,19 @@ class SamplesController < ApplicationController
 
     def download_selected_metadata_file
         @samples = Sample.order(:sample_name)
-        send_data @samples.selected_to_csv(params[:sample_ids]), :filename => "selected_metadata.csv"
+        send_data @samples.selected_to_csv(params[:selected_ids]), :filename => "selected_metadata.csv"
     end
 
     def download_selected_abd_file
         # @project = Project.find(params[:project_id])
         file = Tempfile.new('selected_abundance.tsv')
-        len = params[:sample_ids].length()
+        len = params[:selected_ids].length()
         if len<1
             file.close
             send_file file.path, :filename => "selected_abd.tsv"
         else
             out_json = {}
-            params[:sample_ids].each_with_index do |id, index|
+            params[:selected_ids].each_with_index do |id, index|
                 # @sample = @project.samples.find(id)
                 # n1 = @project.name
                 @sample = Sample.find(id)
@@ -289,7 +288,7 @@ class SamplesController < ApplicationController
 
 
             s1 = "#{pj_name}"
-            params[:sample_ids].each_with_index do |id, index|
+            params[:selected_ids].each_with_index do |id, index|
                 # @sample = @project.samples.find(id)
                 @sample = Sample.find(id)
                 s_name = @sample.sample_name
@@ -316,7 +315,7 @@ class SamplesController < ApplicationController
 
     def download_selected_seq_file
         @project = Project.find(params[:project_id])
-        params[:sample_ids].each do |id|
+        params[:selected_ids].each do |id|
             @sample = @project.samples.find(id)
             n1 = @project.name
             n2 = @sample.sample_name
@@ -419,16 +418,6 @@ class SamplesController < ApplicationController
     end
 
     private
-        def update_metadata
-            @project = Project.find(params[:project_id])
-            db_samples_info_path = File.join Rails.root, 'app', 'data', 'db', params[:project_id] +'_samples_metadata.csv'
-            csv_file = @project.samples.to_csv
-            File.open(db_samples_info_path, 'w') do |file|
-                file << csv_file
-            end
-        end
-
-
         def sample_params
             params.require(:sample).permit(:sample_name, :host_age, :seq_file)
         end
