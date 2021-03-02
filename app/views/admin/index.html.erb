@@ -139,6 +139,20 @@ Admin page
     <%= submit_tag 'Submit'%>
   <% end %>
 
+  <h5>
+    Import all samples from csv:
+  </h5>
+
+  <%= form_tag({action: :update_all_samples}, multipart: true) do %>
+    <p> 
+      Please select csv file to be imported:
+      <br />
+      (project_name should exist in projects database )
+    </p>
+    <%= file_field_tag 'file' %>
+    <%= submit_tag 'Submit'%>
+  <% end %>
+
   <br />
   <h5>
     Modify the abandance:
