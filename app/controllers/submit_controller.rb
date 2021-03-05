@@ -243,13 +243,14 @@ class SubmitController < ApplicationController
         file.write(data)
         uploader = JobInputUploader.new
         uploader.store!(file)
-        file.close
-        file.unlink
+        
         
         Rails.logger.info("=======>#{uploader}")
         inputs.push({
           k => '/data/' + file_name
         })
+        file.close
+        file.unlink
       end
 
       # store input file to user's data folder
