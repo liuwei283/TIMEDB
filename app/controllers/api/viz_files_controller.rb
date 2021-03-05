@@ -71,7 +71,7 @@ class Api::VizFilesController < ApplicationController
         if @analysis_user_datum.use_demo_file
             render json: {}.tap { |x|
                 all_viz_data.each do |dataType| 
-                    if files_info[dataType].blank? 
+                    if files_info[dataType].blank? || files_info[dataType]['demoFilePath'].blank?
                         x[dataType] = nil
                     elsif files_info[dataType]['demoFilePath'].class == String
                         x[dataType] = {id: 0, 
