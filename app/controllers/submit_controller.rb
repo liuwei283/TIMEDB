@@ -239,7 +239,7 @@ class SubmitController < ApplicationController
         time_str += ("_" + time.strftime("%k_%M")) 
         time_str = time_str.gsub(' ','')
         file_name = "#{ds_name}_abd.tsv"
-        file = Tempfile.new("#{time_str}_abd.tsv")
+        file = File.new(file_name, 'w')
         file.write(data)
         uploader = JobInputUploader.new
         uploader.store!(file)
@@ -250,7 +250,7 @@ class SubmitController < ApplicationController
           k => '/data/' + file_name
         })
         file.close
-        file.unlink
+        
       end
 
       # store input file to user's data folder
