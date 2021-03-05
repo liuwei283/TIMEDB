@@ -10,9 +10,6 @@ import MetaInfo from "viz/meta-overview/meta-info.vue";
 import PanelEdit from "viz/meta-overview/panel-edit.vue";
 import ReorderSample from "viz/meta-overview/reorder-sample.vue";
 import Reorder from "viz/meta-overview/reorder.vue";
-import ReorderSpecies from "viz/fmt-overview/reorder-species.vue";
-import FilterSpecies from "viz/fmt-overview/filter-species.vue";
-
 Vue.component("meta-info", MetaInfo);
 Vue.component("reorder", Reorder);
 Vue.component("group-edit", GroupEdit);
@@ -23,9 +20,6 @@ Vue.component("filter-sample", FilterSample);
 
 Vue.component("color-picker", ColorPicker);
 Vue.component("section-files", SectionFiles);
-
-Vue.component("reorder-species", ReorderSpecies);
-Vue.component("filter-species", FilterSpecies);
 //Vue.component("slider-input", SliderInput);
 
 function initVApp() { 
