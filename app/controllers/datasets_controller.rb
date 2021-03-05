@@ -4,15 +4,10 @@ class DatasetsController < ApplicationController
         id = session[:user_id]
         @user = User.find(id)
         @dataset = @user.datasets.find(params[:id])
-        @sample_attrs = Sample.column_names
         user_dir = File.join($user_stor_dir, id.to_s)
         ds_dir = File.join(user_dir, @dataset.name)
         Dir.mkdir(ds_dir) unless File.exists?(ds_dir)
         @file_list = Dir.entries(ds_dir)[2..-1]
-        respond_to do |format|
-            format.html
-            format.json { render json: DatasetSampleDatatable.new(view_context, @dataset) }
-        end
     end
 
     def destroy
@@ -90,22 +85,6 @@ class DatasetsController < ApplicationController
         end
         redirect_to user_dataset_path, notice: "File uploaded."
 
-    end
-
-    def delect_sample
-        @dataset = @user.datasets.find(params[:id])
-        @dataset.delete_samples(params[:selected_ids])
-        redirect_to user_dataset_path
-    end
-
-    def download_ds_abd
-        @dataset = @user.datasets.find(params[:id])
-        send_data @dataset.abd_file(), :filename => "#{@dataset.name}_abd.tsv"
-    end
-
-    def download_ds_metadata
-        @dataset = @user.datasets.find(params[:id])
-        send_data @dataset.metadata_file(), :filename => "#{@dataset.name}_metadata.csv"
     end
 
     private
