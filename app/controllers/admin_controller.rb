@@ -11,6 +11,18 @@ class AdminController < ApplicationController
         @a_attrs = Analysis.column_names
     end
 
+    def modify_sample_metadata
+        if params[:project_id] == -1
+            redirect_to '/admin'
+        else
+            #redirect_to import_project_samples_path(:project_id=>params[:project_id], :file=>params[:file])
+            @project = Project.find(params[:project_id])
+            Sample.import(params[:file],params[:project_id] )
+            @project.update_attribute(:num_of_samples, @project.samples.count)
+            redirect_to '/admin', notice: "Samples imported."
+        end
+    end
+
     def modify_sample_abd
         #redirect_to import_abd_table_project_samples_path(:project_id=>params[:project_id], :file=>params[:file])
         @project = Project.find(params[:project_id])
@@ -63,7 +75,7 @@ class AdminController < ApplicationController
     end
 
     def update_all_samples
-        Sample.import(params[:file])
+        Sample.import_all(params[:file])
         redirect_to '/admin', notice: "Samples imported."
     end
 

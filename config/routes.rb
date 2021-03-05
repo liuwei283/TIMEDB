@@ -6,6 +6,7 @@ Rails.application.routes.draw do
       collection do
         post :import 
         post :import_abd_table
+        post :make_project_seleted_file
       end
       member do
         post :upload_seq
@@ -30,9 +31,6 @@ Rails.application.routes.draw do
     resources :datasets do
       member { post :upload_file }
       member { get :download_file}
-      member { get :download_ds_abd}
-      member { get :download_ds_metadata}
-      member { post :delect_sample}
 
 
     end

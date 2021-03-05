@@ -3,6 +3,7 @@ class ProjectsController < ApplicationController
     $seq_dir = "#{Rails.root}/app/data/seq/"
     $abd_dir = "#{Rails.root}/app/data/abd_files/"
     $tmp_dir = "#{Rails.root}/app/data/tmp/"
+    $user_stor_dir = "#{Rails.root}/data/user"
 
     def index
         @projects = Project.order(:name)
@@ -21,6 +22,7 @@ class ProjectsController < ApplicationController
         @sample_attrs = Sample.column_names
         id = session[:user_id]
         @user = User.find(id)
+        user_dir = File.join($user_stor_dir, id.to_s)
         @datasets = @user.datasets
         respond_to do |format|
             format.html
@@ -86,6 +88,9 @@ class ProjectsController < ApplicationController
     end
   
     private 
+        def send_selected
+        end
+
         def project_params
             params.require(:project).permit(:name, :related_publications)
         end
