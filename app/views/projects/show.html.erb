@@ -53,32 +53,29 @@
     <%end%>
   </div>
 
-  <%= form_tag make_project_seleted_file_project_samples_path(@project), multipart: true do %>  
+  <%= form_tag make_selected_file_samples_path, multipart: true do %>  
     <%= content_tag :table, role: :datatable, class: "display", id: "table_page", data: { url: project_path(format: :json)} do %>
-    <thead>
-          <th>
-            <input type="checkbox" class="selectAll" name="selectAll" value="all">
-          </th>
-          <% @sample_attrs.each do |attr| %>
-            <% if attr != 'id'%>
-              <th> <%= attr %> </th>
+      <thead>
+            <th>
+              <input type="checkbox" class="selectAll" name="selectAll" value="all">
+            </th>
+            <% @sample_attrs.each do |attr| %>
+              <% if attr != 'id'%>
+                <th> <%= attr %> </th>
+              <% end %>
             <% end %>
-          <% end %>
-          <th>Action</th>
-    </thead>
-    <tbody>
-    </tbody>
-  <% end %>
-
-
+            <th>Action</th>
+      </thead>
+      <tbody>
+      </tbody>
+    <% end %>
 
     <%= submit_tag "dowload selected samples metadata to file", :name => 'metadata', :class => "s_table_sub" %>
     <%= submit_tag "download selected samples abundance to file", :name => 'abundance', :class => "s_table_sub"  %>
     <%#= submit_tag "download selected samples sequence to file", :name => 'sequence' %>
     <br />
-    
-    <%= submit_tag "export selected metadata to", :name => 'metadata2ds', :class => "s_table_sub"  %>
-    <%= submit_tag "export selected abundance to", :name => 'abd2ds', :class => "s_table_sub"  %>
+    <%= hidden_field_tag 'project_id', @project.id %>
+    <%= submit_tag "export selected samples to", :name => 'seleted2ds', :class => "s_table_sub"  %>
     <select id="select_box" name="ds_selected">
       <option value="">--Please choose a dataset--</option>
       <% @datasets.each do |ds|%>

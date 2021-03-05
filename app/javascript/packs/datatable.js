@@ -45,9 +45,7 @@ function modify_set(option, id_set, new_ids){
 
 $(function () { 
     var ids = new Set();
-    console.log("runing");
     console.log($("#table_page").data('url'));
-    console.log($("#table_page"));
     var table = $("#table_page").DataTable({
         fixedColumns: true,
         fixedColumns: {
@@ -63,7 +61,7 @@ $(function () {
             orderable: false,
             className: 'select-checkbox',
             checkboxes: {
-                selectRow: true
+                selectRow: true,
             },
         },
         {
@@ -75,20 +73,25 @@ $(function () {
             style:    'multi',
             selector: 'td:first-child'
         },
-      scrollX: true
+        scrollX: true,
     }); 
 
-    $(".selectAll").on( "click", function(e) {
+
+    table.on('change', function() {
         console.log("clicking");
-        console.log(table);
-        if ($(this).is( ":checked" )) {
+        // var info = table.fnSettings().aaSorting;
+        // var idx = info[0][0];
+        // alert(idx);
+    })
+
+    $("th.select-checkbox").on('click',function(e) {
+        if ($(".selectAll").is( ":checked" )) {
             table.rows(  ).select(); 
         } else {
             table.rows(  ).deselect(); 
         }
     });
 
- 
     table.on("select", function(e) {
         var rows_selected = table.rows( { selected: true } ).data();//.column(0).data();
         var selected_ids = rows_selected.map(function(value,index) { 
@@ -145,5 +148,6 @@ $(function () {
     } );
 
 } );
+
 
 
