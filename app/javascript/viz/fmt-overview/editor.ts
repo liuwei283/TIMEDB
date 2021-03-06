@@ -168,24 +168,24 @@ export function editorConfig(v: any): EditorDef {
                         view: {
                             type: "list",
                             items: [
-                                {
-                                    title: "Types",
-                                    type: "select",
-                                    options: v.data.types.map((x, i) => ({value: i, text: x})),
-                                    value: {
-                                        current: 0,
-                                        callback(x) {
-                                            v.data.chosenType = v.data.types[x];
-                                            computeSortingScore(v.data);
-                                            applyDefaultSpeciesSort(v);
-                                            filterSpecies(v);
-                                            editorRef.reorderSample.config.data.array = v.data.hist.samples;
-                                            editorRef.reorderSample.config.data.needAutoUpdate = true;
-                                            editorRef.reorderSample.update();
-                                            update(v);
-                                        },
-                                    },
-                                },
+                                // {
+                                //     title: "Types",
+                                //     type: "select",
+                                //     options: v.data.types.map((x, i) => ({value: i, text: x})),
+                                //     value: {
+                                //         current: 0,
+                                //         callback(x) {
+                                //             v.data.chosenType = v.data.types[x];
+                                //             computeSortingScore(v.data);
+                                //             applyDefaultSpeciesSort(v);
+                                //             filterSpecies(v);
+                                //             editorRef.reorderSample.config.data.array = v.data.hist.samples;
+                                //             editorRef.reorderSample.config.data.needAutoUpdate = true;
+                                //             editorRef.reorderSample.update();
+                                //             update(v);
+                                //         },
+                                //     },
+                                // },
                                 {
                                     title: "Label rotation angle",
                                     type: "input",
@@ -213,15 +213,15 @@ export function editorConfig(v: any): EditorDef {
                                     },
                                 },
                                 {
-                                    title: "Reorder meta features",
+                                    title: "Reorder sample",
                                     type: "vue",
                                     component: "reorder",
                                     ref: "reorderSample",
                                     data: {
                                         title: `Reorder sample`,
-                                        array: v.data.hist.samples,
+                                        array: v.data.samples,
                                         callback(array) {
-                                            v.data.hist.samples = array;
+                                            v.data.samples = array;
                                             computeSortingScore(v.data);
                                             update(v);
                                         },

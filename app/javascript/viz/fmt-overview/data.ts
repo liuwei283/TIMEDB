@@ -35,13 +35,13 @@ export function main(data) {
     this.data.species = this.data.filteredSpecies = getDistinctValues(data, data.columns[0]).sort();
     this.data.speciesCount = this.data.species.length;
     this.data.samples = getDistinctValues(data, data.columns[1]).sort();
-    this.data.types = getDistinctValues(data, data.columns[2]).sort();
-    this.data.chosenType = this.data.types[0];
+    // this.data.types = getDistinctValues(data, data.columns[2]).sort();
+    // this.data.chosenType = this.data.types[0];
     this.data.sources = getDistinctValues(data, data.columns[3]).sort();
     this.data.mainDict = _.groupBy(data, "Sample");
-    this.data.samples.forEach(k => {
-        this.data.mainDict[k] = _.groupBy(this.data.mainDict[k], "Type");
-    });
+    // this.data.samples.forEach(k => {
+    //     this.data.mainDict[k] = _.groupBy(this.data.mainDict[k], "Type");
+    // });
     this.data.colorDict = {};
     const palette = d3.scaleLinear().domain([0, 1, 2]).range(paletteColors);
     this.data.sources.forEach((s, i) => {
@@ -54,20 +54,18 @@ export function main(data) {
 
 export function computeSortingScore(data) {
 
-    if (!data.hist)
-        data.hist = { samples: data.samples.filter(s =>
-                !!data.mainDict[s][data.chosenType])};
 
     data.speciesSortingScore = {};
     data.species.forEach(s => {
         data.speciesSortingScore[s] = 0;
     });
-    data.hist.samples.forEach((s, i) => {
-        const sampleWeight = 1 / Math.pow(data.sources.length + 1, i);
-        if (!!data.mainDict[s][data.chosenType]) {
-            const groupedData = _.groupBy(data.mainDict[s][data.chosenType], "Source");
+    data.samples.forEach((s, i) => {
+        const sampleWeight = Math.pow(0.5, i);
+        if (!!data.mainDict[s]) {
+            const groupedData = _.groupBy(data.mainDict[s], "Source");
             data.sources.forEach((k, j) => {
-                const sourceWeight = 1 - j / data.sources.length;
+                const sourceWeight = 1.5- j / (2 * data.sources.length);
+                // console.log(sourceWeight);
                 if (!!groupedData[k]) {
                     groupedData[k].forEach(x => {
                         data.speciesSortingScore[x.Species] += sampleWeight * sourceWeight * parseFloat(x.Abd) / 100;
@@ -76,13 +74,15 @@ export function computeSortingScore(data) {
             });
         }
     });
+    console.log(data.speciesSortingScore["Alistipes_sp_AP11"]);
+    console.log(data.speciesSortingScore["Clostridium_nexile"]);
 }
 
 export function generateHistData(data) {
     const hist = {indexes: data.sources, result: {}, samples: []};
     data.samples.forEach(s => {
-        if (!!data.mainDict[s][data.chosenType]) {
-            const groupedData = _.groupBy(data.mainDict[s][data.chosenType], "Source");
+        if (!!data.mainDict[s]) {
+            const groupedData = _.groupBy(data.mainDict[s], "Source");
             hist.result[s] = {};
             hist.indexes.forEach(k => {
                 const species = [...data.filteredSpecies];
