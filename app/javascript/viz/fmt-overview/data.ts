@@ -60,12 +60,12 @@ export function computeSortingScore(data) {
         data.speciesSortingScore[s] = 0;
     });
     data.samples.forEach((s, i) => {
-        const sampleWeight = Math.pow(0.333, i);
+        const sampleWeight = Math.pow(0.5, i);
         if (!!data.mainDict[s]) {
             const groupedData = _.groupBy(data.mainDict[s], "Source");
             data.sources.forEach((k, j) => {
-                const sourceWeight = 0.5 - j / (2 * data.sources.length);
-                console.log(sourceWeight);
+                const sourceWeight = 1.5- j / (2 * data.sources.length);
+                // console.log(sourceWeight);
                 if (!!groupedData[k]) {
                     groupedData[k].forEach(x => {
                         data.speciesSortingScore[x.Species] += sampleWeight * sourceWeight * parseFloat(x.Abd) / 100;
