@@ -1,8 +1,6 @@
 import Oviz from "crux";
-import { Visualizer } from "crux/dist/visualizer/visualizer"
 import * as d3 from "d3-hierarchy";
 import { parseNewick } from "crux/dist/utils";
-import { group } from "d3";
 
 import * as text_size from "crux/dist/utils/text-size";
 
