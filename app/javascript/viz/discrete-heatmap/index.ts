@@ -74,14 +74,6 @@ function initVizWithDeepomics(fileDefs) {
     
 }
 
-function genDefaultColorMap(values) {
-    const colorMap = new Map();
-    colorMap.set(0, "white");
-    colorMap.set(0.5, "#C7C7C7");
-    colorMap.set(1, "red");
-    return colorMap;
-}
-
 function genDefaultValueMap() {
     const valueMap = new Map();
     valueMap.set(0, "did not use drug");

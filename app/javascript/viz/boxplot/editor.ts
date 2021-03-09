@@ -1,4 +1,3 @@
-import {defaultLayoutConf as conf} from "utils/editor"
 import { genDefaultPalette, withDefaultPalette } from "oviz-common/palette";
 import { EditorDef } from "utils/editor";
 import { copyObject } from "utils/object";
