@@ -157,15 +157,8 @@
             var ds = window.gon.select_box_option;
             var oplist = [];
             for (var key in ds){
-                var fs = ds[key];
-                var op = {value: "", lable: "--- in " + key + "---", disabled: true};
+                var op = {value: key, lable: key};
                 oplist.push(op);
-                for (var i in fs){
-                    var f = fs[i];
-                    var ds_dir = path.join(key, f);
-                    var op = {value: ds_dir, lable: f, disabled: false};
-                    oplist.push(op);
-                }
             }
             this.select_box_option = oplist
 

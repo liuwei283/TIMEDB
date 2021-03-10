@@ -6,7 +6,6 @@ Rails.application.routes.draw do
       collection do
         post :import 
         post :import_abd_table
-        post :make_project_seleted_file
       end
       member do
         post :upload_seq
@@ -31,6 +30,9 @@ Rails.application.routes.draw do
     resources :datasets do
       member { post :upload_file }
       member { get :download_file}
+      member { get :download_ds_abd}
+      member { get :download_ds_metadata}
+      member { post :delect_sample}
 
 
     end
@@ -93,6 +95,7 @@ Rails.application.routes.draw do
   post "admin/modify_ana" => "admin#modify_ana", :as => "admin/modify_ana"
   post "admin/modify_viz_source" => "admin#modify_viz_source", :as => "admin/modify_viz_source"
   post "admin/add_img" => "admin#add_img", :as => "admin/add_img"
+  post "admin/update_all_samples" => "admin#update_all_samples", :as => "admin/update_all_samples"
 
   namespace :admin do
     post :update_analysis_category_position, to: 'analysis_categories#update_position'

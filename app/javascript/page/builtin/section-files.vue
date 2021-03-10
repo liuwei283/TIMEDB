@@ -388,8 +388,9 @@ interface FileSet {
 })
 
 export default class SectionFiles extends Vue {
-    @Prop({ default: {} }) public config: {};
+    @Prop({ default: {}}) public data: {};
 
+    private config = {};
     public ooo = {};
     public fileKeys: FileKey[] = [];
     public filesForUpload: Record<string, File> = {};
@@ -414,11 +415,11 @@ export default class SectionFiles extends Vue {
     private _appliedFiles: { [key: string]: number };
 
     public created() {
-        
         this.refreshFileList();
         this._fileById = {};
         this._appliedFiles = {};
         this._fileKeyByName = {};
+        if (!!this.data.config) this.config = this.data.config;
     }
 
     get requiredFilesChosen() {

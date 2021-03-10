@@ -9,325 +9,152 @@
 <%end%>
 
 <div class="container">
-<ol class="breadcrumb">
-  <li class="breadcrumb-item">
-    <%=link_to 'Admin home', '/admin' %>
-  </li> 
-  <li class="breadcrumb-item">
-    <%=link_to 'Projects', '#project_admin' %>
-  </li> 
-  <li class="breadcrumb-item">
-    <%=link_to 'Samples', '#sample_admin' %>
-  </li> 
-  <li class="breadcrumb-item">
-    <%=link_to 'Analysis Categories', admin_analysis_categories_path %>
-  </li> 
-  <li class="breadcrumb-item">
-    <%=link_to 'Analyses', admin_analyses_path %>
-  </li> 
-  
-</ol>
-
-
-<h1>
-Admin page
-</h1>
-
-<p>
-    This is made for admin to :
-    <ul>
-      <li>add project metadata</li>
-      <li>add sample metadata</li>
-      <li>add sample abandance data</li>
-      <li>add analysis module</li>
-      <li>add visualization module</li>
-    </ul>
-</p>
-
-<hr />
-
-
-<br />
-
-<section id="project_admin" class="admin_block">
-  <h4>
-  Project management:
-  </h4>
-
-  <div id='hidden_helper'>
-  Hide columns: 
-  <br />
-  <% i=0 %>
-  <% @projects.column_names.each do |attr| %>
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item">
+      <%=link_to 'Admin home', '/admin' %>
+    </li> 
+    <li class="breadcrumb-item">
+      <%=link_to 'Projects', '#project_admin' %>
+    </li> 
+    <li class="breadcrumb-item">
+      <%=link_to 'Samples', '#sample_admin' %>
+    </li> 
+    <li class="breadcrumb-item">
+      <%=link_to 'Analysis Categories', admin_analysis_categories_path %>
+    </li> 
+    <li class="breadcrumb-item">
+      <%=link_to 'Analyses', admin_analyses_path %>
+    </li> 
     
-    <button class="toggle-vis" data-column='<%=i.to_s%>'> 
-      <%= attr.capitalize %>
-    </button>
-    <%i += 1%>
-    
-  <%end%>
-</div>
+  </ol>
 
-  <table id="pj_table" class="display">
-    <thead>
-      
-      <% @projects.column_names.each do |attr| %>
-        
-        <th> <%= attr.capitalize %> </th>
-        
-      <% end %>
-      <th>
-        Action
-      </th>
-      
-    </thead>
 
-    <tbody>
-      <% @projects.each do |pj| %>
-      
-        <tr>
-          <% @projects.column_names.each do |attr| %>
-            
-            <td> 
-              <div class="table_cell"> 
-                <%= pj[attr] %> 
-              </div>
-            </td>
-           
-          <% end %>
-          <td>
-            <%= link_to 'Show', project_path(pj) %>
-            <%= link_to 'Delete', project_path(pj), method: :delete,
-                    data: { confirm: 'Are you sure?' } %>
-
-            <%= link_to 'Edit', edit_project_path(pj) %>
-          </td>
-          
-        </tr>
-      
-      <% end %>
-    </tbody>
-
-  </table>
-
-  <%= link_to  "Add one project", "/projects/new" %>
-
-  <%= form_tag import_projects_path, multipart: true do %>
-    <%= file_field_tag :file %>
-    <%= submit_tag "Import projects from csv" %>
-  <% end %>
-</section>
-<hr />
-<section id="sample_admin" class="admin_block">
-  <h4>
-  Sample management:
-  </h4>
-  <br />
-  <h5>
-    Modify the metadata:
-  </h5>
-
-  <%= form_tag({action: :modify_sample_metadata}, multipart: true) do %>
-    <p>
-      Please select the project whose samples need to be modified
-    </p>
-    <%= select_tag :project_id, options_from_collection_for_select(@projects, :id, :name, -1) %>
-    <p> 
-      Please select csv file to be imported:
-    </p>
-    <%= file_field_tag 'file' %>
-    <%= submit_tag 'Submit'%>
-  <% end %>
-
-  <br />
-  <h5>
-    Modify the abandance:
-  </h5>
-
-  <%= form_tag({action: :modify_sample_abd}, multipart: true) do %>
-    <p>
-      Please select the project whose samples need to be modified
-    </p>
-    <%= select_tag :project_id, options_from_collection_for_select(@projects, :id, :name, -1) %>
-    <p> 
-      Please select tsv file to be imported:
-    </p>
-    <%= file_field_tag 'file' %>
-    <%= submit_tag 'Submit'%>
-  <% end %>
-</section>
-<hr>
-<br/>
-<!--
-<section id="Analysis_Viz_admin" class="admin_block">
-  <h4>
-  Analysis&Visualization management:
-  </h4>
-  <p>
-    <%=image_tag  "meta_viz_design.jpg" %>
-    <br/>
-    Analysis depends on visualization and analysis category. Please create them before creating analysis.
-  </p>
-  <br />
-  <h5>
-    Modify visualizer:
-  </h5>
+  <h1>
+  Admin page
+  </h1>
 
   <p>
-  Current visualizer:
+      This is made for admin to :
+      <ul>
+        <li>add project metadata</li>
+        <li>add sample metadata</li>
+        <li>add sample abandance data</li>
+        <li>add analysis module</li>
+        <li>add visualization module</li>
+      </ul>
   </p>
 
-  <table id="Table" class="display">
-    <thead>
-      
-      <% @viz_attrs.each do |attr| %>
-        
-        <th> <%= attr.capitalize %> </th>
-        
-      <% end %>
-      
-    </thead>
+  <hr />
 
-    <tbody>
-      <% @viz.each do |v| %>
-      
-        <tr>
-          <% @viz_attrs.each do |attr| %>
-            
-            <td> 
-              <div class="table_cell"> 
-                <%= v[attr] %> 
-              </div>
-            </td>
-           
-          <% end %>
-          
-        </tr>
-      
-      <% end %>
-    </tbody>
-
-  </table>
-
-  <%= form_tag({action: :modify_viz}, multipart: true) do %>
-    <%= file_field_tag :file %>
-    <%= submit_tag "Import visualization from csv" %>
-  <% end %>
-  
-  <br />
-  <h5>
-    Modify analysis categories:
-  </h5>
-
-  <p>
-  Current categories:
-  </p>
-
-  <table id="Table2" class="display">
-    <thead>
-      
-      <% @ac_attrs.each do |attr| %>
-        
-        <th> <%= attr.capitalize %> </th>
-        
-      <% end %>
-      
-    </thead>
-
-    <tbody>
-      <% @ana_cate.each do |ac| %>
-      
-        <tr>
-          <% @ac_attrs.each do |attr| %>
-            
-            <td> 
-              <div class="table_cell"> 
-                <%= ac[attr] %> 
-              </div>
-            </td>
-           
-          <% end %>
-          
-        </tr>
-      
-      <% end %>
-    </tbody>
-
-  </table>
-
-  <%= form_tag({action: :modify_ana_cate}, multipart: true) do %>
-    <%= file_field_tag :file %>
-    <%= submit_tag "Import categories from csv" %>
-  <% end %>
 
   <br />
-  <h5>
-    Modify analyses:
-  </h5>
 
-  <p>
-  Current analyses:
-  </p>
+  <section id="project_admin" class="admin_block">
+    <h4>
+    Project management:
+    </h4>
 
-  <table id="Table3" class="display">
-    <thead>
+    <div id='hidden_helper'>
+    Hide columns: 
+    <br />
+    <% i=0 %>
+    <% @projects.column_names.each do |attr| %>
       
-      <% @a_attrs.each do |attr| %>
+      <button class="toggle-vis" data-column='<%=i.to_s%>'> 
+        <%= attr.capitalize %>
+      </button>
+      <%i += 1%>
+      
+    <%end%>
+  </div>
+
+    <table id="pj_table" class="display">
+      <thead>
         
-        <th> <%= attr.capitalize %> </th>
-        
-      <% end %>
-      
-    </thead>
-
-    <tbody>
-      <% @ana.each do |a| %>
-      
-        <tr>
-          <% @a_attrs.each do |attr| %>
-            
-            <td> 
-              <div class="table_cell"> 
-                <%= a[attr] %> 
-              </div>
-            </td>
-           
-          <% end %>
+        <% @projects.column_names.each do |attr| %>
           
-        </tr>
-      
-      <% end %>
-    </tbody>
+          <th> <%= attr.capitalize %> </th>
+          
+        <% end %>
+        <th>
+          Action
+        </th>
+        
+      </thead>
 
-  </table>
+      <tbody>
+        <% @projects.each do |pj| %>
+        
+          <tr>
+            <% @projects.column_names.each do |attr| %>
+              
+              <td> 
+                <div class="table_cell"> 
+                  <%= pj[attr] %> 
+                </div>
+              </td>
+            
+            <% end %>
+            <td>
+              <%= link_to 'Show', project_path(pj) %>
+              <%= link_to 'Delete', project_path(pj), method: :delete,
+                      data: { confirm: 'Are you sure?' } %>
 
-  <%= form_tag({action: :modify_ana}, multipart: true) do %>
-    <%= file_field_tag :file %>
-    <%= submit_tag "Import analyses from csv" %>
-  <% end %>
+              <%= link_to 'Edit', edit_project_path(pj) %>
+            </td>
+            
+          </tr>
+        
+        <% end %>
+      </tbody>
 
+    </table>
+
+    <%= link_to  "Add one project", "/projects/new" %>
+
+    <%= form_tag import_projects_path, multipart: true do %>
+      <%= file_field_tag :file %>
+      <%= submit_tag "Import projects from csv" %>
+    <% end %>
+  </section>
+  <hr />
+  <section id="sample_admin" class="admin_block">
+    <h4>
+    Sample management:
+    </h4>
+    <br />
+    <h5>
+      Import all sample metadata from csv:
+    </h5>
+
+    <%= form_tag({action: :update_all_samples}, multipart: true) do %>
+      <p> 
+        Please select csv file to be imported:
+        <br />
+        (project_name should exist in projects database )
+      </p>
+      <%= file_field_tag 'file' %>
+      <%= submit_tag 'Submit'%>
+    <% end %>
+
+    <br />
+    <h5>
+      Modify the abandance:
+    </h5>
+
+    <%= form_tag({action: :modify_sample_abd}, multipart: true) do %>
+      <p>
+        Please select the project whose samples need to be modified
+      </p>
+      <%= select_tag :project_id, options_from_collection_for_select(@projects, :id, :name, -1) %>
+      <p> 
+        Please select tsv file to be imported:
+      </p>
+      <%= file_field_tag 'file' %>
+      <%= submit_tag 'Submit'%>
+    <% end %>
+  </section>
+  <hr>
   <br/>
 
-  <h6> You may want to add description image to the analysis card </h6>
-  <%= form_tag({action: :add_img}, multipart: true) do %>
-    <p> upload image file for analysis card:</p>
-    <%= file_field_tag :image_file %>
-    <%= submit_tag "Add image" %>
-  <% end %>
-
-
-  <br />
-  <h5>
-    Modify visualization source:
-  </h5>
-
-  <%= form_tag({action: :modify_viz_source}, multipart: true) do %>
-    <%= file_field_tag :file %>
-    <%= submit_tag "Import source from csv" %>
-  <% end %>
-
-
-
-</section>
--->
 </div>

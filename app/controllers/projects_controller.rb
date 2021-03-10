@@ -3,7 +3,6 @@ class ProjectsController < ApplicationController
     $seq_dir = "#{Rails.root}/app/data/seq/"
     $abd_dir = "#{Rails.root}/app/data/abd_files/"
     $tmp_dir = "#{Rails.root}/app/data/tmp/"
-    $user_stor_dir = "#{Rails.root}/data/user"
 
     def index
         @projects = Project.order(:name)
@@ -11,6 +10,7 @@ class ProjectsController < ApplicationController
         respond_to do |format|
             format.html
             format.csv { send_data @projects.to_csv }
+            format.json { render json: ProjectDatatable.new(view_context) }
         end
     end
   
@@ -21,11 +21,11 @@ class ProjectsController < ApplicationController
         @sample_attrs = Sample.column_names
         id = session[:user_id]
         @user = User.find(id)
-        user_dir = File.join($user_stor_dir, id.to_s)
         @datasets = @user.datasets
         respond_to do |format|
             format.html
             format.csv { send_data @project.samples.to_csv }
+            format.json { render json: ProjectSampleDatatable.new(view_context, @project) }
         end
     end
   
@@ -43,13 +43,12 @@ class ProjectsController < ApplicationController
 
     def import
         Project.import(params[:file])
-        update_metadata
         redirect_to '/admin', notice: "Projects imported."
     end
 
     def export_selected
         @projects = Project.order(:name)
-        send_data @projects.selected_to_csv(params[:project_ids])
+        send_data @projects.selected_to_csv(params[:selected_ids])
     end
 
     def new
@@ -80,7 +79,6 @@ class ProjectsController < ApplicationController
         @project = Project.find(params[:id])
          
         if @project.update(project_params)
-            update_metadata
             redirect_to @project
         else
             render 'edit'
@@ -88,18 +86,6 @@ class ProjectsController < ApplicationController
     end
   
     private 
-        def update_metadata
-            @projects = Project.order(:name)
-            db_projects_info_path = File.join Rails.root, 'app', 'data', 'db', 'projects_metadata.csv'
-            csv_file = @projects.to_csv
-            File.open(db_projects_info_path, 'w') do |file|
-                file << csv_file
-            end
-        end
-
-        def send_selected
-        end
-
         def project_params
             params.require(:project).permit(:name, :related_publications)
         end

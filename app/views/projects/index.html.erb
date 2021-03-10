@@ -1,21 +1,12 @@
 <% content_for :head do %>
   <script src="https://cdn.staticfile.org/jquery/1.10.2/jquery.min.js"></script>
   <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.22/js/jquery.dataTables.min.js"></script>
+  <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/select/1.3.1/js/dataTables.select.min.js"></script>
+  <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/fixedcolumns/3.3.2/js/dataTables.fixedColumns.min.js"></script>
   <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.22/css/jquery.dataTables.css">
-  
-  <%= javascript_pack_tag "table_style" %>
-  <script>
-    function toggle_checkall(field_name, state) {
-      var checkboxes = document.getElementsByTagName('input');
-      var count = checkboxes.length;
-      for (var i = 0; i < count; i++) {
-        if (checkboxes[i].type == "checkbox"
-            && checkboxes[i].name == field_name + "_ids[]") {
-          checkboxes[i].checked = state;
-        }
-      }
-    } 
-</script>
+  <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/select/1.3.1/css/select.dataTables.min.css">
+  <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/fixedcolumns/3.3.2/css/fixedColumns.dataTables.min.css">
+  <%= javascript_pack_tag "datatable" %>
 <% end %>
 
 
@@ -32,7 +23,7 @@
     <br />
     <% i=1 %>
     <% @attrs.each do |attr| %>
-      <% if attr != 'id' && attr != 'created_at' && attr != 'updated_at' %>
+      <% if attr != 'id'%>
         <button class="toggle-vis" data-column='<%=i.to_s%>'> 
           <%= attr %>
         </button>
@@ -42,57 +33,26 @@
   </div>
 
   <%= form_tag export_selected_projects_path(format: "csv"), multipart: true do %> 
-
-    <table id="Table" class="display">
+    <%= content_tag :table, role: :datatable, class: "display", id: "table_page", data: { url: projects_path(format: :json)} do %>
       <thead>
-        <th>
-          <input type="checkbox" onclick="toggle_checkall('project', this.checked);" />
-        </th>
-        <% @attrs.each do |attr| %>
-          <% if attr != 'id' && attr != 'created_at' && attr != 'updated_at' %>
-            <th> <%= attr %> </th>
-          <% end %>
-        <% end %>
-        <th>Action</th>
-      </thead>
-
-      <tbody>
-        <% @projects.each do |project| %>
-        
-          <tr>
-            <td><%= check_box_tag "project_ids[]", project.id %></td>
+            <th>
+              <input type="checkbox" class="selectAll" name="selectAll" value="all">
+            </th>
             <% @attrs.each do |attr| %>
-              <% if attr != 'id' && attr != 'created_at' && attr != 'updated_at' %>
-                <td> 
-                  <div class="table_cell"> 
-                    <%= project[attr] %> 
-                  </div>
-                </td>
+              <% if attr != 'id'%>
+                <th> <%= attr %> </th>
               <% end %>
             <% end %>
-            
-            <td>
-              <%= link_to 'Show', project_path(project) %>
-              <%#= link_to 'Delete', project_path(project), method: :delete,
-                      data: { confirm: 'Are you sure?' } %>
-
-              <%#= link_to 'Edit', edit_project_path(project) %>
-            </td>
-          </tr>
-        
-        <% end %>
+            <th>Action</th>
+      </thead>
+      <tbody>
       </tbody>
+    <% end %>
 
-    </table>
-    <%= submit_tag "Download selected metadata" %>
+    
+    <%= submit_tag "Download selected metadata" , :class => "s_table_sub"%>
   <% end %>
 
-
-  <%#<%= link_to  "Add", "/projects/new" %>
-  <%#= form_tag import_projects_path, multipart: true do %>
-    <%#= file_field_tag :file %>
-    <%#= submit_tag "Import project from csv" %>
-  <%# end %>
   <p>
     *To avoid frenquent download, please refresh the page to enable download again.
   </p>

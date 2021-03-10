@@ -1,21 +1,21 @@
 class SubmitController < ApplicationController
   UID = 45
   PROJECT_ID = 289
-  $user_stor_dir = "#{Rails.root}/data/user"
+  # $user_stor_dir = "#{Rails.root}/data/user"
   
   def index
     id = params[:id]
     gon.push id: id
     uid = session[:user_id]
     @user = User.find(uid)
-    user_dir = File.join($user_stor_dir, uid.to_s)
+    # user_dir = File.join($user_stor_dir, uid.to_s)
     @datasets = @user.datasets
     data = {}
     @datasets.each do |ds|
       ds_name = ds.name
-      ds_dir = File.join(user_dir, ds_name)
-      file_list = Dir.entries(ds_dir)[2..-1]
-      data[ds_name] = file_list
+      # ds_dir = File.join(user_dir, ds_name)
+      # file_list = Dir.entries(ds_dir)[2..-1]
+      data[ds_name] = ds_name
     end
     gon.push select_box_option: data
 
@@ -25,7 +25,7 @@ class SubmitController < ApplicationController
     id = params[:id]
     uid = session[:user_id]
     @user = User.find(uid)
-    user_dir = File.join($user_stor_dir, @user.id.to_s)
+    # user_dir = File.join($user_stor_dir, @user.id.to_s)
     if @user.task_ids
       @task_list = @user.task_ids.split(',')
     else
@@ -208,8 +208,7 @@ class SubmitController < ApplicationController
   def submit_app_task
     uid = session[:user_id]
     @user = User.find(uid)
-    user_dir = File.join($user_stor_dir, uid.to_s)
-
+    # user_dir = File.join($user_stor_dir, uid.to_s)
     result_json = {
       code: false,
       data: ''
@@ -228,16 +227,30 @@ class SubmitController < ApplicationController
       # store selected file to user's data folder
       app_selected&.each do |k, v|
         next unless !v.blank?
-        file_name = v.split("/")[1]
-        ds_name = v.split("/")[0]
-        file_path = File.join(user_dir, ds_name, file_name)
-        file = File.open file_path
+        ds_name = v
+        @dataset = @user.datasets.find_by(name: v)
+        data = @dataset.abd_file()
+        # file_path = File.join(user_dir, ds_name, file_name)
+        # fix the source of file
+        # file = File.open file_path
+        
+        time = Time.now
+        time_str = time.strftime("%Y_%m_%d")       
+        time_str += ("_" + time.strftime("%k_%M")) 
+        time_str = time_str.gsub(' ','')
+        file_name = "#{ds_name}_abd.tsv"
+        file = File.new(file_name, 'w')
+        file.write(data)
         uploader = JobInputUploader.new
         uploader.store!(file)
+        
+        
         Rails.logger.info("=======>#{uploader}")
         inputs.push({
           k => '/data/' + file_name
         })
+        file.close
+        
       end
 
       # store input file to user's data folder
