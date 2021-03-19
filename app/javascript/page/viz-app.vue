@@ -23,13 +23,7 @@
     import BootstrapVue from 'bootstrap-vue';
     import OvizEditor from "oviz-editor";
     import VApp from "./vapp.vue";
-    import {EditorDef, ItemDef} from "utils/editor-def"
-    import Oviz from "crux"
-    import {copyObject} from "utils/object"
-    import {DiscreteHeatmap} from "viz"
-    import {default as SignedHeatmap} from "viz/signed-heatmap"
     import objectToFormData from 'object-to-formdata';
-    import { getVizByTaskOutput } from "viz"
     import { event } from "crux/dist/utils";
     
     Vue.component("VApp", VApp);

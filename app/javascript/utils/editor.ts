@@ -31,7 +31,12 @@ export const defaultLayoutConf: any = {
 const fileConf = {
     id: "files",
     title: "Files",
-    builtin: "files"
+    layout: "single-page",
+    view: {
+        type: "vue",
+        component: "section-files",
+        data: {}
+    }
 };
 
 export function registerEditorConfig(editorConf, editorRef?) {

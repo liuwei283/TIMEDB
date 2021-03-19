@@ -1,11 +1,11 @@
-- [The Basics of Oral Mircobiome Plarform](README.md)
 
-- [How to submit a job](submit.md)
+- Developer guide
 
-- [How to obtain the analysis results](query.md)
-
-- [How to add a new visulization module](visualizer.md)
-
+  - [The Basics of Gutmeta Platform](basics.md)
+  - [How to upload your dataset](dataset.md)
+  - [How to add your database overview visulization](db-viz.md)
+  - [How to add a new visulization module](visualizer.md)
+  - [How to add submission port to the deepomics module](submit.md)
 
 <!-- - Developer guide
 
