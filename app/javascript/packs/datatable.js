@@ -45,7 +45,7 @@ function modify_set(option, id_set, new_ids){
 
 $(function () { 
     var ids = new Set();
-    console.log($("#table_page").data('url'));
+    //console.log($("#table_page").data('url'));
     var table = $("#table_page").DataTable({
         fixedColumns: true,
         fixedColumns: {
@@ -78,7 +78,7 @@ $(function () {
 
 
     table.on('change', function() {
-        console.log("clicking");
+        //console.log("clicking");
         // var info = table.fnSettings().aaSorting;
         // var idx = info[0][0];
         // alert(idx);
@@ -112,13 +112,26 @@ $(function () {
     table.on("draw", function(e) {
         //console.log("predraw");
         var all_rows = table.rows().data();
+        var all_select = true;
+        if(all_rows.length==0){
+            all_select = false;
+        }
         all_rows.map(function(row, index){
             var id = row[0];
             if (ids.has(id)){
                 table.row(index).select();
             }
-            
+            else{
+                all_select = false;
+            }
         });
+        if(all_select){
+            $(".selectAll").prop('checked', true);
+        }
+        else{
+            $(".selectAll").prop('checked', false);
+        }
+        
     });
 
 
@@ -135,7 +148,13 @@ $(function () {
                 .val(id)
             );
         });
-        console.log("submitting");
+        $(form).append(
+            $('<input>')
+                .attr('type', 'hidden')
+                .attr('name', 'search_value')
+                .val(table.search())
+        );
+        //console.log('submitting');
     });
 
     $('button.toggle-vis').on( 'click', function (e) {

@@ -11,7 +11,7 @@ class ApplicationDatatable
       {
         recordsTotal: count,
         recordsFiltered: total_entries,
-        data: data
+        data: data,
       }
     end
     
