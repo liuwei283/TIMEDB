@@ -1,11 +1,11 @@
 class Dataset < ApplicationRecord
   belongs_to :user, touch: true
   has_and_belongs_to_many :samples
-  validates :name, presence: true, uniqueness: { 
-    message: ->(object, data) do
-      "Dataset #{data[:value]} already exists. "
-    end
-  }, on: :create
+  # validates :name, presence: true, uniqueness: { 
+  #   message: ->(object, data) do
+  #     "Dataset #{data[:value]} already exists. "
+  #   end
+  # }, on: :create
 
   def abd_file()
     ids = sample_ids
