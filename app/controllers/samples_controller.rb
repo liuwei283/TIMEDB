@@ -231,6 +231,23 @@ class SamplesController < ApplicationController
         end
     end
 
+    def download_abd
+        @project = Project.find(params[:project_id])
+        @sample = @project.samples.find(params[:id])
+        n1 = @project.name
+        n2 = @sample.sample_name
+        file_current = "#{$abd_dir}#{n1}_#{n2}.tsv"
+        if File.file?(file_current)
+            send_file(
+            file_current,
+                filename: "#{n1}_#{n2}.tsv",
+            )
+        else
+            redirect_back fallback_location: @sample, notice: "File does NOT exist."
+        end
+
+    end
+
     def import_abd_table
         @project = Project.find(params[:project_id])
         n1 = @project.name
