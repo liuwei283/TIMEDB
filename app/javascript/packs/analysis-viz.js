@@ -2,7 +2,6 @@ import Vue from "vue"
 import VApp from "page/vapp.vue"
 import ColorPicker from "page/builtin/color-picker.vue";
 import SectionFiles from "page/builtin/section-files.vue";
-import SliderInput from "page/builtin/slider-input.vue";
 import CommentEdit from "viz/meta-overview/comment-edit.vue";
 import FilterSample from "viz/meta-overview/filter-sample.vue";
 import GroupEdit from "viz/meta-overview/group-edit.vue";
@@ -25,8 +24,7 @@ Vue.component("color-picker", ColorPicker);
 Vue.component("section-files", SectionFiles);
 
 Vue.component("reorder-species", ReorderSpecies);
-Vue.component("filter-species", FilterSpecies);
-//Vue.component("slider-input", SliderInput);
+// Vue.component("filter-species", FilterSpecies);
 
 function initVApp() { 
     if(document.getElementById("vapp")) {
