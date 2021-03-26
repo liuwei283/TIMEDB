@@ -29,9 +29,9 @@ class ApplicationController < ActionController::Base
             
         end
         
-        user_dir = File.join($user_stor_dir, session[:user_id].to_s)  
-        unless File.directory?(user_dir)
-            Dir.mkdir(user_dir)
-        end
+        #user_dir = File.join($user_stor_dir, session[:user_id].to_s)  
+        # unless File.directory?(user_dir)
+        #     Dir.mkdir(user_dir)
+        # end
     end
 end

@@ -14,7 +14,10 @@ class SamplesController < ApplicationController
         respond_to do |format|
             format.html
             format.csv { send_data @samples.to_csv }
-            format.json { render json: SampleDatatable.new(view_context) }
+            format.json { 
+                json_data =  SampleDatatable.new(view_context).as_json
+                render json: json_data
+            }
         end
     end
 
@@ -29,9 +32,10 @@ class SamplesController < ApplicationController
         @sample = @project.samples.find(params[:id])
         @attrs = Sample.column_names
         abd_name = "#{@project.name}_#{@sample.sample_name}.tsv"
-        abd_path = File.join("/app/data/abd_files/", abd_name)
+        abd_url = File.join("/app/data/abd_files/", abd_name)
+        abd_path = File.join($abd_dir, abd_name)
         @abd_exist = File.exist?(abd_path)
-        gon.push file: abd_path
+        gon.push file: abd_url
     end
 
     def create
@@ -83,14 +87,40 @@ class SamplesController < ApplicationController
             download_selected_metadata_file
         elsif params[:abundance]
             download_selected_abd_file
+        elsif params[:filter_abd]
+            download_filter_abd
+        elsif params[:filter_metadata]
+            download_filter_metadata
         elsif params[:seqence]
             "nothing"
-
         elsif params[:seleted2ds]
             export_selected2dataset
+        elsif params[:filter2ds]
+            export_filtered2dataset
+            
         end
 
     end
+
+    def export_filtered2dataset
+        id = session[:user_id]
+        @user = User.find(id)
+        ds_name = params[:ds_selected]  
+        @dataset = @user.datasets.find_by(name: ds_name)
+        if params[:project_id]
+            @project = Project.find(params[:project_id])
+            ids = Sample.filtered(params[:search_value], @project)
+            @dataset.add_samples(ids)
+            redirect_to @project
+        else
+            ids = Sample.filtered(params[:search_value])
+            @dataset.add_samples(ids)
+            redirect_to samples_path
+
+        end
+         
+    end
+        
 
     def export_selected2dataset
         id = session[:user_id]
@@ -107,9 +137,43 @@ class SamplesController < ApplicationController
         
     end
 
+    def download_filter_metadata
+        time = Time.now
+        time_str = time.strftime("%Y_%m_%d")       
+        time_str += ("_" + time.strftime("%k_%M")) 
+        time_str = time_str.gsub(' ','')
+        if params[:project_id]
+            @project = Project.find(params[:project_id])
+            ids = Sample.filtered(params[:search_value], @project)
+            send_data Sample.selected_to_csv(ids), :filename => "#{time_str}_selected_metadata.csv"
+        else
+            ids = Sample.filtered(params[:search_value])
+            send_data Sample.selected_to_csv(ids), :filename => "#{time_str}_selected_metadata.csv"
+        end
+    end
+
     def download_selected_metadata_file
+        time = Time.now
+        time_str = time.strftime("%Y_%m_%d")       
+        time_str += ("_" + time.strftime("%k_%M")) 
+        time_str = time_str.gsub(' ','')
         @samples = Sample.order(:sample_name)
-        send_data @samples.selected_to_csv(params[:selected_ids]), :filename => "selected_metadata.csv"
+        send_data @samples.selected_to_csv(params[:selected_ids]), :filename => "#{time_str}_selected_metadata.csv"
+    end
+
+    def download_filter_abd
+        time = Time.now
+        time_str = time.strftime("%Y_%m_%d")       
+        time_str += ("_" + time.strftime("%k_%M")) 
+        time_str = time_str.gsub(' ','')
+        if params[:project_id]
+            @project = Project.find(params[:project_id])
+            ids = Sample.filtered(params[:search_value], @project)
+            send_data Sample.selected_abd_to_tsv(ids, option={"pj_name": @project.name}), :filename => "#{time_str}_selected_abd.tsv"
+        else
+            ids = Sample.filtered(params[:search_value])
+            send_data Sample.selected_abd_to_tsv(ids), :filename => "#{time_str}_selected_abd.tsv"
+        end
     end
 
     def download_selected_abd_file
@@ -165,6 +229,23 @@ class SamplesController < ApplicationController
         else
             redirect_back fallback_location: @sample, notice: "File does NOT exist."
         end
+    end
+
+    def download_abd
+        @project = Project.find(params[:project_id])
+        @sample = @project.samples.find(params[:id])
+        n1 = @project.name
+        n2 = @sample.sample_name
+        file_current = "#{$abd_dir}#{n1}_#{n2}.tsv"
+        if File.file?(file_current)
+            send_file(
+            file_current,
+                filename: "#{n1}_#{n2}.tsv",
+            )
+        else
+            redirect_back fallback_location: @sample, notice: "File does NOT exist."
+        end
+
     end
 
     def import_abd_table

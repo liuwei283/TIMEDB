@@ -26,10 +26,12 @@ class SampleDatatable < ApplicationDatatable
       # users.total_entries
     end
   
+
     def samples
       @samples ||= fetch_samples
     end
-  
+
+    
     def fetch_samples
       search_string = []
       Sample.column_names.each do |attr|

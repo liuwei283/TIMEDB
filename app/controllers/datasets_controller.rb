@@ -5,10 +5,10 @@ class DatasetsController < ApplicationController
         @user = User.find(id)
         @dataset = @user.datasets.find(params[:id])
         @sample_attrs = Sample.column_names
-        user_dir = File.join($user_stor_dir, id.to_s)
-        ds_dir = File.join(user_dir, @dataset.name)
-        Dir.mkdir(ds_dir) unless File.exists?(ds_dir)
-        @file_list = Dir.entries(ds_dir)[2..-1]
+        # user_dir = File.join($user_stor_dir, id.to_s)
+        # ds_dir = File.join(user_dir, @dataset.name)
+        # Dir.mkdir(ds_dir) unless File.exists?(ds_dir)
+        # @file_list = Dir.entries(ds_dir)[2..-1]
         respond_to do |format|
             format.html
             format.json { render json: DatasetSampleDatatable.new(view_context, @dataset) }
@@ -69,9 +69,9 @@ class DatasetsController < ApplicationController
         @dataset = @user.datasets.create(dataset_params)
         @user.update_attribute(:dataset_n, @user.datasets.count)
         if @dataset.save
-            user_dir = File.join($user_stor_dir, id.to_s)
-            ds_dir = File.join(user_dir, @dataset.name)
-            Dir.mkdir(ds_dir)
+            # user_dir = File.join($user_stor_dir, id.to_s)
+            # ds_dir = File.join(user_dir, @dataset.name)
+            # Dir.mkdir(ds_dir)
             redirect_to user_dataset_path(:id => @dataset.id)
         else
             render 'new'

@@ -95,4 +95,29 @@ class Sample < ApplicationRecord
     end
   end 
 
+  def self.filtered(keyword, project=nil)
+    search_string = []
+    Sample.column_names.each do |attr|
+      if Sample.columns_hash[attr].type != :string
+        search_string << "cast(\"#{attr}\" as varchar(10)) like :search"
+      else
+        search_string << "\"#{attr}\" like :search"
+      end
+    end
+
+    if(project!= nil)
+      samples = project.samples.order(:sample_name)
+      samples = samples.where(search_string.join(' or '), search: "%#{keyword}%")
+      
+    else
+      samples = Sample.order(:sample_name)
+      samples = samples.where(search_string.join(' or '), search: "%#{keyword}%")
+      
+    end
+    ids = samples.ids
+
+
+    return ids
+  end
+
 end

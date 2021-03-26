@@ -60,8 +60,13 @@
   <%= submit_tag "download selected samples abundance to file", :name => 'abundance', :class => "s_table_sub"  %>
   <%#= submit_tag "download selected samples sequence to file", :name => 'sequence' %>
   <br />
+  <%= submit_tag "dowload filtered samples metadata to file", :name => 'filter_metadata', :class => "s_table_sub" %>
+  <%= submit_tag "dowload filtered samples abundance to file", :name => 'filter_abd', :class => "s_table_sub" %>
+  <br />
+  
     
   <%= submit_tag "export selected samples to", :name => 'seleted2ds', :class => "s_table_sub"  %>
+  <%= submit_tag "export filtered samples to", :name => 'filter2ds', :class => "s_table_sub"  %>
   <select id="select_box" name="ds_selected">
     <option value="">--Please choose a dataset--</option>
     <% @datasets.each do |ds|%>
