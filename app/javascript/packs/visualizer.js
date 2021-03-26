@@ -10,14 +10,12 @@ let outputsLoaded = false;
 
 function checkResource() {
     const moduleName = window.gon.module_name;
-    console.log(window.gon.module_name);
     if (window.__BVD3_visualizers[moduleName]) {
         packLoaded = true;
     }
     if (document.getElementById("canvas")) {
         canvasMounted = true;
     }
-    console.log(`${packLoaded} - ${canvasMounted}`);
     if (packLoaded && canvasMounted && !vizLoaded) {
         if (window.gon.viz_mode === viz_mode.TASK_OUTPUT && !outputsLoaded) return;
         vizLoaded = true;
@@ -32,24 +30,17 @@ function checkResource() {
 }
 
 event.on(event.CANVAS_READY, () => { 
-    console.log(event.CANVAS_READY);
     canvasMounted = true; checkResource();
-    console.log(vizLoaded);
 });
 event.on("bvd3-resource-loaded", () => { 
-    console.log("bvd3-resource-loaded");
     packLoaded = true; 
     checkResource(); 
-    console.log(vizLoaded);
 });
 event.on("GMT:query-finished", ()=> {
-    console.log("GMT:query-finished");
     outputsLoaded = true;
     checkResource();
-    console.log(vizLoaded)
 });
 event.on("GMT:reset-query", () => {
-    console.log("GMT:reset-query");
     const canvas = document.getElementById("canvas");
     if (!canvas) { return; }
     const svgElm = canvas.getElementsByTagName("svg");

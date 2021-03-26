@@ -39,7 +39,6 @@ export function editorConfig(v): EditorDef {
                                 id: "pwcolor",
                                 paletteMap: genPaletteMap(Object.keys(v.data.colors)),
                                 callback(colors) {
-                                    console.log(colors)
                                     v.data.colors = colors;
                                     v.forceRedraw = true;
                                     run(v);

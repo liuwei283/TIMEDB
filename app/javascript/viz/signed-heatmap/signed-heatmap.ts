@@ -146,7 +146,6 @@ export class SignedHeatMap extends Component<SignedHeatMapOption> {
 
     protected computeRange(min, max, isSym): any {
         if (isSym) {
-            console.log({max,min})
             let bound = (max > -min) ? max : -min;
             bound = findBound(bound, 0, 2);
             return {min: -bound, max: bound};

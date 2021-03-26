@@ -1,7 +1,6 @@
 import Vue, { VueConstructor } from "vue";
 
 export function replace(id: string, vue: string | VueConstructor): Vue {
-    console.log(id);
     const el = document.getElementById(id);
     if (!el) { return; }
     return new Vue({

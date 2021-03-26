@@ -78,10 +78,8 @@ export function editorConfig(v: any): EditorDef {
                                     }
 
                                     v.data.tree.dataOpt.maxTextLength = 0;
-                                    console.log(v.data.tree);
                                     v.data.tree = main(v.data.tree._data);
                                     // updateBranchZIndex(v);
-                                    console.log(v.data.tree);
                                     if (v.data.tree.leaves.length < 20) {
                                         v.data.tree.dataOpt.isRadical = conf.displayCircularTree;
                                         editorRef.circularChecked.config.disabled = false;

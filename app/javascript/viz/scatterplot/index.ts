@@ -7,7 +7,7 @@ import { registerEditorConfig } from "utils/editor";
 import {groupedChartColors} from "oviz-common/palette";
 import {getGroups, groupBy}from "utils/array"
 import {register} from "page/visualizers";
-import {rankDict} from "utils/bio-info.ts";
+import {rankDict} from "utils/bio-info";
 
 import * as _ from "lodash";
 
@@ -77,7 +77,6 @@ function init() {
                 dependsOn: ["scatterData"],
                 loaded(data) {
                     if (!data) return;
-                    console.log(data);
                     this.data.groups = getGroups(data, data.columns[1]);
                     
                     this.data.samples.forEach(s => {
@@ -128,20 +127,11 @@ function init() {
                     const chosenRank = this.data.ranks[0].text;
                     const data = Object.keys(this.data.clusterDict).map(k => this.data.clusterDict[k]);
                     this.data.clusters = Object.keys(_.groupBy(data, chosenRank));
-                    // data.forEach((cluster, i, arr) => 
-                    //     this.data.samples.forEach(s => {
-                    //         if(cluster["sampleId"] === s){
-                    //             this.data.sampleInfoDict[s].cluster = cluster.cluster;
-                    //             arr.slice(i, 1);
-                    //         }
-                    //     })
-                    // );
                     return null;
                 }
             }
         },
         setup() {
-            console.log(this["_data"]);
             registerEditorConfig(editorConfig(this), editorRef);
         }
     }); 

@@ -62,7 +62,6 @@ export default class ReorderSpecies extends Vue {
 
     private apply() {
         if (this.data.keys[0] !== "group") this.useDefault = false;
-        console.log(this.data.keys);
         this.data.callback(
             this.data.keys,
             this.useDefault

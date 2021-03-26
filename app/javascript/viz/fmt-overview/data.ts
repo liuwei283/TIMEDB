@@ -74,8 +74,6 @@ export function computeSortingScore(data) {
             });
         }
     });
-    console.log(data.speciesSortingScore["Alistipes_sp_AP11"]);
-    console.log(data.speciesSortingScore["Clostridium_nexile"]);
 }
 
 export function generateHistData(data) {

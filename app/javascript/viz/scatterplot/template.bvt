@@ -159,7 +159,6 @@ Component {
                 key = "legend1"
                 on:mousedown = (ev, el) => dragStart(ev, el)
                 on:mouseup = (ev, el) => dragEnd(ev, el)
-                @expr console.log(groupLegendData)
                 Legend {
                     data =groupLegendData
                     lineHeight = 18

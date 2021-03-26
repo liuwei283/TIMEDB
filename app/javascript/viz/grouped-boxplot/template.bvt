@@ -31,7 +31,6 @@ svg {
 				x = -4 + 8 * index
 				:box (_d) {
 					Rect.full  {
-						@expr console.log(_d)
 						zIndex = 1
 						fill = "white"
 						stroke = colors[index]

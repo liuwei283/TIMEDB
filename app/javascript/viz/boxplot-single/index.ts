@@ -114,7 +114,6 @@ function init() {
         },
         setup() {            
             this.data.plotWidth = 1000;
-            console.log(this["_data"]);
             registerEditorConfig(editorConfig(this));
         },
     });
