@@ -73,14 +73,14 @@ function init() {
                             boxData[j].means.push(stat2.mean());
                         });
                     });
-                    //const div = Math.ceil(categories.length/10);
                     this.data.xTicks = [];
                     categories.filter((d, i, arr) => {
                         if (i === 0 || d % 10 === 0 || i === arr.length - 1)
                             this.data.xTicks.push({value: d, index: i});
                     });
+                    // this is hardcoded due to xy plot bug
                     this.data.boxData = boxData.sort((a,b)=> - a.values.length - b.values.length);
-                    this.data.classifications = classifications;
+                    this.data.classifications = [classifications[1], classifications[0]];
                     this.data.categories = categories;
                     return null;
                 },

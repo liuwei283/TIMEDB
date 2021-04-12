@@ -107,18 +107,12 @@ import _ from 'lodash';
 import Vue from 'vue';
 import axios from 'axios';
 import objectToFormData from 'object-to-formdata';
-import BootstrapVue from 'bootstrap-vue';
 import AlertCenter from 'components/alert-center.vue';
 import VApp from "page/vapp.vue";
-import OvizEditor from "oviz-editor";
-import {EditorDef, ItemDef} from "utils/editor-def";
-import Oviz from "crux";
 import { event } from "crux/dist/utils";
 import {registerViz} from "viz";
 
 Vue.component("VApp", VApp);
-Vue.use(OvizEditor);
-Vue.use(BootstrapVue);
 
 export default {
     data() {
@@ -183,7 +177,6 @@ export default {
             this.searchJob();
         },
         updateGon(output) {
-            console.log(output.module_name);
             window.gon.module_name = output.module_name;
             window.gon.required_data = output.required_data;
             if (!window.gon.urls) window.gon.urls = {};
@@ -232,7 +225,6 @@ export default {
         },
         token_search(token){
             this.job_id = token;
-            console.log(this.job_id)
             this.searchJob();
         },
     },

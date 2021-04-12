@@ -444,48 +444,5 @@ function histoPanelDef(v: any, h: any, i: number) {
     };
 }
 
-function genPanelEditorDef(v: any, key: string, name: string) {
-    return {
-        id: `${key}-panel`,
-        title: `${name} panel`,
-        layout: "tabs",
-        tabs: [
-            {
-                name: "Settings",
-                id: "content",
-                view: {
-                    type: "vue",
-                    component: "meta-info",
-                    data: {
-                        data: v.data.extraPanelKeys[key].map(mk => ({
-                            name: mk,
-                            ...v.data.extraPanelData[key][mk].toObject(),
-                        })),
-                        callback(obj) {
-                            for (const o of obj) v.data.extraPanelData[key][o.name].update(v, o);
-                            update(v);
-                        },
-                    },
-                },
-            },
-            {
-                name: "Reorder",
-                id: "reorder",
-                view: {
-                    type: "vue",
-                    component: "reorder",
-                    data: {
-                        title: `Reorder ${name}`,
-                        array: Array.from(v.data.extraPanelKeys[key]),
-                        callback(array) {
-                            v.data.extraPanelKeys[key] = array;
-                            update(v);
-                        },
-                    },
-                },
-            },
-        ],
-    };
-}
 
 export const toolbar: ToolbarDef = [];

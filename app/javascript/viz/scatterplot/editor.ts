@@ -21,7 +21,6 @@ const cbpPalette = {
 
 export function editorConfig(v): EditorDef {
     const [defaultPalette] = genDefaultPalette(v.data.colors);
-    console.log(v.data.availableAxises);
     return {
         sections: [
             {

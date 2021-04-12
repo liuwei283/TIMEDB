@@ -82,7 +82,6 @@ function init() {
             }
         },
         setup() {            
-            console.log(this["_data"]);
             registerEditorConfig(editorConfig(this));
         },
     });

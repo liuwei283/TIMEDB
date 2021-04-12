@@ -43,25 +43,14 @@
     import OvizEditor from "oviz-editor";
 
     import axios from "axios";
-    import {EditorDef, ItemDef} from "utils/editor-def"
-    import Oviz from "crux"
-    import {copyObject} from "utils/object"
-    import {DiscreteHeatmap} from "viz"
-    import {default as SignedHeatmap} from "viz/signed-heatmap"
-    import objectToFormData from 'object-to-formdata';
-    import { getVizByTaskOutput } from "viz"
     import { event } from "crux/dist/utils";
     import {viz_mode} from "page/visualizers";
 
-    import ColorPicker from "page/builtin/color-picker.vue";
-    import SectionFiles from "page/builtin/section-files.vue";
     import DropDownSelect from "page/builtin/dropdown-select.vue";
 
     Vue.use(OvizEditor);
     Vue.use(BootstrapVue);
 
-    Vue.component("section-files", SectionFiles)
-    Vue.component("color-picker", ColorPicker)
     Vue.component("dropdown-select", DropDownSelect)
 
     export default {
@@ -99,9 +88,6 @@
                         if (result.code)
                             location.reload();
                     })
-            },
-            useDemo() {
-                console.log("useD")
             },
             toggleEditor() {
                 this.showEditor=!this.showEditor;

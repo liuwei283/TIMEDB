@@ -94,7 +94,6 @@ axios.all([axios.get('/data/static_viz_data/world_map/countries-110m.json'), axi
     
     // const [min, max] = findBoundsForValues(numbers.map(d=> Math.sqrt(d)), 2);
     const [min, max] = findBoundsForValues(numbers, 2);
-    console.log(max);
     legendG.append("text")
         .text(findBound(_.max(numbers), 0, 2))
         .attr("x", width - 248)

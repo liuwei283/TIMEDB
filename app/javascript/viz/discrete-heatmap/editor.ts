@@ -21,7 +21,6 @@ function convertColorsMapToArray(colorMap) {
 }
 export function editorConfig(v):EditorDef {
     const [defaultPalette] = genDefaultPalette(v.data.colors, v.data.values);
-    console.log(defaultPalette);
     return {
         sections: [
             {

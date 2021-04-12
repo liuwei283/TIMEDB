@@ -21,3 +21,13 @@ const environment = require('./environment')
 //     }
 // }
 module.exports = environment.toWebpackConfig()
+// use another port
+// const path = require('path');
+// module.exports = {
+//     ...environment.toWebpackConfig(),
+//     devServer: {
+//       contentBase: path.join(__dirname, 'dist'),
+//       compress: true,
+//       port: 3036,
+//     },
+//   };

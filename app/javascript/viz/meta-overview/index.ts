@@ -4,8 +4,8 @@ import { MetaOverview } from "./meta-overview";
 import { getLeafOrder, main, meta } from "./data";
 import { registerEditorConfig } from "utils/editor";
 import { editorConfig, editorRef } from "./editor";
-
 import {controlGroupColors} from "oviz-common/palette";
+
 
 const MODULE_NAME = "meta-overview";
 
