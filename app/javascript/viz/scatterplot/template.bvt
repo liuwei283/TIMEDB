@@ -32,20 +32,21 @@ Component {
                 x = -25
                 rotation = @rotate(-90)
                 anchor = @anchor("m", "c")
-                fontSize = 15
+                fontSize = 12
             }    
         }
 
         Component {
             x = 50%; y = 100% 
             Text(xLabel) {
-                y = 15
+                y = 20
                 anchor = @anchor("m", "c")
-                fontSize = 15
+                fontSize = 12
             }    
         }
-            
+
         @for (scatter, i) in parsedScatterData {
+            
             @if (!scatter.cluster) {
                 @let scatterColor = groups ? colorMap.get(scatter.group) : colors[0]
                 @let scatterProps = {
@@ -80,7 +81,6 @@ Component {
                     r: config.scatterSize/2
                 }
                 @let shape = groups ? shapeMap.get(scatter.group) : "Circle"
-                    
                 Component(shape) {
                     key = "scatter"+i                    
                     x = @scaled-x(scatter[xLabel]); y = @scaled-y(scatter[yLabel])

@@ -10,6 +10,7 @@ import {register} from "page/visualizers";
 import {rankDict} from "utils/bio-info";
 
 import * as _ from "lodash";
+import { collapseTextChangeRangesAcrossMultipleVersions } from "typescript";
 
 const MODULE_NAME = 'scatterplot'
 
@@ -51,6 +52,25 @@ function init() {
                 },
                 loaded(d) {
                     const rankKeys = Object.keys(rankDict);
+                    // console.log(d.map(x => x.columns[0]));
+                    if (window.gon.analysis_name === "K-means Cluster" || (d.length === 1 && d[0].columns[0] === "")) {
+                        d[0].columns[0] = "s";
+                        this.data.speciesDict = {};
+                        const shortSpecies = [];
+                        for (let i = 1; i < d[0].columns.length; i ++) {
+                            const splittedSpecies = d[0].columns[i].split("|");
+                            shortSpecies.push([splittedSpecies[splittedSpecies.length - 1], d[0].columns[i]]);
+                            this.data.speciesDict[splittedSpecies[splittedSpecies.length - 1]] = d[0].columns[i];
+                        }
+                        d[0] = d[0].map(x => {
+                            const parsedX = {sampleId: x.sampleId};
+                            shortSpecies.forEach(s => {
+                                parsedX[s[0]] = x[s[1]];
+                            });
+                            return parsedX;
+                        })
+                        d[0].columns = ["s", ...shortSpecies.map(s => s[0])];
+                    }
                     this.data.ranks = d.map(x => x.columns[0])
                                     .sort((a, b) => rankKeys.indexOf(a) - rankKeys.indexOf(b))
                                     .map((x, i) =>  ({value: i, text: rankDict[x]}))
@@ -77,16 +97,27 @@ function init() {
                 dependsOn: ["scatterData"],
                 loaded(data) {
                     if (!data) return;
-                    this.data.groups = getGroups(data, data.columns[1]);
-                    
-                    this.data.samples.forEach(s => {
-                        data.forEach((group, i, arr) => {
-                            if(group[data.columns[0]] === s){
-                                this.data.sampleInfoDict[s].group = group[data.columns[1]];
-                                arr.slice(i, 1);
-                            }
-                        })
+                    // this.data.groups = [...getGroups(data, data.columns[1]), "unknown"];
+                    const groups = getGroups(data, data.columns[1]);
+                    const groupDict = {};
+                    data.forEach(x => {
+                        groupDict[x[data.columns[0]]] = x[data.columns[1]];
                     });
+                    let hasUnknownSample = false;
+                    this.data.samples.forEach(s => {
+                        this.data.sampleInfoDict[s].group = groupDict[s] || "unknown";
+                        if (!groupDict[s] && !hasUnknownSample) { 
+                            hasUnknownSample = true;
+                        }
+                        // data.forEach((group, i, arr) => {
+                        //     if(group[data.columns[0]] === s){
+                        //         this.data.sampleInfoDict[s].group = group[data.columns[1]];
+                        //         arr.slice(i, 1);
+                        //     }
+                        // })
+                    });
+                    if (hasUnknownSample) groups.push("unknown");
+                    this.data.groups = groups;
                     return null;
                 }
             },
