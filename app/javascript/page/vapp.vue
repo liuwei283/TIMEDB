@@ -146,7 +146,7 @@
 
 </script>
 
-<style lang="scss">
+<style scoped lang="scss">
     #vapp {
         height: 100%;
     }
