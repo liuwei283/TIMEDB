@@ -122,3 +122,6 @@ function init() {
 }
 
 register(MODULE_NAME, init);
+export function registerBoxplotSingle() {
+    register(MODULE_NAME, init);
+}
