@@ -124,3 +124,7 @@ function init() {
 }
 
 register(MODULE_NAME, init);
+
+export function registerHierTree() {
+    register(MODULE_NAME, init);
+}

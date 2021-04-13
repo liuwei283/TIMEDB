@@ -151,6 +151,6 @@ function init() {
 
 register(MODULE_NAME, init);
 
-export function registerScatterplot(){
+export function registerScatterBoxPlot(){
     register(MODULE_NAME, init);
 }

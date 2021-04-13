@@ -144,3 +144,7 @@ function init() {
 }
 
 register(MODULE_NAME, init);
+
+export function registerGroupedBoxP() {
+    register(MODULE_NAME, init);
+}
