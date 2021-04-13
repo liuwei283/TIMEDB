@@ -146,7 +146,7 @@
 
 </script>
 
-<style scoped>
+<style lang="scss">
     #vapp {
         height: 100%;
     }
@@ -212,6 +212,7 @@
         right: 10px;
     }
     .need-upload {
+        height: 0;
         margin: 0 1px;
         padding: 8rem 4rem;
         text-align: center;
