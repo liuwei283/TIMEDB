@@ -143,7 +143,7 @@
     }
 </script>
 
-<style scoped>
+<style lang="scss">
     button {
         height:30px;
         background: skyblue;
