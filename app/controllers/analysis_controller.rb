@@ -3,13 +3,13 @@ class AnalysisController < ApplicationController
     def index
         @analyses = Analysis.where "mid is not null"
         # check the card image
-        dir = File.join(Rails.root, "app", "assets", "images")
-        sample_img = File.join(dir, "600.png")
-        @analyses.each do |a|
-            filename = "#{a.mid}.png" 
-            dest = File.join(dir, filename)
-            FileUtils.cp(sample_img, dest) unless File.file?(dest)
-        end
+        # dir = File.join(Rails.root, "app", "assets", "images")
+        # sample_img = File.join(dir, "600.png")
+        # @analyses.each do |a|
+        #     filename = "#{a.mid}.png" 
+        #     dest = File.join(dir, filename)
+        #     FileUtils.cp(sample_img, dest) unless File.file?(dest)
+        # end
     end
 
     def show 
