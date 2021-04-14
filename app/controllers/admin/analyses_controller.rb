@@ -63,13 +63,12 @@ class Admin::AnalysesController < ApplicationController
   private
 
   def analysis_params
-    if !params[:analysis][:cover_img].blank?
-      File.open("#{Rails.root}/app/assets/images/#{params[:analysis][:mid]}.png", "wb") do |f|
-          f.write(params[:analysis][:cover_img].read)
-      end
-    end
-    params.require(:analysis).permit(:name, :visualizer_id, :files_info,
+    p = params.require(:analysis).permit(:name, :visualizer_id, :files_info,
                                      :mid, :analysis_category_id)
+    if !params[:analysis][:image_file].blank?
+        p[:cover_image] = "data:image/png;base64" + Base64.strict_encode64(params[:analysis][:image_file].read)
+    end
+    return p
   end
 
   def set_analyses_category
