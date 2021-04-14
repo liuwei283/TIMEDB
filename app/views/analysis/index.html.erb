@@ -10,9 +10,12 @@
             <% @analyses.each do |analysis| %>
                 <div class="col-md-4 module_card">
                     <div class="card_img">
-                        <% name = analysis.mid.to_s + ".png"%>
-                        <% target = "/submit/" + analysis.mid.to_s + '/'%>
-                        <%=link_to image_tag(name), target%>
+                        <% if analysis.cover_image.nil? %>
+                            <%= image_tag("628.png")%>
+                        <% else %> 
+                            <%= image_tag(analysis.cover_image)%>
+                        <% end %>
+                        
                     </div>
 
                     <div class="card_body">
