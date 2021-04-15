@@ -89,6 +89,6 @@ function setUpRange(v) {
 
 register(MODULE_NAME, init);
 
-export function registerCorrHeatmap(){
+export function registerCorrHeatmap() {
     register(MODULE_NAME, init);
 }

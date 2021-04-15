@@ -1,18 +1,18 @@
-export interface Viz {
-    vizOpts: any;
-}
-import {registerSignedHeatmap} from "./signed-heatmap";
-import {registerScatterplot} from "./scatterplot";
-import { registerScatterBoxPlot } from "./scatter-box-plot";
+// export interface Viz {
+//     vizOpts: any;
+// }
 import { registerBoxplot} from "./boxplot";
 import { registerBoxplotSingle } from "./boxplot-single";
-import { registerHierTree} from "./hier-tree";
+import { registerCorrHeatmap } from "./corr-heatmap";
 import { registerGroupedBoxP } from "./grouped-boxplot-p";
+import { registerHierTree} from "./hier-tree";
+import { registerScatterBoxPlot } from "./scatter-box-plot";
+import { registerScatterplot} from "./scatterplot";
 
 declare global {
     interface GonInfo {
         urls?: any;
-        required_data?: any; 
+        required_data?: any;
         module_name?: string;
     }
     interface Window {
@@ -20,9 +20,9 @@ declare global {
     }
 }
 export function registerViz(moduleName) {
-    switch(moduleName){
-        case "signed-heatmap":
-            registerSignedHeatmap();
+    switch (moduleName) {
+        case "corr-heatmap":
+            registerCorrHeatmap();
             break;
         case "scatterplot":
             registerScatterplot();
@@ -46,5 +46,3 @@ export function registerViz(moduleName) {
     }
 
 }
-
-
