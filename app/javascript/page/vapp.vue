@@ -202,7 +202,7 @@
     }
     #viz-container {
         position: relative;
-        height: calc(100vh - 31px);
+        height: calc(100% - 38px);
     }
     #v-editor {
         position: absolute;
