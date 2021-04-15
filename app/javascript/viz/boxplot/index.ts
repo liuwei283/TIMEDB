@@ -1,22 +1,17 @@
-import Oviz from "crux"
-import template from "./template.bvt"
+import Oviz from "crux";
+import template from "./template.bvt";
 import {register} from "page/visualizers";
-
 import {sortByRankKey, rankDict} from "utils/bio-info";
 import { registerEditorConfig } from "utils/editor";
 import { editorConfig } from "./editor";
 import { groupedChartColors} from "oviz-common/palette"
 import { findBoundsForValues, computeLog } from "utils/maths";
 import { Color } from "crux/dist/color";
+
 const ylabel = "Beta diversity";
-const title = "Beta Diversity"
-const MODULE_NAME = 'boxplot'
-//
-interface BoxplotData {
-    values: any[], 
-    outliers: any[], 
-    means: number[],
-}
+const title = "Beta Diversity";
+
+const MODULE_NAME = "boxplot";
 
 function init() {
     if (!window.gon || window.gon.module_name !== MODULE_NAME) return;
@@ -49,11 +44,11 @@ function init() {
                     this.data.mainDict = {};
                     const raw = {};
                     this.data.ranks = [];
-                    data.sort((a, b)=> sortByRankKey(a, b))
+                    data.sort((a, b) => sortByRankKey(a, b))
                         .forEach((d, i) => {
                             const rankLabel = rankDict[d[0][0]];
                             this.data.ranks.push(rankLabel);
-                            const {rawData, boxData} = processRawData(d.slice(1,d.length));
+                            const {rawData, boxData} = processRawData(d.slice(1, d.length));
                             this.data.mainDict[rankLabel] = boxData;
                             if (i === 0) this.data.boxData = boxData;
                             raw[rankLabel] = rawData;
@@ -70,7 +65,6 @@ function init() {
                     this.data.pDict = {};
                     data.forEach(d => {
                         const rankLabel = rankDict[d.columns[0]];
-                        // const parsedData = 
                         this.data.pDict[rankLabel] = d.map(r => {
                             const [source, target] = r[d.columns[0]].split(":");
                             const pValue = parseFloat(r[d.columns[1]]);
@@ -78,14 +72,14 @@ function init() {
                         });
                     });
                     return null;
-                }
-            }
+                },
+            },
         },
-        setup() {            
+        setup() {
             registerEditorConfig(editorConfig(this));
         },
     });
-    
+
     return visualizer;
 }
 
@@ -116,7 +110,8 @@ function processRawData(data: any[]) {
         const stat2 = new Oviz.algo.Statistics(result);
         boxData.values.push([stat2.min(), stat2.Q1(), stat2.median(), stat2.Q3(), stat2.max()]);
         boxData.means.push(stat2.mean());
-    });    
+    });
     return {rawData, boxData};
 }
+
 register(MODULE_NAME, init);

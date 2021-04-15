@@ -1,12 +1,13 @@
 import Oviz from "crux";
-import { ScatterBoxPlot } from "./scatter-box-plot";
-import {register} from "page/visualizers";
-import { groupedColors2 } from "oviz-common/palette";
-import {rankDict, sortByRankKey} from "utils/bio-info.ts";
-import { findBoundsForValues, computeLog } from "utils/maths";
 import * as d3 from "d3";
+import { ScatterBoxPlot } from "./scatter-box-plot";
+
+import { findBoundsForValues } from "utils/maths";
+
 import { editorRef, editorConfig } from "./editor";
 import { registerEditorConfig } from "utils/editor";
+import { rankDict, sortByRankKey} from "utils/bio-info";
+import { register } from "page/visualizers";
 
 const xAxisIndex = 0;
 const yAxisIndex = 1;
@@ -32,7 +33,6 @@ function init() {
         height: 800,
         data: {
             colorScheme, startColor, endColor, shapes,
-            ageDiv
         },
         loadData: {
             scatterBoxMain: {
@@ -51,7 +51,7 @@ function init() {
                             x["sampleId"] = x[d.columns[0]];
                             delete x[d.columns[0]];
                             return x;
-                        })
+                        });
                         this.data.mainDict[rankLabel] = {data: mainD};
                         if (i === 0) {
                             this.data.axises = d.columns.slice(1);
@@ -122,19 +122,19 @@ function init() {
                     this.data.groups = [];
                     this.data.ageRange = [Number.MAX_VALUE, Number.MIN_VALUE];
                     data.forEach(d => {
-                        if (this.data.groups.indexOf(d[groupKey]) < 0) this.data.groups.push(d[groupKey]);                    
+                        if (this.data.groups.indexOf(d[groupKey]) < 0) this.data.groups.push(d[groupKey]);
                         const age = parseInt(d[ageKey]);
                         if (this.data.ageRange[0] > age ) this.data.ageRange[0] = age;
                         if (this.data.ageRange[1] < age) this.data.ageRange[1] = age;
                         this.data.groupDict[d[sampleKey]] = {
                             group: d[groupKey], age,
                             shape: shapes[this.data.groups.indexOf(d[groupKey])],
-                        }
+                        };
                     });
                     this.data.colorGetter = (s) => d3.scaleLinear().range([startColor, endColor]).domain(this.data.ageRange)(this.data.groupDict[s].age);
                     return null;
-                }
-            }
+                },
+            },
         },
         setup() {
             this.defineGradient("bg", "horizontal", [startColor, endColor]);
@@ -147,10 +147,8 @@ function init() {
     return visualizer;
 }
 
-
-
 register(MODULE_NAME, init);
 
-export function registerScatterBoxPlot(){
+export function registerScatterBoxPlot() {
     register(MODULE_NAME, init);
 }

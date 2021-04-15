@@ -80,7 +80,7 @@ export class SignedHeatMap extends Component<SignedHeatMapOption> {
             }
 
             Rows { // legend area
-                x = 500; y = 20;
+                x = prop.gridW * prop.columns.length + 200; y = 20;
                 Component {
                     height = 60
                     Columns {
@@ -121,7 +121,7 @@ export class SignedHeatMap extends Component<SignedHeatMapOption> {
                     }
                     Line {
                         x1 = 0; x2 = 100; y1 = 20; y2 = 20
-                        stroke = @color("path")
+                        stroke = @color("line")
                     }
                 }
                 Component {

@@ -64,14 +64,14 @@ function init() {
                     return {rows, columns: d.columns.splice(1, d.columns.length), data,
                         range: {min, max}};
                 },
-            }
+            },
         },
         setup() {
             setUpRange(this);
-            registerEditorConfig(editorConfig(this), editorRef);
+            // registerEditorConfig(editorConfig(this), editorRef);
             if (this.data.corrHeatmapData.rows.length > 100) this.data.config.gridH = 10;
             else if (this.data.corrHeatmapData.rows.length > 60) this.data.config.gridH = 12;
-        }
+        },
     });
     return visualizer;
 }

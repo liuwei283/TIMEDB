@@ -88,10 +88,10 @@ export function editorConfig(v): EditorDef {
                                 title: "Customize colors",
                                 scheme: copyObject(v.data.colors),
                                 palettes: withDefaultPalette(defaultPalette, cbpPalette),
-                                paletteMap: {"0":0,"1":1},
+                                paletteMap: {"0": 0, "1": 1},
                                 id: "pwcolor",
                                 callback(colors) {
-                                    v.data.colors = [colors['0']];
+                                    v.data.colors = [colors["0"]];
                                     run(v);
                                 },
                             },

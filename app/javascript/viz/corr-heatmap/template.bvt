@@ -1,18 +1,19 @@
 svg {
     Component {
+        x = 50; y = 50
         SignedHeatMap {
-            data = heatmapData.data
+            data = corrHeatmapData.data
             gridW = 30
             gridH = config.gridH
-            columns = heatmapData.columns
-            rows = heatmapData.rows
+            columns = corrHeatmapData.columns
+            rows = corrHeatmapData.rows
             startColor = colors.origin
             positiveEndColor = colors["positive range"]
             negativeEndColor = colors["negative range"]
             
             dataRange = [config.rangeMin, config.rangeMax]
-            symRange = config.isSym
-            showPAnno = config.showPAnno
+            symRange = false
+            showPAnno = false
                 
             // :groupLegend {
             //     @if groupData {
