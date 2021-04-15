@@ -357,7 +357,7 @@ class SubmitController < ApplicationController
     render json: result_json
   end
 
-    # TODO 写好看点
+  # TODO 写好看点
   def create_task_output(otp)
     task_output = @task.task_outputs.new
     task_output.output_id = otp['id']

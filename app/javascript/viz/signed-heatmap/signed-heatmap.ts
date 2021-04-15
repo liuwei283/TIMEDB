@@ -1,7 +1,9 @@
 import { ColorSchemeGradient, schemeGradient } from "crux/dist/color";
 import { Component, ComponentOption } from "crux/dist/element";
 import * as d3 from "d3";
+import * as text_size from "crux/dist/utils/text-size";
 import { findBound } from "utils/maths";
+
 
 export interface SignedHeatMapOption extends ComponentOption {
     rows: [];
@@ -24,6 +26,8 @@ export class SignedHeatMap extends Component<SignedHeatMapOption> {
     private _negativeColorScheme!: ColorSchemeGradient;
     private _positiveColorScheme!: ColorSchemeGradient;
     private range: any;
+    private maxRowLabelWidth: number;
+    private rowLabelSize: number;
 
     render() {
         return this.t`
@@ -58,7 +62,7 @@ export class SignedHeatMap extends Component<SignedHeatMapOption> {
                         Component {
                             Text {
                                 text = row
-                                fontSize = prop.gridH > 12 ? prop.gridH - 2 : prop.gridH
+                                fontSize = rowLabelSize
                             }
                         }
                     }
@@ -80,7 +84,7 @@ export class SignedHeatMap extends Component<SignedHeatMapOption> {
             }
 
             Rows { // legend area
-                x = prop.gridW * prop.columns.length + 200; y = 20;
+                x = prop.gridW * prop.columns.length + maxRowLabelWidth + 20; y = 20;
                 Component {
                     height = 60
                     Columns {
@@ -133,9 +137,13 @@ export class SignedHeatMap extends Component<SignedHeatMapOption> {
     }
 
     public didCreate() {
-        if (this.prop.rows.length * this.prop.gridH > 950) this.$v.size.height = this.prop.rows.length * this.prop.gridH + 150
+        if (this.prop.rows.length * this.prop.gridH > 950)
+            this.$v.size.height = this.prop.rows.length * this.prop.gridH + 150;
     }
     public willRender() {
+        this.rowLabelSize = this.prop.gridH > 12 ? this.prop.gridH - 2 : this.prop.gridH;
+        this.maxRowLabelWidth = Math.max(...this.prop.rows.map(t =>
+            text_size.measuredTextSize(t, this.rowLabelSize).width));
         this.range = this.computeRange(this.prop.dataRange[0],
             this.prop.dataRange[1], this.prop.symRange);
         this._negScale = d3.scaleLinear().domain([this.range.min, 0]).range([-1, 0]);

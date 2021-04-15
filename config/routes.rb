@@ -75,7 +75,6 @@ Rails.application.routes.draw do
   end
 
   # submit pages
-  get 'submit/viz', to: 'submit#viz'
   get 'submit/:id', to: 'submit#index', as: 'submit'
   get 'job-query', to: 'submit#query', as: 'query'
   
