@@ -8,7 +8,9 @@ hr
 = f.input :files_info, as: :text, input_html: {value: f.object.files_info_json, data: {'ace': true, 'ace-mode': 'json'}}
 hr
 = f.error_notification
-=f.input :cover_img, as: :file
+=f.input :image_file, as: :file
+- if !@analysis.cover_image.nil?
+  img src = @analysis.cover_image width="400"
 hr
 = f.button :submit
 
