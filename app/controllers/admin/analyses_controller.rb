@@ -66,7 +66,7 @@ class Admin::AnalysesController < ApplicationController
     p = params.require(:analysis).permit(:name, :visualizer_id, :files_info,
                                      :mid, :analysis_category_id)
     if !params[:analysis][:image_file].blank?
-        p[:cover_image] = "data:image/png;base64" + Base64.strict_encode64(params[:analysis][:image_file].read)
+        p[:cover_image] = "data:image/png;base64," + Base64.strict_encode64(params[:analysis][:image_file].read)
     end
     return p
   end
