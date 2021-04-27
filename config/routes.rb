@@ -1,6 +1,5 @@
 Rails.application.routes.draw do
 
-  get 'test', to: 'demo#test'
   resources :projects do
     resources :samples do
       collection do
@@ -60,6 +59,7 @@ Rails.application.routes.draw do
       get 'all_task_outputs', to: 'viz_files#all_task_outputs', as: 'all_task_outputs'
       get 'chosen_files', to: 'viz_files#get_chosen_files', as: 'chosen_files'
       get 'chosen_file_paths', to: 'viz_files#chosen_file_paths', as: 'chosen_file_paths'
+      get 'download_demo_file', to: 'viz_files#download_demo_file', as: 'download_demo_file'
       post 'chosen_files', to: 'viz_files#update_chosen_files', as: 'update_chosen_files'
       post 'create_files', to: 'viz_files#create_files', as: 'create_files'
       post 'batch_delete_files', to: 'viz_files#batch_delete_files', as: 'batch_delete_files'

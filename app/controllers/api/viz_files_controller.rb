@@ -224,18 +224,34 @@ class Api::VizFilesController < ApplicationController
     #     render json: data
     # end
 
-    def download_data_files
+    def download_demo_file
+        file_set = []
+        files_info = @analysis.files_info
+        files_info.each do |dataType, dataInfo| 
+          next unless !dataInfo['demoFilePath'].blank?
+          if dataInfo['demoFilePath'].class == String
+            file_set << dataInfo['demoFilePath']
+          else
+            dataInfo['demoFilePath'].each do |fPath|
+                file_set << fPath
+              end
+          end
+        end
     
-        paths = ['data/test.txt', 'data/test.tsv']
-        zip_file_path = 'data/viz_data.zip'
-        Zip::ZipFile.open zip_file_path, Zip::ZipFile::CREATE do |zip|
-            paths.each do |path|
-                path = File.join Rails.root, path
-                zip.add(path, path)
+        if file_set.size == 1
+            send_file File.join(Rails.root, file_set.values.first)
+            return
+        end
+    
+        compressed_filestream = Zip::OutputStream.write_buffer(::StringIO.new()) do |zos|
+            file_set.each do |fpath|
+              zos.put_next_entry File.basename(fpath)
+              zos.write File.read(File.join(Rails.root, fpath))
             end
         end
-
-        send_file zip_file_path
+    
+        compressed_filestream.rewind
+        send_data compressed_filestream.read, filename: "#{@analysis.name}.zip"
 
     end
 

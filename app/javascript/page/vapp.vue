@@ -10,7 +10,7 @@
                     :options="taskOutputs"
                     :variant="outline"
                     class="tool-bar-el"/>
-                
+                <b-button @click="downloadDemoFiles" class="tool-bar-el"><i class="fa fa-download"></i>Download Data</b-button>
                 <b-button id="editor-conf" @click="toggleEditor">Editor</b-button>
             </div>
             <div v-else>
@@ -92,6 +92,9 @@
             toggleEditor() {
                 this.showEditor=!this.showEditor;
             },
+            downloadDemoFiles() {
+                window.open(`${window.gon.urls.download_demo_file}?name=${this.chosen}`);
+            }
         },        
         created() {
             event.rpcRegisterReceiver("getVue", () => this);

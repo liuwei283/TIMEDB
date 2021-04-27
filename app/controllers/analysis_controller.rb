@@ -33,7 +33,8 @@ class AnalysisController < ApplicationController
                 chosen_files: api_analysis_chosen_files_path(@analysis),
                 chosen_file_paths: api_analysis_chosen_file_paths_path(@analysis),
                 batch_delete_files: api_analysis_batch_delete_files_path(@analysis),
-                }
+                download_demo_file: api_analysis_download_demo_file_path(@analysis),
+            }
 
     end
 
