@@ -28,6 +28,7 @@ gem 'gon'
 gem 'carrierwave', '~> 2.0'
 gem 'hashids'
 gem 'simple_form'
+gem 'rubyzip'
 # Use Redis adapter to run Action Cable in production
 # gem 'redis', '~> 4.0'
 # Use Active Model has_secure_password

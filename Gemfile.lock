@@ -363,6 +363,7 @@ DEPENDENCIES
   rails-assets-datatables!
   rails-assets-jquery!
   rubocop
+  rubyzip
   sass-rails (>= 6)
   selenium-webdriver
   simple_form
