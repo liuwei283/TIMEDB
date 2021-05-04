@@ -11,6 +11,8 @@
   <%= javascript_pack_tag "datatable" %>
 <%end%>
 
+<% content_for :title, 'Project '+@project.name  %>
+
 <div class="container">
   <h1>
     Project Information

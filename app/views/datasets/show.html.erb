@@ -10,6 +10,7 @@
   <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/fixedcolumns/3.3.2/css/fixedColumns.dataTables.min.css">
   <%= javascript_pack_tag "datatable" %>
 <%end%>
+<% content_for :title, @dataset.name %>
 
 <div class="container">
     <h1>
