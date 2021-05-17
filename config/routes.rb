@@ -76,6 +76,7 @@ Rails.application.routes.draw do
 
   # submit pages
   get 'submit/:id', to: 'submit#index', as: 'submit'
+  get 'pipeline/:id', to: 'submit#pipeline', as: 'submit_pipeline'
   get 'job-query', to: 'submit#query', as: 'query'
   
   # post 'submit-app-task', to: 'submit#submit_app_task', format: 'json'

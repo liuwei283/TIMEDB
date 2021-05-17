@@ -34,6 +34,23 @@ class SubmitController < ApplicationController
     gon.push tasks: @task_list
   end
 
+  def pipeline
+    id = params[:id]
+    gon.push id: id
+    uid = session[:user_id]
+    @user = User.find(uid)
+    # user_dir = File.join($user_stor_dir, uid.to_s)
+    @datasets = @user.datasets
+    data = {}
+    @datasets.each do |ds|
+      ds_name = ds.name
+      # ds_dir = File.join(user_dir, ds_name)
+      # file_list = Dir.entries(ds_dir)[2..-1]
+      data[ds_name] = ds_name
+    end
+    gon.push select_box_option: data
+  end
+
   def query_all # query all tasks by user
     @tasks = Task.where("user_id = ?", session[:user_id])
     parsed_jobs = []
