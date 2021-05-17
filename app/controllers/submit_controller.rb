@@ -235,6 +235,7 @@ class SubmitController < ApplicationController
       app_inputs = params[:inputs]
       app_params = params[:params]
       app_selected = params[:selected]
+      is_pipeline = params[:is_pipeline]
       @analysis = Analysis.find_by mid:params[:mid]
 
       inputs = Array.new
@@ -274,11 +275,11 @@ class SubmitController < ApplicationController
       app_inputs&.each do |k, v|
         uploader = JobInputUploader.new
         uploader.store!(v)
-	unless v.nil? || v == ""
-          inputs.push({
-            k => '/data/' + v.original_filename,
-          })
-	end
+        unless v.nil? || v == ""
+                inputs.push({
+                  k => '/data/' + v.original_filename,
+                })
+        end
       end
       
       app_params&.each do |p|
@@ -292,10 +293,21 @@ class SubmitController < ApplicationController
       
       # submit task
       client = LocalApi::Client.new
-      result = client.run_module(UID, PROJECT_ID, app_id.to_i, inputs, params)
+      if is_pipeline 
+        result = client.run_pipeline(UID, PROJECT_ID, app_id.to_i, inputs, params)
+      else
+        result = client.run_module(UID, PROJECT_ID, app_id.to_i, inputs, params)
+      end
       # Rails.logger.info(result['message'])
       Rails.logger.debug "===========>"
       Rails.logger.info(result)
+      if is_pipeline
+        render json: {
+          code: false,
+          data: result
+        }
+        return
+      end
       if result['message']['code']
         result_json[:code] = true
         @task  = @user.tasks.new

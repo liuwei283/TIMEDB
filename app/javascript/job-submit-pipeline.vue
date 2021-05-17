@@ -255,6 +255,7 @@
                             "params": this.formatParams(),
                             "selected": this.selected,
                             "mid": this.id,
+                            "is_pipeline": true,
                             // "inputs": this.formatInputs(),
                             // "params": this.formatParams(),
                         }),
