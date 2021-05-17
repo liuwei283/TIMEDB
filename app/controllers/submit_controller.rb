@@ -3,6 +3,27 @@ class SubmitController < ApplicationController
   PROJECT_ID = 289
   # $user_stor_dir = "#{Rails.root}/data/user"
   
+  def query_app_task_test
+    result_json = {
+      code: false,
+      data: ''
+    }
+    begin
+      # @task = Task.find_by! id:params[:job_id], user_id:session[:user_id]
+      
+      # submit task
+      client = LocalApi::Client.new
+      result = client.task_info(UID, 235, 'app')
+      Rails.logger.info result
+      @result_message = result
+      # result_json[:data] = result
+    rescue StandardError => e
+      result_json[:code] = false
+      result_json[:data] = e.message
+    end
+    # render json: result_json
+  end
+
   def index
     id = params[:id]
     gon.push id: id

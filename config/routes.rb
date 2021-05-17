@@ -38,6 +38,7 @@ Rails.application.routes.draw do
   end
 
   # get 'welcome/index'
+  get 'test', to: 'submit#query_app_task_test'
   root 'welcome#index'
   # get 'tutorial', to: 'welcome#tutorial', as: 'tutorial'
   get 'contact', to: 'welcome#contact', as: 'contact'
