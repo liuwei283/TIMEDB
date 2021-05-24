@@ -1,9 +1,10 @@
 class Analysis < ApplicationRecord
     has_many :viz_file_objects
     has_many :analysis_user_data
-    has_many :tasks
+    has_many :task_outputs
     belongs_to :analysis_category
     belongs_to :visualizer
+    has_many :analysis_pipelines, through: :module_requirements
 
     def self.import(file)
         CSV.foreach(file.path, headers: true, encoding: 'bom|utf-8') do |row|

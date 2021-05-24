@@ -10,10 +10,31 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_04_14_051711) do
+ActiveRecord::Schema.define(version: 2021_05_21_072238) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "active_storage_attachments", force: :cascade do |t|
+    t.string "name", null: false
+    t.string "record_type", null: false
+    t.bigint "record_id", null: false
+    t.bigint "blob_id", null: false
+    t.datetime "created_at", null: false
+    t.index ["blob_id"], name: "index_active_storage_attachments_on_blob_id"
+    t.index ["record_type", "record_id", "name", "blob_id"], name: "index_active_storage_attachments_uniqueness", unique: true
+  end
+
+  create_table "active_storage_blobs", force: :cascade do |t|
+    t.string "key", null: false
+    t.string "filename", null: false
+    t.string "content_type"
+    t.text "metadata"
+    t.bigint "byte_size", null: false
+    t.string "checksum", null: false
+    t.datetime "created_at", null: false
+    t.index ["key"], name: "index_active_storage_blobs_on_key", unique: true
+  end
 
   create_table "analyses", force: :cascade do |t|
     t.string "name", null: false
@@ -29,6 +50,17 @@ ActiveRecord::Schema.define(version: 2021_04_14_051711) do
 
   create_table "analysis_categories", force: :cascade do |t|
     t.string "name", null: false
+  end
+
+  create_table "analysis_pipelines", force: :cascade do |t|
+    t.string "name", limit: 50, null: false
+    t.integer "pid"
+    t.text "description"
+    t.boolean "hidden", default: false
+    t.integer "position"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.text "cover_image"
   end
 
   create_table "analysis_user_data", force: :cascade do |t|
@@ -55,6 +87,29 @@ ActiveRecord::Schema.define(version: 2021_04_14_051711) do
     t.bigint "sample_id"
     t.index ["dataset_id"], name: "index_datasets_samples_on_dataset_id"
     t.index ["sample_id"], name: "index_datasets_samples_on_sample_id"
+  end
+
+  create_table "deltadb_records", force: :cascade do |t|
+    t.integer "kind", default: 0, null: false
+    t.json "data"
+    t.bigint "deltadb_table_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["deltadb_table_id"], name: "index_deltadb_records_on_deltadb_table_id"
+  end
+
+  create_table "deltadb_tables", force: :cascade do |t|
+    t.string "name"
+    t.json "data"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "module_requirements", force: :cascade do |t|
+    t.bigint "analysis_id"
+    t.bigint "analysis_pipeline_id"
+    t.index ["analysis_id"], name: "index_module_requirements_on_analysis_id"
+    t.index ["analysis_pipeline_id"], name: "index_module_requirements_on_analysis_pipeline_id"
   end
 
   create_table "projects", force: :cascade do |t|
@@ -107,22 +162,31 @@ ActiveRecord::Schema.define(version: 2021_04_14_051711) do
     t.index ["project_id"], name: "index_samples_on_project_id"
   end
 
+  create_table "task_maps", force: :cascade do |t|
+    t.bigint "analysis_id"
+    t.bigint "analysis_pipeline_id"
+    t.bigint "task_id"
+    t.index ["analysis_id"], name: "index_task_maps_on_analysis_id"
+    t.index ["analysis_pipeline_id"], name: "index_task_maps_on_analysis_pipeline_id"
+    t.index ["task_id"], name: "index_task_maps_on_task_id"
+  end
+
   create_table "task_outputs", force: :cascade do |t|
     t.bigint "user_id"
     t.string "task_id", null: false
     t.integer "output_id", null: false
     t.json "file_paths", null: false
+    t.bigint "analysis_id"
+    t.index ["analysis_id"], name: "index_task_outputs_on_analysis_id"
     t.index ["user_id"], name: "index_task_outputs_on_user_id"
   end
 
   create_table "tasks", force: :cascade do |t|
     t.bigint "user_id"
-    t.bigint "analysis_id"
     t.integer "tid", null: false
     t.string "status", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.index ["analysis_id"], name: "index_tasks_on_analysis_id"
     t.index ["user_id"], name: "index_tasks_on_user_id"
   end
 
@@ -159,6 +223,7 @@ ActiveRecord::Schema.define(version: 2021_04_14_051711) do
     t.index ["viz_data_source_id"], name: "index_viz_file_objects_on_viz_data_source_id"
   end
 
+  add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "analysis_user_data", "task_outputs"
   add_foreign_key "datasets", "users"
   add_foreign_key "samples", "projects"

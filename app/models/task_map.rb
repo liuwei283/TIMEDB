@@ -1,0 +1,2 @@
+class TaskMap < ApplicationRecord
+end

@@ -36,4 +36,37 @@
         </div>
 
     </div>
+    <hr/>
+        <h1>Analysis Pipelines</h1>
+    <br>
+    <div id="pipelines_list" class=".container-fluid">
+        <div class="row">
+            <% @pipelines.each do |pipeline| %>
+                <div class="col-md-4 module_card">
+                    <div class="card_img">
+                        <% target = "/submit-pipeline/" + pipeline.pid.to_s + '/' %>
+                        <% if pipeline.cover_image.nil? %>
+                            <%=link_to image_tag("628.png"), target%>
+                        <% else %> 
+                            <%=link_to image_tag(pipeline.cover_image), target%>
+                        <% end %>
+                        
+                    </div>
+
+                    <div class="card_body">
+                        <h5>
+                            <%=pipeline.name%>
+                        </h5>
+
+                        <p>
+                            <%=pipeline.description%>
+                        </p>
+                    </div>
+                        
+                </div>
+            <%end %>
+
+        </div>
+
+    </div>
 </div>

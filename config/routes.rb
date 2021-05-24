@@ -77,7 +77,7 @@ Rails.application.routes.draw do
 
   # submit pages
   get 'submit/:id', to: 'submit#index', as: 'submit'
-  get 'pipeline/:id', to: 'submit#pipeline', as: 'submit_pipeline'
+  get 'submit-pipeline/:id', to: 'submit#pipeline', as: 'submit_pipeline'
   get 'job-query', to: 'submit#query', as: 'query'
   
   # post 'submit-app-task', to: 'submit#submit_app_task', format: 'json'
@@ -106,6 +106,7 @@ Rails.application.routes.draw do
     get 'analyses', to: 'analyses#index'
     # get 'visualizers', to: 'visualizers#index'
     resources :visualizers
+    resources :analysis_pipelines
   end
 
   # serve files

@@ -13,8 +13,8 @@ class SubmitController < ApplicationController
       
       # submit task
       client = LocalApi::Client.new
-      result = client.task_info(UID, 235, 'app')
-      Rails.logger.info result
+      # result = client.task_info(UID, 235, 'app')
+      # Rails.logger.info result
       result = client.task_info(UID, 235, 'pipeline')
       Rails.logger.info result
       @result_message = result
