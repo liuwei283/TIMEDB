@@ -103,88 +103,66 @@ class SubmitController < ApplicationController
       "status":"success",
       "message":{
          "status":"finished",
-         "inputs":[
+         "nodes":[
             {
-               "id":1010,
-               "name":"Profiling_table",
-               "desc":"",
-               "files":[
+               "id":671,
+               "name":"meta_module_double_input_test",
+               "outputs":[
                   {
-                     "name":"LiJ_2014.xls",
-                     "path":"/data"
-                  }
-               ]
-            },
-            {
-               "id":1011,
-               "name":"Group_info",
-               "desc":"",
-               "files":[
-                  {
-                     "name":"group.tsv",
-                     "path":"/data"
+                     "id":911,
+                     "name":"output",
+                     "desc":"output of double testing",
+                     "files":[
+                        {
+                           "name":"test_double_output.txt",
+                           "path":"/project/platform_task_test/gutmeta_pipeline_test1/task_20210517132818/DOAP_meta_module_double_input_test/3P4dmDkcKjCAJANvPLmiwj/output"
+                        }
+                     ]
                   }
                ]
             }
-         ],
-         "outputs":[
-            {
-               "id":854,
-               "name":"Cluster_result",
-               "desc":"",
-               "files":[
-                  {
-                     "name":"shell",
-                     "path":"/project/platform_task_test/task_20210119170627"
-                  },
-                  {
-                     "name":"cluster.result.xls",
-                     "path":"/project/platform_task_test/task_20210119170627"
-                  },
-                  {
-                     "name":"coordinate.xls",
-                     "path":"/project/platform_task_test/task_20210119170627"
-                  },
-                  {
-                     "name":"group.txt",
-                     "path":"/project/platform_task_test/task_20210119170627"
-                  }
-               ]
-            }
-         ],
-         "params":[
-            
          ]
       }
    }
-   return_json_hash = {"status":"success", "message":{"status":"finished", "inputs":[{"id":1018, "name":"user_abd", "desc":"abd from metaphlan2", "files":[{      "name":"user_abd.tsv", "path":"/data"}]}, {"id":1044, "name":"group_info", "desc":"group information", "files":[{"name":"anno.tsv", "path":"/data"}]}], "outputs":[{"id":862, "name":"PCOA_result", "desc":"", "files":[{      "name":"shell", "path":"/project/platform_task_test/task_20210207154208"}, {"name":"tmp.csv", "path":"/project/platform_task_test/task_20210207154208"}, {"name":"k_PCOA.coordinate.tsv", "path":"/project/platform_task_test/ta      sk_20210207154208"}, {"name":"p_PCOA.coordinate.tsv", "path":"/project/platform_task_test/task_20210207154208"}, {"name":"c_PCOA.coordinate.tsv", "path":"/project/platform_task_test/task_20210207154208"}, {"name":"o_PCOA.coor      dinate.tsv", "path":"/project/platform_task_test/task_20210207154208"}, {"name":"f_PCOA.coordinate.tsv", "path":"/project/platform_task_test/task_20210207154208"}, {"name":"g_PCOA.coordinate.tsv", "path":"/project/platform_ta      sk_test/task_20210207154208"}, {"name":"s_PCOA.coordinate.tsv", "path":"/project/platform_task_test/task_20210207154208"}, {"name":"t_PCOA.coordinate.tsv", "path":"/project/platform_task_test/task_20210207154208"}, {"name":"group_info.tsv", "path":"/project/platform_task_test/task_20210207154208"}]}], "params":[]}}
+   
     # @task = Task.find_by! id:params[:job_id], user_id:session[:user_id]
-    @task = Task.find_by! id:6, user_id:57
+    @task = Task.find_by! id:params[:job_id], user_id:session[:user_id]
 
     # Rails.logger.debug @task
     result = JSON.parse(return_json_hash.to_json)
-    @analysis = @task.analysis
+
     if @task.status === 'submitted'
-      @task.status = result['message']['status']
+      @task.status = @result['message']['status']
       @task.save!
     end
-    source_files = {}
+
     response_body = []
-    @task_output = {}
+
     if TaskOutput.where(task_id:@task.id).exists? 
       task_outputs = TaskOutput.where(task_id:@task.id)
       task_outputs.each do |otp|
         @task_output = otp
+        @analysis = otp.analysis
         parsed_output = processTaskOutput()
         response_body << parsed_output
       end
+    elsif !@task.analysis.blank? # module task
+      @analysis = @task.analysis
+      @task_output = create_task_output(result['message'])
+      parsed_output = processTaskOutput()
+      response_body << parsed_output
     else
-      result['message']['outputs'].each do |otp|
-        @task_output = create_task_output(otp)
+      @response_body = []
+      # pipeline = AnalysisPipeline.find @task.analysis_pipeline_id
+      result['message']['nodes'].each do |mrs|
+        Rails.logger.debug "=====>"
+        @analysis = Analysis.find_by(mid:mrs['id'])
+        @task_output = create_task_output(mrs)
         parsed_output = processTaskOutput()
         response_body << parsed_output
       end
     end
+
     render json: response_body
   end
 
@@ -202,12 +180,16 @@ class SubmitController < ApplicationController
       app_inputs = params[:inputs]
       app_params = params[:params]
       app_selected = params[:selected]
-      @analysis = Analysis.find_by mid:params[:mid]
+      is_analysis = true
+      if !params[:mid].blank?
+        @analysis = Analysis.find_by mid:params[:mid]
+      else
+        is_analysis = false
+        @pipeline = AnalysisPipeline.find_by pid:params[:pid]
+      end
 
-
-      
       # submit task
-      client = LocalApi::Client.new
+
       result_hash = {
         message: {
           code: 0,
@@ -221,9 +203,15 @@ class SubmitController < ApplicationController
       if result['message']['code']
         result_json[:code] = true
         @task  = @user.tasks.new
-        @task.analysis = @analysis
         @task.status = 'submitted'
         @task.tid = result['message']['data']['task_id']
+        if is_analysis
+          @task.analysis = @analysis
+          @task.analysis_pipeline = nil
+        else
+          @task.analysis_pipeline = @pipeline
+          @task.analysis = nil
+        end
         @task.save!
         @user.updated_at = Time.now
         @user.save!
@@ -366,31 +354,50 @@ class SubmitController < ApplicationController
     begin
       @task = Task.find_by! id:params[:job_id], user_id:session[:user_id]
       
-      # submit task
+      # query task
       client = LocalApi::Client.new
-      result = client.task_info(UID, @task.tid, 'app')
+      result = ''
+      if !@task.analysis.blank?
+        result = client.task_info(UID, @task.tid, 'app')
+      else
+        result = client.task_info(UID, @task.tid, 'pipeline')
+      end
       Rails.logger.info(result)
-      # result = {"status"=>"success", "message"=>{"status"=>"finished", "inputs"=>[{"id"=>946, "name"=>"MetaPhlan results", "desc"=>"MetaPhlan results", "files"=>[{"name"=>"CRC_Abd_table.txt", "path"=>"/data"}]}], "outputs"=>[{"id"=>779, "name"=>"PCoA analysis", "desc"=>"Bray-Curtis distances among the uploaded sample(s) and the samples in the database will be calculated, and then PCoA analysis will be performed. ", "files"=>[{"name"=>"pcoa.pdf", "path"=>"/project/TestProject/task_20200814114313"}]}, {"id"=>778, "name"=>"Shannon diversity", "desc"=>"The Shannon diversity is calculated for the uploaded sample(s), and be compared with the samples in the databases. ", "files"=>[{"name"=>"Shannon.pdf", "path"=>"/project/TestProject/task_20200814114313"}]}, {"id"=>777, "name"=>"Taxonomical annoatation results", "desc"=>"Top 10 genus and species are selected from the samples, and the taxonomic compositions of the uploaded sample(s).", "files"=>[{"name"=>"histogram.pdf", "path"=>"/project/TestProject/task_20200814114313"}]}, {"id"=>776, "name"=>"Comparison of top 10 genus and species", "desc"=>"The relative abundances of top10 genus and species are compared between the uploaded sample(s) and the data from the database.", "files"=>[{"name"=>"Top10_boxplot.pdf", "path"=>"/project/TestProject/task_20200814114313"}]}], "params"=>[{"id"=>1712, "name"=>"Target region", "prefix"=>"-r", "default"=>"CHN", "desc"=>"Select the samples from the target region in this oral microbiome database, e.g. CHN, JPN, PH or USA.", "value"=>"CHN"}]}}
+
+      if @task.status == 'submitted'
+        @task.status = result['message']['status']
+        @task.save!
+      end
+
+
       if result['status'] == 'success'
-        if @task.status == 'submitted'
-          @task.status = result['message']['status']
-          @task.save!
-        end
         response_body = []
+
         @task_output = {}
-        @analysis = @task.analysis
+        
         if TaskOutput.where(task_id:@task.id).exists? 
           task_outputs = TaskOutput.where(task_id:@task.id)
           task_outputs.each do |otp|
             @task_output = otp
+            @analysis = otp.analysis
             parsed_output = processTaskOutput()
             response_body << parsed_output
           end
         elsif result['message']['status'] == 'finished'
-          result['message']['outputs'].each do |otp|
-            @task_output = create_task_output(otp)
+          if !@task.analysis.blank? # module task
+            @analysis = @task.analysis
+            @task_output = create_task_output(result['message'])
             parsed_output = processTaskOutput()
             response_body << parsed_output
+          else
+            @response_body = []
+            # pipeline = AnalysisPipeline.find @task.analysis_pipeline_id
+            result['message']['nodes'].each do |mrs|
+              @analysis = Analysis.find_by(mid:mrs['id'])
+              @task_output = create_task_output(mrs)
+              parsed_output = processTaskOutput()
+              response_body << parsed_output
+            end
           end
         end
         render json: response_body
@@ -409,12 +416,39 @@ class SubmitController < ApplicationController
     render json: result_json
   end
 
+  private
+
+  def process_module_result
+  
+  end
+
   # TODO 写好看点
-  def create_task_output(otp)
+  def create_task_output(mrs)
+    #   {
+    #     "id":671,
+    #     "name":"meta_module_double_input_test",
+    #     "outputs":[
+    #        {
+    #           "id":911,
+    #           "name":"output",
+    #           "desc":"output of double testing",
+    #           "files":[
+    #              {
+    #                 "name":"test_double_output.txt",
+    #                 "path":"/project/platform_task_test/gutmeta_pipeline_test1/task_20210517132818/DOAP_meta_module_double_input_test/3P4dmDkcKjCAJANvPLmiwj/output"
+    #              }
+    #           ]
+    #        }
+    #     ]
+    #  }
+    # @task, @analysis
+    
     task_output = @task.task_outputs.new
-    task_output.output_id = otp['id']
+    task_output.analysis = @analysis
+    task_output.output_id = mrs['outputs'][0]['id']
     file_paths = {}
-    files_to_do = otp['files']
+    files_to_do = mrs['outputs'][0]['files']
+    
     @analysis.files_info.each do |dataType, info|
       @viz_data_source = VizDataSource.find_by(data_type:dataType)
       if @viz_data_source.allow_multiple
@@ -428,7 +462,6 @@ class SubmitController < ApplicationController
               files_to_do.delete(of1)
             end
           end
-          
         end
       else
         files_to_do.each do |of1|
@@ -440,8 +473,8 @@ class SubmitController < ApplicationController
           end
         end
       end
-      
     end
+
     task_output.file_paths = file_paths
     task_output.save!
     return task_output

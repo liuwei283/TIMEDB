@@ -1,4 +1,7 @@
 class Analysis < ApplicationRecord
+    
+    has_many :tasks
+
     has_many :viz_file_objects
     has_many :analysis_user_data
     has_many :task_outputs

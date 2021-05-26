@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_05_21_072238) do
+ActiveRecord::Schema.define(version: 2021_05_25_082730) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -162,15 +162,6 @@ ActiveRecord::Schema.define(version: 2021_05_21_072238) do
     t.index ["project_id"], name: "index_samples_on_project_id"
   end
 
-  create_table "task_maps", force: :cascade do |t|
-    t.bigint "analysis_id"
-    t.bigint "analysis_pipeline_id"
-    t.bigint "task_id"
-    t.index ["analysis_id"], name: "index_task_maps_on_analysis_id"
-    t.index ["analysis_pipeline_id"], name: "index_task_maps_on_analysis_pipeline_id"
-    t.index ["task_id"], name: "index_task_maps_on_task_id"
-  end
-
   create_table "task_outputs", force: :cascade do |t|
     t.bigint "user_id"
     t.string "task_id", null: false
@@ -178,6 +169,7 @@ ActiveRecord::Schema.define(version: 2021_05_21_072238) do
     t.json "file_paths", null: false
     t.bigint "analysis_id"
     t.index ["analysis_id"], name: "index_task_outputs_on_analysis_id"
+    t.index ["output_id"], name: "index_task_outputs_on_output_id", unique: true
     t.index ["user_id"], name: "index_task_outputs_on_user_id"
   end
 
@@ -187,6 +179,10 @@ ActiveRecord::Schema.define(version: 2021_05_21_072238) do
     t.string "status", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.bigint "analysis_id"
+    t.bigint "analysis_pipeline_id"
+    t.index ["analysis_id"], name: "index_tasks_on_analysis_id"
+    t.index ["analysis_pipeline_id"], name: "index_tasks_on_analysis_pipeline_id"
     t.index ["user_id"], name: "index_tasks_on_user_id"
   end
 
