@@ -93,6 +93,12 @@
             </b-button>
             <b-button class="btn col-md-4" disabled >{{data.outputs[0].name}}
             </b-button>
+            <!-- <dropdown-select
+                    right
+                    v-model="chosenOutput"
+                    :options="taskOutputs"
+                    :variant="outline"
+                    class="tool-bar-el"/> -->
             </div>
             <div id = "viz-card"> 
                 <VApp/>
@@ -109,10 +115,13 @@ import axios from 'axios';
 import objectToFormData from 'object-to-formdata';
 import AlertCenter from 'components/alert-center.vue';
 import VApp from "page/vapp.vue";
+import DropDownSelect from "page/builtin/dropdown-select.vue";
 import { event } from "crux/dist/utils";
 import {registerViz} from "viz";
 
 Vue.component("VApp", VApp);
+// Vue.use(BootstrapVue);
+Vue.component("dropdown-select", DropDownSelect);
 
 export default {
     data() {
@@ -125,6 +134,8 @@ export default {
             submitted: false,
             code: false,
             data: {outputs: []},
+            chosenOutput: null,
+            taskOutputs: [{value: 0, text: "Demo Files", secondaryText: ""}],
         };
     },
     created() {
@@ -134,6 +145,7 @@ export default {
         window.gon.viz_mode = "task-output";
     },
     updated(){
+        console.log(chosenOutput);
         if(this.submitted) {
             event.emit("GMT:query-finished", this);
         }
@@ -180,7 +192,8 @@ export default {
             window.gon.module_name = output.module_name;
             window.gon.required_data = output.required_data;
             if (!window.gon.urls) window.gon.urls = {};
-            window.gon.urls.chosen_file_paths = `/api/analysis/${output.analysis_id}/chosen_file_paths`
+            window.gon.urls.chosen_file_paths = `/api/analysis/${output.analysis_id}/chosen_file_paths`;
+            window.gon.urls.download_demo_file = `/api/analysis/${output.analysis_id}/download_demo_file`;
             registerViz(output.module_name);
         },
         refreshJobs() {
