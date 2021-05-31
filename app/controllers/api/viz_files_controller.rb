@@ -262,6 +262,8 @@ class Api::VizFilesController < ApplicationController
               zos.write File.read(fpath)
             end
         end
+        compressed_filestream.rewind
+        send_data compressed_filestream.read, filename: "#{@analysis.name}.zip"
     end
     # def download_demo_file
     #     file_set = []
