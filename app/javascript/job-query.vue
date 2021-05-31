@@ -145,7 +145,7 @@ export default {
         window.gon.viz_mode = "task-output";
     },
     updated(){
-        console.log(chosenOutput);
+        console.log(this.chosenOutput);
         if(this.submitted) {
             event.emit("GMT:query-finished", this);
         }
