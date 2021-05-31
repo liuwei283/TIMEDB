@@ -241,21 +241,19 @@ class Api::VizFilesController < ApplicationController
         end
         if !@analysis_user_datum.task_output.blank?
             info = @analysis_user_datum.task_output.file_paths
-            info.each do |dataType|
-                Rails.logger.debug "============>"
-                Rails.logger.debug info[dataType]
-                if info[dataType].class == Array
-                    info[dataType].each do |fInfo, i|
+            info.each do |dataType, d|
+                if d.class == Array
+                    d.each do |fInfo, i|
                         all_files << fInfo['url']
                     end
                 else
-                    all_files << info[dataType]['url']
+                    all_files << d['url']
                 end
             end
             
         end
         if all_files.size == 1
-                send_file all_files.values.first
+            send_file all_files.values.first
             return
         end
         compressed_filestream = Zip::OutputStream.write_buffer(::StringIO.new()) do |zos|
