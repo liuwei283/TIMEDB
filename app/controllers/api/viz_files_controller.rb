@@ -242,12 +242,12 @@ class Api::VizFilesController < ApplicationController
         if !@analysis_user_datum.task_output.blank?
             info = @analysis_user_datum.task_output.file_paths
             info.each do |dataType|
-                if info[dataType].class == String
-                    all_files << info[dataType]['url']
-                else
+                if info[dataType].class == Array
                     info[dataType].each do |fInfo, i|
                         all_files << fInfo['url']
                     end
+                else
+                    all_files << info[dataType]['url']
                 end
             end
             
