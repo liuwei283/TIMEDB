@@ -244,10 +244,10 @@ class Api::VizFilesController < ApplicationController
             info.each do |dataType, d|
                 if d.class == Array
                     d.each do |fInfo, i|
-                        all_files << File.join( "/home/platform/omics_rails/current/media/user/meta_platform", fInfo['url'])
+                        all_files << File.join( "/home/platform/omics_rails/current/media/user/meta_platform", fInfo['url'][5, fInfo['url'].length])
                     end
                 else
-                    all_files << File.join( "/home/platform/omics_rails/current/media/user/meta_platform", d['url'])
+                    all_files << File.join( "/home/platform/omics_rails/current/media/user/meta_platform", d['url'][5, d['url'].length])
                 end
             end
             
