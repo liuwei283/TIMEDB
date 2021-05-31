@@ -225,35 +225,74 @@ class Api::VizFilesController < ApplicationController
     # end
 
     def download_demo_file
-        file_set = []
         files_info = @analysis.files_info
-        files_info.each do |dataType, dataInfo| 
-          next unless !dataInfo['demoFilePath'].blank?
-          if dataInfo['demoFilePath'].class == String
-            file_set << dataInfo['demoFilePath']
-          else
-            dataInfo['demoFilePath'].each do |fPath|
-                file_set << fPath
-              end
-          end
-        end
-    
-        if file_set.size == 1
-            send_file File.join(Rails.root, file_set.values.first)
-            return
-        end
-    
-        compressed_filestream = Zip::OutputStream.write_buffer(::StringIO.new()) do |zos|
-            file_set.each do |fpath|
-              zos.put_next_entry File.basename(fpath)
-              zos.write File.read(File.join(Rails.root, fpath))
+        # all_viz_data = @analysis.visualizer.viz_data_sources.map{|d| d.data_type}
+        all_files = []
+        if @analysis_user_datum.use_demo_file
+            files_info.each do |dataType|
+                if files_info[dataType]['demoFilePath'].class == String
+                    all_files << File.join(Rails.root, files_info[dataType]['demoFilePath'])
+                else
+                    files_info[dataType]['demoFilePath'].each do |fPath|
+                        all_files << File.join(Rails.root, fPath)
+                    end
+                end
             end
         end
-    
-        compressed_filestream.rewind
-        send_data compressed_filestream.read, filename: "#{@analysis.name}.zip"
-
+        if !@analysis_user_datum.task_output.blank?
+            info = @analysis_user_datum.task_output.file_paths
+            info.each do |dataType|
+                if info[dataType].class == String
+                    all_files << info[dataType]['url']
+                else
+                    info[dataType].each do |fInfo, i|
+                        all_files << fInfo['url']
+                    end
+                end
+            end
+            
+        end
+        if all_files.size == 1
+                send_file all_files.values.first
+            return
+        end
+        compressed_filestream = Zip::OutputStream.write_buffer(::StringIO.new()) do |zos|
+            all_files.each do |fpath|
+              zos.put_next_entry File.basename(fpath)
+              zos.write File.read(fpath)
+            end
+        end
     end
+    # def download_demo_file
+    #     file_set = []
+    #     files_info = @analysis.files_info
+    #     files_info.each do |dataType, dataInfo| 
+    #       next unless !dataInfo['demoFilePath'].blank?
+    #       if dataInfo['demoFilePath'].class == String
+    #         file_set << dataInfo['demoFilePath']
+    #       else
+    #         dataInfo['demoFilePath'].each do |fPath|
+    #             file_set << fPath
+    #           end
+    #       end
+    #     end
+    
+    #     if file_set.size == 1
+    #         send_file File.join(Rails.root, file_set.values.first)
+    #         return
+    #     end
+    
+    #     compressed_filestream = Zip::OutputStream.write_buffer(::StringIO.new()) do |zos|
+    #         file_set.each do |fpath|
+    #           zos.put_next_entry File.basename(fpath)
+    #           zos.write File.read(File.join(Rails.root, fpath))
+    #         end
+    #     end
+    
+    #     compressed_filestream.rewind
+    #     send_data compressed_filestream.read, filename: "#{@analysis.name}.zip"
+
+    # end
 
     def instantiate_models
         @analysis = Analysis.find(params[:analysis_id])

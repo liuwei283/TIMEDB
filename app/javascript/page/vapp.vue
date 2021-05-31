@@ -14,7 +14,8 @@
                 <b-button id="editor-conf" @click="toggleEditor">Editor</b-button>
             </div>
             <div v-else>
-                <b-button @click="downloadSVG">Download</b-button>
+                <b-button @click="downloadSVG" class="tool-bar-el"><i class="fa fa-download"/>Download Chart</b-button>
+                <b-button @click="downloadDemoFiles" class="tool-bar-el"><i class="fa fa-download"></i>Download Data</b-button>
                 <b-button id="editor-conf" @click="toggleEditor">Editor</b-button>
             </div>
         </div>
