@@ -230,11 +230,12 @@ class Api::VizFilesController < ApplicationController
         all_files = []
         if @analysis_user_datum.use_demo_file
             files_info.each do |dataType|
+                fName = files_info[dataType]
                 if files_info[dataType]['demoFilePath'].class == String
-                    all_files << files_info[dataType]['demoFilePath']
+                    all_files << [fName, files_info[dataType]['demoFilePath']]
                 else
                     files_info[dataType]['demoFilePath'].each do |fPath|
-                        all_files << [dataType, fPath]
+                        all_files << [fName, fPath]
                     end
                 end
             end
@@ -242,18 +243,19 @@ class Api::VizFilesController < ApplicationController
         if !@analysis_user_datum.task_output.blank?
             info = @analysis_user_datum.task_output.file_paths
             info.each do |dataType, d|
+                fName = files_info[dataType]
                 if d.class == Array
                     d.each do |fInfo, i|
-                        all_files << [dataType, fInfo['url']]
+                        all_files << [fName, fInfo['url']]
                     end
                 else
-                    all_files << d['url']
+                    all_files << [fName, d['url']]
                 end
             end
             
         end
         if all_files.size == 1
-            send_file File.join(Rails.root, all_files.values.first)
+            send_file File.join(Rails.root, all_files.values.first[1])
             return
         end
         compressed_filestream = Zip::OutputStream.write_buffer(::StringIO.new()) do |zos|
