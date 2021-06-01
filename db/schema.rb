@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_06_01_092310) do
+ActiveRecord::Schema.define(version: 2021_06_01_132310) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -169,7 +169,6 @@ ActiveRecord::Schema.define(version: 2021_06_01_092310) do
     t.json "file_paths", null: false
     t.bigint "analysis_id"
     t.index ["analysis_id"], name: "index_task_outputs_on_analysis_id"
-    t.index ["output_id"], name: "index_task_outputs_on_output_id"
     t.index ["user_id"], name: "index_task_outputs_on_user_id"
   end
 
