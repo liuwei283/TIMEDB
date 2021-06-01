@@ -231,10 +231,10 @@ class Api::VizFilesController < ApplicationController
         if @analysis_user_datum.use_demo_file
             files_info.each do |dataType|
                 if files_info[dataType]['demoFilePath'].class == String
-                    all_files << File.join(Rails.root, files_info[dataType]['demoFilePath'])
+                    all_files << files_info[dataType]['demoFilePath']
                 else
                     files_info[dataType]['demoFilePath'].each do |fPath|
-                        all_files << File.join(Rails.root, fPath)
+                        all_files << [dataType, fPath]
                     end
                 end
             end
@@ -244,22 +244,22 @@ class Api::VizFilesController < ApplicationController
             info.each do |dataType, d|
                 if d.class == Array
                     d.each do |fInfo, i|
-                        all_files << File.join( "/home/platform/omics_rails/current/media/user/meta_platform", fInfo['url'][5, fInfo['url'].length])
+                        all_files << [dataType, fInfo['url']]
                     end
                 else
-                    all_files << File.join( "/home/platform/omics_rails/current/media/user/meta_platform", d['url'][5, d['url'].length])
+                    all_files << d['url']
                 end
             end
             
         end
         if all_files.size == 1
-            send_file all_files.values.first
+            send_file File.join(Rails.root, all_files.values.first)
             return
         end
         compressed_filestream = Zip::OutputStream.write_buffer(::StringIO.new()) do |zos|
             all_files.each do |fpath|
-              zos.put_next_entry File.basename(fpath)
-              zos.write File.read(fpath)
+              zos.put_next_entry "#{fpath[0]}:#{File.basename(fpath[1])}"
+              zos.write File.read(File.join(Rails.root, fpath[1]))
             end
         end
         compressed_filestream.rewind

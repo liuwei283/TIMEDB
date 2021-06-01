@@ -33,6 +33,11 @@ class RawFilesController < ApplicationController
       send_file path
     end
 
+    def outputs
+      path = File.join Rails.root, 'data/outputs', full_path
+      send_file path
+    end
+    
     def full_path
       if (params[:format])
         "#{params[:path]}.#{params[:format]}"

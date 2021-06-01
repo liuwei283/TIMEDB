@@ -79,7 +79,7 @@ class SubmitController < ApplicationController
     parsed_jobs = []
     @tasks.each do |t|
       # submit task
-      if t.status == 'running' || t.status = "submitted"
+      if t.status == 'running' || t.status == "submitted"
         client = LocalApi::Client.new
         result = client.task_info(UID, t.tid, 'app')
         Rails.logger.debug "===>#{result}"
@@ -88,8 +88,15 @@ class SubmitController < ApplicationController
           t.save!
         end
       end
+      if !t.analysis.blank?
+        Rails.logger.debug t.analysis
+        jobName = t.analysis.name
+      else
+        Rails.logger.debug t.analysis_pipeline
+        jobName = t.analysis_pipeline.name
+      end
       parsed_jobs.push({
-        jobName: t.analysis.name,
+        jobName: jobName,
         jobId: t.id,
         created: t.created_at,
         status: t.status,
@@ -354,6 +361,18 @@ class SubmitController < ApplicationController
     begin
       @task = Task.find_by! id:params[:job_id], user_id:session[:user_id]
       
+      if TaskOutput.where(task_id:@task.id).exists?
+        response_body = []
+        task_outputs = TaskOutput.where(task_id:@task.id)
+        task_outputs.each do |otp|
+          @task_output = otp
+          @analysis = otp.analysis
+          parsed_output = processTaskOutput()
+          response_body << parsed_output
+        end
+        render json: response_body
+        return
+      end
       # query task
       client = LocalApi::Client.new
       result = ''
@@ -375,15 +394,7 @@ class SubmitController < ApplicationController
 
         @task_output = {}
         
-        if TaskOutput.where(task_id:@task.id).exists? 
-          task_outputs = TaskOutput.where(task_id:@task.id)
-          task_outputs.each do |otp|
-            @task_output = otp
-            @analysis = otp.analysis
-            parsed_output = processTaskOutput()
-            response_body << parsed_output
-          end
-        elsif result['message']['status'] == 'finished'
+        if result['message']['status'] == 'finished'
           if !@task.analysis.blank? # module task
             @analysis = @task.analysis
             @task_output = create_task_output(result['message'])
@@ -457,7 +468,7 @@ class SubmitController < ApplicationController
             if matchPattern(of1['name'], fName)
               file_paths[dataType] = [] if file_paths[dataType].blank?
               file_paths[dataType] << {id: 0, 
-                                      url: File.join('/data', of1['path'], of1['name']), 
+                                      url: File.join('/data/outputs', of1['path'], of1['name']), 
                                       is_demo: true}
               files_to_do.delete(of1)
             end
@@ -467,7 +478,7 @@ class SubmitController < ApplicationController
         files_to_do.each do |of1|
           if of1['name'] == info['outputFileName']
             file_paths[dataType] = {id: 0, 
-                                    url: File.join('/data', of1['path'], of1['name']), 
+                                    url: File.join('/data/outputs', of1['path'], of1['name']), 
                                     is_demo: true}
             files_to_do.delete(of1)
           end

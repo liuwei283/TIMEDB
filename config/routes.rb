@@ -38,7 +38,8 @@ Rails.application.routes.draw do
   end
 
   # get 'welcome/index'
-  get 'test', to: 'submit#query_app_task_test'
+  post 'query_app_task_dummy', to: 'submit#query_app_task_dummy'
+  post 'submit_app_task_dummy', to: 'submit#submit_app_task_dummy'
   root 'welcome#index'
   # get 'tutorial', to: 'welcome#tutorial', as: 'tutorial'
   get 'contact', to: 'welcome#contact', as: 'contact'
@@ -112,6 +113,7 @@ Rails.application.routes.draw do
   # serve files
   match 'data/uploads/*path', to: 'raw_files#uploads', as: 'get_uploads', via: :get
   match 'data/demo/*path', to: 'raw_files#demo', as: 'get_demo', via: :get
+  match 'data/outputs/*path', to: 'raw_files#outputs', as: 'get_outputs', via: :get
   match 'data/static_viz_data/*path', to: 'raw_files#viz_file', via: :get
   match 'app/data/abd_files/*path', to: 'raw_files#viz_abd_file', via: :get
 
