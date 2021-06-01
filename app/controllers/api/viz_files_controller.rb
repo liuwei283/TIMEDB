@@ -230,7 +230,7 @@ class Api::VizFilesController < ApplicationController
         all_files = []
         if @analysis_user_datum.use_demo_file
             files_info.each do |dataType|
-                fName = files_info[dataType]
+                fName = files_info[dataType]['name']
                 if files_info[dataType]['demoFilePath'].class == String
                     all_files << [fName, files_info[dataType]['demoFilePath']]
                 else
@@ -243,7 +243,7 @@ class Api::VizFilesController < ApplicationController
         if !@analysis_user_datum.task_output.blank?
             info = @analysis_user_datum.task_output.file_paths
             info.each do |dataType, d|
-                fName = files_info[dataType]
+                fName = files_info[dataType]['name']
                 if d.class == Array
                     d.each do |fInfo, i|
                         all_files << [fName, fInfo['url']]

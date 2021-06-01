@@ -456,7 +456,6 @@ class SubmitController < ApplicationController
     
     task_output = @task.task_outputs.new
     task_output.analysis = @analysis
-    task_output.output_id = mrs['outputs'][0]['id']
     file_paths = {}
     files_to_do = mrs['outputs'][0]['files']
     
