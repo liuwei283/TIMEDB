@@ -3,9 +3,9 @@
 
 body.database, body.pipelines, body.public_references, body.toolkits, body.welcome, body.submit
     .index-banner
-        color: $gray-100
-        background: image-url("texture-1.jpg")
-        background-size: cover
+        color: $gray-900
+        // background: asset-url("texture-1.jpg")
+        // background-size: cover
         padding: 2rem 0
         &.sm
             padding: 3rem 0
@@ -75,7 +75,7 @@ body.database
         border: 1px solid #ccc
         border-radius: 4px
 
-#app-list, #pipeline-list
+#analyses_list, #pipeline_list
     .card
         transition: all 0.3s
         border: 1px solid $gray-400
@@ -84,3 +84,5 @@ body.database
             box-shadow: 0 0 32px darken($gray-400, 5%)
         .btn
             border-radius: 2rem
+        h5
+            color: $gray-700

@@ -1,7 +1,7 @@
 <footer class="footer page-footer">
     <div class="container">
         <div class="row">
-            <div class="col-md-3">
+            <div class="col-md-2">
                 <div class="row">
                     <a id="sidebarCollapse" class="navbar-brand mt-4" href="https://gutmeta.deepomics.org/" style="color: #fff">
                         <%
@@ -13,7 +13,7 @@
                     </a>
                 </div>
             </div>
-            <div class="col-md-3">
+            <div class="col-md-2">
                 <h4>Database</h4>
                 <ul>
                     <li><a href='/database/overview/'>Database Information</a></li>
@@ -22,16 +22,22 @@
                 </ul>
             </div>
 
-            <div class="col-md-3">
+            <div class="col-md-2">
                 <h4>Submit</h4>
                 <ul>
-                    <li><%=link_to 'Analysis', analysis_index_path%></li>
-                    <li><a href="/visualizer/analysis/1">Visualization</a></li>
-                    <li><a href='/job-query/'>Job Query</a></li>
+                    <li><a href="/submit/analyses">Analyses</li>
+                    <li><a href="/submit/pipelines">Pipelines</li>
+                    <li><a href='/submit/job-query/'>Job Query</a></li>
+                </ul>
+            </div>
+            <div class="col-md-2">
+                <h4>Visualization</h4>
+                <ul>
+                    <li><a href="/visualizer/analysis/1">Analyses</a></li>
                 </ul>
             </div>
 
-            <div class="col-md-3">
+            <div class="col-md-2">
                 <h4>Support</h4>
                 <ul>
                     <li><a href='/docs'>Tutorial</a></li>

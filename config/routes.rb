@@ -32,8 +32,6 @@ Rails.application.routes.draw do
       member { get :download_ds_abd}
       member { get :download_ds_metadata}
       member { post :delect_sample}
-
-
     end
   end
 
@@ -77,9 +75,12 @@ Rails.application.routes.draw do
   end
 
   # submit pages
-  get 'submit/:id', to: 'submit#index', as: 'submit'
-  get 'submit-pipeline/:id', to: 'submit#pipeline', as: 'submit_pipeline'
-  get 'job-query', to: 'submit#query', as: 'query'
+  get "submit/analyses", to: "submit#analyses"
+  get "submit/pipelines", to: "submit#pipelines"
+  get 'submit/job-query', to: 'submit#query', as: 'query'
+  get 'submit/analysis/:id', to: 'submit#index', as: 'submit_analysis'
+  get 'submit/pipeline/:id', to: 'submit#pipeline', as: 'submit_pipeline'
+  
   
   # post 'submit-app-task', to: 'submit#submit_app_task', format: 'json'
   post 'query-app-task', to: 'submit#query_app_task', format: 'json'

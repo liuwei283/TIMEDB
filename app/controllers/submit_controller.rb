@@ -2,6 +2,13 @@ class SubmitController < ApplicationController
   UID = 45
   PROJECT_ID = 289
   # $user_stor_dir = "#{Rails.root}/data/user"
+  def analyses
+    @analyses = Analysis.where "mid is not null"
+  end
+
+  def pipelines
+    @pipelines = AnalysisPipeline.all
+  end
   
   def query_app_task_test
     result_json = {
