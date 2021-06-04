@@ -10,7 +10,11 @@ br
             / - if visible_analysis(a)
             .col-lg-4.mb-4
                 .card
-                    img.card-img-top src = a.cover_image
+                    - if a.cover_image.blank?
+                        img.card-img-top =image_tag("module.jpg")
+                    - else
+                        img.card-img-top src = a.cover_image
+                    / img.card-img-top src = a.cover_image
                     .card_body
                         h5 =a.name
                         /= link_to "/submit/#{a.mid.to_s}"

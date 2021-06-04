@@ -7,13 +7,14 @@ br
 #pipeline_list.container-fluid.container
     .row.cols-xs-space.cols-sm-space.cols-md-space
         - @pipelines.each do |p|
-            / - if visible_analysis(a)
             .col-lg-4.mb-4
                 .card
-                    img.card-img-top src = p.cover_image
+                    - if p.cover_image.blank?
+                        img.card-img-top =image_tag("pipeline.png")
+                    - else
+                        img.card-img-top src = p.cover_image
                     .card_body
                         h5 =p.name
-                        /= link_to "/submit/#{a.mid.to_s}"
                     ul.list-group.list-group-flush
                         li.list-group-item.text-center
                             = link_to "Submit", "/submit/pipeline/#{p.pid.to_s}"
