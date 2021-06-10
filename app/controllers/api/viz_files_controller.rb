@@ -229,12 +229,12 @@ class Api::VizFilesController < ApplicationController
         # all_viz_data = @analysis.visualizer.viz_data_sources.map{|d| d.data_type}
         all_files = []
         if @analysis_user_datum.use_demo_file
-            files_info.each do |dataType|
-                fName = files_info[dataType]['name']
-                if files_info[dataType]['demoFilePath'].class == String
-                    all_files << [fName, files_info[dataType]['demoFilePath']]
+            files_info.each do |dataType, d|
+                fName = d['name']
+                if d['demoFilePath'].class == String
+                    all_files << [fName, d['demoFilePath']]
                 else
-                    files_info[dataType]['demoFilePath'].each do |fPath|
+                    d['demoFilePath'].each do |fPath|
                         all_files << [fName, fPath]
                     end
                 end
@@ -260,7 +260,7 @@ class Api::VizFilesController < ApplicationController
         end
         compressed_filestream = Zip::OutputStream.write_buffer(::StringIO.new()) do |zos|
             all_files.each do |fpath|
-              zos.put_next_entry "#{fpath[0]}:#{File.basename(fpath[1])}"
+              zos.put_next_entry "#{fpath[0]}__#{File.basename(fpath[1])}"
               zos.write File.read(File.join(Rails.root, fpath[1]))
             end
         end
