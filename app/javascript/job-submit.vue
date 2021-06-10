@@ -8,7 +8,7 @@
                 <!-- Inputs -->
                 <div v-if="!submitted">
                     <h3 class="text-center">{{ app.name }}
-                        <i class="fa  fa-question-circle" v-b-tooltip
+                        <i class="fa  fa-question-circle" b-tooltip.hover
                                        :title="app.description"></i>
                     </h3>
                     <div class="set-input-section" ref="inputSection">
@@ -18,7 +18,7 @@
                                 <div class="col-md-6" v-for="input in displayedInputs" :key="input.id">
                                     <label :for="`i-${input.id}`">{{ input.name }}
                                         <span v-if="input.required" class="required">*</span>
-                                        <i class="fa  fa-question-circle" v-b-tooltip
+                                        <i class="fa  fa-question-circle" b-tooltip.hover
                                         :title="input.description"></i>
                                     </label>
 
@@ -62,7 +62,7 @@
                                 <div class="col-md-6" v-for="param in displayedParams" :key="param.id">
                                     <label :for="`p-${param.id}`">{{ param.name }}
                                         <span v-if="param.required" class="required">*</span>
-                                        <i class="fa  fa-question-circle" v-b-tooltip
+                                        <i class="fa  fa-question-circle" b-tooltip.hover
                                         :title="param.description"></i>
                                     </label>
                                     <div v-if="param.param_type === 'string'">
@@ -274,6 +274,8 @@
 </script>
 
 <style lang="scss">
+@import '~bootstrap/scss/bootstrap.scss';
+@import '~bootstrap-vue/src/index.scss';
 #run-app #alert-center {
 	z-index: 1000;
 }

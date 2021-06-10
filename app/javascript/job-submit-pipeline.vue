@@ -302,6 +302,8 @@
 </script>
 
 <style lang="scss">
+@import '~bootstrap/scss/bootstrap.scss';
+@import '~bootstrap-vue/src/index.scss';
 #run-app #alert-center {
 	z-index: 1000;
 }
