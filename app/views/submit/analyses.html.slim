@@ -1,3 +1,6 @@
+- content_for :title
+  | Analyses
+
 .index-banner
   .container
     h1.display-4.font-weight-bold Analyses
@@ -18,5 +21,5 @@ br
                     .card_body
                         h5 =a.name
                         /= link_to "/submit/#{a.mid.to_s}"
-                    list-group.list-group-flush
+                    .list-group.list-group-flush
                         = link_to "Submit", "/submit/analysis/#{a.mid.to_s}", class: "list-group-item list-group-item-action text-center"
