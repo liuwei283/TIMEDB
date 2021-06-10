@@ -2,6 +2,7 @@
 - unless @analysis.id.nil?
   = f.association :analysis_category
 = f.input :name
+/ = f.input :url
 = f.association :visualizer
 = f.input :mid
 hr
@@ -18,3 +19,11 @@ hr
   sass:
     textarea.form-control
       height: 200px
+
+- content_for :page_script do
+  =javascript_pack_tag 'admin-form'
+  sass:
+    .ace_editor
+      height: 200px
+      border: 1px solid #ced4da
+      border-radius: 0.25rem
