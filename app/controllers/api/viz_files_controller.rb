@@ -255,7 +255,7 @@ class Api::VizFilesController < ApplicationController
             
         end
         if all_files.size == 1
-            send_file File.join(Rails.root, all_files.values.first[1])
+            send_file File.join(Rails.root, all_files[0][1])
             return
         end
         compressed_filestream = Zip::OutputStream.write_buffer(::StringIO.new()) do |zos|
