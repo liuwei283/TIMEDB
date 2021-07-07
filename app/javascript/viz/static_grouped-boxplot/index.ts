@@ -1,12 +1,11 @@
-import Oviz from "crux"
-import template from "./template.bvt"
-import { groupedChartColors} from "oviz-common/palette"
+import Oviz from "crux";
+import { groupedChartColors} from "oviz-common/palette";
 import { findBoundsForValues } from "utils/maths";
+import template from "./template.bvt";
 
 const ylabel = "Relative abundance(log10)";
 const classifiedIndex = 0;
-const valueRange = [-9, 3];
-const title = "grouped box plot"
+const title = "grouped box plot";
 
 export function init(id, path, config) {
     console.log(id);
@@ -17,7 +16,7 @@ export function init(id, path, config) {
             config: {
                 plotWidth: 1000,
                 showOutliers: true,
-                xLabelRotation: 70,
+                xLabelRotation: 45,
             },
             colors: groupedChartColors,
         },
@@ -67,6 +66,20 @@ export function init(id, path, config) {
                     return null;
                 },
             },
+        },
+        setup() {
+            const minBoxW = 12;
+            const mulNum = this.data.classifications.length;
+            const gridW = ((minBoxW + 2) * mulNum - 2) / 0.8;
+            if (this.data.categories.length * gridW > 1000) {
+                this.data.config.plotWidth = this.data.categories.length * gridW;
+                this.data.gridW = gridW;
+                this.data.boxW = minBoxW;
+            } else {
+                const boxGap = this.data.boxGap = 4;
+                this.data.gridW = 1000 / this.data.categories.length;
+                this.data.boxW = (this.data.gridW * 0.8 - boxGap * (mulNum - 1)) / mulNum;
+            }
         },
     });
 }

@@ -29,5 +29,14 @@ export function init(id, path, config) {
                 loaded: main,
             },
         },
+        setup() {
+            console.log(this["_data"]);
+            if (this.data.tree.dataOpt.isRadical) {
+                this.size.height = this.size.width = 2 * (this.data.tree.dataOpt.treeRadius
+                    + Math.ceil(this.data.tree.dataOpt.maxTextLength));
+            } else {
+                this.size.width = this.size.height = 1000;
+            }
+        },
     });
 }

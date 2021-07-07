@@ -1,14 +1,14 @@
 svg {
-    height = 1000
-    width = 1300
     Component {
         @if (tree.dataOpt.isRadical) {
             @let radius = tree.dataOpt.treeRadius
+            @let maxTextW = Math.ceil(tree.dataOpt.maxTextLength)
             Tree {
-                y = 500
-                x = 200
+                @expr console.log(maxTextW)
+                y = radius + maxTextW
+                x = maxTextW
                 r = radius
-                width = 900
+                width = radius * 2
                 // height = 600
                 data = tree.treeData
                 direction = "radical"
@@ -46,20 +46,24 @@ svg {
                             }
                         }
                         Container {
-                            //@expr console.log(l.leaf.data)
                             anchor = l.tree.leafAnchor(l.leaf)
-                            padding = 15
-                            //@expr console.log(l.leaf.data.data.q_value < tree.dataOpt.maxQvalue)
-                            Text(name){
-                                fill = tree.library.color_dict.colorLinks[l.leaf.data.name]
-                            }
-                            @if (l.leaf.data.data.qvalue < tree.dataOpt.maxQvalue) {
-                                Rect {
-                                    width = name.length * 6; height = 15; fill = "none"
-                                    stroke = tree.library.color_dict.colorNodes[l.leaf.data.name]
-                                    strokeWidth = 2; borderRadius = 2
+                            padding = 13
+                            Container {
+                                padding = 2
+                                @if (l.leaf.data.data.qvalue < tree.dataOpt.maxQvalue) {
+                                    Rect.detached {
+                                        // width = name.length * 6; height = 15; 
+                                        width = 100%; height = 100%
+                                        fill = "none"
+                                        stroke = tree.library.color_dict.colorNodes[l.leaf.data.name]
+                                        // strokeWidth = 2; borderRadius = 2
+                                    }
+                                }
+                                Text(name){
+                                    fill = tree.library.color_dict.colorLinks[l.leaf.data.name]
                                 }
                             }
+                            //@expr console.log(l.leaf.data.data.q_value < tree.dataOpt.maxQvalue)
                         }
                     }
                 }  

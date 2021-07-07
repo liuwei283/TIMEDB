@@ -11,7 +11,8 @@ import {annoLoaded, main, matrixLoaded} from "./data";
 
 registerDefaultBioInfoComponents();
 
-const MODULE_NAME = "tree"
+const MODULE_NAME = "tree";
+
 function init() {
     if (window.gon.module_name !== MODULE_NAME) return;
     const { visualizer } = Oviz.visualize({
@@ -39,6 +40,13 @@ function init() {
         },
         setup() {
             registerEditorConfig(editorConfig(this), editorRef);
+            if (this.data.tree.dataOpt.isRadical) {
+                console.log(2 * this.data.tree.dataOpt.treeRadius);
+                this.size.width = this.size.height = 1000;
+                // this.size.height = this.size.width = 2 * this.data.tree.dataOpt.treeRadius + 200;
+            } else {
+                this.size.width = this.size.height = 1000;
+            }
             this.defineGradient("colorScale", "horizontal", ["#CFE1E9", "#1565C0"]);
         },
 

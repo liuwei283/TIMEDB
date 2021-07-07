@@ -580,7 +580,7 @@ export function main(_data) {
             return true;
         return false;
     }
-    if(!!this) this.data.branchShouldStayOnTop = branchShouldStayOnTop;
+    if (!!this) this.data.branchShouldStayOnTop = branchShouldStayOnTop;
 
     console.log(treeData.children[0].data);
     return {treeData, dataOpt, leave_box_dict: null, mean_info_box, max_mean, min_mean, library, allNodes, leaves, distinct_leaves, leave_link_dict, _data, max, min};

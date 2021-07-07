@@ -3,7 +3,7 @@ svg {
 	height = 500
 	Component {
 		y = 40
-		x = -150
+		x = -50
 		Text {
 			x = @geo(50, -50)
 			text = title
@@ -21,12 +21,7 @@ svg {
 			}
 			:legend(d) {
 				Legend {
-					
 					x = @geo(90, -50)
-					// anchor = @anchor("right","top")
-					// x = 100%
-					// anchor = @anchor("right","top")
-					// d.fill = d.data.r
 					data = legendData
 				}
 			}

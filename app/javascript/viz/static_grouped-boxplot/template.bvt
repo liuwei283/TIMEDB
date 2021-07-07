@@ -1,11 +1,11 @@
 svg {
-	width = 1500; height = 1000
+	width = 1100; height = 650
 	XYPlot {
+		x = 40; y = 20
 		height = 500
 		width = config.plotWidth
 		valueRange = valueRange
-		padding-y = 20
-		padding-l = 40
+		gap = gridW * 0.2
 		data = {
 			boxData1: boxData[0],
 			boxData2: boxData[1]
@@ -28,14 +28,13 @@ svg {
 				data = "boxData" + (index + 1).toString()
 				showMean = true
 				showNotch = false
-				x = -4 + 8 * index
+				x = index * (boxW + boxGap) - 2
+				@let boxStroke = colors[index]
+				@let whiskleD = 5
 				:box (_d) {
-					Rect.full  {
-						@expr console.log(_d)
-						zIndex = 1
+					Rect  {
 						fill = "white"
-						stroke = colors[index]
-						// fillOpacity = 
+						stroke = boxStroke; strokeWidth = 1.5
 						behavior:tooltip {
 							content = (`min: ${_d.data[0].toFixed(2)} <br>
 										first quartile: ${_d.data[1].toFixed(2)} <br>
@@ -43,25 +42,48 @@ svg {
 										third quartile: ${_d.data[3].toFixed(2)} <br>
 										max: ${_d.data[4].toFixed(2)} <br>`)
 						}
-						x = 33%
-						width = 33%
+						// x = 33%; width = 33%
+						width = boxW; height = 100%
 					}
 				}
+				// :whiskle (d) {
+				// 	Line { x1 = 50%; x2 = 50%; y1 = 0; y2 = 100%; stroke = colors[index];
+				// 	}
+				// }
+				// :outlier{
+				// 	@if config.showOutliers {
+				// 		Circle.centered { r = 2; fill = colors[index] }
+				// 	} @else {
+				// 		Circle.centered { fill = "none" }
+				// 	}
+				// }
+				// :mean(means) {
+				// 	Line {x1 = 33%; x2 = 66%; stroke = colors[index]}
+				// }
+				// :median(d) {}
 				:whiskle (d) {
-					Line { x1 = 50%; x2 = 50%; y1 = 0; y2 = 100%; stroke = colors[index];
+					Line { 
+						x =  boxW / 2; y1 = 0; y2 = 100%; 
+						stroke = boxStroke;strokeWidth = 2
 					}
 				}
-				:outlier{
+				:outlier(o){
 					@if config.showOutliers {
-						Circle.centered { r = 2; fill = colors[index] }
+						Circle.centered { 
+							r = 2
+							x = -boxW * 0.5
+							fill = colors[index] 
+						}
 					} @else {
 						Circle.centered { fill = "none" }
 					}
 				}
 				:mean(means) {
-					Line {x1 = 33%; x2 = 66%; stroke = colors[index]}
+					// Line {x1 = 33%; x2 = 66%; stroke = colors[index]}
 				}
-				:median(d) {}
+				:median(d) {
+					Line { x2 =  boxW; stroke = boxStroke; strokeWidth = 2}
+				}
 			}
 		}
 		Axis("left");
