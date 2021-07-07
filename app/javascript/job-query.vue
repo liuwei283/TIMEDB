@@ -68,11 +68,10 @@
                             v-if="data.item.status == 'finished'"
                             @click="showAnalyses(data.item.jobId)"
                             >
-                        <i class="fas fa-search mr-1"></i>Analyses</b-button
+                        <i class="fas fa-search mr-1"></i>Result</b-button
                         >
                         <b-button variant="primary" size="sm" v-else disabled>
-                        <i class="fas fa-search mr-1"></i>Analyses</b-button
-                        >
+                        <i class="fas fa-search mr-1"></i>Result</b-button>
                         <b-button
                         variant="danger"
                         size="sm"
@@ -88,21 +87,26 @@
             </b-card>
         </div>
         <div v-else class="viz-result">
-            <div>
-            <b-button class="btn col-md-2" variant = "primary" @click="returnQuery"><i class="fas fa-arrow-left"></i> Back to query
-            </b-button>
-            <b-button class="btn col-md-4" disabled >{{data.outputs[0].name}}
-            </b-button>
-            <!-- <dropdown-select
-                    right
-                    v-model="chosenOutput"
-                    :options="taskOutputs"
-                    :variant="outline"
-                    class="tool-bar-el"/> -->
-            </div>
-            <div id = "viz-card"> 
+            <b-card header-tag="header">
+            <template #header>
+                
+                <b-button class="btn col-md-2" variant = "primary" @click="returnQuery">
+                    <i class="fas fa-arrow-left"></i> Back to query
+                </b-button>
+                <b-button variant="dark" class="btn col-md-4" disabled >{{`${jobName}: job ${job_id}`}}
+                </b-button>
+                <dropdown-select v-if="data.outputs.length > 1"
+                        right
+                        v-model="chosenOutput"
+                        :options="taskOutputs"
+                        :variant="outline"
+                        class="tool-bar-el"/>
+                
+            </template>
+             <div id = "viz-card"> 
                 <VApp/>
             </div>
+            </b-card>
         </div>
     </div>
 </div>
@@ -127,6 +131,7 @@ export default {
     data() {
         return {
             job_id: '',
+            jobName: '',
             all_jobs: [],
             fields: ["index", "jobName", "jobId", "created", "status", "operation"],
             showTable:  true,
@@ -157,6 +162,11 @@ export default {
             if (this.job_id.length <= 0){
                 this.valid_name = false;
             }else {
+                this.all_jobs.forEach(j => {
+                    // console.log([j.jobId, this.job_id]);
+                    if (j.jobId === this.job_id)
+                        this.jobName = j.jobName;
+                })
                 axios.post(
                     `/query-app-task/`,
                     objectToFormData({'job_id': this.job_id}),

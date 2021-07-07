@@ -1,18 +1,18 @@
 import Oviz from "crux";
-import template from "./template.bvt"
-import {ComplexScatterplot} from "./complex-scatterplot"
-import { editorRef, editorConfig } from "./editor";
+
+import {register} from "page/visualizers";
 import { registerEditorConfig } from "utils/editor";
 
-import {groupedChartColors} from "oviz-common/palette";
-import {getGroups, groupBy}from "utils/array"
-import {register} from "page/visualizers";
+import {ComplexScatterplot} from "./complex-scatterplot";
+import { editorConfig, editorRef } from "./editor";
+
+import { groupedChartColors } from "oviz-common/palette";
+import { getGroups } from "utils/array";
 import {rankDict} from "utils/bio-info";
 
 import * as _ from "lodash";
-import { collapseTextChangeRangesAcrossMultipleVersions } from "typescript";
 
-const MODULE_NAME = 'scatterplot'
+const MODULE_NAME = "scatterplot";
 
 function init() {
     if (!window.gon || window.gon.module_name !== MODULE_NAME) return;
@@ -22,13 +22,13 @@ function init() {
         renderer: "svg",
         root: new ComplexScatterplot(),
         data: {
-            colors: groupedChartColors.slice(0,3),
+            colors: groupedChartColors.slice(0, 3),
             config: {
                 plotHeight: 500,
                 plotWidth: 500,
                 rankIndex: 0,
-                xAxisIndex:0,
-                yAxisIndex:1,
+                xAxisIndex: 0,
+                yAxisIndex: 1,
                 computeOval: false,
                 categoryRange: [null, null],
                 valueRange: [null, null],
@@ -46,7 +46,7 @@ function init() {
                 dsvRowParser (row, _, columns) {
                     row["sampleId"] = row[columns[0]];
                     delete row[columns[0]];
-                    for (let i = 1; i< columns.length; i++)
+                    for (let i = 1; i < columns.length; i++)
                         row[columns[i]] = parseFloat(row[columns[i]]);
                     return row;
                 },
@@ -68,12 +68,12 @@ function init() {
                                 parsedX[s[0]] = x[s[1]];
                             });
                             return parsedX;
-                        })
+                        });
                         d[0].columns = ["s", ...shortSpecies.map(s => s[0])];
                     }
                     this.data.ranks = d.map(x => x.columns[0])
                                     .sort((a, b) => rankKeys.indexOf(a) - rankKeys.indexOf(b))
-                                    .map((x, i) =>  ({value: i, text: rankDict[x]}))
+                                    .map((x, i) =>  ({value: i, text: rankDict[x]}));
                     // this.data.ranks = d.map((x, i) => ({value: i, text: x.columns[0]}));
                     this.data.samples = d[0].map(x => x["sampleId"]);
                     const mainDict = {};
@@ -82,13 +82,13 @@ function init() {
                     });
                     const selectedDataCols = d[0].columns;
                     this.data.availableAxises = selectedDataCols.filter((_, i) => i > 0)
-                                .map((x,i) => ({"value": i, "text": x}));
+                                .map((x, i) => ({value: i, text: x}));
                     this.data.mainDict = mainDict;
                     this.data.rankLabel = this.data.ranks[0].text;
                     this.data.sampleInfoDict = {};
-                    this.data.samples.forEach(k =>this.data.sampleInfoDict[k] = {});
+                    this.data.samples.forEach(k => this.data.sampleInfoDict[k] = {});
                     return mainDict[this.data.rankLabel];
-                }
+                },
             },
             scatterGroupData: {
                 fileKey: "scatterGroupData",
@@ -119,22 +119,22 @@ function init() {
                     if (hasUnknownSample) groups.push("unknown");
                     this.data.groups = groups;
                     return null;
-                }
+                },
             },
             scatterVectorData: {
                 fileKey: "scatterVectorData",
                 type: "tsv",
                 optional: true,
                 dependsOn: ["scatterData"],
-                dsvRowParser (row, _,columns) {
-                    for (let i = 1; i< columns.length; i++)
+                dsvRowParser (row, _, columns) {
+                    for (let i = 1; i < columns.length; i++)
                         row[columns[i]] = parseFloat(row[columns[i]]);
                     return row;
                 },
                 loaded(data) {
                     if (!data) return;
                     this.data.vectorLabel = data.columns[0];
-                }
+                },
             },
             scatterClusterData: {
                 fileKey: "scatterClusterData",
@@ -159,19 +159,19 @@ function init() {
                     const data = Object.keys(this.data.clusterDict).map(k => this.data.clusterDict[k]);
                     this.data.clusters = Object.keys(_.groupBy(data, chosenRank));
                     return null;
-                }
-            }
+                },
+            },
         },
         setup() {
             registerEditorConfig(editorConfig(this), editorRef);
-        }
-    }); 
-    
+        },
+    });
+
     return visualizer;
 }
 
 register(MODULE_NAME, init);
 
-export function registerScatterplot(){
+export function registerScatterplot() {
     register(MODULE_NAME, init);
 }

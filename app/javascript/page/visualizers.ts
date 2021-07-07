@@ -3,7 +3,8 @@ import { event } from "crux/dist/utils";
 export const viz_mode = {
     ANALYSIS: "analysis",
     TASK_OUTPUT: "task-output"
-}
+};
+
 declare global {
     interface Window {
         __BVD3_visualizers: Record<string, () => void>;

@@ -4,8 +4,8 @@ svg {
 	
 	XYPlot {
 		padding = 50
-		height = plotHeight
-		width = plotWidth
+		height = config.plotHeight
+		width = config.plotWidth
 		anchor = @anchor("left","top")
 		data = barchartData
 		dataHandler = {

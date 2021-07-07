@@ -8,18 +8,13 @@ import { editorConfig } from "./editor";
 import { groupedChartColors} from "oviz-common/palette"
 import {rankDict} from "utils/bio-info";
 
+const plotWidth = 500;
 const ylabel = "Relative abundance -log10";
 const classifiedIndex = 1;
 const valueRange = [-8, 2];
-const title = "grouped box plot"
-//please change the displayed value range in the template by the prop: valueRange.
-const MODULE_NAME = "grouped-boxplot-p"
-
-interface BoxplotData {
-    values: any[], 
-    outliers: any[], 
-    means: number[],
-}
+const title = "grouped box plot";
+// please change the displayed value range in the template by the prop: valueRange.
+const MODULE_NAME = "grouped-boxplot-p";
 
 function init() {
     if (!window.gon || window.gon.module_name !== MODULE_NAME) return;
@@ -44,6 +39,7 @@ function init() {
                 dsvHasHeader: true,
                 multiple: true,
                 loaded(d) {
+                    // rank sorting
                     const rankKeys = Object.keys(rankDict);
                     this.data.ranks = d.map(x => x.columns[1])
                                     .sort((a, b) => rankKeys.indexOf(a) - rankKeys.indexOf(b))
@@ -52,12 +48,11 @@ function init() {
                     this.data.pDict = {};
                     const chosenRank = this.data.ranks[0].text;
                     this.data.speciesDict = {};
-                        
                     d.forEach(data => {
                         const rankLabel = rankDict[data.columns[1]];
                         // only shows the species level
                         const shortSpecies = [];
-                        this.data.speciesDict[rankLabel] = {}
+                        this.data.speciesDict[rankLabel] = {};
                         for (let i = 2; i < data.columns.length; i ++) {
                             const splittedSpecies = data.columns[i].split("|");
                             shortSpecies.push([splittedSpecies[splittedSpecies.length - 1], data.columns[i]]);
@@ -72,11 +67,11 @@ function init() {
                                 parsedX[s[0]] = x[s[1]];
                             });
                             return parsedX;
-                        })
-                        
+                        });
+
                         const pData = data.filter(x => x[columns[0]] === "p-value")[0];
                         data = data.filter(x => x[columns[0]] !== "p-value");
-                        
+
                         const categories = columns.slice(2);
                         if (categories.length > 50) categories.splice(50, categories.length - 50);
                         const classifiedKey = columns[classifiedIndex];
@@ -114,8 +109,8 @@ function init() {
                             });
                         });
                         const valueRange = findBoundsForValues(allValues, 2, false, 0.1);
-                        
-                        this.data.pDict[rankLabel] = {pData: categories.map(c => parseFloat(pData[c])), 
+
+                        this.data.pDict[rankLabel] = {pData: categories.map(c => parseFloat(pData[c])),
                          categories};
                         this.data.boxDict[rankLabel] = {boxData, valueRange, categories, classifications};
                         if (chosenRank === rankLabel) {
@@ -127,19 +122,30 @@ function init() {
                 },
             },
         },
-        setup() {            
+        setup() {
             console.log(this["_data"]);
-            if (this.data.boxData.categories.length * 20 > 500){
+            if (this.data.boxData.categories.length * 20 > 500) {
                 this.data.config.plotWidth = this.data.boxData.categories.length * 20;
                 this.data.gridW = 20;
             } else {
                 this.data.gridW = 500 / this.data.boxData.categories.length;
             }
-                
+            // const minBoxW = 12;
+            // const mulNum = this.data.boxData.classifications.length;
+            // const gridW = ((minBoxW + 2) * mulNum - 2) / 0.7;
+            // if (this.data.boxData.categories.length * gridW > plotWidth) {
+            //     this.data.config.plotWidth = this.data.boxData.categories.length * gridW;
+            //     this.data.gridW = gridW;
+            //     this.data.boxW = minBoxW;
+            // } else {
+            //     const boxGap = this.data.boxGap = 4;
+            //     this.data.gridW = plotWidth / this.data.boxData.categories.length;
+            //     this.data.boxW = (this.data.gridW * 0.7 - boxGap * (mulNum - 1)) / mulNum;
+            // }
             registerEditorConfig(editorConfig(this));
         },
     });
-    
+
     return visualizer;
 }
 

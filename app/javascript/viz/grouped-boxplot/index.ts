@@ -1,26 +1,22 @@
-import Oviz from "crux"
-import template from "./template.bvt"
+import Oviz from "crux";
 import {register} from "page/visualizers";
+import { registerEditorConfig } from "utils/editor";
+import { editorConfig } from "./editor";
+import template from "./template.bvt";
 
 import { findBoundsForValues } from "utils/maths";
 
-import { registerEditorConfig } from "utils/editor";
-import { editorConfig } from "./editor";
-import { groupedChartColors} from "oviz-common/palette"
-import {rankDict} from "utils/bio-info.ts";
+import { groupedChartColors} from "oviz-common/palette";
+import {rankDict} from "utils/bio-info";
 
 const ylabel = "Relative abundance";
+const rankLabelIndex = 0;
 const classifiedIndex = 0;
 const valueRange = [-8, 2];
-const title = "grouped box plot"
-//please change the displayed value range in the template by the prop: valueRange.
-const MODULE_NAME = 'grouped-boxplot'
+const title = "grouped box plot";
 
-interface BoxplotData {
-    values: any[], 
-    outliers: any[], 
-    means: number[],
-}
+// please change the displayed value range in the template by the prop: valueRange.
+const MODULE_NAME = "grouped-boxplot";
 
 function init() {
     if (!window.gon || window.gon.module_name !== MODULE_NAME) return;
@@ -44,12 +40,14 @@ function init() {
                 dsvHasHeader: true,
                 multiple: true,
                 loaded(d) {
+                    // process rank info
                     const rankKeys = Object.keys(rankDict);
                     this.data.ranks = d.map(x => x.columns[0])
                                     .sort((a, b) => rankKeys.indexOf(a) - rankKeys.indexOf(b))
                                     .map((x, i) =>  ({value: i, text: rankDict[x]}));
                     this.data.boxDict = {};
                     const chosenRank = this.data.ranks[0].text;
+
                     d.forEach(data => {
                         const rankLabel = rankDict[data.columns[0]];
                         const categories = data.columns.slice(1);
@@ -85,7 +83,6 @@ function init() {
                             });
                         });
                         const valueRange = findBoundsForValues(allValues, 2, false, 0.5);
-                        
                         this.data.boxDict[rankLabel] = {boxData, valueRange, categories, classifications};
                         if (chosenRank === rankLabel) this.data.boxData = {boxData, valueRange, categories, classifications};
                     });
@@ -94,7 +91,7 @@ function init() {
                 },
             },
         },
-        setup() {            
+        setup() {
             this.data.plotWidth = 1000;
             registerEditorConfig(editorConfig(this));
         },

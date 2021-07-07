@@ -94,7 +94,8 @@
                 this.showEditor=!this.showEditor;
             },
             downloadDemoFiles() {
-                window.open(`${window.gon.urls.download_demo_file}?name=${this.chosen}`);
+                // window.open(`${window.gon.urls.download_demo_file}`);
+                window.open(window.gon.urls.download_demo_file);
             }
         },        
         created() {

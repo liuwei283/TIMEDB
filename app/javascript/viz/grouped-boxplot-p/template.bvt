@@ -4,7 +4,6 @@ Component {
 	Rows {
 		y = 40
 		XYPlot {
-			@expr console.log(pData.pData)
 			height = 150
 			categories = pData.categories
 			width = config.plotWidth
@@ -128,7 +127,7 @@ Component {
 				rotation = @rotate(-90)
 				Text(ylabel) { anchor = @anchor("bottom", "center") }
 			}
-			Component{
+			Component { // legend
 				x = 5%; y = 5%
 				@for (item, index) in boxData.classifications{
 					Line { key = index; x1 = 7.5; x2 = 7.5; y1 = 24 * index - 10; y2 = 24 * index + 10; stroke = colors[index] }

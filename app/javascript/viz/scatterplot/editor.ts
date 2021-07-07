@@ -1,8 +1,6 @@
-import {defaultLayoutConf as conf} from "utils/editor"
 import { genDefaultPalette, withDefaultPalette } from "oviz-common/palette";
 import { EditorDef } from "utils/editor";
 import { copyObject } from "utils/object";
-import { forEachChild } from "typescript";
 
 function run(v) {
     v.data._changed = true;
@@ -48,8 +46,8 @@ export function editorConfig(v): EditorDef {
                                         },
                                     },
                                 },
-                            ]
-                        }
+                            ],
+                        },
                     },
                     {
                         id: "xData",
@@ -79,13 +77,12 @@ export function editorConfig(v): EditorDef {
                                         current: 0,
                                         callback(d) {
                                             v.data.config.categoryRange[0] = parseFloat(d);
-                                            if (!!v.data.config.categoryRange[0] 
+                                            if (!!v.data.config.categoryRange[0]
                                                 && !!v.data.config.categoryRange[1]) {
                                                     v.forceRedraw = true;
                                                     v.root.dataChanged = true;
                                                     run(v);
                                                 }
-                                            
                                         },
                                     },
                                 },
@@ -105,8 +102,8 @@ export function editorConfig(v): EditorDef {
                                         },
                                     },
                                 },
-                            ]
-                        }
+                            ],
+                        },
                     },
                     {
                         id: "yData",
@@ -141,7 +138,6 @@ export function editorConfig(v): EditorDef {
                                                     v.forceRedraw = true;
                                                     run(v);
                                                 }
-                                            
                                         },
                                     },
                                 },
@@ -160,10 +156,10 @@ export function editorConfig(v): EditorDef {
                                         },
                                     },
                                 },
-                            ]
-                        }
-                    }
-                ]
+                            ],
+                        },
+                    },
+                ],
             },
             {
                 id: "settings",
@@ -180,10 +176,10 @@ export function editorConfig(v): EditorDef {
                                 title: "Customize colors",
                                 scheme: copyObject(v.data.colors),
                                 palettes: withDefaultPalette(defaultPalette, cbpPalette),
-                                paletteMap: {"0":0,"1":1},
+                                paletteMap: {"0": 0, "1": 1},
                                 id: "pwcolor",
                                 callback(colors) {
-                                    v.data.colors = [colors['0'], colors['1']];
+                                    v.data.colors = [colors["0"], colors["1"]];
                                     v.forceRedraw = true;
                                     run(v);
                                 },

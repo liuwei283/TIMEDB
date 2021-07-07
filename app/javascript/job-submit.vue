@@ -125,7 +125,6 @@
     import VueTagsInput from '@johmun/vue-tags-input';
     import AlertCenter from 'components/alert-center.vue';
     import GlobalSaveButton from 'components/global-save-button.vue';
-    import path from 'path'
 
     Vue.use(BootstrapVue);
 

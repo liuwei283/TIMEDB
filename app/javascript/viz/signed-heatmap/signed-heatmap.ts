@@ -2,7 +2,7 @@ import { ColorSchemeGradient, schemeGradient } from "crux/dist/color";
 import { Component, ComponentOption } from "crux/dist/element";
 import * as d3 from "d3";
 import * as text_size from "crux/dist/utils/text-size";
-import { findBound } from "utils/maths";
+import { findUpperBound } from "utils/maths";
 
 
 export interface SignedHeatMapOption extends ComponentOption {
@@ -155,11 +155,11 @@ export class SignedHeatMap extends Component<SignedHeatMapOption> {
     protected computeRange(min, max, isSym): any {
         if (isSym) {
             let bound = (max > -min) ? max : -min;
-            bound = findBound(bound, 0, 2);
+            bound = findUpperBound(bound);
             return {min: -bound, max: bound};
         } else {
-            const upperBound = findBound(max, 0, 2);
-            const lowerBound = findBound(-min, 0, 2);
+            const upperBound = findUpperBound(max);
+            const lowerBound = findUpperBound(-min);
             return {min: -lowerBound, max: upperBound};
         }
     }
