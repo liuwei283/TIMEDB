@@ -2,13 +2,7 @@
   | Admin::Visualizers
 
 .container
-  ol.breadcrumb
-    li.breadcrumb-item
-      = link_to 'Analysis Categories', admin_analysis_categories_path
-    li.breadcrumb-item
-      = link_to 'Analyses', admin_analyses_path
-    li.breadcrumb-item
-      = link_to 'Visualizers', admin_visualizers_path
+  =render 'partials/admin_navbar'  
   .card
     .card-body
       h2.card-title Visualizers
