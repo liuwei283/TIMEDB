@@ -208,8 +208,11 @@ export function fillinblock(cid, relation_key, relation_data, content_data){
     }
     // have table
     if(cid[0] == 'T'){
+        //console.log(relation_key);
         var tdk = relation_data["t"][relation_key];
-        var tdata = content_data["t"][tdk]
+        //console.log(tdk);
+        var tdata = content_data["t"][tdk];
+        //console.log(tdata);
         var container = document.getElementById(cid);
         var tid = "t"+cid;
         container.innerHTML = '';
@@ -255,21 +258,26 @@ export function catch_change(data, tids){
         var struct_data = data["struct"];
         var relation_data = data["relation"];
         var content_data = data["content"];
-        var bro = this.parentElement.children;
-        var outer_block = this.parentElement.parentElement;
+        var bro = this.parentElement.parentElement.children;
+        //console.log(bro);
+        var outer_block = this.parentElement.parentElement.parentElement;
         var nbro = bro.length;
+        //console.log(nbro);
         var new_k = "";
         for (var i=0; i<nbro; i++){
             if (i>0){
                 new_k += "_";
             }
-            new_k += bro[i].value;  
+            //console.log('string' + new_k);
+            new_k += bro[i].children[1].value;  
+            //console.log(bro[i].children);
         }
+        //console.log(new_k);
         var B_i = parseInt(outer_block.id[1]);
         //console.log(B_i);
         //console.log(struct_data[B_i]);
         var type_key = Object.keys(struct_data[B_i])[0];
-        
+        //console.log(type_key);
         var ntype = type_key.length;
         if(type_key[0]=="H"){
             ntype -= 1;
@@ -279,6 +287,7 @@ export function catch_change(data, tids){
         //console.log(type_key);
         for (var i=0; i<ntype; i++){
             var cid = type_key[i] + i + outer_block.id;
+            console.log(cid);
             fillinblock(cid, new_k, relation_data, content_data);
         }
         if (Object.keys(struct_data[B_i])[0].includes("T")){

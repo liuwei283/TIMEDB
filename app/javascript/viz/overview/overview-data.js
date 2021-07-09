@@ -1,7 +1,7 @@
 var struct_data = [
     {"HTV": [
         {
-            "title": "",
+            "title": "Metadata attribute",
             "select":{
                 "BMI": "BMI_pie",
                 "age": "age_pie",
