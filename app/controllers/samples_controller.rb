@@ -5,8 +5,16 @@ class SamplesController < ApplicationController
     $tmp_dir = "#{Rails.root}/app/data/tmp/"
 
     def index
+        @vis = ['id', 'sample_name', 'experiment_type', 'project_name', 'nr_reads_sequenced', 'country', 'abundance_available', 'associated_phenotype']
         @samples = Sample.order(:sample_name)
         @sample_attrs = Sample.column_names
+        @invis = []
+        @sample_attrs.each_with_index do |attr, index|
+            if !@vis.include?(attr)
+                @invis.push(index)
+            end
+        end
+        gon.push invis: @invis
         @user = User.find(session[:user_id])
         id = session[:user_id]
         @user = User.find(id)

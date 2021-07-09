@@ -1,74 +1,89 @@
 var struct_data = [
-    {"HTV": [{
-        "BMI": "BMI_pie",
-        "age": "age_pie",
-        "sex": "sex_pie",
-        "country": "country_pie",
-        "phenotype": "phenotype_pie"
-
+    {"HTV": [
+        {
+            "title": "",
+            "select":{
+                "BMI": "BMI_pie",
+                "age": "age_pie",
+                "sex": "sex_pie",
+                "country": "country_pie",
+                "phenotype": "phenotype_pie"
+            }
         }]
     },
     
-    {"HV": [{
-        "D000236(Adenoma)": "D000236",
-        "D001172(Arthritis, Rheumatoid)": "D001172",
-        "D001528(Behcet Syndrome)": "D001528",
-        "D001943(Breast Neoplasms)": "D001943",
-        "D003093(Colitis, Ulcerative)": "D003093",
-        "D003424(Crohn Disease)": "D003424",
-        "D003922(Diabetes Mellitus, Type 1)": "D003922",
-        "D003922(Diabetes Mellitus, Type 2)": "D003924",
-        "D006973(Hypertension)": "D006973",
-        "D007234(Infant, Premature)": "D007234",
-        "D008545(Melanoma)": "D008545",
-        "D009765(Obesity)": "D009765",
-        "D011236(Prediabetic State)": "D011236",
-        "D012778(Short Bowel Syndrome)": "D012778",
-        "D013167(Spondylitis, Ankylosing)": "D013167",
-        "D014376(Tuberculosis)": "D014376",
-        "D014607(Uveomeningoencephalitic Syndrome)": "D014607",
-        "D015179(Colorectal Neoplasms)": "D015179",
-        "D015212(Inflammatory Bowel Diseases)": "D015212",
-        "D016640(Diabetes, Gestational)": "D016640",
-        "D037841(Pregnant Women)": "D037841",
-        "D050177(Overweight)": "D050177",
-        "D065626(Non-alcoholic Fatty Liver Disease)": "D065626"
+    {"HV": [
+        {
+            "title": "Phenotype (MeSH ID)",
+            "select":{
+                "D000236(Adenoma)": "D000236",
+                "D001172(Arthritis, Rheumatoid)": "D001172",
+                "D001528(Behcet Syndrome)": "D001528",
+                "D001943(Breast Neoplasms)": "D001943",
+                "D003093(Colitis, Ulcerative)": "D003093",
+                "D003424(Crohn Disease)": "D003424",
+                "D003922(Diabetes Mellitus, Type 1)": "D003922",
+                "D003922(Diabetes Mellitus, Type 2)": "D003924",
+                "D006973(Hypertension)": "D006973",
+                "D007234(Infant, Premature)": "D007234",
+                "D008545(Melanoma)": "D008545",
+                "D009765(Obesity)": "D009765",
+                "D011236(Prediabetic State)": "D011236",
+                "D012778(Short Bowel Syndrome)": "D012778",
+                "D013167(Spondylitis, Ankylosing)": "D013167",
+                "D014376(Tuberculosis)": "D014376",
+                "D014607(Uveomeningoencephalitic Syndrome)": "D014607",
+                "D015179(Colorectal Neoplasms)": "D015179",
+                "D015212(Inflammatory Bowel Diseases)": "D015212",
+                "D016640(Diabetes, Gestational)": "D016640",
+                "D037841(Pregnant Women)": "D037841",
+                "D050177(Overweight)": "D050177",
+                "D065626(Non-alcoholic Fatty Liver Disease)": "D065626"
+            }
         }]
 
     },
 
-    {"HV": [{
-        "D000236(Adenoma)": "D000236", 
-        "D001172(Arthritis, Rheumatoid)": "D001172", 
-        "D001528(Behcet Syndrome)": "D001528", 
-        "D001943(Breast Neoplasms)": "D001943", 
-        "D003093(Colitis, Ulcerative)": "D003093", 
-        "D003424(Crohn Disease)": "D003424", 
-        "D003922(Diabetes Mellitus, Type 1)": "D003922", 
-        "D003924(Diabetes Mellitus, Type 2)": "D003924", 
-        "D006973(Hypertension)": "D006973", 
-        "D007234(Infant, Premature)": "D007234", 
-        "D008545(Melanoma)": "D008545", 
-        "D009765(Obesity)": "D009765", 
-        "D011236(Prediabetic State)": "D011236", 
-        "D012778(Short Bowel Syndrome)": "D012778", 
-        "D013167(Spondylitis, Ankylosing)": "D013167", 
-        "D014376(Tuberculosis)": "D014376", 
-        "D014607(Uveomeningoencephalitic Syndrome)": "D014607", 
-        "D015179(Colorectal Neoplasms)": "D015179", 
-        "D015212(Inflammatory Bowel Diseases)": "D015212", 
-        "D016640(Diabetes, Gestational)": "D016640", 
-        "D037841(Pregnant Women)": "D037841", 
-        "D050177(Overweight)": "D050177", 
-        "D065626(Non-alcoholic Fatty Liver Disease)": "D065626"
-        },
+    {"HV": [
         {
-            "Phylum": "p",
-            "Class": "c",
-            "Order": "o",
-            "Family": "f",
-            "Genus": "g",
-            "Species": "s"
+            "title": "Phenotype (MeSH ID)",
+            "select":{
+                "D000236(Adenoma)": "D000236", 
+                "D001172(Arthritis, Rheumatoid)": "D001172", 
+                "D001528(Behcet Syndrome)": "D001528", 
+                "D001943(Breast Neoplasms)": "D001943", 
+                "D003093(Colitis, Ulcerative)": "D003093", 
+                "D003424(Crohn Disease)": "D003424", 
+                "D003922(Diabetes Mellitus, Type 1)": "D003922", 
+                "D003924(Diabetes Mellitus, Type 2)": "D003924", 
+                "D006973(Hypertension)": "D006973", 
+                "D007234(Infant, Premature)": "D007234", 
+                "D008545(Melanoma)": "D008545", 
+                "D009765(Obesity)": "D009765", 
+                "D011236(Prediabetic State)": "D011236", 
+                "D012778(Short Bowel Syndrome)": "D012778", 
+                "D013167(Spondylitis, Ankylosing)": "D013167", 
+                "D014376(Tuberculosis)": "D014376", 
+                "D014607(Uveomeningoencephalitic Syndrome)": "D014607", 
+                "D015179(Colorectal Neoplasms)": "D015179", 
+                "D015212(Inflammatory Bowel Diseases)": "D015212", 
+                "D016640(Diabetes, Gestational)": "D016640", 
+                "D037841(Pregnant Women)": "D037841", 
+                "D050177(Overweight)": "D050177", 
+                "D065626(Non-alcoholic Fatty Liver Disease)": "D065626"
+            }
+
+        },
+        {   "title":"Taxonomy level",
+            "select":{
+                "Phylum": "p",
+                "Class": "c",
+                "Order": "o",
+                "Family": "f",
+                "Genus": "g",
+                "Species": "s"
+            }
+            
         }]
     }
 ];

@@ -136,10 +136,19 @@ export function construct_block(Bid, block_data){
     var nslt = selects.length;
 
     // create select element
+    // update function: title on select box
     for(var j=0; j<nslt; j++){
+        var sblock = document.createElement("div");
+        var stitle = document.createElement('div');
+        var selectbox = selects[j]['select'];
+        sblock.className = "sdiv col";
+        stitle.className = "select_title"
+        stitle.innerHTML = selects[j]['title'];
         var sid = 'S'+j+Bid;
-        var slt = selector(sid, selects[j]);
-        slt_row.appendChild(slt);
+        var slt = selector(sid, selectbox);
+        sblock.append(stitle);
+        sblock.append(slt);
+        slt_row.appendChild(sblock);
     }
     block_div.appendChild(slt_row);
 

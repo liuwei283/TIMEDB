@@ -4,7 +4,16 @@ class DatasetsController < ApplicationController
         id = session[:user_id]
         @user = User.find(id)
         @dataset = @user.datasets.find(params[:id])
+        @vis = ['id', 'sample_name', 'experiment_type', 'project_name', 'nr_reads_sequenced', 'country', 'abundance_available', 'associated_phenotype']
+        
         @sample_attrs = Sample.column_names
+        @invis = []
+        @sample_attrs.each_with_index do |attr, index|
+            if !@vis.include?(attr)
+                @invis.push(index)
+            end
+        end
+        gon.push invis: @invis
         # user_dir = File.join($user_stor_dir, id.to_s)
         # ds_dir = File.join(user_dir, @dataset.name)
         # Dir.mkdir(ds_dir) unless File.exists?(ds_dir)

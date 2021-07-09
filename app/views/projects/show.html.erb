@@ -42,14 +42,16 @@
   </p>
 
   <div id='hidden_helper'>
-    Hide columns: 
+    Click to view hidden columns:
     <br />
     <% i=1 %>
     <% @sample_attrs.each do |attr| %>
-      <% if attr != 'id'%>
-        <button class="toggle-vis" data-column='<%=i.to_s%>'> 
-          <%= attr%>
-        </button>
+      <% if attr != 'id' %>
+        <% if !@vis.include? attr%>
+          <button class="toggle-vis" data-column='<%=i.to_s%>'> 
+            <%= attr%>
+          </button>
+        <% end %>
         <%i += 1%>
       <%end%>
     <%end%>

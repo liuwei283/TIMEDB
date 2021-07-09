@@ -45,6 +45,7 @@ function modify_set(option, id_set, new_ids){
 
 $(function () { 
     var ids = new Set();
+    var invis = window.gon.invis
     //console.log($("#table_page").data('url'));
     var table = $("#table_page").DataTable({
         fixedColumns: true,
@@ -67,13 +68,33 @@ $(function () {
         {
             targets: -1,
             orderable: false  
-        }],
+        },
+        {
+            targets: invis,
+            visible: false
+        }
+        ],
         searching: true,
         select: {
             style:    'multi',
             selector: 'td:first-child'
         },
         scrollX: true,
+        rowCallback: function(row, data) {
+            if ( data[33] == "<div class='table_cell'> YES </div>" )
+            {
+                $('td:eq(7)', row).css('background-color', '#83FDC0');
+                
+            }
+            else if( data[33] == "<div class='table_cell'> NO </div>" )
+            {
+                $(row).find('td:eq(7)').css('background-color', '#FA9288');
+                
+            }
+            else{
+                //$(row).find('td:eq(7)').css('background-color', 'orange')
+            }         
+        }
     }); 
 
 

@@ -15,9 +15,17 @@ class ProjectsController < ApplicationController
     end
   
     def show
+        @vis = ['id', 'sample_name', 'experiment_type', 'project_name', 'nr_reads_sequenced', 'country', 'abundance_available', 'associated_phenotype']
         @user = User.find(session[:user_id])
         @project = Project.find(params[:id])
         @attrs = Project.column_names
+        @invis = []
+        @attrs.each_with_index do |attr, index|
+            if !@vis.include?(attr)
+                @invis.push(index)
+            end
+        end
+        gon.push invis: @invis
         @sample_attrs = Sample.column_names
         id = session[:user_id]
         @user = User.find(id)
