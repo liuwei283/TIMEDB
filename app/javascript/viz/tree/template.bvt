@@ -3,10 +3,10 @@ svg {
         @if (tree.dataOpt.isRadical) {
             @let radius = tree.dataOpt.treeRadius
             @let maxTextW = Math.ceil(tree.dataOpt.maxTextLength)
+            @let legendW = 140
             Tree {
-                @expr console.log(maxTextW)
                 y = radius + maxTextW
-                x = maxTextW
+                x = maxTextW 
                 r = radius
                 width = radius * 2
                 // height = 600
@@ -94,78 +94,86 @@ svg {
                 }
             }
             Component {
-                x = (tree.dataOpt.showDistinctNodeName) ? 1400 : 1150
+                // x = (tree.dataOpt.showDistinctNodeName) ? 800 : 800
+                x = 2 * (maxTextW + radius)
                 Component {
                     y = 25
                     Text {
-                        fontSize = 16
+                        fontSize = 14
                         style:font-weight="bold"
                         text = "Significant Different"
                     }
                     Component {
-                        y = 50
+                        y = 30
                         Line {
-                            x1 = 0
-                            y1 = 0
-                            x2 = 100
-                            y2 = 0
+                            x1 = 5
+                            y = 0
+                            x2 = 70
                             stroke = "red"
                             strokeWidth = 6
                         }
                         Text.centered {
-                            x = 130
+                            x = 100
                             y = -1
                             text = tree.library.id_group.group1
-                            fontSize = 16
+                            fontSize = 12
                         }
                     }
                     Component {
-                        y = 75
+                        y = 45
                         Line {
-                            x1 = 0
-                            y1 = 0
-                            x2 = 100
-                            y2 = 0
+                            x1 = 5
+                            y = 0
+                            x2 = 70
                             stroke = "blue"
                             strokeWidth = 6
                         }
                         Text.centered {
-                            x = 130
+                            x = 100
                             y = -1
                             text = tree.library.id_group.group2
-                            fontSize = 16
+                            fontSize = 12
                         }
                     }
                 }
                 Component {
-                    y = 130
+                    y = 100
                     Text {
-                        fontSize = 16
+                        fontSize = 14
                         text = "Relative Abundance"
                         style:font-weight="bold"
                     }
-                    @for i in 5 {
-                        Circle.centered {
-                            x = 50
-                            y = (i + 1) * 50
-                            r = tree.max_mean * (5 - i) / 5
+                    Rows {
+                        y = 25
+                        @for i in 5 {
+                        Component {
+                            height = tree.max_mean * (5 - i) / 2.5 + 5
+                            Circle.centered {
+                                fill = "skyblue"
+                                x = tree.max_mean
+                                r = tree.max_mean * (5 - i) / 5
+                                y = tree.max_mean * (5 - i) / 5
+                            }
+                            Text.centered {
+                                x = tree.max_mean * 3
+                                y = tree.max_mean * (5 - i) / 5
+                                fontSize = 12
+                                text = Math.ceil((tree.max_mean * (5 - i) / 5)) + "%"
+                            }
                         }
-                        Text.centered {
-                            x = 50 + tree.max_mean * 2
-                            y = (i + 1) * 50
-                            text = Math.ceil((tree.max_mean * (5 - i) / 5)) + "%"
                         }
                     }
+                    
                 }
                 Component {
-                    y = 430
+                    y = 360
                     Text {
-                        fontSize = 18
+                        fontSize = 14
                         style:font-weight="bold"
                         text = tree.dataOpt.allRank[tree.dataOpt.treeDepth]
                     }
                     Component {
-                        y = 35
+                        y = 35; x = 5
                         @for (node, i) in tree.library.color_dict.depthNodesLegend {
                             Circle {
                                 r = 8
@@ -179,6 +187,7 @@ svg {
                                 x = node.x + 25
                                 y = node.y 
                                 text = node.name.substring(3)
+                                fontSize = 11
                                 // style:font-weight="bold"
                                 // on:mouseenter = setActive(node.name)
                                 // on:mouseleave = setActive(null)
