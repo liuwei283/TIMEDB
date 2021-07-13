@@ -15,6 +15,7 @@ class SubmitController < ApplicationController
       code: false,
       data: ''
     }
+    @result_message = []
     begin
       # @task = Task.find_by! id:params[:job_id], user_id:session[:user_id]
       
@@ -22,9 +23,13 @@ class SubmitController < ApplicationController
       client = LocalApi::Client.new
       # result = client.task_info(UID, 235, 'app')
       # Rails.logger.info result
-      result = client.task_info(UID, 235, 'pipeline')
-      Rails.logger.info result
-      @result_message = result
+      # result = client.task_info(UID, 235, 'pipeline')
+      # result = client.task_info(UID, 238, 'pipeline')
+      # result = client.task_info(UID, 239, 'pipeline')
+      @result_message << client.task_info(UID, 235, 'pipeline')
+      @result_message << client.task_info(UID, 236, 'pipeline')
+      @result_message << client.task_info(UID, 238, 'pipeline')
+      @result_message << client.task_info(UID, 239, 'pipeline')
       # result_json[:data] = result
     rescue StandardError => e
       result_json[:code] = false
