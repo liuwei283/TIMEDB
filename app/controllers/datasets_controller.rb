@@ -42,12 +42,9 @@ class DatasetsController < ApplicationController
         id = session[:user_id]
         @user = User.find(id)
         @dataset = @user.datasets.find(params[:id])
-        user_dir = File.join($user_stor_dir, id.to_s)
-        old_dir = File.join(user_dir, @dataset.name)
+    
          
         if @dataset.update(dataset_params)
-            new_dir = File.join(user_dir, @dataset.name)
-            File.rename(old_dir, new_dir) 
             redirect_to user_dataset_path(@dataset)
         else
             render 'edit'

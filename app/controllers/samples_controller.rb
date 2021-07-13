@@ -119,11 +119,11 @@ class SamplesController < ApplicationController
             @project = Project.find(params[:project_id])
             ids = Sample.filtered(params[:search_value], @project)
             @dataset.add_samples(ids)
-            redirect_to @project
+            redirect_to redirect_to user_dataset_path(@user, @dataset)
         else
             ids = Sample.filtered(params[:search_value])
             @dataset.add_samples(ids)
-            redirect_to samples_path
+            redirect_to redirect_to user_dataset_path(@user, @dataset)
 
         end
          
@@ -138,9 +138,9 @@ class SamplesController < ApplicationController
         @dataset.add_samples(params[:selected_ids]) 
         if params[:project_id]
             @project = Project.find(params[:project_id])
-            redirect_to @project
+            redirect_to user_dataset_path(@user, @dataset)
         else
-            redirect_to samples_path
+            redirect_to user_dataset_path(@user, @dataset)
         end
         
     end
