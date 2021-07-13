@@ -32,11 +32,14 @@ export function init(id, path, config) {
         setup() {
             console.log(this["_data"]);
             if (this.data.tree.dataOpt.isRadical) {
-                this.size.height = this.size.width = 2 * (this.data.tree.dataOpt.treeRadius
+                this.size.width = 2 * (this.data.tree.dataOpt.treeRadius
+                    + Math.ceil(this.data.tree.dataOpt.maxTextLength)) + 140;
+                this.size.height = 2 * (this.data.tree.dataOpt.treeRadius
                     + Math.ceil(this.data.tree.dataOpt.maxTextLength));
             } else {
                 this.size.width = this.size.height = 1000;
             }
+            console.log(this.size.width);
         },
     });
 }

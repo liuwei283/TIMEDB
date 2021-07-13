@@ -154,6 +154,7 @@
 <style scoped lang="scss">
     #vapp {
         height: 100%;
+        background-color: white;
     }
     .task {
         width: 100%;

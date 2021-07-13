@@ -73,7 +73,7 @@
 import Vue from "vue";
 import Component from "vue-class-component";
 import { Prop } from "vue-property-decorator";
-import ColorPicker from "./color-picker.vue";
+import ColorPicker from "page/builtin/color-picker.vue";
 import Reorder from "./reorder.vue";
 
 @Component({

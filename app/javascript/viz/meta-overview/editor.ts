@@ -1,10 +1,7 @@
-// import { showMsgBox } from "packs/vapp";
+import { event } from "crux/dist/utils";
 import { EditorDef, ToolbarDef } from "utils/editor";
 import { copyObject } from "utils/object";
-// import { filterSamples, updateCommentColor, updateGensStat } from "./data";
 import { filterSamples } from "./data";
-import { event } from "crux/dist/utils";
-import { viz_mode } from "page/visualizers";
 
 export const editorRef: any = {};
 
@@ -53,7 +50,6 @@ function updateSampleSorting(v, keys) {
                 } else {
                     getter = s => v.data.metaDict[s][key];
                 }
-                
         }
         getters.push([getter, sOrder === "a"]);
     }
@@ -137,13 +133,6 @@ export function editorConfig(v: any): EditorDef {
 
     // const panelDefs = v.data.panelKeyOrder.filter(key => key !== "pw").map(key => genPanelEditorDef(v, key, v.data.panelNames[key]));
 
-    const genePanelRightInfoOptions = [
-        ["qValue", "Q-Value"],
-        ["pValue", "P-Value"],
-        ["pathway", "Pathway"],
-        ["go", "GO"],
-    ];
-
     const d = v.data;
     const sampleReorderOpts = [
         ["id", "Sample ID"],
@@ -151,54 +140,10 @@ export function editorConfig(v: any): EditorDef {
         // ...d.histoKeys.map((h, i) => [`^hist_${i}`, `Histogram ${h[0].name}: Total`]),
         // ...d.histoKeys.flat().map(k => [k.rawKey, k.key, `Histogram ${k.name}`]),
         ...d.metaFeatures.map(k => [`mt_${k}`, k, "Meta info"]),
-    ]
-        .flatMap(([k, name, p]) => [
+    ].flatMap(([k, name, p]) => [
             { value: `a${k}`, text: `${p ? `${p}: ` : ""}${name} ↑` },
             { value: `d${k}`, text: `${p ? `${p}: ` : ""}${name} ↓` },
         ]);
-    
-    // const histoDefs = d.histoKeys.map((k, i) => histoPanelDef(v, k, i));
-
-    // const pathwayPanelDef = d.pathways.length
-    //     ? [
-    //           {
-    //               id: "pathway",
-    //               title: "Pathway panel",
-    //               layout: "single-page",
-    //               view: {
-    //                   type: "list",
-    //                   items: [
-    //                       {
-    //                           title: "Reorder",
-    //                           type: "vue",
-    //                           component: "reorder",
-    //                           data: {
-    //                               title: "Reorder pathways",
-    //                               array: Array.from(v.data.pathways),
-    //                               callback(array) {
-    //                                   v.data.pathways = array;
-    //                                   update(v);
-    //                               },
-    //                           },
-    //                       },
-    //                       {
-    //                           type: "vue",
-    //                           component: "color-picker",
-    //                           data: {
-    //                               title: "Customize colors",
-    //                               scheme: copyObject(v.data.pathwayColor),
-    //                               id: "pwcolor",
-    //                               callback(colors) {
-    //                                   v.data.pathwayColor = colors;
-    //                                   update(v);
-    //                               },
-    //                           },
-    //                       },
-    //                   ],
-    //               },
-    //           },
-    //       ]
-    //     : [];
 
     return {
         sections: [
@@ -304,25 +249,46 @@ export function editorConfig(v: any): EditorDef {
             {
                 id: "meta",
                 title: "Meta Panel",
-                layout: "single-page",
-                view: {
-                    type: "list",
-                    items: [
-                        {
-                            title: "Reorder meta features",
+                layout: "tabs",
+                tabs: [
+                    {
+                        name: "Settings",
+                        id: "content",
+                        view: {
+                            type: "vue",
+                            component: "meta-info",
+                            data: {
+                                data: v.data.metaFeatures.map(k => ({
+                                    name: k, ...v.data.metaInfo[k],
+                                })),
+                                callback(obj) {
+                                    // console.log(Object.keys(v.data.metaInfo));
+                                    for (const o of obj) {
+                                        v.data.metaInfo[o.name].update(v, o);
+                                    }
+                                    // console.log(v.data.metaInfo);
+                                    update(v);
+                                },
+                            },
+                        },
+                    },
+                    {
+                        name: "Reorder",
+                        id: "reorder",
+                        view: {
                             type: "vue",
                             component: "reorder",
                             data: {
-                                title: `Reorder`,
-                                array: v.data.metaFeatures,
+                                title: `Reorder meta features`,
+                                array:  v.data.metaFeatures,
                                 callback(array) {
                                     v.data.metaFeatures = array;
                                     update(v);
                                 },
                             },
                         },
-                    ],
-                },
+                    },
+                ],
             },
         ],
     };
@@ -443,6 +409,5 @@ function histoPanelDef(v: any, h: any, i: number) {
         ],
     };
 }
-
 
 export const toolbar: ToolbarDef = [];

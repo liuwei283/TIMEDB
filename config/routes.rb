@@ -86,11 +86,12 @@ Rails.application.routes.draw do
   post 'query-app-task', to: 'submit#query_app_task', format: 'json'
   # post 'query-app-task-dummy', to: 'submit#query_app_task_dummy', format: 'json'
   post 'submit-app-task', to: 'submit#submit_app_task', format: 'json'
+  post 'submit-app-task-dummy', to: 'submit#submit_app_task_dummy', format: 'json'
   post 'query-all-tasks', to: 'submit#query_all', format: 'json'
   post 'remove-task', to: 'submit#remove_task', format: 'json'
 
   # admin
-  get '/admin', to: 'admin#index'
+  get '/admin', to: 'admin#index', as: "admin_index"
   post "admin/modify_sample_metadata" => "admin#modify_sample_metadata", :as => "admin/modify_sample_metadata"
   post "admin/modify_sample_abd" => "admin#modify_sample_abd", :as => "admin/modify_sample_abd"
   post "admin/modify_viz" => "admin#modify_viz", :as => "admin/modify_viz"

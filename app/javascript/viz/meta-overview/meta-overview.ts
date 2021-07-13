@@ -1,10 +1,12 @@
 import Oviz from "crux";
 import template from "./template.bvt";
-import { minmax, max } from "crux/dist/utils/math";
+
+import { minmax } from "crux/dist/utils/math";
 import * as d3 from "d3";
+import {computeLog} from "utils/maths";
 
 export class MetaOverview extends Oviz.Component {
-    public colors:any;
+    public colors: any;
     public ovMain: any;
     public ovTree: any;
     public mainHeatmap: number[][];
@@ -21,7 +23,6 @@ export class MetaOverview extends Oviz.Component {
     public boxplot;
 
     public sampleOrderChanged = true;
-    
     private valueRange;
     // private colors = ["pink", "skyblue"];
     private fullDisplay = true;
@@ -37,9 +38,9 @@ export class MetaOverview extends Oviz.Component {
         gapY: 10,
         gridW: 8,
         gridH: 12,
-    }
+    };
     private yPos = 0;
-    private gridW = 6;
+    private gridW = 4;
     private gridH = 12;
     private mainHeight = 300;
     private mainWidth = 1200;
@@ -49,7 +50,11 @@ export class MetaOverview extends Oviz.Component {
     private histLegendLabels;
     private mainRange = [];
     private mainGradientFills = [];
+    private histLegendPos = {x: 1000, y: 20};
+    private mainLegendPos = {x: 1000, y: 210};
     private boxLegendPos = {x: 1000, y: 210};
+
+    private debug = {};
 
     private _sizeUpdated = true;
     public render() {
@@ -58,25 +63,38 @@ export class MetaOverview extends Oviz.Component {
 
     public willRender() {
         if (this._firstRender) {
-            
             this.histLegendLabels = this.species.filter(s => s !== "Other")
                     .map(s => {
                         const labels = [null, s];
                         const names = s.split("|");
-                        const name = names[names.length - 1]; 
+                        const name = names[names.length - 1];
                         labels[0] = name.split("_")[2];
                         return labels;
                     }).sort();
-                    
+
             if (this.species.indexOf("Other")) this.histLegendLabels.push(["Other", "Other"]);
-            
+
             const [min, max] = minmax(this.mainHeatmap.flat().filter(x => x > 0));
-            this.mainRange = [Math.log10(min) , Math.log10(max)];
+            // console.log([[min, max]);
+            // this.mainRange = [Math.log10(min) , Math.log10(max)];
+            this.mainRange = [computeLog(min) , computeLog(max)];
             const gradient = d3.scaleLinear()
-                //.range(["#FFEB3B", "#8E24AA"])
-                .range(["#9999ff", "#ff9933"])
-                .domain(this.mainRange);
-            const div = (this.mainRange[1] - this.mainRange[0])/20;
+                // .range([this.colors.start, this.colors.end])
+                // .domain(this.mainRange);
+                .range([this.colors.start, this.colors.org, this.colors.end])
+                .domain([this.mainRange[0], (this.mainRange[1] + this.mainRange[0])/2
+                            , this.mainRange[1]]);
+                /* @debug
+            this.debug.scale1 = (x) => d3.scaleLinear().range([0, 200])
+                                    .domain([-5, 2])(x);
+            this.debug.scale2 = (x) => d3.scaleLinear().range([0, 200])
+                        .domain([min, max])(x);
+            const debug = this.mainHeatmap.flat().filter(x => x > 0).sort();
+            this.debug.data = [];
+            for (let i = 0; i < debug.length; i += 6) {
+                this.debug.data.push([computeLog(debug[i]), debug[i]]);
+            }*/
+            const div = (this.mainRange[1] - this.mainRange[0]) / 20;
             for (let i = 0; i <= 20; i ++) {
                 this.mainGradientFills.push(gradient(this.mainRange[0] + i * div));
             }
@@ -84,43 +102,40 @@ export class MetaOverview extends Oviz.Component {
                 if (d === 0)
                     return this.colors.na;
                 else {
-                    return d3.scaleLinear()
-                        // .range(["hsl(50, 80%, 60%)", "hsl(10, 80%, 60%)"])
-                        //.range(["#FFEB3B", "#8E24AA"])
-                        .range(["#9999ff", "#ff9933"])
-                        .domain(this.mainRange)(Math.log10(d));
-                        //.domain([min , max])(d);
+                    return gradient(computeLog(d));
                 }
             };
             this.valueRange = [0, max];
-            // this.mainHeatmap.forEach(d => {
-            //     console.log(max(d));
-            // })
             const mainH = this.species.length * this.gridH;
             if (mainH < this.mainHeight) {
                 this.mainHeight = this.sizeSettings.mainHeight = mainH;
             } else {
-                this.gridH = this.mainHeight / this.species.length; 
+                this.gridH = this.mainHeight / this.species.length;
             }
             const mainW = this.filteredSamples.length * this.gridW;
             if (mainW < this.mainWidth) {
                 this.mainWidth = this.sizeSettings.mainWidth = mainW;
             } else {
-                this.gridW = this.mainWidth / this.filteredSamples.length; 
+                this.gridW = this.mainWidth / this.filteredSamples.length;
             }
-            this.boxLegendPos = {x: this.sizeSettings.offsetX + this.mainWidth 
+            this.histLegendPos.x = this.offsetX + this.mainWidth + this.sizeSettings.gapX;
+            this.mainLegendPos = {
+                x: this.offsetX + this.mainWidth + this.sizeSettings.gapX + 100,
+                y: this.sizeSettings.barHeight - 40,
+            };
+            this.boxLegendPos = {x: this.sizeSettings.offsetX + this.mainWidth
                         + this.sizeSettings.boxHeight,
                     y: this.sizeSettings.barHeight + this.sizeSettings.padding };
         }
         if (this._sizeUpdated) {
             this._sizeUpdated = false;
             this.mainWidth = this.filteredSamples.length * this.gridW;
-            this.boxLegendPos = {x: this.sizeSettings.offsetX + this.mainWidth 
+            this.boxLegendPos = {x: this.sizeSettings.offsetX + this.mainWidth
                         + this.sizeSettings.boxHeight,
                     y: this.sizeSettings.barHeight + this.sizeSettings.padding };
-            this.$v.size.width = this.mainWidth + this.sizeSettings.boxHeight 
+            this.$v.size.width = this.mainWidth + this.sizeSettings.boxHeight
                 + this.offsetX + 2 * this.sizeSettings.gapX + 2 * this.sizeSettings.padding;
-        } 
+        }
     }
 
     protected state = {
@@ -130,13 +145,15 @@ export class MetaOverview extends Oviz.Component {
         newHeight: null,
         mode: null,
         updated: null,
+        dragStartPos: null,
+        legendPos: null,
     };
 
     private setActive(x: number|string, y: number = null) {
         if (typeof x === "string") {
             const xPos = this.filteredSamples.indexOf(x) * this.gridW + this.offsetX;
             this.setState({activeX: xPos});
-        } else 
+        } else
             this.setState({ activeX: x, activeY: y });
     }
 
@@ -181,28 +198,33 @@ export class MetaOverview extends Oviz.Component {
         // this.setState({updated: true});
     }
 
-    private zoomMain(orientation: string, zoomIn :boolean = false) {
-        if (orientation === "h") {
-
-        } else {
-
-        } 
-    }
-
     protected dragStart(ev, el) {
-        el.$parent.$on['mousemove'] = (evp, elp) => {
-            let [legendX, legendY] = Oviz.utils.mouse(elp, evp);
+        const [x, y] = Oviz.utils.mouse(el.$parent, ev);
+        this.setState({dragStartPos: {x, y}});
+        el.$parent.$on["mousemove"] = (evp, elp) => {
+            const [newX, newY] = Oviz.utils.mouse(elp, evp);
             if (el.id === "boxLegend") {
-                this.boxLegendPos = {x: legendX+35, y: legendY-30};
+                this.boxLegendPos = {x: this.boxLegendPos.x + newX
+                        - this.state.dragStartPos.x,
+                    y: this.boxLegendPos.y + newY - this.state.dragStartPos.y};
+            } else if (el.id === "histLegend") {
+                this.histLegendPos = {x: this.histLegendPos.x + newX
+                        - this.state.dragStartPos.x,
+                    y: this.histLegendPos.y + newY - this.state.dragStartPos.y};
+            } else {
+                this.mainLegendPos = {x: this.mainLegendPos.x + newX
+                        - this.state.dragStartPos.x,
+                    y: this.mainLegendPos.y + newY - this.state.dragStartPos.y};
             }
-            this.setState({legendX, legendY});
-        }
+            this.setState({dragStartPos: {x: newX, y: newY}});
+        };
         el.stage = "dragging";
     }
 
     protected dragEnd(ev, el) {
-        delete el.$parent.$on['mousemove'];
         el.stage = null;
-        this.setState({legendX:null, legendY:null});
+        delete el.$parent.$on["mousemove"];
+        this.setState({dragStartPos: null});
+        // this.setState({legendX: null, legendY: null});
     }
 }

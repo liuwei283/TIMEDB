@@ -19,10 +19,18 @@ const width = 960,
         rangeMax: "#3262a8",
     };
 
+const scaleBarPos = d3.scaleLinear().range([0, 80])
+.domain([1, 3]);
+
 const svg = d3.select("#world-map")
             .append("svg:svg")
             .attr("width", width)
             .attr("height", height + paddingB);
+// Define the div for the tooltip
+const div = d3.select("#world-map").append("div")
+            .attr("class", "tooltip")
+            .style("events", "none")
+            .style("opacity", 0);
 
 svg.append("g").attr("id", "container");
 const projection = d3.geoNaturalEarth1();
@@ -31,9 +39,60 @@ const pathGenerator = d3.geoPath().projection(projection);
 const g = d3.select("#container").append("g").attr("id","zoom-area");
 
 const otherG = d3.select("#container").append("g").attr("id", "other")
-    .attr("transform", `translate(50, ${ height - 100})`)
+    .attr("transform", `translate(50, ${ height - 50})`);
 const legendG = d3.select("#container").append("g").attr("id", "legend")
-    .attr("transform", `translate(0, ${ height})`)
+    .attr("transform", `translate(0, ${ height})`);
+const zoomBarG = d3.select("#container").append("g").attr("id", "zoomBar")
+    .attr("transform", `translate(${width - 100}, ${ height - 50})`);
+zoomBarG.append("polygon").attr("points", "0,0 10,0 5,10")
+        .attr("id", "scaleAnchor").attr("transform", "translate(0,10)")
+        .attr("fill", "#666");
+
+const scaleTicks = [1, 1.5, 2, 2.5, 3];
+
+zoomBarG.selectAll("line").data(scaleTicks)
+    .enter()
+    .append("line")
+    .attr("stroke", "#000")
+    .attr("y1", 20)
+    .attr("y2", 15)
+    .attr("x1", (d) => scaleBarPos(d)+5)
+    .attr("x2", (d) => scaleBarPos(d)+5);
+zoomBarG.selectAll("text").data(scaleTicks)
+    .enter()
+    .append("text")
+    .attr("font-size", "11")
+    .attr("y", 32)
+    .attr("text-anchor", "middle")
+    .text((d) => d)
+    .attr("x", (d) => scaleBarPos(d)+5);
+zoomBarG.append("text").text("Zoom Scale:")
+        .attr("font-size", "11").attr("x", 0).attr("y", 0)
+        .on("mouseover", () => {
+            // //tip.show(d);
+            div.transition()
+                .duration(200)
+                .style("opacity", 1);
+            div.html(`<strong>Wheel to zoom in/out</strong><br>
+                    <strong>Click on blank space to reset</strong>`)
+                .style("left", (d3.event.pageX + 15) + "px")
+                .style("top", (d3.event.pageY + 15) + "px")
+                .style("padding", "5px")
+                .style("border-radius", "3px")
+                .style("color", "white")
+                .style("background-color", "rgba(50,50,50, 0.85)");
+          }).on("mouseout", () => {
+            div.transition()
+                .duration(500)
+                .style("opacity", 0);
+          });
+zoomBarG.append("line").attr("strokeWidth", 1)
+        .attr("stroke", "#000").attr("x1", 5).attr("y1", 20)
+        .attr("x2", 85).attr("y2", 20);
+// zoomBarG.append("text").text("1").attr("text-anchor", "middle")
+//         .attr("x", 5).attr("y", 30).attr("font-size", 11);
+// zoomBarG.append("text").text("3").attr("text-anchor", "middle")
+//         .attr("x", 85).attr("y", 30).attr("font-size", 11);
 legendG.append("rect")
     .attr("fill", "white")
     .attr("width", width)
@@ -65,12 +124,12 @@ legendG.append("rect")
         .attr("height", paddingB/5);
 const grad = schemeGradient(colors.rangeMin, colors.rangeMax);
 
-const reset =() => {
+const reset = () => {
     g.transition().duration(50).call(
         zoom.transform,
         d3.zoomIdentity,
       );
-}
+};
 d3.select("#container").append("rect").attr("width", width).attr("height", height).attr("stroke", "grey").attr("strokeWidth", 2).attr("fill", "none");
 g.append("path")
     .attr("class", "sphere")
@@ -101,15 +160,14 @@ axios.all([axios.get("/data/static_viz_data/world_map/countries-110m.json"), axi
     const myScale = d3.scaleLinear()
                         .domain([0, max])
                         .range([0, 1]);
-
-    // Define the div for the tooltip
-    const div = d3.select("#world-map").append("div")
-        .attr("class", "tooltip")
-        .style("events", "none")
-        .style("opacity", 0);
+    // const div = d3.select("#world-map").append("div")
+    //     .attr("class", "tooltip")
+    //     .style("events", "none")
+    //     .style("opacity", 0);
     g.selectAll("path").data(countries)
         .enter()
         .append("path")
+        .attr("id", (d) => d.properties.name)
         .attr("class", "country")
         .attr("d", pathGenerator)
         .attr("fill", (d) => {
@@ -121,7 +179,7 @@ axios.all([axios.get("/data/static_viz_data/world_map/countries-110m.json"), axi
         .attr("opacity", 0.9)
         .attr("stroke", colors.background)
         .attr("strokeWidth", "1")
-        .on("mouseover", (d) => {
+        .on("mouseover", function (d) {
             // //tip.show(d);
             div.transition()
                 .duration(200)
@@ -135,6 +193,8 @@ axios.all([axios.get("/data/static_viz_data/world_map/countries-110m.json"), axi
                 .style("color", "white")
                 .style("background-color", "rgba(50,50,50, 0.85)");
             d3.select(this)
+              .transition()
+              .duration(100)
               .style("opacity", 1)
               .style("stroke", colors.activeStroke)
               .style("stroke-width", 2);
@@ -143,20 +203,17 @@ axios.all([axios.get("/data/static_viz_data/world_map/countries-110m.json"), axi
             div.style("left", (d3.event.pageX + 15) + "px")
                 .style("top", (d3.event.pageY + 15) + "px");
           })
-          .on("mouseout", (d) => {
+          .on("mouseout", function (d) {
             div.transition()
                 .duration(500)
                 .style("opacity", 0);
             d3.select(this)
+              .transition()
+              .duration(100)
               .style("opacity", 0.9)
               .style("stroke", colors.background)
               .style("stroke-width", 1);
           });
-    // otherG.append("rect")
-    //       .attr("width", 100)
-    //       .attr("height", 70)
-    //       .attr("fill", "white")
-    //       .attr("stroke", "black");
     otherG.append("text").text(`Unknown: ${dict["NULL"]}`)
           .attr("x", 0).attr("y", 20);
   }));
@@ -167,6 +224,11 @@ const zoom = d3.zoom()
     .translateExtent([[0, 0], [width, height]])
     .on("zoom", () => {
         g.attr("transform", d3.event.transform);
+        const offsetX = scaleBarPos(d3.event.transform.k);
+        d3.select("#scaleAnchor")
+          .transition()
+          .duration(100)
+          .attr("transform", `translate(${offsetX}, 10)`);
     });
 
 svg.call(zoom);

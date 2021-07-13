@@ -84,11 +84,16 @@ class SubmitController < ApplicationController
   def query_all # query all tasks by user
     @tasks = Task.where("user_id = ?", session[:user_id])
     parsed_jobs = []
+    result = nil
     @tasks.each do |t|
       # submit task
       if t.status == 'running' || t.status == "submitted"
         client = LocalApi::Client.new
-        result = client.task_info(UID, t.tid, 'app')
+        if !t.analysis.blank?
+          result = client.task_info(UID, t.tid, 'app')
+        else
+          result = client.task_info(UID, t.tid, 'pipeline')
+        end
         Rails.logger.debug "===>#{result}"
         if result['status'] == 'success'
           t.status = result['message']['status']
@@ -194,37 +199,29 @@ class SubmitController < ApplicationController
       app_inputs = params[:inputs]
       app_params = params[:params]
       app_selected = params[:selected]
-      is_analysis = true
+      is_pipeline = params[:is_pipeline]
       if !params[:mid].blank?
         @analysis = Analysis.find_by mid:params[:mid]
       else
-        is_analysis = false
         @pipeline = AnalysisPipeline.find_by pid:params[:pid]
       end
 
       # submit task
 
-      result_hash = {
-        message: {
-          code: 0,
-          data: {
-            task_id: 10,
-            msg: 'success'
-          }
-        }
-      }
+      result_hash = {status:"success", 
+        message:{code:true, data:{msg:"Task submitted.", task_id:237}}}
       result = JSON.parse(result_hash.to_json)
       if result['message']['code']
         result_json[:code] = true
         @task  = @user.tasks.new
         @task.status = 'submitted'
         @task.tid = result['message']['data']['task_id']
-        if is_analysis
-          @task.analysis = @analysis
-          @task.analysis_pipeline = nil
-        else
+        if is_pipeline
           @task.analysis_pipeline = @pipeline
           @task.analysis = nil
+        else
+          @task.analysis = @analysis
+          @task.analysis_pipeline = nil
         end
         @task.save!
         @user.updated_at = Time.now
@@ -261,8 +258,12 @@ class SubmitController < ApplicationController
       app_params = params[:params]
       app_selected = params[:selected]
       is_pipeline = params[:is_pipeline]
-      @analysis = Analysis.find_by mid:params[:mid]
-
+      # @analysis = Analysis.find_by mid:params[:mid]
+      if !params[:mid].blank?
+        @analysis = Analysis.find_by mid:params[:mid]
+      else
+        @pipeline = AnalysisPipeline.find_by pid:params[:pid]
+      end
       inputs = Array.new
       params = Array.new
 
@@ -326,17 +327,16 @@ class SubmitController < ApplicationController
       # Rails.logger.info(result['message'])
       Rails.logger.debug "===========>"
       Rails.logger.info(result)
-      if is_pipeline
-        render json: {
-          code: false,
-          data: result
-        }
-        return
-      end
       if result['message']['code']
         result_json[:code] = true
         @task  = @user.tasks.new
-        @task.analysis = @analysis
+        if is_pipeline
+          @task.analysis_pipeline = @pipeline
+          @task.analysis = nil
+        else
+          @task.analysis = @analysis
+          @task.analysis_pipeline = nil
+        end
         @task.status = 'submitted'
         @task.tid = result['message']['data']['task_id']
         @task.save!
@@ -345,7 +345,7 @@ class SubmitController < ApplicationController
         result_json[:data] = {
           'msg': result['message']['data']['msg'],
           'task_id': @task.id
-        }  
+        }
       else
         result_json[:code] = false
         result_json[:data] = {
@@ -434,6 +434,16 @@ class SubmitController < ApplicationController
     render json: result_json
   end
 
+  def remove_task
+    @task = Task.find params[:job_id]
+    @analysis_user_datum = AnalysisUserDatum.find_by task_output: @task.task_outputs[0]
+    @analysis_user_datum.task_output = nil
+    @analysis_user_datum.use_demo_file = true
+    @analysis_user_datum.save!
+    @task.destroy!
+    render json:{code:true}
+  end
+
   private
 
   def process_module_result
@@ -508,16 +518,6 @@ class SubmitController < ApplicationController
     parsed_output['analysis_id'] = @analysis.id
     parsed_output['required_data'] = @analysis.files_info.keys
     return parsed_output
-  end
-
-  def remove_task
-    @task = Task.find params[:job_id]
-    @analysis_user_datum = AnalysisUserDatum.find_by task_output: @task.task_outputs[0]
-    @analysis_user_datum.task_output = nil
-    @analysis_user_datum.use_demo_file = true
-    @analysis_user_datum.save!
-    @task.destroy!
-    render json:{code:true}
   end
 
   def encode(id)
