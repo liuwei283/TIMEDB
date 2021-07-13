@@ -322,13 +322,6 @@ class SubmitController < ApplicationController
       # Rails.logger.info(result['message'])
       Rails.logger.debug "===========>"
       Rails.logger.info(result)
-      if is_pipeline
-        render json: {
-          code: false,
-          data: result
-        }
-        return
-      end
       if result['message']['code']
         result_json[:code] = true
         @task  = @user.tasks.new
