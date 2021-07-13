@@ -39,7 +39,7 @@ export function findLowerBound(x: number, sigDigit: number = 2): number {
     return parseFloat(Math.floor(x).toPrecision(sigDigit));
 }
 
-export function computeLog(number, base): number {
+export function computeLog(number, base = 10): number {
     return Math.log(number) / Math.log(base);
 }
 
