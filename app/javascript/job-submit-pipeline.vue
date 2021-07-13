@@ -134,7 +134,6 @@
     import VueTagsInput from '@johmun/vue-tags-input';
     import AlertCenter from 'components/alert-center.vue';
     import GlobalSaveButton from 'components/global-save-button.vue';
-    import path from 'path'
 
     Vue.use(BootstrapVue);
 
@@ -254,10 +253,8 @@
                             "inputs": this.files,
                             "params": this.formatParams(),
                             "selected": this.selected,
-                            "mid": this.id,
+                            "pid": this.id,
                             "is_pipeline": true,
-                            // "inputs": this.formatInputs(),
-                            // "params": this.formatParams(),
                         }),
                         {
                             
@@ -281,7 +278,6 @@
                     });
                 }
             },
-
             setSelectBox(){
                 var i = 0;
                 var s = "<option disabled vaule=''>Choose a file</option>";

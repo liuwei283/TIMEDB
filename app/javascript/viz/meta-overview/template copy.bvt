@@ -4,8 +4,6 @@ Component {
     @let displayW = fullDisplay ? mainWidth : sizeSettings.mainWidth
     @let displayH = fullDisplay ? mainHeight : sizeSettings.mainHeight
     @let showBoxplot = gridH > 10
-    
-    // stacked bar
     XYPlot {
         static = true
         discreteCategory = true
@@ -18,28 +16,135 @@ Component {
         }
         // gap = 1
         padding = 0
-        gap = 0
         StackedBars {
+            static = true
             data = "stacked" 
             :children(d) {
-                Rect {
-                    width = 100%; height = @geo(100, 1)
+                Rect.full{
                     fill = hist.colorMap[d.key]
+                    // width = 40; x = 50%
+                    anchor = @anchor("top","center")
                     on:mouseenter = setActive(d.data.data[0])
                     on:mouseleave = setActive(null)
                     behavior:tooltip {
                         content = `sample ID: ${d.data.data[0]}<br>species: ${d.key}<br> relative abundance: ${d.data.data[1]}%`
                     }
-                    stroke = "none"
                 }
             }
             width = 100%
             height = 100%
-            // stroke = "#fff"
-            stroke = "none"
+            stroke = "#fff"
             fill = "none"
         }
     }
+
+    // control panel
+    // Component {
+    //     key = "controller"
+    //     x = 20; y = 20; width = 100; height = 180
+    //     @let triProps = {fill: "#aaa", stroke: "#000", "style:cursor": "pointer"}
+    //     @let rectProps = {width: 30, height: 15, fill: "#999", strokeWidth: 0.5, stroke: "#000"}
+    //     // Rect.full {
+    //     //     fill = controllerMode === "zoom" ? "rgb(200,0,0,0.2)" : "rgb(0,200,0,0.2)"
+    //     //     on:wheel = (ev) => controlMain(ev)
+    //     //     on:click = swicthMode
+    //     // }
+    //     Rect.full {
+    //         stroke = "#000"; fill = "#666"
+    //     }
+    //     Circle.centered {
+    //         x = 50; y = 90; r = 45; stroke = "#000"; fill = "none"
+    //     }
+    //     Component {
+    //         x = 50; y = 2; height = 40; width = 80
+    //         Rect.full {
+    //             fill = "#aa6"; stroke = "#000"; anchor = @anchor("t", "c")
+    //         }
+    //         Text.centered {
+    //             fill = "#000"; text = "h-scale: 1.0"; fontSize = 11
+    //             anchor = @anchor("t","c");  y = 2
+    //         }
+    //         Text.centered {
+    //             fill = "#000"; text = "v-scale: 1.0"; fontSize = 11
+    //             anchor = @anchor("t","c");  y = 14
+    //         }
+    //         Text.centered {
+    //             fill = "#000"; text = "display: full"; fontSize = 11
+    //             anchor = @anchor("t","c");  y = 26
+    //         }
+    //     }
+        
+    //     Component {
+    //         y = 137
+    //         Text.centered {
+    //             text = "- h +"; y = 9; x = 50; fill = "#fff"; fontSize = 11
+    //         }
+    //         Rect {
+    //             on:click = zoomMain("h",false); x = 5; y = 0; style:cursor = "pointer"
+    //             @props rectProps
+    //         }
+    //         Rect {
+    //             on:click = zoomMain("h",true); x = 65; y = 0; style:cursor = "pointer"
+    //             @props rectProps
+    //         }
+    //         Text.centered {
+    //             text = "- v +"; y = 27; x = 50; fill = "#fff"; fontSize = 11
+    //         }
+    //         Rect {
+    //             on:click = zoomMain("v",false); x = 5; y = 20; style:cursor = "pointer"
+    //             @props rectProps
+    //         }
+    //         Rect {
+    //             on:click = zoomMain("v",true); x = 65; y = 20; style:cursor = "pointer"
+    //             @props rectProps
+    //         }
+            
+            
+            
+
+            
+    //         // Path {
+    //         //    d = "M -5 10 L -30 0 L -45 0 L -45 20 L -30 20 L -5 10"; fill = "#aaa"
+    //         //     style:cursor= "pointer"; on:click = zoomMain("h",true)
+    //         // }
+    //         // Text.centered {
+    //         //     text = "h-"; y = 10; x = -35; fill = "#fff"; fontSize = 10
+    //         // }
+    //         // Path {
+    //         //    d = "M 5 10 L 30 0 L 45 0 L 45 20 L 30 20 L 5 10"; fill = "#aaa"
+    //         //     style:cursor= "pointer"; on:click = zoomMain("h",true)
+    //         // }
+    //         // Text.centered {
+    //         //     text = "h+"; y = 10; x = 35; fill = "#fff"; fontSize = 10
+    //         // }
+    //     }
+    //     Triangle {
+    //         @props triProps
+    //         orientation = "top"; width = 30; height = 20
+    //         anchor = @anchor("t", "c"); x = 50; y = 48
+    //     }
+    //     Triangle {
+    //         @props triProps
+    //         orientation = "bottom"; width = 30; height = 20
+    //         anchor = @anchor("b", "c"); x = 50; y = 132
+    //     }
+    //     Triangle {
+    //         @props triProps
+    //         orientation = "left";width = 20; height = 30
+    //         anchor = @anchor("l", "m"); x = 8; y = 90
+    //     }
+    //     Triangle {
+    //         @props triProps
+    //         orientation = "right"; width = 20; height = 30
+    //         anchor = @anchor("r", "m"); x = 92; y = 90
+    //     }
+    //     Rect.centered {
+    //         x = 50; y = 90; width = 30; height = 30
+    //         on:click = fitSize; style:cursor = "pointer"
+    //         fill = "#a33"; stroke = "#000"
+    //     }
+        
+    // }
 
     //main area
     Component {
@@ -56,7 +161,7 @@ Component {
                 data = ovTree
                 direction = "right"
                 link.stroke = "#000"
-                :leaf {
+                :leaf({leaf, tree}) {
                     Component{}
                 }
                 :node {
@@ -65,12 +170,12 @@ Component {
             }
 
             Component {
-                x = offsetX
+                x = offsetX; static = true
                 @for (r, i) in mainHeatmap {
                     @for (sample, j) in r {
                         Rect {
                             key = `main-${i}-${j}`
-                            height = gridH; width = gridW; x = gridW * j; y = gridH * i
+                            height = gridH - 1; width = gridW - 1; x = gridW * j; y = gridH * i
                             fill = mainColorGetter(sample)
                             on:mouseenter = setActive(gridW * j + offsetX, gridH * i + offsetY)
                             on:mouseleave = setActive(null, null)
@@ -113,7 +218,7 @@ Component {
                             y = -gridH/6 + gridH * index /3
                             :box (_d) {
                                 Rect.full  {
-                                    fill = "#fff"
+                                    fill = color
                                     stroke = color
                                     behavior:tooltip {
                                         content = (`min: ${_d.data[0].toExponential(2)} <br>
@@ -131,10 +236,10 @@ Component {
                                 }
                             }
                             :outlier{
-                                Circle.centered { r = 1.5; fill = color }
+                                Circle.centered { r = 2; fill = color }
                             }
                             :mean(means) {
-                                Line {y1 = 33%; y2 = 66%; stroke = color}
+                                Line {y1 = 33%; y2 = 66%; stroke = "#fff"}
                             }
                             :median(d) {}
                         }
@@ -231,11 +336,11 @@ Component {
                                 @let metaFill = metaInfo[f].color(d)
                             @if !!metaFill {
                                 Rect {
-                                    height = 95%; width = gridW; x = gridW * j; fill = metaFill
+                                    height = 95%; width = gridW - 1; x = gridW * j; fill = metaFill
                                 }
                             } @else {
                                 Rect {
-                                    height = 95%; width = gridW; x = gridW * j; fill = colors.na
+                                    height = 95%; width = gridW - 1; x = gridW * j; fill = colors.na
                                 }
                                 Line {
                                     x1 = gridW * j; x2 = gridW * j + gridW; y1 = 95%; y2 = 0; stroke = "red"
@@ -257,40 +362,12 @@ Component {
         }
     }
 
-    // Component { //debug plot
-    //     y = offsetY + displayH + 80; x = 0
-    //     height = 200
-    //     @let pos = 0
-    //     // @expr console.log(debug.data.length)
-    //     @for value in debug.data {
-            
-    //         Circle.centered {
-    //             @expr pos +=2
-    //             x = pos; y = 200 - debug.scale1(value[0])
-    //             r = 1; fill = "green"
-    //         }
-    //         Circle.centered {
-    //             x = pos; y = 200 - debug.scale2(value[1])
-    //             r = 1; fill = "blue"
-    //         }
-    //     }
-    //     Line {
-    //         x = offsetX + displayW + sizeSettings.gapX + sizeSettings.boxHeight
-    //         y1 = 0; y2 = 200
-    //     }
-    //     Line {
-    //         x2 = offsetX + displayW + sizeSettings.gapX + sizeSettings.boxHeight
-    //         y = 200/7
-    //     }
-    // }
     //legends
     Component {
         key = "histLegend"
-        // static = true;
-        height = 156; width = 200
-        on:mousedown = (ev, el) => dragStart(ev, el)
-        on:mouseup = (ev, el) => dragEnd(ev, el)
-        @props histLegendPos
+        static = true;
+        height = 156; width = 200; 
+        x = offsetX + displayW + sizeSettings.gapX; y = 20
         Rect.full {
             fill = "#fff"; stroke = "#000"; strokeWidth = 0.5
         }
@@ -320,11 +397,9 @@ Component {
 
     Component {
         key = "mainLegend"
-        x = mainLegendPos.x; y = mainLegendPos.y
-        // static = true
+        static = true;
+        x = offsetX + displayW + sizeSettings.gapX + 100; y = sizeSettings.barHeight - 40
         height = 50; width = 100
-        on:mousedown = (ev, el) => dragStart(ev, el)
-        on:mouseup = (ev, el) => dragEnd(ev, el)
         Rect.full {
             strokeWidth = 0.5; fill = "#fff"; stroke = "#000"
         }
@@ -354,6 +429,7 @@ Component {
                 }
             }
         }
+        
     }
     Component { // boxplot legend
         key = "boxLegend"

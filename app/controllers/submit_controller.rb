@@ -194,37 +194,29 @@ class SubmitController < ApplicationController
       app_inputs = params[:inputs]
       app_params = params[:params]
       app_selected = params[:selected]
-      is_analysis = true
+      is_pipeline = params[:is_pipeline]
       if !params[:mid].blank?
         @analysis = Analysis.find_by mid:params[:mid]
       else
-        is_analysis = false
         @pipeline = AnalysisPipeline.find_by pid:params[:pid]
       end
 
       # submit task
 
-      result_hash = {
-        message: {
-          code: 0,
-          data: {
-            task_id: 10,
-            msg: 'success'
-          }
-        }
-      }
+      result_hash = {status:"success", 
+        message:{code:true, data:{msg:"Task submitted.", task_id:237}}}
       result = JSON.parse(result_hash.to_json)
       if result['message']['code']
         result_json[:code] = true
         @task  = @user.tasks.new
         @task.status = 'submitted'
         @task.tid = result['message']['data']['task_id']
-        if is_analysis
-          @task.analysis = @analysis
-          @task.analysis_pipeline = nil
-        else
+        if is_pipeline
           @task.analysis_pipeline = @pipeline
           @task.analysis = nil
+        else
+          @task.analysis = @analysis
+          @task.analysis_pipeline = nil
         end
         @task.save!
         @user.updated_at = Time.now
@@ -261,8 +253,12 @@ class SubmitController < ApplicationController
       app_params = params[:params]
       app_selected = params[:selected]
       is_pipeline = params[:is_pipeline]
-      @analysis = Analysis.find_by mid:params[:mid]
-
+      # @analysis = Analysis.find_by mid:params[:mid]
+      if !params[:mid].blank?
+        @analysis = Analysis.find_by mid:params[:mid]
+      else
+        @pipeline = AnalysisPipeline.find_by pid:params[:pid]
+      end
       inputs = Array.new
       params = Array.new
 
@@ -336,7 +332,13 @@ class SubmitController < ApplicationController
       if result['message']['code']
         result_json[:code] = true
         @task  = @user.tasks.new
-        @task.analysis = @analysis
+        if is_pipeline
+          @task.analysis_pipeline = @pipeline
+          @task.analysis = nil
+        else
+          @task.analysis = @analysis
+          @task.analysis_pipeline = nil
+        end
         @task.status = 'submitted'
         @task.tid = result['message']['data']['task_id']
         @task.save!
@@ -345,7 +347,7 @@ class SubmitController < ApplicationController
         result_json[:data] = {
           'msg': result['message']['data']['msg'],
           'task_id': @task.id
-        }  
+        }
       else
         result_json[:code] = false
         result_json[:data] = {

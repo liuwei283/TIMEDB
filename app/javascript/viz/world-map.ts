@@ -66,14 +66,15 @@ zoomBarG.selectAll("text").data(scaleTicks)
     .attr("text-anchor", "middle")
     .text((d) => d)
     .attr("x", (d) => scaleBarPos(d)+5);
-zoomBarG.append("text").text("Current Scale:")
+zoomBarG.append("text").text("Zoom Scale:")
         .attr("font-size", "11").attr("x", 0).attr("y", 0)
         .on("mouseover", () => {
             // //tip.show(d);
             div.transition()
                 .duration(200)
                 .style("opacity", 1);
-            div.html(`<strong>Wheel to zoom in/out</strong>`)
+            div.html(`<strong>Wheel to zoom in/out</strong><br>
+                    <strong>Click on blank space to reset</strong>`)
                 .style("left", (d3.event.pageX + 15) + "px")
                 .style("top", (d3.event.pageY + 15) + "px")
                 .style("padding", "5px")

@@ -1,11 +1,11 @@
 import Oviz from "crux";
-import { register } from "page/visualizers";
-import { MetaOverview } from "./meta-overview";
-import { getLeafOrder, main, meta } from "./data";
-import { registerEditorConfig } from "utils/editor";
-import { editorConfig, editorRef } from "./editor";
 import {controlGroupColors} from "oviz-common/palette";
+import { register } from "page/visualizers";
+import { registerEditorConfig } from "utils/editor";
 
+import { getLeafOrder, main, meta } from "./data";
+import { editorConfig, editorRef } from "./editor";
+import { MetaOverview } from "./meta-overview";
 
 const MODULE_NAME = "meta-overview";
 
@@ -23,8 +23,14 @@ function init() {
             colors: {
                 control: controlGroupColors[0],
                 gout: controlGroupColors[1],
-                na: "#777",
-            }
+                // na: "#777",
+                na: "#333",
+                // start: "#fff7f3",
+                // end: "#0A2299",
+                start: "#800000",
+                org: "#FF5050",
+                end: "#FFFF00",
+            },
         },
         loadData: {
             ovTree: {
