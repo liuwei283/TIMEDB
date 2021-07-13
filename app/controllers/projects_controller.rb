@@ -5,8 +5,16 @@ class ProjectsController < ApplicationController
     $tmp_dir = "#{Rails.root}/app/data/tmp/"
 
     def index
+        @vis = ['id', 'name', 'num_of_samples', 'num_of_runs', 'related_publications', 'original_description']
         @projects = Project.order(:name)
         @attrs = Project.column_names
+        @invis = []
+        @attrs.each_with_index do |attr, index|
+            if !@vis.include?(attr)
+                @invis.push(index+1)
+            end
+        end
+        gon.push invis: @invis
         respond_to do |format|
             format.html
             format.csv { send_data @projects.to_csv }
@@ -19,14 +27,15 @@ class ProjectsController < ApplicationController
         @user = User.find(session[:user_id])
         @project = Project.find(params[:id])
         @attrs = Project.column_names
+        @sample_attrs = Sample.column_names
         @invis = []
-        @attrs.each_with_index do |attr, index|
+        @sample_attrs.each_with_index do |attr, index|
             if !@vis.include?(attr)
-                @invis.push(index)
+                @invis.push(index+1)
             end
         end
         gon.push invis: @invis
-        @sample_attrs = Sample.column_names
+        
         id = session[:user_id]
         @user = User.find(id)
         @datasets = @user.datasets

@@ -29,7 +29,7 @@
   <div id='hidden_helper'>
     Click to view hidden columns:
     <br />
-    <% i=1 %>
+    <% i=2 %>
     <% @sample_attrs.each do |attr| %>
       <% if attr != 'id' %>
         <% if !@vis.include? attr%>
@@ -49,9 +49,9 @@
             <input type="checkbox" class="selectAll" name="selectAll" value="all"> 
           </th>
           <% @sample_attrs.each do |attr| %>
-            <% if attr != 'id'%>
-              <th> <%= attr %> </th>
-            <% end %>
+            
+            <th> <%= attr %> </th>
+           
           <% end %>
           <th>Action</th>
     </thead>

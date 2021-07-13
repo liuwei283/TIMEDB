@@ -62,6 +62,24 @@ class AdminController < ApplicationController
         redirect_to '/admin', notice: "ALL Abundance data uploaded."
     end
 
+    def delete_samples
+        up_file = params[:file]
+        if up_file.respond_to?(:read)
+            data = up_file.read
+            lines = data.split("\n")
+            lines.each do |line|
+                id = line.chomp
+                if Sample.exists? id
+                    Sample.find(id).destroy
+                end
+            end
+
+        else
+            logger.error "Bad file_data: #{up_file.class.name}: #{up_file.inspect}"
+        end
+        redirect_to '/admin', notice: "Samples deleted."
+    end
+
     def update_all_samples
         Sample.import(params[:file])
         redirect_to '/admin', notice: "Samples imported."

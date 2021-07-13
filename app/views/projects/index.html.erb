@@ -19,14 +19,16 @@
   </p>
 
   <div id='hidden_helper'>
-    Hide columns: 
+    Click to view hidden columns: 
     <br />
-    <% i=1 %>
+    <% i=2 %>
     <% @attrs.each do |attr| %>
       <% if attr != 'id'%>
-        <button class="toggle-vis" data-column='<%=i.to_s%>'> 
-          <%= attr %>
-        </button>
+        <% if !@vis.include? attr%>
+          <button class="toggle-vis" data-column='<%=i.to_s%>'> 
+            <%= attr%>
+          </button>
+        <% end %>
         <%i += 1%>
       <%end%>
     <%end%>
@@ -39,9 +41,9 @@
               <input type="checkbox" class="selectAll" name="selectAll" value="all">
             </th>
             <% @attrs.each do |attr| %>
-              <% if attr != 'id'%>
-                <th> <%= attr %> </th>
-              <% end %>
+              
+              <th> <%= attr %> </th>
+              
             <% end %>
             <th>Action</th>
       </thead>

@@ -11,7 +11,7 @@ class SamplesController < ApplicationController
         @invis = []
         @sample_attrs.each_with_index do |attr, index|
             if !@vis.include?(attr)
-                @invis.push(index)
+                @invis.push(index+1)
             end
         end
         gon.push invis: @invis

@@ -31,7 +31,7 @@
     <div id='hidden_helper'>
         Click to view hidden columns: 
         <br />
-        <% i=1 %>
+        <% i=2 %>
         <% @sample_attrs.each do |attr| %>
         <% if attr != 'id'%>
             <% if !@vis.include? attr%>
@@ -44,16 +44,16 @@
         <%end%>
     </div>
 
-    <%= form_tag delect_sample_user_dataset_path, multipart: true do %>  
+    <%= form_tag delete_sample_user_dataset_path, multipart: true do %>  
         <%= content_tag :table, role: :datatable, class: "display", id: "table_page", data: { url: user_dataset_path(format: :json)} do %>
             <thead>
                 <th>
                     <input type="checkbox" class="selectAll" name="selectAll" value="all">
                 </th>
                 <% @sample_attrs.each do |attr| %>
-                    <% if attr != 'id'%>
+                    
                     <th> <%= attr %> </th>
-                    <% end %>
+                    
                 <% end %>
                 <th>Action</th>
             </thead>
@@ -61,7 +61,7 @@
             </tbody>
         <% end %>
 
-    <%= submit_tag "delecte selected samples from dataset", :name => 'delete_sample', :class => "s_table_sub" %>
+    <%= submit_tag "delete selected samples from dataset", :name => 'delete_sample', :class => "s_table_sub" %>
     <%end%>
 
     <p>

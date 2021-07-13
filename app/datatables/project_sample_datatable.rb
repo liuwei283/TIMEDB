@@ -4,6 +4,7 @@ class ProjectSampleDatatable < ApplicationDatatable
     def data
       samples.map do |sample|
         [].tap do |column|
+          column << ""
           Sample.column_names.each do |attr|
             if attr != 'id'
               column << "<div class='table_cell'> #{sample[attr]} </div>"

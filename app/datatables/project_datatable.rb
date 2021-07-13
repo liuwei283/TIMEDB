@@ -4,6 +4,7 @@ class ProjectDatatable < ApplicationDatatable
     def data
       projects.map do |project|
         [].tap do |column|
+          column << ""
           Project.column_names.each do |attr|
             if attr != 'id'
               column << "<div class='table_cell'> #{project[attr]} </div>"

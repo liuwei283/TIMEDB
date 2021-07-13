@@ -31,7 +31,7 @@ Rails.application.routes.draw do
       member { get :download_file}
       member { get :download_ds_abd}
       member { get :download_ds_metadata}
-      member { post :delect_sample}
+      member { post :delete_sample}
     end
   end
 
@@ -98,6 +98,7 @@ Rails.application.routes.draw do
   post "admin/modify_ana" => "admin#modify_ana", :as => "admin/modify_ana"
   post "admin/modify_viz_source" => "admin#modify_viz_source", :as => "admin/modify_viz_source"
   post "admin/add_img" => "admin#add_img", :as => "admin/add_img"
+  post "admin/delete_samples" => "admin#delete_samples", :as => "admin/delete_samples"
   post "admin/update_all_samples" => "admin#update_all_samples", :as => "admin/update_all_samples"
 
   namespace :admin do

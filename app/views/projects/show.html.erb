@@ -11,7 +11,7 @@
   <%= javascript_pack_tag "datatable" %>
 <%end%>
 
-<% content_for :title, 'Project '+@project.name  %>
+<% content_for :title, 'Project '+ @project.name  %>
 
 <div class="container">
   <h1>
@@ -46,14 +46,14 @@
     <br />
     <% i=1 %>
     <% @sample_attrs.each do |attr| %>
-      <% if attr != 'id' %>
-        <% if !@vis.include? attr%>
+      
+        <% if !@vis.include? attr %>
           <button class="toggle-vis" data-column='<%=i.to_s%>'> 
             <%= attr%>
           </button>
         <% end %>
         <%i += 1%>
-      <%end%>
+      
     <%end%>
   </div>
 
@@ -64,9 +64,9 @@
               <input type="checkbox" class="selectAll" name="selectAll" value="all">
             </th>
             <% @sample_attrs.each do |attr| %>
-              <% if attr != 'id'%>
-                <th> <%= attr %> </th>
-              <% end %>
+              
+              <th> <%= attr %> </th>
+              
             <% end %>
             <th>Action</th>
       </thead>

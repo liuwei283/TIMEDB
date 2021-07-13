@@ -10,7 +10,7 @@ class DatasetsController < ApplicationController
         @invis = []
         @sample_attrs.each_with_index do |attr, index|
             if !@vis.include?(attr)
-                @invis.push(index)
+                @invis.push(index+1)
             end
         end
         gon.push invis: @invis
@@ -28,10 +28,7 @@ class DatasetsController < ApplicationController
         id = session[:user_id]
         @user = User.find(id)
         @dataset = @user.datasets.find(params[:id])
-        user_dir = File.join($user_stor_dir, id.to_s)
-        ds_dir = File.join(user_dir, @dataset.name)
         @dataset.destroy
-        FileUtils.rm_r(ds_dir)
         redirect_to '/'
     end
 
@@ -101,7 +98,7 @@ class DatasetsController < ApplicationController
 
     end
 
-    def delect_sample
+    def delete_sample
         @dataset = @user.datasets.find(params[:id])
         @dataset.delete_samples(params[:selected_ids])
         redirect_to user_dataset_path
