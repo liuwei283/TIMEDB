@@ -84,11 +84,16 @@ class SubmitController < ApplicationController
   def query_all # query all tasks by user
     @tasks = Task.where("user_id = ?", session[:user_id])
     parsed_jobs = []
+    result = nil
     @tasks.each do |t|
       # submit task
       if t.status == 'running' || t.status == "submitted"
         client = LocalApi::Client.new
-        result = client.task_info(UID, t.tid, 'app')
+        if !t.analysis.blank?
+          result = client.task_info(UID, t.tid, 'app')
+        else
+          result = client.task_info(UID, t.tid, 'pipeline')
+        end
         Rails.logger.debug "===>#{result}"
         if result['status'] == 'success'
           t.status = result['message']['status']
@@ -429,6 +434,16 @@ class SubmitController < ApplicationController
     render json: result_json
   end
 
+  def remove_task
+    @task = Task.find params[:job_id]
+    @analysis_user_datum = AnalysisUserDatum.find_by task_output: @task.task_outputs[0]
+    @analysis_user_datum.task_output = nil
+    @analysis_user_datum.use_demo_file = true
+    @analysis_user_datum.save!
+    @task.destroy!
+    render json:{code:true}
+  end
+
   private
 
   def process_module_result
@@ -503,16 +518,6 @@ class SubmitController < ApplicationController
     parsed_output['analysis_id'] = @analysis.id
     parsed_output['required_data'] = @analysis.files_info.keys
     return parsed_output
-  end
-
-  def remove_task
-    @task = Task.find params[:job_id]
-    @analysis_user_datum = AnalysisUserDatum.find_by task_output: @task.task_outputs[0]
-    @analysis_user_datum.task_output = nil
-    @analysis_user_datum.use_demo_file = true
-    @analysis_user_datum.save!
-    @task.destroy!
-    render json:{code:true}
   end
 
   def encode(id)
