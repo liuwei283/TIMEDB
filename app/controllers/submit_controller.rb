@@ -19,7 +19,9 @@ class SubmitController < ApplicationController
     
     begin
       client = LocalApi::Client.new
-      @result_message << client.task_info(UID, params[:tid], 'pipeline')
+      @result_message << client.task_info(UID, 236, 'pipeline')
+      @result_message << client.task_info(UID, 242, 'pipeline')
+      @result_message << client.task_info(UID, 243, 'pipeline')
     rescue StandardError => e
       @result_json[:code] = false
       @result_json[:data] = e.message
