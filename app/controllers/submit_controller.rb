@@ -11,31 +11,19 @@ class SubmitController < ApplicationController
   end
   
   def query_app_task_test
-    result_json = {
+    @result_json = {
       code: false,
       data: ''
     }
     @result_message = []
+    
     begin
-      # @task = Task.find_by! id:params[:job_id], user_id:session[:user_id]
-      
-      # submit task
       client = LocalApi::Client.new
-      # result = client.task_info(UID, 235, 'app')
-      # Rails.logger.info result
-      # result = client.task_info(UID, 235, 'pipeline')
-      # result = client.task_info(UID, 238, 'pipeline')
-      # result = client.task_info(UID, 239, 'pipeline')
-      @result_message << client.task_info(UID, 235, 'pipeline')
-      @result_message << client.task_info(UID, 236, 'pipeline')
-      @result_message << client.task_info(UID, 238, 'pipeline')
-      @result_message << client.task_info(UID, 239, 'pipeline')
-      # result_json[:data] = result
+      @result_message << client.task_info(UID, params[:tid], 'pipeline')
     rescue StandardError => e
-      result_json[:code] = false
-      result_json[:data] = e.message
+      @result_json[:code] = false
+      @result_json[:data] = e.message
     end
-    # render json: result_json
   end
 
   def index
