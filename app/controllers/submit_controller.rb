@@ -378,9 +378,12 @@ class SubmitController < ApplicationController
             parsed_output = processTaskOutput()
             response_body << parsed_output
           else
+            Rails.logger.debug "is pipeline"
             @response_body = []
             result['message']['tasks'].each do |mrs|
+              Rails.logger.debug mrs['module_id']
               @analysis = Analysis.find_by(mid:mrs['module_id'])
+              Rails.logger.debug @analysis
               @task_output = create_task_output(mrs)
               parsed_output = processTaskOutput()
               response_body << parsed_output
