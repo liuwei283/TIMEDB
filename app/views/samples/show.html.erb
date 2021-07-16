@@ -6,8 +6,12 @@
             <% @attrs.each do |attr| %>
                 <% if attr != 'id' && attr != 'created_at' && attr != 'updated_at' && @sample[attr]%>
                 <div class="col-md-6">
-                    <strong><%=attr.capitalize %>: </strong>
-                    <%= @sample[attr] %>
+                    <strong><%=attr%>: </strong>
+                    <% if attr == 'project_name' %>
+                        <%= link_to @sample[attr], @project %>
+                    <% else %>
+                        <%= @sample[attr] %>
+                    <% end %>
                 </div>
                 <% end %>
             <% end %>

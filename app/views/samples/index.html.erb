@@ -29,6 +29,7 @@
   <div id='hidden_helper'>
     Click to view hidden columns:
     <br />
+    <br/>
     <% i=2 %>
     <% @sample_attrs.each do |attr| %>
       <% if attr != 'id' %>
@@ -41,6 +42,7 @@
       <%end%>
     <%end%>
   </div>
+  <br/>
 
 <%= form_tag make_selected_file_samples_path, multipart: true do %>
   <%= content_tag :table, role: :datatable, class: "display", id: "table_page", data: { url: samples_path(format: :json)} do %>

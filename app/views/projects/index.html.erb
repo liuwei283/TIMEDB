@@ -19,7 +19,8 @@
   </p>
 
   <div id='hidden_helper'>
-    Click to view hidden columns: 
+    Click to view hidden columns:
+    <br/> 
     <br />
     <% i=2 %>
     <% @attrs.each do |attr| %>
@@ -33,6 +34,7 @@
       <%end%>
     <%end%>
   </div>
+  <br/>
 
   <%= form_tag export_selected_projects_path(format: "csv"), multipart: true do %> 
     <%= content_tag :table, role: :datatable, class: "display", id: "table_page", data: { url: projects_path(format: :json)} do %>

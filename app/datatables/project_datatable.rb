@@ -7,7 +7,14 @@ class ProjectDatatable < ApplicationDatatable
           column << ""
           Project.column_names.each do |attr|
             if attr != 'id'
-              column << "<div class='table_cell'> #{project[attr]} </div>"
+              
+          
+              if attr == 'name'
+                column << link_to("#{project[attr]}", "https://www.ncbi.nlm.nih.gov/bioproject/#{project[attr]}")
+              else
+                column << "<div class='table_cell'> #{project[attr]} </div>"
+              end
+            
             else
               column << project[attr]
             end
