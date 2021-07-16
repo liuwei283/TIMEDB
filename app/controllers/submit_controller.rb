@@ -11,31 +11,21 @@ class SubmitController < ApplicationController
   end
   
   def query_app_task_test
-    result_json = {
+    @result_json = {
       code: false,
       data: ''
     }
     @result_message = []
+    
     begin
-      # @task = Task.find_by! id:params[:job_id], user_id:session[:user_id]
-      
-      # submit task
       client = LocalApi::Client.new
-      # result = client.task_info(UID, 235, 'app')
-      # Rails.logger.info result
-      # result = client.task_info(UID, 235, 'pipeline')
-      # result = client.task_info(UID, 238, 'pipeline')
-      # result = client.task_info(UID, 239, 'pipeline')
-      @result_message << client.task_info(UID, 235, 'pipeline')
       @result_message << client.task_info(UID, 236, 'pipeline')
-      @result_message << client.task_info(UID, 238, 'pipeline')
-      @result_message << client.task_info(UID, 239, 'pipeline')
-      # result_json[:data] = result
+      @result_message << client.task_info(UID, 242, 'pipeline')
+      @result_message << client.task_info(UID, 243, 'pipeline')
     rescue StandardError => e
-      result_json[:code] = false
-      result_json[:data] = e.message
+      @result_json[:code] = false
+      @result_json[:data] = e.message
     end
-    # render json: result_json
   end
 
   def index
@@ -123,31 +113,7 @@ class SubmitController < ApplicationController
   end
 
   def query_app_task_dummy
-    return_json_hash = {
-      "status":"success",
-      "message":{
-         "status":"finished",
-         "nodes":[
-            {
-               "id":671,
-               "name":"meta_module_double_input_test",
-               "outputs":[
-                  {
-                     "id":911,
-                     "name":"output",
-                     "desc":"output of double testing",
-                     "files":[
-                        {
-                           "name":"test_double_output.txt",
-                           "path":"/project/platform_task_test/gutmeta_pipeline_test1/task_20210517132818/DOAP_meta_module_double_input_test/3P4dmDkcKjCAJANvPLmiwj/output"
-                        }
-                     ]
-                  }
-               ]
-            }
-         ]
-      }
-   }
+    return_json_hash = {"status":"success", "message":{"status":"", "type":"pipeline", "inputs":[], "outputs":[], "params":[], "tasks":[{"status":"finished", "module_id":645, "name":"gutmeta_beta_diversity", "outputs":[{"id":878, "name":"beta_diversity", "desc":"beta diversity", "files":[{"name":"k_test_result.tsv", "path":"/project/gutmeta_pipeline_test1/task_20210713125024/DOAP_gutmeta_beta_diversity/R2DqFYJzP6ueKdJxWgE37P/output"}, {"name":"k_compare_group.tsv", "path":"/project/gutmeta_pipeline_test1/task_20210713125024/DOAP_gutmeta_beta_diversity/R2DqFYJzP6ueKdJxWgE37P/output"}, {"name":"k_Beta_diversity.tsv", "path":"/project/gutmeta_pipeline_test1/task_20210713125024/DOAP_gutmeta_beta_diversity/R2DqFYJzP6ueKdJxWgE37P/output"}, {"name":"p_test_result.tsv", "path":"/project/gutmeta_pipeline_test1/task_20210713125024/DOAP_gutmeta_beta_diversity/R2DqFYJzP6ueKdJxWgE37P/output"}, {"name":"p_compare_group.tsv", "path":"/project/gutmeta_pipeline_test1/task_20210713125024/DOAP_gutmeta_beta_diversity/R2DqFYJzP6ueKdJxWgE37P/output"}, {"name":"p_Beta_diversity.tsv", "path":"/project/gutmeta_pipeline_test1/task_20210713125024/DOAP_gutmeta_beta_diversity/R2DqFYJzP6ueKdJxWgE37P/output"}, {"name":"c_test_result.tsv", "path":"/project/gutmeta_pipeline_test1/task_20210713125024/DOAP_gutmeta_beta_diversity/R2DqFYJzP6ueKdJxWgE37P/output"}, {"name":"c_compare_group.tsv", "path":"/project/gutmeta_pipeline_test1/task_20210713125024/DOAP_gutmeta_beta_diversity/R2DqFYJzP6ueKdJxWgE37P/output"}, {"name":"c_Beta_diversity.tsv", "path":"/project/gutmeta_pipeline_test1/task_20210713125024/DOAP_gutmeta_beta_diversity/R2DqFYJzP6ueKdJxWgE37P/output"}, {"name":"o_test_result.tsv", "path":"/project/gutmeta_pipeline_test1/task_20210713125024/DOAP_gutmeta_beta_diversity/R2DqFYJzP6ueKdJxWgE37P/output"}, {"name":"o_compare_group.tsv", "path":"/project/gutmeta_pipeline_test1/task_20210713125024/DOAP_gutmeta_beta_diversity/R2DqFYJzP6ueKdJxWgE37P/output"}, {"name":"o_Beta_diversity.tsv", "path":"/project/gutmeta_pipeline_test1/task_20210713125024/DOAP_gutmeta_beta_diversity/R2DqFYJzP6ueKdJxWgE37P/output"}, {"name":"f_test_result.tsv", "path":"/project/gutmeta_pipeline_test1/task_20210713125024/DOAP_gutmeta_beta_diversity/R2DqFYJzP6ueKdJxWgE37P/output"}, {"name":"f_compare_group.tsv", "path":"/project/gutmeta_pipeline_test1/task_20210713125024/DOAP_gutmeta_beta_diversity/R2DqFYJzP6ueKdJxWgE37P/output"}, {"name":"f_Beta_diversity.tsv", "path":"/project/gutmeta_pipeline_test1/task_20210713125024/DOAP_gutmeta_beta_diversity/R2DqFYJzP6ueKdJxWgE37P/output"}, {"name":"g_test_result.tsv", "path":"/project/gutmeta_pipeline_test1/task_20210713125024/DOAP_gutmeta_beta_diversity/R2DqFYJzP6ueKdJxWgE37P/output"}, {"name":"g_compare_group.tsv", "path":"/project/gutmeta_pipeline_test1/task_20210713125024/DOAP_gutmeta_beta_diversity/R2DqFYJzP6ueKdJxWgE37P/output"}, {"name":"g_Beta_diversity.tsv", "path":"/project/gutmeta_pipeline_test1/task_20210713125024/DOAP_gutmeta_beta_diversity/R2DqFYJzP6ueKdJxWgE37P/output"}, {"name":"s_test_result.tsv", "path":"/project/gutmeta_pipeline_test1/task_20210713125024/DOAP_gutmeta_beta_diversity/R2DqFYJzP6ueKdJxWgE37P/output"}, {"name":"s_compare_group.tsv", "path":"/project/gutmeta_pipeline_test1/task_20210713125024/DOAP_gutmeta_beta_diversity/R2DqFYJzP6ueKdJxWgE37P/output"}, {"name":"s_Beta_diversity.tsv", "path":"/project/gutmeta_pipeline_test1/task_20210713125024/DOAP_gutmeta_beta_diversity/R2DqFYJzP6ueKdJxWgE37P/output"}, {"name":"t_test_result.tsv", "path":"/project/gutmeta_pipeline_test1/task_20210713125024/DOAP_gutmeta_beta_diversity/R2DqFYJzP6ueKdJxWgE37P/output"}, {"name":"t_compare_group.tsv", "path":"/project/gutmeta_pipeline_test1/task_20210713125024/DOAP_gutmeta_beta_diversity/R2DqFYJzP6ueKdJxWgE37P/output"}, {"name":"t_Beta_diversity.tsv", "path":"/project/gutmeta_pipeline_test1/task_20210713125024/DOAP_gutmeta_beta_diversity/R2DqFYJzP6ueKdJxWgE37P/output"}, {"name":"group_info.tsv", "path":"/project/gutmeta_pipeline_test1/task_20210713125024/DOAP_gutmeta_beta_diversity/R2DqFYJzP6ueKdJxWgE37P/output"}]}]}, {"status":"finished", "module_id":666, "name":"meta_alpha_diversity", "outputs":[{"id":908, "name":"alpha_diversity", "desc":"alpha diversity", "files":[{"name":"Alpha_diversity_pvalue.tsv", "path":"/project/gutmeta_pipeline_test1/task_20210713125024/DOAP_gutmeta_alpha_diversity/bUT8BVcs4vWonCY7DWKofd/output"}, {"name":"Alpha_diversity.tsv", "path":"/project/gutmeta_pipeline_test1/task_20210713125024/DOAP_gutmeta_alpha_diversity/bUT8BVcs4vWonCY7DWKofd/output"}, {"name":"group_info.tsv", "path":"/project/gutmeta_pipeline_test1/task_20210713125024/DOAP_gutmeta_alpha_diversity/bUT8BVcs4vWonCY7DWKofd/output"}]}]}], "error_message":""}}
    
     # @task = Task.find_by! id:params[:job_id], user_id:session[:user_id]
     @task = Task.find_by! id:params[:job_id], user_id:session[:user_id]
@@ -177,10 +143,9 @@ class SubmitController < ApplicationController
       response_body << parsed_output
     else
       @response_body = []
-      # pipeline = AnalysisPipeline.find @task.analysis_pipeline_id
-      result['message']['nodes'].each do |mrs|
-        Rails.logger.debug "=====>"
-        @analysis = Analysis.find_by(mid:mrs['id'])
+      result['message']['tasks'].each do |mrs|
+        Rails.logger.debug "====> #{mrs['module_id']}"
+        @analysis = Analysis.find_by(mid:mrs['module_id'])
         @task_output = create_task_output(mrs)
         parsed_output = processTaskOutput()
         response_body << parsed_output
@@ -407,16 +372,18 @@ class SubmitController < ApplicationController
         @task_output = {}
         
         if result['message']['status'] == 'finished'
-          if !@task.analysis.blank? # module task
+          if result['message']['type'] == "module" # module task
             @analysis = @task.analysis
             @task_output = create_task_output(result['message'])
             parsed_output = processTaskOutput()
             response_body << parsed_output
           else
+            Rails.logger.debug "is pipeline"
             @response_body = []
-            # pipeline = AnalysisPipeline.find @task.analysis_pipeline_id
-            result['message']['nodes'].each do |mrs|
-              @analysis = Analysis.find_by(mid:mrs['id'])
+            result['message']['tasks'].each do |mrs|
+              Rails.logger.debug mrs['module_id']
+              @analysis = Analysis.find_by(mid:mrs['module_id'])
+              Rails.logger.debug @analysis
               @task_output = create_task_output(mrs)
               parsed_output = processTaskOutput()
               response_body << parsed_output
@@ -425,9 +392,6 @@ class SubmitController < ApplicationController
         end
         render json: response_body
         return
-        result_json[:data] = {
-          'msg': "the task is #{result['message']['status']}",
-        }
       else
         result_json[:data] = result['message']
       end
@@ -508,6 +472,7 @@ class SubmitController < ApplicationController
     end
 
     task_output.file_paths = file_paths
+    task_output.output_id = 0
     task_output.save!
     return task_output
   end

@@ -71,12 +71,13 @@
                         <i class="fas fa-search mr-1"></i>Result</b-button
                         >
                         <b-button variant="primary" size="sm" v-else disabled>
+                        
                         <i class="fas fa-search mr-1"></i>Result</b-button>
                         <b-button
-                        variant="danger"
-                        size="sm"
-                        class="ml-4"
-                        @click="deleteJob(data.item.jobId)"
+                            variant="danger"
+                            size="sm"
+                            class="ml-4"
+                            @click="deleteJob(data.item.jobId)"
                         >
                         <i class="fas fa-trash-alt mr-1"></i>Delete
                         </b-button>
@@ -93,14 +94,15 @@
                 <b-button class="btn col-md-2" variant = "primary" @click="returnQuery">
                     <i class="fas fa-arrow-left"></i> Back to query
                 </b-button>
-                <b-button variant="dark" class="btn col-md-4" disabled >{{`${jobName}: job ${job_id}`}}
+                <b-button variant="dark" class="btn col-md-4" disabled >{{`${jobName}(${job_id})`}}
                 </b-button>
                 <dropdown-select v-if="data.outputs.length > 1"
                         right
                         v-model="chosenOutput"
                         :options="taskOutputs"
-                        :variant="outline"
                         class="tool-bar-el"/>
+                <b-button v-else variant="dark" class="btn col-md-4" disabled >{{data.outputs.name}}
+                </b-button>
                 
             </template>
              <div id = "viz-card"> 
@@ -150,8 +152,9 @@ export default {
         window.gon.viz_mode = "task-output";
     },
     updated(){
-        console.log(this.chosenOutput);
         if(this.submitted) {
+            event.emit("GMT:reset-query", this);
+            this.updateGon(this.data.outputs[this.chosenOutput]);
             event.emit("GMT:query-finished", this);
         }
     },
@@ -163,8 +166,7 @@ export default {
                 this.valid_name = false;
             }else {
                 this.all_jobs.forEach(j => {
-                    // console.log([j.jobId, this.job_id]);
-                    if (j.jobId === this.job_id)
+                    if (j.jobId === parseInt(this.job_id))
                         this.jobName = j.jobName;
                 })
                 axios.post(
@@ -184,6 +186,8 @@ export default {
                     } else {
                         this.data.outputs = response.data;
                         this.updateGon(this.data.outputs[0]);
+                        this.taskOutputs = this.data.outputs.map((x, i) => ({value: i, text: x.name}));
+                        this.chosenOutput = 0;
                         this.submitted = true;
                     }
                 }).catch((error) => {

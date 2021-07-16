@@ -80,13 +80,13 @@ Rails.application.routes.draw do
   get 'submit/job-query', to: 'submit#query', as: 'query'
   get 'submit/analysis/:id', to: 'submit#index', as: 'submit_analysis'
   get 'submit/pipeline/:id', to: 'submit#pipeline', as: 'submit_pipeline'
-  get "debug", to: "submit#query_app_task_test"
+  # get "debug", to: "submit#query_app_task_test"
   
   # post 'submit-app-task', to: 'submit#submit_app_task', format: 'json'
   post 'query-app-task', to: 'submit#query_app_task', format: 'json'
   # post 'query-app-task-dummy', to: 'submit#query_app_task_dummy', format: 'json'
   post 'submit-app-task', to: 'submit#submit_app_task', format: 'json'
-  post 'submit-app-task-dummy', to: 'submit#submit_app_task_dummy', format: 'json'
+  # post 'submit-app-task-dummy', to: 'submit#submit_app_task_dummy', format: 'json'
   post 'query-all-tasks', to: 'submit#query_all', format: 'json'
   post 'remove-task', to: 'submit#remove_task', format: 'json'
 
