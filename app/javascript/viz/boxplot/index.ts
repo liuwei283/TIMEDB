@@ -1,12 +1,14 @@
 import Oviz from "crux";
-import template from "./template.bvt";
-import {register} from "page/visualizers";
-import {sortByRankKey, rankDict} from "utils/bio-info";
-import { registerEditorConfig } from "utils/editor";
-import { editorConfig } from "./editor";
-import { groupedChartColors} from "oviz-common/palette"
-import { findBoundsForValues, computeLog } from "utils/maths";
 import { Color } from "crux/dist/color";
+import { editorConfig } from "./editor";
+import template from "./template.bvt";
+
+import {register} from "page/visualizers";
+import { rankDict, sortByRankKey } from "utils/bio-info";
+import { registerEditorConfig } from "utils/editor";
+import { computeLog, findBoundsForValues } from "utils/maths";
+
+import { groupedChartColors} from "oviz-common/palette";
 
 const ylabel = "Beta diversity";
 const title = "Beta Diversity";
@@ -25,13 +27,15 @@ function init() {
                 plotWidth: 1000,
                 showOutliers: true,
                 showP: true,
+                hollowBox: true,
                 xLabelRotation: 45,
+                labelFontSize: 12,
             },
-            colors: groupedChartColors.slice(0,1),
-            boxColor: {
-                // default: (x) =>  x,
-                stroke: (x) => Color.literal(x).darken(30).string,
-                fill: (x) => Color.literal(x).lighten(10).string,
+            colors: { default: groupedChartColors[0] },
+            getBoxColors: (x, hollow = true) => {
+                if (hollow) return [x, "white", x];
+                else return [Color.literal(x).darken(30).string,
+                    Color.literal(x).lighten(10).string, "white" ];
             },
         },
         loadData: {
@@ -86,6 +90,7 @@ function init() {
 export function registerBoxplot() {
     register(MODULE_NAME, init);
 }
+
 function processRawData(data: any[]) {
     const rawData = {};
     const allValues = [];
@@ -93,7 +98,7 @@ function processRawData(data: any[]) {
         rawData[d[0]] = d.splice(1, d.length).map(x => parseFloat(x));
         allValues.push(...rawData[d[0]]);
     });
-    const boxData = {categories: Object.keys(rawData), 
+    const boxData = {categories: Object.keys(rawData),
         valueRange: findBoundsForValues(allValues, 2, false, 0.5),
         values: [], outliers: [], means: [], max: Math.max(...allValues)};
     boxData.categories.forEach((k, i) => {

@@ -1,23 +1,17 @@
-import Oviz from "crux"
-import template from "./template.bvt"
-import {register} from "page/visualizers";
-import {getGroups} from "utils/array"
-import {rankDict, sortByRank} from "utils/bio-info";
+import Oviz from "crux";
+import { Color } from "crux/dist/color";
+import template from "./template.bvt";
+
+import { groupedChartColors } from "oviz-common/palette";
+import { register } from "page/visualizers";
+import { getGroups } from "utils/array";
+import { rankDict, sortByRank } from "utils/bio-info";
 import { registerEditorConfig } from "utils/editor";
-import { findBoundsForValues, computeLog } from "utils/maths";
-// import { editorConfig } from "./editor";
-import { groupedChartColors} from "oviz-common/palette";
-import {editorConfig} from "./editor";
-import * as _ from "lodash";
+import { findBoundsForValues } from "utils/maths";
+import { editorConfig } from "./editor";
 
-//please change the displayed value range in the template by the prop: valueRange.
-const MODULE_NAME = 'boxplot-single'
-
-interface BoxplotData {
-    values: any[], 
-    outliers: any[], 
-    means: number[],
-}
+// please change the displayed value range in the template by the prop: valueRange.
+const MODULE_NAME = "boxplot-single";
 
 function init() {
     if (!window.gon || window.gon.module_name !== MODULE_NAME) return;
@@ -32,8 +26,13 @@ function init() {
                 showP: true,
                 xLabelRotation: 45,
             },
-            colors: groupedChartColors,
+            colors: { default: groupedChartColors[0] },
             ylabel: "Alpha diversity",
+            getBoxColors: (x, hollow = true) => {
+                if (hollow) return [x, "white", x];
+                else return [Color.literal(x).darken(30).string,
+                    Color.literal(x).lighten(10).string, "white" ];
+            },
         },
         loadData: {
             boxSingleMain: {
@@ -56,7 +55,7 @@ function init() {
                             allValues.push(v);
                             if (this.data.groupDict[s] === this.data.groups[0])
                                 initialData[0].push(v);
-                            else 
+                            else
                                 initialData[1].push(v);
                         });
                         const boxData = { categories: [...this.data.groups],
@@ -74,6 +73,7 @@ function init() {
                                 }
                             });
                             const stat2 = new Oviz.algo.Statistics(result);
+                            console.log([group, stat2.Q3()]);
                             boxData.values.push([stat2.min(), stat2.Q1(), stat2.median(), stat2.Q3(), stat2.max()]);
                             boxData.means.push(stat2.mean());
                         });
@@ -109,15 +109,15 @@ function init() {
                         this.data.pDict[rankLabel] = parseFloat(d[data.columns[1]]);
                     });
                     this.data.pValue = this.data.pDict[this.data.ranks[3]];
-                }
-            }
+                },
+            },
         },
-        setup() {            
+        setup() {
             this.data.plotWidth = 1000;
             registerEditorConfig(editorConfig(this));
         },
     });
-    
+
     return visualizer;
 }
 

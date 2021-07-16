@@ -68,7 +68,7 @@ export const rainbow1 = [ "hsl(340, 82%, 76%)",
 "hsl(14, 100%, 78%)",
 "hsl(36, 100%, 75%)",
 "hsl(45, 100%, 75%)",
-"hsl(54, 90%, 72%)",//"hsl(54, 100%, 81%)",
+"hsl(54, 90%, 72%)", // "hsl(54, 100%, 81%)",
 "hsl(66, 71%, 77%)",
 "hsl(88, 50%, 76%)",
 "hsl(122, 37%, 74%)",
@@ -86,12 +86,15 @@ export const rainbow1 = [ "hsl(340, 82%, 76%)",
 ];
 
 export const groupedChartColors = [
-"#3CC145",
-"#f06748",
-"#6748f0",
-"#48d1f0",
-"#bb48f0",
-"#f0bb48"];
+// "#3CC145",
+// "#f06748",
+// "#6748f0",
+// "#48d1f0",
+// "#bb48f0",
+// "#f0bb48",
+"#20854E", "#BC3C29", "#0072B5", "#E18727", "#7876B1",
+];
+
 export const groupedColors2 = [
     "hsl(0, 73%, 70%)",
     "hsl(45, 100%, 70%)",
@@ -99,7 +102,7 @@ export const groupedColors2 = [
     "hsl(231, 44%, 70%)",
     "hsl(291, 47%, 70%)",
     "hsl(340, 82%, 70%)",
-]
+];
 
 export const controlGroupColors = [
     "#27AE60", "#E74C3C"

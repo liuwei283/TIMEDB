@@ -5,30 +5,19 @@ svg {
 		padding = 80
 		data = {boxData}
         valueRange = boxData.valueRange
-		// AxisBackground { dashArray = "1, 2" }
-		// AxisBackground {
-		// 	orientation = "vertical"
-		// 	includeEndTicks = true
-		// 	dashArray = "1, 2"
-		// }
-		Rect{
-			width = 100%
-			height = 100%
-			stroke = "#000"
-			fill = "none"
+
+		Rect.full {
+			stroke = @color("line"); fill = "none"
 		}
-        
         Boxes {
             data = "boxData"
             showMean = true
             showNotch = false
-            @let boxFill = boxColor.fill(colors[0])
-            @let boxStroke = boxColor.stroke(colors[0])
+            @let boxColors = getBoxColors(colors.default)
             :box (_d) {
                 Rect.full  {
-                    fill = boxFill
-                    stroke = boxFill
-                    // fillOpacity = 0.001
+                    fill = boxColors[1]
+                    stroke = boxColors[0]
                     behavior:tooltip {
                         content = (`min: ${_d.data[0].toFixed(2)} <br>
                                     first quartile: ${_d.data[1].toFixed(2)} <br>
@@ -45,52 +34,50 @@ svg {
                     height = 100%
                     Line { 
                         x = 50%; y2 = 100%
-                        stroke = boxStroke
+                        stroke = boxColors[0]
                     }
                 }
                 
             }
             :outlier{
                 @if config.showOutliers {
-                    Circle.centered { r = 2; fill = boxStroke }
+                    Circle.centered { 
+                        r = 2
+                        stroke = boxColors[0]; fill = boxColors[1] 
+                    }
                 } @else {
                     Circle.centered { fill = "none" }
                 }
             }
             :mean(means) {
-                Line {x1 = 20%; x2 = 80%; stroke = "white"}
+                Line {x1 = 20%; x2 = 80%; stroke = boxColors[2] }
             }
-            :median(d) {}
+            :median {}
         }
 		@let w = @scaled-x(1) - @scaled-x(0)
         @if config.showP {
             @for pair in pDict[ranks[config.rankIndex].text] {
-            Component {
-                @let sourceIndex = boxData.categories.indexOf(pair.source)
-                @let targetIndex = boxData.categories.indexOf(pair.target)
-                @let sourceX = @scaled-x(sourceIndex) + (sourceIndex === 1 ? 5 : 0)
-                @let targetX =  @scaled-x(targetIndex) + (targetIndex === 1 ? -5 : 0)
-                y = @scaled-y(boxData.max)+ (Math.abs(sourceIndex - targetIndex) > 1 ? -40: -20)
-                Line {
-                    x = sourceX; y2 = 10
+                Component {
+                    @let sourceIndex = boxData.categories.indexOf(pair.source)
+                    @let targetIndex = boxData.categories.indexOf(pair.target)
+                    @let sourceX = @scaled-x(sourceIndex) + (sourceIndex === 1 ? 5 : 0)
+                    @let targetX =  @scaled-x(targetIndex) + (targetIndex === 1 ? -5 : 0)
+                    y = @scaled-y(boxData.max)+ (Math.abs(sourceIndex - targetIndex) > 1 ? -40: -20)
+                    Line {
+                        x = sourceX; y2 = 10
+                    }
+                    Line {
+                        x = targetX; y2 = 10
+                    }
+                    Line {
+                        x1 = sourceX; x2 = targetX;
+                    }
+                    Text {
+                        x = (targetX + sourceX)/2; y = -2; anchor = @anchor("c", "b")
+                        text = pair.pValue < 0.001 ? "p < 0.001" : `p = ${pair.pValue.toFixed(3)}`
+                    }
                 }
-                Line {
-                    x = targetX; y2 = 10
-                }
-                Line {
-                    x1 = sourceX; x2 = targetX;
-                }
-                Text {
-                    // @expr console.log(pair.pValue.toExponential(3))
-                    x = (targetX + sourceX)/2; y = -2; anchor = @anchor("c", "b")
-                    text = pair.pValue < 0.001 ? "p < 0.001" : `p = ${pair.pValue.toFixed(3)}`
-                }
-                // x = @scaled-x(i) + w /2; y = @scaled-y(boxData.max[i])
-                // Circle.centered {
-                //     r = 5; fill = "magenta"
-                // }
             }
-        }
         }
 
 		Axis("left");
@@ -105,12 +92,10 @@ svg {
 				}
 			}
 		}
-		// Text {text = title; anchor = @anchor("bottom", "center"); x = 50%; y = -7; fontSize = 14}
 		Component {
 			x = -25; y = 50%
 			rotation = @rotate(-90)
 			Text(ylabel) { anchor = @anchor("bottom", "center") }
 		}
-	
 	}
 }
