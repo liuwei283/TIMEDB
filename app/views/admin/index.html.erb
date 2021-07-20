@@ -137,8 +137,23 @@
       <%= file_field_tag 'file' %>
       <%= submit_tag 'Submit'%>
     <% end %>
+    <br/>
+    <h5>
+      Delete samples:
+    </h5>
 
+    <%= form_tag({action: :delete_samples}, multipart: true) do %>
+      <p> 
+        Please select csv file to be imported:
+        <br />
+        (samples id in a column)
+      </p>
+      <%= file_field_tag 'file' %>
+      <%= submit_tag 'Submit'%>
+    <% end %>
     <br />
+
+
     <h5>
       Modify the abandance:
     </h5>

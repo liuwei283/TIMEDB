@@ -31,7 +31,7 @@ Rails.application.routes.draw do
       member { get :download_file}
       member { get :download_ds_abd}
       member { get :download_ds_metadata}
-      member { post :delect_sample}
+      member { post :delete_sample}
     end
   end
 
@@ -80,13 +80,13 @@ Rails.application.routes.draw do
   get 'submit/job-query', to: 'submit#query', as: 'query'
   get 'submit/analysis/:id', to: 'submit#index', as: 'submit_analysis'
   get 'submit/pipeline/:id', to: 'submit#pipeline', as: 'submit_pipeline'
-  
+  # get "debug", to: "submit#query_app_task_test"
   
   # post 'submit-app-task', to: 'submit#submit_app_task', format: 'json'
   post 'query-app-task', to: 'submit#query_app_task', format: 'json'
   # post 'query-app-task-dummy', to: 'submit#query_app_task_dummy', format: 'json'
   post 'submit-app-task', to: 'submit#submit_app_task', format: 'json'
-  post 'submit-app-task-dummy', to: 'submit#submit_app_task_dummy', format: 'json'
+  # post 'submit-app-task-dummy', to: 'submit#submit_app_task_dummy', format: 'json'
   post 'query-all-tasks', to: 'submit#query_all', format: 'json'
   post 'remove-task', to: 'submit#remove_task', format: 'json'
 
@@ -99,6 +99,7 @@ Rails.application.routes.draw do
   post "admin/modify_ana" => "admin#modify_ana", :as => "admin/modify_ana"
   post "admin/modify_viz_source" => "admin#modify_viz_source", :as => "admin/modify_viz_source"
   post "admin/add_img" => "admin#add_img", :as => "admin/add_img"
+  post "admin/delete_samples" => "admin#delete_samples", :as => "admin/delete_samples"
   post "admin/update_all_samples" => "admin#update_all_samples", :as => "admin/update_all_samples"
 
   namespace :admin do

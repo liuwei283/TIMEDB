@@ -50,7 +50,7 @@ $(function () {
     var table = $("#table_page").DataTable({
         fixedColumns: true,
         fixedColumns: {
-            leftColumns: 2,
+            leftColumns: 3,
             rightColumns: 1
         },
         processing: true,
@@ -81,14 +81,14 @@ $(function () {
         },
         scrollX: true,
         rowCallback: function(row, data) {
-            if ( data[33] == "<div class='table_cell'> YES </div>" )
+            if ( data[34] == "<div class='table_cell'> YES </div>" )
             {
-                $('td:eq(7)', row).css('background-color', '#83FDC0');
+                $('td:eq(8)', row).css('background-color', '#83FDC0');
                 
             }
-            else if( data[33] == "<div class='table_cell'> NO </div>" )
+            else if( data[34] == "<div class='table_cell'> NO </div>" )
             {
-                $(row).find('td:eq(7)').css('background-color', '#FA9288');
+                $(row).find('td:eq(8)').css('background-color', '#FA9288');
                 
             }
             else{
@@ -116,7 +116,7 @@ $(function () {
     table.on("select", function(e) {
         var rows_selected = table.rows( { selected: true } ).data();//.column(0).data();
         var selected_ids = rows_selected.map(function(value,index) { 
-            return value[0];
+            return value[1];
         });
         ids = modify_set(1, ids, selected_ids);
     });
@@ -124,7 +124,7 @@ $(function () {
     table.on("deselect", function(e) {
         var rows_deselected = table.rows( { selected: false } ).data();//.column(0).data();
         var deselected_ids = rows_deselected.map(function(value,index) { 
-            return value[0];
+            return value[1];
         });
         ids = modify_set(-1, ids, deselected_ids);
         //console.log(ids);
