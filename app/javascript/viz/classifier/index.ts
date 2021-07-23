@@ -6,7 +6,7 @@ import { GridPlot } from "./grid-plot";
 import template from "./template.bvt";
 
 import {register} from "page/visualizers";
-import { getDistinctValues } from "utils/array";
+import { getGroups } from "utils/array";
 import { registerEditorConfig } from "utils/editor";
 import { computeLog, findBoundsForValues } from "utils/maths";
 
@@ -132,7 +132,7 @@ function init() {
                     };
                 },
                 loaded(data) {
-                    this.data.groups = getDistinctValues(data, "group");
+                    this.data.groups = getGroups(data, "group");
                     const allValues = data.map(x => x.value);
                     const valueRange = findBoundsForValues(allValues, 2);
                     const boxData = { values: [], outliers: [], means: [], categories: [...this.data.groups]};
