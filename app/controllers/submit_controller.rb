@@ -89,6 +89,9 @@ class SubmitController < ApplicationController
         else
           result = client.task_info(UID, t.tid, 'pipeline')
         end
+        Rails.logger.debug "=====>"
+        Rails.logger.debug([result['status'], result['message']['status']])
+        Rails.logger.debug result
         if result['status'] == 'success'
           t.status = result['message']['status'] if !result['message']['status'].blank?
           t.save!
