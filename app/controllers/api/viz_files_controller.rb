@@ -13,12 +13,12 @@ class Api::VizFilesController < ApplicationController
             render json:{code:true}
             return
         end
-        @task = Task.find(params[:task_output_id])
-        if @task.task_outputs[0] == @analysis_user_datum.task_output
+        @task_output = TaskOutput.find(params[:task_output_id])
+        if @task_output == @analysis_user_datum.task_output
             render json:{}
             return
         end
-        @analysis_user_datum.task_output = @task.task_outputs[0]
+        @analysis_user_datum.task_output = @task_output
         @analysis_user_datum.use_demo_file = false
         @analysis_user_datum.save!       
         render json:{code:true}
@@ -55,10 +55,12 @@ class Api::VizFilesController < ApplicationController
     end
 
     def all_task_outputs
-        @tasks = Task.where("user_id = ? and analysis_id = ?",
-                                        @user.id, @analysis.id)
-        render json: @tasks.map { |t|
-             {id: t.id, task_id: t.id}
+        @tasks = Task.where("user_id = ?", @user.id)
+        tasks_ids = @tasks.map{|t| t.id}
+        @task_output = TaskOutput.where("task_id in (?) and analysis_id = ?",
+            tasks_ids, @analysis.id)
+        render json: @task_output.map { |opt|
+             {id: opt.id, task_id: opt.task.id, task_id: opt.id}
         }
         
     end

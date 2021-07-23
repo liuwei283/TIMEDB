@@ -89,17 +89,14 @@ class SubmitController < ApplicationController
         else
           result = client.task_info(UID, t.tid, 'pipeline')
         end
-        Rails.logger.debug "===>#{result}"
         if result['status'] == 'success'
-          t.status = result['message']['status']
+          t.status = result['message']['status'] if !result['message']['status'].blank?
           t.save!
         end
       end
       if !t.analysis.blank?
-        Rails.logger.debug t.analysis
         jobName = t.analysis.name
       else
-        Rails.logger.debug t.analysis_pipeline
         jobName = t.analysis_pipeline.name
       end
       parsed_jobs.push({
@@ -122,7 +119,7 @@ class SubmitController < ApplicationController
     result = JSON.parse(return_json_hash.to_json)
 
     if @task.status === 'submitted'
-      @task.status = @result['message']['status']
+      @task.status = result['message']['status'] if !result['message']['status'].blank?
       @task.save!
     end
 
@@ -144,7 +141,6 @@ class SubmitController < ApplicationController
     else
       @response_body = []
       result['message']['tasks'].each do |mrs|
-        Rails.logger.debug "====> #{mrs['module_id']}"
         @analysis = Analysis.find_by(mid:mrs['module_id'])
         @task_output = create_task_output(mrs)
         parsed_output = processTaskOutput()
@@ -257,9 +253,7 @@ class SubmitController < ApplicationController
         file.write(data)
         uploader = JobInputUploader.new
         uploader.store!(file)
-        
-        
-        Rails.logger.info("=======>#{uploader}")
+                
         inputs.push({
           k => '/data/' + file_name
         })
@@ -361,7 +355,7 @@ class SubmitController < ApplicationController
       Rails.logger.info(result)
 
       if @task.status == 'submitted'
-        @task.status = result['message']['status']
+        @task.status = result['message']['status'] if !result['message']['status'].blank?
         @task.save!
       end
 
@@ -378,12 +372,9 @@ class SubmitController < ApplicationController
             parsed_output = processTaskOutput()
             response_body << parsed_output
           else
-            Rails.logger.debug "is pipeline"
             @response_body = []
             result['message']['tasks'].each do |mrs|
-              Rails.logger.debug mrs['module_id']
               @analysis = Analysis.find_by(mid:mrs['module_id'])
-              Rails.logger.debug @analysis
               @task_output = create_task_output(mrs)
               parsed_output = processTaskOutput()
               response_body << parsed_output
