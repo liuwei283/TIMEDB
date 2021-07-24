@@ -31,6 +31,7 @@
                     <div class = "row">
                         <h3 class="font-weight-bold .col">Local Jobs <span v-b-tooltip.hover title="Only the lastest ten jobs are stored. Exceeding jobs are deleted automatically"><i class="fas fa-exclamation-circle small"></i></span></h3>
                         <b-button variant="success" class="btn-sm .col" @click="refreshJobs()">Refresh</b-button>
+                        <div class ="ml-3" v-if="!refreshEnd"><i class="fas fa-spinner fa-spin" style='font-size:28px'> </i> </div>
                     </div>
                 </div>
                     <b-table
@@ -96,11 +97,13 @@
                 </b-button>
                 <b-button variant="dark" class="btn col-md-4" disabled >{{`${jobName}(${job_id})`}}
                 </b-button>
-                <dropdown-select v-if="data.outputs.length > 1"
+                <div v-if="data.outputs.length > 1">
+                <dropdown-select 
                         right
                         v-model="chosenOutput"
                         :options="taskOutputs"
                         class="tool-bar-el"/>
+                </div>
                 <b-button v-else variant="dark" class="btn col-md-4" disabled >{{data.outputs.name}}
                 </b-button>
                 
@@ -143,6 +146,7 @@ export default {
             data: {outputs: []},
             chosenOutput: null,
             taskOutputs: [{value: 0, text: "Demo Files", secondaryText: ""}],
+            refreshEnd: true,
         };
     },
     created() {
@@ -211,21 +215,27 @@ export default {
             registerViz(output.module_name);
         },
         refreshJobs() {
-             axios.post(
+            this.refreshEnd = false;
+            axios.post(
                 `/query-all-tasks/`,
                 null,
-                {  
-                    headers: {
-                        'X-Requested-With': 'XMLHttpRequest',
-                        'X-CSRF-Token': document.head.querySelector('meta[name="csrf-token"]').content,
-                        'Content-Type': 'multipart/form-data',
-                    },
-                })
-                .then(r => {
-                    this.all_jobs = r.data.map((d, index) => {
-                        return  {index, ...d}
-                    });
+            {  
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest',
+                    'X-CSRF-Token': document.head.querySelector('meta[name="csrf-token"]').content,
+                    'Content-Type': 'multipart/form-data',
+                },
+            })
+            .then(r => {
+                this.all_jobs = r.data.map((d, index) => {
+                    return  {index, ...d}
                 });
+            }).finally(() => {
+                // wait 1 sec
+                 setTimeout(() => {
+                    this.refreshEnd = true;
+                    }, 1000);
+            });
         },
         deleteJob(jobId){
             const { alertCenter } = this.$refs;
