@@ -10,17 +10,17 @@
                     :options="taskOutputs"
                     :variant="outline"
                     class="tool-bar-el"/>
-                <b-button @click="downloadDemoFiles" class="tool-bar-el"><i class="fa fa-download"></i>Download Data</b-button>
+                <b-button @click="downloadDemoFiles" class="tool-bar-el"><i class="far fa-file-archive"></i>Download Data</b-button>
                 <b-button id="editor-conf" @click="toggleEditor">Editor</b-button>
             </div>
             <div v-else>
                 <b-button @click="downloadSVG" class="tool-bar-el"><i class="fa fa-download"/>Download Chart</b-button>
-                <b-button @click="downloadDemoFiles" class="tool-bar-el"><i class="fa fa-download"></i>Download Data</b-button>
+                <b-button @click="downloadDemoFiles" class="tool-bar-el"><i class="far fa-file-archive"></i>Download Data</b-button>
                 <b-button id="editor-conf" @click="toggleEditor">Editor</b-button>
             </div>
         </div>
         <div id="viz-container">
-            <div class="need-upload" v-if="isLoading">
+            <div class="need-upload w-100" v-if="isLoading">
                 <i class="fas fa-circle-notch fa-spin fa-5x m-0"></i>
                 <h4 class="mt-4">Loading data……</h4>
             </div>
@@ -218,10 +218,10 @@
         right: 10px;
     }
     .need-upload {
-        height: 0;
         margin: 0 1px;
         padding: 8rem 4rem;
         text-align: center;
         color: #999;
+        position: absolute;
     }
 </style>
