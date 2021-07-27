@@ -88,29 +88,27 @@
                 </div>
             </b-card>
         </div>
-        <div v-else class="viz-result">
-            <b-card header-tag="header">
-            <template #header>
-                
-                <b-button class="btn col-md-2" variant = "primary" @click="returnQuery">
+        <div v-else class="viz-result mb-1">
+            <b-card no-body>
+                <b-card-header v-b-modal.modalBox class="border-1">
+                    <b-button class="btn col-md-2" variant = "primary" @click="returnQuery">
                     <i class="fas fa-arrow-left"></i> Back to query
-                </b-button>
-                <b-button variant="dark" class="btn col-md-4" disabled >{{`${jobName}(${job_id})`}}
-                </b-button>
-                <div v-if="data.outputs.length > 1">
-                <dropdown-select 
-                        right
-                        v-model="chosenOutput"
-                        :options="taskOutputs"
-                        class="tool-bar-el"/>
-                </div>
-                <b-button v-else variant="dark" class="btn col-md-4" disabled >{{data.outputs.name}}
-                </b-button>
-                
-            </template>
-             <div id = "viz-card"> 
-                <VApp/>
-            </div>
+                    </b-button>
+                    <b-button variant="dark" class="btn col-md-4" disabled >{{`${jobName}(${job_id})`}}
+                    </b-button>
+                    <dropdown-select v-if="data.outputs.length > 1"
+                            right
+                            v-model="chosenOutput"
+                            :options="taskOutputs"
+                            class="tool-bar-el"/>
+                    <b-button v-else variant="dark" class="btn col-md-4" disabled >{{data.outputs[0].name}}
+                    </b-button>
+                </b-card-header>
+                <b-card-body class="p-0">
+                   <div id = "viz-card"> 
+                        <VApp/>
+                    </div>
+                </b-card-body>
             </b-card>
         </div>
     </div>
@@ -300,9 +298,6 @@ export default {
     font-size: 20px;
 }
 //result card div
-.card-body {
-    padding: "none";
-}
 #job-query .error-info {
     min-height: 300px;
 }
