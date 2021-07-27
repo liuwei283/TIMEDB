@@ -19,9 +19,9 @@ class SubmitController < ApplicationController
     
     begin
       client = LocalApi::Client.new
-      @result_message << client.task_info(UID, 236, 'pipeline')
-      @result_message << client.task_info(UID, 242, 'pipeline')
       @result_message << client.task_info(UID, 243, 'pipeline')
+      @result_message << client.task_info(UID, 252, 'pipeline')
+      @result_message << client.task_info(UID, 253, 'pipeline')
     rescue StandardError => e
       @result_json[:code] = false
       @result_json[:data] = e.message
@@ -89,6 +89,9 @@ class SubmitController < ApplicationController
         else
           result = client.task_info(UID, t.tid, 'pipeline')
         end
+        Rails.logger.debug "=====>"
+        Rails.logger.debug([result['status'], result['message']['status']])
+        Rails.logger.debug result
         if result['status'] == 'success'
           t.status = result['message']['status'] if !result['message']['status'].blank?
           t.save!
