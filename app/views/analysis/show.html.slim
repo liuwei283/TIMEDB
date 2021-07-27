@@ -6,8 +6,9 @@
     =stylesheet_pack_tag 'analysis-viz'
 
 
-.viz-container
-    =render 'partials/viz_sidebar'
-    .vapp-container
-        #vapp
+/ .viz-container
+#ana-viz-container
+  =render 'partials/viz_sidebar'
+  .vapp-container
+    #vapp
 =javascript_pack_tag "viz/#{@analysis.visualizer.js_module_name}"
