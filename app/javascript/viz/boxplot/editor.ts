@@ -3,7 +3,7 @@ import { EditorDef } from "utils/editor";
 import { copyObject } from "utils/object";
 
 function run(v) {
-    v.forceDraw = true;
+    v.forceRedraw = true;
     v.run();
 }
 export const editorRef = {} as any;
@@ -40,6 +40,7 @@ export function editorConfig(v): EditorDef {
                                         callback(d) {
                                             v.data.config.rankIndex = parseInt(d);
                                             const rankLabel = v.data.ranks[parseInt(d)].text;
+                                            this.data.rank = rankLabel;
                                             v.data.boxData = v.data.mainDict[rankLabel];
                                             v.forceRedraw = true;
                                             run(v);
@@ -50,9 +51,9 @@ export function editorConfig(v): EditorDef {
                                     title: "Range Lower Bound",
                                     type: "input",
                                     value: {
-                                        current: 0,
+                                        current: v.data.data.valueRange[0],
                                         callback(d) {
-                                            v.data.boxData.valueRange[0] = parseFloat(d);
+                                            v.data.data.valueRange[0] = parseFloat(d);
                                             run(v);
                                         },
                                     },
@@ -61,17 +62,82 @@ export function editorConfig(v): EditorDef {
                                     title: "Range Upper Bound",
                                     type: "input",
                                     value: {
-                                        current: 0,
+                                        current: v.data.data.valueRange[1],
                                         callback(d) {
-                                            v.data.boxData.valueRange[1] = parseFloat(d);
+                                            v.data.data.valueRange[1] = parseFloat(d);
                                             run(v);
                                         },
                                     },
                                 },
-                            ]
-                        }
+                            ],
+                        },
                     },
-                ]
+                ],
+            },
+            {
+                id: "plot-st",
+                title: "Plot Settings",
+                layout: "single-page",
+                view: {
+                    type: "list",
+                    items: [
+                        {
+                            title: "plot width",
+                            type: "input",
+                            value: {
+                                current: v.data.config.plotSize[0],
+                                callback(d) {
+                                    v.data.config.plotSize[0] = parseFloat(d);
+                                    run(v);
+                                },
+                            },
+                        },
+                        {
+                            title: "plot height",
+                            type: "input",
+                            value: {
+                                current: v.data.config.plotSize[1],
+                                callback(d) {
+                                    v.data.config.plotSize[1] = parseFloat(d);
+                                    run(v);
+                                },
+                            },
+                        },
+                        {
+                            title: "label font size",
+                            type: "input",
+                            value: {
+                                current: v.data.config.labelFontSize,
+                                callback(d) {
+                                    v.data.config.labelFontSize = parseFloat(d);
+                                    run(v);
+                                },
+                            },
+                        },
+                        {
+                            title: "tick font size",
+                            type: "input",
+                            value: {
+                                current: v.data.config.tickFontSize,
+                                callback(d) {
+                                    v.data.config.tickFontSize = parseFloat(d);
+                                    run(v);
+                                },
+                            },
+                        },
+                        {
+                            title: "rotate x axis labels",
+                            type: "checkbox",
+                            value: {
+                                current: v.data.config.xAxisRotated,
+                                callback(d) {
+                                    v.data.config.xAxisRotated = d;
+                                    run(v);
+                                },
+                            },
+                        },
+                    ],
+                },
             },
             {
                 id: "settings",
@@ -97,17 +163,6 @@ export function editorConfig(v): EditorDef {
                             },
                         },
                         {
-                            title: "X label rotation angle: ",
-                            type: "input",
-                            value: {
-                                current: v.data.config.xLabelRotation,
-                                callback(d) {
-                                    v.data.config.xLabelRotation = parseFloat(d);
-                                    run(v);
-                                },
-                            },
-                        },
-                        {
                             title: "Outliers",
                             type: "checkbox",
                             value: {
@@ -122,9 +177,32 @@ export function editorConfig(v): EditorDef {
                             title: "P-value",
                             type: "checkbox",
                             value: {
-                                current: v.data.config.showP,
+                                current: v.data.config.drawP,
                                 callback(d) {
-                                    v.data.config.showP = d;
+                                    v.data.config.drawP = d;
+                                    run(v);
+                                },
+                            },
+                        },
+                        {
+                            title: "Sample scatter",
+                            type: "checkbox",
+                            value: {
+                                current: v.data.config.drawScatter,
+                                callback(d) {
+                                    v.data.config.drawScatter = d;
+                                    run(v);
+                                },
+                            },
+                        },
+                        {
+                            title: "Draw violin",
+                            type: "checkbox",
+                            value: {
+                                current: v.data.config.drawViolin,
+                                callback(d) {
+                                    v.data.config.drawViolin = d;
+                                    v.data.config.drawBox = !d;
                                     run(v);
                                 },
                             },
