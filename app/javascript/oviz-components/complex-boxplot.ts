@@ -35,9 +35,6 @@ export class ComplexBoxplot extends Component<ComplexBoxplotOption> {
     public willRender() {
         if (this._firstRender) {
             // const this.prop = {values: [], categories: []};
-
-            // @ts-ignore
-            this.boxMax = this.prop.data.boxData.max;
             if (this.prop.getColor) this.getColor = this.prop.getColor;
             else this.getColor = (pos) => this.prop.colors.box || "pink";
             if (this.prop.getScatterColor) this.getScatterColor = this.prop.getScatterColor;
@@ -45,6 +42,8 @@ export class ComplexBoxplot extends Component<ComplexBoxplotOption> {
             if (this.prop.getViolinColor) this.getViolinColor = this.prop.getViolinColor;
             else this.getViolinColor = (pos) => this.prop.colors.violin || "lightsteelblue";
         }
+        // @ts-ignore
+        this.boxMax = this.prop.data.boxData.max;
     }
 
     protected getBoxColors(x) {

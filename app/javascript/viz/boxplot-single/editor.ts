@@ -3,7 +3,7 @@ import { EditorDef } from "utils/editor";
 import { generateBoxConfig } from "viz/boxplot/editor";
 
 function run(v) {
-    v.forceDraw = true;
+    v.forceRedraw = true;
     v.run();
 }
 export const editorRef = {} as any;
