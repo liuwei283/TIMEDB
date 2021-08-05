@@ -3,8 +3,8 @@ import Oviz from "crux";
 import { Color } from "crux/dist/color";
 import { Component, XYPlotOption } from "crux/dist/element";
 import { findBoundsForValues } from "utils/maths";
-import { GridPlotOption } from "../classifier/grid-plot";
 import template from "./box.bvt";
+import { GridPlotOption } from "./grid-plot";
 
 interface ComplexBoxplotOption extends GridPlotOption {
     drawP: boolean;
@@ -13,14 +13,20 @@ interface ComplexBoxplotOption extends GridPlotOption {
     drawViolin: boolean;
     drawScatter: boolean;
     pData: any;
+    hollowBox: boolean;
     getColor: (pos: number) => string;
     getScatterColor: (pos: number) => string;
+    getViolinColor: (pos: number) => string;
+    colors: any;
 }
 
 export class ComplexBoxplot extends Component<ComplexBoxplotOption> {
 
     protected boxMax: number;
     protected offsetY: number = 0;
+    protected getColor;
+    protected getViolinColor;
+    protected getScatterColor;
 
     public render() {
         return this.t`${template}`;
@@ -32,11 +38,17 @@ export class ComplexBoxplot extends Component<ComplexBoxplotOption> {
 
             // @ts-ignore
             this.boxMax = this.prop.data.boxData.max;
+            if (this.prop.getColor) this.getColor = this.prop.getColor;
+            else this.getColor = (pos) => this.prop.colors.box || "pink";
+            if (this.prop.getScatterColor) this.getScatterColor = this.prop.getScatterColor;
+            else this.getScatterColor = (pos) => this.prop.colors.scatter || "#aaa";
+            if (this.prop.getViolinColor) this.getViolinColor = this.prop.getViolinColor;
+            else this.getViolinColor = (pos) => this.prop.colors.violin || "lightsteelblue";
         }
     }
 
-    protected getBoxColors(x, hollow = true) {
-        if (hollow) return [x, "white", x];
+    protected getBoxColors(x) {
+        if (this.prop.hollowBox) return [x, "white", x];
         else return [Color.literal(x).darken(30).string,
             Color.literal(x).lighten(10).string, "white" ];
     }
@@ -49,8 +61,9 @@ export class ComplexBoxplot extends Component<ComplexBoxplotOption> {
             drawViolin: false,
             drawScatter: false,
             drawP: true,
-            getColor: (pos: number) => "#aaa",
-            getScatterColor: (pos: number) => "pink",
+            hollowBox: true,
+            // getColor: (pos: number) => "green",
+            // getScatterColor: (pos: number) => "#aaa",
         };
     }
 
@@ -67,6 +80,7 @@ export type BoxData = {
     min?: number;
     max?: number;
 };
+
 export function processBoxData(values: number[][], categories: string[]): any {
     const boxData: BoxData = {
         categories,

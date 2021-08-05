@@ -1,6 +1,6 @@
-import { genDefaultPalette, withDefaultPalette } from "oviz-common/palette";
+import { generateGridPlotConfig } from "oviz-components/grid-plot";
 import { EditorDef } from "utils/editor";
-import { copyObject } from "utils/object";
+import { generateBoxConfig } from "viz/boxplot/editor";
 
 function run(v) {
     v.forceDraw = true;
@@ -8,16 +8,7 @@ function run(v) {
 }
 export const editorRef = {} as any;
 
-const cbpPalette = {
-    cBioPortal: {
-        name: "cBioPortal",
-        // miss, inframe, trunc, other, text, active layer, line, icon stroke
-        colors: ["#3d7f08", "#913810", "#000000", "#c55ebc", "#000000", "#777", "#555", "#fff"],
-    },
-};
-
 export function editorConfig(v): EditorDef {
-    const [defaultPalette] = genDefaultPalette(v.data.colors);
     return {
         sections: [
             {
@@ -34,15 +25,14 @@ export function editorConfig(v): EditorDef {
                                 {
                                     title: "Taxonomic rank",
                                     type: "select",
-                                    options: v.data.ranks.map((x, i)=> ({value: i, text: x})),
+                                    options: v.data.ranks,
                                     value: {
-                                        current: 3,
+                                        current: v.data.rank,
                                         callback(d) {
-                                            v.data.config.rankIndex = parseInt(d);
-                                            const rankLabel = v.data.ranks[parseInt(d)];
-                                            v.data.boxData = v.data.mainDict[rankLabel];
-                                            v.data.pValue = v.data.pDict[rankLabel];
-                                            v.forceRedraw = true;
+                                            v.data.rank = d;
+                                            v.data.data = v.data.mainDict[d];
+                                            editorRef.lowerBound.value = v.data.data.valueRange[0];
+                                            editorRef.upperBound.value = v.data.data.valueRange[1];
                                             run(v);
                                         },
                                     },
@@ -50,10 +40,11 @@ export function editorConfig(v): EditorDef {
                                 {
                                     title: "Range Lower Bound",
                                     type: "input",
+                                    ref: "lowerBound",
                                     value: {
-                                        current: 0,
+                                        current: v.data.data.valueRange[0],
                                         callback(d) {
-                                            v.data.boxData.valueRange[0] = parseFloat(d);
+                                            v.data.data.valueRange[0] = parseFloat(d);
                                             run(v);
                                         },
                                     },
@@ -61,78 +52,22 @@ export function editorConfig(v): EditorDef {
                                 {
                                     title: "Range Upper Bound",
                                     type: "input",
+                                    ref: "upperBound",
                                     value: {
-                                        current: 0,
+                                        current: v.data.data.valueRange[1],
                                         callback(d) {
-                                            v.data.boxData.valueRange[1] = parseFloat(d);
+                                            v.data.data.valueRange[1] = parseFloat(d);
                                             run(v);
                                         },
                                     },
                                 },
-                            ]
-                        }
+                            ],
+                        },
                     },
-                ]
+                ],
             },
-            {
-                id: "settings",
-                title: "Settings",
-                layout: "single-page",
-                view: {
-                    type: "list",
-                    items: [
-                        {
-                            type: "vue",
-                            title: "",
-                            component: "color-picker",
-                            data: {
-                                title: "Customize colors",
-                                scheme: copyObject(v.data.colors),
-                                palettes: withDefaultPalette(defaultPalette, cbpPalette),
-                                paletteMap: {"0":0,"1":1},
-                                id: "pwcolor",
-                                callback(colors) {
-                                    v.data.colors = [colors['0']];
-                                    run(v);
-                                },
-                            },
-                        },
-                        {
-                            title: "X label rotation angle: ",
-                            type: "input",
-                            value: {
-                                current: v.data.config.xLabelRotation,
-                                callback(d) {
-                                    v.data.config.xLabelRotation = parseFloat(d);
-                                    run(v);
-                                },
-                            },
-                        },
-                        {
-                            title: "Outliers",
-                            type: "checkbox",
-                            value: {
-                                current: v.data.config.showOutliers,
-                                callback(d) {
-                                    v.data.config.showOutliers = d;
-                                    run(v);
-                                },
-                            },
-                        },
-                        {
-                            title: "P-value",
-                            type: "checkbox",
-                            value: {
-                                current: v.data.config.showP,
-                                callback(d) {
-                                    v.data.config.showP = d;
-                                    run(v);
-                                },
-                            },
-                        },
-                    ],
-                },
-            },
+            generateGridPlotConfig(v),
+            generateBoxConfig(v),
         ],
     };
 }

@@ -1,8 +1,8 @@
 import Oviz from "crux";
 import { Color } from "crux/dist/color";
 import * as TextSize from "crux/dist/utils/text-size";
+import { GridPlot } from "../../oviz-components/grid-plot";
 import { editorConfig } from "./editor";
-import { GridPlot } from "./grid-plot";
 import template from "./template.bvt";
 
 import {register} from "page/visualizers";

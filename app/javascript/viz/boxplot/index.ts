@@ -1,17 +1,15 @@
 import Oviz from "crux";
-import { editorConfig } from "./editor";
+import { editorConfig, editorRef } from "./editor";
 import template from "./template.bvt";
 
+import { groupedChartColors} from "oviz-common/palette";
+import { ComplexBoxplot, processBoxData } from "oviz-components/complex-boxplot";
+import { GridPlot } from "oviz-components/grid-plot";
 import {register} from "page/visualizers";
 import { rankDict, sortByRankKey } from "utils/bio-info";
 import { registerEditorConfig } from "utils/editor";
 
-import { groupedChartColors} from "oviz-common/palette";
-import { GridPlot } from "../classifier/grid-plot";
-import { ComplexBoxplot, processBoxData } from "./complex-boxplot";
-
 const yLabel = "Beta diversity";
-const title = "Beta Diversity";
 
 const MODULE_NAME = "boxplot";
 
@@ -22,10 +20,9 @@ function init() {
         el: "#canvas",
         template,
         components: { GridPlot, ComplexBoxplot},
-        data: {title,
+        data: {
             config: {
                 yLabel,
-                rankIndex: 0,
                 plotSize: [300, 300],
                 showOutliers: true,
                 drawP: true,
@@ -36,11 +33,9 @@ function init() {
                 labelFontSize: 12,
                 labelOffsetVer: 30,
                 tickFontSize: 12,
-                getColor(pos) {
-                    return groupedChartColors[0];
-                },
             },
-            colors: { default: groupedChartColors[0] },
+            colors: { box: groupedChartColors[0], scatter: "pink",
+                violin: "LightSteelBlue"},
         },
         loadData: {
             boxMain: {
@@ -59,13 +54,12 @@ function init() {
                             const {rawData, boxData} = processRawData(d.slice(1, d.length));
                             this.data.mainDict[rankLabel] = boxData;
                             if (i === 0) {
-                                // this.data.test = boxData;
                                 this.data.rank = rankLabel;
                                 this.data.data = boxData;
                             }
                             raw[rankLabel] = rawData;
                     });
-                    this.data.ranks = this.data.ranks.map((x, i) =>  ({value: i, text: x}));
+                    this.data.ranks = this.data.ranks.map((x) =>  ({value: x, text: x}));
                     return raw;
                 },
             },
@@ -100,7 +94,7 @@ function init() {
         },
         setup() {
             console.log(this["_data"]);
-            registerEditorConfig(editorConfig(this));
+            registerEditorConfig(editorConfig(this), editorRef);
         },
     });
 

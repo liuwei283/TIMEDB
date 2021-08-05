@@ -2,11 +2,8 @@ svg {
     height = 700; width = 1000
     ComplexBoxplot {
         x = 50; y = 50
-        // getColor = getColor
-        // getScatterColor = getScatterColor
         pData = pDict[rank]
-        plotSize = [300, 300]
-        // xAxisRotation = 45
+        colors = colors
         @props data
         @props config
     }

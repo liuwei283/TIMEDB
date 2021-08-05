@@ -9,7 +9,7 @@ GridPlot {
             showNotch = false
             :box (_d) {
                 Rect.full  {
-                    @let boxColors = getBoxColors(prop.getColor(_d.pos))
+                    @let boxColors = getBoxColors(getColor(_d.pos))
                     fill = boxColors[1]
                     stroke = boxColors[0]
                     // fillOpacity = 0.001
@@ -26,7 +26,7 @@ GridPlot {
             }
             :whiskle (d) {
                 Component {
-                    @let boxColors = getBoxColors(prop.getColor(d.pos))
+                    @let boxColors = getBoxColors(getColor(d.pos))
                     height = 100%
                     Line { 
                         x = 50%; y2 = 100%
@@ -37,13 +37,13 @@ GridPlot {
             }
             :outlier(d){
                 Circle.centered {
-                    @let boxColors = getBoxColors(prop.getColor(d[0]))
+                    @let boxColors = getBoxColors(getColor(d[0]))
                     r = 2; fill = boxColors[0]; visible = prop.showOutliers
                 }
             }
             :mean(d) {
                 Line {
-                    @let boxColors = getBoxColors(prop.getColor(d.pos))
+                    @let boxColors = getBoxColors(getColor(d.pos))
                     x1 = 20%; x2 = 80%; stroke = boxColors[2]; strokeWidth = 2
                 }
             }
@@ -58,6 +58,7 @@ GridPlot {
                 quartile = false
                 extremeLine = false
                 basisCurve = true
+                fill = getViolinColor(0)
             }
         }
         @if prop.drawScatter {
@@ -67,7 +68,7 @@ GridPlot {
                 :children(d) {
                     Circle.centered {
                         r = 2
-                        fill = prop.getScatterColor(d.pos)
+                        fill = getScatterColor(d.pos)
                     }
                 }
             }
