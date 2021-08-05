@@ -1,17 +1,15 @@
 import Oviz from "crux";
-import { Color } from "crux/dist/color";
-import { editorConfig } from "./editor";
+import { editorConfig, editorRef } from "./editor";
 import template from "./template.bvt";
 
+import { groupedChartColors} from "oviz-common/palette";
+import { ComplexBoxplot, processBoxData } from "oviz-components/complex-boxplot";
+import { GridPlot } from "oviz-components/grid-plot";
 import {register} from "page/visualizers";
 import { rankDict, sortByRankKey } from "utils/bio-info";
 import { registerEditorConfig } from "utils/editor";
-import { computeLog, findBoundsForValues } from "utils/maths";
 
-import { groupedChartColors} from "oviz-common/palette";
-
-const ylabel = "Beta diversity";
-const title = "Beta Diversity";
+const yLabel = "Beta diversity";
 
 const MODULE_NAME = "boxplot";
 
@@ -21,22 +19,23 @@ function init() {
     const {visualizer} = Oviz.visualize({
         el: "#canvas",
         template,
-        data: {ylabel, title,
+        components: { GridPlot, ComplexBoxplot},
+        data: {
             config: {
-                rankIndex: 0,
-                plotWidth: 1000,
+                yLabel,
+                plotSize: [300, 300],
                 showOutliers: true,
-                showP: true,
+                drawP: true,
+                drawViolin: false,
+                drawScatter: true,
                 hollowBox: true,
-                xLabelRotation: 45,
+                xAxisRotated: true,
                 labelFontSize: 12,
+                labelOffsetVer: 30,
+                tickFontSize: 12,
             },
-            colors: { default: groupedChartColors[0] },
-            getBoxColors: (x, hollow = true) => {
-                if (hollow) return [x, "white", x];
-                else return [Color.literal(x).darken(30).string,
-                    Color.literal(x).lighten(10).string, "white" ];
-            },
+            colors: { box: groupedChartColors[0], scatter: "pink",
+                violin: "LightSteelBlue"},
         },
         loadData: {
             boxMain: {
@@ -54,10 +53,13 @@ function init() {
                             this.data.ranks.push(rankLabel);
                             const {rawData, boxData} = processRawData(d.slice(1, d.length));
                             this.data.mainDict[rankLabel] = boxData;
-                            if (i === 0) this.data.boxData = boxData;
+                            if (i === 0) {
+                                this.data.rank = rankLabel;
+                                this.data.data = boxData;
+                            }
                             raw[rankLabel] = rawData;
                     });
-                    this.data.ranks = this.data.ranks.map((x, i) =>  ({value: i, text: x}));
+                    this.data.ranks = this.data.ranks.map((x) =>  ({value: x, text: x}));
                     return raw;
                 },
             },
@@ -69,10 +71,21 @@ function init() {
                     this.data.pDict = {};
                     data.forEach(d => {
                         const rankLabel = rankDict[d.columns[0]];
+                        const categories = this.data.mainDict[rankLabel].categories;
                         this.data.pDict[rankLabel] = d.map(r => {
-                            const [source, target] = r[d.columns[0]].split(":");
                             const pValue = parseFloat(r[d.columns[1]]);
-                            return {source, target, pValue};
+                            const [cat1, cat2] = r[d.columns[0]].split(":");
+                            const pos1 = categories.indexOf(cat1);
+                            const pos2 = categories.indexOf(cat2);
+                            if (pos1 < pos2) {
+                                return {source: cat1, target: cat2, pValue,
+                                    sourcePos: pos1, targetPos: pos2,
+                                };
+                            } else {
+                                return {source: cat2, target: cat1, pValue,
+                                    sourcePos: pos2, targetPos: pos1,
+                                };
+                            }
                         });
                     });
                     return null;
@@ -80,7 +93,8 @@ function init() {
             },
         },
         setup() {
-            registerEditorConfig(editorConfig(this));
+            console.log(this["_data"]);
+            registerEditorConfig(editorConfig(this), editorRef);
         },
     });
 
@@ -93,29 +107,14 @@ export function registerBoxplot() {
 
 function processRawData(data: any[]) {
     const rawData = {};
-    const allValues = [];
+    const categories = [];
+    const values = [];
     data.forEach(d => {
         rawData[d[0]] = d.splice(1, d.length).map(x => parseFloat(x));
-        allValues.push(...rawData[d[0]]);
+        categories.push(d[0]);
+        values.push(rawData[d[0]]);
     });
-    const boxData = {categories: Object.keys(rawData),
-        valueRange: findBoundsForValues(allValues, 2, false, 0.5),
-        values: [], outliers: [], means: [], max: Math.max(...allValues)};
-    boxData.categories.forEach((k, i) => {
-        const stat1 = new Oviz.algo.Statistics(rawData[k]);
-        const interQuartileRange = stat1.Q3() - stat1.Q1();
-        const result = [];
-        rawData[k].forEach(d => {
-            if ((d < stat1.Q3() - 1.5 * interQuartileRange) || (d > stat1.Q3() + 1.5 * interQuartileRange))  {
-                boxData.outliers.push([i, d]);
-            } else {
-                result.push(d);
-            }
-        });
-        const stat2 = new Oviz.algo.Statistics(result);
-        boxData.values.push([stat2.min(), stat2.Q1(), stat2.median(), stat2.Q3(), stat2.max()]);
-        boxData.means.push(stat2.mean());
-    });
+    const boxData = processBoxData(values, categories);
     return {rawData, boxData};
 }
 

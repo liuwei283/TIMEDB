@@ -1,14 +1,14 @@
 import Oviz from "crux";
-import { Color } from "crux/dist/color";
 import template from "./template.bvt";
 
 import { groupedChartColors } from "oviz-common/palette";
+import { ComplexBoxplot, processBoxData } from "oviz-components/complex-boxplot";
 import { register } from "page/visualizers";
 import { getGroups } from "utils/array";
 import { rankDict, sortByRank } from "utils/bio-info";
 import { registerEditorConfig } from "utils/editor";
-import { findBoundsForValues } from "utils/maths";
-import { editorConfig } from "./editor";
+import { GridPlot } from "../../oviz-components/grid-plot";
+import { editorConfig, editorRef } from "./editor";
 
 // please change the displayed value range in the template by the prop: valueRange.
 const MODULE_NAME = "boxplot-single";
@@ -21,19 +21,26 @@ function init() {
         template,
         data: {
             config: {
-                plotWidth: 1000,
+                yLabel: "Alpha Diversity",
+                rankIndex: 0,
+                plotSize: [300, 300],
                 showOutliers: true,
-                showP: true,
-                xLabelRotation: 45,
+                drawP: true,
+                drawViolin: false,
+                drawScatter: true,
+                hollowBox: true,
+                xAxisRotated: true,
+                labelFontSize: 12,
+                labelOffsetVer: 30,
+                tickFontSize: 12,
+                getColor(pos) {
+                    return groupedChartColors[0];
+                },
             },
-            colors: { default: groupedChartColors[0] },
-            ylabel: "Alpha diversity",
-            getBoxColors: (x, hollow = true) => {
-                if (hollow) return [x, "white", x];
-                else return [Color.literal(x).darken(30).string,
-                    Color.literal(x).lighten(10).string, "white" ];
-            },
+            colors: { box: groupedChartColors[0], scatter: "pink",
+                violin: "LightSteelBlue"},
         },
+        components: { GridPlot, ComplexBoxplot},
         loadData: {
             boxSingleMain: {
                 fileKey: "boxSingleMain",
@@ -49,38 +56,20 @@ function init() {
                         const rankLabel = rankDict[d[rankKey]];
                         this.data.ranks.push(rankLabel);
                         const allValues = [];
-                        const initialData = [[], []];
+                        const values = this.data.categories.map(x => []);
                         samples.forEach(s => {
                             const v = parseFloat(d[s]);
                             allValues.push(v);
-                            if (this.data.groupDict[s] === this.data.groups[0])
-                                initialData[0].push(v);
-                            else
-                                initialData[1].push(v);
+                            const catIndex = this.data.categories.indexOf(this.data.groupDict[s]);
+                            values[catIndex].push(v);
                         });
-                        const boxData = { categories: [...this.data.groups],
-                            valueRange: findBoundsForValues(allValues, 2, false, 0.5),
-                            values: [], outliers: [], means: [], max: Math.max(...allValues)};
-                        this.data.groups.forEach((group, i) => {
-                            const result = [];
-                            const stat1 = new Oviz.algo.Statistics(initialData[i]);
-                            const interQuartileRange = stat1.Q3() - stat1.Q1();
-                            initialData[i].forEach(x => {
-                                if ((x < stat1.Q3() - 1.5 * interQuartileRange) || (x > stat1.Q3() + 1.5 * interQuartileRange))  {
-                                    boxData.outliers.push([i, x]);
-                                } else {
-                                    result.push(x);
-                                }
-                            });
-                            const stat2 = new Oviz.algo.Statistics(result);
-                            console.log([group, stat2.Q3()]);
-                            boxData.values.push([stat2.min(), stat2.Q1(), stat2.median(), stat2.Q3(), stat2.max()]);
-                            boxData.means.push(stat2.mean());
-                        });
-                        this.data.mainDict[rankLabel] = {...boxData};
+                        const boxData = processBoxData(values, this.data.categories);
+                        this.data.mainDict[rankLabel] = boxData;
                     });
-                    this.data.ranks = this.data.ranks.sort((a, b) => sortByRank(a,b));
-                    this.data.boxData = this.data.mainDict[this.data.ranks[3]];
+                    this.data.ranks = this.data.ranks.sort((a, b) => sortByRank(a, b));
+                    this.data.rank = this.data.ranks[3] || this.data.ranks[this.data.ranks.length - 1];
+                    this.data.data = this.data.mainDict[this.data.rank];
+                    this.data.ranks = this.data.ranks.map((x) =>  ({value: x, text: x}));
                     return null;
                 },
             },
@@ -90,7 +79,7 @@ function init() {
                 dsvHasHeader: true,
                 loaded(data) {
                     this.data.groupDict = {};
-                    this.data.groups = getGroups(data, data.columns[1]);
+                    this.data.categories = getGroups(data, data.columns[1]);
                     data.forEach(d => {
                         this.data.groupDict[d[data.columns[0]]] = d[data.columns[1]];
                     });
@@ -105,16 +94,20 @@ function init() {
                 loaded(data) {
                     this.data.pDict = {};
                     data.forEach(d => {
-                        const rankLabel = rankDict[d[data.columns[0]]]; 
-                        this.data.pDict[rankLabel] = parseFloat(d[data.columns[1]]);
+                        const rankLabel = rankDict[d[data.columns[0]]];
+                        this.data.pDict[rankLabel] = [{source: this.data.categories[0],
+                            target: this.data.categories[1],
+                            pValue: parseFloat(d[data.columns[1]]),
+                            sourcePos: 0, targetPos: 1,
+                        }];
                     });
-                    this.data.pValue = this.data.pDict[this.data.ranks[3]];
+                    this.data.pValue = this.data.pDict[this.data.rank];
                 },
             },
         },
         setup() {
-            this.data.plotWidth = 1000;
-            registerEditorConfig(editorConfig(this));
+            console.log(this["_data"]);
+            registerEditorConfig(editorConfig(this), editorRef);
         },
     });
 
@@ -122,6 +115,7 @@ function init() {
 }
 
 register(MODULE_NAME, init);
+
 export function registerBoxplotSingle() {
     register(MODULE_NAME, init);
 }
