@@ -60,6 +60,7 @@ function updateSpeciesSorting(v, keys) {
         }
         getters.push([getter, sOrder === "a"]);
     }
+    getters.push([(s => v.data.speciesSortingScore[s]), false]);
     v.data.species = sort(v.data, getters);
     filterSpecies(v);
     update(v);
@@ -102,6 +103,7 @@ function selectGenes(genes: any[], str: string) {
 function compare(a: any, b: any, getter: any, asc: boolean) {
     const a_ = getter(a),
         b_ = getter(b);
+    // console.log([a_, b_]);
     const va = asc ? a_ : b_;
     const vb = asc ? b_ : a_;
     if (va < vb) return -1;
@@ -116,14 +118,14 @@ function update(v) {
 export function applyDefaultSpeciesSort(v) {
     const getters = [];
 
+    getters.push([(s => v.data.speciesSortingScore[s]), false]);
+
     getters.push([(s => {
         if (!!v.data.metaDict[s])
             return v.data.metaDict[s]["type"];
         else
             return "*";
     }), true]);
-
-    getters.push([(s => v.data.speciesSortingScore[s]), false]);
 
     v.data.species = sort(v.data, getters);
     filterSpecies(v);
