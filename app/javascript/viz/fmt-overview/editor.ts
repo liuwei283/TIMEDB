@@ -189,6 +189,28 @@ export function editorConfig(v: any): EditorDef {
                                 //     },
                                 // },
                                 {
+                                    title: "Species bar width",
+                                    type: "input",
+                                    value: {
+                                        current: v.data.gridW,
+                                        callback(x) {
+                                            v.data.gridW = parseInt(x);
+                                            update(v);
+                                        },
+                                    },
+                                },
+                                {
+                                    title: "Abundance plot height",
+                                    type: "input",
+                                    value: {
+                                        current: v.data.plotHeight,
+                                        callback(x) {
+                                            v.data.plotHeight = parseInt(x);
+                                            update(v);
+                                        },
+                                    },
+                                },
+                                {
                                     title: "Label rotation angle",
                                     type: "input",
                                     value: {

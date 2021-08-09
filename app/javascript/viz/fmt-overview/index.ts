@@ -23,6 +23,8 @@ function init() {
         data: {
             labelAngle: 45,
             italicLabel: false,
+            gridW: 12,
+            plotHeight: 120,
         },
         theme: "light",
         loadData: {

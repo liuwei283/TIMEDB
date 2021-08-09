@@ -1,10 +1,11 @@
 svg {
     height = 900; width = 1000
     @let offsetY = 470
-    @let gridH = 12
-    @let gridW = 12
+    @let gridH = gridW
+    // @let gridW = 12
     @let offsetX = 50
     @let mainWidth = 12 * speciesCount
+    // @let plotHeight = 120
     Component {
         x = offsetX; y = 20
         Rows {
@@ -28,15 +29,15 @@ svg {
                     }
                     
                     Rect {
-                        x = 100%; height = 100%; width = 15; fill = "#ccc"
+                        x = 100%; height = 100%; width = 18; fill = "#ccc"
                         stroke = @color("line"); strokeWidth = 0.5
                     }
                     Text {
                         rotation = @rotate(90)
-                        x = @geo(100, 8); y = 50%; anchor = @anchor("center", "middle")
+                        x = @geo(100, 10); y = 50%; anchor = @anchor("center", "middle")
                         text = sample; fontSize = 12
                     }
-                    height = 150; width = mainWidth
+                    height = plotHeight; width = mainWidth
                     padding-y = 2
                     data = hist.result[sample]
                     stackedData = {
