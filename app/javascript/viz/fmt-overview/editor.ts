@@ -152,9 +152,6 @@ export function editorConfig(v: any): EditorDef {
     const d = v.data;
     const speciesReorderOpts = [
         ["id", "Species Name"],
-        // ["bis", "Bisection"],
-        // ...d.histoKeys.map((h, i) => [`^hist_${i}`, `Histogram ${h[0].name}: Total`]),
-        // ...d.histoKeys.flat().map(k => [k.rawKey, k.key, `Histogram ${k.name}`]),
         ...d.metaFeatures.map(k => [`mt_${k}`, k, "Meta info"]),
     ]
         .flatMap(([k, name, p]) => [
