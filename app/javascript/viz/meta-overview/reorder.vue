@@ -9,7 +9,7 @@
             </draggable>
             <draggable v-else v-model="array" class="list-group">
                 <div class="list-group-item" v-for="d in array" :key="d">
-                    <span class="text-light">{{d}}</span>
+                    <span>{{d}}</span>
                     <!-- <p class="text-light">{{d}}</p> -->
                 </div>
             </draggable>
