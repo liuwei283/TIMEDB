@@ -61,7 +61,8 @@ export default class ReorderSpecies extends Vue {
     }
 
     private apply() {
-        if (this.data.keys[0] !== "group") this.useDefault = false;
+        // if (this.data.keys[0] !== "group") this.useDefault = false;
+        if (this.data.keys.length > 0) this.useDefault = false;
         this.data.callback(
             this.data.keys,
             this.useDefault
@@ -69,7 +70,8 @@ export default class ReorderSpecies extends Vue {
     }
 
     private useDefaultSort() {
-        this.data.keys = ["group"];
+        // this.data.keys = ["group"];
+        this.data.keys = [];
         this.useDefault = true;
     }
 }

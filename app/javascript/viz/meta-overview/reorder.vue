@@ -3,11 +3,14 @@
         <b-btn size="sm" @click="toggleModal(true)" block>{{ data.title || 'Reorder' }}</b-btn>
         <b-modal ref="modal" :title="data.title || 'Reorder'" @ok="apply" no-stacking no-fade centered>
             <draggable v-if="data.compact" v-model="array" class="compact-container d-flex flex-wrap">
-                <div class="item m-1 p-1" v-for="d in array" :key="d">{{d}}</div>
+                <div class="item m-1 p-1" v-for="d in array" :key="d">
+                    <span class="text-light">{{d}}</span>
+                </div>
             </draggable>
             <draggable v-else v-model="array" class="list-group">
                 <div class="list-group-item" v-for="d in array" :key="d">
-                    <span>{{d}}</span>
+                    <span class="text-light">{{d}}</span>
+                    <!-- <p class="text-light">{{d}}</p> -->
                 </div>
             </draggable>
         </b-modal>

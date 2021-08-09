@@ -1,12 +1,11 @@
-svg {
-    height = 900; width = 1000
-    @let offsetY = 470
-    @let gridH = gridW
-    // @let gridW = 12
-    @let offsetX = 50
-    @let mainWidth = 12 * speciesCount
-    // @let plotHeight = 120
+// svg {
+//     // height = 900; width = 1000
+
+//     // @let plotHeight = 120
     Component {
+        @let gridH = 12
+        // @let gridW = 12
+        @let offsetX = 50
         x = offsetX; y = 20
         Rows {
             static = true
@@ -120,8 +119,8 @@ svg {
                             width = gridW
                             Text {
                                 rotation = @rotate(labelAngle)
-                                text = s; anchor = @anchor("l", "c")
-                                y = 2; x = 50%; fontSize = 11
+                                text = s; anchor = @anchor("l", "m")
+                                y = 2; x = @geo(50, 1); fontSize = 11
                                 style:font-style = italicLabel ? "italic" : "normal"
                             }
                         }
@@ -153,7 +152,6 @@ svg {
                 y = 220
                 @for feature in metaFeatures {
                     Rows {
-                        
                         Component {
                             width = 130
                             height = 40 + 16 * metaInfo[feature].values.length
@@ -204,4 +202,4 @@ svg {
         }
     }
     
-}
+// }

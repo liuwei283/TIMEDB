@@ -31,8 +31,11 @@ function updateHistoLegendData(v) {
 
 const samplesVueData: any = {};
 
+let getters = [];
+let sortScoreIndex = 0;
+
 function updateSpeciesSorting(v, keys) {
-    const getters = [];
+    getters = [];
 
     for (const sampleSortBy of keys) {
         const sOrder = sampleSortBy[0];
@@ -61,6 +64,7 @@ function updateSpeciesSorting(v, keys) {
         getters.push([getter, sOrder === "a"]);
     }
     getters.push([(s => v.data.speciesSortingScore[s]), false]);
+    sortScoreIndex = keys.length;
     v.data.species = sort(v.data, getters);
     filterSpecies(v);
     update(v);
@@ -116,7 +120,7 @@ function update(v) {
     v.run();
 }
 export function applyDefaultSpeciesSort(v) {
-    const getters = [];
+    getters = [];
 
     getters.push([(s => v.data.speciesSortingScore[s]), false]);
 
@@ -195,6 +199,7 @@ export function editorConfig(v: any): EditorDef {
                                         current: v.data.gridW,
                                         callback(x) {
                                             v.data.gridW = parseInt(x);
+                                            v.data.mainSizeChanged = true;
                                             update(v);
                                         },
                                     },
@@ -247,6 +252,9 @@ export function editorConfig(v: any): EditorDef {
                                         callback(array) {
                                             v.data.samples = array;
                                             computeSortingScore(v.data);
+                                            getters[sortScoreIndex] = [(s => v.data.speciesSortingScore[s]), false];
+                                            v.data.species = sort(v.data, getters);
+                                            filterSpecies(v);
                                             update(v);
                                         },
                                     },
@@ -284,8 +292,10 @@ export function editorConfig(v: any): EditorDef {
                                         keys: Array.from(conf.samplesSortBy),
                                         // mutTypes: Array.from(v.data.mutTypes),
                                         callback: (s, useDefault) => {
-                                            if (useDefault) applyDefaultSpeciesSort(v);
-                                            else updateSpeciesSorting(v, s);
+                                            if (useDefault) {
+                                                applyDefaultSpeciesSort(v);
+                                                update(v);
+                                            } else updateSpeciesSorting(v, s);
                                         },
                                     },
                                 },
@@ -307,7 +317,8 @@ export function editorConfig(v: any): EditorDef {
                                         callback(hiddenSamples) {
                                             v.data.hiddenSpecies = new Set(hiddenSamples);
                                             filterSpecies(v);
-                                            v.root._sizeUpdated = true;
+                                            // v.root._sizeUpdated = true;
+                                            v.data.mainSizeChanged = true;
                                             update(v);
                                         },
                                     },
