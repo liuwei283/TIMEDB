@@ -100,7 +100,7 @@
                                     }
                                 }
                                 Text(f) {
-                                    x = gridW * species.length + 5; 
+                                    x = mainWidth + 5; 
                                     // x = offsetX + gridW * filteredSamples.length + 5; 
                                     y = 6; anchor = @anchor("m", "l"); fontSize = 11
                                 }
