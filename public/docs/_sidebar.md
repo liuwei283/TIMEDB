@@ -7,8 +7,9 @@
   - [How to add a new visulization module](visualizer.md)
   - [How to add submission port to the deepomics module](submit.md)
 
-<!-- - Developer guide
-
+ - Developer guide
+  - [Project installation guide](start.md)
+<!--
   - [Module development](module-dev.md)
   - [Pipeline development](pipeline-dev.md)
   - [Resources](resources.md)

@@ -45,7 +45,7 @@ The platform has 2 viz mode:
 
 
 **Database Design Overview**
-![Database Design](_images/db_design.png)
+![Database Design](_images/db_design.0.2.png)
 
 
 Some concepts:
