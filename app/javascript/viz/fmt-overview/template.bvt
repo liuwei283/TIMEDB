@@ -1,11 +1,11 @@
-svg {
-    height = 900; width = 1000
-    @let offsetY = 470
-    @let gridH = 12
-    @let gridW = 12
-    @let offsetX = 50
-    @let mainWidth = 12 * speciesCount
+// svg {
+//     // height = 900; width = 1000
+
+//     // @let plotHeight = 120
     Component {
+        @let gridH = 12
+        // @let gridW = 12
+        @let offsetX = 50
         x = offsetX; y = 20
         Rows {
             static = true
@@ -28,15 +28,15 @@ svg {
                     }
                     
                     Rect {
-                        x = 100%; height = 100%; width = 15; fill = "#ccc"
+                        x = 100%; height = 100%; width = 18; fill = "#ccc"
                         stroke = @color("line"); strokeWidth = 0.5
                     }
                     Text {
                         rotation = @rotate(90)
-                        x = @geo(100, 8); y = 50%; anchor = @anchor("center", "middle")
+                        x = @geo(100, 10); y = 50%; anchor = @anchor("center", "middle")
                         text = sample; fontSize = 12
                     }
-                    height = 150; width = mainWidth
+                    height = plotHeight; width = mainWidth
                     padding-y = 2
                     data = hist.result[sample]
                     stackedData = {
@@ -100,7 +100,7 @@ svg {
                                     }
                                 }
                                 Text(f) {
-                                    x = gridW * species.length + 5; 
+                                    x = mainWidth + 5; 
                                     // x = offsetX + gridW * filteredSamples.length + 5; 
                                     y = 6; anchor = @anchor("m", "l"); fontSize = 11
                                 }
@@ -119,8 +119,8 @@ svg {
                             width = gridW
                             Text {
                                 rotation = @rotate(labelAngle)
-                                text = s; anchor = @anchor("l", "c")
-                                y = 2; x = 50%; fontSize = 11
+                                text = s; anchor = @anchor("l", "m")
+                                y = 2; x = @geo(50, 1); fontSize = 11
                                 style:font-style = italicLabel ? "italic" : "normal"
                             }
                         }
@@ -152,7 +152,6 @@ svg {
                 y = 220
                 @for feature in metaFeatures {
                     Rows {
-                        
                         Component {
                             width = 130
                             height = 40 + 16 * metaInfo[feature].values.length
@@ -203,4 +202,4 @@ svg {
         }
     }
     
-}
+// }

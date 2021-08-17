@@ -1,13 +1,12 @@
 
 import Oviz from "crux";
-import template from "./template.bvt";
+import { FMT } from "./root";
+
 import { register } from "page/visualizers";
 import { registerEditorConfig } from "utils/editor";
 import { main, meta } from "./data";
 
 import { editorConfig, editorRef } from "./editor";
-
-
 
 const MODULE_NAME = "fmt-overview";
 
@@ -18,11 +17,13 @@ function init() {
         // renderer: "svg",
         // width: 1600,
         // height: 750,
-        template,
-        // root: new MetaOverview(),
+        // template,
+        root: new FMT(),
         data: {
             labelAngle: 45,
             italicLabel: false,
+            gridW: 12,
+            plotHeight: 120,
         },
         theme: "light",
         loadData: {
@@ -39,6 +40,7 @@ function init() {
             },
         },
         setup() {
+            this.data.mainWidth = this.data.gridW * this.data.speciesCount;
             registerEditorConfig(editorConfig(this), editorRef);
         },
     });

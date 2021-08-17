@@ -360,7 +360,7 @@ svg {
                             y = -25
                             fontSize = 15
                             style:font-weight="bold"
-                            text = "Classification Rank (" + tree.dataOpt.classficationRank + ")"
+                            text = "Taxonomy Level (" + tree.dataOpt.classficationRank + ")"
                         }
                         @for (node, i) in tree.depthNodesLegend {
                             Circle {

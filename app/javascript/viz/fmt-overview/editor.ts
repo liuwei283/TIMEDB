@@ -31,8 +31,11 @@ function updateHistoLegendData(v) {
 
 const samplesVueData: any = {};
 
+let getters = [];
+let sortScoreIndex = 0;
+
 function updateSpeciesSorting(v, keys) {
-    const getters = [];
+    getters = [];
 
     for (const sampleSortBy of keys) {
         const sOrder = sampleSortBy[0];
@@ -60,6 +63,8 @@ function updateSpeciesSorting(v, keys) {
         }
         getters.push([getter, sOrder === "a"]);
     }
+    getters.push([(s => v.data.speciesSortingScore[s]), false]);
+    sortScoreIndex = keys.length;
     v.data.species = sort(v.data, getters);
     filterSpecies(v);
     update(v);
@@ -102,6 +107,7 @@ function selectGenes(genes: any[], str: string) {
 function compare(a: any, b: any, getter: any, asc: boolean) {
     const a_ = getter(a),
         b_ = getter(b);
+    // console.log([a_, b_]);
     const va = asc ? a_ : b_;
     const vb = asc ? b_ : a_;
     if (va < vb) return -1;
@@ -114,7 +120,9 @@ function update(v) {
     v.run();
 }
 export function applyDefaultSpeciesSort(v) {
-    const getters = [];
+    getters = [];
+
+    getters.push([(s => v.data.speciesSortingScore[s]), false]);
 
     getters.push([(s => {
         if (!!v.data.metaDict[s])
@@ -122,8 +130,6 @@ export function applyDefaultSpeciesSort(v) {
         else
             return "*";
     }), true]);
-
-    getters.push([(s => v.data.speciesSortingScore[s]), false]);
 
     v.data.species = sort(v.data, getters);
     filterSpecies(v);
@@ -146,9 +152,6 @@ export function editorConfig(v: any): EditorDef {
     const d = v.data;
     const speciesReorderOpts = [
         ["id", "Species Name"],
-        // ["bis", "Bisection"],
-        // ...d.histoKeys.map((h, i) => [`^hist_${i}`, `Histogram ${h[0].name}: Total`]),
-        // ...d.histoKeys.flat().map(k => [k.rawKey, k.key, `Histogram ${k.name}`]),
         ...d.metaFeatures.map(k => [`mt_${k}`, k, "Meta info"]),
     ]
         .flatMap(([k, name, p]) => [
@@ -187,6 +190,29 @@ export function editorConfig(v: any): EditorDef {
                                 //     },
                                 // },
                                 {
+                                    title: "Species bar width",
+                                    type: "input",
+                                    value: {
+                                        current: v.data.gridW,
+                                        callback(x) {
+                                            v.data.gridW = parseInt(x);
+                                            v.data.mainSizeChanged = true;
+                                            update(v);
+                                        },
+                                    },
+                                },
+                                {
+                                    title: "Abundance plot height",
+                                    type: "input",
+                                    value: {
+                                        current: v.data.plotHeight,
+                                        callback(x) {
+                                            v.data.plotHeight = parseInt(x);
+                                            update(v);
+                                        },
+                                    },
+                                },
+                                {
                                     title: "Label rotation angle",
                                     type: "input",
                                     value: {
@@ -223,6 +249,9 @@ export function editorConfig(v: any): EditorDef {
                                         callback(array) {
                                             v.data.samples = array;
                                             computeSortingScore(v.data);
+                                            getters[sortScoreIndex] = [(s => v.data.speciesSortingScore[s]), false];
+                                            v.data.species = sort(v.data, getters);
+                                            filterSpecies(v);
                                             update(v);
                                         },
                                     },
@@ -260,8 +289,10 @@ export function editorConfig(v: any): EditorDef {
                                         keys: Array.from(conf.samplesSortBy),
                                         // mutTypes: Array.from(v.data.mutTypes),
                                         callback: (s, useDefault) => {
-                                            if (useDefault) applyDefaultSpeciesSort(v);
-                                            else updateSpeciesSorting(v, s);
+                                            if (useDefault) {
+                                                applyDefaultSpeciesSort(v);
+                                                update(v);
+                                            } else updateSpeciesSorting(v, s);
                                         },
                                     },
                                 },
@@ -283,7 +314,8 @@ export function editorConfig(v: any): EditorDef {
                                         callback(hiddenSamples) {
                                             v.data.hiddenSpecies = new Set(hiddenSamples);
                                             filterSpecies(v);
-                                            v.root._sizeUpdated = true;
+                                            // v.root._sizeUpdated = true;
+                                            v.data.mainSizeChanged = true;
                                             update(v);
                                         },
                                     },

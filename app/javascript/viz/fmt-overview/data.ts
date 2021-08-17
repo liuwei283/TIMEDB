@@ -1,8 +1,10 @@
 import { ColorScheme, ColorSchemeCategory, ColorSchemeGradient } from "crux/dist/color";
 import { schemeSet1, schemeSet2, schemeSet3 } from "d3-scale-chromatic";
 import { applyDefaultSpeciesSort } from "./editor";
+
 import * as d3 from "d3";
 import * as _ from "lodash";
+import { getGroups } from "utils/array";
 
 const schemeSets = [schemeSet1, schemeSet2, schemeSet3];
 
@@ -23,21 +25,14 @@ export const rainbowL = ["hsl(0, 73%, 80%)",
 
 const paletteColors = ["#c30", "#ffc", "#03c"];
 
-const getDistinctValues = (data: any[], key: string) => {
-    return data.reduce((a, x) => {
-        if (a.indexOf(x[key]) < 0) a.push(x[key]);
-        return a;
-    }, []);
-};
-
 export function main(data) {
     this.data.hiddenSpecies = new Set();
-    this.data.species = this.data.filteredSpecies = getDistinctValues(data, data.columns[0]).sort();
+    this.data.species = this.data.filteredSpecies = getGroups(data, data.columns[0]).sort();
     this.data.speciesCount = this.data.species.length;
-    this.data.samples = getDistinctValues(data, data.columns[1]).sort();
-    // this.data.types = getDistinctValues(data, data.columns[2]).sort();
+    this.data.samples = getGroups(data, data.columns[1]).sort();
+    // this.data.types = getGroups(data, data.columns[2]).sort();
     // this.data.chosenType = this.data.types[0];
-    this.data.sources = getDistinctValues(data, data.columns[3]).sort();
+    this.data.sources = getGroups(data, data.columns[3]).sort();
     this.data.mainDict = _.groupBy(data, "Sample");
     // this.data.samples.forEach(k => {
     //     this.data.mainDict[k] = _.groupBy(this.data.mainDict[k], "Type");
@@ -54,7 +49,6 @@ export function main(data) {
 
 export function computeSortingScore(data) {
 
-
     data.speciesSortingScore = {};
     data.species.forEach(s => {
         data.speciesSortingScore[s] = 0;
@@ -64,13 +58,15 @@ export function computeSortingScore(data) {
         if (!!data.mainDict[s]) {
             const groupedData = _.groupBy(data.mainDict[s], "Source");
             data.sources.forEach((k, j) => {
-                const sourceWeight = 1.5- j / (2 * data.sources.length);
-                // console.log(sourceWeight);
+                const sourceWeight = 1 - j / data.sources.length;
                 if (!!groupedData[k]) {
                     groupedData[k].forEach(x => {
                         data.speciesSortingScore[x.Species] += sampleWeight * sourceWeight * parseFloat(x.Abd) / 100;
                     });
                 }
+            });
+            getGroups(data.mainDict[s], "Species").forEach(sp => {
+                data.speciesSortingScore[sp] += Math.pow(0.5, i - 1);
             });
         }
     });

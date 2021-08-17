@@ -22,8 +22,8 @@ export function init(id, path, config) {
                 loaded: treeLoaded,
             },
         },
-
+        setup() {
+            this.defineGradient("colorScale", "horizontal", ["#eef4fa", "#1565C0"]);
+        },
     });
-    
 }
-
