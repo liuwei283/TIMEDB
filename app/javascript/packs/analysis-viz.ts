@@ -2,6 +2,8 @@ import Vue from "vue";
 
 import VApp from "page/vapp.vue";
 
+import EditText from "oviz-components/edit-text-vue.vue";
+
 import ColorPicker from "page/builtin/color-picker.vue";
 import SectionFiles from "page/builtin/section-files.vue";
 import FilterSpecies from "viz/fmt-overview/filter-species.vue";
@@ -27,6 +29,12 @@ function initVApp() {
         const vapp = new Vue({
             el: document.getElementById("vapp"),
             render: h => h(VApp),
+        });
+        const div = document.createElement("div");
+        div.setAttribute("id", "edit-text");
+        const _ = new Vue({
+            el: "#edit-text",
+            render: h => h(EditText),
         });
     }
 }

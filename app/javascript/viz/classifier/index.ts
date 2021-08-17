@@ -1,6 +1,7 @@
 import Oviz from "crux";
 import { Color } from "crux/dist/color";
 import * as TextSize from "crux/dist/utils/text-size";
+import { EditText } from "oviz-components/edit-text";
 import { GridPlot } from "../../oviz-components/grid-plot";
 import { editorConfig } from "./editor";
 import template from "./template.bvt";
@@ -23,7 +24,7 @@ function init() {
     const {visualizer} = Oviz.visualize({
         el: "#canvas",
         template,
-        components: { GridPlot },
+        components: { GridPlot, EditText },
         data: {
             config: {
                 rankIndex: 0,
@@ -52,7 +53,7 @@ function init() {
                 else return [Color.literal(x).darken(30).string,
                     Color.literal(x).lighten(10).string, "white" ];
             },
-            updateNotePos(ev, deltaPos) {
+            updateNotePos(ev, el, deltaPos) {
                 this.notesProps.x += deltaPos[0];
                 this.notesProps.y += deltaPos[1];
                 this.redraw();

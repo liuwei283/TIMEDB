@@ -4,6 +4,7 @@ import template from "./template.bvt";
 
 import { groupedChartColors} from "oviz-common/palette";
 import { ComplexBoxplot, processBoxData } from "oviz-components/complex-boxplot";
+import { EditText } from "oviz-components/edit-text";
 import { GridPlot } from "oviz-components/grid-plot";
 import {register} from "page/visualizers";
 import { rankDict, sortByRankKey } from "utils/bio-info";
@@ -19,7 +20,7 @@ function init() {
     const {visualizer} = Oviz.visualize({
         el: "#canvas",
         template,
-        components: { GridPlot, ComplexBoxplot},
+        components: { GridPlot, ComplexBoxplot, EditText},
         data: {
             config: {
                 yLabel,
