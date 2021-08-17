@@ -67,25 +67,34 @@ zoomBarG.selectAll("text").data(scaleTicks)
     .attr("text-anchor", "middle")
     .text((d) => d)
     .attr("x", (d) => scaleBarPos(d) + 5);
-zoomBarG.append("text").text("Zoom Scale:")
-        .attr("font-size", "11").attr("x", 0).attr("y", 0)
-        .on("mouseover", () => {
-            div.transition()
-                .duration(200)
-                .style("opacity", 1);
-            div.html(`<strong>Wheel to zoom in/out</strong><br>
-                    <strong>Click on blank space to reset</strong>`)
-                .style("left", (d3.event.pageX + 15) + "px")
-                .style("top", (d3.event.pageY + 15) + "px")
-                .style("padding", "5px")
-                .style("border-radius", "3px")
-                .style("color", "white")
-                .style("background-color", "rgba(50,50,50, 0.85)");
-          }).on("mouseout", () => {
-            div.transition()
-                .duration(500)
-                .style("opacity", 0);
-          });
+zoomBarG.append("text")
+        .attr("class", "fa help-text")
+        .attr("font-family", "arial")
+        .text("\uf059")
+        .attr("font-size", "12").attr("x", 0).attr("y", 0)
+        .style("fill", "#666");
+zoomBarG.append("text")
+        .attr("class", "help-text")
+        .text("Zoom Scale: ")
+        .attr("font-size", 11).attr("x", 13).attr("y", 0);
+zoomBarG.selectAll("text.help-text").attr("cursor", "help")
+    .on("mouseover", () => {
+        div.transition()
+            .duration(200)
+            .style("opacity", 1);
+        div.html(`<strong>Wheel to zoom in/out</strong><br>
+                <strong>Click on blank space to reset</strong>`)
+            .style("left", (d3.event.pageX + 15) + "px")
+            .style("top", (d3.event.pageY + 15) + "px")
+            .style("padding", "5px")
+            .style("border-radius", "3px")
+            .style("color", "white")
+            .style("background-color", "rgba(50,50,50, 0.85)");
+  }).on("mouseout", () => {
+    div.transition()
+        .duration(500)
+        .style("opacity", 0);
+  });
 zoomBarG.append("line").attr("strokeWidth", 1)
         .attr("stroke", "#000").attr("x1", 5).attr("y1", 20)
         .attr("x2", 85).attr("y2", 20);
