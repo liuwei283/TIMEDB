@@ -24,11 +24,12 @@ export class GridPlot extends Component<GridPlotOption> {
             height = 30 + prop.plotSize[1]
             width = 35 + prop.plotSize[0]
             padding-l = 35; padding-b = 30
-            @yield background
-            @yield content with prop.data
-            Rect.full {
-                stroke = @color("line"); fill = "none"
+            @yield background default {
+                Rect.full {
+                    fill = "none"; strokeWidth = 1; stroke = "black"
+                }
             }
+            @yield content with prop.data
             @yield leftAxis default {
             @if prop.yAxisRotated {
                 Axis("left") {
@@ -41,6 +42,9 @@ export class GridPlot extends Component<GridPlotOption> {
                     }
                 }
             } @else {
+                Component {
+                    // @expr console.log("????")
+                }
                 Axis("left") {
                     label.fontSize = prop.tickFontSize
                 }
@@ -73,16 +77,15 @@ export class GridPlot extends Component<GridPlotOption> {
                         y = 100%
                         label.fontSize = prop.tickFontSize
                     }
-                    // Rect { height = 10; width = 10}
                 }
             }
-            Text {
+            EditText {
                 text = prop.flip ? prop.xLabel : prop.yLabel
                 x = -prop.labelOffsetVer; y = 50%; rotation = @rotate(-90)
                 fontSize = prop.labelFontSize
                 anchor = @anchor("m", "c")
             }
-            Text {
+            EditText {
                 text = prop.flip ? prop.yLabel : prop.xLabel
                 x = 50%; y = @geo(100,prop.labelOffsetHor)
                 fontSize = prop.labelFontSize
@@ -93,7 +96,6 @@ export class GridPlot extends Component<GridPlotOption> {
 
     protected adjustLabel(ev, el, delta, cuur) {
         this.xAxisRotation = cuur[0] * 180 / Math.PI;
-        // console.log(this.xAxisRotation);
         this.redraw();
     }
 
@@ -106,8 +108,6 @@ export class GridPlot extends Component<GridPlotOption> {
             tickFontSize: 10,
             labelOffsetVer: 25,
             labelOffsetHor: 15,
-            // xAxisRotated: false,
-            // yAxisRotated: true,
         };
     }
 }

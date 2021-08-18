@@ -153,14 +153,11 @@
 
 <style scoped lang="scss">
     #vapp {
-        height: 100%;
-        background-color: white;
-    }
-    .task {
         width: 100%;
-    }
-    .ana {
-        width: calc(100vw - 270px);
+        min-height: 500px;
+        // height: auto;
+        position: relative;
+        background-color: white;
     }
     #tool-bar div >* {
         height: 100%;
@@ -196,19 +193,19 @@
         float: right;
     }
     #canvas {
-        /*height: 100vh;*/
-        /*height: 968px;
-        width: calc(100vw - 270px);*/
-        height: 100%;
-        width: 100%;
+        min-height: calc(500px - 2.5em);
+        width: 100vw;
         overflow: scroll;
     }
     .col-md-12 {
         width: 80px;
     }
     #viz-container {
+        // position: relative;
+        // height:  calc(100% - 2.5em);
+        // height: 100%;
+        min-height: calc(500px - 2.5em);
         position: relative;
-        height: calc(100% - 38px);
     }
     #v-editor {
         position: absolute;

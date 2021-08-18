@@ -15,36 +15,30 @@
 
 $grid-height: 800px
 $sidebar-width: 250px
-#ana-viz-container 
-    height: 100%
-    min-height: 1000px
-    max-width: calc(100vw - $sidebar-width)    
-    min-width: 1000px + $sidebar-width
-    background: $gray-100
-.vapp-container
-    position: absolute
-    left: $sidebar-width
-    height: 100%
-    max-height: 100%
-    min-height: 1000px
-// @debug desaturate(lighten($yellow, 45%), 60%)
+.analysis #wrapper
+    display: flex
+    height: calc(100vh - 70px) // 100 viewport height - navbar height
+
+.analysis #main
+    overflow-y: scroll
+    overflow-x: hidden
+    width: 100vw
+
 $sidebar-background-color: desaturate(lighten($orange, 45%), 80%)
-#viz-sidebar
-    // background: desaturate($blue, 50%)
+#sidebar
     background: $white
     min-width: 250px
     max-width: 250px
-    height: calc(100vh - 2px)
-    // height: 1000px
+    // max-height: 1000px
     margin-left: -250px
     margin-top: 1px
-    position: absolute
+    position: relative
     overflow: hidden
     margin-left: 0
-    // &.active
-    //     margin-left: 0
-    //     & + #main
-    //         max-width: calc(100% - 250px)
+    &.active
+        margin-left: 0
+        & + #main
+            max-width: calc(100% - 250px)
     &.has-toolbar
         .sidebar-content
             bottom: 3rem
@@ -114,6 +108,54 @@ $sidebar-background-color: desaturate(lighten($orange, 45%), 80%)
         //         color: $white
         //         &:hover
         //             text-decoration: none
+
+#analysis-memo
+    margin: 1px 1px 1px 0
+    padding: 1.5rem 0 1rem 0
+    // background: $gray-100
+    border-radius: 2px
+    h1, h2
+        &:not(:first-child)
+            margin: 2rem 0 1rem 0
+    h3, h4, h5, h6
+        margin: 1rem 0
+    pre
+        background: rgba(0,0,0,.1)
+        margin: 15px 0
+        padding: 15px
+        border-radius: 4px
+        code
+            background: none
+            margin: 0
+            padding: 0
+            border-radius: 0
+    code
+        color: #ff52a3
+        margin: 0 1px
+        background: rgba(0,0,0,.1)
+        padding: 2px 3px
+        border-radius: 2px
+    table
+        width: 100%
+        margin: 15px 0
+        th, td
+            border: 1px solid rgba(255,255,255,.2)
+    .nav-tabs
+        border-bottom-color: $gray-700
+    .nav-link
+        color: $gray-600
+        &.active
+            border-color: transparent
+            color: $white
+            background: darken($gray-600, 5%)
+            text-shadow: 0 0 1px #222
+        &:not(.active):hover
+            // border-color: transparent
+            border-bottom: 1px solid $theme
+            text-decoration: none
+            background: lighten($gray-600, 30%)
+    .tab-content
+    .tab-pane
 
 // css for index
 .card_img
