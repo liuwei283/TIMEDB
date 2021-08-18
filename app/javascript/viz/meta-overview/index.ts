@@ -1,4 +1,5 @@
 import Oviz from "crux";
+import { remove } from "crux/dist/utils/event";
 import {controlGroupColors} from "oviz-common/palette";
 import { register } from "page/visualizers";
 import { registerEditorConfig } from "utils/editor";
@@ -20,11 +21,12 @@ function init() {
         theme: "light",
         data: {
             hiddenSamples: new Set(),
+            gridSize: [4, 12],
             colors: {
                 control: controlGroupColors[0],
                 gout: controlGroupColors[1],
-                // na: "#777",
-                na: "#333",
+                na: "#777",
+                abd0: "#333",
                 // start: "#fff7f3",
                 // end: "#0A2299",
                 start: "#800000",
@@ -36,8 +38,12 @@ function init() {
             ovTree: {
                 fileKey: "ovTree",
                 type: "newick",
+                optional: true,
                 loaded(d) {
+                    // d = removeNodeLength(d);
+                    // test();
                     this.data.species = getLeafOrder(d);
+                    return d;
                 },
             },
             ovMain: {

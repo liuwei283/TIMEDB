@@ -13,8 +13,6 @@ class Admin::AnalysesController < ApplicationController
 
   def create
     analysis_params[:files_info] = JSON.parse analysis_params[:files_info]
-    Rails.logger.debug(analysis_params[:files_info])
-    Rails.logger.debug(analysis_params)
     @analysis = @analysis_category.analyses.build analysis_params
 
     if @analysis.save
@@ -63,8 +61,9 @@ class Admin::AnalysesController < ApplicationController
   private
 
   def analysis_params
-    p = params.require(:analysis).permit(:name, :visualizer_id, :files_info,
-                                     :mid, :analysis_category_id)
+    p = params.require(:analysis).permit(:name, :url, :visualizer_id,
+              :files_info, :documentation, :about, :references,
+              :mid, :analysis_category_id)
     if !params[:analysis][:image_file].blank?
         p[:cover_image] = "data:image/png;base64," + Base64.strict_encode64(params[:analysis][:image_file].read)
     end

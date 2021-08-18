@@ -23,6 +23,7 @@ export class MetaOverview extends Oviz.Component {
     public boxplot;
 
     public sampleOrderChanged = true;
+    public gridSize;
     private valueRange;
     // private colors = ["pink", "skyblue"];
     private fullDisplay = true;
@@ -40,8 +41,8 @@ export class MetaOverview extends Oviz.Component {
         gridH: 12,
     };
     private yPos = 0;
-    private gridW = 4;
-    private gridH = 12;
+    private gridW = 0;
+    private gridH = 0;
     private mainHeight = 300;
     private mainWidth = 1200;
     private controllerMode = "scroll";
@@ -63,6 +64,8 @@ export class MetaOverview extends Oviz.Component {
 
     public willRender() {
         if (this._firstRender) {
+            this.gridW = this.gridSize[0];
+            this.gridH = this.gridSize[1];
             this.histLegendLabels = this.species.filter(s => s !== "Other")
                     .map(s => {
                         const labels = [null, s];
@@ -72,18 +75,18 @@ export class MetaOverview extends Oviz.Component {
                         return labels;
                     }).sort();
 
-            if (this.species.indexOf("Other")) this.histLegendLabels.push(["Other", "Other"]);
+            if (this.species.indexOf("Other") >= 0) this.histLegendLabels.push(["Other", "Other"]);
 
-            const [min, max] = minmax(this.mainHeatmap.flat().filter(x => x > 0));
-            // console.log([[min, max]);
-            // this.mainRange = [Math.log10(min) , Math.log10(max)];
-            this.mainRange = [computeLog(min) , computeLog(max)];
+            // const [min, max] = minmax(this.mainHeatmap.flat().filter(x => x > 0));
+            const [min, max] = minmax(this.mainHeatmap.flat());
+            this.mainRange = [computeLog(min + 1) , computeLog(max + 1)];
             const gradient = d3.scaleLinear()
                 // .range([this.colors.start, this.colors.end])
                 // .domain(this.mainRange);
-                .range([this.colors.start, this.colors.org, this.colors.end])
-                .domain([this.mainRange[0], (this.mainRange[1] + this.mainRange[0])/2
-                            , this.mainRange[1]]);
+                .range([this.colors.start,  this.colors.org, this.colors.end])
+                // .domain([this.mainRange[0], (this.mainRange[1] + this.mainRange[0])/2
+                //             , this.mainRange[1]]);
+                .domain([0, this.mainRange[1] / 2, this.mainRange[1]]);
                 /* @debug
             this.debug.scale1 = (x) => d3.scaleLinear().range([0, 200])
                                     .domain([-5, 2])(x);
@@ -100,11 +103,12 @@ export class MetaOverview extends Oviz.Component {
             }
             this.mainColorGetter = (d) => {
                 if (d === 0)
-                    return this.colors.na;
+                    return this.colors.abd0;
                 else {
                     return gradient(computeLog(d));
                 }
             };
+            // this.mainColorGetter = (d) => gradient(computeLog(d + 1));
             this.valueRange = [0, max];
             const mainH = this.species.length * this.gridH;
             if (mainH < this.mainHeight) {
@@ -129,12 +133,21 @@ export class MetaOverview extends Oviz.Component {
         }
         if (this._sizeUpdated) {
             this._sizeUpdated = false;
+            this.gridW = this.gridSize[0];
+            this.gridH = this.gridSize[1];
             this.mainWidth = this.filteredSamples.length * this.gridW;
+            this.$v.size.width = this.mainWidth + this.sizeSettings.boxHeight
+                + this.offsetX + 2 * this.sizeSettings.gapX + 2 * this.sizeSettings.padding;
+            this.histLegendPos = {x: this.sizeSettings.offsetX + this.mainWidth
+                + this.sizeSettings.padding,
+                y: this.sizeSettings.padding };
+            this.mainLegendPos = {x: this.sizeSettings.offsetX + this.mainWidth
+                + this.sizeSettings.boxHeight - 130,
+                y: this.sizeSettings.padding + this.sizeSettings.barHeight - 60};
             this.boxLegendPos = {x: this.sizeSettings.offsetX + this.mainWidth
                         + this.sizeSettings.boxHeight,
                     y: this.sizeSettings.barHeight + this.sizeSettings.padding };
-            this.$v.size.width = this.mainWidth + this.sizeSettings.boxHeight
-                + this.offsetX + 2 * this.sizeSettings.gapX + 2 * this.sizeSettings.padding;
+
         }
     }
 
@@ -198,33 +211,23 @@ export class MetaOverview extends Oviz.Component {
         // this.setState({updated: true});
     }
 
-    protected dragStart(ev, el) {
-        const [x, y] = Oviz.utils.mouse(el.$parent, ev);
-        this.setState({dragStartPos: {x, y}});
-        el.$parent.$on["mousemove"] = (evp, elp) => {
-            const [newX, newY] = Oviz.utils.mouse(elp, evp);
-            if (el.id === "boxLegend") {
-                this.boxLegendPos = {x: this.boxLegendPos.x + newX
-                        - this.state.dragStartPos.x,
-                    y: this.boxLegendPos.y + newY - this.state.dragStartPos.y};
-            } else if (el.id === "histLegend") {
-                this.histLegendPos = {x: this.histLegendPos.x + newX
-                        - this.state.dragStartPos.x,
-                    y: this.histLegendPos.y + newY - this.state.dragStartPos.y};
-            } else {
-                this.mainLegendPos = {x: this.mainLegendPos.x + newX
-                        - this.state.dragStartPos.x,
-                    y: this.mainLegendPos.y + newY - this.state.dragStartPos.y};
-            }
-            this.setState({dragStartPos: {x: newX, y: newY}});
-        };
-        el.stage = "dragging";
+    protected handleLegendPos(_, el, deltaPos: [number, number]) {
+        switch (el.id) {
+            case "histLegend":
+                this.histLegendPos = {x: this.histLegendPos.x + deltaPos[0],
+                    y: this.histLegendPos.y + deltaPos[1]};
+                break;
+            case "mainLegend":
+                this.mainLegendPos = {x: this.mainLegendPos.x + deltaPos[0],
+                    y: this.mainLegendPos.y + deltaPos[1]};
+                break;
+            case "boxLegend":
+                this.boxLegendPos = {x: this.boxLegendPos.x + deltaPos[0],
+                    y: this.boxLegendPos.y + deltaPos[1]};
+                break;
+        }
+
+        this.redraw();
     }
 
-    protected dragEnd(ev, el) {
-        el.stage = null;
-        delete el.$parent.$on["mousemove"];
-        this.setState({dragStartPos: null});
-        // this.setState({legendX: null, legendY: null});
-    }
 }

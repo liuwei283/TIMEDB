@@ -7,8 +7,9 @@ Component {
     Rows {
         Component {
             height = 20
-            Text(titles[0]) {
+            EditText {
                 @props config.titleProps
+                text = titles[0]
                 style:font-weight = "bold"
             }
         }
@@ -21,7 +22,8 @@ Component {
                 Axis("right") {
                     tick.visible = false
                     :label(tick) {
-                        Text(tick.value) {
+                        EditText {
+                            text = tick.value
                             x = 4; anchor = @anchor("l", "m")
                             fontSize = 11;
                         }
@@ -47,7 +49,8 @@ Component {
                 Axis("right") {
                     tick.visible = false
                     :label(tick) {
-                        Text(tick.value) {
+                        EditText {
+                            text = tick.value
                             x = 4; anchor = @anchor("l", "m")
                             fontSize = 11
                         }
@@ -78,7 +81,7 @@ Component {
                         x = @scaled-x(pickVal); y2 = 100%
                         stroke = "red"; strokeWidth = 1
                     }
-                    // Text(pickVal) {
+                    // EditText(pickVal) {
                     //     x = @scaled-x(pickVal); y = @geo(100, 3)
                     //     fill = "red"
                     //     fontSize = 11; anchor = @anchor("t", "c")
@@ -89,7 +92,8 @@ Component {
     }
     Component {
             height = 20
-            Text(titles[1]) {
+            EditText {
+                text = titles[1]
                 @props config.titleProps
                 style:font-weight = "bold"
             }
@@ -190,7 +194,8 @@ Component {
                         fill = "white"
                     }
                     @for (t, i) in specifyNotes {
-                        Text(t) {
+                        EditText {
+                            text = t
                             fontSize = 11; y = 13 * i
                         }
                     }

@@ -1,15 +1,13 @@
 import Oviz from "crux";
 import { ColorScheme, ColorSchemeCategory, ColorSchemeGradient } from "crux/dist/color";
 import { minmax } from "crux/dist/utils/math";
+import { ascending, descending} from "d3-array";
+import { cluster,  hierarchy } from "d3-hierarchy";
 import { scaleLinear } from "d3-scale";
-// import { schemeSet3 } from "d3-scale-chromatic";
 import { groupedColors2, rainbow1, rainbowL} from "oviz-common/palette";
 import { findBoundsForValues} from "utils/maths";
 
 const defaultScheme = groupedColors2;
-
-let nodeList: string[];
-
 // const rainbow = [
 //     "hsl(340, 82%, 73%)",
 //     "hsl(355, 82%, 73%)",
@@ -34,30 +32,7 @@ let nodeList: string[];
 //     "hsl(320, 47%, 71%)",
 //     "#AF7AC5",
 // ];
-const rainbow = [
-    "hsl(340, 85%, 73%)",
-    "hsl(355, 85%, 73%)",
-    "hsl(0, 78%, 72%)",
-    "hsl(14, 100%, 75%)",
-    "hsl(36, 100%, 74%)",
-    "hsl(45, 100%, 74%)",
-    "hsl(54, 95%, 72%)",
-    "hsl(66, 76%, 77%)",
-    "hsl(88, 55%, 76%)",
-    "hsl(100, 55%, 76%)",
-    "hsl(122, 43%, 74%)",
-    "hsl(148, 43%, 74%)",
-    "hsl(174, 47%, 65%)",
-    "hsl(187, 77%, 71%)",
-    "hsl(199, 97%, 74%)",
-    "hsl(207, 95%, 77%)",
-    "hsl(207, 95%, 77%)",
-    "hsl(231, 50%, 74%)",
-    "hsl(261, 50%, 74%)",
-    "hsl(287, 50%, 74%)",
-    "hsl(320, 52%, 71%)",
-    "#AF7AC5",
-];
+
 const brewPalette = [
     "#8dd3c7",
     "#ffffb3",
@@ -87,11 +62,69 @@ const rainbow3 = [
     "#678FFE", "#8C78E8", "#905BEC", "#A33AF2", "#C91BFE",
     "#ED5094",
 ];
-//", const paletteColors = ["#900", "#ffc", "#009"];
-const paletteColors = ["#9e0142", "#ffffbf", "#313695"];
+// const paletteColors = ["#9e0142", "#ffffbf", "#313695"];
+let nodeList = [];
+export function getLeafOrder(rootNode): string[] {
+    nodeList = [];
+    sortTree(rootNode);
+    return nodeList;
+}
+function sortTree(d): any {
+    if (d.children) {
+        d.children.forEach(c => {
+            sortTree(c);
+        });
+    } else {
+        nodeList.push(d.name);
+    }
+}
+function setTreeLength(node) {
+    node.children?.forEach(x => {
+        setTreeLength(x);
+    });
+    node.length = 200 - node.y;
+}
 
 export function main(d) {
     const speciesLabel = d.columns[0];
+    const species = d.map(x => x[speciesLabel]);
+
+    // process tree
+    if (!this.data.ovTree) {
+        const rootNode = new TreeNode("root");
+        species.forEach(phylum => {
+            if (phylum.startsWith("k_")) {
+                const allRanks = phylum.split("|");
+                let currNode = rootNode;
+                allRanks.forEach((_, i) => {
+                    const fullName = allRanks.slice(0, i + 1).join("|");
+                    currNode = currNode.addChild(new TreeNode(fullName));
+                });
+            } else {
+                rootNode.addChild(new TreeNode(phylum));
+            }
+        });
+        const root = hierarchy(rootNode).sort((a, b) =>
+            descending(a.height, b.height) || ascending(a.data.name, b.data.name));
+        root.dx = 10;
+        root.dy = 200 / (root.height + 1);
+        const clusterRoot = cluster().nodeSize([root.dx, root.dy])(root);
+        // setTreeLength(clusterRoot);
+        this.data.ovTree = clusterRoot;
+        const sortedNodes = [];
+        const localSort = (d) => {
+            if (d.children)
+                d.children.forEach(c => {
+                    localSort(c);
+                });
+            else {
+                sortedNodes.push(d.name);
+            }
+        };
+        localSort(rootNode);
+        this.data.species = sortedNodes;
+    }
+
     this.data.samples = this.data.filteredSamples = d.columns.splice(1, d.columns.length - 1);
     this.data.mainDict = {};
     d.forEach(x => {
@@ -144,7 +177,7 @@ export function main(d) {
         spDict[x[speciesLabel]] = datum;
     });
     this.data.hist = {
-                    indexes: [...top5species],
+                    indexes: [...top5species].reverse(),
                     result: {}};
     top5species.forEach(k => {
         this.data.hist.result[k] = Object.keys(spDict[k])
@@ -161,26 +194,18 @@ export function main(d) {
     });
 
     this.data.hist.colorMap = {};
-    const palette = scaleLinear().domain([0, 1, 2]).range(paletteColors);
+    // const palette = scaleLinear().domain([0, 1, 2]).range(paletteColors);
     top5species.forEach((x, i) => {
-        // let hslString = rainbow1[i % 16];
-        // if (i >= 16) {
-        //     const div = Math.floor(i / 16);
-        //     const attrs = hslString.split("(")[1].substring(0, hslString.length - 1);
-        //     const h = parseFloat(attrs.split(",")[0]);
-        //     const s = parseInt(attrs.split(",")[1].substring(0, hslString.length - 1)) + 5;
-        //     const l = parseInt(attrs.split(",")[2].substring(0, hslString.length - 1)) - 10;
-        //     hslString =  `hsl(${h},${s}%,${l}%)`;
-        // }
-        // this.data.hist.colorMap[x] = hslString;
-        this.data.hist.colorMap[x] = rainbow[i];
+        this.data.hist.colorMap[x] = rainbow2[i];
     });
 }
 
-export function getLeafOrder(rootNode): string[] {
-    nodeList = [];
-    sortTree(rootNode);
-    return nodeList;
+export function removeNodeLength(rootNode): any {
+    delete rootNode.length;
+    rootNode.children?.forEach(node => {
+        removeNodeLength(node);
+    });
+    return rootNode;
 }
 
 export function meta(d) {
@@ -255,6 +280,22 @@ export function meta(d) {
     const valueRange = findBoundsForValues(allValues, 2);
     this.data.boxplot = {categories, classifications, boxData, valueRange};
 }
+class TreeNode {
+    protected name: string;
+    protected children?: TreeNode[];
+
+    constructor(name: string) {
+        this.name = name;
+    }
+
+    public addChild(node: TreeNode): TreeNode {
+        if (!this.children) this.children = [];
+        if (!this.children.find(x => x.name === node.name))
+            this.children.push(node);
+        return this.children[this.children.length - 1];
+    }
+    public getName() { return this.name; }
+}
 
 export class MetaInfo {
     public static keys = [
@@ -295,7 +336,7 @@ export class MetaInfo {
     private schemeSet;
 
     constructor(public key: string, public isNumber: boolean, public min: number,
-            public max: number, public values: string[], schemeSet = defaultScheme) {
+                public max: number, public values: string[], schemeSet = defaultScheme) {
         this.useNumber = isNumber;
         this.rangeMin = min;
         this.rangeMax = max;
@@ -367,16 +408,6 @@ export class MetaInfo {
     }
 }
 
-function sortTree(d): any {
-    if (d.children) {
-        d.children.forEach(c => {
-            sortTree(c);
-        });
-    } else {
-        nodeList.push(d.name);
-    }
-}
-
 export function filterSamples(v: any) {
     const hidden: Set<string> = v.data.hiddenSamples;
     v.data.filteredSamples = v.data.samples.filter(s => !hidden.has(s));
@@ -385,10 +416,10 @@ export function filterSamples(v: any) {
         v.data.hist.result[k] = v.data.filteredSamples.map(x => [x, v.data.mainDict[k][x]]);
     });
     Object.keys(v.data.metaData).forEach(k => {
-        v.data.metaData[k] = v.data.filteredSamples.map(x => v.data.metaDict[x][k])
+        v.data.metaData[k] = v.data.filteredSamples.map(x => v.data.metaDict[x][k]);
     });
     v.data.mainHeatmap = v.data.mainHeatmap.map((_, i) => {
-        return v.data.filteredSamples.map(s => 
+        return v.data.filteredSamples.map(s =>
             v.data.mainDict[v.data.species[i]][s]);
     });
 }
@@ -400,6 +431,6 @@ export class GradientBar {
     constructor(colors, stops) {
         this.colors = colors;
         this.stops = stops;
-        this.getColor = d3.scaleLinear().range(colors).domain(stops);
+        this.getColor = scaleLinear().range(colors).domain(stops);
     }
 }
