@@ -1,7 +1,56 @@
 GridPlot {
     @props prop
     :content {
-        @if prop.drawBox{        
+        @if prop.drawBox{    
+            @if prop.flip {
+                        Boxes {
+            static = true
+            data = "boxData"
+            showMean = true
+            showNotch = false
+            :box (_d) {
+                Rect.full  {
+                    @let boxColors = getBoxColors(getColor(_d.pos))
+                    fill = boxColors[1]
+                    stroke = boxColors[0]
+                    // fillOpacity = 0.001
+                    behavior:tooltip {
+                        content = (`min: ${_d.data[0].toFixed(2)} <br>
+                                    first quartile: ${_d.data[1].toFixed(2)} <br>
+                                    median: ${_d.data[2].toFixed(2)} <br>
+                                    third quartile: ${_d.data[3].toFixed(2)} <br>
+                                    max: ${_d.data[4].toFixed(2)} <br>`)
+                    }
+                    y = 20%
+                    height = 60%
+                }
+            }
+            :whiskle (d) {
+                Component.full {
+                    @let boxColors = getBoxColors(getColor(d.pos))
+                    // width = 100%
+                    Line { 
+                        y = 50%; x2 = 100%
+                        stroke = boxColors[0]; strokeWidth = 2
+                    }
+                }
+                
+            }
+            :outlier(d){
+                Circle.centered {
+                    @let boxColors = getBoxColors(getColor(d[0]))
+                    r = 2; fill = boxColors[0]; visible = prop.showOutliers
+                }
+            }
+            :mean(d) {
+                Line {
+                    @let boxColors = getBoxColors(getColor(d.pos))
+                    y1 = 20%; y2 = 80%; stroke = boxColors[2]; strokeWidth = 2
+                }
+            }
+            :median {}
+        }
+            } @else {
         Boxes {
             static = true
             data = "boxData"
@@ -48,7 +97,8 @@ GridPlot {
                 }
             }
             :median {}
-        }
+        } 
+            }
         }
         @if prop.drawViolin {
             Violins {
