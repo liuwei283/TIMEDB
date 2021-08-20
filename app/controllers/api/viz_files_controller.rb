@@ -167,16 +167,15 @@ class Api::VizFilesController < ApplicationController
         params.each do |key, file|
             next unless key.start_with? '_f_'
             dataType = key.delete_prefix('_f_')
-            # vfo = @user.viz_file_objects.new
-            # vfo.file = file
             vfo = VizFileObject.new
             vfo.user = @user
             vds = VizDataSource.find_by data_type:dataType
             vfo.viz_data_source = vds
+            vfo.analysis = @analysis
             vfo.file = file
             vfo.name = params["_fn_#{dataType}"]
-            vfo.analysis = @analysis
             vfo.save!
+            
             result[dataType] = { id: vfo.id }
             chosen[dataType] = vfo.id
         end
