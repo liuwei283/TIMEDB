@@ -18,6 +18,7 @@ interface ComplexBoxplotOption extends GridPlotOption {
     getScatterColor: (pos: number) => string;
     getViolinColor: (pos: number) => string;
     colors: any;
+    useCat: boolean;
 }
 
 export class ComplexBoxplot extends Component<ComplexBoxplotOption> {
@@ -36,11 +37,13 @@ export class ComplexBoxplot extends Component<ComplexBoxplotOption> {
         if (this._firstRender) {
             // const this.prop = {values: [], categories: []};
             if (this.prop.getColor) this.getColor = this.prop.getColor;
-            else this.getColor = (pos) => this.prop.colors.box || "pink";
+            else this.getColor = (pos) => this.prop.useCat ? this.prop.colors.cats[pos]
+                : this.prop.colors?.box || "pink";
             if (this.prop.getScatterColor) this.getScatterColor = this.prop.getScatterColor;
-            else this.getScatterColor = (pos) => this.prop.colors.scatter || "#aaa";
+            else this.getScatterColor = (pos) => this.prop.colors?.scatter || "#aaa";
             if (this.prop.getViolinColor) this.getViolinColor = this.prop.getViolinColor;
-            else this.getViolinColor = (pos) => this.prop.colors.violin || "lightsteelblue";
+            else this.getViolinColor = (pos) => (this.prop.useCat ? this.prop.colors.cats[pos]
+                        : this.prop.colors?.violin || "lightsteelblue");
         }
         // @ts-ignore
         this.boxMax = this.prop.data.boxData.max;
