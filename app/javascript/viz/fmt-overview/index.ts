@@ -41,6 +41,7 @@ function init() {
         },
         setup() {
             this.data.mainWidth = this.data.gridW * this.data.speciesCount;
+            this.size.height = this.data.hist.samples.length * this.data.plotHeight + 250;
             registerEditorConfig(editorConfig(this), editorRef);
         },
     });
