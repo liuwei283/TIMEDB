@@ -40,41 +40,40 @@ section#function_card
       | Function
 
   #cards_wrapper.container
-    .card
-      .card_img
-        =link_to '/database/overview'
-          =image_tag "research.png", :alt=>"Human Gut Metagenomics.png"
-      .card_body
-        h5
-          |Human Gut Metagenomics Database
-        p.card_des
-          |curated database with over 10,000 
-          br 
-          |metagenomics sequencing data
-    .card
-      .card_img
-        =link_to "/submit/analyses"
-          =image_tag "bioinformatics.png", :alt=>"Analyze you data.png"
-      .card_body
-        h5
-          |Analyze your data
-        p.card_des
-          |containing diversity analysis, differential testing, 
-          br
-          |diseases classifier, PCA,
-          br 
-          |functional enrichments and so on
-    .card
-      .card_img
-        =link_to "/visualizer/analysis/1"
-          =image_tag "bacteria.png" , :alt=>"Visualize your results.png"
-      .card_body
-        h5
-          |Visualize your results 
-        p.card_des
-          |containing  corresponding visualization of analysis result and basic sample and
-          br
-          |basic sample information visualization and so on
+    .card-deck
+      .card
+        .card_img
+          =link_to '/database/overview'
+            =image_tag "research.png", :alt=>"Human Gut Metagenomics.png"
+        .card_body
+          h5
+            |Human Gut Metagenomics Database
+          p.card-text
+            |curated database with over 10,000 
+            |metagenomics sequencing data
+      .card
+        .card_img
+          =link_to "/submit/analyses"
+            =image_tag "bioinformatics.png", :alt=>"Analyze you data.png"
+        .card_body
+          h5
+            |Analyze your data
+          p.card-text
+            |containing diversity analysis, differential testing, 
+            
+            |diseases classifier, PCA,
+            
+            |functional enrichments and so on
+      .card
+        .card_img
+          =link_to "/visualizer/analysis/1"
+            =image_tag "bacteria.png" , :alt=>"Visualize your results.png"
+        .card_body
+          h5
+            |Visualize your results 
+          p.card-text
+            |containing  corresponding visualization of analysis result and basic sample and
+            |basic sample information visualization and so on
 
 section#dataset_list
     .container

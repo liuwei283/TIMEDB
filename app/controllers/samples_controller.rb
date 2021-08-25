@@ -42,7 +42,7 @@ class SamplesController < ApplicationController
         abd_name = "#{@project.name}_#{@sample.sample_name}.tsv"
         abd_url = File.join("/app/data/abd_files/", abd_name)
         abd_path = File.join($abd_dir, abd_name)
-        @abd_exist = File.exist?(abd_path)
+        @abd_exist = (File.exist?(abd_path)) && (File.size(abd_path)>100)
         gon.push file: abd_url
     end
 
@@ -119,11 +119,11 @@ class SamplesController < ApplicationController
             @project = Project.find(params[:project_id])
             ids = Sample.filtered(params[:search_value], @project)
             @dataset.add_samples(ids)
-            redirect_to redirect_to user_dataset_path(@user, @dataset)
+            redirect_to user_dataset_path(@user, @dataset)
         else
             ids = Sample.filtered(params[:search_value])
             @dataset.add_samples(ids)
-            redirect_to redirect_to user_dataset_path(@user, @dataset)
+            redirect_to user_dataset_path(@user, @dataset)
 
         end
          
