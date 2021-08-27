@@ -2,8 +2,8 @@ class AnalysisController < ApplicationController
     before_action :instantiate_sidebar
    
     def index
-        params[:id] = @analysis_categories[0].analyses[0].id
-        redirect_to action: "show", id: 5
+        aid = @analysis_categories[0].analyses[0].id
+        redirect_to action: "show", id: aid
     end
     def show 
         @analysis = Analysis.find(params[:id])
