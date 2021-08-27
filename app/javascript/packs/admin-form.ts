@@ -1,4 +1,5 @@
 /// <reference types="ace" />
+import axios from "axios";
 import * as $ from "jquery";
 
 declare global {
@@ -28,6 +29,19 @@ function fixIndex() {
     });
 }
 
+function axiosConfig(multipart: boolean = false) {
+    const config = {
+        headers: {
+            "X-Requested-With": "XMLHttpRequest",
+            "X-CSRF-Token": document.head.querySelector<HTMLMetaElement>('meta[name="csrf-token"]').content,
+        },
+    };
+    if (multipart) {
+        config.headers["Content-Type"] = "'multipart/form-data'";
+    }
+    return config;
+}
+
 document.addEventListener("DOMContentLoaded", () => {
     $(".btn-add-opt").each(function() {
         const addBtn = $(this);
@@ -39,6 +53,24 @@ document.addEventListener("DOMContentLoaded", () => {
             fixIndex();
         });
     });
+
+    // sortable list
+    const lists = $(".sortable-list");
+    if (lists.length > 0) {
+        const sortable = require("sortablejs");
+        lists.each(function() {
+            const list = $(this);
+            console.log(sortable);
+            sortable.default.create(this, {
+                handle: ".drag-handle",
+                draggable: ".list-group-item",
+                onEnd: (e) => {
+                    const position = list.find("li").map((i, e) => $(e).data("id")).get().join(",");
+                    axios.post(list.data("update-path"), { position}, axiosConfig());
+                },
+            });
+        });
+    }
 
     $("*[data-ace]").each(function() {
         console.log("test message");

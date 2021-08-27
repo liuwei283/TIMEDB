@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_08_18_050137) do
+ActiveRecord::Schema.define(version: 2021_08_27_062702) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -52,12 +52,15 @@ ActiveRecord::Schema.define(version: 2021_08_18_050137) do
     t.text "rendered_doc"
     t.text "rendered_about"
     t.text "rendered_ref"
+    t.integer "position"
+    t.boolean "hidden", default: false
     t.index ["analysis_category_id"], name: "index_analyses_on_analysis_category_id"
     t.index ["visualizer_id"], name: "index_analyses_on_visualizer_id"
   end
 
   create_table "analysis_categories", force: :cascade do |t|
     t.string "name", null: false
+    t.integer "position"
   end
 
   create_table "analysis_pipelines", force: :cascade do |t|
