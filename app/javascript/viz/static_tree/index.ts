@@ -1,7 +1,6 @@
-import template from "viz/tree/template.bvt"
 import Oviz from "crux";
-import { registerDefaultBioInfoComponents } from "crux/dist/element/global";
 import {annoLoaded, main, matrixLoaded} from "viz/tree/data";
+import template from "viz/tree/template.bvt";
 
 export function init(id, path, config) {
     Oviz.visualize({
@@ -30,16 +29,13 @@ export function init(id, path, config) {
             },
         },
         setup() {
-            console.log(this["_data"]);
             if (this.data.tree.dataOpt.isRadical) {
-                this.size.width = 2 * (this.data.tree.dataOpt.treeRadius
-                    + Math.ceil(this.data.tree.dataOpt.maxTextLength)) + 140;
-                this.size.height = 2 * (this.data.tree.dataOpt.treeRadius
-                    + Math.ceil(this.data.tree.dataOpt.maxTextLength));
+                const r = this.data.tree.dataOpt.treeRadius + Math.ceil(this.data.tree.dataOpt.maxTextLength);
+                this.size.width = 2 * r + 200;
+                this.size.height = 2 * r;
             } else {
                 this.size.width = this.size.height = 1000;
             }
-            console.log(this.size.width);
         },
     });
 }

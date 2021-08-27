@@ -4,7 +4,6 @@ import { register } from "page/visualizers";
 import { registerEditorConfig } from "utils/editor";
 import { editorConfig, editorRef } from "./editor";
 
-
 import template from "./template.bvt";
 
 import {annoLoaded, main, matrixLoaded} from "./data";
@@ -41,9 +40,9 @@ function init() {
         setup() {
             registerEditorConfig(editorConfig(this), editorRef);
             if (this.data.tree.dataOpt.isRadical) {
-                console.log(2 * this.data.tree.dataOpt.treeRadius);
-                this.size.width = this.size.height = 1000;
-                // this.size.height = this.size.width = 2 * this.data.tree.dataOpt.treeRadius + 200;
+                const r = this.data.tree.dataOpt.treeRadius + Math.ceil(this.data.tree.dataOpt.maxTextLength);
+                this.size.width = 2 * r + 200;
+                this.size.height = 2 * r;
             } else {
                 this.size.width = this.size.height = 1000;
             }
