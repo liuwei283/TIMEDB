@@ -1,6 +1,10 @@
 class AnalysisController < ApplicationController
     before_action :instantiate_sidebar
    
+    def index
+        params[:id] = @analysis_categories[0].analyses[0].id
+        redirect_to action: "show", id: 5
+    end
     def show 
         @analysis = Analysis.find(params[:id])
         files_info = @analysis.files_info
@@ -28,11 +32,11 @@ class AnalysisController < ApplicationController
     end
 
     def instantiate_sidebar 
-        @analysis_categories = AnalysisCategory.all
+        @analysis_categories = AnalysisCategory.unscoped
+                        .order(:position).select {|ac| ac.analyses.length > 0 }
         if session[:user_id].blank? || !User.exists?(session[:user_id])
             user = User.create
             session[:user_id] = user.id
-           
         end
     end
 end
