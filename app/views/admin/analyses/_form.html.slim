@@ -5,6 +5,7 @@
 / = f.input :url
 = f.association :visualizer
 = f.input :mid
+= f.input :hidden
 hr
 = f.input :files_info, as: :text, input_html: {value: f.object.files_info_json, data: {'ace': true, 'ace-mode': 'json'}}
 = f.input :documentation

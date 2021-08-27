@@ -51,7 +51,7 @@ class Admin::AnalysisCategoriesController < ApplicationController
   end
 
   def set_analyses_categories
-    @analysis_categories = AnalysisCategory.unscoped
+    @analysis_categories = AnalysisCategory.unscoped.order(:position)
   end
 
   def set_analyses_category

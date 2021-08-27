@@ -3,6 +3,7 @@ import template from "./template.bvt";
 
 import { groupedChartColors } from "oviz-common/palette";
 import { ComplexBoxplot, processBoxData } from "oviz-components/complex-boxplot";
+import { EditText } from "oviz-components/edit-text";
 import { register } from "page/visualizers";
 import { getGroups } from "utils/array";
 import { rankDict, sortByRank } from "utils/bio-info";
@@ -40,7 +41,7 @@ function init() {
             colors: { box: groupedChartColors[0], scatter: "pink",
                 violin: "LightSteelBlue"},
         },
-        components: { GridPlot, ComplexBoxplot},
+        components: { GridPlot, ComplexBoxplot, EditText},
         loadData: {
             boxSingleMain: {
                 fileKey: "boxSingleMain",
@@ -59,7 +60,7 @@ function init() {
                         const values = this.data.categories.map(x => []);
                         samples.forEach(s => {
                             const v = parseFloat(d[s]);
-                            allValues.push(v);
+                            if (!isNaN(v)) allValues.push(v);
                             const catIndex = this.data.categories.indexOf(this.data.groupDict[s]);
                             values[catIndex].push(v);
                         });
@@ -95,11 +96,14 @@ function init() {
                     this.data.pDict = {};
                     data.forEach(d => {
                         const rankLabel = rankDict[d[data.columns[0]]];
-                        this.data.pDict[rankLabel] = [{source: this.data.categories[0],
-                            target: this.data.categories[1],
-                            pValue: parseFloat(d[data.columns[1]]),
-                            sourcePos: 0, targetPos: 1,
-                        }];
+                        const p = parseFloat(d[data.columns[1]]);
+                        if (!isNaN(p)) {
+                            this.data.pDict[rankLabel] = [{source: this.data.categories[0],
+                                target: this.data.categories[1],
+                                pValue: p,
+                                sourcePos: 0, targetPos: 1,
+                            }];
+                        }
                     });
                     this.data.pValue = this.data.pDict[this.data.rank];
                 },

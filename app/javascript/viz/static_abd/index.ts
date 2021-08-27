@@ -2,6 +2,7 @@ import Crux from "crux";
 import { registerDefaultBioInfoComponents } from "crux/dist/element/global";
 import { Revolution } from "./revolution";
 import template from "./template.bvt";
+
 import {treeLoaded} from "./data";
 
 registerDefaultBioInfoComponents();
@@ -23,6 +24,8 @@ export function init(id, path, config) {
             },
         },
         setup() {
+            this.size.height = this.data.tree.dataOpt.maxLength;
+            this.size.width = this.data.tree.dataOpt.treeRadius * 2 + 400;
             this.defineGradient("colorScale", "horizontal", ["#eef4fa", "#1565C0"]);
         },
     });

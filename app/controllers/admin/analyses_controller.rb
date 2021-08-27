@@ -4,7 +4,7 @@ class Admin::AnalysesController < ApplicationController
   before_action :set_analysis, only: %w(edit update destroy)
 
   def index
-    @analysis_categories = AnalysisCategory.unscoped
+    @analysis_categories = AnalysisCategory.unscoped.order(:position)
   end
 
   def new
@@ -63,7 +63,7 @@ class Admin::AnalysesController < ApplicationController
   def analysis_params
     p = params.require(:analysis).permit(:name, :url, :visualizer_id,
               :files_info, :documentation, :about, :references,
-              :mid, :analysis_category_id)
+              :mid, :analysis_category_id, :hidden)
     if !params[:analysis][:image_file].blank?
         p[:cover_image] = "data:image/png;base64," + Base64.strict_encode64(params[:analysis][:image_file].read)
     end

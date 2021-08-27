@@ -96,6 +96,7 @@ svg {
             Component {
                 // x = (tree.dataOpt.showDistinctNodeName) ? 800 : 800
                 x = 2 * (maxTextW + radius)
+                y = maxTextW - 50
                 Component {
                     y = 25
                     Text {

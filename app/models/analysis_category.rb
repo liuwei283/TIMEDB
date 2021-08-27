@@ -1,5 +1,7 @@
 class AnalysisCategory < ApplicationRecord
-    has_many :analyses
+    default_scope { order(:position) }
+    has_many :analyses, -> { where(hidden: false).order(:position) }
+    validates :name, presence: true
 
     def self.import(file)
         CSV.foreach(file.path, headers: true, encoding: 'bom|utf-8') do |row|
