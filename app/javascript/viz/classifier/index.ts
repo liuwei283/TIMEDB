@@ -111,7 +111,7 @@ function init() {
                     const valueRange = findBoundsForValues(allValues, 2);
                     this.data.lineData = {
                         data: lineData, categoryRange: [1, maxCat], valueRange,
-                        categoryUseLog: true, plotSize,
+                        categoryUseLog: true, plotSize, margin: [0.05, 0.05],
                         dataHandler: {
                             default: {
                                 values: d => d.values,
@@ -154,11 +154,11 @@ function init() {
                         boxData.means.push(stat2.mean());
                     });
                     this.data.boxData = {data: {boxData}, discreteCategories: true, plotSize,
-                        valueRange,
+                        valueRange, margin: [0.05, 0.05],
                         yLabel: "Propability of Disease"};
                     const scatterData = data.sort((a, b) => a.value - b.value)
                         .map((d, i) => ({pos: i + 1, ...d}));
-                    this.data.scatterData = {data: scatterData,
+                    this.data.scatterData = {data: scatterData, margin: [0.05, 0.05],
                         categoryRange: [0, scatterData.length], plotSize,
                         valueRange, xLabel: "Samples"};
                     return null;
@@ -190,6 +190,7 @@ function init() {
                     this.data.specifyData = {
                         plotSize, valueRange: [0, 1], categoryRange: [0, 1],
                         yLabel: "sensitivity", xLabel: "1 - specify",
+                        margin: [0.05, 0.05],
                         data: {
                             line: {values: line, key: "median"},
                             area: {values: area, key: "low-high"},
