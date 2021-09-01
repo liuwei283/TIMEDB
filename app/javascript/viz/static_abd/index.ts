@@ -24,8 +24,13 @@ export function init(id, path, config) {
             },
         },
         setup() {
-            this.size.height = this.data.tree.dataOpt.maxLength;
-            this.size.width = this.data.tree.dataOpt.treeRadius * 2 + 400;
+            if (this.data.tree.dataOpt.isRadical) {
+                this.size.height = this.data.tree.dataOpt.treeRadius * 2;
+                this.size.width = this.data.tree.dataOpt.treeRadius * 2 + 400;
+            } else {
+                this.size.height = this.data.tree.dataOpt.treeHeight + 50;
+                this.size.width = 1250;
+            }
             this.defineGradient("colorScale", "horizontal", ["#eef4fa", "#1565C0"]);
         },
     });
