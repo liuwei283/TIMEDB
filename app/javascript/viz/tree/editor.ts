@@ -17,8 +17,8 @@ export const conf = {
         { value: "2", text: "Phylum"},
         { value: "3", text: "Class"},
         { value: "4", text: "Order"},
-        { value: "5", text: "Family"},
-        { value: "6", text: "Genus"},
+        // { value: "5", text: "Family"},
+        // { value: "6", text: "Genus"},
     ],
 } as any;
 
@@ -100,7 +100,7 @@ export function editorConfig(v: any): EditorDef {
                             disabled: conf.distinctNodeOnly,
                             options: [
                                 { value: "1", text: "Show All Name"},
-                                { value: "2", text: "Show Distinct Name"},
+                                { value: "2", text: "Highlight Distinct Name"},
                                 { value: "3", text: "Show No Name"},
                             ],
                             bind: {
@@ -113,7 +113,7 @@ export function editorConfig(v: any): EditorDef {
                                             v.data.tree.dataOpt.showDistinctNodeName = false;
                                             break;
                                         case 2:
-                                            v.data.tree.dataOpt.showAllNodeName = false;
+                                            v.data.tree.dataOpt.showAllNodeName = true;
                                             v.data.tree.dataOpt.showDistinctNodeName = true;
                                             break;
                                         case 3:

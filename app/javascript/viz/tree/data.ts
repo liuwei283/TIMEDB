@@ -1,8 +1,7 @@
 import Oviz from "crux";
-import * as d3 from "d3-hierarchy";
 import { parseNewick } from "crux/dist/utils";
-
 import * as text_size from "crux/dist/utils/text-size";
+import * as d3 from "d3-hierarchy";
 
 const groupColors = ["#908CA8",
 "#D49C98",
@@ -20,15 +19,14 @@ const rainbow = [ "hsl(340, 82%, 76%)",
 "hsl(14, 100%, 78%)",
 "hsl(36, 100%, 75%)",
 "hsl(45, 100%, 75%)",
-"hsl(54, 90%, 72%)",//"hsl(54, 100%, 81%)",
+"hsl(54, 90%, 72%)", // "hsl(54, 100%, 81%)",
 "hsl(66, 71%, 77%)",
 "hsl(88, 50%, 76%)",
 "hsl(122, 37%, 74%)",
 "hsl(174, 42%, 65%)",
 "hsl(187, 72%, 71%)",
-"hsl(199, 92%, 74%)",
-"hsl(207, 90%, 77%)",
-"hsl(207, 90%, 77%)",
+"hsl(199, 82%, 74%)",
+"hsl(212, 90%, 74%)",
 "hsl(231, 44%, 74%)",
 "hsl(261, 46%, 74%)",
 "hsl(291, 47%, 71%)",
@@ -48,7 +46,7 @@ export let dataOpt = {
     maxQvalue: 0.05,
     distinctNodeOnly: false,
     showDistinctNodeName: true,
-    showAllNodeName: false,
+    showAllNodeName: true,
     boxPlotLength: 600,
     logPara: 0.01,
 };
@@ -206,45 +204,55 @@ export function getLinkColor(nodes, treeDepth) {
     const colorLinks = [];
     const depthPathNodes = [];
 
-    const nodeColor = (hslString : string) => {
+    const nodeColor = (hslString: string) => {
         const attrs = hslString.split("(")[1].substring(0, hslString.length - 1);
         const h = parseFloat(attrs.split(",")[0]);
         const s = parseInt(attrs.split(",")[1].substring(0, hslString.length - 1)) - 10;
         const l = parseInt(attrs.split(",")[2].substring(0, hslString.length - 1)) + 20;
         return `hsl(${h},${s}%,${l}%)`;
-        //return hslString;
-    }
+        // return hslString;
+    };
 
-    const linkColor = (hslString : string) => {
+    const linkColor = (hslString: string) => {
         const attrs = hslString.split("(")[1].substring(0, hslString.length - 1);
         const h = parseFloat(attrs.split(",")[0]);
         const s = parseInt(attrs.split(",")[1].substring(0, hslString.length - 1)) + 30;
         const l = parseInt(attrs.split(",")[2].substring(0, hslString.length - 1)) - 20;
         return `hsl(${h},${s}%,${l}%)`;
-    }
+    };
 
-    const dark30 = (hslString : string) => {
+    const dark30 = (hslString: string) => {
         const attrs = hslString.split("(")[1].substring(0, hslString.length - 1);
         const h = parseFloat(attrs.split(",")[0]);
         const s = parseInt(attrs.split(",")[1]);
         const l = parseInt(attrs.split(",")[2].substring(0, hslString.length - 1)) - 30;
         return `hsl(${h},${s}%,${l}%)`;
-    }
-    const dark50 = (hslString : string) => {
+    };
+    const dark50 = (hslString: string) => {
         const attrs = hslString.split("(")[1].substring(0, hslString.length - 1);
         const h = parseFloat(attrs.split(",")[0]);
         const s = parseInt(attrs.split(",")[1]);
         const l = parseInt(attrs.split(",")[2].substring(0, hslString.length - 1)) - 40;
         return `hsl(${h},${s}%,${l}%)`;
-    }
+    };
 
+    const getColors = (n: number) => {
+        const div = Math.floor(rainbow.length / n);
+        const colors = [];
+        for (let i = 0; i < n; i ++) {
+            colors.push(rainbow[i * div]);
+        }
+        return colors;
+    };
+    const rainbowColors = getColors(depthNodes.length);
     let c = 0;
     depthNodes.forEach ((d , i) => {
         const info = {
             name: d.data.name,
             x: 0,
             y: 0,
-            color: nodeColor( color.get(i)),
+            // color: nodeColor( color.get(i)),
+            color: rainbowColors[i],
         };
 
         c = dataOpt.showDistinctNodeName ? 1 : (Math.floor(len / 10) < 2) ? 1 : 2;
@@ -270,10 +278,8 @@ export function getLinkColor(nodes, treeDepth) {
             depthPathNodes[d.data.name] = tempNode.data.name;
             depthNodes.forEach((d, j) => {
                 if (d.data.name === tempNode.data.name) {
-                    //colorNodes[node_name] = nodeColor( color.get(j));
-                    //colorLinks[node_name] = linkColor( color.get(j));
-                    colorNodes[node_name] = rainbow[j] || rainbow[j-10];
-                    colorLinks[node_name] = dark50(rainbow[j] || rainbow[j-10]);
+                    colorNodes[node_name] = rainbowColors[j];
+                    colorLinks[node_name] = dark50(rainbowColors[j]);
                     return true;
                 }
             });
@@ -435,7 +441,6 @@ export function main(_data) {
 
     newick = newick.substring(1);
 
-
     const treeNewick = parseNewick(newick);
     const treeData = parseTreeData(treeNewick);
 
@@ -560,30 +565,30 @@ export function main(_data) {
 
     library.color_dict = getLinkColor(allNodes, dataOpt.treeDepth);
 
-    const max =0;
+    const max = 0;
     const min = 0;
     // const max = Math.max(...box_values) + dataOpt.logPara;
     // const min = Math.min(...box_values) + dataOpt.logPara;
 
-    // const leave_box_dict = [];
+    const leave_box_dict = [];
 
-    // leaves.some(l => {
-    //     leave_box_dict[l.data.name] = {
-    //         group1: boxPlotValue(all_info_box[l.data.name].group1, max, min),
-    //         group2: boxPlotValue(all_info_box[l.data.name].group2, max, min),
-    //     };
-    // });
+    leaves.some(l => {
+        leave_box_dict[l.data.name] = {
+            group1: boxPlotValue(all_info_box[l.data.name].group1, max, min),
+            group2: boxPlotValue(all_info_box[l.data.name].group2, max, min),
+        };
+    });
 
     dataOpt.isRadical = (leaves.length > 20) ? true : false ;
     const branchShouldStayOnTop = (l, t) => {
         if (l.target.data.data.qvalue < dataOpt.maxQvalue)
             return true;
         return false;
-    }
+    };
     if (!!this) this.data.branchShouldStayOnTop = branchShouldStayOnTop;
 
     console.log(treeData.children[0].data);
-    return {treeData, dataOpt, leave_box_dict: null, mean_info_box, max_mean, min_mean, library, allNodes, leaves, distinct_leaves, leave_link_dict, _data, max, min};
+    return {treeData, dataOpt, leave_box_dict, mean_info_box, max_mean, min_mean, library, allNodes, leaves, distinct_leaves, leave_link_dict, _data, max, min};
 }
 function parseTreeData(tree) {
     if (library.matrix_dict[tree.name]) tree.data = library.matrix_dict[tree.name];
