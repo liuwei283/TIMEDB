@@ -14,6 +14,7 @@ import * as _ from "lodash";
 
 const MODULE_NAME = "scatterplot";
 
+// tbd
 function init() {
     if (!window.gon || window.gon.module_name !== MODULE_NAME) return;
 

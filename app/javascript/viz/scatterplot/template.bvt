@@ -189,7 +189,7 @@ Component {
                 Legend {
                     @let map = @colorMap(clusters, colors)
                     @let clusterLegendData = map.legendData()
-                    @expr clusterLegendData.forEach(x => {x.type = "custom"; x.label = `cluster ${x.label}`})
+                    @expr clusterLegendData.forEach(x => {x.type = "Custom"; x.label = `cluster ${x.label}`})
                     data =clusterLegendData
                     lineHeight = 18
                     :legend(data) {
