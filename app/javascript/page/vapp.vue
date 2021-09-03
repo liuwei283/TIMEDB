@@ -154,7 +154,7 @@
 <style scoped lang="scss">
     #vapp {
         width: 100%;
-        min-height: 500px;
+        min-height: 25rem;
         // height: auto;
         position: relative;
         background-color: white;
