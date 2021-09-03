@@ -15,7 +15,7 @@
     "babel-preset-typescript-vue": "^1.1.1",
     "bootstrap": "^4.5.0",
     "bootstrap-vue": "^2.15.0",
-    "crux": "file:~/crux",
+    "crux": "/home/platform/crux",
     "datatables.net": "^1.10.22",
     "datatables.net-dt": "^1.10.22",
     "filesize": "^6.1.0",
