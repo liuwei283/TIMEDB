@@ -17,7 +17,7 @@ export interface ScatterClusterDatum {
     center: {x, y};
     ellipseData: ErrorEllipseDatum;
 }
-export class ComplexScatterplot extends Component<ComponentOption> {
+export class ComplexScatterplotBk extends Component<ComponentOption> {
 
     public dataChanged: boolean = true;
     public rankChanged: boolean;
@@ -67,13 +67,13 @@ export class ComplexScatterplot extends Component<ComponentOption> {
                 if (this.groups) {
                     this.shapeMap = this.getMap(this.groups, shapes);
                     this.groupLegendData = this.groups.map((x, i) => {
-                        return {type: "custom", label: x, fill: "grey"};
+                        return {type: "Custom", label: x, fill: "grey"};
                     });
                 }
             } else if (this.groups) {
                 this.colorMap = this.getMap(this.groups, this.colors);
                 this.groupLegendData = this.groups.map((x, i) => {
-                    return {type: "custom", label: x, fill: this.colors[i]}
+                    return {type: "Custom", label: x, fill: this.colors[i]}
                 });
             }
         }

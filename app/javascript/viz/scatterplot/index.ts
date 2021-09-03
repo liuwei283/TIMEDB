@@ -3,7 +3,7 @@ import Oviz from "crux";
 import {register} from "page/visualizers";
 import { registerEditorConfig } from "utils/editor";
 
-import {ComplexScatterplot} from "./complex-scatterplot";
+import {ComplexScatterplotBk} from "./complex-scatterplot";
 import { editorConfig, editorRef } from "./editor";
 
 import { groupedChartColors } from "oviz-common/palette";
@@ -20,7 +20,8 @@ function init() {
     const {visualizer} = Oviz.visualize({
         el: "#canvas",
         renderer: "svg",
-        root: new ComplexScatterplot(),
+        root: new ComplexScatterplotBk(),
+        height: 700,
         data: {
             colors: groupedChartColors.slice(0, 3),
             config: {
@@ -52,7 +53,7 @@ function init() {
                 },
                 loaded(d) {
                     const rankKeys = Object.keys(rankDict);
-                    // console.log(d.map(x => x.columns[0]));
+                    // hardcoded part
                     if (window.gon.analysis_name === "K-means Cluster" || (d.length === 1 && d[0].columns[0] === "")) {
                         d[0].columns[0] = "s";
                         this.data.speciesDict = {};
