@@ -33,7 +33,7 @@ const defaultScheme = groupedColors2;
 //     "#AF7AC5",
 // ];
 
-const brewPalette = [
+export const brewPalette = [
     "#8dd3c7",
     "#ffffb3",
     "#bebada",
@@ -222,7 +222,7 @@ export function meta(d) {
     this.data.discaredFeatures = [];
     let curPos = 0;
     this.data.metaFeatures.forEach((k, i) => {
-        if (k === "Age" || k === "age" || k === "BMI") {
+        if (k === "Age" || k === "age" || k === "BMI" || !isNaN(parseFloat(d[0][k]))) {
             const [min, max] = minmax(d.map(x => x[k]));
             this.data.metaInfo[k] = new MetaInfo(k, true, min, max, []);
             this.data.metaData[k] = this.data.samples.map(x => this.data.metaDict[x][k]);
@@ -398,7 +398,7 @@ export class MetaInfo {
 
     public update(v: any, obj: any) {
         for (const k of MetaInfo.keys) {
-            if (k === "thres" || (k === "values" && obj[k])) {
+            if (k === "thres" || (k === "valcolorues" && obj[k])) {
                 this[k] = [...obj[k]];
             } else {
                 this[k] = obj[k];

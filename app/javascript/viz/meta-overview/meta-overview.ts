@@ -33,7 +33,7 @@ export class MetaOverview extends Oviz.Component {
         mainHeight: 300,
         mainWidth: 1200,
         barHeight: 180,
-        boxHeight: 250,
+        boxHeight: 220,
         padding: 20,
         gapX: 10,
         gapY: 10,
