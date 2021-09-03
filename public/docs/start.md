@@ -106,7 +106,7 @@ sudo systemctl enable postgresql
 # Ubuntu, run manually
 sudo service postgresql start
 # Ubuntu, auto start on boot
-sudo updtae-rc.d postgresql defaults
+sudo update-rc.d postgresql defaults
 ```
 
 By default, no password is configured for development database. Therefore, you must edit the `pg_hba.conf`
