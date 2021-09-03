@@ -1,204 +1,54 @@
-
 Component {
-	width = 800; height = 800;
-	XYPlot { //scatterplot area
-		height = 70%; width = 70%; padding = 40
-		valueRange = yRange
-		categoryRange = xRange
-		hasPadding = false
-		data = scatterData
-		dataHandler = {
-			scatterData: {
-				values: d => d.values,
-				pos: d => d[0],
-				value: d => d[1],
-			}
-		}
-		@for (d, i) in scatterData {
-			Component {
-				key = i + "c1"
-				x = @scaled-x(d.values[0]); y = @scaled-y(d.values[1])
-				Component(d.shape) {
-					r = 5; height = 10; width = 10;
-					anchor = @anchor("c", "m"); fill = colorGetter(d.sampleId)
-				}
-			}
-		}
-		Line {
-			x1 = @scaled-x(0); y1 = 0; x2 = @scaled-x(0); y2 = 100%
-			dashArray = [4,4]; stroke = "grey"
-		}
-		Line {
-			x1 = 0; y1 = @scaled-y(0); x2 = 100%; y2 = @scaled-y(0)
-			dashArray = [4,4]; stroke = "grey"
-		}
-		Axis("bottom") {y = 100%; includeEndTicks = false}
-		Axis("left") {includeEndTicks = false}
-		Text {
-			text = xLabel
-			x = 50%; y = @geo(100, 15)
-			anchor = @anchor("top", "center")
-		}
-		Component {
-			x = -25; y = 50%
-			rotation = @rotate(-90)
-			Text {
-				text = yLabel
-				anchor = @anchor("bottom", "center")
-			}
-		}
-	}
-	XYPlot {
-		y = 70%; height = 30%; width = 70%; padding = 40
-		data = {
-			boxData: boxDataX,
-			scatterData: scatterData,
-		}
-		valueRange = xRange
-		dataHandler = {
-			scatterData: {
-				pos: d => d.age <= ageDiv ? `<=${ageDiv}` : `>${ageDiv}`,
-				min: d => 0,
-				value: d => d[xLabel],
-			}
-		}
-		flip = true
-		invertValueAxis = true
-		Boxes {
-			data = "boxData"
-			:box (d) {
-				Rect.full  {
-					fill = "#fff"
-					stroke = d.pos === 0 ? startColor: endColor
-					y = 10%
-					height = 80%
-				}
-			}
-			:median(d) {
-				Line {y1 = 10%; y2 = 90%; stroke = d[0] === boxDataX.values[0][0] ? startColor: endColor}
-			}
-			:mean(means) {}
-			:whiskle (d) {
-				Line {
-					x1 = 0; x2 = 0; y1 = 30%; y2 = 70%
-					stroke = d[0] === boxDataX.values[0][0] ? startColor: endColor
-				}
-				Line {
-					x1 = 100%; x2 = 100%; y1 = 30%; y2 = 70%
-					stroke = d[0] === boxDataX.values[0][0] ? startColor: endColor
-				}
-				Line {
-					x1 = 0; x2 = 100%; y1 = 50%; y2 = 50%
-					stroke = d[0] === boxDataX.values[0][0] ? startColor: endColor
-				}
-			}
-		}
-		Scatters1D {
-			data = "scatterData"
-			:children({pos, index}) {
-				Component(scatterData[pos].shape) { 
-					width = 6; height = 6; r = 3; fill = "#666"
-				}	
-			}
-		}
-		Axis("left");
-		Axis("bottom") {y = 100%; includeEndTicks = false}
-		Text(xLabel) { x = 50%; y = @geo(100, 15); anchor = @anchor("top", "center") }
-	}
-	XYPlot {
-		x = 70%; height = 70%; width = 30%; padding = 40
-		data = {
-			boxData: boxDataY,
-			scatterData: scatterData,
-		}
-		dataHandler = {
-			scatterData: {
-				pos: d => d.age <= ageDiv ? `<=${ageDiv}` : `>${ageDiv}`,
-				min: d => 0,
-				value: d => d[yLabel],
-			}
-		}
-		valueRange = yRange
-		Boxes {
-			data = "boxData"
-			:box (d) {
-				Rect.full  {
-					fill = "#fff"
-					stroke = d.pos === 0 ? startColor: endColor
-					x = 10%
-					width = 80%
-				}
-			}
-			:median(d) {
-				Line {x1 = 10%; x2 = 90%; stroke = d[0] === boxDataY.values[0][0] ? startColor: endColor}
-			}
-			:mean(means) {}
-			:whiskle (d) {
-				Line {
-					x1 = 30%; x2 = 70%; y1 = 0; y2 = 0
-					stroke = d[0] === boxDataY.values[0][0] ? startColor: endColor
-				}
-				Line {
-					x1 = 30%; x2 = 70%; y1 = 100%; y2 = 100%
-					stroke = d[0] === boxDataY.values[0][0] ? startColor: endColor
-				}
-				Line {
-					x1 = 50%; x2 = 50%; y1 = 0; y2 = 100%
-					stroke = d[0] === boxDataY.values[0][0] ? startColor: endColor
-				}
-			}
-		}
-		Scatters1D {
-			data = "scatterData"
-			:children({pos, index}) {
-				Component(scatterData[pos].shape) { 
-					width = 6; height = 6; r = 3; fill = "#666"
-				}	
-			}
-		}
-		// Scatters1D {
-		// 	data = "scatterRight"
-		// 	x = @geo(5, 0)
-		// 	Path {d = result.smallSymbols[1]; fill = "#000"}
-		// }
-		Axis("left") {includeEndTicks = false}
-		Axis("bottom"){y = 100%}
-		Component {
-			x = -25; y = 50%
-			rotation = @rotate(-90)
-			Text(yLabel) {anchor = @anchor("bottom", "center")}
-		}
-	}
-	Component {
-		x = @geo(70, 40); y = @geo(70, 40)
-		Component {
-			height = groups.length * 20; width = legendWidth
-			Rect.full{ fill = "#fff"; stroke = "#000" }
-			@for (group, i) in groups {
-				Component {
-					key = i + "c2"
-					x = legendWidth * 0.1; y = i * 20 + 10
-					Component(shapes[i]) {
-						anchor = @anchor("m", "c"); fill = "#999"
-						width = 10; height = 10; r = 5
-					}
-				}
-				Text {
-					key = i + "t"
-					x = legendWidth * 0.3; y = i * 20 + 10
-					anchor = @anchor("middle","left")
-					text = group
-				}
-			}
-		}
-		Component {
-			y = groups.length * 20 + 20; height = 20; width = legendWidth
-			Rect.full {fill = @gradient("bg")}
-			Axis {
-				xScale = @scale-linear(ageRange[0], ageRange[1], 0, legendWidth)
-				y = 20; orientation = "bottom"
-				includeEndTicks = false
-			}
-		}
-	}
+Component {
+    @let scatterSize = 8
+    x = 50; y = 50
+    ComplexScatterplot {
+        plotSize = [mainGridLength, mainGridLength]
+        @props data
+        @props scatterConfig
+    }
+    ComplexBoxplot {
+        y = mainGridLength + 60
+        colors = colors
+        plotSize = [mainGridLength, boxGridHeight]
+        @props boxDataX
+        @props xBoxConfig
+        @props boxConfig
+    }
+    ComplexBoxplot {
+        x = mainGridLength + 60
+        colors = colors
+        plotSize = [boxGridHeight, mainGridLength]
+        @props boxDataY
+        @props yBoxConfig
+        @props boxConfig
+    }
+    Component {
+        x = mainGridLength + 60; y = mainGridLength + 60
+        @let groupH = groups.length * 14 + 16
+        Legend {
+            padding = 8
+            width = legendWidth
+            lineHeight = 14
+            data = groupLegend
+        }
+        @if (catDiv) {
+            Component {
+                y = groupH + 19
+                Text(catKey) {
+                    y = -4; anchor = @anchor("b", "l")
+                    style:font-weight="bold"
+                }
+                height = 20; width = legendWidth
+                Rect.full {fill = @gradient("bg")}
+                Axis {
+                    xScale = @scale-linear(metaInfo[catKey].rangeMin, metaInfo[catKey].rangeMax, 0, legendWidth)
+                    y = 20; orientation = "bottom"
+                    includeEndTicks = false
+                }
+            }
+        }
+        
+    }
+}
 }

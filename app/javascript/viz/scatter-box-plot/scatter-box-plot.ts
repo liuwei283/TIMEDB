@@ -1,7 +1,5 @@
 import Oviz from "crux";
 import template from "./template.bvt";
-import { minmax, max } from "crux/dist/utils/math";
-import * as d3 from "d3";
 
 export class ScatterBoxPlot extends Oviz.Component {
 
@@ -16,12 +14,15 @@ export class ScatterBoxPlot extends Oviz.Component {
     public yLabel;
     public ageDiv;
 
+    public data;
+
+    public metaFeatures;
+
     public render() {
         return this.t`${template}`;
     }
 
     public willRender() {
-        
+        console.log(this.data);
     }
-
 }
