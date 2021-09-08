@@ -114,6 +114,10 @@
                     </div>
                     
                     <b-btn @click="submitTask" class="float-right mt-2"><i class="fa fa-location-arrow"></i> Submit</b-btn>
+                    <div class="is-loading" v-if="isLoading">
+                        <i class="fas fa-spinner fa-pulse fa-5x m-0"></i>
+                        <h3 class="mt-4">Submitting task……</h3>
+                    </div>
                 </div>
                 <div v-else>
                     <b-card class="text-center job-info">
@@ -134,6 +138,7 @@
     import VueTagsInput from '@johmun/vue-tags-input';
     import AlertCenter from 'components/alert-center.vue';
     import GlobalSaveButton from 'components/global-save-button.vue';
+    import * as $ from "jquery";
 
     Vue.use(BootstrapVue);
 
@@ -157,6 +162,7 @@
                 ],
                 inputValid: {},
                 submitted: false,
+                isLoading: false,
                 jobID: '',
             };
         },
@@ -190,6 +196,8 @@
                     alertCenter.add('danger', response.data.data);
                 }
             });
+            // $("#disable-fill").fadeIn(10);
+            // this.isLoading=true;
         },
         computed: {
             displayedInputs() {
@@ -245,7 +253,9 @@
                     }
                 })
                 if (allRight) {
-                    console.log([this.app.id, this.id]);
+                    let alertData;
+                    $("#disable-fill").fadeIn(10);
+                    this.isLoading=true;
                     axios.post(
                         `/submit-app-task/`,
                         objectToFormData({
@@ -257,7 +267,6 @@
                             "is_pipeline": true,
                         }),
                         {
-                            
                             headers: {
                                 'X-Requested-With': 'XMLHttpRequest',
                                 'X-CSRF-Token': document.head.querySelector('meta[name="csrf-token"]').content,
@@ -269,12 +278,18 @@
                             this.jobID = response.data.data.task_id;
                             this.submitted = true;
                         } else {
-                            alertCenter.add('danger', response.data.data);
+                            alertData = response.data.msg;
                         }
                     }).catch((reason) => {
-                        alertCenter.add('danger', `${reason}`);
+                        alertData = reason;
                     }).finally(() => {
-                        // setTimeout(() => { alertCenter.add('danger', ''); }, 2000);
+                        setTimeout(() => {
+                            $("#disable-fill").fadeOut(10);
+                            this.isLoading = false;
+                            if (!!alertData) {
+                                alertCenter.add('danger', alertData);
+                            }
+                        }, 2000);
                     });
                 }
             },
@@ -339,5 +354,16 @@
     min-height: 200px;
     padding: 100px 20px;
     font-size: 30px;
+}
+.is-loading {
+    margin: 0 1px;
+    padding: 8rem 4rem;
+    text-align: center;
+    color: #000;
+    position: absolute;
+    top:0;
+    z-index: 1000;
+    width: 100%;
+    height: 100%;
 }
 </style>
