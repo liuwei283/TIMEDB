@@ -9,6 +9,9 @@
 
  - Developer guide
   - [Project installation guide](start.md)
+  - [Developer's tools](tools.md)
+  - [Old guide](start-old.md)
+  
 <!--
   - [Module development](module-dev.md)
   - [Pipeline development](pipeline-dev.md)
