@@ -1,5 +1,5 @@
 class Admin::AnalysisCategoriesController < ApplicationController
-
+  http_basic_authenticate_with name: "admin", password: "Lovelace"
   before_action :set_analyses_categories
   before_action :set_analyses_category, only: %w(edit update destroy)
 
