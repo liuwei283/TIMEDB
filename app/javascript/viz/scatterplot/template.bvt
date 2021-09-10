@@ -76,20 +76,20 @@ Component {
                     width : config.scatterSize,
                     height : config.scatterSize,
                     fill : (config.hollow ? "none" : colorMap.get(scatter.cluster)),
-                    strokeWidth : 2,
-                    stroke : colorMap.get(scatter.cluster),
+                    strokeWidth : (config.hollow ? 2 : 0.5),
+                    stroke : (config.hollow ? colorMap.get(scatter.cluster): "white"),
                     r: config.scatterSize/2
                 }
                 @let shape = groups ? shapeMap.get(scatter.group) : "Circle"
-                // Component(shape) {
-                //     key = "scatter"+i                    
-                //     x = @scaled-x(scatter[xLabel]); y = @scaled-y(scatter[yLabel])
-                //     @props scatterProps
-                //     anchor = @anchor("m", "c")
-                //     behavior:tooltip {
-                //         content = generateScatterContent(scatter)
-                //     }
-                // }
+                Component(shape) {
+                    key = "scatter"+i                    
+                    x = @scaled-x(scatter[xLabel]); y = @scaled-y(scatter[yLabel])
+                    @props scatterProps
+                    anchor = @anchor("m", "c")
+                    behavior:tooltip {
+                        content = generateScatterContent(scatter)
+                    }
+                }
                 Line {
                     x1 = @scaled-x(parsedClusterData[scatter.cluster].center.x)
                     y1 = @scaled-y(parsedClusterData[scatter.cluster].center.y)
