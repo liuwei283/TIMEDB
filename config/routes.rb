@@ -35,9 +35,9 @@ Rails.application.routes.draw do
     end
   end
 
-  # get 'welcome/index'
-  post 'query_app_task_dummy', to: 'submit#query_app_task_dummy'
-  post 'submit_app_task_dummy', to: 'submit#submit_app_task_dummy'
+  # post 'query_app_task_dummy', to: 'submit#query_app_task_dummy'
+  # post 'submit_app_task_dummy', to: 'submit#submit_app_task_dummy'
+  
   root 'welcome#index'
   # get 'tutorial', to: 'welcome#tutorial', as: 'tutorial'
   get 'contact', to: 'welcome#contact', as: 'contact'
@@ -64,6 +64,8 @@ Rails.application.routes.draw do
       post 'create_files', to: 'viz_files#create_files', as: 'create_files'
       post 'batch_delete_files', to: 'viz_files#batch_delete_files', as: 'batch_delete_files'
     end
+    get 'tabix/:url_name', to: 'tabix_apis#show', as: 'tabix_api'
+    get 'public/:url_name', to: 'public_file_apis#show', as: 'public_api'
   end
 
   # database pages
@@ -111,9 +113,10 @@ Rails.application.routes.draw do
       resources :analyses, expect: %i[index show]
     end
     get 'analyses', to: 'analyses#index'
-    # get 'visualizers', to: 'visualizers#index'
     resources :visualizers
     resources :analysis_pipelines
+    resources :file_keys, except: :show
+    resources :tabix_apis, except: :show
   end
 
   # serve files
