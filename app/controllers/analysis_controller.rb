@@ -2,14 +2,14 @@ class AnalysisController < ApplicationController
     before_action :instantiate_sidebar
    
     def index
-        aid = @analysis_categories[0].analyses[0].id
-        redirect_to action: "show", id: aid
+        aurl = @analysis_categories[0].analyses[0].url
+        redirect_to action: "show", url_name: aurl
     end
     def show 
-        @analysis = Analysis.find(params[:id])
+        @analysis = Analysis.find_by url:params[:url_name]
         files_info = @analysis.files_info
         
-        @analysisUserDatum = AnalysisUserDatum.findOrInitializeBy params[:id], session[:user_id]
+        @analysisUserDatum = AnalysisUserDatum.findOrInitializeBy @analysis.id, session[:user_id]
         chosen_output = nil
         chosen_output = @analysisUserDatum.task_output.id if !@analysisUserDatum.task_output.blank?
         gon.push module_name: @analysis.visualizer.js_module_name,

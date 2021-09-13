@@ -73,7 +73,8 @@ Rails.application.routes.draw do
   get 'demo', to: 'demo#show'
   
   scope '/visualizer' do
-    resources :analysis, except: :index
+    # resources :analysis, except: :index
+    get 'analysis/:url_name', to: 'analysis#show', as: 'analysis'
   end
 
   get 'visualizer', to: "analysis#index", as: "visualizer"

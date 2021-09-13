@@ -1,8 +1,8 @@
-/- host = Rails.configuration.action_mailer.default_url_options[:host]
+/ - host = Rails.configuration.action_mailer.default_url_options[:host]
 - unless @analysis.id.nil?
   = f.association :analysis_category
 = f.input :name
-/ = f.input :url
+= f.input :url, hint: "This name will be embeded in URLs. Hence it must be URL-safe."
 = f.association :visualizer
 = f.input :mid
 = f.input :hidden

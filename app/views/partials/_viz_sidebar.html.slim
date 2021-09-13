@@ -4,7 +4,5 @@
             = c.name
         .collapse.show id="sidebar-cl-#{c.id}"
             - c.analyses.each do |a|
-                / - if visible_analysis(a)
                 li class=('active' if @analysis == a)
-                    / = link_to project_analysis_path(@project, a.url_name) do
-                    = link_to a.name, analysis_path(a.id)
+                    = link_to a.name, analysis_path(a.url)

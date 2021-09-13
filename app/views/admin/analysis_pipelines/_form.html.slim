@@ -1,4 +1,5 @@
 = f.input :name
+= f.input :url, hint: "This name will be embeded in URLs. Hence it must be URL-safe."
 = f.input :pid
 = f.input :image_file, as: :file
 - if !@pipeline.cover_image.nil?
