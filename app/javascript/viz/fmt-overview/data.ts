@@ -1,4 +1,5 @@
 import { ColorScheme, ColorSchemeCategory, ColorSchemeGradient } from "crux/dist/color";
+import { measuredTextSize } from "crux/dist/utils/text-size";
 import { schemeSet1, schemeSet2, schemeSet3 } from "d3-scale-chromatic";
 import { applyDefaultSpeciesSort } from "./editor";
 
@@ -28,15 +29,13 @@ const paletteColors = ["#c30", "#ffc", "#03c"];
 export function main(data) {
     this.data.hiddenSpecies = new Set();
     this.data.species = this.data.filteredSpecies = getGroups(data, data.columns[0]).sort();
+    console.log(this.data.species[0]);
+    this.data.maxSpeciesLength = Math.max(...this.data.filteredSpecies
+                                        .map(x => measuredTextSize(x, 12).width));
     this.data.speciesCount = this.data.species.length;
     this.data.samples = getGroups(data, data.columns[1]).sort();
-    // this.data.types = getGroups(data, data.columns[2]).sort();
-    // this.data.chosenType = this.data.types[0];
     this.data.sources = getGroups(data, data.columns[3]).sort();
     this.data.mainDict = _.groupBy(data, "Sample");
-    // this.data.samples.forEach(k => {
-    //     this.data.mainDict[k] = _.groupBy(this.data.mainDict[k], "Type");
-    // });
     this.data.colorDict = {};
     const palette = d3.scaleLinear().domain([0, 1, 2]).range(paletteColors);
     this.data.sources.forEach((s, i) => {
