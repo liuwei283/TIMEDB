@@ -1,9 +1,9 @@
-import axios from "axios";
 import { schemeGradient } from "crux/dist/color";
 import { max } from "crux/dist/utils/math";
 import * as d3 from "d3";
 import * as _ from "lodash";
 import { feature } from "topojson";
+
 
 const width = 1060,
     height = 500,

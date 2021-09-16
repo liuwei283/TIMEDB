@@ -46,5 +46,10 @@ class RawFilesController < ApplicationController
       end
     end
 
+    def database
+      path = File.join Rails.root, 'data/public', full_path
+      send_file path
+    end
+
   end
   
