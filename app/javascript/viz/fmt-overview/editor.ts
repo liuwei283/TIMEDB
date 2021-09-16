@@ -190,7 +190,7 @@ export function editorConfig(v: any): EditorDef {
                                 //     },
                                 // },
                                 {
-                                    title: "Species bar width",
+                                    title: "Bar width",
                                     type: "input",
                                     value: {
                                         current: v.data.gridW,
@@ -202,7 +202,7 @@ export function editorConfig(v: any): EditorDef {
                                     },
                                 },
                                 {
-                                    title: "Abundance plot height",
+                                    title: "Strain plot height",
                                     type: "input",
                                     value: {
                                         current: v.data.plotHeight,
@@ -219,7 +219,7 @@ export function editorConfig(v: any): EditorDef {
                                         current: v.data.labelAngle,
                                         callback(x) {
                                             const angle = parseInt(x);
-                                            if (angle >= 45 && angle <= 135)
+                                            if ((-90 <= angle && angle <= -30) || (30 <= angle && angle <= 90))
                                                 v.data.labelAngle = angle;
                                             update(v);
                                         },
@@ -311,11 +311,37 @@ export function editorConfig(v: any): EditorDef {
                                         get species() {
                                             return Array.from(v.data.species);
                                         },
-                                        callback(hiddenSamples) {
+                                        get defaultValue() {
+                                            return true;
+                                        },
+                                        get title() {
+                                            return "Filter Species";
+                                        },
+                                        callback(_, hiddenSamples) {
                                             v.data.hiddenSpecies = new Set(hiddenSamples);
                                             filterSpecies(v);
-                                            // v.root._sizeUpdated = true;
                                             v.data.mainSizeChanged = true;
+                                            update(v);
+                                        },
+                                    },
+                                },
+                                {
+                                    type: "vue",
+                                    component: "filter-species",
+                                    title: "Highlight Species",
+                                    ref: "highlightSpecies",
+                                    data: {
+                                        get species() {
+                                            return Array.from(v.data.species);
+                                        },
+                                        get defaultValue() {
+                                            return false;
+                                        },
+                                        get title() {
+                                            return "Highlight Species";
+                                        },
+                                        callback(highlight, _) {
+                                            v.data.highlightSpecies = new Set(highlight);
                                             update(v);
                                         },
                                     },
@@ -338,25 +364,44 @@ export function editorConfig(v: any): EditorDef {
             {
                 id: "meta",
                 title: "Meta Panel",
-                layout: "single-page",
-                view: {
-                    type: "list",
-                    items: [
-                        {
-                            title: "Reorder meta features",
+                layout: "tabs",
+                tabs: [
+                    {
+                        name: "Settings",
+                        id: "content",
+                        view: {
+                            type: "vue",
+                            component: "meta-info",
+                            data: {
+                                data: v.data.metaFeatures.map(k => ({
+                                    name: k, ...v.data.metaInfo[k],
+                                })),
+                                callback(obj) {
+                                    for (const o of obj) {
+                                        v.data.metaInfo[o.name].update(v, o);
+                                    }
+                                    update(v);
+                                },
+                            },
+                        },
+                    },
+                    {
+                        name: "Reorder",
+                        id: "reorder",
+                        view: {
                             type: "vue",
                             component: "reorder",
                             data: {
-                                title: `Reorder`,
-                                array: v.data.metaFeatures,
+                                title: `Reorder meta features`,
+                                array:  v.data.metaFeatures,
                                 callback(array) {
                                     v.data.metaFeatures = array;
                                     update(v);
                                 },
                             },
                         },
-                    ],
-                },
+                    },
+                ],
             },
         ],
     };

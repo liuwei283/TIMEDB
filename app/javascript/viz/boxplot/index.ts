@@ -29,7 +29,7 @@ function init() {
                 drawP: true,
                 drawViolin: false,
                 drawScatter: true,
-                hollowBox: true,
+                hollowBox: false,
                 xAxisRotated: true,
                 labelFontSize: 12,
                 labelOffsetVer: 30,
@@ -67,6 +67,7 @@ function init() {
             boxP: {
                 fileKey: "boxP",
                 type: "tsv",
+                optional: true,
                 multiple: true,
                 loaded(data) {
                     this.data.pDict = {};

@@ -21,7 +21,7 @@
           p.text-muted No analysis. Click "Add Analysis" button above to add.
       - unless c.analyses.empty?
         ul.sortable-list.list-group.list-group-flush data-update-path="#{admin_analysis_category_update_analysis_position_path(c)}"
-          - c.analyses.each do |a|
+          - c.analyses.unscope(where: :hidden).order(:position).each do |a|
             li.list-group-item.justify-content-between.d-flex data-id="#{a.id}"
               div
                 = icon 'fa', 'bars', class: 'drag-handle'

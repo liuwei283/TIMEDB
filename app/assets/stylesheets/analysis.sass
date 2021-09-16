@@ -115,10 +115,16 @@ $sidebar-background-color: desaturate(lighten($orange, 45%), 80%)
     // background: $gray-100
     border-radius: 2px
     h1, h2
+        color: #6d2c4a
+        // width: 100%
+        // border-bottom: 1px solid #9e5274
         &:not(:first-child)
             margin: 2rem 0 1rem 0
     h3, h4, h5, h6
+        color: #6d2c4a
         margin: 1rem 0
+    strong
+        color: #6d2c4a
     pre
         background: rgba(0,0,0,.1)
         margin: 15px 0
@@ -136,10 +142,16 @@ $sidebar-background-color: desaturate(lighten($orange, 45%), 80%)
         padding: 2px 3px
         border-radius: 2px
     table
-        width: 100%
-        margin: 15px 0
+        max-width: calc(100% - 20px)
+        margin: 15px 20px
         th, td
-            border: 1px solid rgba(255,255,255,.2)
+            border: 1px solid rgba(0,0,0,.2)
+            padding: 0 1em
+    li::marker
+        color: #920547
+        font-size: 1.2em
+    li p
+        margin-bottom: 0
     .nav-tabs
         border-bottom-color: $gray-700
     .nav-link

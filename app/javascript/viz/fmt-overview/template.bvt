@@ -1,12 +1,12 @@
-// svg {
-//     // height = 900; width = 1000
-
-//     // @let plotHeight = 120
+Component {
+    EditText {
+        text = title
+        anchor = @anchor("c", "t")
+        y = 10; fontSize = 13; x = centerX
+    }
     Component {
         @let gridH = 12
-        // @let gridW = 12
-        @let offsetX = 50
-        x = offsetX; y = 20
+        x = offsetX; y = offsetY
         Rows {
             static = true
             @for (sample, i) in hist.samples {
@@ -51,7 +51,7 @@
                                 stroke = @color("line")
                                 strokeWidth = 0.5
                                 behavior:tooltip {
-                                    content = `Species: ${d.data.pos}<br>Source: ${d.key}<br>Abundance: ${d.data.value.toFixed(2)}%`
+                                    content = `Species: ${d.data.pos}<br>Strain: ${d.key}<br>Proportion: ${d.data.value.toFixed(2)}%`
                                 }
                                 //anchor = @anchor("top","center")
                             }
@@ -77,11 +77,11 @@
                                     @for (d, j) in metaData[f] {
                                         Component {
                                             height = 100%; width = 100%
-                                            // on:mouseenter = setActive(gridW * j + offsetX, null)
-                                            // on:mouseleave = setActive(null, null)
-                                            // behavior:tooltip {
-                                            //     content = `sample: ${filteredSamples[j]}<br>${f}: ${d}`
-                                            // }
+                                            // on:mouseenter = setActive(gridW * j + offsetX)
+                                            // on:mouseleave = setActive(null)
+                                            behavior:tooltip {
+                                                content = `species: ${filteredSpecies[j]}<br>${f}: ${d}`
+                                            }
                                             @let metaFill = metaInfo[f].color(d)
                                             @if !!metaFill {
                                                 Rect {
@@ -117,12 +117,23 @@
                     @for s in filteredSpecies {
                         Component {
                             width = gridW
-                            Text {
-                                rotation = @rotate(labelAngle)
-                                text = s; anchor = @anchor("l", "m")
-                                y = 2; x = @geo(50, 1); fontSize = 11
-                                style:font-style = italicLabel ? "italic" : "normal"
+                            @let fill = highlightSpecies.has(s) ? "red" : "black"
+                            @if labelAngle > 0 {
+                                Text {
+                                    rotation = @rotate(labelAngle); fill =  fill
+                                    text = s; anchor = @anchor("l", "m")
+                                    y = 5; x = @geo(50, 1); fontSize = 11
+                                    style:font-style = italicLabel ? "italic" : "normal"
+                                }
+                            } @else {
+                                Text {
+                                    rotation = @rotate(labelAngle); fill =  fill
+                                    text = s; anchor = @anchor("r", "m")
+                                    y = 5; x = @geo(50, 1); fontSize = 11
+                                    style:font-style = italicLabel ? "italic" : "normal"
+                                }
                             }
+                            
                         }
                     }
                 }
@@ -135,7 +146,7 @@
                 Rect.full {
                     stroke = @color("line"); fill = "#fff"
                 }
-                Text("Source") {
+                Text("Strain") {
                     fontSize = 11; x = 3; y = 3
                 }
                 @for (source, i) in sources {
@@ -201,5 +212,4 @@
             }
         }
     }
-    
-// }
+}

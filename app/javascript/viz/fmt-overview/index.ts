@@ -7,6 +7,7 @@ import { registerEditorConfig } from "utils/editor";
 import { main, meta } from "./data";
 
 import { editorConfig, editorRef } from "./editor";
+import { EditText } from "oviz-components/edit-text";
 
 const MODULE_NAME = "fmt-overview";
 
@@ -14,16 +15,14 @@ function init() {
     if ( !window.gon || window.gon.module_name !== MODULE_NAME) return;
     const {visualizer} = Oviz.visualize({
         el: "#canvas",
-        // renderer: "svg",
-        // width: 1600,
-        // height: 750,
-        // template,
         root: new FMT(),
+        components: { EditText },
         data: {
             labelAngle: 45,
             italicLabel: false,
             gridW: 12,
             plotHeight: 120,
+            highlightSpecies: new Set([]),
         },
         theme: "light",
         loadData: {
@@ -40,8 +39,6 @@ function init() {
             },
         },
         setup() {
-            this.data.mainWidth = this.data.gridW * this.data.speciesCount;
-            this.size.height = this.data.hist.samples.length * this.data.plotHeight + 250;
             registerEditorConfig(editorConfig(this), editorRef);
         },
     });
