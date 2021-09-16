@@ -4,19 +4,21 @@ The `FMT Overview` displays the overall data of the analyses. It contains stacke
 ## Input Files
 _Click on the `Download Data` button to check the official input files._
 
-### 1. Strain proportion data (TSV file)
+#### 1. Strain proportion data (TSV file)
 
 | Species |  Sample | Source | Abd |
 |---|---|---|---|
 | Streptococcus_thermophilus  | DS04  | clu01 | 100 |
-> Source represents strain, Abd represents proportion
 
-### 2. Metadata (TSV file)
+- Source represents strain, Abd represents proportion
+
+#### 2. Metadata (TSV file)
 
 | spe |  group | type |
 |---|---|---|
 | Streptococcus_thermophilus  | Other(11)  | from_donor |
-> The first column is the species. The column name doesn't matter. You may add as many meta features as you like.
+
+- The first column is the species. The column name doesn't matter. You may add as many meta features as you like.
 
 ## Display Interactions
 
@@ -25,7 +27,7 @@ _Click on the `Download Data` button to check the official input files._
 - **Tooltips**<br/>
   Hover on the bar or meta grid and a info tooltip will show.
 - **Download**<br/>
-  One SVG file will be generated when the '**Download**' button is clicked.
+  One SVG file will be generated when the `Download Chart` button is clicked.
 
 ## Editor Functions
 
@@ -51,5 +53,6 @@ _Click on the `Download Data` button to check the official input files._
 - **Meta Panel**
   - __*Settings*__: drag to reorder the metadata categories, set colors for the categories.
   - __*Reorder*__: drag to reorder the metadata. 
-  
+
+
 *Manual version=1.0*, written by Dr. JIANG Yiqi and Ms. WANG Yanfei on 2021-09-13.
