@@ -214,12 +214,17 @@ export function editorConfig(v: any): EditorDef {
                                 },
                                 {
                                     title: "Label rotation angle",
+                                    type: "text",
+                                    content: "Valid range: [-90, -45] or [45, 90]",
+                                },
+                                {
+                                    title: null,
                                     type: "input",
                                     value: {
                                         current: v.data.labelAngle,
                                         callback(x) {
                                             const angle = parseInt(x);
-                                            if ((-90 <= angle && angle <= -30) || (30 <= angle && angle <= 90))
+                                            if ((-90 <= angle && angle <= -45) || (45 <= angle && angle <= 90))
                                                 v.data.labelAngle = angle;
                                             update(v);
                                         },

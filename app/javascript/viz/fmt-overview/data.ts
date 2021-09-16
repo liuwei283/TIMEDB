@@ -28,13 +28,12 @@ const paletteColors = ["#c30", "#ffc", "#03c"];
 
 export function main(data) {
     this.data.hiddenSpecies = new Set();
-    this.data.species = this.data.filteredSpecies = getGroups(data, data.columns[0]).sort();
-    console.log(this.data.species[0]);
+    this.data.species = this.data.filteredSpecies = getGroups(data, "Species").sort();
     this.data.maxSpeciesLength = Math.max(...this.data.filteredSpecies
                                         .map(x => measuredTextSize(x, 12).width));
     this.data.speciesCount = this.data.species.length;
-    this.data.samples = getGroups(data, data.columns[1]).sort();
-    this.data.sources = getGroups(data, data.columns[3]).sort();
+    this.data.samples = getGroups(data, "Sample").sort();
+    this.data.sources = getGroups(data, "Source").sort();
     this.data.mainDict = _.groupBy(data, "Sample");
     this.data.colorDict = {};
     const palette = d3.scaleLinear().domain([0, 1, 2]).range(paletteColors);
