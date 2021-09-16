@@ -79,8 +79,10 @@ GridPlot {
                     height = 100%
                     Line { 
                         x = 50%; y2 = 100%
-                        stroke = boxColors[0]; strokeWidth = 2
+                        stroke = boxColors[0]; strokeWidth = 1
+                        dashArray = "4,1"
                     }
+                    Line { x1 = 41.25%; x2 = 57.75%; y1 = 0; y2 = 0; stroke = "#000" }
                 }
                 
             }
@@ -93,10 +95,15 @@ GridPlot {
             :mean(d) {
                 Line {
                     @let boxColors = getBoxColors(getColor(d.pos))
-                    x1 = 20%; x2 = 80%; stroke = boxColors[2]; strokeWidth = 2
+                    x1 = 20%; x2 = 80%; stroke = "black"; strokeWidth = 2
                 }
             }
-            :median {}
+            :median(d) {
+                Line {
+                    @let boxColors = getBoxColors(getColor(d.pos))
+                    x1 = 20%; x2 = 80%; stroke = "#666"; strokeWidth = 2; dashArray = "2, 2"
+                }
+            }
         } 
             }
         }
