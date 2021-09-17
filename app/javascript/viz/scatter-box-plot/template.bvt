@@ -3,7 +3,9 @@ Component {
     @let scatterSize = 8
     x = 50; y = 50
     ComplexScatterplot {
+        @expr console.log(data)
         plotSize = [mainGridLength, mainGridLength]
+        hiddenSamples = hiddenSamples;
         @props data
         @props scatterConfig
     }
@@ -32,20 +34,32 @@ Component {
             lineHeight = 14
             data = groupLegend
         }
+        @let catDiv = true
         @if (catDiv) {
             Component {
                 y = groupH + 19
-                Text(catKey) {
+                Text(colorKey) {
                     y = -4; anchor = @anchor("b", "l")
                     style:font-weight="bold"
                 }
                 height = 20; width = legendWidth
-                Rect.full {fill = @gradient("bg")}
+                Rect.full {
+                    fill = @gradient("bg")
+                }
                 Axis {
-                    xScale = @scale-linear(metaInfo[catKey].rangeMin, metaInfo[catKey].rangeMax, 0, legendWidth)
+                    xScale = @scale-linear(metaInfo[colorKey].rangeMin, metaInfo[colorKey].rangeMax, 0, legendWidth)
                     y = 20; orientation = "bottom"
                     includeEndTicks = false
                 }
+            }
+        } @else {
+            Legend {
+                y = groupH + 10
+                padding = 8
+                width = legendWidth
+                lineHeight = 14
+                data = classLegend
+                on:dblclick = () => alert("yeeeee")
             }
         }
         

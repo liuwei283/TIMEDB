@@ -19,6 +19,7 @@ export interface ScatterClusterDatum {
 
 export interface ComplextScatterplotOption extends GridPlotOption {
     scatterSize: number;
+    hiddenSamples: Set<string>;
     scatterFill?: string;
     scatterStroke?: string;
     generateTooltip: (d) => string;
@@ -34,7 +35,7 @@ export class ComplexScatterplot extends Component<ComplextScatterplotOption> {
     public ranks: Array<{ value: string; text: string }>;
     public availableAxises: Array<{ value: string; text: string }>;
 
-    public scatterData: any;
+    protected scatterData: any;
     public scatterVectorData: any[];
     public vectorLabel: string;
     public groups: string[];
@@ -61,6 +62,7 @@ export class ComplexScatterplot extends Component<ComplextScatterplotOption> {
 
     private legend1Pos: {x: number, y: number};
 
+    private hiddenSamples: Set<string>;
     private markedScatter: string;
 
     private markedLines: [any, any] = [
@@ -68,11 +70,17 @@ export class ComplexScatterplot extends Component<ComplextScatterplotOption> {
         { y: 0, dashArray: "1,2", stroke: "#aaa"},
     ];
 
+    // private _dataChanged = true;
+
     public render = Oviz.t`${template}`;
 
-    public willRender() {
-        // 
-    }
+    // public willRender() {
+    //     // 
+    //     if (this._firstRender) {
+    //         this.scatterData = this.prop.data;
+    //         this.hiddenSamples = this.prop.hiddenSamples;
+    //     }
+    // }
 /*
     willRender() {
         if (this._firstRender) {
@@ -230,6 +238,18 @@ export class ComplexScatterplot extends Component<ComplextScatterplotOption> {
         }
     }
 
+    protected hideScatter(d) {
+        const result = confirm(`You want to hide ${d.data.sampleId}?`);
+        if (result) {
+            this.hiddenSamples.add(d.data.sampleId);
+            if (d.data.sampleId === this.markedScatter) {
+                this.markedScatter = null;
+            }
+            this.scatterData = this.scatterData.filter(x => !this.hiddenSamples.has(x.sampleId));
+            this.redraw();
+        }
+    }
+
     protected generateScatterContent(scatter) {
         return Object.keys(scatter)
                      .reduce(((acc, cur) => {
@@ -258,3 +278,17 @@ export class ComplexScatterplot extends Component<ComplextScatterplotOption> {
         };
     }
 }
+
+type ScatterData = {
+    valueRange: [number, number],
+    categoryRange: [number, number],
+    data: any[],
+    xLabel: string,
+    yLabel: string,
+}
+// export function processRawData(data: any[], xLabel: string, yLabel: string): ScatterData {
+//     const result = {valueRange: null, categoryRange: null, data: null, xLabel, yLabel};
+//     data.forEach()
+//     return result;
+
+// }

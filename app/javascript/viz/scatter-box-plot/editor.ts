@@ -1,4 +1,7 @@
+import { setSyntheticLeadingComments } from "typescript";
 import { EditorDef } from "utils/editor";
+import { generateBoxConfig } from "viz/boxplot/editor";
+import { setMainData } from ".";
 
 export const editorRef = {} as any;
 
@@ -6,7 +9,40 @@ function run(v) {
     v.forceRedraw = true;
     v.run();
 }
-
+function scatterConfig(v){
+    return ({
+        id: "scatter",
+        title: "Scatterplot Content",
+        layout: "single-page",
+        icon: "",
+        view: {
+            type: "list",
+            items: [
+                {
+                    title: "",
+                    ref: "filterSamples",
+                    type: "vue",
+                    component: "filter-species",
+                    data: {
+                        get species() {
+                            return Array.from(v.data.samples);
+                        },
+                        get defaultValue() {
+                            return true;
+                        },
+                        get title() {
+                            return "Filter Samples";
+                        },
+                        callback(_, hiddenSamples) {
+                            v.data.hiddenSamples = new Set(hiddenSamples);
+                            run(v);
+                        },
+                    },
+                },
+            ],
+        },
+    });
+}
 export function editorConfig(v): EditorDef {
 
     return {
@@ -30,6 +66,8 @@ export function editorConfig(v): EditorDef {
                                         current: v.data.rank,
                                         callback(d) {
                                             v.data.rank = d;
+                                            setMainData(v.data.mainDict[d], v);
+                                            run(v);
                                         },
                                     },
                                 },
@@ -218,6 +256,90 @@ export function editorConfig(v): EditorDef {
                         },
                     ],
                 },
+            },
+            scatterConfig(v),
+            {
+                id: "setting-bc",
+                title: "Box content settings",
+                layout: "single-page",
+                view: {
+                    type: "list",
+                    items: [                       
+                        {
+                            title: "Hollow box",
+                            type: "checkbox",
+                            value: {
+                                current: v.data.boxConfig.hollowBox,
+                                callback(d) {
+                                    v.data.boxConfig.hollowBox = d;
+                                    run(v);
+                                },
+                            },
+                        },
+                        {
+                            title: "Outliers",
+                            type: "checkbox",
+                            value: {
+                                current: v.data.boxConfig.showOutliers,
+                                callback(d) {
+                                    v.data.boxConfig.showOutliers = d;
+                                    run(v);
+                                },
+                            },
+                        },
+                        {
+                            title: "Sample scatter",
+                            type: "checkbox",
+                            value: {
+                                current: v.data.boxConfig.drawScatter,
+                                callback(d) {
+                                    v.data.boxConfig.drawScatter = d;
+                                    run(v);
+                                },
+                            },
+                        },
+                        {
+                            title: "Draw violin",
+                            type: "checkbox",
+                            value: {
+                                current: v.data.boxConfig.drawViolin,
+                                callback(d) {
+                                    v.data.boxConfig.drawViolin = d;
+                                    v.data.boxConfig.drawBox = !d;
+                                    run(v);
+                                },
+                            },
+                        },
+                    ],
+                },
+            },
+            {
+                id: "meta",
+                title: "Meta Panel",
+                layout: "single-page",
+                view: {
+                    type: "list",
+                    items: [
+                        {
+                            title: "meta info",
+                            type: "vue",
+                            component: "meta-info",
+                            data: {
+                                data: v.data.metaFeatures.map(k => ({
+                                    name: k, ...v.data.metaInfo[k],
+                                })),
+                                callback(obj) {
+                                    // console.log(Object.keys(v.data.metaInfo));
+                                    for (const o of obj) {
+                                        v.data.metaInfo[o.name].update(v, o);
+                                    }
+                                    // console.log(v.data.metaInfo);
+                                    run(v);
+                                },
+                            },
+                        },
+                    ]
+                }
             }
         ],
     };
