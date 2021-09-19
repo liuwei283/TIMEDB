@@ -9,7 +9,7 @@ function run(v) {
     v.forceRedraw = true;
     v.run();
 }
-function scatterConfig(v){
+function scatterConfig(v) {
     return ({
         id: "scatter",
         title: "Scatterplot Content",
@@ -42,6 +42,105 @@ function scatterConfig(v){
             ],
         },
     });
+}
+function xyConfig(v) {
+    return [{
+        id: "xData",
+        name: "X-Axis",
+        view: {
+            type: "list",
+            items: [
+                {
+                    ref: "xAxis",
+                    title: "X-Axis",
+                    type: "select",
+                    options: v.data.axises,
+                    value: {
+                        current: v.data.xLabel,
+                        callback(d) {
+                            setMainData(v.data.mainDict[v.data.rank], v, d);
+                            editorRef.xLower.value = v.data.data.categoryRange[0];
+                            editorRef.xUpper.value = v.data.data.categoryRange[1];
+                            run(v);
+                        },
+                    },
+                },
+                {
+                    ref: "xLower",
+                    title: "X Range Lower Bound",
+                    type: "input",
+                    value: {
+                        current:  v.data.data.categoryRange[0],
+                        callback(d) {
+                            v.data.boxDataX.valueRange[0] = v.data.data.categoryRange[0] = parseFloat(d);
+                            run(v);
+                        },
+                    },
+                },
+                {
+                    ref: "xUpper",
+                    title: "X Range Upper Bound",
+                    type: "input",
+                    value: {
+                        current: v.data.data.categoryRange[1],
+                        callback(d) {
+                            v.data.boxDataX.valueRange[1] = v.data.data.categoryRange[1] = parseFloat(d);
+                            run(v);
+                        },
+                    },
+                },
+            ],
+        },
+    },
+    {
+        id: "yData",
+        name: "Y-Axis",
+        view: {
+            type: "list",
+            items: [
+                {
+                    ref: "yAxis",
+                    title: "Y-Axis",
+                    type: "select",
+                    options: v.data.axises,
+                    value: {
+                        current: v.data.yLabel,
+                        callback(d) {
+                            setMainData(v.data.mainDict[v.data.rank], v, null, d);
+                            editorRef.yLower.value = v.data.data.valueRange[0];
+                            editorRef.yUpper.value = v.data.data.valueRange[1];
+                            run(v);
+                        },
+                    },
+                },
+                {
+                    ref: "yLower",
+                    title: "Y Range Lower Bound",
+                    type: "input",
+                    value: {
+                        current:  v.data.data.valueRange[0],
+                        callback(d) {
+                            v.data.boxDataY.valueRange[0] = v.data.data.valueRange[0] = parseFloat(d);
+                            run(v);
+                        },
+                    },
+                },
+                {
+                    ref: "yUpper",
+                    title: "Y Range Upper Bound",
+                    type: "input",
+                    value: {
+                        current: v.data.data.valueRange[1],
+                        callback(d) {
+                            v.data.boxDataY.valueRange[1] = v.data.data.valueRange[1] = parseFloat(d);
+                            run(v);
+                        },
+                    },
+                },
+            ],
+        },
+    },
+];
 }
 export function editorConfig(v): EditorDef {
 
@@ -85,6 +184,7 @@ export function editorConfig(v): EditorDef {
                             ],
                         },
                     },
+                    ...xyConfig(v),
                     // {
                     //     id: "xData",
                     //     name: "X-Axis",

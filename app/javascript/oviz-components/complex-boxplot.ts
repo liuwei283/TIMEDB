@@ -47,10 +47,9 @@ export class ComplexBoxplot extends Component<ComplexBoxplotOption> {
             else this.getViolinColor = (pos) => (this.prop.useCat ? this.prop.colors.cats[pos]
                         : this.prop.colors?.violin || "lightsteelblue");
             if (this.prop.useCat) {
-                console.log(this.prop.colors.cats);
                 this.violinFillProps = {fill: this.prop.colors.cats};
             } else {
-                this.violinFillProps = {fill: this.getViolinColor(0)}
+                this.violinFillProps = {fill: this.getViolinColor(0)};
             }
         }
         // @ts-ignore

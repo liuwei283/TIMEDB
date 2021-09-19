@@ -10,12 +10,25 @@ import { GridPlot } from "oviz-components/grid-plot";
 import { groupedChartColors } from "oviz-common/palette";
 import { register } from "page/visualizers";
 import { rankDict, sortByRankKey} from "utils/bio-info";
-import DataUtils from "utils/data";
+// import DataUtils from "utils/data";
 import { registerEditorConfig } from "utils/editor";
 import { findBoundsForValues } from "utils/maths";
 
 import { minmax } from "crux/dist/utils/math";
 import { brewPalette, MetaInfo } from "viz/meta-overview/data";
+import { isNullishCoalesce } from "typescript";
+
+const DataUtils = {
+    isNull(x) {
+        if (x === "NA") return true;
+        return false;
+    },
+    isDistcint(data: any[], key?: string) {
+        // if (!!key) return !!(data.filter(x => x[key] !== "NA").find(x => isNaN(parseFloat(x[key]))));
+        const values = !!key ? data.map(x => x[key]) : data;
+        return !!(values.filter(x => x !== "NA").find(x => isNaN(parseFloat(x))));
+    },
+};
 
 const xAxisIndex = 0;
 const yAxisIndex = 1;
@@ -54,7 +67,7 @@ function init() {
             boxConfig: {
                 showOutliers: true,
                 drawViolin: false,
-                drawScatter: true,
+                drawScatter: false,
                 hollowBox: false,
                 labelFontSize: 12,
                 tickFontSize: 12,
@@ -185,10 +198,10 @@ function init() {
     return visualizer;
 }
 
-export const setMainData = (d, v) => {
-    v.data.axises = d.columns.slice(1);
-    const chosenX = v.data.axises[xAxisIndex];
-    const chosenY = v.data.axises[yAxisIndex];
+export const setMainData = (d, v, xLabel?, yLabel?) => {
+    v.data.axises = d.columns.slice(1).map(x => ({value: x, text: x}));
+    const chosenX = xLabel || v.data.axises[xAxisIndex].value;
+    const chosenY = yLabel || v.data.axises[yAxisIndex].value;
     v.data.xLabel = chosenX;
     v.data.yLabel = chosenY;
     v.data.scatterData = [];
@@ -226,7 +239,6 @@ const processRawData = (d, v) => {
         xValues.push(xValue);
         yValues.push(yValue);
     });
-    console.log(Math.max(...xValues));
     v.data.xRange = findBoundsForValues(xValues, 2, false, 0.1);
     v.data.yRange = findBoundsForValues(yValues, 2, false, 0.1);
 
