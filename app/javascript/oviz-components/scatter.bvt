@@ -19,6 +19,7 @@ GridPlot {
     :content(scatterData) {
         Dots {
             :children(d) {
+                @if (d.data.show) {
                 Component {
                     key = d.data.sampleId // this part is hard-coded
                     cursor = "pointer"
@@ -33,6 +34,8 @@ GridPlot {
                         }
                     }
                     on:click = markScatter(d)
+                    on:dblclick = hideScatter(d)
+                }
                 }
             }
         }

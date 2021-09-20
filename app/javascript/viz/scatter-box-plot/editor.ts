@@ -22,20 +22,16 @@ function scatterConfig(v) {
                     title: "",
                     ref: "filterSamples",
                     type: "vue",
-                    component: "filter-species",
+                    component: "filter-samples-bind",
                     data: {
-                        get species() {
-                            return Array.from(v.data.samples);
-                        },
-                        get defaultValue() {
-                            return true;
+                        get samples() {
+                            return v.data.samples;
                         },
                         get title() {
                             return "Filter Samples";
                         },
-                        callback(_, hiddenSamples) {
-                            v.data.hiddenSamples = new Set(hiddenSamples);
-                            run(v);
+                        callback(samples) {
+                            console.log(samples);
                         },
                     },
                 },
@@ -283,7 +279,25 @@ export function editorConfig(v): EditorDef {
                                 },
                             },
                         },
-                        
+                        {
+                            title: "",
+                            ref: "filterSamples",
+                            type: "vue",
+                            component: "filter-samples-bind",
+                            data: {
+                                get samples() {
+                                    return v.data.scatterData;
+                                },
+                                get title() {
+                                    return "Filter Samples";
+                                },
+                                callback(samples) {
+                                    // console.log(samples);
+                                    v.data.scatterData = samples;
+                                    run(v);
+                                },
+                            },
+                        },
                     ],
                 },
             },

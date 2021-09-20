@@ -46,24 +46,6 @@ export class ComplexScatterplot extends Component<ComplextScatterplotOption> {
     public clusterDict;
     public sampleInfoDict: any;
 
-    private parsedScatterData: any[];
-    private parsedClusterData: Record<string, ScatterClusterDatum>;
-    private rankLabel;
-    private xLabel;
-    private categoryRange;
-    private yLabel;
-    private valueRange;
-
-    private groupLegendData;
-
-    private shapeMap: Map<string, string>;
-    private colorMap: Map<string|number, string>;
-
-    private legend2Pos: {x: number, y: number};
-
-    private legend1Pos: {x: number, y: number};
-
-    private hiddenSamples: Set<string>;
     private markedScatter: string;
 
     private markedLines: [any, any] = [
@@ -168,11 +150,8 @@ export class ComplexScatterplot extends Component<ComplextScatterplotOption> {
         }
     }
 */
-    protected rangeIsValid(range: Array<number>): boolean {
-        if (!!range && !!range[0] && !!range[1]) return true;
-        return false;
-    }
 
+// 这个是旧的椭圆算法
     protected computeErrorEllipse(samples, xIndex, yIndex, svgRatioX, svgRatioY): ScatterClusterDatum {
         const ellipseData = {cx: 0, cy: 0, rx: 0, ry: 0, rotationAngle: 0};
         const s = 5.991;
@@ -218,14 +197,6 @@ export class ComplexScatterplot extends Component<ComplextScatterplotOption> {
         return {center, ellipseData: ellipseDatum};
     }
 
-    protected getX(value: number) {
-        return this._scale(value, !this.prop.flip);
-    }
-
-    protected getY(value: number) {
-        return this._scale(value, this.prop.flip);
-    }
-
     protected markScatter(d) {
         if (d.data.sampleId === this.markedScatter) {
             this.markedScatter = null;
@@ -242,11 +213,10 @@ export class ComplexScatterplot extends Component<ComplextScatterplotOption> {
     protected hideScatter(d) {
         const result = confirm(`You want to hide ${d.data.sampleId}?`);
         if (result) {
-            this.hiddenSamples.add(d.data.sampleId);
             if (d.data.sampleId === this.markedScatter) {
                 this.markedScatter = null;
             }
-            this.scatterData = this.scatterData.filter(x => !this.hiddenSamples.has(x.sampleId));
+            d.data.show = false;
             this.redraw();
         }
     }
