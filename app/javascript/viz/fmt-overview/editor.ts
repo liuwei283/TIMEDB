@@ -309,11 +309,11 @@ export function editorConfig(v: any): EditorDef {
                                 },
                                 {
                                     type: "vue",
-                                    component: "filter-species",
+                                    component: "filter-samples",
                                     title: "Filter Species",
                                     ref: "filterSpecies",
                                     data: {
-                                        get species() {
+                                        get samples() {
                                             return Array.from(v.data.species);
                                         },
                                         get defaultValue() {
@@ -332,11 +332,11 @@ export function editorConfig(v: any): EditorDef {
                                 },
                                 {
                                     type: "vue",
-                                    component: "filter-species",
+                                    component: "filter-samples",
                                     title: "Highlight Species",
                                     ref: "highlightSpecies",
                                     data: {
-                                        get species() {
+                                        get samples() {
                                             return Array.from(v.data.species);
                                         },
                                         get defaultValue() {
