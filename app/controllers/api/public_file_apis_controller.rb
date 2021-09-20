@@ -5,7 +5,7 @@ class Api::PublicFileApisController < ApplicationController
     def show
         file_path = helpers.render_with_params File.join('/data/public', @api.path),
                                                 @user
-                                                #file_api_params
+                                                file_api_params
         redirect_to file_path
     end
 

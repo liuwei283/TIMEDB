@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_09_13_085133) do
+ActiveRecord::Schema.define(version: 2021_09_20_032112) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -143,6 +143,17 @@ ActiveRecord::Schema.define(version: 2021_09_13_085133) do
     t.datetime "updated_at", precision: 6, null: false
     t.string "abundance_available"
     t.index ["project_id"], name: "index_samples_on_project_id"
+  end
+
+  create_table "tabix_apis", force: :cascade do |t|
+    t.string "url_name", limit: 30
+    t.string "folder", limit: 1024
+    t.string "column_names", limit: 1024
+    t.string "column_types", limit: 256
+    t.json "alias", default: {"main"=>"main.bgz"}, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["url_name"], name: "index_tabix_apis_on_url_name"
   end
 
   create_table "task_outputs", force: :cascade do |t|
