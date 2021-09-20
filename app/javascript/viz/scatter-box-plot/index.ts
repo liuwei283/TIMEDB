@@ -10,25 +10,12 @@ import { GridPlot } from "oviz-components/grid-plot";
 import { groupedChartColors } from "oviz-common/palette";
 import { register } from "page/visualizers";
 import { rankDict, sortByRankKey} from "utils/bio-info";
-// import DataUtils from "utils/data";
+import DataUtils from "utils/data";
 import { registerEditorConfig } from "utils/editor";
 import { findBoundsForValues } from "utils/maths";
 
 import { minmax } from "crux/dist/utils/math";
 import { brewPalette, MetaInfo } from "viz/meta-overview/data";
-import { isNullishCoalesce } from "typescript";
-
-const DataUtils = {
-    isNull(x) {
-        if (x === "NA") return true;
-        return false;
-    },
-    isDistcint(data: any[], key?: string) {
-        // if (!!key) return !!(data.filter(x => x[key] !== "NA").find(x => isNaN(parseFloat(x[key]))));
-        const values = !!key ? data.map(x => x[key]) : data;
-        return !!(values.filter(x => x !== "NA").find(x => isNaN(parseFloat(x))));
-    },
-};
 
 const xAxisIndex = 0;
 const yAxisIndex = 1;
@@ -63,6 +50,7 @@ function init() {
                 labelFontSize: 12,
                 tickFontSize: 12,
                 scatterSize: 8,
+                hollow: false,
             },
             boxConfig: {
                 showOutliers: true,
@@ -118,7 +106,7 @@ function init() {
                     this.data.metaInfo = {};
                     this.data.discardedFeatures = [];
                     let curPos = 0;
-                    let catKey, groupKey, colorKey;
+                    let catKey: string, groupKey: string, colorKey: string;
                     this.data.metaFeatures.forEach((k, i) => {
                         if (DataUtils.isDistcint(data, k)) {
                             const values = data.map(x => x[k]).reduce((a, x) => {
@@ -161,11 +149,11 @@ function init() {
                     });
                     this.data.groupKey = groupKey;
                     data.forEach(x => {
-                        this.data.groupDict[x[sampleKey]] = {...x,
-                            groupIndex: this.data.groups.indexOf(x[groupKey])};
+                        this.data.groupDict[x[sampleKey]] = x;
                     });
                     this.data.colorKey = colorKey;
-
+                    this.data.shapeDict = {};
+                    this.data.groups.forEach((k, i) => this.data.shapeDict[k] = shapes[i]);
                     return null;
                 },
             },
@@ -207,7 +195,8 @@ export const setMainData = (d, v, xLabel?, yLabel?) => {
     v.data.scatterData = [];
     processRawData(d, v);
 
-    const shapeGetter = (s) => shapes[s.groupIndex];
+    const shapeGetter = (s) => v.data.shapeDict[s[v.data.groupKey]]
+    const groups = v.data.metaInfo[v.data.groupKey].values;
     const colorGetter = (s) => v.data.metaInfo[v.data.colorKey].color(s[v.data.colorKey]);
     v.data.data = {
         xLabel: v.data.xLabel, yLabel: v.data.yLabel,
@@ -245,23 +234,11 @@ const processRawData = (d, v) => {
     const categories = v.data.categories;
     const xBoxValues = categories.map(_ => []);
     const yBoxValues = categories.map(_ => []);
-    if (v.data.catDiv) {
-        v.data.scatterData.forEach(x => {
-            if (parseFloat(x[v.data.catKey]) <= v.data.catDiv) {
-                xBoxValues[0].push(x.pos);
-                yBoxValues[0].push(x.value);
-            } else {
-                xBoxValues[1].push(x.pos);
-                yBoxValues[1].push(x.value);
-            }
-        });
-    } else {
-        v.data.scatterData.forEach(x => {
-            const catIndex = categories.indexOf(x[v.data.catKey]);
-            xBoxValues[catIndex].push(x.pos);
-            yBoxValues[catIndex].push(x.value);
-        });
-    }
+    v.data.scatterData.forEach(x => {
+        const catIndex = categories.indexOf(x[v.data.catKey]);
+        xBoxValues[catIndex].push(x.pos);
+        yBoxValues[catIndex].push(x.value);
+    });
     v.data.boxDataX = processBoxData(xBoxValues, categories);
     v.data.boxDataY = processBoxData(yBoxValues, categories);
 };

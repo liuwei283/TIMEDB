@@ -18,6 +18,7 @@ export interface ScatterClusterDatum {
 }
 
 export interface ComplextScatterplotOption extends GridPlotOption {
+    hollow: boolean;
     scatterSize: number;
     hiddenSamples: Set<string>;
     scatterFill?: string;
@@ -273,8 +274,9 @@ export class ComplexScatterplot extends Component<ComplextScatterplotOption> {
     public defaultProp() {
         return {
             ...super.defaultProp,
-            scatterSize: 10,
+            scatterSize: 8,
             flip: false,
+            hollow: false,
         };
     }
 }

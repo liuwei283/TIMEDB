@@ -144,6 +144,12 @@ function xyConfig(v) {
 }
 export function editorConfig(v): EditorDef {
 
+    const metaOpts = Object.keys(v.data.metaInfo).map(x => ({value: x,
+                            text: `${x} (${v.data.metaInfo[x].isNumber ? "continuous" : "discrete"})`}));
+    const metaOptsDiscrete = Object.keys(v.data.metaInfo)
+                                    .filter(k => !v.data.metaInfo[k].isNumber)
+                                    .map(x => ({value: x, text: x}));
+
     return {
         sections: [
             {
@@ -172,12 +178,50 @@ export function editorConfig(v): EditorDef {
                                 },
                                 {
                                     type: "select",
-                                    title: "Group by",
-                                    options: Object.keys(v.data.metaInfo).map(x => ({value: x, text: x})),
+                                    title: "Scatter shape by",
+                                    options: metaOptsDiscrete,
+                                    value: {
+                                        current: v.data.groupKey,
+                                        callback(d) {
+                                            v.data.groupKey = d;
+                                            v.data.groups = v.data.metaInfo[d].values;
+                                            v.data.shapeDict = {};
+                                            v.data.groups.forEach((x, i) => {
+                                                v.data.shapeDict[x] = v.data.shapes[i];
+                                            });
+                                            v.data.data.shapeGetter = (x) => v.data.shapeDict[x[d]];
+                                            run(v);
+                                        },
+                                    },
+                                },
+                                {
+                                    type: "select",
+                                    title: "Scatter color by",
+                                    options: metaOpts,
+                                    value: {
+                                        current: v.data.colorKey,
+                                        callback(d) {
+                                            v.data.colorKey = d;
+                                            const colorMetaInfo = v.data.metaInfo[v.data.colorKey];
+                                            v.data.data.colorGetter = (s) => v.data.metaInfo[v.data.colorKey].color(s[v.data.colorKey]);
+                                            v.data.classLegend = colorMetaInfo.values.map((x, i) => {
+                                                return {label: x, fill: colorMetaInfo.color(x), type: "Rect"};
+                                            });
+                                            run(v);
+                                        },
+                                    },
+                                },
+                                {
+                                    type: "select",
+                                    title: "Box category by",
+                                    options: metaOptsDiscrete,
                                     value: {
                                         current: v.data.catKey,
                                         callback(d) {
                                             v.data.catKey = d;
+                                            v.data.categories = v.data.metaInfo[d].values;
+                                            setMainData(v.data.mainDict[v.data.rank], v);
+                                            run(v);
                                         },
                                     },
                                 },
@@ -185,116 +229,7 @@ export function editorConfig(v): EditorDef {
                         },
                     },
                     ...xyConfig(v),
-                    // {
-                    //     id: "xData",
-                    //     name: "X-Axis",
-                    //     view: {
-                    //         type: "list",
-                    //         items: [
-                    //             {
-                    //                 ref: "xAxis",
-                    //                 title: "X-Axis",
-                    //                 type: "select",
-                    //                 options: v.data.availableAxises,
-                    //                 value: {
-                    //                     current: v.data.config.xAxisIndex.toString(),
-                    //                     callback(d) {
-                    //                         v.data.config.xAxisIndex = parseInt(d);
-                    //                         v.root.dataChanged = true;
-                    //                         v.forceRedraw = true;
-                    //                         run(v);
-                    //                     },
-                    //                 },
-                    //             },
-                    //             {
-                    //                 title: "X Range Lower Bound",
-                    //                 type: "input",
-                    //                 value: {
-                    //                     current: 0,
-                    //                     callback(d) {
-                    //                         v.data.config.categoryRange[0] = parseFloat(d);
-                    //                         if (!!v.data.config.categoryRange[0]
-                    //                             && !!v.data.config.categoryRange[1]) {
-                    //                                 v.forceRedraw = true;
-                    //                                 v.root.dataChanged = true;
-                    //                                 run(v);
-                    //                             }
-                    //                     },
-                    //                 },
-                    //             },
-                    //             {
-                    //                 title: "X Range Upper Bound",
-                    //                 type: "input",
-                    //                 value: {
-                    //                     current: 0,
-                    //                     callback(d) {
-                    //                         v.data.config.categoryRange[1] = parseFloat(d);
-                    //                         if (!!v.data.config.categoryRange[0] 
-                    //                             && !!v.data.config.categoryRange[1]) {
-                    //                                 v.forceRedraw = true;
-                    //                                 v.root.dataChanged = true;
-                    //                                 run(v);
-                    //                             }
-                    //                     },
-                    //                 },
-                    //             },
-                    //         ],
-                    //     },
-                    // },
-                    // {
-                    //     id: "yData",
-                    //     name: "Y-Axis",
-                    //     view: {
-                    //         type: "list",
-                    //         items: [
-                    //             {
-                    //                 ref: "yAxis",
-                    //                 title: "Y-Axis",
-                    //                 type: "select",
-                    //                 options: v.data.availableAxises,
-                    //                 value: {
-                    //                     current: v.data.config.yAxisIndex.toString(),
-                    //                     callback(d) {
-                    //                         v.data.config.yAxisIndex = parseInt(d);
-                    //                         v.forceRedraw = true;
-                    //                         v.root.dataChanged = true;
-                    //                         run(v);
-                    //                     },
-                    //                 },
-                    //             },
-                    //             {
-                    //                 title: "Y Range Lower Bound",
-                    //                 type: "input",
-                    //                 value: {
-                    //                     current: 0,
-                    //                     callback(d) {
-                    //                         v.data.config.valueRange[0] = parseFloat(d);
-                    //                         if (!!v.data.config.valueRange[0] 
-                    //                             && !!v.data.config.valueRange[1]) {
-                    //                                 v.forceRedraw = true;
-                    //                                 run(v);
-                    //                             }
-                    //                     },
-                    //                 },
-                    //             },
-                    //             {
-                    //                 title: "Y Range Upper Bound",
-                    //                 type: "input",
-                    //                 value: {
-                    //                     current: 0,
-                    //                     callback(d) {
-                    //                         v.data.config.valueRange[1] = parseFloat(d);
-                    //                         if (!!v.data.config.valueRange[0] 
-                    //                             && !!v.data.config.valueRange[1]) {
-                    //                                 v.forceRedraw = true;
-                    //                                 run(v);
-                    //                             }
-                    //                     },
-                    //                 },
-                    //             },
-                    //         ],
-                    //     },
-                    // },
+
                 ],
             },
             {
@@ -304,20 +239,6 @@ export function editorConfig(v): EditorDef {
                 view: {
                     type: "list",
                     items: [
-                        // {
-                        //     type: "vue",
-                        //     title: "",
-                        //     component: "color-picker",
-                        //     data: {
-                        //         title: "Customize colors",
-                        //         scheme: copyObject(v.data.colors),
-                        //         id: "pwcolor",
-                        //         callback(colors) {
-                        //             v.data.colors = colors;
-                        //             run(v);
-                        //         },
-                        //     },
-                        // },
                         {
                             title: "grid length",
                             type: "input",
@@ -325,20 +246,7 @@ export function editorConfig(v): EditorDef {
                                 current: v.data.mainGridLength,
                                 callback(d) {
                                     v.data.mainGridLength = parseFloat(d);
-                                    v.forceRedraw = true;
-                                    v.run();
-                                },
-                            },
-                        },
-                        {
-                            title: "scatter size",
-                            type: "input",
-                            value: {
-                                current: v.data.scatterConfig.scatterSize,
-                                callback(d) {
-                                    v.data.scatterConfig.scatterSize = parseInt(d);
-                                    v.forceRedraw = true;
-                                    v.run();
+                                    run(v);
                                 },
                             },
                         },
@@ -349,15 +257,37 @@ export function editorConfig(v): EditorDef {
                                 current: v.data.boxGridHeight,
                                 callback(d) {
                                     v.data.boxGridHeight = parseFloat(d);
-                                    v.forceRedraw = true;
-                                    v.run();
+                                    run(v);
                                 },
                             },
                         },
+                        {
+                            title: "scatter size",
+                            type: "input",
+                            value: {
+                                current: v.data.scatterConfig.scatterSize,
+                                callback(d) {
+                                    v.data.scatterConfig.scatterSize = parseInt(d);
+                                    run(v);
+                                },
+                            },
+                        },
+                        {
+                            title: "hollow scatter",
+                            type: "checkbox",
+                            value: {
+                                current: v.data.scatterConfig.hollow,
+                                callback(d) {
+                                    v.data.scatterConfig.hollow = d;
+                                    run(v);
+                                },
+                            },
+                        },
+                        
                     ],
                 },
             },
-            scatterConfig(v),
+            // scatterConfig(v),
             {
                 id: "setting-bc",
                 title: "Box content settings",
@@ -429,11 +359,9 @@ export function editorConfig(v): EditorDef {
                                     name: k, ...v.data.metaInfo[k],
                                 })),
                                 callback(obj) {
-                                    // console.log(Object.keys(v.data.metaInfo));
                                     for (const o of obj) {
                                         v.data.metaInfo[o.name].update(v, o);
                                     }
-                                    // console.log(v.data.metaInfo);
                                     run(v);
                                 },
                             },
