@@ -31,27 +31,20 @@
         = link_to admin_analysis_pipelines_path do
           = icon 'fa', 'cube', class: 'fa-fw'
           | Analysis Pipelines
-      li class=('active' if controller_name == 'tabix_apis')
-        = link_to admin_tabix_apis_path do
-          = icon 'fa', 'cube', class: 'fa-fw'
-          | Tabix Apis
-      li class=('active' if controller_name == 'public_file_apis')
-        = link_to admin_public_file_apis_path do
-          = icon 'fa', 'cube', class: 'fa-fw'
-          | Public File Apis
-    /ul.list-unstyled.apis
-      li class=('active' if controller_name == 'tabix_apis')
-        = link_to admin_tabix_apis_path do
-          = icon 'fa', 'cube', class: 'fa-fw'
-          | Tabix Apis
-      li class=('active' if controller_name == 'public_file_apis')
-        = link_to admin_public_file_apis_path do
-          = icon 'fa', 'cube', class: 'fa-fw'
-          | Public File Apis
-      /li class=('active' if controller_name == 'fasta_apis')
-        /= link_to admin_fasta_apis_path do
-          /= icon 'fa', 'cube', class: 'fa-fw'
-          /| Fasta Apis
+/ ul.list-unstyled.apis
+/   li.header API
+/   li class=('active' if controller_name == 'tabix_apis')
+/     = link_to admin_tabix_apis_path do
+/       = icon 'fa', 'cube', class: 'fa-fw'
+/       | Tabix Apis
+/   li class=('active' if controller_name == 'fasta_apis')
+/     = link_to admin_fasta_apis_path do
+/       = icon 'fa', 'cube', class: 'fa-fw'
+/       | Fasta Apis
+/   li class=('active' if controller_name == 'public_file_apis')
+/     = link_to admin_public_file_apis_path do
+/       = icon 'fa', 'cube', class: 'fa-fw'
+/       | Public File Apis
 / ul.list-unstyled.bg
 /   li.header Background
 /   li class=('active' if controller_name == 'background_pipelines')
