@@ -18,6 +18,5 @@ br
                         img.card-img-top src = p.cover_image
                     .card_body
                         h5 =p.name
-                    ul.list-group.list-group-flush
-                        li.list-group-item.text-center
-                            = link_to "Submit", "/submit/pipeline/#{p.pid.to_s}"
+                    .list-group.list-group-flush
+                        = link_to "Submit", "/submit/pipeline/#{p.pid.to_s}", class: "list-group-item list-group-item-action text-center"

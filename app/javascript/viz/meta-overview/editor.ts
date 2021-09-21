@@ -157,12 +157,18 @@ export function editorConfig(v: any): EditorDef {
                                 // },
                                 {
                                     type: "vue",
-                                    component: "filter-sample",
-                                    title: "Filter Samples",
+                                    component: "filter-samples",
+                                    title: null,
                                     ref: "filterSample",
                                     data: {
                                         get samples() {
                                             return Array.from(v.data.samples);
+                                        },
+                                        get defaultValue() {
+                                            return true;
+                                        },
+                                        get title() {
+                                            return "Filter Samples";
                                         },
                                         callback(hiddenSamples) {
                                             v.data.hiddenSamples = new Set(hiddenSamples);

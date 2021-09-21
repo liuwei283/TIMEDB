@@ -7,8 +7,10 @@ import { ComplexBoxplot, processBoxData } from "oviz-components/complex-boxplot"
 import { ComplexScatterplot } from "oviz-components/complex-scatterplot";
 import { EditText } from "oviz-components/edit-text";
 import { GridPlot } from "oviz-components/grid-plot";
+import { groupedChartColors } from "oviz-common/palette";
 import { register } from "page/visualizers";
 import { rankDict, sortByRankKey} from "utils/bio-info";
+import DataUtils from "utils/data";
 import { registerEditorConfig } from "utils/editor";
 import { findBoundsForValues } from "utils/maths";
 
@@ -20,7 +22,7 @@ const yAxisIndex = 1;
 const startColor = "blue";
 const endColor = "red";
 
-const ageDiv = 40;
+// const ageDiv = 40;
 const shapes = ["Circle", "Triangle", "Rect"];
 
 const colorScheme = Oviz.color.ColorSchemeGradient.create(startColor, endColor);
@@ -39,7 +41,7 @@ function init() {
         width: 800,
         height: 800,
         data: {
-            colorScheme, startColor, endColor, shapes, ageDiv,
+            colorScheme, startColor, endColor, shapes,
             colors: {},
             mainGridLength: 300,
             boxGridHeight: 100,
@@ -48,12 +50,13 @@ function init() {
                 labelFontSize: 12,
                 tickFontSize: 12,
                 scatterSize: 8,
+                hollow: false,
             },
             boxConfig: {
                 showOutliers: true,
                 drawViolin: false,
-                drawScatter: true,
-                hollowBox: true,
+                drawScatter: false,
+                hollowBox: false,
                 labelFontSize: 12,
                 tickFontSize: 12,
                 useCat: true,
@@ -77,6 +80,7 @@ function init() {
                     this.data.mainDict = {};
                     this.data.ranks = [];
                     data.forEach((d, i) => {
+                        // process rank information
                         const rankLabel = rankDict[d.columns[0]];
                         this.data.ranks.push({value: rankLabel, text: rankLabel});
                         const mainD = d.map(x => {
@@ -84,28 +88,10 @@ function init() {
                             delete x[d.columns[0]];
                             return x;
                         });
-                        this.data.mainDict[rankLabel] = {data: mainD};
+                        this.data.mainDict[rankLabel] = d;
                         if (i === 0) {
                             this.data.rank = rankLabel;
-                            this.data.axises = d.columns.slice(1);
-                            const chosenX = this.data.axises[xAxisIndex];
-                            const chosenY = this.data.axises[yAxisIndex];
-                            this.data.xLabel = chosenX;
-                            this.data.yLabel = chosenY;
-                            this.data.scatterData = [];
-                            processRawData(d, this);
-
-                            const shapeGetter = (s) => shapes[s.groupIndex];
-                            const colorGetter = (s) => this.data.metaInfo[this.data.catKey].color(s[this.data.catKey]);
-                            this.data.data = {
-                                xLabel: this.data.xLabel, yLabel: this.data.yLabel,
-                                data: this.data.scatterData,
-                                valueRange: this.data.yRange,
-                                categoryRange: this.data.xRange,
-                                shapeGetter, colorGetter,
-                            };
-                            this.data.boxDataX.valueRange = this.data.data.categoryRange;
-                            this.data.boxDataY.valueRange = this.data.data.valueRange;
+                            setMainData(d, this);
                         }
                     });
                     return null;
@@ -120,18 +106,11 @@ function init() {
                     this.data.metaInfo = {};
                     this.data.discardedFeatures = [];
                     let curPos = 0;
+                    let catKey: string, groupKey: string, colorKey: string;
                     this.data.metaFeatures.forEach((k, i) => {
-                        if (!isNaN(parseFloat(data[0][k]))) {
-                            const values = data.map(x => parseFloat(x[k]));
-                            const [min, max] = minmax(values);
-                            this.data.metaInfo[k] = new MetaInfo(k, true, min, max, values);
-                            this.data.metaInfo[k].colorStart = "#0247FE";
-                            this.data.metaInfo[k].colorEnd = "#FE4702";
-                            this.data.metaInfo[k].updateColorGetter();
-                            // this.data.metaData[k] = this.data.samples.map(x => this.data.metaDict[x][k]);
-                        } else {
+                        if (DataUtils.isDistcint(data, k)) {
                             const values = data.map(x => x[k]).reduce((a, x) => {
-                                if (a.indexOf(x) < 0 && x !== "NA") a.push(x);
+                                if (a.indexOf(x) < 0 && (!DataUtils.isNull(x))) a.push(x);
                                 return a;
                             }, []);
                             if (values.length > 10) {
@@ -141,45 +120,59 @@ function init() {
                             } else {
                                 this.data.metaInfo[k] = new MetaInfo(k, false, null, null, values,
                                     curPos + values.length <= brewPalette.length ?
-                                        brewPalette.slice(curPos, curPos + values.length) : null);
-                                // this.data.metaData[k] = this.data.samples.map(x => this.data.metaDict[x][k]);
+                                        groupedChartColors.slice(curPos, curPos + values.length) : null);
                                 curPos += values.length;
+                                if (!!groupKey && !catKey) {
+                                    catKey = k;
+                                }
+                                if (!groupKey) groupKey = k;
                             }
+                        } else {
+                            const values = data.map(x => parseFloat(x[k]));
+                            const [min, max] = minmax(values);
+                            this.data.metaInfo[k] = new MetaInfo(k, true, min, max, values);
+                            this.data.metaInfo[k].colorStart = "#0247FE";
+                            this.data.metaInfo[k].colorEnd = "#FE4702";
+                            this.data.metaInfo[k].updateColorGetter();
+                            if (!colorKey) colorKey = k;
                         }
                     });
                     const sampleKey = data.columns[0];
-                    const groupKey = this.data.groupKey = data.columns[1];
-                    const catKey = this.data.catKey = data.columns[2] || data.columns[1];
-                    if (this.data.metaInfo[catKey].isNumber) {
-                        this.data.catDiv = Oviz.algo.statistics(this.data.metaInfo[catKey].values).median();
-                        this.data.catDiv = 40;
-                        this.data.categories = [`<=${this.data.catDiv}`, `>${this.data.catDiv}`];
-                    } else {
-                        this.data.categories = this.data.metaInfo[catKey].values;
-                    }
+                    if (!catKey) catKey = groupKey;
+                    if (!colorKey) colorKey = groupKey;
+                    this.data.categories = this.data.metaInfo[catKey].values;
+                    this.data.catKey = catKey;
                     this.data.groupDict = {};
                     this.data.groups = this.data.metaInfo[groupKey].values;
                     this.data.groupLegend = this.data.groups.map((x, i) => {
                         return {label: x, fill: "#aaa", type: shapes[i]};
                     });
+                    this.data.groupKey = groupKey;
                     data.forEach(x => {
-                        this.data.groupDict[x[sampleKey]] = {...x,
-                            groupIndex: this.data.groups.indexOf(x[groupKey])};
+                        this.data.groupDict[x[sampleKey]] = x;
                     });
+                    this.data.colorKey = colorKey;
+                    this.data.shapeDict = {};
+                    this.data.groups.forEach((k, i) => this.data.shapeDict[k] = shapes[i]);
                     return null;
                 },
             },
         },
         setup() {
             console.log(this["_data"]);
+
             // set cat colors
-            if (this.data.catDiv) {
-                this.data.colors.cats = [this.data.metaInfo[this.data.catKey].colorStart,
-                                this.data.metaInfo[this.data.catKey].colorEnd];
+            this.data.colors.cats = this.data.categories.map(x => this.data.metaInfo[this.data.catKey].color(x));
+            const colorMetaInfo = this.data.metaInfo[this.data.colorKey];
+            if (colorMetaInfo.isNumber) {
+                this.data.colors.classes = [colorMetaInfo.colorStart, colorMetaInfo.colorEnd];
             } else {
-                this.data.colors.cats = this.data.categories.map(x =>
-                        this.data.metaInfo[this.data.catKey].color(x));
+                this.data.colors.classes = colorMetaInfo.values.map(x => colorMetaInfo.color(x));
+                this.data.classLegend = colorMetaInfo.values.map((x, i) => {
+                    return {label: x, fill: colorMetaInfo.color(x), type: "Rect"};
+                });
             }
+            this.data.hiddenSamples = new Set();
             this.defineGradient("bg", "horizontal", [startColor, endColor]);
             registerEditorConfig(editorConfig(this), editorRef);
             this.data.data.generateTooltip =  (d) => {
@@ -193,6 +186,30 @@ function init() {
     return visualizer;
 }
 
+export const setMainData = (d, v, xLabel?, yLabel?) => {
+    v.data.axises = d.columns.slice(1).map(x => ({value: x, text: x}));
+    const chosenX = xLabel || v.data.axises[xAxisIndex].value;
+    const chosenY = yLabel || v.data.axises[yAxisIndex].value;
+    v.data.xLabel = chosenX;
+    v.data.yLabel = chosenY;
+    v.data.scatterData = [];
+    processRawData(d, v);
+
+    const shapeGetter = (s) => v.data.shapeDict[s[v.data.groupKey]]
+    const groups = v.data.metaInfo[v.data.groupKey].values;
+    const colorGetter = (s) => v.data.metaInfo[v.data.colorKey].color(s[v.data.colorKey]);
+    v.data.data = {
+        xLabel: v.data.xLabel, yLabel: v.data.yLabel,
+        data: v.data.scatterData,
+        valueRange: v.data.yRange,
+        categoryRange: v.data.xRange,
+        shapeGetter, colorGetter,
+    };
+    v.data.samples =  d.map(x => x.sampleId);
+    v.data.boxDataX.valueRange = v.data.data.categoryRange;
+    v.data.boxDataY.valueRange = v.data.data.valueRange;
+};
+
 const processRawData = (d, v) => {
     const xValues = [];
     const yValues = [];
@@ -200,6 +217,7 @@ const processRawData = (d, v) => {
         const xValue = parseFloat(x[v.data.xLabel]);
         const yValue = parseFloat(x[v.data.yLabel]);
         const temp = {sampleId: x.sampleId,
+            show: true,
             pos: xValue,
             value: yValue,
             // values: [xValue, yValue]
@@ -216,23 +234,11 @@ const processRawData = (d, v) => {
     const categories = v.data.categories;
     const xBoxValues = categories.map(_ => []);
     const yBoxValues = categories.map(_ => []);
-    if (v.data.catDiv) {
-        v.data.scatterData.forEach(x => {
-            if (parseFloat(x[v.data.catKey]) <= v.data.catDiv) {
-                xBoxValues[0].push(x.pos);
-                yBoxValues[0].push(x.value);
-            } else {
-                xBoxValues[1].push(x.pos);
-                yBoxValues[1].push(x.value);
-            }
-        });
-    } else {
-        v.data.scatterData.forEach(x => {
-            const catIndex = categories.indexOf(x[v.data.catKey]);
-            xBoxValues[catIndex].push(x.pos);
-            yBoxValues[catIndex].push(x.value);
-        });
-    }
+    v.data.scatterData.forEach(x => {
+        const catIndex = categories.indexOf(x[v.data.catKey]);
+        xBoxValues[catIndex].push(x.pos);
+        yBoxValues[catIndex].push(x.value);
+    });
     v.data.boxDataX = processBoxData(xBoxValues, categories);
     v.data.boxDataY = processBoxData(yBoxValues, categories);
 };

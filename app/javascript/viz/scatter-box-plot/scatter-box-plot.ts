@@ -22,7 +22,7 @@ export class ScatterBoxPlot extends Oviz.Component {
         return this.t`${template}`;
     }
 
-    public willRender() {
-        console.log(this.data);
-    }
+    // public willRender() {
+    //     console.log(this.data);
+    // }
 }

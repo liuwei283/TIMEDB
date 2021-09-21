@@ -2,6 +2,7 @@
 import Oviz from "crux";
 import { Color } from "crux/dist/color";
 import { Component, XYPlotOption } from "crux/dist/element";
+import { isThisTypeNode } from "typescript";
 import { findBoundsForValues } from "utils/maths";
 import template from "./box.bvt";
 import { GridPlotOption } from "./grid-plot";
@@ -28,6 +29,7 @@ export class ComplexBoxplot extends Component<ComplexBoxplotOption> {
     protected getColor;
     protected getViolinColor;
     protected getScatterColor;
+    protected violinFillProps;
 
     public render() {
         return this.t`${template}`;
@@ -44,15 +46,21 @@ export class ComplexBoxplot extends Component<ComplexBoxplotOption> {
             if (this.prop.getViolinColor) this.getViolinColor = this.prop.getViolinColor;
             else this.getViolinColor = (pos) => (this.prop.useCat ? this.prop.colors.cats[pos]
                         : this.prop.colors?.violin || "lightsteelblue");
+            if (this.prop.useCat) {
+                this.violinFillProps = {fill: this.prop.colors.cats};
+            } else {
+                this.violinFillProps = {fill: this.getViolinColor(0)};
+            }
         }
         // @ts-ignore
         this.boxMax = this.prop.data.boxData.max;
     }
 
     protected getBoxColors(x) {
-        if (this.prop.hollowBox) return [x, "white", x];
-        else return [Color.literal(x).darken(30).string,
-            Color.literal(x).lighten(10).string, "white" ];
+        // [stroke, fill]
+        if (this.prop.hollowBox)
+            return [Color.literal(x).darken(10).string, "#fff", x];
+        else return ["#333", x, "#333" ];
     }
 
     public defaultProp() {

@@ -18,7 +18,9 @@ export interface ScatterClusterDatum {
 }
 
 export interface ComplextScatterplotOption extends GridPlotOption {
+    hollow: boolean;
     scatterSize: number;
+    hiddenSamples: Set<string>;
     scatterFill?: string;
     scatterStroke?: string;
     generateTooltip: (d) => string;
@@ -34,7 +36,7 @@ export class ComplexScatterplot extends Component<ComplextScatterplotOption> {
     public ranks: Array<{ value: string; text: string }>;
     public availableAxises: Array<{ value: string; text: string }>;
 
-    public scatterData: any;
+    protected scatterData: any;
     public scatterVectorData: any[];
     public vectorLabel: string;
     public groups: string[];
@@ -44,23 +46,6 @@ export class ComplexScatterplot extends Component<ComplextScatterplotOption> {
     public clusterDict;
     public sampleInfoDict: any;
 
-    private parsedScatterData: any[];
-    private parsedClusterData: Record<string, ScatterClusterDatum>;
-    private rankLabel;
-    private xLabel;
-    private categoryRange;
-    private yLabel;
-    private valueRange;
-
-    private groupLegendData;
-
-    private shapeMap: Map<string, string>;
-    private colorMap: Map<string|number, string>;
-
-    private legend2Pos: {x: number, y: number};
-
-    private legend1Pos: {x: number, y: number};
-
     private markedScatter: string;
 
     private markedLines: [any, any] = [
@@ -68,11 +53,17 @@ export class ComplexScatterplot extends Component<ComplextScatterplotOption> {
         { y: 0, dashArray: "1,2", stroke: "#aaa"},
     ];
 
+    // private _dataChanged = true;
+
     public render = Oviz.t`${template}`;
 
-    public willRender() {
-        // 
-    }
+    // public willRender() {
+    //     // 
+    //     if (this._firstRender) {
+    //         this.scatterData = this.prop.data;
+    //         this.hiddenSamples = this.prop.hiddenSamples;
+    //     }
+    // }
 /*
     willRender() {
         if (this._firstRender) {
@@ -159,11 +150,8 @@ export class ComplexScatterplot extends Component<ComplextScatterplotOption> {
         }
     }
 */
-    protected rangeIsValid(range: Array<number>): boolean {
-        if (!!range && !!range[0] && !!range[1]) return true;
-        return false;
-    }
 
+// 这个是旧的椭圆算法
     protected computeErrorEllipse(samples, xIndex, yIndex, svgRatioX, svgRatioY): ScatterClusterDatum {
         const ellipseData = {cx: 0, cy: 0, rx: 0, ry: 0, rotationAngle: 0};
         const s = 5.991;
@@ -209,14 +197,6 @@ export class ComplexScatterplot extends Component<ComplextScatterplotOption> {
         return {center, ellipseData: ellipseDatum};
     }
 
-    protected getX(value: number) {
-        return this._scale(value, !this.prop.flip);
-    }
-
-    protected getY(value: number) {
-        return this._scale(value, this.prop.flip);
-    }
-
     protected markScatter(d) {
         if (d.data.sampleId === this.markedScatter) {
             this.markedScatter = null;
@@ -226,6 +206,17 @@ export class ComplexScatterplot extends Component<ComplextScatterplotOption> {
             this.markedLines[0].x = d.pos;
             this.markedLines[1].y = d.value;
             this.$v.forceRedraw = true;
+            this.redraw();
+        }
+    }
+
+    protected hideScatter(d) {
+        const result = confirm(`You want to hide ${d.data.sampleId}?`);
+        if (result) {
+            if (d.data.sampleId === this.markedScatter) {
+                this.markedScatter = null;
+            }
+            d.data.show = false;
             this.redraw();
         }
     }
@@ -253,8 +244,23 @@ export class ComplexScatterplot extends Component<ComplextScatterplotOption> {
     public defaultProp() {
         return {
             ...super.defaultProp,
-            scatterSize: 10,
+            scatterSize: 8,
             flip: false,
+            hollow: false,
         };
     }
 }
+
+type ScatterData = {
+    valueRange: [number, number],
+    categoryRange: [number, number],
+    data: any[],
+    xLabel: string,
+    yLabel: string,
+}
+// export function processRawData(data: any[], xLabel: string, yLabel: string): ScatterData {
+//     const result = {valueRange: null, categoryRange: null, data: null, xLabel, yLabel};
+//     data.forEach()
+//     return result;
+
+// }
