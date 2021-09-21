@@ -238,6 +238,7 @@ export function fillinblock(cid, relation_key, relation_data, content_data){
 
 
 export function initPage(main_id, data, tids){
+    
     var struct_data = data["struct"];
     var relation_data = data["relation"];
     var init_data = data["init"];
@@ -248,6 +249,7 @@ export function initPage(main_id, data, tids){
         fillinblock(key, init_data[key], relation_data, content_data);
     }
     assign_tb_style(tids);
+
 }
 
 

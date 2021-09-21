@@ -1,4 +1,7 @@
 - use_dark = page_is_dark?
+
+
+
 #topbar.nav.navbar.navbar-expand-md class=(use_dark ? 'navbar-dark' : 'navbar-light')
   .container
     = link_to root_url, id: 'sidebarCollapse', class: 'navbar-brand'
@@ -6,6 +9,11 @@
       span.font-weight-bold Metagenomics
     button.navbar-toggler type="button" data-toggle="collapse" data-target=".dual-collapse2"
       span.navbar-toggler-icon
+
+    ul.navbar-nav
+      = link_to edit_user_path(session[:user_id]), class: 'nav-item nav-link' do
+        = icon 'fas', 'cog'
+        | User Settings
 
     .collapse.navbar-collapse.order-1.order-md-0.dual-collapse2
       ul.navbar-nav.ml-auto
