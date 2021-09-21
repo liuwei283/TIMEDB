@@ -1,3 +1,4 @@
+import axios from "axios";
 import { schemeGradient } from "crux/dist/color";
 import { max } from "crux/dist/utils/math";
 import * as d3 from "d3";
