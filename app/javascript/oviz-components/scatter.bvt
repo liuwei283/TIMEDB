@@ -17,20 +17,50 @@ GridPlot {
         }
     }
     :content(scatterData) {
+        @if clusterData {
+            @for (datum, cluster) in clusterData {
+                Component {
+                    x = @scaled-x(datum.center.x) - datum.ellipseData.dx
+                    y = @scaled-y(datum.center.y) - datum.ellipseData.dy
+                    @let clusterFill = colorGetter({cluster})
+                    Path {
+                        d = datum.ellipseData.ellipsePath
+                        strokeWidth = 2
+                        fill = "none"
+                        stroke = clusterFill
+                    }
+                    Path {
+                        d = datum.ellipseData.xAxisPath; dashArray = "1, 2"
+                        stroke = clusterFill
+                    }
+                    Path {
+                        d = datum.ellipseData.yAxisPath; dashArray = "1, 2"
+                        stroke = clusterFill
+                    }
+                }
+            }
+        }
         Dots {
             :children(d) {
                 @if (d.data.show) {
                 Component {
                     key = d.data.sampleId // this part is hard-coded
                     cursor = "pointer"
-                    @let shape = prop.shapeGetter(d.data)
+                    @let shape = shapeGetter(d.data)
+                    @if clusterData {
+                        Line {
+                            x2 = @scaled-x(clusterData[d.data.cluster].center.x) - @scaled-x(d.pos)
+                            y2 = @scaled-y(clusterData[d.data.cluster].center.y) - @scaled-y(d.value)
+                        }
+                    }
                     Component(shape) {
                         r = prop.scatterSize / 2; height = prop.scatterSize; width = prop.scatterSize;
-                        anchor = @anchor("c", "m"); fill = prop.hollow ? "#fff" : prop.colorGetter(d.data)
-                        stroke = prop.hollow ? prop.colorGetter(d.data) : "none" 
+                        anchor = @anchor("c", "m")
+                        fill = prop.hollow ? "#fff" : colorGetter(d.data)
+                        stroke = prop.hollow ? colorGetter(d.data) : "none" 
                         strokeWidth = prop.hollow ? 2 : 0
                         behavior:tooltip {
-                            content = prop.generateTooltip(d.data)
+                            content = generateTooltip(d.data)
                         }
                     }
                     on:click = markScatter(d)
