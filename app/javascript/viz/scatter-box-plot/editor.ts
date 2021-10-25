@@ -1,7 +1,7 @@
 import { setSyntheticLeadingComments } from "typescript";
 import { EditorDef } from "utils/editor";
 import { generateBoxConfig } from "viz/boxplot/editor";
-import { setMainData } from ".";
+import { setColors, setMainData } from ".";
 
 export const editorRef = {} as any;
 
@@ -376,6 +376,7 @@ export function editorConfig(v): EditorDef {
                                     for (const o of obj) {
                                         v.data.metaInfo[o.name].update(v, o);
                                     }
+                                    setColors(v);
                                     run(v);
                                 },
                             },

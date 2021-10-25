@@ -24,9 +24,6 @@ const endColor = "red";
 
 // const ageDiv = 40;
 const shapes = ["Circle", "Triangle", "Rect"];
-
-const colorScheme = Oviz.color.ColorSchemeGradient.create(startColor, endColor);
-
 const MODULE_NAME = "scatter-box-plot";
 
 function init() {
@@ -41,7 +38,7 @@ function init() {
         width: 800,
         height: 800,
         data: {
-            colorScheme, startColor, endColor, shapes,
+            startColor, endColor, shapes,
             colors: {},
             mainGridLength: 300,
             boxGridHeight: 100,
@@ -159,21 +156,11 @@ function init() {
             },
         },
         setup() {
-            console.log(this["_data"]);
+            // console.log(this["_data"]);
+            this.data.colorScheme = Oviz.color.ColorSchemeGradient.create(startColor, endColor);
 
-            // set cat colors
-            this.data.colors.cats = this.data.categories.map(x => this.data.metaInfo[this.data.catKey].color(x));
-            const colorMetaInfo = this.data.metaInfo[this.data.colorKey];
-            if (colorMetaInfo.isNumber) {
-                this.data.colors.classes = [colorMetaInfo.colorStart, colorMetaInfo.colorEnd];
-            } else {
-                this.data.colors.classes = colorMetaInfo.values.map(x => colorMetaInfo.color(x));
-                this.data.classLegend = colorMetaInfo.values.map((x, i) => {
-                    return {label: x, fill: colorMetaInfo.color(x), type: "Rect"};
-                });
-            }
+            setColors(this);
             this.data.hiddenSamples = new Set();
-            this.defineGradient("bg", "horizontal", [startColor, endColor]);
             registerEditorConfig(editorConfig(this), editorRef);
             this.data.data.generateTooltip =  (d) => {
                 return [this.data.xLabel, this.data.yLabel, ...this.data.metaFeatures].map(k =>
@@ -184,6 +171,21 @@ function init() {
     });
 
     return visualizer;
+}
+
+export function setColors(v) {
+    // set cat colors
+    v.data.colors.cats = v.data.categories.map(x => v.data.metaInfo[v.data.catKey].color(x));
+    const colorMetaInfo = v.data.metaInfo[v.data.colorKey];
+    if (colorMetaInfo.isNumber) {
+        v.data.colors.classes = [colorMetaInfo.colorStart, colorMetaInfo.colorEnd];
+        v.defineGradient("bg", "horizontal", [colorMetaInfo.colorStart, colorMetaInfo.colorEnd]);
+    } else {
+        v.data.colors.classes = colorMetaInfo.values.map(x => colorMetaInfo.color(x));
+        v.data.classLegend = colorMetaInfo.values.map((x, i) => {
+            return {label: x, fill: colorMetaInfo.color(x), type: "Rect"};
+        });
+    }
 }
 
 export const setMainData = (d, v, xLabel?, yLabel?) => {
