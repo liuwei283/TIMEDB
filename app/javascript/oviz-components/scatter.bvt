@@ -26,15 +26,15 @@ GridPlot {
                     Path {
                         d = datum.ellipseData.ellipsePath
                         strokeWidth = 2
-                        fill = "none"
+                        fill = "LightYellow"; fillOpacity = 0.5
                         stroke = clusterFill
                     }
                     Path {
-                        d = datum.ellipseData.xAxisPath; dashArray = "1, 2"
+                        d = datum.ellipseData.xAxisPath; dashArray = "4, 2"
                         stroke = clusterFill
                     }
                     Path {
-                        d = datum.ellipseData.yAxisPath; dashArray = "1, 2"
+                        d = datum.ellipseData.yAxisPath; dashArray = "4, 2"
                         stroke = clusterFill
                     }
                 }
@@ -51,6 +51,7 @@ GridPlot {
                         Line {
                             x2 = @scaled-x(clusterData[d.data.cluster].center.x) - @scaled-x(d.pos)
                             y2 = @scaled-y(clusterData[d.data.cluster].center.y) - @scaled-y(d.value)
+                            strokeColor = prop.strokeColor
                         }
                     }
                     Component(shape) {

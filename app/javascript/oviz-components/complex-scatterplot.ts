@@ -19,17 +19,17 @@ export interface ScatterClusterDatum {
 }
 
 export interface ComplextScatterplotOption extends GridPlotOption {
-    hollow: boolean;
-    scatterSize: number;
-    hiddenSamples: Set<string>;
+    hollow: boolean; // indicates whether the scatter is hollow or solid
+    scatterSize: number; // indicates how big the scatter is 
     scatterFill?: string;
     scatterStroke?: string;
-    generateTooltip: (d) => string;
-    shapeGetter: (d) => string;
-    colorGetter: (d) => string;
+    generateTooltip?: (d) => string;
+    shapeGetter?: (d) => string;
+    colorGetter?: (d) => string;
     colors?: string[];
     clusters?: string[];
     groups?: string[];
+    strokeColor: string;
 }
 
 export class ComplexScatterplot extends Component<ComplextScatterplotOption> {
@@ -134,7 +134,6 @@ export class ComplexScatterplot extends Component<ComplextScatterplotOption> {
             this.redraw();
         }
     }
-
     protected hideScatter(d) {
         const result = confirm(`You want to hide ${d.data.sampleId}?`);
         if (result) {
@@ -164,6 +163,7 @@ export class ComplexScatterplot extends Component<ComplextScatterplotOption> {
             scatterSize: 8,
             flip: false,
             hollow: false,
+            strokeColor: "#999",
         };
     }
 }
