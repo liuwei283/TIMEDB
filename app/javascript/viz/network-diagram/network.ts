@@ -1,7 +1,11 @@
 import Oviz from "crux";
+import { simpleLinearRegression } from "crux/dist/algo";
 import { Color } from "crux/dist/color";
+import { offset } from "crux/dist/defs/geometry";
 import { Component, ComponentOption } from "crux/dist/element";
+import propsModule from "crux/dist/rendering/vdom/modules/props";
 import * as d3 from "d3";
+import { parseConfigFileTextToJson } from "typescript";
 
 export enum Gravity {
     Top = 0, Right, Bottom, Left,
@@ -11,10 +15,8 @@ interface DiagramLink {
     source: string;
     target: string;
     correlation: number;
-    source_x?: number;
-    source_y?: number;
-    target_x?: number;
-    target_y?: number;
+    sourceNode?: any;
+    targetNode?: any;
     _strokeWidth?: number;
 }
 
@@ -43,12 +45,17 @@ export interface NetworkDiagramOption<Data extends T[], T= any> extends Componen
     _phylums?: any;
     colorMap: any;
     showNodeNames: boolean;
+    groups: string[];
+    groupWidth: number;
 }
 
 export class NetworkDiagram extends Component<NetworkDiagramOption<any[], any>> {
 
     protected edgeColor: {group1:string, group2:string };
 
+    protected draggingNode: null;
+
+    protected _height;
     protected _nodes: any[];
     protected _links: DiagramLink[];
     protected _updateNode: {nid, newX, newY};
@@ -79,48 +86,58 @@ export class NetworkDiagram extends Component<NetworkDiagramOption<any[], any>> 
         groupWidth: 600,
         offset: 20,
         maxCol: 8,
+        nodeStartPos() {
+            return this.groupWidth + this.nodeInterval;
+        }
     };
 
     render() {
-        return this.t`Component{
-            width = 1500; height = 800; id = "network"
+        return this.t`
+        Component{
+            id = "network"
+            width = 1500; height = _height
             Line {
-                x1 = layoutConfig.groupWidth; x2 = layoutConfig.groupWidth; y1 = 0; y2 = 700
+                x1 = layoutConfig.groupWidth; x2 = layoutConfig.groupWidth
+                y1 = 0; y2 = @geo(100, -40)
                 strokeWidth = 2
                 stroke = "grey"
                 dashArray = "4 2"
             }
             Text.centered {
-                text = "Control Enrichment"
+                text = prop.groups[0]
                 x = layoutConfig.groupWidth/2; y = 20
                 fontSize = 20
                 style:user-select = "none"
             }
             Text.centered {
-                text = "Gout Enrichment"
+                text = prop.groups[1]
                 x = layoutConfig.groupWidth * 1.5; y = 20
                 fontSize = 20
                 style:user-select = "none"
             }
             @for (l, i) in _links {
                 Line {
-                    key = i;
-                    x1 = l.source_x; x2 = l.target_x; y1 = l.source_y; y2 = l.target_y
-                    strokeWidth = l.correlation < 0.5 ? 0.5 : _edgeScale(l.correlation)
-                    stroke = l.correlation < 0.5 ? edgeColor.group1 : edgeColor.group2
+                    key = "link" + i
+                    x1 = l.sourceNode._x; x2 = l.targetNode._x; y1 = l.sourceNode._y; y2 = l.targetNode._y
+                    // strokeWidth = l.correlation < 0.5 ? 0.5 : _edgeScale(l.correlation)
+                    strokeWidth = Math.abs(l.correlation) < 0.5 ? 0.5 : _edgeScale(Math.abs(l.correlation))
+                    stroke = l.correlation < 0 ? edgeColor.group1 : edgeColor.group2
                     behavior:tooltip {
                         content = [edgeDetail, l]
                     }
                 }
             }
+
             @for d in _nodes {
                 Component {
-                    id = d.NodeName
+                    key = d.NodeName
                     x = d._x
                     y = d._y
-                    on:mousedown = (ev, el) => dragStart(ev, el, d.NodeGroup)
-                    on:mouseup = (ev, el) => dragEnd(ev, el)
-                    
+                    behavior:drag {
+                        onDragStart = @bind(dragStart)
+                        onDrag = @bind(dragNode)
+                        onDragEnd = @bind(dragEnd)
+                    }
                     behavior:tooltip {
                         content = [nodeDetail, d]
                     }
@@ -164,62 +181,88 @@ export class NetworkDiagram extends Component<NetworkDiagramOption<any[], any>> 
         details += `<br>Correlation: ${parseFloat(l.correlation).toFixed(3)}`;
         return details;
     }
-
-    protected dragEnd(_, el) {
-        delete this.$on['mousemove'];
-        el.stage = null;
-        this._updateNode = null;
-        // this.setState(null);
+    private setupCoord() {
+        this.group2LinkedX = this.prop.groupWidth;
+        this.group2NonLinkX = this.prop.groupWidth;
+        this.layoutConfig.groupWidth = this.prop.groupWidth - 70;
+        this.layoutConfig.maxCol = Math.floor(this.layoutConfig.groupWidth / this.layoutConfig.nodeInterval);
+        this.group1NonLinkY = 600;
+        this.group2NonLinkY = 600;
     }
 
-    protected dragStart(_, el, group) {
-        this.$on['mousemove'] = (evp, elp) => {
-            let [newX, newY] = Oviz.utils.mouse(elp, evp);
-            console.log(`${newX} - ${newY}`)
-            if (newY < 50 || newY > 700) {
-                el.stage = null;
-                return;
-            }
-            if (group === "Control") {
-                if (newX < 0 || newX > this.layoutConfig.groupWidth) {
-                    el.stage = null;
-                    return;
-                }
-            } else {
-                if (newX < this.layoutConfig.groupWidth || newX > this.layoutConfig.groupWidth * 2 + 100) {
-                    el.stage = null;
-                    return;
-                }
-            }
-            this._updateNode = {nid: el._prop.id, newX, newY};
-            this.setState({
-                ...this._updateNode,
-            });
-        }
-        el.stage = "dragging";
+    protected dragNode( _, __, deltaPos) {
+        this.draggingNode._x += deltaPos[0];
+        this.draggingNode._y += deltaPos[1];
+        this.redraw();
     }
+
+    protected dragEnd() {
+        this.draggingNode = null;
+    }
+
+    protected dragStart(_, el) {
+        const node = this._nodes.find(x => x.NodeName === el.id);
+        this.draggingNode = node;
+    }
+
     didCreate() {
         this.edgeColor = {
             group1: Color.literal("red").desaturate(30).string,
             group2: Color.literal("blue").desaturate(30).lighten(20).string,
         }
-        this._nodes = this.prop._nodes.map(d => {
-            const temp_x = this.setUpXCoordinates(d);
-            const temp_y = this.setUpYCoordinates(d);
+        this.setupCoord();
+        // const linkedNodes = [];
+        // const unlinkedNodes = [];
+        // for (const node of this.prop._nodes) {
+        //     if (this.prop._links.find(e => (e.source === node["NodeName"] 
+        //         || e.target === node["NodeName"]))){
+        //             node.linked = true;
+        //             linkedNodes.push(node);
+        //     }
+        //     else {
+        //         node.linked = false;
+        //         unlinkedNodes.push(node);
+        //     }
+        // }
+
+        this._nodes = this.prop._nodes;
+        this._nodes.forEach(d => {
             this.prop._links.forEach(e => {
                 if (d.NodeName === e.source) {
-                    e.source_x = temp_x;
-                    e.source_y = temp_y;
+                    d.linked = true;
+                    e.sourceNode = d;
                 }
                 if (d.NodeName === e.target) {
-                    e.target_x = temp_x;
-                    e.target_y = temp_y;
+                    d.linked = true;
+                    e.targetNode = d;
                 }
             });
+        });
+        this._nodes.sort((a, b) => !a.linked ? 1 : -1);
+        this._nodes.forEach(d => {
+            const temp_x = this.setUpXCoordinates(d);
+            const temp_y = this.setUpYCoordinates(d);
             d._x = temp_x;
             d._y = temp_y;
-            return d;
         });
+        // this._nodes =  [...linkedNodes, ...unlinkedNodes].map(d => {
+        //     const temp_x = this.setUpXCoordinates(d);
+        //     const temp_y = this.setUpYCoordinates(d);
+        //     this.prop._links.forEach(e => {
+        //         if (d.NodeName === e.source) {
+        //             e.source_x = temp_x;
+        //             e.source_y = temp_y;
+        //         }
+        //         if (d.NodeName === e.target) {
+        //             e.target_x = temp_x;
+        //             e.target_y = temp_y;
+        //         }
+        //     });
+        //     d._x = temp_x;
+        //     d._y = temp_y;
+        //     return d;
+        // });
+        
         let maxCor = 0;
         this.prop._links.forEach(d => {
             if (maxCor < d.correlation) maxCor = d.correlation;
@@ -228,27 +271,32 @@ export class NetworkDiagram extends Component<NetworkDiagramOption<any[], any>> 
         this._edgeScale = d3.scaleQuantize()
                             .domain([0.5, maxCor])
                             .range([1, 1.5, 2]);
+        
+    
+        // setup
+        this._height = this.group2NonLinkY + this.layoutConfig.nodeInterval + this.layoutConfig.offset;
+        this.$v.size.height = this._height + 400;
     }
 
-    willRender() {
-        if (this._updateNode) {
-            this._nodes.forEach( node => {
-                if (node.NodeName === this._updateNode.nid) {
-                    node._x = this._updateNode.newX;
-                    node._y = this._updateNode.newY;
-                }
-            });
-            this._links.forEach( link => {
-                if ( link.source === this._updateNode.nid) {
-                    link.source_x = this._updateNode.newX;
-                    link.source_y = this._updateNode.newY;
-                } else if ( link.target === this._updateNode.nid) {
-                    link.target_x = this._updateNode.newX;
-                    link.target_y = this._updateNode.newY;
-                }
-            });
-        }
-    }
+    // willRender() {
+    //     if (this._updateNode) {
+    //         this._nodes.forEach( node => {
+    //             if (node.NodeName === this._updateNode.nid) {
+    //                 node._x = this._updateNode.newX;
+    //                 node._y = this._updateNode.newY;
+    //             }
+    //         });
+    //         this._links.forEach( link => {
+    //             if ( link.source === this._updateNode.nid) {
+    //                 link.source_x = this._updateNode.newX;
+    //                 link.source_y = this._updateNode.newY;
+    //             } else if ( link.target === this._updateNode.nid) {
+    //                 link.target_x = this._updateNode.newX;
+    //                 link.target_y = this._updateNode.newY;
+    //             }
+    //         });
+    //     }
+    // }
 
     protected getParsedNodes() {
         return this.prop._nodes.map(d => {
@@ -277,22 +325,16 @@ export class NetworkDiagram extends Component<NetworkDiagramOption<any[], any>> 
 
     protected setUpXCoordinates(d) {
         let returnX = 0;
-        let flag_link = false;
-        this.prop._links.forEach((e, i) => {
-            if (e.source === d.NodeName || e.target === d.NodeName) {
-                flag_link = true;
-            }
-        });
-        if (d.NodeGroup === "Control") {
-            if (flag_link) {
+        if (d.NodeGroup === this.prop.groups[0]) {
+            if (d.linked) {
                 returnX = this.group1LinkedX;
                 this.group1LinkedX += this.layoutConfig.nodeInterval;
             } else {
                 returnX = this.group1NonLinkX;
                 this.group1NonLinkX += this.layoutConfig.nodeInterval;
             }
-        } else if (d.NodeGroup === "Gout") {
-            if (flag_link) {
+        } else if (d.NodeGroup === this.prop.groups[1]) {
+            if (d.linked) {
                 returnX = this.group2LinkedX;
                 this.group2LinkedX += this.layoutConfig.nodeInterval;
             } else {
@@ -305,15 +347,10 @@ export class NetworkDiagram extends Component<NetworkDiagramOption<any[], any>> 
 
     protected setUpYCoordinates(d) {
         let returnY = 0;
-        let flag_link = false;
-        this.prop._links.forEach(e => {
-            if (e.source === d.NodeName || e.target === d.NodeName) {
-                flag_link = true;
-            }
-        });
+
         // Group 1 Y
-        if (d.NodeGroup === "Control") {
-            if (flag_link) {
+        if (d.NodeGroup === this.prop.groups[0]) {
+            if (d.linked) {
                 returnY = this.group1LinkedCol % 2 === 1 ? this.group1LinkedY + this.layoutConfig.offset
                     : this.group1LinkedY;
                 // this.group1LinkedColumnCount ++;
@@ -325,6 +362,7 @@ export class NetworkDiagram extends Component<NetworkDiagramOption<any[], any>> 
                     this.group1LinkedY += this.layoutConfig.nodeInterval;
                     this.group1LinkedColumnCount = 0;
                 }
+                this.group1NonLinkY = returnY + this.layoutConfig.nodeInterval;
             } else {
                 returnY = this.group1NonLinkY;
                 this.group1NonLinkColumnCount ++;
@@ -334,23 +372,24 @@ export class NetworkDiagram extends Component<NetworkDiagramOption<any[], any>> 
                     this.group1NonLinkColumnCount = 0;
                 }
             }
-        } else if (d.NodeGroup === "Gout") {
-            if (flag_link) {
+        } else if (d.NodeGroup === this.prop.groups[1]) {
+            if (d.linked) {
                 returnY = this.group2LinkedCol % 2 === 1 ? this.group2LinkedY + this.layoutConfig.offset
                     : this.group2LinkedY;
                 this.group2LinkedCol ++;
                 if (this.group2LinkedCol === this.layoutConfig.maxCol) {
                     this.group2LinkedCol = 0;
                     this.group2LinkedRow ++;
-                    this.group2LinkedX = this.group2LinkedRow % 2 === 1 ? 700 + this.layoutConfig.offset : 700;
+                    this.group2LinkedX = this.group2LinkedRow % 2 === 1 ? this.layoutConfig.nodeStartPos() + this.layoutConfig.offset : this.layoutConfig.nodeStartPos();
                     this.group2LinkedY += this.layoutConfig.nodeInterval;
                     this.group2LinkedColumnCount = 0;
                 }
+                this.group2NonLinkY = returnY + this.layoutConfig.nodeInterval;
             } else {
                 returnY = this.group2NonLinkY;
                 this.group2NonLinkColumnCount ++;
                 if (this.group2NonLinkColumnCount === this.layoutConfig.maxCol) {
-                    this.group2NonLinkX = 700;
+                    this.group2NonLinkX = this.layoutConfig.nodeStartPos();
                     this.group2NonLinkY += this.layoutConfig.nodeInterval;
                     this.group2NonLinkColumnCount = 0;
                 }
