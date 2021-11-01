@@ -215,6 +215,7 @@ export function removeNodeLength(rootNode): any {
 }
 
 export function meta(d) {
+    if (d.columns.indexOf("Group") < 0) throw new Error("must provide \"Group\" in meta file");
     const sampleIdKey = d.columns[0];
     this.data.metaFeatures = d.columns.slice(1, d.columns.length);
     this.data.metaDict = {};
@@ -253,7 +254,6 @@ export function meta(d) {
     });
     // compute left boxplot
     let categories = [...this.data.species];
-    console.log(this.data.metaInfo["Group"]);
     const classifications = this.data.metaInfo["Group"].values;
     const boxData = [{values: [], outliers: [], means: [], categories}, {values: [], outliers: [], means: [], categories}];
     const allValues = [];
