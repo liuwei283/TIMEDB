@@ -17,14 +17,21 @@ function checkResource() {
         canvasMounted = true;
     }
     if (packLoaded && canvasMounted && !vizLoaded) {
-        if (window.gon.viz_mode === viz_mode.TASK_OUTPUT && !outputsLoaded) return;
-        vizLoaded = true;
-        const v = call(moduleName);
-        if (Array.isArray(v)) {
-            const [v_, opt] = v;
-            currViz = v_;
-        } else {
-            if (v) currViz = v;
+        try {
+            if (window.gon.viz_mode === viz_mode.TASK_OUTPUT && !outputsLoaded) return;
+            vizLoaded = true;
+            const v = call(moduleName);
+            if (Array.isArray(v)) {
+                const [v_, opt] = v;
+                currViz = v_;
+            } else {
+                if (v) currViz = v;
+            }
+        } catch(error) {
+            event.emit(event.DATA_LOADING_FAILED, error.message);
+            throw new Error(error.message);
+        } finally {
+            console.log("???")
         }
     }
 }
