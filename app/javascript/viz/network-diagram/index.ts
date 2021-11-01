@@ -112,10 +112,9 @@ function init() {
         },
         setup() {
             setCanvasSize(this);
-            console.log(this["_data"]);
             registerEditorConfig(editorConfig(this));
         },
-    });
+    });    
     return [visualizer, {
         theme: {
             light: "mh-light",
@@ -125,11 +124,12 @@ function init() {
 }
 
 function setCanvasSize(v) {
-    const autoWidth = v.size.width;
+    const autoWidth = v.size.width - 250;
+    console.log(autoWidth)
     if (autoWidth < 1480) {
-        v.data.groupWidth = 700;
+        v.data.groupWidth = 650;
         v.size.width = 1480;
-    } else v.data.groupWidth = autoWidth/2 - 200;
+    } else v.data.groupWidth = autoWidth/2 - 100;
 }
 
 function initializeNodeColors(phylums): any {
