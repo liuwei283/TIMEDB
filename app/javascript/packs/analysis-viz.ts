@@ -12,6 +12,7 @@ import ReorderSpecies from "viz/fmt-overview/reorder-species.vue";
 import MetaInfo from "viz/meta-overview/meta-info.vue";
 import ReorderSample from "viz/meta-overview/reorder-sample.vue";
 import Reorder from "viz/meta-overview/reorder.vue";
+import { registerDefaultEditorConfig } from "utils/editor";
 
 Vue.component("reorder", Reorder);
 Vue.component("filter-samples", FilterSamples);
@@ -28,8 +29,9 @@ function initVApp() {
             el: document.getElementById("vapp"),
             render: h => h(VApp),
         });
-        const div = document.createElement("div");
-        div.setAttribute("id", "edit-text");
+        registerDefaultEditorConfig();
+        // const div = document.createElement("div");
+        // div.setAttribute("id", "edit-text");
         const _ = new Vue({
             el: "#edit-text",
             render: h => h(EditText),

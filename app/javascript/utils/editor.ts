@@ -39,6 +39,16 @@ const fileConf = {
     }
 };
 
+export function registerDefaultEditorConfig() {
+    const vue = event.rpc("getVue");
+    if (vue) {
+        console.log(`registered`);
+        vue.conf = {
+            sections: [fileConf],
+        };
+    }
+}
+
 export function registerEditorConfig(editorConf, editorRef?) {
     const vue = event.rpc("getVue");
     if (vue) {

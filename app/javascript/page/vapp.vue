@@ -24,6 +24,11 @@
                 <i class="fas fa-circle-notch fa-spin fa-5x m-0"></i>
                 <h4 class="mt-4">Loading data……</h4>
             </div>
+            <div class="need-upload" v-if="error">
+                <i class="fas fa-exclamation-triangle fa-5x m-0"></i>
+                <h4 class="mt-4">An error occurred when loading data. Please check the format of your input file.</h4>
+                <p>{{error}}</p>
+            </div>
             <div id="canvas"/>
             <div id="v-editor" v-show="showEditor">
                 <OvizEditor :config = "conf" :editorWidth = "280"/>
@@ -35,6 +40,7 @@
             </b-modal>
             </div>
         </div>
+        <div id="edit-text"></div>
     </div>
 </template>
 
@@ -61,6 +67,7 @@
                 isLoading: true,
                 isAnalysis: true,
                 showEditor: true,
+                error: null,
                 outline: "secondary",
                 chosenOutput: 0,
                 chosenOutputOld: 0,
@@ -133,6 +140,15 @@
                     (this.$refs.msgBox as any).show();
                 },
                 "vapp-show-msg-box",
+            );
+            event.on(
+                event.DATA_LOADING_FAILED,
+                (_, error) => {
+                    this.isLoading = false;
+                    this.pendingForData = true;
+                    this.error = error;
+                },
+                "vapp-load-failed",
             );
         },
         mounted() {
