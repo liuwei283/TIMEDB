@@ -24,7 +24,7 @@
                 <i class="fas fa-circle-notch fa-spin fa-5x m-0"></i>
                 <h4 class="mt-4">Loading data……</h4>
             </div>
-            <div class="need-upload" v-if="error">
+            <div class="need-upload w-100" v-if="error">
                 <i class="fas fa-exclamation-triangle fa-5x m-0"></i>
                 <h4 class="mt-4">An error occurred when loading data. Please check the format of your input file.</h4>
                 <p>{{error}}</p>
