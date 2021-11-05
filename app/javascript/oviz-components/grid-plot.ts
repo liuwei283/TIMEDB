@@ -54,8 +54,10 @@ export class GridPlot extends Component<GridPlotOption> {
                 @if prop.xAxisRotated {
                     Axis("bottom") {
                         y = 100%
+                        @props prop.opt.bottomAxis
                         :label(tick) {
                             Text(tick.value) {
+                                @expr console.log(tick)
                                 @let tickX = @scaled-x(tick.value)
                                 @let tickY = 5
                                 behavior:drag {
@@ -76,6 +78,7 @@ export class GridPlot extends Component<GridPlotOption> {
                     Axis("bottom"){
                         y = 100%
                         label.fontSize = prop.tickFontSize
+                        @props prop.opt.bottomAxis
                     }
                 }
             }
