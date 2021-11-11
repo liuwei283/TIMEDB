@@ -12,7 +12,8 @@ export interface DiscreteHeatMapOption extends ComponentOption {
     values: any[];
     valueMap: any;
     drawRows: boolean;
-    colLabelRotaton: number; // the rotation angle for column labels
+    colLabelRotaton: number;
+     // the rotation angle for column labels
 }
 
 export class DiscreteHeatMap extends Component<DiscreteHeatMapOption> {
@@ -70,11 +71,11 @@ export class DiscreteHeatMap extends Component<DiscreteHeatMapOption> {
     willRender() {
         this.prop.values.forEach((d, i)=> {
             this.colorMap.set(d, this.prop.colors[i]);
-        })
+        });
     }
     protected getTooltipContent(d, i, j) {
-        return `${this.prop.rowName}: ${this.prop.rows[i]}</br>
-            ${this.prop.colName}: ${this.prop.columns[j]}</br>
+        return `sample: ${this.prop.rows[i]}</br>
+            drug: ${this.prop.columns[j]}</br>
             data: ${this.prop.valueMap.get(d)}`;
     }
 }
