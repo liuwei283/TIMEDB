@@ -60,65 +60,23 @@ function init() {
         loadData: {
             boxplotDataCont: {
                 fileKey: "boxplotDataCont",
-                type: "csv",
+                type: "tsv",
                 dsvHasHeader: true,
                 loaded(data) {
-                    const value=datalogprocess(data,"Chao2",100)
-                    console.log(value)
-                    const allvalues=value.map(x=>{
-                        const num = parseFloat(x["Chao2"]);
-                        if (isNaN(num)) return Number(x["Chao2"]);
+                    const groupKey = data.columns[0];
+                    const valueKey = data.columns[1];
+                    const catKey = data.columns[2];
+                    const value=datalogprocess(data,valueKey,100)
+                    const allvalues= value.map(x=>{
+                        const num = parseFloat(x[valueKey]);
+                        if (isNaN(num)) return Number(x[valueKey]);
                         return num;
                     });
                     //this.data.valueRange= findBoundsForValues(allvalues, 2, false);
                     this.data.valuemin=valueRange[0];
                     this.data.valuemax=valueRange[1];
-                    const result = diverplotDataProcess(value, "Chao2", "Group", "Time");   
+                    const result = diverplotDataProcess(value, valueKey, groupKey, catKey);   
                     this.data.xTicks = [];
-                        // categories.filter((d, i, arr) => {
-                        //     if (i === 0 || d % 10 === 0 || i === arr.length - 1)
-                        //         this.data.xTicks.push({value: d, index: i});
-                    // const categories = getGroups(data, data.columns[1]).sort((a,b)=> parseInt(a) - parseInt(b));
-                    // const groupedData = groupBy(data, data.columns[0]);
-                    // const parsedData = {};
-                    // const classifications = Object.keys(groupedData);
-                    // classifications.forEach(cls => {
-                    //     const cData = groupedData[cls].map(d => {
-                    //         d[data.columns[2]] = computeLog(parseInt(d[data.columns[2]]), Math.pow(10,2));
-                    //         return d;
-                    //     })
-                    //     parsedData[cls] = groupBy(cData, data.columns[1]);
-                    // })
-                    // const boxData = [{values: [], outliers: [], means: [], categories: categories.map(d=> ` ${d} `)}, 
-                    //     {values: [], outliers: [], means: [], categories: categories.map(d=> ` ${d} `)}];
-                    // categories.forEach((ctg, i) => {
-                    //     classifications.forEach((cls, j) => {
-                    //         if (!parsedData[cls][ctg]) return;
-                    //         const initialData = parsedData[cls][ctg].map(d => d[data.columns[2]]);
-                    //         const result = [];
-                    //         const stat1 = new Oviz.algo.Statistics(initialData);
-                    //         const interQuartileRange = stat1.Q3() - stat1.Q1();
-                    //         initialData.forEach(d => {
-                    //             if ((d < stat1.Q3() - 1.5 * interQuartileRange) || (d > stat1.Q3() + 1.5 * interQuartileRange))  {
-                    //                 boxData[j].outliers.push([i, d]);
-                    //             } else {
-                    //                 result.push(d);
-                    //             }
-                    //         });
-                    //         const stat2 = new Oviz.algo.Statistics(result);
-                    //         boxData[j].values.push([stat2.min(), stat2.Q1(), stat2.median(), stat2.Q3(), stat2.max()]);
-                    //         boxData[j].means.push(stat2.mean(
-
-
-
-                    // ));
-                    //     });
-                    // });
-                    // this.data.xTicks = [];
-                    // categories.filter((d, i, arr) => {
-                    //     if (i === 0 || d % 10 === 0 || i === arr.length - 1)
-                    //         this.data.xTicks.push({value: d, index: i});
-                    // });
                     // // this is hardcoded due to xy plot bug
                     const boxData=result.boxData;
                     const boxData1=boxData.sort((a,b)=> - a.values.length - b.values.length);
@@ -136,12 +94,8 @@ function init() {
                         if (i === 0 || d % 10 === 0 || i === arr.length - 1)
                         this.data.xTicks.push({value: d, index: i});
                         return null;});
-                    console.log("xthisk",this.data.xTicks)
-                    //this.data.valueRange = [valuemin,valueRange]
                     this.data.legendData = result.classifications.map((x, i) => {
-                        // const fillColor = Oviz.color.Color.literal(myScheme[i]);
                         return {type: "Custom", label: x, fill: myScheme[i]};
-                            // stroke: fillColor.darken(20).string
                     });
                 },
             },
