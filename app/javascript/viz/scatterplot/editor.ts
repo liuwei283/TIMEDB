@@ -1,10 +1,11 @@
 import { genDefaultPalette, withDefaultPalette } from "oviz-common/palette";
 import { EditorDef } from "utils/editor";
+import { parse } from "utils/newick";
 import { copyObject } from "utils/object";
+import { generateLegendData, setMainData } from ".";
 
 function run(v) {
-    v.data._changed = true;
-    v.root.dataChanged = true;
+    v.forceRedraw = true;
     v.run();
 }
 export const editorRef = {} as any;
@@ -37,11 +38,10 @@ export function editorConfig(v): EditorDef {
                                     type: "select",
                                     options: v.data.ranks,
                                     value: {
-                                        current: v.data.config.rankIndex.toString(),
+                                        current: v.data.rank,
                                         callback(d) {
-                                            v.data.config.rankIndex = parseInt(d);
+                                            v.data.rank = d;
                                             v.root.rankChanged = true;
-                                            v.forceRedraw = true;
                                             run(v);
                                         },
                                     },
@@ -59,13 +59,13 @@ export function editorConfig(v): EditorDef {
                                     ref: "xAxis",
                                     title: "X-Axis",
                                     type: "select",
-                                    options: v.data.availableAxises,
+                                    options: v.data.axises,
                                     value: {
-                                        current: v.data.config.xAxisIndex.toString(),
+                                        current: v.data.xLabel,
                                         callback(d) {
-                                            v.data.config.xAxisIndex = parseInt(d);
-                                            v.root.dataChanged = true;
-                                            v.forceRedraw = true;
+                                            v.data.xLabel = d;
+                                            v.root.$ref.scatter.dataChanged = true;
+                                            setMainData(v.data.mainDict[v.data.rank], v, v.data.xLabel, v.data.yLabel);
                                             run(v);
                                         },
                                     },
@@ -74,15 +74,11 @@ export function editorConfig(v): EditorDef {
                                     title: "X Range Lower Bound",
                                     type: "input",
                                     value: {
-                                        current: 0,
+                                        current: v.data.data.categoryRange[0],
                                         callback(d) {
-                                            v.data.config.categoryRange[0] = parseFloat(d);
-                                            if (!!v.data.config.categoryRange[0]
-                                                && !!v.data.config.categoryRange[1]) {
-                                                    v.forceRedraw = true;
-                                                    v.root.dataChanged = true;
-                                                    run(v);
-                                                }
+                                            v.data.data.categoryRange[0] = parseFloat(d);
+                                            v.root.$ref.scatter.dataChanged = true;
+                                            run(v);
                                         },
                                     },
                                 },
@@ -90,15 +86,11 @@ export function editorConfig(v): EditorDef {
                                     title: "X Range Upper Bound",
                                     type: "input",
                                     value: {
-                                        current: 0,
+                                        current: v.data.data.categoryRange[1],
                                         callback(d) {
-                                            v.data.config.categoryRange[1] = parseFloat(d);
-                                            if (!!v.data.config.categoryRange[0] 
-                                                && !!v.data.config.categoryRange[1]) {
-                                                    v.forceRedraw = true;
-                                                    v.root.dataChanged = true;
-                                                    run(v);
-                                                }
+                                            v.data.data.categoryRange[1] = parseFloat(d);
+                                            v.root.$ref.scatter.dataChanged = true;
+                                            run(v);
                                         },
                                     },
                                 },
@@ -115,13 +107,13 @@ export function editorConfig(v): EditorDef {
                                     ref: "yAxis",
                                     title: "Y-Axis",
                                     type: "select",
-                                    options: v.data.availableAxises,
+                                    options: v.data.axises,
                                     value: {
-                                        current: v.data.config.yAxisIndex.toString(),
+                                        current: v.data.yLabel,
                                         callback(d) {
-                                            v.data.config.yAxisIndex = parseInt(d);
-                                            v.forceRedraw = true;
-                                            v.root.dataChanged = true;
+                                            v.data.yLabel = d;
+                                            v.root.$ref.scatter.dataChanged = true;
+                                            setMainData(v.data.mainDict[v.data.rank], v, v.data.xLabel, v.data.yLabel);
                                             run(v);
                                         },
                                     },
@@ -130,14 +122,10 @@ export function editorConfig(v): EditorDef {
                                     title: "Y Range Lower Bound",
                                     type: "input",
                                     value: {
-                                        current: 0,
+                                        current: v.data.data.valueRange[0],
                                         callback(d) {
-                                            v.data.config.valueRange[0] = parseFloat(d);
-                                            if (!!v.data.config.valueRange[0] 
-                                                && !!v.data.config.valueRange[1]) {
-                                                    v.forceRedraw = true;
-                                                    run(v);
-                                                }
+                                            v.data.data.valueRange[0] = parseFloat(d);
+                                            run(v);
                                         },
                                     },
                                 },
@@ -145,14 +133,10 @@ export function editorConfig(v): EditorDef {
                                     title: "Y Range Upper Bound",
                                     type: "input",
                                     value: {
-                                        current: 0,
+                                        current: v.data.data.valueRange[0],
                                         callback(d) {
-                                            v.data.config.valueRange[1] = parseFloat(d);
-                                            if (!!v.data.config.valueRange[0] 
-                                                && !!v.data.config.valueRange[1]) {
-                                                    v.forceRedraw = true;
-                                                    run(v);
-                                                }
+                                            v.data.data.valueRange[1] = parseFloat(d);
+                                            run(v);
                                         },
                                     },
                                 },
@@ -175,12 +159,12 @@ export function editorConfig(v): EditorDef {
                             data: {
                                 title: "Customize colors",
                                 scheme: copyObject(v.data.colors),
-                                palettes: withDefaultPalette(defaultPalette, cbpPalette),
-                                paletteMap: {"0": 0, "1": 1},
+                                // palettes: withDefaultPalette(defaultPalette, cbpPalette),
+                                // paletteMap: {"0": 0, "1": 1},
                                 id: "pwcolor",
                                 callback(colors) {
-                                    v.data.colors = [colors["0"], colors["1"]];
-                                    v.forceRedraw = true;
+                                    v.data.colors = colors;
+                                    generateLegendData(v);
                                     run(v);
                                 },
                             },
@@ -205,7 +189,17 @@ export function editorConfig(v): EditorDef {
                                 current: v.data.config.scatterSize,
                                 callback(d) {
                                     v.data.config.scatterSize = parseFloat(d);
-                                    v.forceRedraw = true;
+                                    run(v);
+                                },
+                            },
+                        },
+                        {
+                            title: "Scatter Opacity: ",
+                            type: "input",
+                            value: {
+                                current: v.data.config.scatterOpacity,
+                                callback(d) {
+                                    v.data.config.scatterOpacity = parseFloat(d);
                                     run(v);
                                 },
                             },
@@ -217,6 +211,28 @@ export function editorConfig(v): EditorDef {
                                 current: v.data.config.hollow,
                                 callback(d) {
                                     v.data.config.hollow = d;
+                                    run(v);
+                                },
+                            },
+                        },
+                        {
+                            title: "Draw Lines to center",
+                            type: "checkbox",
+                            value: {
+                                current: v.data.config.drawCenterStrokes,
+                                callback(d) {
+                                    v.data.config.drawCenterStrokes = d;
+                                    run(v);
+                                },
+                            },
+                        },
+                        {
+                            title: "Draw Ellipse",
+                            type: "checkbox",
+                            value: {
+                                current: v.data.config.drawEllipse,
+                                callback(d) {
+                                    v.data.config.drawEllipse = d;
                                     run(v);
                                 },
                             },
