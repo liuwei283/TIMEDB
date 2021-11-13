@@ -133,7 +133,7 @@ export function editorConfig(v): EditorDef {
                                     title: "Y Range Upper Bound",
                                     type: "input",
                                     value: {
-                                        current: v.data.data.valueRange[0],
+                                        current: v.data.data.valueRange[1],
                                         callback(d) {
                                             v.data.data.valueRange[1] = parseFloat(d);
                                             run(v);
