@@ -4,7 +4,10 @@ Component {
         @props prop
         gap = prop.gridW * prop.gapRatio
         :background {
-            AxisBackground { dashArray = "1,2"; includeEndTicks = true }
+            AxisBackground { 
+                dashArray = "1,2"; includeEndTicks = true
+                @props prop.opt.axisBackground
+            }
             Rect.full {
                 fill = "none"; strokeWidth = 1; stroke = "black"
             }
@@ -67,14 +70,9 @@ Component {
                 Component {
                     @for (pair,index) in prop.pData {
                         Component {
-                            @expr console.log(pair)
                             @let pos = prop.drawOutlier ? pair.stat1Max : pair.stat2Max
                             x = @scaled-x(index)
                             y=  @scaled-y(pos)-8
-                            // behavior:drag {
-                            //     direction = "y"
-                            //     onDrag = (ev, el, delta) => 
-                            // }
                             @let delta = prop.gridW/4
                             behavior:drag {
                                direction = "y"

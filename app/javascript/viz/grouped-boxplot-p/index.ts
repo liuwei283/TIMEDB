@@ -8,7 +8,7 @@ import {register} from "page/visualizers";
 import {DiverBoxPlot,diverplotDataProcess, processData} from "oviz-components/diverboxplot";
 import { findBoundsForValues } from "utils/maths";
 import { rankDict, sortByRankKey } from "utils/bio-info";
-import { editorConfig } from "./editor";
+import { editorConfig, editorRef } from "./editor";
 import { registerEditorConfig } from "utils/editor";
 
 import * as TextSize from "crux/dist/utils/text-size";
@@ -59,7 +59,9 @@ function init() {
                 drawP:true,
                 plotSize: [null, 350],
                 boxW,gapRatio,
-                labelFontSize: 12, tickFontSize: 12, xAxisRotated: true
+                labelFontSize: 12, tickFontSize: 12, xAxisRotated: true,
+                drawBackgroundAxis: true,
+                margin: [0, 0.1],
             }
         },
         loadData: {
@@ -136,7 +138,6 @@ function init() {
                             const rank = rankDict[d[0][idKey].split("_")[0]];
                             const {categories, stat1Maxes, stat2Maxes} = this.data.mainDict[rank];
                             const temp = [];
-                            // this.data.pDict["curRank"] = {};
                             d.filter(x => categories.indexOf(x[idKey]) >= 0)
                             .sort((a, b) => {
                                 return categories.indexOf(a[idKey]) - categories.indexOf(b[idKey]);
@@ -156,8 +157,7 @@ function init() {
         setup() {
             // 在这边计算了箱子的宽度，每个category格子的宽度，xy-plot的width
             processconfigData(this);
-            registerEditorConfig(editorConfig(this));
-            console.log(this["_data"]);
+            registerEditorConfig(editorConfig(this), editorRef);
         },
     });
 

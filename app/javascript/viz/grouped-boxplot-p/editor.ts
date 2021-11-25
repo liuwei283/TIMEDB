@@ -23,26 +23,68 @@ export function editorConfig(v): EditorDef {
     return {
         sections: [
             {
+                id: "data",
+                title: "Data",
+                layout: "tabs",
+                tabs: [
+                    {
+                        id: "gData",
+                        name: "General",
+                        view: {
+                            type: "list",
+                            items: [
+                                {
+                                    title: "Taxonomic rank",
+                                    type: "select",
+                                    options: v.data.ranks,
+                                    value: {
+                                        current: v.data.rank,
+                                        callback(d) {
+                                            v.data.rank = d;
+                                            v.data.data = v.data.mainDict[v.data.rank];
+                                            processconfigData(v);
+                                            editorRef.lowerBound = v.data.data.valueRange[0];
+                                            editorRef.upperBound = v.data.data.valueRange[1];
+                                            run(v);
+                                        },
+                                    },
+                                },
+                                {
+                                    title: "Range Lower Bound",
+                                    type: "input",
+                                    ref: "lowerBound",
+                                    value: {
+                                        current: v.data.data.valueRange[0],
+                                        callback(d) {
+                                            v.data.data.valueRange[0] = parseFloat(d);
+                                            run(v);
+                                        },
+                                    },
+                                },
+                                {
+                                    title: "Range Upper Bound",
+                                    type: "input",
+                                    ref: "upperBound",
+                                    value: {
+                                        current: v.data.data.valueRange[1],
+                                        callback(d) {
+                                            v.data.data.valueRange[1] = parseFloat(d);
+                                            run(v);
+                                        },
+                                    },
+                                },
+                            ],
+                        },
+                    },
+                ],
+            },
+            {
                 id: "settings",
                 title: "Settings",
                 layout: "single-page",
                 view: {
                     type: "list",
                     items: [
-                        {
-                            title: "Taxonomic rank",
-                            type: "select",
-                            options: v.data.ranks,
-                            value: {
-                                current: v.data.rank,
-                                callback(d) {
-                                    v.data.rank = d;
-                                    v.data.data = v.data.mainDict[v.data.rank];
-                                    processconfigData(v);
-                                    run(v);
-                                },
-                            },
-                        },
                         {
                             type: "vue",
                             title: "",
@@ -64,23 +106,27 @@ export function editorConfig(v): EditorDef {
                             },
                         },
                         {
-                            title: "Outliers",
-                            type: "checkbox",
+                            title: "Plot Height",
+                            type: "input",
                             value: {
-                                current: v.data.config.drawOutlier,
+                                current: v.data.config.plotSize[1],
                                 callback(value) {
-                                    v.data.config.drawOutlier = value
+                                    v.data.config.plotSize[1] = parseFloat(value);
                                     run(v);
                                 },
                             },
                         },
                         {
-                            title: "show P annotation",
-                            type: "checkbox",
+                            title: "Plot Margin(y)",
+                            type: "input",
                             value: {
-                                current: v.data.config.drawP,
+                                current: v.data.config.margin[1],
                                 callback(value) {
-                                    v.data.config.drawP = value
+                                    if (parseFloat(value) > 0.1) {
+                                        window.alert("margin should be smaller than 0.1")
+                                        return;
+                                    }
+                                    v.data.config.margin[1] = parseFloat(value);
                                     run(v);
                                 },
                             },
@@ -93,6 +139,39 @@ export function editorConfig(v): EditorDef {
                                 callback(value) {
                                     v.data.config.boxW = parseFloat(value);
                                     processconfigData(v);
+                                    run(v);
+                                },
+                            },
+                        },
+                        {
+                            title: "Outliers",
+                            type: "checkbox",
+                            value: {
+                                current: v.data.config.drawOutlier,
+                                callback(value) {
+                                    v.data.config.drawOutlier = value
+                                    run(v);
+                                },
+                            },
+                        },
+                        {
+                            title: "P annotation",
+                            type: "checkbox",
+                            value: {
+                                current: v.data.config.drawP,
+                                callback(value) {
+                                    v.data.config.drawP = value;
+                                    run(v);
+                                },
+                            },
+                        },
+                        {
+                            title: "Background axises",
+                            type: "checkbox",
+                            value: {
+                                current: v.data.config.drawBackgroundAxis,
+                                callback(value) {
+                                    v.data.config.drawBackgroundAxis = value;
                                     run(v);
                                 },
                             },

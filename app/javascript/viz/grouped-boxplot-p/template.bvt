@@ -7,9 +7,9 @@ svg {
 			colors = colors
 			drawBox=true
 			@props config
-			margin = [0, 0.1]
 			yLabel = yLabel
 			disableDrag = true
+			axisBackground.stroke = config.drawBackgroundAxis ? "#999" : "none"
 		}
 		Legend {
 			@props legendPos
@@ -38,6 +38,4 @@ svg {
 			}
 		}
 	}
-
-
 }
