@@ -3,18 +3,16 @@ Component {
     GridPlot {
         @props prop
         gap = prop.gridW * prop.gapRatio
-        // valueRange = valueRange
         :background {
-            AxisBackground { dashArray = "1,2"; includeEndTicks = false }
+            AxisBackground { dashArray = "1,2"; includeEndTicks = true }
             Rect.full {
-                    fill = "none"; strokeWidth = 1; stroke = "black"
-                }
+                fill = "none"; strokeWidth = 1; stroke = "black"
+            }
         }
         :content {
             @if prop.drawBox{
                 @for (item, index) in prop.data{
                     Boxes {
-                        @expr console.log(index)
                         @let i = index[index.length-1]
                         x = i * (prop.boxW + 2) + 1
                         key = index
@@ -29,12 +27,12 @@ Component {
                                 width = prop.boxW
                                 height =100%
                                 behavior:tooltip {
-							content = (`pos: ${_d.pos}<br>
-                                        min: ${_d.data[0].toFixed(2)} <br>
-										first quartile: ${_d.data[1].toFixed(2)} <br>
-										median: ${_d.data[2].toFixed(2)} <br>
-										third quartile: ${_d.data[3].toFixed(2)} <br>
-										max: ${_d.data[4].toFixed(2)} <br>`)
+                                    content = (`pos: ${_d.pos}<br>
+                                                min: ${_d.data[0].toFixed(2)} <br>
+                                                first quartile: ${_d.data[1].toFixed(2)} <br>
+                                                median: ${_d.data[2].toFixed(2)} <br>
+                                                third quartile: ${_d.data[3].toFixed(2)} <br>
+                                                max: ${_d.data[4].toFixed(2)} <br>`)
                                 }
                             }
                         }
@@ -44,6 +42,7 @@ Component {
                             }
                         }
                         :outlier(d) {
+                            @if prop.drawOutlier {
                             Component {
                                 x = prop.gridW * - (1-prop.gapRatio)/2 + prop.boxW/ 2 + 1
                             
@@ -54,6 +53,7 @@ Component {
                                     }
                                 }
                             }
+                            }
                         }
                         :mean(means) {
                         }
@@ -63,20 +63,39 @@ Component {
                     }
                 }
             }
-            // @if prop.drawViolin{
-            //         Violins {
-            //             static = true
-            //             data =  "violinData"
-            //             dataLine = false
-            //             quartile = false
-            //             extremeLine = false
-            //             basisCurve = true
-            //             violinOptions.stroke = "none"
-            //         }   
-
-        
-
+            @if prop.pData && prop.drawP {
+                Component {
+                    @for (pair,index) in prop.pData {
+                        Component {
+                            @expr console.log(pair)
+                            @let pos = prop.drawOutlier ? pair.stat1Max : pair.stat2Max
+                            x = @scaled-x(index)
+                            y=  @scaled-y(pos)-8
+                            // behavior:drag {
+                            //     direction = "y"
+                            //     onDrag = (ev, el, delta) => 
+                            // }
+                            @let delta = prop.gridW/4
+                            behavior:drag {
+                               direction = "y"
+                            }
+                            Line {
+                                x = -delta; y2=5
+                            }
+                            Line {
+                                x = delta; y2=5
+                            }
+                            Line {
+                                x1 = -delta; x2= delta
+                            }
+                            Text(pair.notation) {
+                                anchor = @anchor("c", "b")
+                                fontSize= 12;
+                            }
+                        }
+                    }
+                }
+            }
         }
     }
-
 }

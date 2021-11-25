@@ -2,6 +2,7 @@ import { defaultLayoutConf as conf} from "utils/editor";
 import { EditorDef } from "utils/editor";
 import { copyObject } from "utils/object";
 import { genDefaultPalette, withDefaultPalette, genPaletteMap} from "oviz-common/palette";
+import { processconfigData } from ".";
 
 const cbpPalette = {
     cBioPortal: {
@@ -12,7 +13,7 @@ const cbpPalette = {
 };
 
 function run(v) {
-    v.data._changed = true;
+    v.forceRedraw = true;
     v.run();
 }
 export const editorRef = {} as any;
@@ -33,18 +34,11 @@ export function editorConfig(v): EditorDef {
                             type: "select",
                             options: v.data.ranks,
                             value: {
-                                current: v.data.config.rankIndex.toString(),
+                                current: v.data.rank,
                                 callback(d) {
-                                    v.data.config.rankIndex = parseInt(d);
-                                    v.data.boxData = v.data.boxDict[v.data.ranks[parseInt(d)].text];
-                                    v.data.pData = v.data.pDict[v.data.ranks[parseInt(d)].text];
-                                    if (v.data.boxData.categories.length * 20 > 500){
-                                        v.data.config.plotWidth = v.data.boxData.categories.length * 20;
-                                        v.data.gridW = 20;
-                                    } else {
-                                        v.data.gridW = 500 / v.data.boxData.categories.length;
-                                    }
-                                    v.forceRedraw = true;
+                                    v.data.rank = d;
+                                    v.data.data = v.data.mainDict[v.data.rank];
+                                    processconfigData(v);
                                     run(v);
                                 },
                             },
@@ -60,9 +54,11 @@ export function editorConfig(v): EditorDef {
                                 id: "pwcolor",
                                 paletteMap: genPaletteMap(Object.keys(v.data.colors)),
                                 callback(colors) {
-                                    console.log(colors)
                                     v.data.colors = colors;
-                                    v.forceRedraw = true;
+                                    // v.forceRedraw = true;
+                                    v.data.legendData.forEach((x, i) => {
+                                        x.fill = colors[i];
+                                    });
                                     run(v);
                                 },
                             },
@@ -71,27 +67,24 @@ export function editorConfig(v): EditorDef {
                             title: "Outliers",
                             type: "checkbox",
                             value: {
-                                current: true,
+                                current: v.data.config.drawOutlier,
                                 callback(value) {
-                                    v.data.config.showOutliers = value
+                                    v.data.config.drawOutlier = value
                                     run(v);
                                 },
                             },
                         },
                         {
-                            title: "X-Label Rotation Angle",
+                            title: "Box Width",
                             type: "input",
-                            format: "int",
                             value: {
-                                current: 45,
-                                callback(newValue) {
-                                    let val = parseInt(newValue as any);
-                                    if (val < 0) val = 0;
-                                    if (val > 90) val = 90;
-                                    v.data.config.xLabelRotation = val;
+                                current: v.data.boxW,
+                                callback(value) {
+                                    v.data.boxW = parseFloat(value);
+                                    processconfigData(v);
                                     run(v);
-                                }
-                              }
+                                },
+                            },
                         },
                     ]
                 }
