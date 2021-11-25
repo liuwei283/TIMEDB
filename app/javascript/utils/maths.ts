@@ -6,8 +6,11 @@ export function findUpperBoundDec(x, sigDigit, power = 0) {
         return;
     }
     if (x === 0) return 0;
+    
     if (x < Math.pow(10, sigDigit - 1))
         return findUpperBoundDec(10 * x, sigDigit, power + 1);
+    else if (x > Math.pow(10, sigDigit))
+        return findUpperBoundDec(10 * x, sigDigit, power - 1);
     else {
         const numTen = 10 * Math.floor(x / 10);
         const dig = x - numTen;
@@ -27,10 +30,22 @@ export function findLowerBoundDec(x, sigDigit, power = 0) {
         return Math.floor(x) / Math.pow(10, power);
 }
 
-export function findUpperBound(x: number, sigDigit: number = 2): number {
-    if (x < 1)
-        return findUpperBoundDec(x, sigDigit);
-    return parseFloat(Math.ceil(x).toPrecision(sigDigit));
+export function findUpperBound(x: number, sigDigit: number, power = 0): number {
+    if (x < 0) {
+        console.error("Bound must be positive value");
+        throw Error("Bound must be positive value");
+    }
+    if (x === 0) return 0;
+    if (x < Math.pow(10, sigDigit - 1))
+        return findUpperBound(10 * x, sigDigit, power + 1);
+    else if (x > Math.pow(10, sigDigit))
+        return findUpperBound(10 * x, sigDigit, power - 1);
+    else {
+        const numTen = 10 * Math.floor(x / 10);
+        const dig = x - numTen;
+        console.log(dig)
+        return (numTen +Math.ceil(dig)) / Math.pow(10, power);
+    }
 }
 
 export function findLowerBound(x: number, sigDigit: number = 2): number {
