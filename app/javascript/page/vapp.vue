@@ -210,7 +210,7 @@
     }
     #canvas {
         min-height: calc(500px - 2.5em);
-        width: 100vw;
+        width: calc(100vw - 250px);
         overflow: scroll;
     }
     .col-md-12 {
