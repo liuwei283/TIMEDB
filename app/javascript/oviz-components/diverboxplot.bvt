@@ -1,5 +1,5 @@
 Component {
-    @let lineColor = "#999"
+    @let lineColor = "#666"
     GridPlot {
         @props prop
         gap = prop.gridW * prop.gapRatio
@@ -49,7 +49,7 @@ Component {
                                 @yield boxOutlier with {data: d, index: i, fill: prop.colors[i], stroke: lineColor} default {
                                     Circle.centered {
                                         r = 2; 
-                                        fill = prop.colors[i]; stroke = lineColor; strokeWidth = 0.8
+                                        stroke = prop.colors[i]; fill = "none"
                                     }
                                 }
                             }

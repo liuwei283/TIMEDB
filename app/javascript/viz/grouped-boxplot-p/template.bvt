@@ -1,7 +1,8 @@
 svg {
 	Component {
 		DiverBoxPlot{
-			y = 30; x = 40
+			static = true
+			y = 20; x = 40
 			@props data
 			colors = colors
 			drawBox=true

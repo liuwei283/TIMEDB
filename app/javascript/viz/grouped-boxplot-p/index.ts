@@ -11,11 +11,14 @@ import { rankDict, sortByRankKey } from "utils/bio-info";
 import { editorConfig } from "./editor";
 import { registerEditorConfig } from "utils/editor";
 
+import * as TextSize from "crux/dist/utils/text-size";
+
 const boxW =20;
 const yLabel = "Abundance Log(x + 1)";
 const gapRatio=0.2;
 const MODULE_NAME = "grouped-boxplot-p";
-const myScheme = groupedChartColors;
+const colors = groupedChartColors;
+// ["#7DCEA0", "#F1948A", "#85C1E9"];
 
 type boxData = {
     values: [], 
@@ -40,9 +43,10 @@ function init() {
         components: { GridPlot, EditText, DiverBoxPlot},
         data: {
             yLabel, legendTitle: "Methods",
-            colors: myScheme,
+            colors,
             lineColor: "#666",
-            legendPos: {x: 60, y: 50},
+            deltaX: 40,
+            legendPos: {x: null, y: null},
             // 拖动更新legend位置的function 可以放进component.ts里
             updateLegendPos(ev, el, deltaPos) {
                 this.legendPos.x += deltaPos[0];
@@ -115,14 +119,14 @@ function init() {
                             this.data.groups.push(d[data.columns[1]]);
                     });
                     this.data.legendData = this.data.groups.map((x, i) => {
-                        return {type: "Custom", label: x, fill: myScheme[i]};
+                        return {type: "Custom", label: x, fill: colors[i]};
                     });
                 }
             },
             bpPData: {
                 fileKey: "bpPData",
                 type: "tsv",
-                dependsOn: ["bpGroup"],
+                dependsOn: ["boxplotDataGroupedP"],
                 multiple: true,
                 loaded(data) {
                     this.data.pDict = {};
@@ -160,13 +164,18 @@ function init() {
     return visualizer;
 }
 export function processconfigData(v) {
+    const textLength = TextSize.measuredTextSize(v.data.data.categories[0]).width;
+    const deltaX = Math.cos(Math.PI / 6) * textLength;
+    if (deltaX > 40) v.data.deltaX = deltaX + 10;
+
     const gridW = v.data.config.gridW =  ((v.data.config.boxW + 2) * 
         v.data.data.classifications.length) / (1-v.data.config.gapRatio);
     v.data.config.plotSize[0] = v.data.data.categories.length * gridW;
     // v.data.plotHeight= v.data.classifications.length* 50;
     // 以及定义了画布的宽度
-    v.size.width = v.data.config.plotSize[0] + 300;
+    v.size.width = v.data.config.plotSize[0] + deltaX + 50;
     v.size.height= v.data.config.plotSize[1] + 300;
+    v.data.legendPos = {x: 5, y: v.data.config.plotSize[1]};
 }
 export function registerGroupedBoxP() {
     register(MODULE_NAME, init);

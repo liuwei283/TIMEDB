@@ -75,12 +75,23 @@ export function editorConfig(v): EditorDef {
                             },
                         },
                         {
+                            title: "show P annotation",
+                            type: "checkbox",
+                            value: {
+                                current: v.data.config.drawP,
+                                callback(value) {
+                                    v.data.config.drawP = value
+                                    run(v);
+                                },
+                            },
+                        },
+                        {
                             title: "Box Width",
                             type: "input",
                             value: {
-                                current: v.data.boxW,
+                                current: v.data.config.boxW,
                                 callback(value) {
-                                    v.data.boxW = parseFloat(value);
+                                    v.data.config.boxW = parseFloat(value);
                                     processconfigData(v);
                                     run(v);
                                 },
