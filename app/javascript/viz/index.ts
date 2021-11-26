@@ -8,6 +8,7 @@ import { registerGroupedBoxP } from "./grouped-boxplot-p";
 import { registerHierTree} from "./hier-tree";
 import { registerScatterBoxPlot } from "./scatter-box-plot";
 import { registerScatterplot} from "./scatterplot";
+import { registerClassifier } from "./classifier";
 
 declare global {
     interface GonInfo {
@@ -41,6 +42,9 @@ export function registerViz(moduleName) {
             break;
         case "grouped-boxplot-p":
             registerGroupedBoxP();
+            break;
+        case "classifier":
+            registerClassifier();
             break;
 
     }
