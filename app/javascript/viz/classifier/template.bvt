@@ -4,6 +4,7 @@ svg {
     
 Component {
     x = 50; y = 50
+
     Rows {
         Component {
             height = 20
@@ -155,13 +156,25 @@ Component {
         GridPlot {
             static = true
             @props scatterData
+            // valueUseLog = true
+            // flip = true
+            // invertValueAxis = true
             :content {
                 Bars {
                     :children(d) {
+                        // Rect {
+                        //     // r = 2.5; stroke = colors[d.data.group]
+                        //     // fill = colors[d.data.group]
+                        //     y = @geo(0, -5)
+                        //     height = @geo(100,5)
+                        //     width = 1
+                        //     fill = colors[d.data.group]
+                        //     fillOpacity = 0.2
+                        // }
                         Circle.centered {
-                            x = 50%; r = 1.5; stroke = colors[d.data.group]
-                            // fill = colors[d.data.group]
-                            fill = "white"
+                            r = 1.5;
+                            strokeWidth = 0.8
+                            stroke = colors[d.data.group]; fill = "none"
                         }
                     }
                 }
@@ -172,6 +185,7 @@ Component {
         }
         GridPlot {
             @props specifyData
+            discreteCategory = false
             :content {
                 Polygon {
 					points = @scaled(specifyData.data.area.values)
@@ -194,7 +208,7 @@ Component {
                         fill = "white"
                     }
                     @for (t, i) in specifyNotes {
-                        EditText {
+                        Text {
                             text = t
                             fontSize = 11; y = 13 * i
                         }
