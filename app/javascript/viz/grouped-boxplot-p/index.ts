@@ -65,6 +65,22 @@ function init() {
             }
         },
         loadData: {
+            bpGroup: {
+                fileKey: "bpGroup",
+                type: "tsv",
+                loaded(data) {
+                    this.data.groupDict = {};
+                    this.data.groups = [];
+                    data.forEach(d => {
+                        this.data.groupDict[d[data.columns[0]]] = d[data.columns[1]];
+                        if (!this.data.groups.includes(d[data.columns[1]]))
+                            this.data.groups.push(d[data.columns[1]]);
+                    });
+                    this.data.legendData = this.data.groups.map((x, i) => {
+                        return {type: "Custom", label: x, fill: colors[i]};
+                    });
+                }
+            },
             boxplotDataGroupedP: {
                 fileKey: "boxplotDataGroupedP",
                 type: "tsv",
@@ -74,6 +90,8 @@ function init() {
                     const mainDict = {};
                     // console.log(data);
                     data.forEach((d, i) => {
+                        if (d.length === 0) return;
+
                         // process rank info
                         const idKey = d.columns[0];
                         const rankLabel = d[0][idKey].split("_")[0];
@@ -109,22 +127,6 @@ function init() {
                     return null;
                 }
             },
-            bpGroup: {
-                fileKey: "bpGroup",
-                type: "tsv",
-                loaded(data) {
-                    this.data.groupDict = {};
-                    this.data.groups = [];
-                    data.forEach(d => {
-                        this.data.groupDict[d[data.columns[0]]] = d[data.columns[1]];
-                        if (!this.data.groups.includes(d[data.columns[1]]))
-                            this.data.groups.push(d[data.columns[1]]);
-                    });
-                    this.data.legendData = this.data.groups.map((x, i) => {
-                        return {type: "Custom", label: x, fill: colors[i]};
-                    });
-                }
-            },
             bpPData: {
                 fileKey: "bpPData",
                 type: "tsv",
@@ -132,10 +134,13 @@ function init() {
                 multiple: true,
                 loaded(data) {
                     this.data.pDict = {};
+                    const ranks = this.data.ranks.map(x => x.text);
                     data.forEach(d => {
-                            const idKey = d.columns[0];
-                            const pKey = "pvalue";
-                            const rank = rankDict[d[0][idKey].split("_")[0]];
+                        if (d.length === 0) return;
+                        const idKey = d.columns[0];
+                        const pKey = "pvalue";
+                        const rank = rankDict[d[0][idKey].split("_")[0]];
+                        if (ranks.includes(rank)) {
                             const {categories, stat1Maxes, stat2Maxes} = this.data.mainDict[rank];
                             const temp = [];
                             d.filter(x => categories.indexOf(x[idKey]) >= 0)
@@ -150,6 +155,7 @@ function init() {
                             });
                             this.data.pDict[rank] = temp;
                             this.data.mainDict[rank].pData = temp;
+                        } 
                     });
                 }
             }
