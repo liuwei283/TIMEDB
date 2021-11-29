@@ -44,9 +44,9 @@ class Admin::TasksController < ApplicationController
       client = LocalApi::Client.new
       result = ''
       if !@task.analysis.blank?
-        result = client.task_info(@task.user.id, @task.tid, 'app')
+        result = client.task_info(45, @task.tid, 'app')
       else
-        result = client.task_info(@task.user.id, @task.tid, 'pipeline')
+        result = client.task_info(45, @task.tid, 'pipeline')
       end
       Rails.logger.debug result
       if !result['message']['status'].blank?
