@@ -73,6 +73,34 @@ export function editorConfig(v): EditorDef {
                                         },
                                     },
                                 },
+                                {
+                                    title: "P First Cutoff",
+                                    type: "input",
+                                    value: {
+                                        current: v.data.pValueConfig.firstCutoff,
+                                        callback(value) {
+                                            v.data.pValueConfig.firstCutoff = parseFloat(value);
+                                            v.data.data.pData.forEach(d => {
+                                                d.notation = v.data.pValueConfig.getAnnos(d.value);
+                                            });
+                                            run(v);
+                                        },
+                                    },
+                                },
+                                {
+                                    title: "P Second Cutoff",
+                                    type: "input",
+                                    value: {
+                                        current: v.data.pValueConfig.secondCutoff,
+                                        callback(value) {
+                                            v.data.pValueConfig.secondCutoff = parseFloat(value);
+                                            v.data.data.pData.forEach(d => {
+                                                d.notation = v.data.pValueConfig.getAnnos(d.value);
+                                            });
+                                            run(v);
+                                        },
+                                    },
+                                },
                             ],
                         },
                     },

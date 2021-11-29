@@ -62,6 +62,17 @@ function init() {
                 labelFontSize: 12, tickFontSize: 12, xAxisRotated: true,
                 drawBackgroundAxis: true,
                 margin: [0, 0.1],
+            },
+            pValueConfig: {
+                firstCutoff: 0.05,
+                secondCutoff: 0.005,
+                getAnnos(value: number) {
+                    if (value < this.secondCutoff)
+                        return "**";
+                    else if (value < this.firstCutoff)
+                        return "*";
+                    return "";
+                }
             }
         },
         loadData: {
@@ -150,7 +161,6 @@ function init() {
                                 const value = Number(row[pKey]);
                                 temp.push({
                                     stat1Max: stat1Maxes[i], stat2Max: stat2Maxes[i], value,
-                                    notation: value < 0.005 ? "**" : value < 0.05 ? "*" : "",
                                 });
                             });
                             this.data.pDict[rank] = temp;
@@ -163,6 +173,10 @@ function init() {
         setup() {
             // 在这边计算了箱子的宽度，每个category格子的宽度，xy-plot的width
             processconfigData(this);
+            this.data.pValueConfig.getAnnos();
+            this.data.data.pData.forEach(d => {
+                d.notation = this.data.pValueConfig.getAnnos(d.value);
+            })
             registerEditorConfig(editorConfig(this), editorRef);
         },
     });
