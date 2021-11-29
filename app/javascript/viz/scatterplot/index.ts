@@ -3,7 +3,7 @@ import Oviz from "crux";
 import {register} from "page/visualizers";
 import { registerEditorConfig } from "utils/editor";
 
-import {ComplexScatterplotBk} from "./complex-scatterplot";
+import template from "./template.bvt";
 import { editorConfig, editorRef } from "./editor";
 
 import { groupedChartColors } from "oviz-common/palette";
@@ -11,6 +11,10 @@ import { getGroups } from "utils/array";
 import {rankDict} from "utils/bio-info";
 
 import * as _ from "lodash";
+import { EditText } from "oviz-components/edit-text";
+import { GridPlot } from "oviz-components/grid-plot";
+import { ComplexScatterplot, shapes } from "oviz-components/complex-scatterplot";
+import { findBoundsForValues } from "utils/maths";
 
 const MODULE_NAME = "scatterplot";
 
@@ -20,23 +24,20 @@ function init() {
 
     const {visualizer} = Oviz.visualize({
         el: "#canvas",
-        renderer: "svg",
-        root: new ComplexScatterplotBk(),
+        template,
         height: 700,
+        components: { ComplexScatterplot, GridPlot, EditText},
         data: {
-            colors: groupedChartColors.slice(0, 3),
+            colors: {
+                strokeColor: "#999"
+            },
             config: {
-                plotHeight: 500,
-                plotWidth: 500,
-                rankIndex: 0,
-                xAxisIndex: 0,
-                yAxisIndex: 1,
-                computeOval: false,
-                categoryRange: [null, null],
-                valueRange: [null, null],
-                scatterSize: 8,
+                plotSize: [300, 300],
+                scatterSize: 6,
                 hollow: false,
-                showErrorEllipse: true,
+                drawEllipse: true,
+                drawCenterStrokes: true,
+                scatterOpacity: 0.9,
             },
             vectorLabel: null,
         },
@@ -75,18 +76,18 @@ function init() {
                     }
                     this.data.ranks = d.map(x => x.columns[0])
                                     .sort((a, b) => rankKeys.indexOf(a) - rankKeys.indexOf(b))
-                                    .map((x, i) =>  ({value: i, text: rankDict[x]}));
-                    // this.data.ranks = d.map((x, i) => ({value: i, text: x.columns[0]}));
+                                    .map((x, i) =>  ({value: rankDict[x], text: rankDict[x]}));
+
                     this.data.samples = d[0].map(x => x["sampleId"]);
                     const mainDict = {};
-                    d.forEach(data => {
+                    d.forEach((data, i) => {
                         mainDict[rankDict[data.columns[0]]] = data;
                     });
                     const selectedDataCols = d[0].columns;
                     this.data.availableAxises = selectedDataCols.filter((_, i) => i > 0)
                                 .map((x, i) => ({value: i, text: x}));
                     this.data.mainDict = mainDict;
-                    this.data.rankLabel = this.data.ranks[0].text;
+                    this.data.rank = this.data.ranks[0].text;
                     this.data.sampleInfoDict = {};
                     this.data.samples.forEach(k => this.data.sampleInfoDict[k] = {});
                     return mainDict[this.data.rankLabel];
@@ -99,26 +100,12 @@ function init() {
                 dependsOn: ["scatterData"],
                 loaded(data) {
                     if (!data) return;
-                    // this.data.groups = [...getGroups(data, data.columns[1]), "unknown"];
                     const groups = getGroups(data, data.columns[1]);
                     const groupDict = {};
                     data.forEach(x => {
                         groupDict[x[data.columns[0]]] = x[data.columns[1]];
                     });
-                    let hasUnknownSample = false;
-                    this.data.samples.forEach(s => {
-                        this.data.sampleInfoDict[s].group = groupDict[s] || "unknown";
-                        if (!groupDict[s] && !hasUnknownSample) { 
-                            hasUnknownSample = true;
-                        }
-                        // data.forEach((group, i, arr) => {
-                        //     if(group[data.columns[0]] === s){
-                        //         this.data.sampleInfoDict[s].group = group[data.columns[1]];
-                        //         arr.slice(i, 1);
-                        //     }
-                        // })
-                    });
-                    if (hasUnknownSample) groups.push("unknown");
+                    this.data.groupDict = groupDict;
                     this.data.groups = groups;
                     return null;
                 },
@@ -165,6 +152,12 @@ function init() {
             },
         },
         setup() {
+            setMainData(this.data.mainDict[this.data.rank], this);
+            this.data.clusters.forEach((k, i) => {
+                this.data.colors[k] = groupedChartColors[i];
+            });
+            generateLegendData(this);
+            setFunctionSize(this);
             registerEditorConfig(editorConfig(this), editorRef);
         },
     });
@@ -176,4 +169,72 @@ register(MODULE_NAME, init);
 
 export function registerScatterplot() {
     register(MODULE_NAME, init);
+}
+
+export const setMainData = (d, v, xLabel?, yLabel?) => {
+    v.data.axises = d.columns.slice(1).map(x => ({value: x, text: x}));
+    const chosenX = xLabel || v.data.axises[0].value;
+    const chosenY = yLabel || v.data.axises[1].value;
+    v.data.xLabel = chosenX;
+    v.data.yLabel = chosenY;
+    v.data.scatterData = [];
+    processRawData(d, v);
+    v.data.data = {
+        xLabel: v.data.xLabel, yLabel: v.data.yLabel,
+        data: v.data.scatterData,
+        valueRange: v.data.yRange,
+        categoryRange: v.data.xRange,
+    };
+    v.data.samples =  d.map(x => x.sampleId);
+};
+
+const processRawData = (d, v) => {
+    const xValues = [];
+    const yValues = [];
+    d.forEach(x => {
+        const xValue = parseFloat(x[v.data.xLabel]);
+        const yValue = parseFloat(x[v.data.yLabel]);
+        const temp = {sampleId: x.sampleId,
+            show: true,
+            pos: xValue,
+            value: yValue,
+            // values: [xValue, yValue]
+            cluster: v.data.clusterDict[x.sampleId][v.data.rank],
+            group: v.data.groupDict[x.sampleId]};
+        temp[v.data.xLabel] = xValue;
+        temp[v.data.yLabel] = yValue;
+        v.data.scatterData.push(temp);
+        xValues.push(xValue);
+        yValues.push(yValue);
+    });
+    v.data.xRange = findBoundsForValues(xValues, 2, false, 0.1);
+    v.data.yRange = findBoundsForValues(yValues, 2, false, 0.1);
+};
+
+function setFunctionSize(v) {
+    v.size.height = v.data.config.plotSize[1] + 100;
+    v.size.width = v.data.config.plotSize[0] + 100;
+};
+
+export function generateLegendData(v) {
+    const legends = [];
+    const legendOpts = {
+        padding: 5,
+    };
+    if (!!v.data.clusters) {
+        v.data.config.colorGetter = (d) => v.data.colors[d.cluster];
+        legends.push({
+            title: "Cluster",
+            data: v.data.clusters.map(d => ({label: d, fill: v.data.colors[d], type: "Circle"})),
+            ...legendOpts,
+        });
+        if (!!v.data.groups) {
+            legends.push({
+                title: "Group",
+                data: v.data.groups.map((d, i) => ({label: d, fill: "#aaa", type: shapes[i]})),
+                ...legendOpts,
+            });
+        }
+    }
+    v.data.legends = legends;
 }

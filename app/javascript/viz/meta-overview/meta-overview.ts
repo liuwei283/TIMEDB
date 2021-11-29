@@ -48,6 +48,8 @@ export class MetaOverview extends Oviz.Component {
     private controllerMode = "scroll";
     private offsetX = 150;
 
+    private speciesMap = {};
+
     private histLegendLabels;
     private mainRange = [];
     private mainGradientFills = [];
@@ -72,21 +74,35 @@ export class MetaOverview extends Oviz.Component {
                         const names = s.split("|");
                         const name = names[names.length - 1];
                         labels[0] = name.split("_")[2];
+                        this.speciesMap[s] = labels[0];
                         return labels;
                     }).sort();
 
-            if (this.species.indexOf("Other") >= 0) this.histLegendLabels.push(["Other", "Other"]);
+            if (this.species.indexOf("Other") >= 0) {
+                this.histLegendLabels.push(["Other", "Other"]);
+                this.speciesMap["Other"] = "Other";
+            }
 
             // const [min, max] = minmax(this.mainHeatmap.flat().filter(x => x > 0));
             const [min, max] = minmax(this.mainHeatmap.flat());
             this.mainRange = [computeLog(min + 1) , computeLog(max + 1)];
+            // const gradientColors = ["#041866", 
+            //     "#435497", "#98c4d1",
+            //     "#be3035", "#f3e567"];
+            const gradientColors = ["#041866", "#d4c1e6", "#ba1600"];
+            const valueDiv = (this.mainRange[1] - this.mainRange[0]) / 4;
+            const values = [];
+            for (let i = 0; i < 5; i++) {
+                values.push(this.mainRange[0] + i * valueDiv);
+            }
             const gradient = d3.scaleLinear()
                 // .range([this.colors.start, this.colors.end])
                 // .domain(this.mainRange);
-                .range([this.colors.start,  this.colors.org, this.colors.end])
+                .range(gradientColors)
                 // .domain([this.mainRange[0], (this.mainRange[1] + this.mainRange[0])/2
                 //             , this.mainRange[1]]);
                 .domain([0, this.mainRange[1] / 2, this.mainRange[1]]);
+                // .domain(values);
                 /* @debug
             this.debug.scale1 = (x) => d3.scaleLinear().range([0, 200])
                                     .domain([-5, 2])(x);
@@ -123,9 +139,13 @@ export class MetaOverview extends Oviz.Component {
                 this.gridW = this.mainWidth / this.filteredSamples.length;
             }
             this.histLegendPos.x = this.offsetX + this.mainWidth + this.sizeSettings.gapX;
+            // this.mainLegendPos = {
+            //     x: this.offsetX + this.mainWidth + this.sizeSettings.gapX + 100,
+            //     y: this.sizeSettings.barHeight - 40,
+            // };
             this.mainLegendPos = {
-                x: this.offsetX + this.mainWidth + this.sizeSettings.gapX + 100,
-                y: this.sizeSettings.barHeight - 40,
+                x: 20,
+                y: 20,
             };
             this.boxLegendPos = {x: this.sizeSettings.offsetX + this.mainWidth
                         + this.sizeSettings.boxHeight,
@@ -141,12 +161,16 @@ export class MetaOverview extends Oviz.Component {
             this.histLegendPos = {x: this.sizeSettings.offsetX + this.mainWidth
                 + this.sizeSettings.padding,
                 y: this.sizeSettings.padding };
-            this.mainLegendPos = {x: this.sizeSettings.offsetX + this.mainWidth
-                + this.sizeSettings.boxHeight - 130,
-                y: this.sizeSettings.padding + this.sizeSettings.barHeight - 60};
-            this.boxLegendPos = {x: this.sizeSettings.offsetX + this.mainWidth
-                        + this.sizeSettings.boxHeight,
-                    y: this.sizeSettings.barHeight + this.sizeSettings.padding };
+            // this.mainLegendPos = {x: this.sizeSettings.offsetX + this.mainWidth
+            //     + this.sizeSettings.boxHeight - 130,
+            //     y: this.sizeSettings.padding + this.sizeSettings.barHeight - 60};
+            this.mainLegendPos = {
+                x: 40, y: 50,
+            };
+            // this.boxLegendPos = {x: this.sizeSettings.offsetX + this.mainWidth
+            //             + this.sizeSettings.boxHeight,
+            //         y: this.sizeSettings.barHeight + this.sizeSettings.padding };
+            this.boxLegendPos = {x: this.sizeSettings.offsetX - 10, y: 120}
 
         }
     }

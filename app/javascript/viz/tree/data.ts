@@ -357,6 +357,11 @@ export function main(_data) {
                 parent_name = d[Name][arr_len - 2];
             }
 
+            if (!tree.allNode[parent_name]) {
+                window.alert(`Invalid Abundance Data !! \nMissing parent: ${parent_name}\nPlease check the user manual for the required format.`)
+                throw Error(`Missing parent abundance: ${parent_name}`);
+            }
+                
             parent_node = tree.allNode[parent_name];
 
             const child_num = parent_node.children.length;

@@ -10,10 +10,31 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_09_20_032112) do
+ActiveRecord::Schema.define(version: 2021_08_27_062702) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "active_storage_attachments", force: :cascade do |t|
+    t.string "name", null: false
+    t.string "record_type", null: false
+    t.bigint "record_id", null: false
+    t.bigint "blob_id", null: false
+    t.datetime "created_at", null: false
+    t.index ["blob_id"], name: "index_active_storage_attachments_on_blob_id"
+    t.index ["record_type", "record_id", "name", "blob_id"], name: "index_active_storage_attachments_uniqueness", unique: true
+  end
+
+  create_table "active_storage_blobs", force: :cascade do |t|
+    t.string "key", null: false
+    t.string "filename", null: false
+    t.string "content_type"
+    t.text "metadata"
+    t.bigint "byte_size", null: false
+    t.string "checksum", null: false
+    t.datetime "created_at", null: false
+    t.index ["key"], name: "index_active_storage_blobs_on_key", unique: true
+  end
 
   create_table "analyses", force: :cascade do |t|
     t.string "name", null: false
@@ -27,9 +48,10 @@ ActiveRecord::Schema.define(version: 2021_09_20_032112) do
     t.text "documentation"
     t.text "references"
     t.text "about"
-    t.text "rendered_ref"
+    t.text "rendered_desc"
     t.text "rendered_doc"
     t.text "rendered_about"
+    t.text "rendered_ref"
     t.integer "position"
     t.boolean "hidden", default: false
     t.index ["analysis_category_id"], name: "index_analyses_on_analysis_category_id"
@@ -56,9 +78,9 @@ ActiveRecord::Schema.define(version: 2021_09_20_032112) do
   create_table "analysis_user_data", force: :cascade do |t|
     t.bigint "user_id"
     t.bigint "analysis_id"
-    t.bigint "task_output_id"
     t.json "chosen", null: false
     t.boolean "use_demo_file", default: true
+    t.bigint "task_output_id"
     t.index ["analysis_id"], name: "index_analysis_user_data_on_analysis_id"
     t.index ["task_output_id"], name: "index_analysis_user_data_on_task_output_id"
     t.index ["user_id"], name: "index_analysis_user_data_on_user_id"
@@ -79,6 +101,22 @@ ActiveRecord::Schema.define(version: 2021_09_20_032112) do
     t.index ["sample_id"], name: "index_datasets_samples_on_sample_id"
   end
 
+  create_table "deltadb_records", force: :cascade do |t|
+    t.integer "kind", default: 0, null: false
+    t.json "data"
+    t.bigint "deltadb_table_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["deltadb_table_id"], name: "index_deltadb_records_on_deltadb_table_id"
+  end
+
+  create_table "deltadb_tables", force: :cascade do |t|
+    t.string "name"
+    t.json "data"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
   create_table "module_requirements", force: :cascade do |t|
     t.bigint "analysis_id"
     t.bigint "analysis_pipeline_id"
@@ -90,26 +128,20 @@ ActiveRecord::Schema.define(version: 2021_09_20_032112) do
     t.string "name"
     t.string "project_id1"
     t.string "project_id2"
+    t.text "original_description"
     t.text "curated_description"
     t.integer "num_of_samples"
     t.integer "num_of_runs"
     t.integer "population"
     t.text "related_publications"
-    t.text "original_description"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-  end
-
-  create_table "public_file_apis", force: :cascade do |t|
-    t.string "url_name", limit: 30
-    t.string "path", limit: 1024
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-    t.index ["url_name"], name: "index_public_file_apis_on_url_name"
   end
 
   create_table "samples", force: :cascade do |t|
     t.string "sample_name"
+    t.text "original_description"
+    t.text "curated_description"
     t.string "project_name"
     t.string "run_id"
     t.string "second_run_id"
@@ -136,24 +168,11 @@ ActiveRecord::Schema.define(version: 2021_09_20_032112) do
     t.text "antibiotics_used"
     t.text "antibiotics_dose"
     t.integer "days_without_antibiotics_use"
-    t.text "original_description"
-    t.text "curated_description"
     t.bigint "project_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.string "abundance_available"
     t.index ["project_id"], name: "index_samples_on_project_id"
-  end
-
-  create_table "tabix_apis", force: :cascade do |t|
-    t.string "url_name", limit: 30
-    t.string "folder", limit: 1024
-    t.string "column_names", limit: 1024
-    t.string "column_types", limit: 256
-    t.json "alias", default: {"main"=>"main.bgz"}, null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["url_name"], name: "index_tabix_apis_on_url_name"
   end
 
   create_table "task_outputs", force: :cascade do |t|
@@ -185,7 +204,6 @@ ActiveRecord::Schema.define(version: 2021_09_20_032112) do
     t.integer "dataset_n"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.string "genome_reference", default: "hg19"
   end
 
   create_table "visualizers", force: :cascade do |t|
@@ -214,6 +232,8 @@ ActiveRecord::Schema.define(version: 2021_09_20_032112) do
     t.index ["viz_data_source_id"], name: "index_viz_file_objects_on_viz_data_source_id"
   end
 
+  add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "analysis_user_data", "task_outputs"
   add_foreign_key "datasets", "users"
   add_foreign_key "samples", "projects"
 end

@@ -119,12 +119,10 @@ Rails.application.routes.draw do
     resources :tasks, except: :new
     resources :file_keys, except: :show
     resources :tabix_apis, except: :show
-    resources :public_file_apis, except: :show
   end
 
   # serve files
   match 'data/uploads/*path', to: 'raw_files#uploads', as: 'get_uploads', via: :get
-  match '/data/public/*path', to: 'raw_files#database', as: 'database', via: :get
   match 'data/demo/*path', to: 'raw_files#demo', as: 'get_demo', via: :get
   match 'data/outputs/*path', to: 'raw_files#outputs', as: 'get_outputs', via: :get
   match 'data/static_viz_data/*path', to: 'raw_files#viz_file', via: :get

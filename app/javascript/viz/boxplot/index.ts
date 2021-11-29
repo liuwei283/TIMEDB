@@ -28,7 +28,7 @@ function init() {
                 showOutliers: true,
                 drawP: true,
                 drawViolin: false,
-                drawScatter: true,
+                drawScatter: false,
                 hollowBox: false,
                 xAxisRotated: true,
                 labelFontSize: 12,
@@ -44,7 +44,7 @@ function init() {
                 type: "tsv",
                 multiple: true,
                 dsvHasHeader: false,
-                loaded(data) {
+                loaded(data) { // check data, throw new error if data not qualifying
                     this.data.mainDict = {};
                     const raw = {};
                     this.data.ranks = [];
