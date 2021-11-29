@@ -116,6 +116,7 @@ Rails.application.routes.draw do
     get 'analyses', to: 'analyses#index'
     resources :visualizers
     resources :analysis_pipelines
+    resources :tasks, except: :new
     resources :file_keys, except: :show
     resources :tabix_apis, except: :show
   end

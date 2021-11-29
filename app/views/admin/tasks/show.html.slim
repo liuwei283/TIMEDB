@@ -1,0 +1,57 @@
+- content_for :title do
+  | Task
+.container
+  ol.breadcrumb
+    li.breadcrumb-item = link_to 'Tasks', admin_task_path
+    li.breadcrumb-item.active = link_to @task.id, admin_task_path(@task)
+  .card
+    .card-body
+      h2.card-title
+        | Task&nbsp;
+        = @task.id
+      hr
+
+      table.table.table-bordered
+        tbody
+          tr 
+            td.col-md-4 Status 
+            td.col-md-6 = @task.status
+          tr 
+            td App 
+            td = @task.getAppName
+          tr 
+            td Module/Pipeline 
+            td = @task.analysis ? "Module" : "Pipeline"
+          tr 
+            td App ID
+            td = @task.getAppId
+          tr 
+            td Result Mapped
+            td = @task.task_outputs.blank? ? "No" : "Yes"
+
+      .ml-3
+        span.mx-2 Deepomics Query Result:
+        pre.bg-light.bg-gradient.json_container
+          = @log
+        - if !@task.task_outputs.blank?
+          span.mx-2 Mapped output:
+          br
+          - @task.task_outputs.each do |topt|
+            button.my-1.btn.btn-secondary data-toggle="collapse"  data-target="#output-#{topt.id}"  aria-expanded="false" aria-controls="#output-#{topt.id}"
+              = "output-#{topt.id} #{topt.analysis.name}"
+            pre.bg-light.bg-gradient.json_container.collapse.multi-collapse id="output-#{topt.id}"
+              = topt.file_paths.to_json
+            br
+        
+        button.btn.btn-danger Clear outputs
+
+
+- content_for :page_script do 
+  javascript: 
+    document.addEventListener("DOMContentLoaded", () => {
+      const containers = document.getElementsByClassName("json_container");
+      for (cnt of containers) {
+        const data = cnt.innerHTML;
+        cnt.innerHTML = JSON.stringify(JSON.parse(data), undefined, 2);
+      }
+    });
