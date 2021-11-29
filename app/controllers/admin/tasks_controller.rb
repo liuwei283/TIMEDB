@@ -1,6 +1,6 @@
 class Admin::TasksController < ApplicationController
   before_action :set_tasks, only: %i[index]
-  before_action :set_task, only: %i[show destroy]
+  before_action :set_task, only: %i[show destroy clear_outputs]
 
   def index
     # @tasks = Task.all
@@ -16,6 +16,13 @@ class Admin::TasksController < ApplicationController
     # @task.task_outputs.each do |topt|
     #   Rails.logger.debug "===>#{topt.analysis.name}"
     # end
+  end
+
+  def clear_outputs
+    flash[:success] = 'Task outputs cleared.'
+    @task.task_outputs.each do |topt|
+      topt.destroy
+    end
   end
 
   def destroy
@@ -48,7 +55,6 @@ class Admin::TasksController < ApplicationController
       else
         result = client.task_info(45, @task.tid, 'pipeline')
       end
-      Rails.logger.debug result
       if !result['message']['status'].blank?
         result_json[:code] = true
         result_json[:data] = result

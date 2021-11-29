@@ -40,4 +40,19 @@ class Task < ApplicationRecord
         return @app_id
     end
 
+    def getDeepomicsUrl
+        @app_id = ""
+        begin
+            if !self.analysis.blank?
+                @app_id = self.analysis.mid
+            else
+                @app_id = self.analysis_pipeline.pid
+            end
+        rescue Exception => e
+            @app_id = e.message
+        end
+        return "https://deepomics.org/user/apps/#{@app_id}/monitor/?task_id=#{self.tid}"
+    end
+
+
 end

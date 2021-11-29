@@ -117,6 +117,7 @@ Rails.application.routes.draw do
     resources :visualizers
     resources :analysis_pipelines
     resources :tasks, except: :new
+    post "clear_outputs", to:"tasks#clear_outputs", as: "clear_outputs"
     resources :file_keys, except: :show
     resources :tabix_apis, except: :show
   end

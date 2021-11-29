@@ -2,7 +2,7 @@
   | Task
 .container
   ol.breadcrumb
-    li.breadcrumb-item = link_to 'Tasks', admin_task_path
+    li.breadcrumb-item = link_to 'Tasks', admin_tasks_path
     li.breadcrumb-item.active = link_to @task.id, admin_task_path(@task)
   .card
     .card-body
@@ -18,7 +18,11 @@
             td.col-md-6 = @task.tid
           tr 
             td.col-md-4 Status 
-            td.col-md-6 = @task.status
+            td.col-md-6
+              - if @task.status == "finished"
+                | <i class="fa fa-check-circle text-success"></i> finished 
+              - elsif @task.status == "failed"
+                | <i class="fa fa-times-circle text-danger"></i> failed 
           tr 
             td App 
             td = @task.getAppName
@@ -33,7 +37,8 @@
             td = @task.task_outputs.blank? ? "No" : "Yes"
 
       .ml-3
-        span.mx-2 Deepomics Query Result:
+        button.btn.btn-small.bg-info
+          = link_to "Deepomics Query Result", @task.getDeepomicsUrl
         pre.bg-light.bg-gradient.json_container
           = @log
         - if !@task.task_outputs.blank?
@@ -45,8 +50,11 @@
             pre.bg-light.bg-gradient.json_container.collapse.multi-collapse id="output-#{topt.id}"
               = topt.file_paths.to_json
             br
-        
-        button.btn.btn-danger Clear outputs
+        .btn-group.mr-2
+              = link_to admin_clear_outputs_path(id:@task.id), method: :post, class: 'btn btn-danger' do
+                = icon 'fas', 'exclamation'
+                | Clear outputs
+        / button.btn.btn-danger Clear outputs
 
 
 - content_for :page_script do 
@@ -58,3 +66,11 @@
         cnt.innerHTML = JSON.stringify(JSON.parse(data), undefined, 2);
       }
     });
+  sass: 
+    pre
+      max-height: 45rem
+      overflow: scroll
+    button a
+      color: white
+      &:hover
+        color: white
