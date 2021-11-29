@@ -64,8 +64,8 @@ function init() {
                 dsvHasHeader: true,
                 loaded(data) {
                     const groupKey = data.columns[0];
-                    const valueKey = data.columns[1];
-                    const catKey = data.columns[2];
+                    const valueKey = data.columns[2];
+                    const catKey = data.columns[1];
                     const value=datalogprocess(data,valueKey,100)
                     const allvalues= value.map(x=>{
                         const num = parseFloat(x[valueKey]);
@@ -86,7 +86,7 @@ function init() {
                     });
                     const classifications=result.classifications;
                     const categories=result.categories;
-
+                    
     
                     this.data.classifications = classifications;
                     this.data.categories = categories;
@@ -112,7 +112,6 @@ function init() {
 }
 
 export function processconfigData(v) {
-    console.log(v.data.classifications)
     const gridW = v.data.gridW =  ((v.data.boxW + 2) * v.data.classifications.length) / (1- v.data.gapRatio);
     v.data.plotWidth = v.data.categories.length * gridW;
     v.data.plotHeight=v.data.classifications.length* 200;
