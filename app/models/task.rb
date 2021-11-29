@@ -26,7 +26,7 @@ class Task < ApplicationRecord
         @app_id = ""
         begin
             if !self.analysis.blank?
-                @app_id = self.analysis.mid.string
+                @app_id = self.analysis.mid.to_s
             else 
                 analysis_ids = self.analysis_pipeline.analyses.map do |a|
                     "#{a.name}: #{a.mid}"
