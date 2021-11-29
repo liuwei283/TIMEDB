@@ -63,6 +63,7 @@ function init() {
         data:  {
             config: {
                 showNodeNames: false,
+                maxR: 30,
             },
         },
         loadData: {

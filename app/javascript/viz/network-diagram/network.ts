@@ -1,11 +1,8 @@
-import Oviz from "crux";
-import { simpleLinearRegression } from "crux/dist/algo";
+
 import { Color } from "crux/dist/color";
-import { offset } from "crux/dist/defs/geometry";
 import { Component, ComponentOption } from "crux/dist/element";
-import propsModule from "crux/dist/rendering/vdom/modules/props";
 import * as d3 from "d3";
-import { parseConfigFileTextToJson } from "typescript";
+import { scalePow, scaleSqrt } from "d3-scale";
 
 export enum Gravity {
     Top = 0, Right, Bottom, Left,
@@ -22,24 +19,24 @@ interface DiagramLink {
 
 export interface NetworkDiagramOption<Data extends T[], T= any> extends ComponentOption {
     _gravity?: Gravity;
-    // the gravity or direction of the graph
-    _raidus?: number | ((d: T, i: number) => number);
-    // the radius of each dot
-    _maxX?: number;
-    // the maxv alue of x that users provide
-    _minX?: number;
-    // the min value of x that users provide
-    _maxY?: number;
-    // the maxv alue of y that users provide
-    _minY?: number;
-    // The value of the y-coordinate (belongs to the vertical axis)
-    _yFunc?: (d: T, i?: number) => number;
-    // The value of the x-coordinate (belongs to the horizontal axis)
-    _xFunc?: (d: T, i?: number) => number;
-    // The class of circles
-    _classFunc?: (d: T, i?: number) => string;
-    // Whether to display labels of circles
-    _labelFunc?: (d: T, i?: number) => string;
+    // // the gravity or direction of the graph
+    // _raidus?: number | ((d: T, i: number) => number);
+    // // the radius of each dot
+    // _maxX?: number;
+    // // the maxv alue of x that users provide
+    // _minX?: number;
+    // // the min value of x that users provide
+    // _maxY?: number;
+    // // the maxv alue of y that users provide
+    // _minY?: number;
+    // // The value of the y-coordinate (belongs to the vertical axis)
+    // _yFunc?: (d: T, i?: number) => number;
+    // // The value of the x-coordinate (belongs to the horizontal axis)
+    // _xFunc?: (d: T, i?: number) => number;
+    // // The class of circles
+    // _classFunc?: (d: T, i?: number) => string;
+    // // Whether to display labels of circles
+    // _labelFunc?: (d: T, i?: number) => string;
     _links?: DiagramLink[]  ;
     _nodes?: any[] ;
     _phylums?: any;
@@ -47,9 +44,14 @@ export interface NetworkDiagramOption<Data extends T[], T= any> extends Componen
     showNodeNames: boolean;
     groups: string[];
     groupWidth: number;
+    maxR: number; // the maximum radius of a node
 }
 
 export class NetworkDiagram extends Component<NetworkDiagramOption<any[], any>> {
+
+    private nodeSizeScale;
+
+    public resetLayout = false;
 
     protected edgeColor: {group1:string, group2:string };
 
@@ -91,6 +93,7 @@ export class NetworkDiagram extends Component<NetworkDiagramOption<any[], any>> 
         }
     };
 
+    
     render() {
         return this.t`
         Component{
@@ -143,8 +146,11 @@ export class NetworkDiagram extends Component<NetworkDiagramOption<any[], any>> 
                     }
                     
                     Circle.centered{
-                        r =  Math.sqrt(d.NodeSize) * 3.14
+                        // r =  Math.sqrt(d.NodeSize) * 3.14
+                        r = nodeSizeScale(d.NodeSize)
                         fill = getFillByPhylumAndGenus(d)
+                        stroke = "#666"
+                        @props prop.opt.node
                     }
                     @if prop.showNodeNames {
                         Text.centered {
@@ -159,6 +165,45 @@ export class NetworkDiagram extends Component<NetworkDiagramOption<any[], any>> 
         }`;
     }
 
+    willRender() {
+        if (this.resetLayout) {
+            this.layoutConfig.nodeInterval = 2 * this.prop.maxR + 5;
+            this.nodeSizeScale.range([0,this.prop.maxR]);
+            this.resetDefaultLayout();
+            this.setupCoord();
+
+            this._nodes.forEach(d => {
+                const temp_x = this.setUpXCoordinates(d);
+                const temp_y = this.setUpYCoordinates(d);
+                d._x = temp_x;
+                d._y = temp_y;
+            });
+
+            this._height = this.group2NonLinkY + this.layoutConfig.nodeInterval + this.layoutConfig.offset;
+            this.$v.size.height = this._height + 400;
+
+            this.resetLayout = false;
+        }
+    }
+
+    resetDefaultLayout() {
+        this.group1LinkedX = 0;
+        this.group2LinkedX = 700;
+        this.group1LinkedY = 100;
+        this.group2LinkedY = 100;
+        this.group1LinkedRow = 0;
+        this.group1LinkedCol = 0;
+        this.group2LinkedRow = 0;
+        this.group2LinkedCol = 0;
+        this.group1LinkedColumnCount = 0;
+        this.group2LinkedColumnCount = 0;
+        this.group1NonLinkX = 0;
+        this.group2NonLinkX = 700;
+        this.group1NonLinkY = 600;
+        this.group2NonLinkY = 600;
+        this.group1NonLinkColumnCount = 0;
+        this.group2NonLinkColumnCount = 0;
+    }
     parseText(str: string): string {
         if (str.length > 10 ) {
             const strs = str.split(" ");
@@ -172,7 +217,7 @@ export class NetworkDiagram extends Component<NetworkDiagramOption<any[], any>> 
     }
 
     nodeDetail(d) {
-        let details = `Node ID: ${d.id}<br>Size: ${d.size}`;
+        let details = `Node ID: ${d.id}<br>Size: ${d.NodeSize}`;
         details += `<br>Phylum: ${d.NodePhylum}<br>Genus: ${d.NodeGenus}`;
         return details;
     }
@@ -210,22 +255,14 @@ export class NetworkDiagram extends Component<NetworkDiagramOption<any[], any>> 
             group1: Color.literal("red").desaturate(30).string,
             group2: Color.literal("blue").desaturate(30).lighten(20).string,
         }
-        this.setupCoord();
-        // const linkedNodes = [];
-        // const unlinkedNodes = [];
-        // for (const node of this.prop._nodes) {
-        //     if (this.prop._links.find(e => (e.source === node["NodeName"] 
-        //         || e.target === node["NodeName"]))){
-        //             node.linked = true;
-        //             linkedNodes.push(node);
-        //     }
-        //     else {
-        //         node.linked = false;
-        //         unlinkedNodes.push(node);
-        //     }
-        // }
-
+        this.layoutConfig.nodeInterval = 2 * this.prop.maxR + 5;
         this._nodes = this.prop._nodes;
+        const rs = this._nodes.map(x => x.NodeSize);
+        const max = Math.max(...rs);
+        this.nodeSizeScale = d3.scaleSqrt().domain([0, max]).range([0,this.prop.maxR]);
+
+        this.setupCoord();
+
         this._nodes.forEach(d => {
             this.prop._links.forEach(e => {
                 if (d.NodeName === e.source) {
@@ -245,6 +282,22 @@ export class NetworkDiagram extends Component<NetworkDiagramOption<any[], any>> 
             d._x = temp_x;
             d._y = temp_y;
         });
+        
+        // const linkedNodes = [];
+        // const unlinkedNodes = [];
+        // for (const node of this.prop._nodes) {
+        //     if (this.prop._links.find(e => (e.source === node["NodeName"] 
+        //         || e.target === node["NodeName"]))){
+        //             node.linked = true;
+        //             linkedNodes.push(node);
+        //     }
+        //     else {
+        //         node.linked = false;
+        //         unlinkedNodes.push(node);
+        //     }
+        // }
+
+
         // this._nodes =  [...linkedNodes, ...unlinkedNodes].map(d => {
         //     const temp_x = this.setUpXCoordinates(d);
         //     const temp_y = this.setUpYCoordinates(d);
@@ -276,6 +329,8 @@ export class NetworkDiagram extends Component<NetworkDiagramOption<any[], any>> 
         // setup
         this._height = this.group2NonLinkY + this.layoutConfig.nodeInterval + this.layoutConfig.offset;
         this.$v.size.height = this._height + 400;
+
+
     }
 
     // willRender() {

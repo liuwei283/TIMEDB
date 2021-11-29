@@ -2,6 +2,7 @@ svg {
     height = 1500
     Rows{
         NetworkDiagram {
+            ref = "network"
             x = 40; y = 40
             _links = networkEdges
             _nodes = networkNodes
@@ -10,6 +11,7 @@ svg {
             showNodeNames = config.showNodeNames
             groups = groups
             groupWidth = groupWidth
+            maxR = config.maxR
         }
         
         Container {
