@@ -28,7 +28,7 @@ function init() {
                 showOutliers: true,
                 drawP: true,
                 drawViolin: false,
-                drawScatter: true,
+                drawScatter: false,
                 hollowBox: true,
                 xAxisRotated: true,
                 labelFontSize: 12,

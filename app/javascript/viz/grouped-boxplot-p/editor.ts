@@ -2,6 +2,7 @@ import { defaultLayoutConf as conf} from "utils/editor";
 import { EditorDef } from "utils/editor";
 import { copyObject } from "utils/object";
 import { genDefaultPalette, withDefaultPalette, genPaletteMap} from "oviz-common/palette";
+import { processconfigData } from ".";
 
 const cbpPalette = {
     cBioPortal: {
@@ -12,7 +13,7 @@ const cbpPalette = {
 };
 
 function run(v) {
-    v.data._changed = true;
+    v.forceRedraw = true;
     v.run();
 }
 export const editorRef = {} as any;
@@ -22,33 +23,96 @@ export function editorConfig(v): EditorDef {
     return {
         sections: [
             {
+                id: "data",
+                title: "Data",
+                layout: "tabs",
+                tabs: [
+                    {
+                        id: "gData",
+                        name: "General",
+                        view: {
+                            type: "list",
+                            items: [
+                                {
+                                    title: "Taxonomic rank",
+                                    type: "select",
+                                    options: v.data.ranks,
+                                    value: {
+                                        current: v.data.rank,
+                                        callback(d) {
+                                            v.data.rank = d;
+                                            v.data.data = v.data.mainDict[v.data.rank];
+                                            processconfigData(v);
+                                            editorRef.lowerBound = v.data.data.valueRange[0];
+                                            editorRef.upperBound = v.data.data.valueRange[1];
+                                            run(v);
+                                        },
+                                    },
+                                },
+                                {
+                                    title: "Range Lower Bound",
+                                    type: "input",
+                                    ref: "lowerBound",
+                                    value: {
+                                        current: v.data.data.valueRange[0],
+                                        callback(d) {
+                                            v.data.data.valueRange[0] = parseFloat(d);
+                                            run(v);
+                                        },
+                                    },
+                                },
+                                {
+                                    title: "Range Upper Bound",
+                                    type: "input",
+                                    ref: "upperBound",
+                                    value: {
+                                        current: v.data.data.valueRange[1],
+                                        callback(d) {
+                                            v.data.data.valueRange[1] = parseFloat(d);
+                                            run(v);
+                                        },
+                                    },
+                                },
+                                {
+                                    title: "P First Cutoff",
+                                    type: "input",
+                                    value: {
+                                        current: v.data.pValueConfig.firstCutoff,
+                                        callback(value) {
+                                            v.data.pValueConfig.firstCutoff = parseFloat(value);
+                                            v.data.data.pData.forEach(d => {
+                                                d.notation = v.data.pValueConfig.getAnnos(d.value);
+                                            });
+                                            run(v);
+                                        },
+                                    },
+                                },
+                                {
+                                    title: "P Second Cutoff",
+                                    type: "input",
+                                    value: {
+                                        current: v.data.pValueConfig.secondCutoff,
+                                        callback(value) {
+                                            v.data.pValueConfig.secondCutoff = parseFloat(value);
+                                            v.data.data.pData.forEach(d => {
+                                                d.notation = v.data.pValueConfig.getAnnos(d.value);
+                                            });
+                                            run(v);
+                                        },
+                                    },
+                                },
+                            ],
+                        },
+                    },
+                ],
+            },
+            {
                 id: "settings",
                 title: "Settings",
                 layout: "single-page",
                 view: {
                     type: "list",
                     items: [
-                        {
-                            title: "Taxonomic rank",
-                            type: "select",
-                            options: v.data.ranks,
-                            value: {
-                                current: v.data.config.rankIndex.toString(),
-                                callback(d) {
-                                    v.data.config.rankIndex = parseInt(d);
-                                    v.data.boxData = v.data.boxDict[v.data.ranks[parseInt(d)].text];
-                                    v.data.pData = v.data.pDict[v.data.ranks[parseInt(d)].text];
-                                    if (v.data.boxData.categories.length * 20 > 500){
-                                        v.data.config.plotWidth = v.data.boxData.categories.length * 20;
-                                        v.data.gridW = 20;
-                                    } else {
-                                        v.data.gridW = 500 / v.data.boxData.categories.length;
-                                    }
-                                    v.forceRedraw = true;
-                                    run(v);
-                                },
-                            },
-                        },
                         {
                             type: "vue",
                             title: "",
@@ -60,9 +124,49 @@ export function editorConfig(v): EditorDef {
                                 id: "pwcolor",
                                 paletteMap: genPaletteMap(Object.keys(v.data.colors)),
                                 callback(colors) {
-                                    console.log(colors)
                                     v.data.colors = colors;
-                                    v.forceRedraw = true;
+                                    // v.forceRedraw = true;
+                                    v.data.legendData.forEach((x, i) => {
+                                        x.fill = colors[i];
+                                    });
+                                    run(v);
+                                },
+                            },
+                        },
+                        {
+                            title: "Plot Height",
+                            type: "input",
+                            value: {
+                                current: v.data.config.plotSize[1],
+                                callback(value) {
+                                    v.data.config.plotSize[1] = parseFloat(value);
+                                    run(v);
+                                },
+                            },
+                        },
+                        {
+                            title: "Plot Margin(y)",
+                            type: "input",
+                            value: {
+                                current: v.data.config.margin[1],
+                                callback(value) {
+                                    if (parseFloat(value) > 0.1) {
+                                        window.alert("margin should be smaller than 0.1")
+                                        return;
+                                    }
+                                    v.data.config.margin[1] = parseFloat(value);
+                                    run(v);
+                                },
+                            },
+                        },
+                        {
+                            title: "Box Width",
+                            type: "input",
+                            value: {
+                                current: v.data.config.boxW,
+                                callback(value) {
+                                    v.data.config.boxW = parseFloat(value);
+                                    processconfigData(v);
                                     run(v);
                                 },
                             },
@@ -71,27 +175,34 @@ export function editorConfig(v): EditorDef {
                             title: "Outliers",
                             type: "checkbox",
                             value: {
-                                current: true,
+                                current: v.data.config.drawOutlier,
                                 callback(value) {
-                                    v.data.config.showOutliers = value
+                                    v.data.config.drawOutlier = value
                                     run(v);
                                 },
                             },
                         },
                         {
-                            title: "X-Label Rotation Angle",
-                            type: "input",
-                            format: "int",
+                            title: "P annotation",
+                            type: "checkbox",
                             value: {
-                                current: 45,
-                                callback(newValue) {
-                                    let val = parseInt(newValue as any);
-                                    if (val < 0) val = 0;
-                                    if (val > 90) val = 90;
-                                    v.data.config.xLabelRotation = val;
+                                current: v.data.config.drawP,
+                                callback(value) {
+                                    v.data.config.drawP = value;
                                     run(v);
-                                }
-                              }
+                                },
+                            },
+                        },
+                        {
+                            title: "Background axises",
+                            type: "checkbox",
+                            value: {
+                                current: v.data.config.drawBackgroundAxis,
+                                callback(value) {
+                                    v.data.config.drawBackgroundAxis = value;
+                                    run(v);
+                                },
+                            },
                         },
                     ]
                 }

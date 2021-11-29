@@ -2,7 +2,7 @@ import { defaultLayoutConf as conf} from "utils/editor";
 import { EditorDef } from "utils/editor";
 
 function run(v) {
-    v.data._changed = true;
+    v.forceRedraw = true;
     v.run();
 }
 export const editorRef = {} as any;
@@ -25,6 +25,19 @@ export function editorConfig(v): EditorDef {
                                 path: "showNodeNames",
                                 callback() {
                                     v.data.config.showNodeNames = conf.showNodeNames;
+                                    run(v);
+                                },
+                            },
+                        },
+                        {
+                            title: "Max Radius",
+                            type: "input",
+                            value: {
+                                current: v.data.config.maxR,
+                                callback(x) {
+                                    v.data.config.maxR = parseFloat(x);
+                                    console.log(v.root.$refs)
+                                    v.root.$ref.network.resetLayout = true;
                                     run(v);
                                 },
                             },

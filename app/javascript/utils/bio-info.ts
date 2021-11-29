@@ -4,7 +4,7 @@ export const rankDict = {
     c: "Class",
     o: "Order",
     f: "Family",
-    t: "tribe",
+    t: "Strain",
     g: "Genus",
     s: "Species",
 };

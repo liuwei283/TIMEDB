@@ -1,7 +1,7 @@
 import { setSyntheticLeadingComments } from "typescript";
 import { EditorDef } from "utils/editor";
 import { generateBoxConfig } from "viz/boxplot/editor";
-import { setMainData } from ".";
+import { setColors, setMainData } from ".";
 
 export const editorRef = {} as any;
 
@@ -199,10 +199,11 @@ export function editorConfig(v): EditorDef {
                                         callback(d) {
                                             v.data.colorKey = d;
                                             const colorMetaInfo = v.data.metaInfo[v.data.colorKey];
-                                            v.data.data.colorGetter = (s) => v.data.metaInfo[v.data.colorKey].color(s[v.data.colorKey]);
+                                            v.data.data.colorGetter = (s) => v.data.metaInfo[d].color(s[d]);
                                             v.data.classLegend = colorMetaInfo.values.map((x, i) => {
                                                 return {label: x, fill: colorMetaInfo.color(x), type: "Rect"};
                                             });
+                                            // setColors(v);
                                             run(v);
                                         },
                                     },
@@ -217,6 +218,7 @@ export function editorConfig(v): EditorDef {
                                             v.data.catKey = d;
                                             v.data.categories = v.data.metaInfo[d].values;
                                             setMainData(v.data.mainDict[v.data.rank], v);
+                                            setColors(v);
                                             run(v);
                                         },
                                     },
@@ -376,6 +378,7 @@ export function editorConfig(v): EditorDef {
                                     for (const o of obj) {
                                         v.data.metaInfo[o.name].update(v, o);
                                     }
+                                    setColors(v);
                                     run(v);
                                 },
                             },

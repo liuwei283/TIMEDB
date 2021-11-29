@@ -3,7 +3,7 @@ import template from "./template.bvt";
 import { NetworkDiagram } from "./network";
 import { registerEditorConfig } from "utils/editor";
 import { editorConfig, editorRef } from "./editor";
-
+import { getGroups } from "utils/array";
 import {register} from "page/visualizers";
 
 const MODULE_NAME = 'network-diagram'
@@ -63,6 +63,7 @@ function init() {
         data:  {
             config: {
                 showNodeNames: false,
+                maxR: 30,
             },
         },
         loadData: {
@@ -105,20 +106,31 @@ function init() {
                     phylums["Other"] = ["Unclassified"];
                     this.data.phylums = phylums;
                     this.data.nodeColorMap = initializeNodeColors(phylums);
+                    this.data.groups = getGroups(d, "NodeGroup");
                     return d;
                 },
             },
         },
         setup() {
+            setCanvasSize(this);
             registerEditorConfig(editorConfig(this));
         },
-    });
+    });    
     return [visualizer, {
         theme: {
             light: "mh-light",
             dark: "dark",
         },
     }];
+}
+
+function setCanvasSize(v) {
+    const autoWidth = v.size.width - 250;
+    console.log(autoWidth)
+    if (autoWidth < 1480) {
+        v.data.groupWidth = 650;
+        v.size.width = 1480;
+    } else v.data.groupWidth = autoWidth/2 - 100;
 }
 
 function initializeNodeColors(phylums): any {

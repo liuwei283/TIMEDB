@@ -1,5 +1,4 @@
 import Oviz from "crux";
-import { remove } from "crux/dist/utils/event";
 import {controlGroupColors} from "oviz-common/palette";
 import { register } from "page/visualizers";
 import { registerEditorConfig } from "utils/editor";
@@ -23,8 +22,8 @@ function init() {
             hiddenSamples: new Set(),
             gridSize: [4, 12],
             colors: {
-                control: controlGroupColors[0],
-                gout: controlGroupColors[1],
+                // control: controlGroupColors[0],
+                // gout: controlGroupColors[1],
                 na: "#777",
                 abd0: "#333",
                 // start: "#fff7f3",
@@ -33,6 +32,7 @@ function init() {
                 org: "#FF5050",
                 end: "#FFFF00",
             },
+            drawTree: false,
         },
         loadData: {
             ovTree: {
@@ -55,7 +55,7 @@ function init() {
             ovMeta: {
                 fileKey: "ovMeta",
                 type: "tsv",
-                dsvRowDef: {Age: "int", BMI: "int", age: "int"},
+                // dsvRowDef: {Age: "int", BMI: "int", age: "int"},
                 dependsOn: ["ovMain"],
                 loaded: meta,
             },

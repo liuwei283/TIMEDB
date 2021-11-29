@@ -1,0 +1,99 @@
+Component {
+    @let lineColor = "#666"
+    GridPlot {
+        @props prop
+        gap = prop.gridW * prop.gapRatio
+        :background {
+            AxisBackground { 
+                dashArray = "1,2"; includeEndTicks = true
+                @props prop.opt.axisBackground
+            }
+            Rect.full {
+                fill = "none"; strokeWidth = 1; stroke = "black"
+            }
+        }
+        :content {
+            @if prop.drawBox{
+                @for (item, index) in prop.data{
+                    Boxes {
+                        @let i = index[index.length-1]
+                        x = i * (prop.boxW + 2) + 1
+                        key = index
+                        data = index
+                        showMean = true
+                        showNotch = false
+                        :box (_d) {
+                            Rect {
+                                stroke = lineColor
+                                strokeWidth = 0.8
+                                fill = prop.colors[i]
+                                width = prop.boxW
+                                height =100%
+                                behavior:tooltip {
+                                    content = (`pos: ${_d.pos}<br>
+                                                min: ${_d.data[0].toFixed(2)} <br>
+                                                first quartile: ${_d.data[1].toFixed(2)} <br>
+                                                median: ${_d.data[2].toFixed(2)} <br>
+                                                third quartile: ${_d.data[3].toFixed(2)} <br>
+                                                max: ${_d.data[4].toFixed(2)} <br>`)
+                                }
+                            }
+                        }
+                        :whiskle(d) {
+                            Line { x = prop.boxW / 2; y1 = 0; y2 = 100%
+                                stroke = lineColor; strokeWidth = 1.5
+                            }
+                        }
+                        :outlier(d) {
+                            @if prop.drawOutlier {
+                            Component {
+                                x = prop.gridW * - (1-prop.gapRatio)/2 + prop.boxW/ 2 + 1
+                            
+                                @yield boxOutlier with {data: d, index: i, fill: prop.colors[i], stroke: lineColor} default {
+                                    Circle.centered {
+                                        r = 2; 
+                                        stroke = prop.colors[i]; fill = "none"
+                                    }
+                                }
+                            }
+                            }
+                        }
+                        :mean(means) {
+                        }
+                        :median(d) {
+                            Line { x2 = prop.boxW; stroke = lineColor; strokeWidth = 2}
+                        }
+                    }
+                }
+            }
+            @if prop.pData && prop.drawP {
+                Component {
+                    @for (pair,index) in prop.pData {
+                        Component {
+                            @let pos = prop.drawOutlier ? pair.stat1Max : pair.stat2Max
+                            x = @scaled-x(index)
+                            y=  @scaled-y(pos)-8
+                            @let delta = prop.gridW/4
+                            behavior:drag {
+                               direction = "y"
+                            }
+                            Line {
+                                x = -delta; y2=5
+                            }
+                            Line {
+                                x = delta; y2=5
+                            }
+                            Line {
+                                x1 = -delta; x2= delta
+                            }
+                            Text(pair.notation) {
+                                anchor = @anchor("c", "b")
+                                fontSize= 12;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
