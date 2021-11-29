@@ -48,11 +48,12 @@ class Admin::TasksController < ApplicationController
       else
         result = client.task_info(@task.user.id, @task.tid, 'pipeline')
       end
+      Rails.logger.debug result
       if !result['message']['status'].blank?
         result_json[:code] = true
         result_json[:data] = result
       else
-        result_json[:data] = "deepomics error: " + result
+        result_json[:data] = result
       end
     rescue StandardError => e
       result_json[:code] = false
