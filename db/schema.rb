@@ -15,27 +15,6 @@ ActiveRecord::Schema.define(version: 2021_08_27_062702) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
-  create_table "active_storage_attachments", force: :cascade do |t|
-    t.string "name", null: false
-    t.string "record_type", null: false
-    t.bigint "record_id", null: false
-    t.bigint "blob_id", null: false
-    t.datetime "created_at", null: false
-    t.index ["blob_id"], name: "index_active_storage_attachments_on_blob_id"
-    t.index ["record_type", "record_id", "name", "blob_id"], name: "index_active_storage_attachments_uniqueness", unique: true
-  end
-
-  create_table "active_storage_blobs", force: :cascade do |t|
-    t.string "key", null: false
-    t.string "filename", null: false
-    t.string "content_type"
-    t.text "metadata"
-    t.bigint "byte_size", null: false
-    t.string "checksum", null: false
-    t.datetime "created_at", null: false
-    t.index ["key"], name: "index_active_storage_blobs_on_key", unique: true
-  end
-
   create_table "analyses", force: :cascade do |t|
     t.string "name", null: false
     t.json "files_info"
@@ -44,14 +23,13 @@ ActiveRecord::Schema.define(version: 2021_08_27_062702) do
     t.bigint "analysis_category_id"
     t.bigint "visualizer_id"
     t.text "cover_image"
-    t.string "url"
+    t.string "url", null: false
     t.text "documentation"
     t.text "references"
     t.text "about"
-    t.text "rendered_desc"
+    t.text "rendered_ref"
     t.text "rendered_doc"
     t.text "rendered_about"
-    t.text "rendered_ref"
     t.integer "position"
     t.boolean "hidden", default: false
     t.index ["analysis_category_id"], name: "index_analyses_on_analysis_category_id"
@@ -72,15 +50,15 @@ ActiveRecord::Schema.define(version: 2021_08_27_062702) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.text "cover_image"
-    t.string "url"
+    t.string "url", null: false
   end
 
   create_table "analysis_user_data", force: :cascade do |t|
     t.bigint "user_id"
     t.bigint "analysis_id"
+    t.bigint "task_output_id"
     t.json "chosen", null: false
     t.boolean "use_demo_file", default: true
-    t.bigint "task_output_id"
     t.index ["analysis_id"], name: "index_analysis_user_data_on_analysis_id"
     t.index ["task_output_id"], name: "index_analysis_user_data_on_task_output_id"
     t.index ["user_id"], name: "index_analysis_user_data_on_user_id"
@@ -101,22 +79,6 @@ ActiveRecord::Schema.define(version: 2021_08_27_062702) do
     t.index ["sample_id"], name: "index_datasets_samples_on_sample_id"
   end
 
-  create_table "deltadb_records", force: :cascade do |t|
-    t.integer "kind", default: 0, null: false
-    t.json "data"
-    t.bigint "deltadb_table_id"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-    t.index ["deltadb_table_id"], name: "index_deltadb_records_on_deltadb_table_id"
-  end
-
-  create_table "deltadb_tables", force: :cascade do |t|
-    t.string "name"
-    t.json "data"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-  end
-
   create_table "module_requirements", force: :cascade do |t|
     t.bigint "analysis_id"
     t.bigint "analysis_pipeline_id"
@@ -125,49 +87,45 @@ ActiveRecord::Schema.define(version: 2021_08_27_062702) do
   end
 
   create_table "projects", force: :cascade do |t|
-    t.string "name"
-    t.string "project_id1"
-    t.string "project_id2"
-    t.text "original_description"
-    t.text "curated_description"
+    t.integer "project_id"
+    t.string "project_name"
+    t.string "primary_site"
     t.integer "num_of_samples"
-    t.integer "num_of_runs"
-    t.integer "population"
-    t.text "related_publications"
+    t.integer "num_of_oberserved_genes"
+    t.text "original_description"
+    t.text "major_related_publications"
+    t.integer "year"
+    t.string "original_link"
+    t.string "details"
+    t.string "orignial_dataset"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
   end
 
   create_table "samples", force: :cascade do |t|
-    t.string "sample_name"
-    t.text "original_description"
-    t.text "curated_description"
+    t.integer "sample_id"
     t.string "project_name"
-    t.string "run_id"
-    t.string "second_run_id"
-    t.string "meta_project_id"
-    t.string "experiment_type"
-    t.string "nr_reads_sequenced"
-    t.string "instrument_model"
-    t.string "disease_phenotype"
-    t.string "is_disease_stage_available"
-    t.string "disease_stage"
-    t.text "more"
-    t.text "more_info"
-    t.string "country"
-    t.string "collection_date"
-    t.string "sex"
-    t.integer "host_age"
-    t.string "diet"
-    t.string "longitude"
-    t.string "lattitude"
-    t.float "BMI"
-    t.string "associated_phenotype"
-    t.string "QC_status"
-    t.text "recent_antibiotics_use"
-    t.text "antibiotics_used"
-    t.text "antibiotics_dose"
-    t.integer "days_without_antibiotics_use"
+    t.integer "num_of_oberserved_genes"
+    t.string "ajcc_pathologic_stage"
+    t.string "tissue_or_organ_of_origin"
+    t.string "primary_diagnosis"
+    t.string "year_of_diagnosis"
+    t.string "gender"
+    t.integer "age"
+    t.string "tumor_stage"
+    t.string "updated_datetime"
+    t.string "ethnicity"
+    t.text "treatments_pharmaceutical_treatment_type"
+    t.text "treatments_pharmaceutical_treatment_or_therapy"
+    t.text "site_of_resection_or_biopsy"
+    t.string "prior_malignancy"
+    t.string "vital_status"
+    t.text "synchronous_malignancy"
+    t.string "morphology"
+    t.string "ajcc_pathologic_n"
+    t.string "ajcc_clinical_m"
+    t.float "os"
+    t.float "pfs"
     t.bigint "project_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
@@ -232,8 +190,6 @@ ActiveRecord::Schema.define(version: 2021_08_27_062702) do
     t.index ["viz_data_source_id"], name: "index_viz_file_objects_on_viz_data_source_id"
   end
 
-  add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
-  add_foreign_key "analysis_user_data", "task_outputs"
   add_foreign_key "datasets", "users"
   add_foreign_key "samples", "projects"
 end
