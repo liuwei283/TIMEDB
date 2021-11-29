@@ -30,6 +30,8 @@ export interface ComplextScatterplotOption extends GridPlotOption {
     clusters?: string[];
     groups?: string[];
     strokeColor: string;
+    drawEllipse: boolean;
+    drawCenterStrokes: boolean;
 }
 
 export class ComplexScatterplot extends Component<ComplextScatterplotOption> {
@@ -54,15 +56,12 @@ export class ComplexScatterplot extends Component<ComplextScatterplotOption> {
     public render = Oviz.t`${template}`;
 
     public willRender() {
-
-        if (this._firstRender) {
-            if (this.prop.shapeGetter) this.shapeGetter = this.prop.shapeGetter;
+        if (this.prop.shapeGetter) this.shapeGetter = this.prop.shapeGetter;
             else if (this.prop.groups) this.shapeGetter = (d) => shapes[this.prop.groups.indexOf(d.group)];
             if (this.prop.colorGetter) this.colorGetter = this.prop.colorGetter;
             else if (this.prop.clusters && this.prop.colors)
                 this.colorGetter = (d) => this.prop.colors[this.prop.clusters.indexOf(d.cluster)];;
             if (this.prop.generateTooltip) this.generateTooltip = this.prop.generateTooltip;
-        }
         if (this.prop.clusters && this.dataChanged) {
             this.clusterData = {};
             const svgRatioX = this.prop.plotSize[0] / (this.prop.categoryRange[1] - this.prop.categoryRange[0]);
@@ -164,6 +163,7 @@ export class ComplexScatterplot extends Component<ComplextScatterplotOption> {
             flip: false,
             hollow: false,
             strokeColor: "#999",
+            drawEllipse: true,
         };
     }
 }

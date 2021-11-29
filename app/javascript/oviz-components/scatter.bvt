@@ -17,7 +17,7 @@ GridPlot {
         }
     }
     :content(scatterData) {
-        @if clusterData {
+        @if clusterData && prop.drawEllipse {
             @for (datum, cluster) in clusterData {
                 Component {
                     x = @scaled-x(datum.center.x) - datum.ellipseData.dx
@@ -26,7 +26,7 @@ GridPlot {
                     Path {
                         d = datum.ellipseData.ellipsePath
                         strokeWidth = 2
-                        fill = "LightYellow"; fillOpacity = 0.5
+                        fill = "LightYellow"; fillOpacity = 0.2
                         stroke = clusterFill
                     }
                     Path {
@@ -47,11 +47,11 @@ GridPlot {
                     key = d.data.sampleId // this part is hard-coded
                     cursor = "pointer"
                     @let shape = shapeGetter(d.data)
-                    @if clusterData {
+                    @if clusterData && prop.drawCenterStrokes {
                         Line {
                             x2 = @scaled-x(clusterData[d.data.cluster].center.x) - @scaled-x(d.pos)
                             y2 = @scaled-y(clusterData[d.data.cluster].center.y) - @scaled-y(d.value)
-                            strokeColor = prop.strokeColor
+                            stroke = prop.strokeColor
                         }
                     }
                     Component(shape) {
@@ -63,6 +63,7 @@ GridPlot {
                         behavior:tooltip {
                             content = generateTooltip(d.data)
                         }
+                        @props prop.opt.scatter
                     }
                     on:click = markScatter(d)
                     on:dblclick = hideScatter(d)

@@ -163,7 +163,7 @@ function init() {
             this.data.hiddenSamples = new Set();
             registerEditorConfig(editorConfig(this), editorRef);
             this.data.data.generateTooltip =  (d) => {
-                return [this.data.xLabel, this.data.yLabel, ...this.data.metaFeatures].map(k =>
+                return ["sampleId", this.data.xLabel, this.data.yLabel, ...this.data.metaFeatures].map(k =>
                     `${k}: ${typeof d[k] === "number" ?  d[k].toFixed(3) : d[k]}<br>`).join("");
             };
             this.data.legendWidth = this.data.boxGridHeight + 40;

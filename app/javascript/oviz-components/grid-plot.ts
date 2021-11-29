@@ -12,6 +12,7 @@ export interface GridPlotOption extends XYPlotOption {
     labelOffsetHor: number;
     labelFontSize: number;
     tickFontSize: number;
+    disableDrag: boolean;
 }
 
 export class GridPlot extends Component<GridPlotOption> {
@@ -56,18 +57,29 @@ export class GridPlot extends Component<GridPlotOption> {
                         y = 100%
                         @props prop.opt.bottomAxis
                         :label(tick) {
-                            Text(tick.value) {
-                                @expr console.log(tick)
-                                @let tickX = @scaled-x(tick.value)
-                                @let tickY = 5
-                                behavior:drag {
-                                    direction = "polar"
-                                    origin = [tickX, tickY]
-                                    onDrag = @bind(adjustLabel)
+                            @if prop.disableDrag {
+                                Text(tick.value) {
+                                    @let tickX = @scaled-x(tick.value)
+                                    @let tickY = 5
+                                    y = 5; anchor = @anchor("r", "m")
+                                    rotation = @rotate(-xAxisRotation)
+                                    fontSize = prop.tickFontSize
                                 }
-                                y = 5; anchor = @anchor("r", "m")
-                                rotation = @rotate(-xAxisRotation)
-                                fontSize = prop.tickFontSize
+                            } @else {
+                                Text(tick.value) {
+                                    @let tickX = @scaled-x(tick.value)
+                                    @let tickY = 5
+                                    
+                                    behavior:drag {
+                                        direction = "polar"
+                                        origin = [tickX, tickY]
+                                        onDrag = @bind(adjustLabel)
+                                        disable = prop.disableDrag
+                                    }
+                                    y = 5; anchor = @anchor("r", "m")
+                                    rotation = @rotate(-xAxisRotation)
+                                    fontSize = prop.tickFontSize
+                                }
                             }
                         }
                     }
@@ -111,6 +123,7 @@ export class GridPlot extends Component<GridPlotOption> {
             tickFontSize: 10,
             labelOffsetVer: 25,
             labelOffsetHor: 15,
+            disableDrag: false,
         };
     }
 }
