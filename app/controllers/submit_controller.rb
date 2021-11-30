@@ -3,11 +3,11 @@ class SubmitController < ApplicationController
   PROJECT_ID = 289
   # $user_stor_dir = "#{Rails.root}/data/user"
   def analyses
-    @analyses = Analysis.where "mid is not null"
+    @analyses = Analysis.where "hidden = false and mid is not null"
   end
 
   def pipelines
-    @pipelines = AnalysisPipeline.all
+    @pipelines = AnalysisPipeline.where "hidden = false and pid is not null"
   end
   
 
