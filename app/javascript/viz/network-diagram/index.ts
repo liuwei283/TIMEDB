@@ -9,6 +9,7 @@ import {register} from "page/visualizers";
 import * as TextSize from "crux/dist/utils/text-size";
 
 import { colorsPlan } from "oviz-common/palette";
+import { EditText } from "oviz-components/edit-text";
 
 const MODULE_NAME = 'network-diagram'
 
@@ -63,7 +64,7 @@ function init() {
         el: "#canvas",
         template,
         theme: "mh-light",
-        components: {NetworkDiagram},
+        components: {NetworkDiagram, EditText},
         data:  {
             config: {
                 showNodeNames: false,
@@ -114,16 +115,13 @@ function init() {
                     this.data.colorMap["Other|Unclassified"] = "#999";
                     this.data.legendColumnWidth = maxTextWidth + 24;
                     phylums["Other"] = ["Unclassified"];
-                    // console.log(phylumns)
                     this.data.phylums = phylums;
-                    
                     const legends = [];
                     Object.keys(phylums).forEach(k => {
                         legends.push([k, null]);
                         legends.push(...(phylums[k].map(x => [x, this.data.colorMap[`${k}|${x}`]])));
                     });
                     const legendData = [];
-                    
                     let colNum = Math.ceil(legends.length/8);
                     for (let i =0; i<colNum; i++) {
                         const temp = [];

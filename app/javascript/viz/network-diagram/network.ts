@@ -106,17 +106,15 @@ export class NetworkDiagram extends Component<NetworkDiagramOption<any[], any>> 
                 stroke = "grey"
                 dashArray = "4 2"
             }
-            Text.centered {
+            EditText.centered {
                 text = prop.groups[0]
                 x = layoutConfig.groupWidth/2; y = 20
                 fontSize = 20
-                style:user-select = "none"
             }
-            Text.centered {
+            EditText.centered {
                 text = prop.groups[1]
                 x = layoutConfig.groupWidth * 1.5; y = 20
                 fontSize = 20
-                style:user-select = "none"
             }
             @for (l, i) in _links {
                 Line {
