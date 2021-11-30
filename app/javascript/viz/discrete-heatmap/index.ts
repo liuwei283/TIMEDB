@@ -41,7 +41,7 @@ function initViz(): any {
         loadData: {
             heatmapDataD: {
                 fileKey: 'heatmapDataD',                  
-                type: "csv",
+                type: "tsv",
                 multiple: true,
                 loaded(d) {
                     //samples sorting
@@ -51,6 +51,7 @@ function initViz(): any {
                         i.forEach((item,index) => {
                             if(!samples.includes(item)){
                                 let eachsample = item[""];
+                                console.log("eachsample",item)
                                 eachsample = eachsample.slice(1,);
                                 samples[index] =parseFloat(eachsample);
                             }
