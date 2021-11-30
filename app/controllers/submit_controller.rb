@@ -3,13 +3,43 @@ class SubmitController < ApplicationController
   PROJECT_ID = 289
   # $user_stor_dir = "#{Rails.root}/data/user"
   def analyses
-    @analyses = Analysis.where "mid is not null"
+    @analyses = Analysis.where "hidden = false and mid is not null"
   end
 
   def pipelines
-    @pipelines = AnalysisPipeline.all
+    @pipelines = AnalysisPipeline.where "hidden = false and pid is not null"
   end
   
+
+  def query_app_task_pure
+    result_json = {
+      code: false,
+      data: ''
+    }
+    begin
+      @task = Task.find_by! params[:id]
+      
+      # query task
+      client = LocalApi::Client.new
+      result = ''
+      if !@task.analysis.blank?
+        result = client.task_info(UID, @task.tid, 'app')
+      else
+        result = client.task_info(UID, @task.tid, 'pipeline')
+      end
+      if !result['message']['status'].blank?
+        result_json[:code] = true
+        result_json[:data] = result
+      else
+        result_json[:data] = "deepomics error: " + result
+      end
+    rescue StandardError => e
+      result_json[:code] = false
+      result_json[:data] = e.message
+    end
+    render json: result_json
+  end
+
   def query_app_task_test
     @result_json = {
       code: false,

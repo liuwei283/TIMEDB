@@ -1,11 +1,8 @@
 = f.input :name
 = f.input :url, hint: "This name will be embeded in URLs. Hence it must be URL-safe."
 = f.input :pid
-= f.input :hidden
 = f.input :image_file, as: :file
-- if !@pipeline.cover_image.nil?
-  img src = @pipeline.cover_image width="400"
-hr
+
 - modules = Analysis.where("mid is not null").map { |m| [m.name, m.id] }
 .form-group.row
   - prefix = 'analysis_pipeline[module_requirements_attributes]'
