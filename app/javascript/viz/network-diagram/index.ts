@@ -6,6 +6,10 @@ import { editorConfig, editorRef } from "./editor";
 import { getGroups } from "utils/array";
 import {register} from "page/visualizers";
 
+import * as TextSize from "crux/dist/utils/text-size";
+
+import { colorsPlan } from "oviz-common/palette";
+
 const MODULE_NAME = 'network-diagram'
 
 const geneColors = [ "#73A79E",
@@ -20,34 +24,34 @@ Oviz.use.theme("mh-light", {
     },
     schemes: {
         phylumScheme: geneColors,
-        hueScheme: getTestColors(),
-        satScheme: getTestColors1(),
+        // hueScheme: getTestColors(),
+        // satScheme: getTestColors1(),
     },
 });
 
-function getTestColors(): string[] {
-    const colors = [];
-    const Color = Oviz.color.Color;
-    let initColor = Color.hsl(0, 75, 75);
-    colors.push(initColor.string);
-    for (let i = 1; i < 20; i++) {
-        initColor = initColor.shiftHue(20);
-        colors.push(initColor.string);
-    }
-    return colors;
-}
+// function getTestColors(): string[] {
+//     const colors = [];
+//     const Color = Oviz.color.Color;
+//     let initColor = Color.hsl(0, 75, 75);
+//     colors.push(initColor.string);
+//     for (let i = 1; i < 20; i++) {
+//         initColor = initColor.shiftHue(20);
+//         colors.push(initColor.string);
+//     }
+//     return colors;
+// }
 
-function getTestColors1(): string[] {
-    const colors = [];
-    const Color = Oviz.color.Color;
-    let initColor = Color.hsl(0, 50, 50);
-    colors.push(initColor.string);
-    for (let i = 1; i < 20; i++) {
-        initColor = initColor.shiftHue(20);
-        colors.push(initColor.string);
-    }
-    return colors;
-}
+// function getTestColors1(): string[] {
+//     const colors = [];
+//     const Color = Oviz.color.Color;
+//     let initColor = Color.hsl(0, 50, 50);
+//     colors.push(initColor.string);
+//     for (let i = 1; i < 20; i++) {
+//         initColor = initColor.shiftHue(20);
+//         colors.push(initColor.string);
+//     }
+//     return colors;
+// }
 function isEmpty(str: string): boolean {
     if ( !str || str.trim() === "" || str === "NA") return true;
     return false;
@@ -88,24 +92,48 @@ function init() {
                 type: "tsv",
                 loaded(d) {
                     const phylums = {};
+                    let maxTextWidth = 0;
                     d.forEach( node => {
                         if (!isEmpty(node.NodePhylum)) {
-                            if (isEmpty(node.NodeGenus)) node.NodeGenus = "";
+                            if (isEmpty(node.NodeGenus)) node.NodeGenus = "Unclassified";
                             else {
+                                const genusWidth = TextSize.measuredTextSize(node.NodeGenus, 14).width;
+                                if (genusWidth > maxTextWidth) maxTextWidth = genusWidth;
                                 if (!phylums[node.NodePhylum])
                                     phylums[node.NodePhylum] = [node.NodeGenus];
-                            else if (!phylums[node.NodePhylum].includes(node.NodeGenus))
+                                else if (!phylums[node.NodePhylum].includes(node.NodeGenus))
                                     phylums[node.NodePhylum].push(node.NodeGenus);
                             }
                         } else {
-                            node.NodePhylum = "";
-                            node.NodeGenus = "";
+                            node.NodePhylum = "Other";
+                            node.NodeGenus = "Unclassified";
                         }
                     });
                     Object.keys(phylums).forEach( k => phylums[k] = phylums[k].sort());
+                    this.data.colorMap = colorsPlan(phylums);
+                    this.data.colorMap["Other|Unclassified"] = "#999";
+                    this.data.legendColumnWidth = maxTextWidth + 24;
                     phylums["Other"] = ["Unclassified"];
+                    // console.log(phylumns)
                     this.data.phylums = phylums;
-                    this.data.nodeColorMap = initializeNodeColors(phylums);
+                    
+                    const legends = [];
+                    Object.keys(phylums).forEach(k => {
+                        legends.push([k, null]);
+                        legends.push(...(phylums[k].map(x => [x, this.data.colorMap[`${k}|${x}`]])));
+                    });
+                    const legendData = [];
+                    
+                    let colNum = Math.ceil(legends.length/8);
+                    for (let i =0; i<colNum; i++) {
+                        const temp = [];
+                        for (let j=0; j< 8 && i*8+j<legends.length; j++) {
+                            temp.push(legends[i*8+j]);
+                        }
+                        legendData.push(temp);
+                    }
+                    this.data.legendData = legendData;
+                    // this.data.nodeColorMap = initializeNodeColors(phylums);
                     this.data.groups = getGroups(d, "NodeGroup");
                     return d;
                 },
@@ -126,7 +154,7 @@ function init() {
 
 function setCanvasSize(v) {
     const autoWidth = v.size.width - 250;
-    console.log(autoWidth)
+    // console.log(autoWidth)
     if (autoWidth < 1480) {
         v.data.groupWidth = 650;
         v.size.width = 1480;

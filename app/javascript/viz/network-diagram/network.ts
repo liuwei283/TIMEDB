@@ -217,7 +217,7 @@ export class NetworkDiagram extends Component<NetworkDiagramOption<any[], any>> 
     }
 
     nodeDetail(d) {
-        let details = `Node ID: ${d.id}<br>Size: ${d.NodeSize}`;
+        let details = `Node ID: ${d.NodeName}<br>Size: ${d.NodeSize}`;
         details += `<br>Phylum: ${d.NodePhylum}<br>Genus: ${d.NodeGenus}`;
         return details;
     }
@@ -374,8 +374,10 @@ export class NetworkDiagram extends Component<NetworkDiagramOption<any[], any>> 
     }
 
     protected getFillByPhylumAndGenus(d) {
-        if (d.NodeName.startsWith(d.NodeGroup)) return this.prop.colorMap.Other.Unclassified;
-        return this.prop.colorMap[d.NodePhylum][d.NodeGenus];
+        // if (d.NodeName.startsWith(d.NodeGroup)) return this.prop.colorMap.Other.Unclassified;
+        // return this.prop.colorMap[d.NodePhylum][d.NodeGenus];
+        // if (d.NodeName.startsWith(d.NodeGroup)) return this.prop.colorMap["Other|Unclassified"];
+        return this.prop.colorMap[`${d.NodePhylum}|${d.NodeGenus}`] || this.prop.colorMap["Other|Unclassified"];
     }
 
     protected setUpXCoordinates(d) {
