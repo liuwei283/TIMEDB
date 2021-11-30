@@ -8,7 +8,7 @@ svg {
             
             Tree {
                 height = heatmapData.heatlength*config.gridH
-                width = 100
+                width = config.treewidth
                 data = rowTreeData
                 direction = "right"
                 link.stroke = "#000"

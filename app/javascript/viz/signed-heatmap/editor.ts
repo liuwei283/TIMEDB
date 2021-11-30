@@ -130,6 +130,17 @@ export function editorConfig(v): EditorDef {
                                 } 
                             },
                         },
+                        {
+                            title: "Tree Width",
+                            type: "input",
+                            value: {
+                                current: v.data.config.treewidth,
+                                callback(d){
+                                    v.data.config.treewidth=parseFloat(d)
+                                    run(v)
+                                } 
+                            },
+                        },
                     ],
                 },
             },

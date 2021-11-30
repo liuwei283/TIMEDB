@@ -49,6 +49,7 @@ function init() {
                 isSym: true,
                 gridH:15,
                 gridW:30,
+                treewidth:150,
                 rowTree: {
                     treeHeight: 200,
                     depthUnit: 0,
