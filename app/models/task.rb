@@ -36,23 +36,21 @@ class Task < ApplicationRecord
         rescue Exception => e
             @app_id = e.message
         end
-        
         return @app_id
     end
 
     def getDeepomicsUrl
-        @app_id = ""
+        @app_url = ""
         begin
             if !self.analysis.blank?
-                @app_id = self.analysis.mid
+                @app_url = "app_id=#{self.analysis.mid}"
             else
-                @app_id = self.analysis_pipeline.pid
+                @app_url = "pipeline_id=#{self.analysis_pipeline.pid}"
             end
         rescue Exception => e
             @app_id = e.message
         end
-        return "https://deepomics.org/user/apps/#{@app_id}/monitor/?task_id=#{self.tid}"
+        # HARD CODE DEEPOMICS PROJECT ID
+        return "https://deepomics.org/user/projects/289/project_pipeline_task_monitor?#{@app_url}&task_id=#{self.tid}"
     end
-
-
 end
