@@ -48,9 +48,17 @@ export class SignedHeatMap extends Component<SignedHeatMapOption> {
                                     fill = getColor(prop.data[row][col]["r"]);
                                 }
                                 @if prop.showPAnno {
-                                    @if (prop.data[row][col]["p"] > 0.7) {
+                                    @if (prop.data[row][col]["p"] <=0.05 && prop.data[row][col]["p"] >= 0.01) {
                                         Text.centered {
                                             text = "*"
+                                            fontSize = prop.gridH
+                                            fill = "black"
+                                            x = prop.gridW/2; y = prop.gridH/2
+                                        }
+                                    }
+                                    @if (prop.data[row][col]["p"] <= 0.01){
+                                        Text.centered {
+                                            text = "**"
                                             fontSize = prop.gridH
                                             fill = "black"
                                             x = prop.gridW/2; y = prop.gridH/2

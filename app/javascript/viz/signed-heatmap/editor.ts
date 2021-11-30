@@ -108,6 +108,28 @@ export function editorConfig(v): EditorDef {
                                 callback() {},
                             },
                         },
+                        {
+                            title: "Grid Height",
+                            type: "input",
+                            value: {
+                                current: v.data.config.gridH,
+                                callback(d){
+                                    v.data.config.gridH=parseFloat(d)
+                                    run(v)
+                                } 
+                            },
+                        },
+                        {
+                            title: "Grid Width",
+                            type: "input",
+                            value: {
+                                current: v.data.config.gridW,
+                                callback(d){
+                                    v.data.config.gridW=parseFloat(d)
+                                    run(v)
+                                } 
+                            },
+                        },
                     ],
                 },
             },
