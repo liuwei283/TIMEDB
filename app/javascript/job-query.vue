@@ -30,7 +30,16 @@
                 <div class = "center-title">
                     <div class = "row">
                         <h3 class="font-weight-bold .col">Local Jobs <span v-b-tooltip.hover title="Only the lastest ten jobs are stored. Exceeding jobs are deleted automatically"><i class="fas fa-exclamation-circle small"></i></span></h3>
-                        <b-button variant="success" class="btn-sm .col" @click="refreshJobs()">Refresh</b-button>
+                        <b-button v-if="this.isDemo"
+                            variant="success" disabled
+                            data-toggle="tooltip"
+                            title="click to refresh in your query page"
+                            class=" btn-sm .col" @click="refreshJobs()">Refresh
+                        </b-button>
+                        <b-button v-else
+                            variant="success" 
+                            class="btn-sm .col" @click="refreshJobs()">Refresh
+                        </b-button>
                         <div class ="ml-3" v-if="!refreshEnd"><i class="fas fa-spinner fa-spin" style='font-size:28px'> </i> </div>
                     </div>
                 </div>
@@ -74,11 +83,12 @@
                         <b-button variant="primary" size="sm" v-else disabled>
                         
                         <i class="fas fa-search mr-1"></i>Result</b-button>
-                        <b-button
+                        <b-button  v-if="!isDemo"
                             variant="danger"
                             size="sm"
                             class="ml-4"
                             @click="deleteJob(data.item.jobId)"
+                            :disabled="data.item.isDemo"
                         >
                         <i class="fas fa-trash-alt mr-1"></i>Delete
                         </b-button>
@@ -145,11 +155,18 @@ export default {
             chosenOutput: null,
             taskOutputs: [{value: 0, text: "Demo Files", secondaryText: ""}],
             refreshEnd: true,
+            isDemo: false,
         };
     },
     created() {
-           this.refreshJobs();
-        },
+        if (window.gon.isJobDemoPage) {
+            this.refreshEnd = true;
+            this.isDemo = true;
+            this.getDemoJobs();
+        } else {
+            this.refreshJobs();
+        }
+    },
     mounted(){
         window.gon.viz_mode = "task-output";
     },
@@ -233,6 +250,28 @@ export default {
                  setTimeout(() => {
                     this.refreshEnd = true;
                     }, 1000);
+            });
+        },
+        getDemoJobs() {
+            axios.post(
+                `/query-demo-tasks/`,
+                null,
+            {  
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest',
+                    'X-CSRF-Token': document.head.querySelector('meta[name="csrf-token"]').content,
+                    'Content-Type': 'multipart/form-data',
+                },
+            })
+            .then(r => {
+                this.all_jobs = r.data.map((d, index) => {
+                    return  {index, ...d}
+                });
+            }).finally(() => {
+                // // wait 1 sec
+                //  setTimeout(() => {
+                //     this.refreshEnd = true;
+                //     }, 1000);
             });
         },
         deleteJob(jobId){

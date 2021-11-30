@@ -9,35 +9,9 @@ class SubmitController < ApplicationController
   def pipelines
     @pipelines = AnalysisPipeline.where "hidden = false and pid is not null"
   end
-  
 
-  def query_app_task_pure
-    result_json = {
-      code: false,
-      data: ''
-    }
-    begin
-      @task = Task.find_by! params[:id]
-      
-      # query task
-      client = LocalApi::Client.new
-      result = ''
-      if !@task.analysis.blank?
-        result = client.task_info(UID, @task.tid, 'app')
-      else
-        result = client.task_info(UID, @task.tid, 'pipeline')
-      end
-      if !result['message']['status'].blank?
-        result_json[:code] = true
-        result_json[:data] = result
-      else
-        result_json[:data] = "deepomics error: " + result
-      end
-    rescue StandardError => e
-      result_json[:code] = false
-      result_json[:data] = e.message
-    end
-    render json: result_json
+  def demo
+    gon.push isJobDemoPage: true
   end
 
   def query_app_task_test
@@ -106,6 +80,26 @@ class SubmitController < ApplicationController
     gon.push select_box_option: data
   end
 
+  def query_demo_tasks # query all demo tasks
+    @tasks = Task.where("is_demo")
+    parsed_jobs = []
+    result = nil
+    @tasks.each do |t|
+      if !t.analysis.blank?
+        jobName = t.analysis.name
+      else
+        jobName = t.analysis_pipeline.name
+      end
+      parsed_jobs.push({
+        jobName: jobName,
+        jobId: t.id,
+        created: t.created_at,
+        status: t.status,
+      })
+    end
+    render json:parsed_jobs
+  end
+
   def query_all # query all tasks by user
     @tasks = Task.where("user_id = ?", session[:user_id])
     parsed_jobs = []
@@ -137,6 +131,7 @@ class SubmitController < ApplicationController
         jobId: t.id,
         created: t.created_at,
         status: t.status,
+        isDemo: t.is_demo,
       })
     end
     render json:parsed_jobs
@@ -426,6 +421,23 @@ class SubmitController < ApplicationController
       result_json[:data] = e.message
     end
     render json: result_json
+  end
+
+  def query_demo_task # query a demo task
+    result_json = {
+      code: false,
+      data: ''
+    }
+    @task = Task.find_by! id:params[:job_id]
+    response_body = []
+    task_outputs = TaskOutput.where(task_id:@task.id)
+    task_outputs.each do |otp|
+      @task_output = otp
+      @analysis = otp.analysis
+      parsed_output = processTaskOutput()
+      response_body << parsed_output
+    end
+    render json: response_body
   end
 
   def remove_task

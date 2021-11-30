@@ -34,11 +34,9 @@ Rails.application.routes.draw do
       member { post :delete_sample}
     end
   end
-
-  # post 'query_app_task_dummy', to: 'submit#query_app_task_dummy'
-  # post 'submit_app_task_dummy', to: 'submit#submit_app_task_dummy'
   
   root 'welcome#index'
+
   # get 'tutorial', to: 'welcome#tutorial', as: 'tutorial'
   get 'contact', to: 'welcome#contact', as: 'contact'
   get 'docs', to: redirect('docs/index.html')
@@ -49,8 +47,6 @@ Rails.application.routes.draw do
   get 'api/public', to: 'raw_files#public'
 
   # draw on overview page
-  
-
   namespace :api do
     resources :analysis, only: [] do
       get 'use_demo', to: 'viz_files#use_demo', as: 'use_demo'
@@ -70,30 +66,36 @@ Rails.application.routes.draw do
 
   # database pages
   get 'database/overview', to: 'database#overview'
-  get 'demo', to: 'demo#show'
+  # get 'demo', to: 'demo#show'
   
+  # visualizer
   scope '/visualizer' do
     # resources :analysis, except: :index
     get 'analysis/:url_name', to: 'analysis#show', as: 'analysis'
   end
-
   get 'visualizer', to: "analysis#index", as: "visualizer"
+
 
   # submit pages
   get "submit/analyses", to: "submit#analyses"
   get "submit/pipelines", to: "submit#pipelines"
   get 'submit/job-query', to: 'submit#query', as: 'query'
+  get "submit/job-demo", to: "submit#demo"
   get 'submit/analysis/:id', to: 'submit#index', as: 'submit_analysis'
   get 'submit/pipeline/:id', to: 'submit#pipeline', as: 'submit_pipeline'
-  get "debug", to: "submit#query_app_task_test"
-  
-  # post 'submit-app-task', to: 'submit#submit_app_task', format: 'json'
+
   post 'query-app-task', to: 'submit#query_app_task', format: 'json'
-  # post 'query-app-task-dummy', to: 'submit#query_app_task_dummy', format: 'json'
+  post 'query-demo-tasks', to: 'submit#query_demo_tasks', format: 'json'
   post 'submit-app-task', to: 'submit#submit_app_task', format: 'json'
-  # post 'submit-app-task-dummy', to: 'submit#submit_app_task_dummy', format: 'json'
+  post 'query-demo-task', to: 'submit#query_demo_task', format: 'json'
   post 'query-all-tasks', to: 'submit#query_all', format: 'json'
   post 'remove-task', to: 'submit#remove_task', format: 'json'
+
+  # get "debug", to: "submit#query_app_task_test"
+  # post 'query_app_task_dummy', to: 'submit#query_app_task_dummy'
+  # post 'submit_app_task_dummy', to: 'submit#submit_app_task_dummy'
+  # post 'submit-app-task', to: 'submit#submit_app_task', format: 'json'
+  # post 'submit-app-task-dummy', to: 'submit#submit_app_task_dummy', format: 'json'
 
   # admin
   get '/admin', to: 'admin#index', as: "admin_index"
