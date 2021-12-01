@@ -127,6 +127,7 @@
                 event.DATA_LOADING_FINISHED,
                 () => {
                     this.isLoading = false;
+                    this.error = null;
                     this.$root.$emit("data-loaded");
                 },
                 "vapp-load-finished",
@@ -150,6 +151,16 @@
                 },
                 "vapp-load-failed",
             );
+
+            event.on(
+                event.DATA_LOADING_STARTED,
+                () => {
+                    this.isLoading = true;
+                    this.error = null;
+                },
+                "vapp-load-started",
+            );
+            
         },
         mounted() {
             event.emit(event.CANVAS_READY, this);
