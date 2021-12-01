@@ -121,7 +121,9 @@
                 </div>
                 <div v-else>
                     <b-card class="text-center job-info">
-                        <p>Job submitted successfully. The job ID is <span class="text-danger">{{jobID}}</span>. You can check your job status via this job ID in job query page. Please write down the job ID in your note book.</p>
+                        <p>Job submitted successfully. The job ID is <span class="text-danger">{{jobID}}</span>.</p>
+                        <br>
+                        <p>You can check your job status via this job ID in <a :href="`/submit/job-query?job_id=${jobID}`">job query page</a>.</p>
                     </b-card>
                 </div>
             </div>

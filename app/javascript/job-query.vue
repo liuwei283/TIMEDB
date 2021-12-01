@@ -100,19 +100,19 @@
         </div>
         <div v-else class="viz-result mb-1">
             <b-card no-body>
-                <b-card-header v-b-modal.modalBox class="border-1">
+                <b-card-header v-b-modal.modalBox class="border-1 py-2">
                     <b-button class="btn col-md-2" variant = "primary" @click="returnQuery">
                     <i class="fas fa-arrow-left"></i> Back to query
                     </b-button>
-                    <b-button variant="dark" class="btn col-md-4" disabled >{{`${jobName}(${job_id})`}}
+                    <b-button variant="dark" class="btn col-md-4" disabled >{{`${jobName} (No.${job_id})`}}
                     </b-button>
                     <dropdown-select v-if="data.outputs.length > 1"
                             right
                             v-model="chosenOutput"
                             :options="taskOutputs"
-                            class="tool-bar-el"/>
-                    <b-button v-else variant="dark" class="btn col-md-4" disabled >{{data.outputs[0].name}}
-                    </b-button>
+                            class="tool-bar-el btn px-0"/>
+                    <!-- <b-button v-else variant="dark" class="btn col-md-4" disabled >{{data.outputs[0].name}}
+                    </b-button> -->
                 </b-card-header>
                 <b-card-body class="p-0">
                    <div id = "viz-card"> 
@@ -143,7 +143,7 @@ Vue.component("dropdown-select", DropDownSelect);
 export default {
     data() {
         return {
-            job_id: '',
+            job_id: null,
             jobName: '',
             all_jobs: [],
             fields: ["index", "jobName", "jobId", "created", "status", "operation"],
@@ -167,6 +167,17 @@ export default {
             this.refreshJobs();
         }
     },
+    beforeMount() {
+        const getJobId = () => {
+            const urls = window.location.href.split('?');
+            if (urls.length <2) return;
+            else {
+                const params = urls[1].split("&").map(x => x.split("="));
+                return params.find(x => x[0]==="job_id")[1];
+            }
+        }
+        if (!this.job_id) this.job_id = getJobId();
+    },
     mounted(){
         window.gon.viz_mode = "task-output";
     },
@@ -189,7 +200,7 @@ export default {
                         this.jobName = j.jobName;
                 })
                 axios.post(
-                    `/query-app-task/`,
+                    `/query-app-task-dummy/`,
                     objectToFormData({'job_id': this.job_id}),
                     {  
                         headers: {
@@ -362,7 +373,6 @@ export default {
         overflow: scroll;
     }
 }
-
 .col-md-12 {
     width: 80px;
 }
