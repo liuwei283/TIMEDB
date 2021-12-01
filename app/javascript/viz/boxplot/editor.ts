@@ -1,3 +1,4 @@
+import { genDefaultPalette, withDefaultPalette } from "oviz-common/palette";
 import { generateGridPlotConfig } from "oviz-components/grid-plot";
 import { EditorDef } from "utils/editor";
 import { copyObject } from "utils/object";
@@ -7,7 +8,13 @@ function run(v) {
     v.run();
 }
 export const editorRef = {} as any;
+// const [defaultPalette] = genDefaultPalette(v.data.colors, v.data.values);
 
+function genPaletteMap(values) {
+    const map = {};
+    Object.keys(values).forEach((key, i)=> map[key] = i);
+    return map;
+}
 export const generateBoxConfig = (v): any => (            {
     id: "setting-bc",
     title: "Box content settings",
@@ -21,10 +28,16 @@ export const generateBoxConfig = (v): any => (            {
                 component: "color-picker",
                 data: {
                     title: "Customize colors",
-                    scheme: copyObject(v.data.colors),
+                    scheme: copyObject({ ...v.data.colorCats,...v.data.colors}),
+                    palettes: withDefaultPalette(genDefaultPalette(v.data.colorCats)[0]),
+                    paletteMap: genPaletteMap(v.data.colorCats),
                     id: "pwcolor",
                     callback(colors) {
-                        v.data.colors = colors;
+                        Object.keys(v.data.colors).forEach(k => {
+                            v.data.colors[k] = colors[k];
+                        });
+                        v.data.palette = Object.keys(v.data.colorCats).map(k => colors[k]);
+                        // v.data.colorCats = colors;
                         run(v);
                     },
                 },
@@ -36,6 +49,28 @@ export const generateBoxConfig = (v): any => (            {
                     current: v.data.config.hollowBox,
                     callback(d) {
                         v.data.config.hollowBox = d;
+                        run(v);
+                    },
+                },
+            },
+            {
+                title: "Color by categories",
+                type: "checkbox",
+                value: {
+                    current: v.data.config.useCat,
+                    callback(d) {
+                        v.data.config.useCat = d;
+                        run(v);
+                    },
+                },
+            },
+            {
+                title: "Show Mean values",
+                type: "checkbox",
+                value: {
+                    current: v.data.config.drawMean,
+                    callback(d) {
+                        v.data.config.drawMean = d;
                         run(v);
                     },
                 },

@@ -15,10 +15,10 @@ const palettes = {
         name: "Lancet",
         colors: ["#00468B", "#ED0000", "#42B540", "#0099B4", "#925E9F", "#FDAF91", "#AD002A", "#ADB6B6", "#1B1919"],
     },
-    jama: {
-        name: "JAMA",
-        colors: ["#BC3C29", "#0072B5", "#E18727", "#20854E", "#7876B1", "#6F99AD", "#FFDC91", "#EE4C97"],
-    },
+    // jama: {
+    //     name: "JAMA",
+    //     colors: ["#BC3C29", "#0072B5", "#E18727", "#20854E", "#7876B1", "#6F99AD", "#FFDC91", "#EE4C97"],
+    // },
 };
 
 export default palettes;
