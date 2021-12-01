@@ -85,6 +85,7 @@ Rails.application.routes.draw do
   get 'submit/pipeline/:id', to: 'submit#pipeline', as: 'submit_pipeline'
 
   post 'query-app-task', to: 'submit#query_app_task', format: 'json'
+    post 'query-app-task-dummy', to: 'submit#query_app_task_dummy'
   post 'query-demo-tasks', to: 'submit#query_demo_tasks', format: 'json'
   post 'submit-app-task', to: 'submit#submit_app_task', format: 'json'
   post 'query-demo-task', to: 'submit#query_demo_task', format: 'json'
@@ -120,6 +121,7 @@ Rails.application.routes.draw do
     resources :analysis_pipelines
     resources :tasks, except: :new
     post "clear_outputs", to:"tasks#clear_outputs", as: "clear_outputs"
+    post "set_demo_task", to:"tasks#set_demo_task", as: "set_demo_task"
     resources :file_keys, except: :show
     resources :tabix_apis, except: :show
   end

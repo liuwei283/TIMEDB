@@ -1,21 +1,22 @@
 class Admin::TasksController < ApplicationController
   before_action :set_tasks, only: %i[index]
-  before_action :set_task, only: %i[show destroy clear_outputs]
+  before_action :set_task, only: %i[show destroy clear_outputs set_demo_task]
 
   def index
-    # @tasks = Task.all
   end
 
   def new
-    # @tasks = BackgroundPipeline.all
   end
 
   def show
     @log = query_app_task_pure
-    # @outputs = @task.task_outputs
-    # @task.task_outputs.each do |topt|
-    #   Rails.logger.debug "===>#{topt.analysis.name}"
-    # end
+  end
+
+  def set_demo_task
+    @task.is_demo = !@task.is_demo
+    @task.save!
+    flash[:success] = "Task #{@task.is_demo ? "set to demo" : "reset" } successfully."
+    redirect_to admin_task_path(@task)
   end
 
   def clear_outputs
