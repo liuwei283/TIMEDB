@@ -200,7 +200,7 @@ export default {
                         this.jobName = j.jobName;
                 })
                 axios.post(
-                    `/query-app-task-dummy/`,
+                    `/query-app-task/`,
                     objectToFormData({'job_id': this.job_id}),
                     {  
                         headers: {

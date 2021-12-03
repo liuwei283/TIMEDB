@@ -359,7 +359,12 @@ class SubmitController < ApplicationController
       data: ''
     }
     begin
-      @task = Task.find_by! id:params[:job_id], user_id:session[:user_id]
+      @task = nil
+      if params[:is_demo]
+        @task = Task.find_by! id:params[:job_id], is_demo: true
+      else 
+        @task =Task.find_by! id:params[:job_id], user_id:session[:user_id]
+      end
       
       if TaskOutput.where(task_id:@task.id).exists?
         response_body = []
