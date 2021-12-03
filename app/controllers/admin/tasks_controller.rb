@@ -36,6 +36,7 @@ class Admin::TasksController < ApplicationController
 
   def set_tasks
     @tasks = Task.all
+    @task_columns = ["id", "status", "user_id","is_demo", "created_at"]
   end
 
   def set_task
