@@ -201,7 +201,7 @@ export default {
                 })
                 axios.post(
                     `/query-app-task/`,
-                    objectToFormData({'job_id': this.job_id}),
+                    objectToFormData({'job_id': this.job_id, 'is_demo': this.isDemo}),
                     {  
                         headers: {
                             'X-Requested-With': 'XMLHttpRequest',
