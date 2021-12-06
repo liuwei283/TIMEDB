@@ -29,7 +29,7 @@
                 <div class="local-jobs .container">
                 <div class = "center-title">
                     <div class = "row">
-                        <h3 class="font-weight-bold .col">Local Jobs <span v-b-tooltip.hover title="Only the lastest ten jobs are stored. Exceeding jobs are deleted automatically"><i class="fas fa-exclamation-circle small"></i></span></h3>
+                        <h3 class="font-weight-bold .col">Submitted Jobs <span v-b-tooltip.hover title="Only the lastest ten jobs are stored. Exceeding jobs are deleted automatically"><i class="fas fa-exclamation-circle small"></i></span></h3>
                         <b-button v-if="this.isDemo"
                             variant="success" disabled
                             data-toggle="tooltip"
@@ -43,6 +43,7 @@
                         <div class ="ml-3" v-if="!refreshEnd"><i class="fas fa-spinner fa-spin" style='font-size:28px'> </i> </div>
                     </div>
                 </div>
+                <div id="table-container">
                     <b-table
                         class="jobs-table"
                         hover
@@ -95,6 +96,7 @@
                     </template>
                     
                     </b-table>
+                </div>
                 </div>
             </b-card>
         </div>
@@ -389,5 +391,9 @@ export default {
     right: 0;
     z-index:20;
     transition: all 0.3s
+}
+#table-container {
+    max-height: 40em;
+    overflow-y: scroll;
 }
 </style>
