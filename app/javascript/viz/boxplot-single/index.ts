@@ -27,6 +27,7 @@ function init() {
                 plotSize: [300, 300],
                 showOutliers: true,
                 drawP: true,
+                useCat: true,
                 drawViolin: false,
                 drawScatter: false,
                 hollowBox: false,

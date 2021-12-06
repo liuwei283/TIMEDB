@@ -138,6 +138,11 @@ export function editorConfig(v): EditorDef {
                             type: "list",
                             items: [
                                 {
+                                    title: "Chart(beta)",
+                                    type: "text",
+                                    content: "beta"
+                                },
+                                {
                                     title: "Taxonomic rank",
                                     type: "select",
                                     options: v.data.ranks,
