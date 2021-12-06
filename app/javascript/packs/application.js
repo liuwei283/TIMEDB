@@ -17,7 +17,7 @@ import JobSubmitPipeline from "../job-submit-pipeline.vue";
 
 import VApp from "page/vapp.vue";
 
-import EditText from "oviz-components/edit-text-vue.vue";
+// import EditText from "oviz-components/edit-text-vue.vue";
 import FilterSamplesBind from "oviz-components/filter-samples-bind.vue";
 
 import ColorPicker from "page/builtin/color-picker.vue";
@@ -45,12 +45,6 @@ function initVApp() {
             render: h => h(VApp),            
         });
         registerDefaultEditorConfig();
-        // const div = document.createElement("div");
-        // div.setAttribute("id", "edit-text");
-        const _ = new Vue({
-            el: "#edit-text",
-            render: h => h(EditText),
-        });
     }
 }
 

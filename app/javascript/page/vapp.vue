@@ -40,7 +40,7 @@
             </b-modal>
             </div>
         </div>
-        <div id="edit-text"></div>
+        <EditText/>
     </div>
 </template>
 
