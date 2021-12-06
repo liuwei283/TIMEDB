@@ -27,21 +27,22 @@
                 </div>
 
                 <div class="local-jobs .container">
-                <div class = "center-title">
-                    <div class = "row">
-                        <h3 class="font-weight-bold .col">Submitted Jobs <span v-b-tooltip.hover title="Only the lastest ten jobs are stored. Exceeding jobs are deleted automatically"><i class="fas fa-exclamation-circle small"></i></span></h3>
+                <div class = "container row pb-2">
+                        <div class= "col-7"> 
+                            <h3 class="font-weight-bold float-right">Submitted Jobs <span v-b-tooltip.hover title="Only the lastest ten jobs are stored. Exceeding jobs are deleted automatically"><i class="fas fa-exclamation-circle small"></i></span></h3>
+                        </div>
                         <b-button v-if="this.isDemo"
                             variant="success" disabled
                             data-toggle="tooltip"
                             title="click to refresh in your query page"
-                            class=" btn-sm .col" @click="refreshJobs()">Refresh
+                            class=" btn-sm col-2" @click="refreshJobs()">Refresh
                         </b-button>
+
                         <b-button v-else
                             variant="success" 
-                            class="btn-sm .col" @click="refreshJobs()">Refresh
+                            class="btn-sm col-1" @click="refreshJobs()">Refresh
                         </b-button>
-                        <div class ="ml-3" v-if="!refreshEnd"><i class="fas fa-spinner fa-spin" style='font-size:28px'> </i> </div>
-                    </div>
+                        <div class="col-1"><i v-if="!refreshEnd" class="fas fa-spinner fa-spin" style="font-size:24px"> </i> </div>
                 </div>
                 <div id="table-container">
                     <b-table
@@ -137,8 +138,10 @@ import VApp from "page/vapp.vue";
 import DropDownSelect from "page/builtin/dropdown-select.vue";
 import { event } from "crux/dist/utils";
 import {registerViz} from "viz";
+import EditText from "oviz-components/edit-text-vue.vue";
 
 Vue.component("VApp", VApp);
+Vue.component("EditText", EditText);
 // Vue.use(BootstrapVue);
 Vue.component("dropdown-select", DropDownSelect);
 
@@ -340,10 +343,10 @@ export default {
 .local-jobs {
     margin-top: 2em;
 }
-.center-title {
-    margin: auto; 
-    max-width: 250px;
-}
+// .center-title {
+//     margin: auto; 
+//     max-width: 250px;
+// }
 
 #job-query .result-card {
     margin: 0;
