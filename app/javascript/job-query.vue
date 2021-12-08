@@ -27,13 +27,24 @@
                 </div>
 
                 <div class="local-jobs .container">
-                <div class = "center-title">
-                    <div class = "row">
-                        <h3 class="font-weight-bold .col">Local Jobs <span v-b-tooltip.hover title="Only the lastest ten jobs are stored. Exceeding jobs are deleted automatically"><i class="fas fa-exclamation-circle small"></i></span></h3>
-                        <b-button variant="success" class="btn-sm .col" @click="refreshJobs()">Refresh</b-button>
-                        <div class ="ml-3" v-if="!refreshEnd"><i class="fas fa-spinner fa-spin" style='font-size:28px'> </i> </div>
-                    </div>
+                <div class = "container row pb-2">
+                        <div class= "col-7"> 
+                            <h3 class="font-weight-bold float-right">Submitted Jobs <span v-b-tooltip.hover title="Only the lastest ten jobs are stored. Exceeding jobs are deleted automatically"><i class="fas fa-exclamation-circle small"></i></span></h3>
+                        </div>
+                        <b-button v-if="this.isDemo"
+                            variant="success" disabled
+                            data-toggle="tooltip"
+                            title="click to refresh in your query page"
+                            class=" btn-sm col-2" @click="refreshJobs()">Refresh
+                        </b-button>
+
+                        <b-button v-else
+                            variant="success" 
+                            class="btn-sm col-1" @click="refreshJobs()">Refresh
+                        </b-button>
+                        <div class="col-1"><i v-if="!refreshEnd" class="fas fa-spinner fa-spin" style="font-size:24px"> </i> </div>
                 </div>
+                <div id="table-container">
                     <b-table
                         class="jobs-table"
                         hover
@@ -74,11 +85,12 @@
                         <b-button variant="primary" size="sm" v-else disabled>
                         
                         <i class="fas fa-search mr-1"></i>Result</b-button>
-                        <b-button
+                        <b-button  v-if="!isDemo"
                             variant="danger"
                             size="sm"
                             class="ml-4"
                             @click="deleteJob(data.item.jobId)"
+                            :disabled="data.item.isDemo"
                         >
                         <i class="fas fa-trash-alt mr-1"></i>Delete
                         </b-button>
@@ -86,23 +98,24 @@
                     
                     </b-table>
                 </div>
+                </div>
             </b-card>
         </div>
         <div v-else class="viz-result mb-1">
             <b-card no-body>
-                <b-card-header v-b-modal.modalBox class="border-1">
+                <b-card-header v-b-modal.modalBox class="border-1 py-2">
                     <b-button class="btn col-md-2" variant = "primary" @click="returnQuery">
                     <i class="fas fa-arrow-left"></i> Back to query
                     </b-button>
-                    <b-button variant="dark" class="btn col-md-4" disabled >{{`${jobName}(${job_id})`}}
+                    <b-button variant="dark" class="btn col-md-4" disabled >{{`${jobName} (No.${job_id})`}}
                     </b-button>
                     <dropdown-select v-if="data.outputs.length > 1"
                             right
                             v-model="chosenOutput"
                             :options="taskOutputs"
-                            class="tool-bar-el"/>
-                    <b-button v-else variant="dark" class="btn col-md-4" disabled >{{data.outputs[0].name}}
-                    </b-button>
+                            class="tool-bar-el btn px-0"/>
+                    <!-- <b-button v-else variant="dark" class="btn col-md-4" disabled >{{data.outputs[0].name}}
+                    </b-button> -->
                 </b-card-header>
                 <b-card-body class="p-0">
                    <div id = "viz-card"> 
@@ -125,15 +138,17 @@ import VApp from "page/vapp.vue";
 import DropDownSelect from "page/builtin/dropdown-select.vue";
 import { event } from "crux/dist/utils";
 import {registerViz} from "viz";
+import EditText from "oviz-components/edit-text-vue.vue";
 
 Vue.component("VApp", VApp);
+Vue.component("EditText", EditText);
 // Vue.use(BootstrapVue);
 Vue.component("dropdown-select", DropDownSelect);
 
 export default {
     data() {
         return {
-            job_id: '',
+            job_id: null,
             jobName: '',
             all_jobs: [],
             fields: ["index", "jobName", "jobId", "created", "status", "operation"],
@@ -145,11 +160,29 @@ export default {
             chosenOutput: null,
             taskOutputs: [{value: 0, text: "Demo Files", secondaryText: ""}],
             refreshEnd: true,
+            isDemo: false,
         };
     },
     created() {
-           this.refreshJobs();
-        },
+        if (window.gon.isJobDemoPage) {
+            this.refreshEnd = true;
+            this.isDemo = true;
+            this.getDemoJobs();
+        } else {
+            this.refreshJobs();
+        }
+    },
+    beforeMount() {
+        const getJobId = () => {
+            const urls = window.location.href.split('?');
+            if (urls.length <2) return;
+            else {
+                const params = urls[1].split("&").map(x => x.split("="));
+                return params.find(x => x[0]==="job_id")[1];
+            }
+        }
+        if (!this.job_id) this.job_id = getJobId();
+    },
     mounted(){
         window.gon.viz_mode = "task-output";
     },
@@ -173,7 +206,7 @@ export default {
                 })
                 axios.post(
                     `/query-app-task/`,
-                    objectToFormData({'job_id': this.job_id}),
+                    objectToFormData({'job_id': this.job_id, 'is_demo': this.isDemo}),
                     {  
                         headers: {
                             'X-Requested-With': 'XMLHttpRequest',
@@ -235,6 +268,28 @@ export default {
                     }, 1000);
             });
         },
+        getDemoJobs() {
+            axios.post(
+                `/query-demo-tasks/`,
+                null,
+            {  
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest',
+                    'X-CSRF-Token': document.head.querySelector('meta[name="csrf-token"]').content,
+                    'Content-Type': 'multipart/form-data',
+                },
+            })
+            .then(r => {
+                this.all_jobs = r.data.map((d, index) => {
+                    return  {index, ...d}
+                });
+            }).finally(() => {
+                // // wait 1 sec
+                //  setTimeout(() => {
+                //     this.refreshEnd = true;
+                //     }, 1000);
+            });
+        },
         deleteJob(jobId){
             const { alertCenter } = this.$refs;
             axios.post(
@@ -288,10 +343,10 @@ export default {
 .local-jobs {
     margin-top: 2em;
 }
-.center-title {
-    margin: auto; 
-    max-width: 250px;
-}
+// .center-title {
+//     margin: auto; 
+//     max-width: 250px;
+// }
 
 #job-query .result-card {
     margin: 0;
@@ -323,7 +378,6 @@ export default {
         overflow: scroll;
     }
 }
-
 .col-md-12 {
     width: 80px;
 }
@@ -340,5 +394,9 @@ export default {
     right: 0;
     z-index:20;
     transition: all 0.3s
+}
+#table-container {
+    max-height: 40em;
+    overflow-y: scroll;
 }
 </style>

@@ -18,7 +18,7 @@
                                 <div class="col-md-6" v-for="input in displayedInputs" :key="input.id">
                                     <label :for="`i-${input.id}`">{{ input.name }}
                                         <span v-if="input.required" class="required">*</span>
-                                        <i class="fa  fa-question-circle" b-tooltip.hover
+                                        <i class="fa fa-question-circle" b-tooltip.hover
                                         :title="input.description"></i>
                                     </label>
 
@@ -112,7 +112,9 @@
                 </div>
                 <div v-else>
                     <b-card class="text-center job-info">
-                        <p>Job submitted successfully. The job ID is <span class="text-danger">{{jobID}}</span>. You can check your job status via this job ID in job query page. Please write down the job ID in your note book.</p>
+                        <p>Job submitted successfully. The job ID is <span class="text-danger">{{jobID}}</span>. </p>
+                        <br>
+                        <p>You can check your job status via this job ID in <a :href="`/submit/job-query?job_id=${jobID}`">job query page</a>.</p>
                     </b-card>
                 </div>
             </div>

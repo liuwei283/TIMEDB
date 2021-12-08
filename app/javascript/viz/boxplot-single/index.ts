@@ -27,19 +27,21 @@ function init() {
                 plotSize: [300, 300],
                 showOutliers: true,
                 drawP: true,
+                useCat: true,
                 drawViolin: false,
                 drawScatter: false,
-                hollowBox: true,
+                hollowBox: false,
                 xAxisRotated: true,
                 labelFontSize: 12,
                 labelOffsetVer: 30,
                 tickFontSize: 12,
-                getColor(pos) {
-                    return groupedChartColors[0];
-                },
+                // getColor(pos) {
+                //     return groupedChartColors[0];
+                // },
             },
             colors: { box: groupedChartColors[0], scatter: "pink",
                 violin: "LightSteelBlue"},
+            palette: groupedChartColors,
         },
         components: { GridPlot, ComplexBoxplot, EditText},
         loadData: {
@@ -110,7 +112,10 @@ function init() {
             },
         },
         setup() {
-            console.log(this["_data"]);
+            // console.log(this["_data"]);
+            this.data.colorCats = this.data.data.categories
+                    .map((x, i)=> [x, this.data.palette[i]])
+                    .reduce((o, key) => Object.assign(o, {[key[0]]: key[1]}), {})
             registerEditorConfig(editorConfig(this), editorRef);
         },
     });

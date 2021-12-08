@@ -54,7 +54,8 @@ function xyConfig(v) {
                     value: {
                         current: v.data.xLabel,
                         callback(d) {
-                            setMainData(v.data.mainDict[v.data.rank], v, d);
+                            v.data.xLabel = d;
+                            setMainData(v.data.mainDict[v.data.rank], v, v.data.xLabel, v.data.yLabel);
                             editorRef.xLower.value = v.data.data.categoryRange[0];
                             editorRef.xUpper.value = v.data.data.categoryRange[1];
                             run(v);
@@ -102,7 +103,8 @@ function xyConfig(v) {
                     value: {
                         current: v.data.yLabel,
                         callback(d) {
-                            setMainData(v.data.mainDict[v.data.rank], v, null, d);
+                            v.data.yLabel=d;
+                            setMainData(v.data.mainDict[v.data.rank], v, v.data.xLabel, v.data.yLabel);
                             editorRef.yLower.value = v.data.data.valueRange[0];
                             editorRef.yUpper.value = v.data.data.valueRange[1];
                             run(v);
