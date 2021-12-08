@@ -6,7 +6,7 @@ svg {
         x = 50; y = 50
         @if rowTreeData {
             Container{
-                y=colTreeData? colheatmapData.draw*config.colTree.treeHeight:0
+                y=colTreeData?config.colTree.treeHeight:0
                     Tree {
                         height = heatmapData.heatlength*config.gridH
                         width = config.treewidth
@@ -89,7 +89,7 @@ svg {
                     
                     dataRange = [config.rangeMin, config.rangeMax]
                     symRange = config.isSym
-                    showPAnno = heatmapDataP
+                    showPAnno = heatmapDataP? true: false
                     
                     :groupLegend {
                         @if groupData {
