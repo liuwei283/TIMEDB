@@ -108,6 +108,11 @@ function init() {
                 optional: true,
                 loaded(d) {
                     if (!d) return;
+                    let showPAnno
+                    if (!d)
+                        showPAnno = false;
+                    else
+                        showPAnno = true;
                     this.data.heatmapData.rows.forEach(r => {
                         d.forEach(line => {
                             if (line[""] === r) {
@@ -118,7 +123,7 @@ function init() {
                             }
                         });
                     });
-                    return null;
+                    return showPAnno;
                 },
             },
             groupData: {

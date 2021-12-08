@@ -1,22 +1,23 @@
 svg {
-    height = 1200
+    height = 1500
     width = 1000
     
     Columns{
         x = 50; y = 50
         @if rowTreeData {
-            
-            Tree {
-                height = heatmapData.heatlength*config.gridH
-                width = config.treewidth
-                data = rowTreeData
-                direction = "right"
-                link.stroke = "#000"
-                :leaf {
-                }
+            Container{
+                y=colTreeData? colheatmapData.draw*config.colTree.treeHeight:0
+                    Tree {
+                        height = heatmapData.heatlength*config.gridH
+                        width = config.treewidth
+                        data = rowTreeData
+                        direction = "right"
+                        link.stroke = "#000"
+                        :leaf {
+                        }
+                    }
             }
         }
-
         Container {
             x=-20
             @if groupData {
@@ -88,7 +89,7 @@ svg {
                     
                     dataRange = [config.rangeMin, config.rangeMax]
                     symRange = config.isSym
-                    showPAnno = config.showPAnno
+                    showPAnno = heatmapDataP
                     
                     :groupLegend {
                         @if groupData {
