@@ -1,3 +1,5 @@
+import {Color} from "crux/dist/color";
+
 const palettes = {
     npg: {
         name: "NPG",
@@ -15,10 +17,10 @@ const palettes = {
         name: "Lancet",
         colors: ["#00468B", "#ED0000", "#42B540", "#0099B4", "#925E9F", "#FDAF91", "#AD002A", "#ADB6B6", "#1B1919"],
     },
-    jama: {
-        name: "JAMA",
-        colors: ["#BC3C29", "#0072B5", "#E18727", "#20854E", "#7876B1", "#6F99AD", "#FFDC91", "#EE4C97"],
-    },
+    // jama: {
+    //     name: "JAMA",
+    //     colors: ["#BC3C29", "#0072B5", "#E18727", "#20854E", "#7876B1", "#6F99AD", "#FFDC91", "#EE4C97"],
+    // },
 };
 
 export default palettes;
@@ -49,7 +51,41 @@ const hslScheme = {
     "magenta":["#F7C9E8","#F19DD5","#EB70C2","#E444AF","#D61F99","#AA1879","#7D1259"],
     "purple":["#F7C9D9","#F19DB9","#EB7099","#E44479","#D61F5C","#AA1849","#7D1236"]
 };
-export function colorsPlan(dict) {
+
+export function colorsPlan(dict): any {
+    const colorMap = {};
+    let j = 0;
+    Object.keys(dict).forEach(k => {
+        // colorMap[k] = {};
+        const initColor = Color.hsl(j, 70, 85);
+        const hueInterval = 30;
+        // const hueShortInterval = 20;
+        if (dict[k].length <= 5) {
+            // let counter = 0;
+            dict[k].forEach((genus, i) => {
+                colorMap[`${k}|${genus}`] = initColor
+                                            .darken(12 * i).string;
+            });
+            j += hueInterval;
+        } else {
+            dict[k].forEach((genus, i) => {
+                colorMap[`${k}|${genus}`] = initColor
+                                        .shiftHue(Math.floor(i / 5) * hueInterval)
+                                        .darken(12 * (i % 5)).string;
+            });
+            j = j + Math.ceil(dict[k].length / 5) * hueInterval;
+        }
+    });
+    return colorMap;
+}
+
+export function colorsPlanOld(dict) {
+    // argument dict structure
+    // {
+    //     "class1": ["subclass1", "subclass2", ...],
+    //     ...
+    // }
+
     let pointerI = 0;
     let pointerJ = [];
     const result: any = {};

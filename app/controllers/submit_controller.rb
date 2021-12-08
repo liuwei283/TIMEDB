@@ -9,35 +9,9 @@ class SubmitController < ApplicationController
   def pipelines
     @pipelines = AnalysisPipeline.where "hidden = false and pid is not null"
   end
-  
 
-  def query_app_task_pure
-    result_json = {
-      code: false,
-      data: ''
-    }
-    begin
-      @task = Task.find_by! params[:id]
-      
-      # query task
-      client = LocalApi::Client.new
-      result = ''
-      if !@task.analysis.blank?
-        result = client.task_info(UID, @task.tid, 'app')
-      else
-        result = client.task_info(UID, @task.tid, 'pipeline')
-      end
-      if !result['message']['status'].blank?
-        result_json[:code] = true
-        result_json[:data] = result
-      else
-        result_json[:data] = "deepomics error: " + result
-      end
-    rescue StandardError => e
-      result_json[:code] = false
-      result_json[:data] = e.message
-    end
-    render json: result_json
+  def demo
+    gon.push isJobDemoPage: true
   end
 
   def query_app_task_test
@@ -106,6 +80,26 @@ class SubmitController < ApplicationController
     gon.push select_box_option: data
   end
 
+  def query_demo_tasks # query all demo tasks
+    @tasks = Task.where("is_demo")
+    parsed_jobs = []
+    result = nil
+    @tasks.each do |t|
+      if !t.analysis.blank?
+        jobName = t.analysis.name
+      else
+        jobName = t.analysis_pipeline.name
+      end
+      parsed_jobs.push({
+        jobName: jobName,
+        jobId: t.id,
+        created: t.created_at,
+        status: t.status,
+      })
+    end
+    render json:parsed_jobs
+  end
+
   def query_all # query all tasks by user
     @tasks = Task.where("user_id = ?", session[:user_id])
     parsed_jobs = []
@@ -137,12 +131,20 @@ class SubmitController < ApplicationController
         jobId: t.id,
         created: t.created_at,
         status: t.status,
+        isDemo: t.is_demo,
       })
     end
     render json:parsed_jobs
   end
 
   def query_app_task_dummy
+    @task = nil
+    Rails.logger.debug params[:is_demo]
+    if params[:is_demo]
+      @task = Task.find_by! id:params[:job_id], is_demo: true
+    else 
+      @task =Task.find_by! id:params[:job_id], user_id:session[:user_id]
+    end
     return_json_hash = {"status":"success","message":{"status":"finished","type":"pipeline","inputs":[],"outputs":[],"params":[],"tasks":[{"status":"finished","module_id":678,"name":"meta_testing","outputs":[{"id":919,"name":"testing","desc":"Wilcox testing results with p adjusted","files":[{"name":"s_ttest.tsv","path":"diff_test"}]},{"id":918,"name":"species_pass","desc":"","files":[{"name":"D065626_Healthy.s.pass.abd.xls","path":"diff_test"}]}]},{"status":"finished","module_id":677,"name":"meta_classifier","outputs":[{"id":917,"name":"classifier","desc":"","files":[{"name":"D065626_Healthy.s.Train_Sample_profile.xls","path":"classifier"},{"name":"D065626_Healthy.s.Train_Sample_group.info","path":"classifier"},{"name":"D065626_Healthy.s.RF.R","path":"classifier"},{"name":"D065626_Healthy.s.cross_validation_error.txt","path":"classifier"},{"name":"D065626_Healthy.s.cross_validation_pick.txt","path":"classifier"},{"name":"D065626_Healthy.s.feature.importance.xls","path":"classifier"},{"name":"D065626_Healthy.s.cross_validation.marker.predict.in.train.txt","path":"classifier"},{"name":"D065626_Healthy.s.train_ci_result.txt","path":"classifier"},{"name":"D065626_Healthy.s.train.auc_info.txt","path":"classifier"}]}]}],"error_message":""}}
     # {"status":"success", "message":{"status":"", "type":"pipeline", "inputs":[], "outputs":[], "params":[], "tasks":[{"status":"finished", "module_id":645, "name":"gutmeta_beta_diversity", "outputs":[{"id":878, "name":"beta_diversity", "desc":"beta diversity", "files":[{"name":"k_test_result.tsv", "path":"/project/gutmeta_pipeline_test1/task_20210713125024/DOAP_gutmeta_beta_diversity/R2DqFYJzP6ueKdJxWgE37P/output"}, {"name":"k_compare_group.tsv", "path":"/project/gutmeta_pipeline_test1/task_20210713125024/DOAP_gutmeta_beta_diversity/R2DqFYJzP6ueKdJxWgE37P/output"}, {"name":"k_Beta_diversity.tsv", "path":"/project/gutmeta_pipeline_test1/task_20210713125024/DOAP_gutmeta_beta_diversity/R2DqFYJzP6ueKdJxWgE37P/output"}, {"name":"p_test_result.tsv", "path":"/project/gutmeta_pipeline_test1/task_20210713125024/DOAP_gutmeta_beta_diversity/R2DqFYJzP6ueKdJxWgE37P/output"}, {"name":"p_compare_group.tsv", "path":"/project/gutmeta_pipeline_test1/task_20210713125024/DOAP_gutmeta_beta_diversity/R2DqFYJzP6ueKdJxWgE37P/output"}, {"name":"p_Beta_diversity.tsv", "path":"/project/gutmeta_pipeline_test1/task_20210713125024/DOAP_gutmeta_beta_diversity/R2DqFYJzP6ueKdJxWgE37P/output"}, {"name":"c_test_result.tsv", "path":"/project/gutmeta_pipeline_test1/task_20210713125024/DOAP_gutmeta_beta_diversity/R2DqFYJzP6ueKdJxWgE37P/output"}, {"name":"c_compare_group.tsv", "path":"/project/gutmeta_pipeline_test1/task_20210713125024/DOAP_gutmeta_beta_diversity/R2DqFYJzP6ueKdJxWgE37P/output"}, {"name":"c_Beta_diversity.tsv", "path":"/project/gutmeta_pipeline_test1/task_20210713125024/DOAP_gutmeta_beta_diversity/R2DqFYJzP6ueKdJxWgE37P/output"}, {"name":"o_test_result.tsv", "path":"/project/gutmeta_pipeline_test1/task_20210713125024/DOAP_gutmeta_beta_diversity/R2DqFYJzP6ueKdJxWgE37P/output"}, {"name":"o_compare_group.tsv", "path":"/project/gutmeta_pipeline_test1/task_20210713125024/DOAP_gutmeta_beta_diversity/R2DqFYJzP6ueKdJxWgE37P/output"}, {"name":"o_Beta_diversity.tsv", "path":"/project/gutmeta_pipeline_test1/task_20210713125024/DOAP_gutmeta_beta_diversity/R2DqFYJzP6ueKdJxWgE37P/output"}, {"name":"f_test_result.tsv", "path":"/project/gutmeta_pipeline_test1/task_20210713125024/DOAP_gutmeta_beta_diversity/R2DqFYJzP6ueKdJxWgE37P/output"}, {"name":"f_compare_group.tsv", "path":"/project/gutmeta_pipeline_test1/task_20210713125024/DOAP_gutmeta_beta_diversity/R2DqFYJzP6ueKdJxWgE37P/output"}, {"name":"f_Beta_diversity.tsv", "path":"/project/gutmeta_pipeline_test1/task_20210713125024/DOAP_gutmeta_beta_diversity/R2DqFYJzP6ueKdJxWgE37P/output"}, {"name":"g_test_result.tsv", "path":"/project/gutmeta_pipeline_test1/task_20210713125024/DOAP_gutmeta_beta_diversity/R2DqFYJzP6ueKdJxWgE37P/output"}, {"name":"g_compare_group.tsv", "path":"/project/gutmeta_pipeline_test1/task_20210713125024/DOAP_gutmeta_beta_diversity/R2DqFYJzP6ueKdJxWgE37P/output"}, {"name":"g_Beta_diversity.tsv", "path":"/project/gutmeta_pipeline_test1/task_20210713125024/DOAP_gutmeta_beta_diversity/R2DqFYJzP6ueKdJxWgE37P/output"}, {"name":"s_test_result.tsv", "path":"/project/gutmeta_pipeline_test1/task_20210713125024/DOAP_gutmeta_beta_diversity/R2DqFYJzP6ueKdJxWgE37P/output"}, {"name":"s_compare_group.tsv", "path":"/project/gutmeta_pipeline_test1/task_20210713125024/DOAP_gutmeta_beta_diversity/R2DqFYJzP6ueKdJxWgE37P/output"}, {"name":"s_Beta_diversity.tsv", "path":"/project/gutmeta_pipeline_test1/task_20210713125024/DOAP_gutmeta_beta_diversity/R2DqFYJzP6ueKdJxWgE37P/output"}, {"name":"t_test_result.tsv", "path":"/project/gutmeta_pipeline_test1/task_20210713125024/DOAP_gutmeta_beta_diversity/R2DqFYJzP6ueKdJxWgE37P/output"}, {"name":"t_compare_group.tsv", "path":"/project/gutmeta_pipeline_test1/task_20210713125024/DOAP_gutmeta_beta_diversity/R2DqFYJzP6ueKdJxWgE37P/output"}, {"name":"t_Beta_diversity.tsv", "path":"/project/gutmeta_pipeline_test1/task_20210713125024/DOAP_gutmeta_beta_diversity/R2DqFYJzP6ueKdJxWgE37P/output"}, {"name":"group_info.tsv", "path":"/project/gutmeta_pipeline_test1/task_20210713125024/DOAP_gutmeta_beta_diversity/R2DqFYJzP6ueKdJxWgE37P/output"}]}]}, {"status":"finished", "module_id":666, "name":"meta_alpha_diversity", "outputs":[{"id":908, "name":"alpha_diversity", "desc":"alpha diversity", "files":[{"name":"Alpha_diversity_pvalue.tsv", "path":"/project/gutmeta_pipeline_test1/task_20210713125024/DOAP_gutmeta_alpha_diversity/bUT8BVcs4vWonCY7DWKofd/output"}, {"name":"Alpha_diversity.tsv", "path":"/project/gutmeta_pipeline_test1/task_20210713125024/DOAP_gutmeta_alpha_diversity/bUT8BVcs4vWonCY7DWKofd/output"}, {"name":"group_info.tsv", "path":"/project/gutmeta_pipeline_test1/task_20210713125024/DOAP_gutmeta_alpha_diversity/bUT8BVcs4vWonCY7DWKofd/output"}]}]}], "error_message":""}}
    
@@ -364,7 +366,12 @@ class SubmitController < ApplicationController
       data: ''
     }
     begin
-      @task = Task.find_by! id:params[:job_id], user_id:session[:user_id]
+      @task = nil
+      if params[:is_demo] == "true"
+        @task = Task.find_by! id:params[:job_id], is_demo: true
+      else 
+        @task =Task.find_by! id:params[:job_id], user_id:session[:user_id]
+      end
       
       if TaskOutput.where(task_id:@task.id).exists?
         response_body = []
@@ -396,7 +403,6 @@ class SubmitController < ApplicationController
 
       if result['status'] == 'success'
         response_body = []
-
         @task_output = {}
         
         if result['message']['status'] == 'finished'
@@ -426,6 +432,23 @@ class SubmitController < ApplicationController
       result_json[:data] = e.message
     end
     render json: result_json
+  end
+
+  def query_demo_task # query a demo task
+    result_json = {
+      code: false,
+      data: ''
+    }
+    @task = Task.find_by! id:params[:job_id]
+    response_body = []
+    task_outputs = TaskOutput.where(task_id:@task.id)
+    task_outputs.each do |otp|
+      @task_output = otp
+      @analysis = otp.analysis
+      parsed_output = processTaskOutput()
+      response_body << parsed_output
+    end
+    render json: response_body
   end
 
   def remove_task

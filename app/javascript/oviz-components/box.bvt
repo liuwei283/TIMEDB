@@ -51,7 +51,7 @@ GridPlot {
                     }
                     :median {
                         Line {
-                            x1 = 20%; x2 = 80%; stroke = "#666"; strokeWidth = 2; dashArray = "4, 1"
+                            x1 = 20%; x2 = 80%; stroke = "#123"; strokeWidth = 2; dashArray = "4, 1"
                         }
                     }
                 }
@@ -66,6 +66,7 @@ GridPlot {
                             @let boxColors = getBoxColors(getColor(_d.pos))
                             fill = boxColors[1]
                             stroke = boxColors[0]
+                            strokeWidth = prop.hollowBox ? 1.5 : 1
                             behavior:tooltip {
                                 content = (`min: ${_d.data[0].toFixed(2)} <br>
                                             first quartile: ${_d.data[1].toFixed(2)} <br>
@@ -86,8 +87,8 @@ GridPlot {
                                 stroke = boxColors[0]; strokeWidth = 1
                                 dashArray = "4,1"
                             }
-                            Line { x1 = 41.25%; x2 = 57.75%; y = 0; stroke = "#000" }
-                            Line { x1 = 41.25%; x2 = 57.75%; y = 100%; stroke = "#000" }
+                            Line { x1 = 41.25%; x2 = 57.75%; y = 0; stroke = boxColors[0] }
+                            Line { x1 = 41.25%; x2 = 57.75%; y = 100%; stroke = boxColors[0] }
                         }
                         
                     }
@@ -97,15 +98,17 @@ GridPlot {
                             r = 2; stroke = boxColors[0]; visible = prop.showOutliers; fill = "none"
                         }
                     }
-                    :mean(d) {
-                        Line {
-                            @let boxColors = getBoxColors(getColor(d.pos))
-                            x1 = 20%; x2 = 80%; stroke = "black"; strokeWidth = 2
+                    :mean {
+                        @if prop.drawMean {
+                            Line {
+                                x1 = 20%; x2 = 80%; stroke = prop.colors.mean || "#123"; strokeWidth = 1; dashArray = "4, 1"
+                            }
                         }
                     }
                     :median {
                         Line {
-                            x1 = 20%; x2 = 80%; stroke = "#333"; strokeWidth = 1; dashArray = "4, 1"
+                            x1 = 20%; x2 = 80%; stroke = prop.colors.median || "#123"; strokeWidth = 2
+                            // x1 = 20%; x2 = 80%; stroke = "#123"; strokeWidth = 1; dashArray = "4, 1"
                         }
                     }
                 } 
@@ -119,7 +122,7 @@ GridPlot {
                 quartile = false
                 extremeLine = false
                 basisCurve = true
-                violinOptions.stroke = "none"
+                violinOptions = {stroke: "none"}
                 @props violinFillProps
             }
         }
