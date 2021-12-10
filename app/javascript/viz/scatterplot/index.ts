@@ -183,8 +183,8 @@ export function setClusterData(v) {
 }
 export const setMainData = (d, v, xLabel?, yLabel?) => {
     v.data.axises = d.columns.slice(1).map(x => ({value: x, text: x}));
-    const chosenX = xLabel || v.data.axises[1].value;
-    const chosenY = yLabel || v.data.axises[2].value;
+    const chosenX = xLabel || v.data.axises[0].value;
+    const chosenY = yLabel || v.data.axises[1].value;
     v.data.xLabel = chosenX;
     v.data.yLabel = chosenY;
     v.data.scatterData = [];
