@@ -3,6 +3,8 @@ Component {
     GridPlot {
         @props prop
         gap = prop.gridW * prop.gapRatio
+        bottomAxis.isSpecial = prop.isSpecial
+        bottomAxis.tickCount = prop.isSpecial ? 10 : null
         :background {
             AxisBackground { 
                 dashArray = "1,2"; includeEndTicks = true
@@ -95,5 +97,6 @@ Component {
                 }
             }
         }
+
     }
 }

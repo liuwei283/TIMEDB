@@ -25,6 +25,7 @@ interface DiverBoxPlotOption extends GridPlotOption {
     pData:any,
     pposition:any,
     drawOutlier: boolean,
+    isSpecial: boolean; // continuos axis drawn as discrete
 }
 
 export class DiverBoxPlot extends Component<DiverBoxPlotOption>{
@@ -45,6 +46,7 @@ export class DiverBoxPlot extends Component<DiverBoxPlotOption>{
             ...super.defaultProp(),
             gapRatio: 0.2,
             drawOutlier: true,
+            isSpecial: false,
             // getColor: (pos: number) => "green",
             // getScatterColor: (pos: number) => "#aaa",
         };
@@ -132,7 +134,6 @@ export  function  diverplotDataProcess(value,valuekey,methodkey,classkey){
         };
         const Cattype= allcat.every(isnumber);
         let categories:any;
-        console.log(Cattype)
         if(Cattype){
             categories = allcat.sort((a,b)=> parseInt(a) - parseInt(b)).map(i => ` ${i} `);
             // categories.forEach((item,index)=>{
@@ -143,14 +144,12 @@ export  function  diverplotDataProcess(value,valuekey,methodkey,classkey){
         }
         else{
             categories = getGroups(value,classkey).sort();
-            console.log("not number",categories)
         };
         //from number to string.
 
 
     //classifications
         const classifications =  Object.keys(groupedData).sort();
-        console.log("classifications",classifications)
         //console.log(classifications)
         classifications.forEach(cls => {
             const cData = groupedData[cls].map(d => {
@@ -159,7 +158,6 @@ export  function  diverplotDataProcess(value,valuekey,methodkey,classkey){
             });
             parsedData[cls] = groupBy(cData,classkey);
         });
-        console.log(parsedData)
     //violinData
         const violinData= {values: [], violins: [], categories};
         let min,max;
@@ -244,10 +242,8 @@ export  function  diverplotDataProcess(value,valuekey,methodkey,classkey){
                 classifications.forEach((cls, j) => {
                     if (!parsedData[cls][i]) return;
                     const initialData = parsedData[cls][i].map(d => d[valuekey]);
-                    console.log("initialData",initialData)
                     const result = [];
                     const stat1 = new Oviz.algo.Statistics(initialData);
-                    console.log("nnnbbbbbb",stat1)
                     const interQuartileRange = stat1.Q3() - stat1.Q1();
                     initialData.forEach(d => {
                         if ((d < stat1.Q3() - 1.5 * interQuartileRange) || (d > stat1.Q3() + 1.5 * interQuartileRange))  {
