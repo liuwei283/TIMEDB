@@ -145,9 +145,9 @@ function init() {
                             this.data.clusterDict[r[sampleK]][rankK] = r[clusterK];
                         });
                     });
-                    const chosenRank = this.data.ranks[0].text;
-                    const data = Object.keys(this.data.clusterDict).map(k => this.data.clusterDict[k]);
-                    this.data.clusters = Object.keys(_.groupBy(data, chosenRank));
+                    // const chosenRank = this.data.ranks[0].text;
+                    // const data = Object.keys(this.data.clusterDict).map(k => this.data.clusterDict[k]);
+                    // this.data.clusters = Object.keys(_.groupBy(data, chosenRank));
                     return null;
                 },
             },
@@ -155,9 +155,10 @@ function init() {
         setup() {
             console.log(this["_data"]);
             setMainData(this.data.mainDict[this.data.rank], this);
-            this.data.clusters.forEach((k, i) => {
-                this.data.colors[k] = groupedChartColors[i];
-            });
+            // this.data.clusters.forEach((k, i) => {
+            //     this.data.colors[k] = groupedChartColors[i];
+            // });
+            setClusterData(this);
             generateLegendData(this);
             setFunctionSize(this);
             registerEditorConfig(editorConfig(this), editorRef);
@@ -173,6 +174,13 @@ export function registerScatterplot() {
     register(MODULE_NAME, init);
 }
 
+export function setClusterData(v) {
+    const data = Object.keys(v.data.clusterDict).map(k => v.data.clusterDict[k]);
+    v.data.clusters = Object.keys(_.groupBy(data, v.data.rank));
+    v.data.clusters.forEach((k, i) => {
+        v.data.colors[k] = groupedChartColors[i];
+    });
+}
 export const setMainData = (d, v, xLabel?, yLabel?) => {
     v.data.axises = d.columns.slice(1).map(x => ({value: x, text: x}));
     const chosenX = xLabel || v.data.axises[1].value;

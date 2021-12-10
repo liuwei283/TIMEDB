@@ -58,7 +58,6 @@ export class ComplexScatterplot extends Component<ComplextScatterplotOption> {
     public render = Oviz.t`${template}`;
 
     public willRender() {
-        debugger;
         if (this.prop.shapeGetter) this.shapeGetter = this.prop.shapeGetter;
         else if (this.prop.groups) this.shapeGetter = (d) => shapes[this.prop.groups.indexOf(d.group)];
         if (this.prop.colorGetter) this.colorGetter = this.prop.colorGetter;
