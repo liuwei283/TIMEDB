@@ -9,6 +9,7 @@ svg {
             clusters = clusters
             // colors = colors
             strokeColor = colors.strokeColor
+            ellipseColor = colors.ellipseColor
             groups = groups
             scatter.fillOpacity = config.scatterOpacity
         }

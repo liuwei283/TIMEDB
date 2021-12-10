@@ -29,7 +29,8 @@ function init() {
         components: { ComplexScatterplot, GridPlot, EditText},
         data: {
             colors: {
-                strokeColor: "#999"
+                strokeColor: "#999",
+                ellipseColor: "lightYellow",
             },
             config: {
                 plotSize: [300, 300],
@@ -152,6 +153,7 @@ function init() {
             },
         },
         setup() {
+            console.log(this["_data"]);
             setMainData(this.data.mainDict[this.data.rank], this);
             this.data.clusters.forEach((k, i) => {
                 this.data.colors[k] = groupedChartColors[i];
@@ -173,8 +175,8 @@ export function registerScatterplot() {
 
 export const setMainData = (d, v, xLabel?, yLabel?) => {
     v.data.axises = d.columns.slice(1).map(x => ({value: x, text: x}));
-    const chosenX = xLabel || v.data.axises[0].value;
-    const chosenY = yLabel || v.data.axises[1].value;
+    const chosenX = xLabel || v.data.axises[1].value;
+    const chosenY = yLabel || v.data.axises[2].value;
     v.data.xLabel = chosenX;
     v.data.yLabel = chosenY;
     v.data.scatterData = [];
@@ -213,7 +215,7 @@ const processRawData = (d, v) => {
 
 function setFunctionSize(v) {
     v.size.height = v.data.config.plotSize[1] + 100;
-    v.size.width = v.data.config.plotSize[0] + 100;
+    v.size.width = v.data.config.plotSize[0] + 200;
 };
 
 export function generateLegendData(v) {
