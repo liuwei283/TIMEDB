@@ -30,7 +30,7 @@ GridPlot {
                             // width = 100%
                             Line { 
                                 y = 50%; x2 = 100%; dashArray = "4,1"
-                                stroke = boxColors[0]; strokeWidth = 2
+                                stroke = boxColors[0]; strokeWidth = 1
                             }
                             Line { y1 = 41.25%; y2 = 57.75%; x = 0; stroke = boxColors[0] }
                             Line { y1 = 41.25%; y2 = 57.75%; x = 100%; stroke = boxColors[0] }
