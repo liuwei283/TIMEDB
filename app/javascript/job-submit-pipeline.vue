@@ -182,7 +182,6 @@
             axios.get(`https://deepomics.org/api/pipeline_flowchart/${this.id}/`).then((response) => {
                 this.app = response.data;
                 this.app.id = this.id;
-                console.log(this.app);
                 for (var k in this.app.inputs){
                     // alert(k);
                     this.files['i-' + this.app.inputs[k].id]  = null;

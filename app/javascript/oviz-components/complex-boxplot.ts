@@ -72,8 +72,8 @@ export class ComplexBoxplot extends Component<ComplexBoxplotOption> {
                 return [Color.literal(x).darken(10).string, "#fff", x];
             else return ["#333", x, "#333"];
         } catch (e) {
-            console.log(x);
-            console.log(e);
+            // console.log(x);
+            // console.log(e);
         }
         
     }
