@@ -1,7 +1,7 @@
 class CreateSamples < ActiveRecord::Migration[6.0]
   def change
     create_table :samples do |t|
-      t.integer :sample_id
+      t.string :sample_name
       t.string :project_name
       t.integer :num_of_oberserved_genes
       t.string :ajcc_pathologic_stage
@@ -13,8 +13,8 @@ class CreateSamples < ActiveRecord::Migration[6.0]
       t.string :tumor_stage
       t.string :updated_datetime
       t.string :ethnicity
-      t.text :treatments_pharmaceutical_treatment_type
-      t.text :treatments_pharmaceutical_treatment_or_therapy
+      t.text :drug_treatment_type
+      t.text :treatment_or_therapy
       t.text :site_of_resection_or_biopsy
       t.string :prior_malignancy
       t.string :vital_status

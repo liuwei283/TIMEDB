@@ -5,7 +5,7 @@ class SamplesController < ApplicationController
     $tmp_dir = "#{Rails.root}/app/data/tmp/"
 
     def index
-        @vis = ['id', 'sample_name', 'experiment_type', 'project_name', 'nr_reads_sequenced', 'country', 'abundance_available', 'associated_phenotype']
+        @vis = ['id', 'project_name', 'num_of_oberserved_genes',  'tissue_or_organ_of_origin', 'primary_diagnosis','gender', 'age', 'tumor_stage','ethnicity','vital_status']
         @samples = Sample.order(:sample_name)
         @sample_attrs = Sample.column_names
         @invis = []

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_08_27_062702) do
+ActiveRecord::Schema.define(version: 2021_11_30_115435) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -87,7 +87,6 @@ ActiveRecord::Schema.define(version: 2021_08_27_062702) do
   end
 
   create_table "projects", force: :cascade do |t|
-    t.integer "project_id"
     t.string "project_name"
     t.string "primary_site"
     t.integer "num_of_samples"
@@ -103,7 +102,7 @@ ActiveRecord::Schema.define(version: 2021_08_27_062702) do
   end
 
   create_table "samples", force: :cascade do |t|
-    t.integer "sample_id"
+    t.string "sample_name"
     t.string "project_name"
     t.integer "num_of_oberserved_genes"
     t.string "ajcc_pathologic_stage"
@@ -115,8 +114,8 @@ ActiveRecord::Schema.define(version: 2021_08_27_062702) do
     t.string "tumor_stage"
     t.string "updated_datetime"
     t.string "ethnicity"
-    t.text "treatments_pharmaceutical_treatment_type"
-    t.text "treatments_pharmaceutical_treatment_or_therapy"
+    t.text "drug_treatment_type"
+    t.text "treatment_or_therapy"
     t.text "site_of_resection_or_biopsy"
     t.string "prior_malignancy"
     t.string "vital_status"
@@ -152,6 +151,7 @@ ActiveRecord::Schema.define(version: 2021_08_27_062702) do
     t.datetime "updated_at", precision: 6, null: false
     t.bigint "analysis_id"
     t.bigint "analysis_pipeline_id"
+    t.boolean "is_demo", default: false
     t.index ["analysis_id"], name: "index_tasks_on_analysis_id"
     t.index ["analysis_pipeline_id"], name: "index_tasks_on_analysis_pipeline_id"
     t.index ["user_id"], name: "index_tasks_on_user_id"

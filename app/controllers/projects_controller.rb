@@ -5,7 +5,7 @@ class ProjectsController < ApplicationController
     $tmp_dir = "#{Rails.root}/app/data/tmp/"
 
     def index
-        @vis = ['id', 'name', 'num_of_samples', 'num_of_runs', 'related_publications', 'original_description']
+        @vis = ['id', 'project_name', 'primary_site', 'num_of_samples', 'num_of_oberserved_genes', 'major_related_publications',"original_link"]
         @projects = Project.order(:name)
         @attrs = Project.column_names
         @invis = []
