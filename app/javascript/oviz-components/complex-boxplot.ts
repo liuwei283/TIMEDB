@@ -2,7 +2,6 @@
 import Oviz from "crux";
 import { Color } from "crux/dist/color";
 import { Component, XYPlotOption } from "crux/dist/element";
-import { isThisTypeNode } from "typescript";
 import { findBoundsForValues } from "utils/maths";
 import template from "./box.bvt";
 import { GridPlotOption } from "./grid-plot";
@@ -13,6 +12,7 @@ interface ComplexBoxplotOption extends GridPlotOption {
     drawBox: boolean;
     drawViolin: boolean;
     drawScatter: boolean;
+    drawMean: boolean;
     pData: any;
     hollowBox: boolean;
     getColor: (pos: number) => string;
@@ -35,34 +35,47 @@ export class ComplexBoxplot extends Component<ComplexBoxplotOption> {
     }
 
     public willRender() {
-        if (this._firstRender) {
-            // const this.prop = {values: [], categories: []};
-            if (this.prop.getColor) this.getColor = this.prop.getColor;
-            else this.getColor = (pos) => this.prop.useCat ? this.prop.colors.cats[pos]
-                : this.prop.colors?.box || "pink";
-            if (this.prop.getScatterColor) this.getScatterColor = this.prop.getScatterColor;
-            else this.getScatterColor = (pos) => this.prop.colors?.scatter || "#aaa";
-            if (this.prop.getViolinColor) this.getViolinColor = this.prop.getViolinColor;
-            else this.getViolinColor = (pos) => (this.prop.useCat ? this.prop.colors.cats[pos]
-                : this.prop.colors?.violin || "lightsteelblue");
-            if (this.prop.useCat) {
-                this.violinFillProps = { fill: this.prop.colors.cats };
-            } else {
-                this.violinFillProps = { fill: this.getViolinColor(0) };
-            }
-        }
+        // if (this._firstRender) {
+        //     // const this.prop = {values: [], categories: []};
+        // }
+        this.setUpColor();
         // @ts-ignore
         this.boxMax = this.prop.data.boxData.max;
+    }
+    private setUpColor() {
+        if (this.prop.getColor)
+            this.getColor = this.prop.getColor;
+        else
+            this.getColor = (pos) => this.prop.useCat ? this.prop.colors.cats[pos]
+                : this.prop.colors?.box || "pink";
+        if (this.prop.getScatterColor)
+            this.getScatterColor = this.prop.getScatterColor;
+        else
+            this.getScatterColor = (pos) => this.prop.colors?.scatter || "#aaa";
+        if (this.prop.getViolinColor)
+            this.getViolinColor = this.prop.getViolinColor;
+        else
+            this.getViolinColor = (pos) => (this.prop.useCat ? this.prop.colors.cats[pos]
+                : this.prop.colors?.violin || "lightsteelblue");
 
-
-
+        if (this.prop.useCat) {
+            this.violinFillProps = { fill: this.prop.colors.cats };
+        } else {
+            this.violinFillProps = { fill: this.getViolinColor(0) };
+        }
     }
 
     protected getBoxColors(x) {
         // [stroke, fill]
-        if (this.prop.hollowBox)
-            return [Color.literal(x).darken(10).string, "#fff", x];
-        else return ["#333", x, "#333"];
+        try {
+            if (this.prop.hollowBox)
+                return [Color.literal(x).darken(10).string, "#fff", x];
+            else return ["#333", x, "#333"];
+        } catch (e) {
+            // console.log(x);
+            // console.log(e);
+        }
+        
     }
 
     public defaultProp() {
@@ -72,6 +85,7 @@ export class ComplexBoxplot extends Component<ComplexBoxplotOption> {
             showOutliers: true,
             drawViolin: false,
             drawScatter: false,
+            drawMean: false,
             drawP: true,
             hollowBox: true,
             // getColor: (pos: number) => "green",

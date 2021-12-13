@@ -42,23 +42,21 @@ export function editorConfig(v): EditorDef {
                                 },
                             },
                         },
-                        // {
-                        //     title: "",
-                        //     type: "vue",
-                        //     component: "color-picker",
-                        //     data: {
-                        //         title: "Color Palette",
-                        //         scheme: ,
-                        //         palettes: withDefaultPalette(defaultPalette, cbpPalette),
-                        //         paletteMap,
-                        //         id: "pwcolor",
-                        //         callback(colors) {
-                        //             v.data.colors = colors;
-                        //             v.forceRedraw = true;
-                        //             run(v);
-                        //         },
-                        //     }
-                        // }
+                        {
+                            title: "",
+                            type: "vue",
+                            component: "color-picker",
+                            data: {
+                                title: "Color Palette",
+                                scheme: v.data.colorMap,
+                                id: "pwcolor",
+                                callback(colors) {
+                                    v.data.colorMap = colors;
+                                    v.forceRedraw = true;
+                                    run(v);
+                                },
+                            }
+                        }
                     ]
                 }
             }

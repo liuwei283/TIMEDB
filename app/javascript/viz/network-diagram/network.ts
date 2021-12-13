@@ -106,17 +106,15 @@ export class NetworkDiagram extends Component<NetworkDiagramOption<any[], any>> 
                 stroke = "grey"
                 dashArray = "4 2"
             }
-            Text.centered {
+            EditText.centered {
                 text = prop.groups[0]
                 x = layoutConfig.groupWidth/2; y = 20
                 fontSize = 20
-                style:user-select = "none"
             }
-            Text.centered {
+            EditText.centered {
                 text = prop.groups[1]
                 x = layoutConfig.groupWidth * 1.5; y = 20
                 fontSize = 20
-                style:user-select = "none"
             }
             @for (l, i) in _links {
                 Line {
@@ -217,7 +215,7 @@ export class NetworkDiagram extends Component<NetworkDiagramOption<any[], any>> 
     }
 
     nodeDetail(d) {
-        let details = `Node ID: ${d.id}<br>Size: ${d.NodeSize}`;
+        let details = `Node ID: ${d.NodeName}<br>Size: ${d.NodeSize}`;
         details += `<br>Phylum: ${d.NodePhylum}<br>Genus: ${d.NodeGenus}`;
         return details;
     }
@@ -374,8 +372,10 @@ export class NetworkDiagram extends Component<NetworkDiagramOption<any[], any>> 
     }
 
     protected getFillByPhylumAndGenus(d) {
-        if (d.NodeName.startsWith(d.NodeGroup)) return this.prop.colorMap.Other.Unclassified;
-        return this.prop.colorMap[d.NodePhylum][d.NodeGenus];
+        // if (d.NodeName.startsWith(d.NodeGroup)) return this.prop.colorMap.Other.Unclassified;
+        // return this.prop.colorMap[d.NodePhylum][d.NodeGenus];
+        // if (d.NodeName.startsWith(d.NodeGroup)) return this.prop.colorMap["Other|Unclassified"];
+        return this.prop.colorMap[`${d.NodePhylum}|${d.NodeGenus}`] || this.prop.colorMap["Other|Unclassified"];
     }
 
     protected setUpXCoordinates(d) {

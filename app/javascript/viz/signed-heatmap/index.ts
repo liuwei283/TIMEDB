@@ -32,6 +32,7 @@ Oviz.use.theme("mh-light", {
 });
 
 const MODULE_NAME = 'signed-heatmap'
+let height = 15;
 
 function init() {
     if (!window.gon || window.gon.module_name !== MODULE_NAME) return;
@@ -46,7 +47,9 @@ function init() {
                 rangeMin: 0,
                 rangeMax: 0,
                 isSym: true,
-                gridH: 15,
+                gridH:15,
+                gridW:30,
+                treewidth:150,
                 rowTree: {
                     treeHeight: 200,
                     depthUnit: 0,
@@ -93,8 +96,9 @@ function init() {
                         });
                         data[rowAttr] = rowData;
                     });
+                    const heatlength=parseFloat(d.length)
                     return {rows, columns: d.columns.splice(1, d.columns.length), data,
-                        range: {min, max}};
+                        range: {min, max}, heatlength};
                 },
             },
             heatmapDataP: {
@@ -114,7 +118,7 @@ function init() {
                             }
                         });
                     });
-                    return null;
+                    return d;
                 },
             },
             groupData: {
@@ -183,8 +187,8 @@ function init() {
             registerEditorConfig(editorConfig(this), editorRef);
             if (this.data.rowTreeData) setUpRowTree(this);
             if (this.data.colTreeData) setUpColTree(this);
-            if (this.data.heatmapData.rows.length > 100) this.data.config.gridH = 10;
-            else if (this.data.heatmapData.rows.length > 60) this.data.config.gridH = 12;
+            //if (this.data.heatmapData.rows.length > 100) this.data.config.gridH = 10;
+            //else if (this.data.heatmapData.rows.length > 60) this.data.config.gridH = 12;
         }
     });
     return visualizer;
@@ -234,6 +238,7 @@ function setUpColTree(v) {
 function setUpRange(v) {
     v.data.config.rangeMin = v.data.heatmapData.range.min;
     v.data.config.rangeMax = v.data.heatmapData.range.max;
+    v.data.config.gridH = 15;
 }
 
 // export default SignedHeatmap;

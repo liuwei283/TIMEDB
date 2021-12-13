@@ -17,7 +17,7 @@ import { generateDiverConfig } from "./editor";
 
 
 const classifiedIndex = 0;
-const valueRange = [2.5, 3.5];
+// const valueRange = [2.5, 3.5];
 const title = "grouped box plot"
 //please change the displayed value range in the template by the prop: valueRange.
 const MODULE_NAME = 'continuos-grouped-boxplot'
@@ -25,7 +25,7 @@ const boxW=5;
 const gapRatio=0.05;
 let valuemin;
 let valuemax;
-const ylabel = "Relative abundance(log10)";
+const yLabel = "Relative abundance(log10)";
 
 interface BoxplotData {
     values: any[], 
@@ -42,14 +42,15 @@ function init() {
         el: "#canvas",
         template,
         components: { GridPlot, ComplexBoxplot, EditText, DiverBoxPlot},
-        data: {ylabel, valueRange, title,legendTitle: "Methods",lineColor: "#666",
-            legendPos: {x: 60, y: 50},
+        data: {
+            yLabel, 
+            title,legendTitle: "Methods",lineColor: "#666",
+            legendPos: {x: 80, y: 100},
             // 拖动更新legend位置的function 可以放进component.ts里
             updateLegendPos(ev, el, deltaPos) {
                 this.legendPos.x += deltaPos[0];
                 this.legendPos.y += deltaPos[1];
                 this.redraw();
-                
             },
             valuemin,
             valuemax,
@@ -66,15 +67,15 @@ function init() {
                     const groupKey = data.columns[0];
                     const valueKey = data.columns[2];
                     const catKey = data.columns[1];
-                    const value=datalogprocess(data,valueKey,100)
+                    const value=datalogprocess(data,valueKey,10)
                     const allvalues= value.map(x=>{
                         const num = parseFloat(x[valueKey]);
                         if (isNaN(num)) return Number(x[valueKey]);
                         return num;
                     });
-                    //this.data.valueRange= findBoundsForValues(allvalues, 2, false);
-                    this.data.valuemin=valueRange[0];
-                    this.data.valuemax=valueRange[1];
+                    this.data.valueRange= findBoundsForValues(allvalues, 2, false);
+                    this.data.valuemin=this.data.valueRange[0];
+                    this.data.valuemax=this.data.valueRange[1];
                     const result = diverplotDataProcess(value, valueKey, groupKey, catKey);   
                     this.data.xTicks = [];
                     // // this is hardcoded due to xy plot bug
@@ -86,8 +87,6 @@ function init() {
                     });
                     const classifications=result.classifications;
                     const categories=result.categories;
-                    
-    
                     this.data.classifications = classifications;
                     this.data.categories = categories;
                     categories.filter((d, i, arr) => {
@@ -101,10 +100,9 @@ function init() {
             },
         },
         setup() {            
-            this.data.plotWidth = 1000;
             processconfigData(this)
             registerEditorConfig(generateDiverConfig(this));
-            console.log(this["_data"])
+            // console.log(this["_data"])
         },
     });
     
@@ -115,9 +113,11 @@ export function processconfigData(v) {
     const gridW = v.data.gridW =  ((v.data.boxW + 2) * v.data.classifications.length) / (1- v.data.gapRatio);
     v.data.plotWidth = v.data.categories.length * gridW;
     v.data.plotHeight=v.data.classifications.length* 200;
-            // 以及定义了画布的宽度
+    // 以及定义了画布的宽度
     v.size.width = v.data.plotWidth + 150;
     v.size.height=v.data.plotHeight+500;
+    v.data.legendPos.x = v.data.plotWidth - 20;
+    v.data.legendPos.y = v.data.plotHeight -30 ;
     // v.data.valueRange=[v.data.valuemin,v.data.valuemax];
 }
 

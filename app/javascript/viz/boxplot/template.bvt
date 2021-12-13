@@ -3,7 +3,7 @@ svg {
     ComplexBoxplot {
         x = 50; y = 50
         pData = pDict[rank]
-        colors = colors
+        colors = {...colors, cats: palette}
         @props data
         @props config
     }

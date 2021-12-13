@@ -43,14 +43,14 @@ class Task < ApplicationRecord
         @app_url = ""
         begin
             if !self.analysis.blank?
-                @app_url = "app_id=#{self.analysis.mid}"
+                @app_url = "project_app_task_monitor?app_id=#{self.analysis.mid}"
             else
-                @app_url = "pipeline_id=#{self.analysis_pipeline.pid}"
+                @app_url = "project_pipeline_task_monitor?pipeline_id=#{self.analysis_pipeline.pid}"
             end
         rescue Exception => e
             @app_id = e.message
         end
         # HARD CODE DEEPOMICS PROJECT ID
-        return "https://deepomics.org/user/projects/289/project_pipeline_task_monitor?#{@app_url}&task_id=#{self.tid}"
+        return "https://deepomics.org/user/projects/289/#{@app_url}&task_id=#{self.tid}"
     end
 end

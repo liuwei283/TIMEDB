@@ -1,8 +1,7 @@
 import { genDefaultPalette, withDefaultPalette } from "oviz-common/palette";
 import { EditorDef } from "utils/editor";
-import { parse } from "utils/newick";
 import { copyObject } from "utils/object";
-import { generateLegendData, setMainData } from ".";
+import { generateLegendData, setClusterData, setMainData } from ".";
 
 function run(v) {
     v.forceRedraw = true;
@@ -42,6 +41,14 @@ export function editorConfig(v): EditorDef {
                                         callback(d) {
                                             v.data.rank = d;
                                             v.root.rankChanged = true;
+                                            setMainData(v.data.mainDict[v.data.rank], v, v.data.xLabel, v.data.yLabel);
+                                            setClusterData(v);
+                                            generateLegendData(v);
+                                            v.root.$ref.scatter.dataChanged = true;
+                                            editorRef.xMin.value = v.data.data.categoryRange[0];
+                                            editorRef.xMax.value = v.data.data.categoryRange[1];
+                                            editorRef.yMin.value = v.data.data.valueRange[0];
+                                            editorRef.yMax.value = v.data.data.valueRange[1];
                                             run(v);
                                         },
                                     },
@@ -66,6 +73,8 @@ export function editorConfig(v): EditorDef {
                                             v.data.xLabel = d;
                                             v.root.$ref.scatter.dataChanged = true;
                                             setMainData(v.data.mainDict[v.data.rank], v, v.data.xLabel, v.data.yLabel);
+                                            editorRef.xMin.value = v.data.data.categoryRange[0];
+                                            editorRef.xMax.value = v.data.data.categoryRange[1];
                                             run(v);
                                         },
                                     },
@@ -73,6 +82,7 @@ export function editorConfig(v): EditorDef {
                                 {
                                     title: "X Range Lower Bound",
                                     type: "input",
+                                    ref: "xMin",
                                     value: {
                                         current: v.data.data.categoryRange[0],
                                         callback(d) {
@@ -85,6 +95,7 @@ export function editorConfig(v): EditorDef {
                                 {
                                     title: "X Range Upper Bound",
                                     type: "input",
+                                    ref: "xMax",
                                     value: {
                                         current: v.data.data.categoryRange[1],
                                         callback(d) {
@@ -114,6 +125,8 @@ export function editorConfig(v): EditorDef {
                                             v.data.yLabel = d;
                                             v.root.$ref.scatter.dataChanged = true;
                                             setMainData(v.data.mainDict[v.data.rank], v, v.data.xLabel, v.data.yLabel);
+                                            editorRef.yMin.value = v.data.data.valueRange[0];
+                                            editorRef.yMax.value = v.data.data.valueRange[1];
                                             run(v);
                                         },
                                     },
@@ -121,6 +134,7 @@ export function editorConfig(v): EditorDef {
                                 {
                                     title: "Y Range Lower Bound",
                                     type: "input",
+                                    ref: "yMin",
                                     value: {
                                         current: v.data.data.valueRange[0],
                                         callback(d) {
@@ -132,6 +146,7 @@ export function editorConfig(v): EditorDef {
                                 {
                                     title: "Y Range Upper Bound",
                                     type: "input",
+                                    ref: "yMax",
                                     value: {
                                         current: v.data.data.valueRange[1],
                                         callback(d) {

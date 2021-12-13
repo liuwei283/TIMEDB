@@ -1,6 +1,4 @@
-import { generateGridPlotConfig } from "oviz-components/grid-plot";
 import { EditorDef } from "utils/editor";
-import { copyObject } from "utils/object";
 import { processconfigData } from "./index"
 
 function run(v) {
@@ -22,7 +20,7 @@ export function generateDiverConfig (v): EditorDef {
                     type: "list",
                     items: [
                         {
-                            title: "ymin",
+                            title: "range min",
                             type: "input",
                             value: {
                                 current: v.data.valueRange[0],
@@ -34,7 +32,7 @@ export function generateDiverConfig (v): EditorDef {
                             
                         },
                         {
-                            title:"ymax",
+                            title:"range max",
                             type:"input",
                             value: {
                                 current:v.data.valueRange[1],
@@ -45,7 +43,7 @@ export function generateDiverConfig (v): EditorDef {
                             },
                         },
                         {
-                            title: "gapRatio",
+                            title: "gap ratio",
                             type: "input",
                             value: {
                                 current: v.data.gapRatio,
@@ -58,7 +56,7 @@ export function generateDiverConfig (v): EditorDef {
                             
                         },
                         {
-                            title:"boxWith",
+                            title:"box width",
                             type:"input",
                             value: {
                                 current:v.data.boxW,

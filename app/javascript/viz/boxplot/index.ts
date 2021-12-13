@@ -26,10 +26,12 @@ function init() {
                 yLabel,
                 plotSize: [300, 300],
                 showOutliers: true,
+                drawMean: true,
                 drawP: true,
                 drawViolin: false,
                 drawScatter: false,
                 hollowBox: false,
+                useCat: true,
                 xAxisRotated: true,
                 labelFontSize: 12,
                 labelOffsetVer: 30,
@@ -37,6 +39,7 @@ function init() {
             },
             colors: { box: groupedChartColors[0], scatter: "pink",
                 violin: "LightSteelBlue"},
+            palette: groupedChartColors,
         },
         loadData: {
             boxMain: {
@@ -95,7 +98,9 @@ function init() {
             },
         },
         setup() {
-            console.log(this["_data"]);
+            this.data.colorCats = this.data.data.categories
+                    .map((x, i)=> [x, this.data.palette[i]])
+                    .reduce((o, key) => Object.assign(o, {[key[0]]: key[1]}), {})
             registerEditorConfig(editorConfig(this), editorRef);
         },
     });

@@ -60,7 +60,7 @@ class Api::VizFilesController < ApplicationController
         @task_output = TaskOutput.where("task_id in (?) and analysis_id = ?",
             tasks_ids, @analysis.id)
         render json: @task_output.map { |opt|
-             {id: opt.id, task_id: opt.task.id, task_id: opt.id}
+             {id: opt.id, task_id: opt.task.id}
         }
         
     end

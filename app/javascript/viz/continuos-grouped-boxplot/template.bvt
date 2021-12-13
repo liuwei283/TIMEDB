@@ -1,21 +1,20 @@
 svg {
 	Component {
 		DiverBoxPlot{
+			static=true
 			y = 20; x = 20
 			plotSize = [plotWidth, plotHeight]
 			valueRange = valueRange
-			// @expr console.log("valueRange",valueRange)
 			categories = xTicks.value
-			// @expr console.log("tick",xTicks.value)
 			discreteCategory = true
-			// @expr console.log(boxData)
-			// categoryRange = [1, 76]
             data=boxData
 			gridW = gridW
 			boxW = boxW
 			gapRatio=gapRatio
 			colors = colors
+			yLabel = yLabel
 			drawViolin=false
+			isSpecial = true
 			drawBox=true
 			:boxOutlier(d) {
 				Circle.centered {
@@ -28,18 +27,19 @@ svg {
 				}
 			}
 		}
-			
-		DraggableLegend {
+
+		
+		Legend {
 			@props legendPos
 			title = legendTitle
 			data = legendData
-			// behavior:drag {
-			// 	onDrag = @bind(updateLegendPos)
-			// }
-			padding = 4
-			lineHeight = 13
+			behavior:drag {
+				onDrag = @bind(updateLegendPos)
+			}
+			padding = 5
+			lineHeight = 15
 			legendWidth = 15
-			label.fontSize = 10
+			label.fontSize = 12
 			:legend(d) {
 				Component {
 					Line {  x = 50%; y1 = 1; y2 = 12; stroke = lineColor }
@@ -55,7 +55,6 @@ svg {
 				}				
 			}
 		}
-
 	}
 
 }

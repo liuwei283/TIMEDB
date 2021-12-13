@@ -21,6 +21,7 @@ export interface ScatterClusterDatum {
 export interface ComplextScatterplotOption extends GridPlotOption {
     hollow: boolean; // indicates whether the scatter is hollow or solid
     scatterSize: number; // indicates how big the scatter is 
+    scatterOpacity: number;
     scatterFill?: string;
     scatterStroke?: string;
     generateTooltip?: (d) => string;
@@ -30,6 +31,7 @@ export interface ComplextScatterplotOption extends GridPlotOption {
     clusters?: string[];
     groups?: string[];
     strokeColor: string;
+    ellipseColor: string;
     drawEllipse: boolean;
     drawCenterStrokes: boolean;
 }
@@ -57,11 +59,11 @@ export class ComplexScatterplot extends Component<ComplextScatterplotOption> {
 
     public willRender() {
         if (this.prop.shapeGetter) this.shapeGetter = this.prop.shapeGetter;
-            else if (this.prop.groups) this.shapeGetter = (d) => shapes[this.prop.groups.indexOf(d.group)];
-            if (this.prop.colorGetter) this.colorGetter = this.prop.colorGetter;
-            else if (this.prop.clusters && this.prop.colors)
-                this.colorGetter = (d) => this.prop.colors[this.prop.clusters.indexOf(d.cluster)];;
-            if (this.prop.generateTooltip) this.generateTooltip = this.prop.generateTooltip;
+        else if (this.prop.groups) this.shapeGetter = (d) => shapes[this.prop.groups.indexOf(d.group)];
+        if (this.prop.colorGetter) this.colorGetter = this.prop.colorGetter;
+        else if (this.prop.clusters && this.prop.colors)
+            this.colorGetter = (d) => this.prop.colors[this.prop.clusters.indexOf(d.cluster)];;
+        if (this.prop.generateTooltip) this.generateTooltip = this.prop.generateTooltip;
         if (this.prop.clusters && this.dataChanged) {
             this.clusterData = {};
             const svgRatioX = this.prop.plotSize[0] / (this.prop.categoryRange[1] - this.prop.categoryRange[0]);
@@ -163,7 +165,9 @@ export class ComplexScatterplot extends Component<ComplextScatterplotOption> {
             flip: false,
             hollow: false,
             strokeColor: "#999",
+            ellipseColor: "lightYellow",
             drawEllipse: true,
+            scatterOpacity: 0.9,
         };
     }
 }
