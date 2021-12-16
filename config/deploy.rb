@@ -1,14 +1,14 @@
 # config valid for current version and patch releases of Capistrano
 lock "~> 3.14.1"
 
-set :application, "gutmeta_platform"
-set :repo_url, "git@gitlab.com:d3lta1/meta_platform.git"
-set :branch, "gutmeta"
+set :application, "immune_platform"
+set :repo_url, "git@gitlab.com:Kristaxueying/immune_platform.git"
+set :branch, "immuneplatform"
 # Default branch is :master
 # ask :branch, `git rev-parse --abbrev-ref HEAD`.chomp
 
 # Default deploy_to directory is /var/www/my_app_name
-set :deploy_to, "/home/platform/meta_platform"
+set :deploy_to, "/home/platform/immune_platform"
 
 # Default value for :format is :airbrussh.
 # set :format, :airbrussh
