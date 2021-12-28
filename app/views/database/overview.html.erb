@@ -75,8 +75,84 @@
     <br/>
 </div>
 <div class = "container Block"> 
+
+
+<!-- to be deleted
 <h2>Sample distribution</h2>
 <div id = "world-map" class = "container Block"> </div>
 </div>
+up to here -->
+
+
+
+<!-- new added -->
+<section id = "organ_card">
+    <div class = "container">
+        <h2>Organs</h2>
+        <div id = "cards_wrapper" class = "container">
+            <div class = "card-deck">
+                <% @organs.each do |og| %>
+                    <div class = "card">
+                        <div class = "card_img">
+                            <a href="#" data-toggle="popover" title="" data-content="Some content inside the popover"><%= og[primary_site] %></a>
+
+
+                        </div>
+                    </div>
+          
+        <% end %>
+
+
+
+
+            </div>
+        </div>
+
+    </div>
+</section>
+section#organ_card
+  .container
+   h2
+      | Organs
+
+  #cards_wrapper.container
+    .card-deck
+      .card
+        .card_img
+          =link_to '/database/overview'
+            =image_tag "research.png", :alt=>"Human Gut Metagenomics.png"
+        .card_body
+          h5
+            |Human Gut Metagenomics Database
+          p.card-text
+            |curated database with over 10,000 
+            |metagenomics sequencing data
+      .card
+        .card_img
+          =link_to "/submit/analyses"
+            =image_tag "bioinformatics.png", :alt=>"Analyze you data.png"
+        .card_body
+          h5
+            |Analyze your data
+          p.card-text
+            |containing diversity analysis, differential testing, 
+            
+            |diseases classifier, PCA,
+            
+            |functional enrichments and so on
+      .card
+        .card_img
+          =link_to "/visualizer"
+            =image_tag "bacteria.png" , :alt=>"Visualize your results.png"
+        .card_body
+          h5
+            |Visualize your results 
+          p.card-text
+            |containing  corresponding visualization of analysis result and basic sample and
+            |basic sample information visualization and so on
+
+
+<h2> Organs information (changed later)</h2>
+
 
 <%=javascript_pack_tag 'db-overview-viz'%>

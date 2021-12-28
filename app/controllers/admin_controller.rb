@@ -1,8 +1,9 @@
 class AdminController < ApplicationController
     http_basic_authenticate_with name: "admin", password: "Lovelace"
-    $abd_dir = "#{Rails.root}/app/data/abd_files/"
+    $inf_dir = "#{Rails.root}/app/data/inf_files/"
     def index
-        @projects = Project.order(:name)
+        @projects = Project.order(:project_name)
+        @organs = Organ.order(:primary_site)
         @ana_cate = AnalysisCategory.order(:name)
         @ac_attrs = AnalysisCategory.column_names
         @viz = Visualizer.order(:name)
@@ -12,9 +13,9 @@ class AdminController < ApplicationController
     end
 
     def modify_sample_abd
-        #redirect_to import_abd_table_project_samples_path(:project_id=>params[:project_id], :file=>params[:file])
+        #redirect_to import_inf_table_project_samples_path(:project_id=>params[:project_id], :file=>params[:file])
         @project = Project.find(params[:project_id])
-        n1 = @project.name
+        n1 = @project.project_name
         up_file = params[:file]
         # uploader = AbdUploader.new(n1)
         # uploader.store!(up_file)
@@ -41,7 +42,7 @@ class AdminController < ApplicationController
 
             keys = all_json.keys
             s_names.each_with_index do |s_name, index|
-                f_path = "#{$abd_dir}#{n1}_#{s_name}.tsv"
+                f_path = "#{$inf_dir}#{n1}_#{s_name}.tsv"
                 f = File.open(f_path, "w")
                 s = "#{n1}\t#{s_name}"
                 i = index
@@ -83,6 +84,11 @@ class AdminController < ApplicationController
     def update_all_samples
         Sample.import(params[:file])
         redirect_to '/admin', notice: "Samples imported."
+    end
+
+    def update_all_organs
+        Organ.import(params[:file])
+        redirect_to '/admin', notice: "Organs imported."
     end
 
     def modify_viz

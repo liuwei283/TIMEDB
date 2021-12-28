@@ -172,6 +172,70 @@
       <%= submit_tag 'Submit'%>
     <% end %>
   </section>
+
+  <hr />
+  <section id="organ_admin" class="admin_block">
+    <h4>
+    Organ management:
+    </h4>
+    <br />
+
+    <table id="og_table" class="display">
+      <thead>
+        <% @organs.column_names.each do |attr| %>
+
+          <th> <%= attr.capitalize %> </th>
+          
+        <% end %>
+        <th>
+          Action
+        </th>
+        
+      </thead>
+
+      <tbody>
+        <% @organs.each do |og| %>
+        
+          <tr>
+            <% @organs.column_names.each do |attr| %>
+              
+              <td> 
+                <div class="table_cell"> 
+                  <%= og[attr] %> 
+                </div>
+              </td>
+            
+            <% end %>
+            <td>
+              <%= link_to 'Delete', organ_path(og), method: :delete,
+                      data: { confirm: 'Are you sure?' } %>
+
+              <%= link_to 'Edit', edit_organ_path(og) %>
+            </td>
+            
+          </tr>
+        
+        <% end %>
+      </tbody>
+
+    </table>
+
+    <%= link_to  "Add one organ for demo", "/organ/new" %>
+    <h5>
+      Import all organ metadata from csv:
+    </h5>
+
+    <%= form_tag({action: :update_all_organs}, multipart: true) do %>
+      <p> 
+        Please select csv file to be imported:
+        <br />
+      </p>
+      <%= file_field_tag 'file' %>
+      <%= submit_tag 'Submit'%>
+    <% end %>
+    <br/>
+  </section>
+
   <hr>
   <br/>
 

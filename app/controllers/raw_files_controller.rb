@@ -17,8 +17,8 @@ class RawFilesController < ApplicationController
       send_file path
     end
 
-    def viz_abd_file
-      path = File.join Rails.root, "app", "data", "abd_files", full_path 
+    def viz_inf_file
+      path = File.join Rails.root, "app", "data", "inf_files", full_path 
       send_file path
     end
   

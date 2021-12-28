@@ -1,6 +1,6 @@
 class Project < ApplicationRecord
   has_many :samples, dependent: :destroy
-  validates :name, presence: true, uniqueness: { 
+  validates :project_name, presence: true, uniqueness: { 
     message: ->(object, data) do
       "Project #{data[:value]} already exists. "
     end
@@ -8,8 +8,12 @@ class Project < ApplicationRecord
 
   def self.import(file)
     CSV.foreach(file.path, headers: true, encoding: 'bom|utf-8') do |row|
-      project = find_by_name(row['name'])|| new
+      project = find_by_project_name(row['project_name'])|| new
       project.attributes = row.to_hash.slice(*column_names)
+      site = project.primary_site
+      organ = Organ.find_by(primary_site: site)
+      project.organ_id = organ.id
+      organ.update_attribute(:num_of_projects, organs.projects.count)
       project.save!
     end
   end

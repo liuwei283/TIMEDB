@@ -23,8 +23,8 @@
         <%#= submit_tag "upload fasta file" %>
     <%# end %> 
 
-    <%#= form_tag upload_abd_project_sample_path, :multipart =>true do %>
-        <%#= file_field_tag :abd_file %>
+    <%#= form_tag upload_inf_project_sample_path, :multipart =>true do %>
+        <%#= file_field_tag :inf_file %>
         <%#= submit_tag "upload abundance file" %>
     <%# end %> 
 
@@ -33,10 +33,10 @@
     
 
     
-    <%if @abd_exist %>
+    <%if @inf_exist %>
         <p>
             <%#= link_to 'Download sequencing data', download_seq_project_sample_path %>
-            <%= link_to 'Download abundance data', download_abd_project_sample_path %><br/>
+            <%= link_to 'Download abundance data', download_inf_project_sample_path %><br/>
             <%#= link_to 'Edit', edit_project_sample_path(@sample.project, @sample.id) %> 
             <%#= link_to 'Delete', [@sample.project, @sample],
             method: :delete,

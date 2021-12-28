@@ -103,7 +103,7 @@ class DatasetsController < ApplicationController
 
     def download_ds_abd
         @dataset = @user.datasets.find(params[:id])
-        send_data @dataset.abd_file(), :filename => "#{@dataset.name}_abd.tsv"
+        send_data @dataset.inf_file(), :filename => "#{@dataset.name}_abd.tsv"
     end
 
     def download_ds_metadata

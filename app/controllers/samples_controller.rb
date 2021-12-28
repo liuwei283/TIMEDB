@@ -1,7 +1,7 @@
 class SamplesController < ApplicationController
     http_basic_authenticate_with name: "admin", password: "Lovelace", only: [:new, :create, :edit, :new, :update, :destroy]
     $seq_dir = "#{Rails.root}/app/data/seq/"
-    $abd_dir = "#{Rails.root}/app/data/abd_files/"
+    $inf_dir = "#{Rails.root}/app/data/inf_files/"
     $tmp_dir = "#{Rails.root}/app/data/tmp/"
 
     def index
@@ -39,11 +39,11 @@ class SamplesController < ApplicationController
         @project = Project.find(params[:project_id])
         @sample = @project.samples.find(params[:id])
         @attrs = Sample.column_names
-        abd_name = "#{@project.name}_#{@sample.sample_name}.tsv"
-        abd_url = File.join("/app/data/abd_files/", abd_name)
-        abd_path = File.join($abd_dir, abd_name)
-        @abd_exist = (File.exist?(abd_path)) && (File.size(abd_path)>100)
-        gon.push file: abd_url
+        inf_name = "#{@project.name}_#{@sample.sample_name}.tsv"
+        inf_url = File.join("/app/data/inf_files/", inf_name)
+        inf_path = File.join($inf_dir, inf_name)
+        @inf_exist = (File.exist?(inf_path)) && (File.size(inf_path)>100)
+        gon.push file: inf_url
     end
 
     def create
@@ -94,7 +94,7 @@ class SamplesController < ApplicationController
         if params[:metadata]
             download_selected_metadata_file
         elsif params[:abundance]
-            download_selected_abd_file
+            download_selected_inf_file
         elsif params[:filter_abd]
             download_filter_abd
         elsif params[:filter_metadata]
@@ -177,24 +177,24 @@ class SamplesController < ApplicationController
         if params[:project_id]
             @project = Project.find(params[:project_id])
             ids = Sample.filtered(params[:search_value], @project)
-            send_data Sample.selected_abd_to_tsv(ids, option={"pj_name": @project.name}), :filename => "#{time_str}_selected_abd.tsv"
+            send_data Sample.selected_inf_to_tsv(ids, option={"pj_name": @project.name}), :filename => "#{time_str}_selected_abd.tsv"
         else
             ids = Sample.filtered(params[:search_value])
-            send_data Sample.selected_abd_to_tsv(ids), :filename => "#{time_str}_selected_abd.tsv"
+            send_data Sample.selected_inf_to_tsv(ids), :filename => "#{time_str}_selected_abd.tsv"
         end
     end
 
-    def download_selected_abd_file
+    def download_selected_inf_file
         time = Time.now
         time_str = time.strftime("%Y_%m_%d")       
         time_str += ("_" + time.strftime("%k_%M")) 
         time_str = time_str.gsub(' ','')
         if params[:project_id]
             @project = Project.find(params[:project_id])
-            send_data Sample.selected_abd_to_tsv(params[:selected_ids], option={"pj_name": @project.name}), :filename => "#{time_str}_selected_abd.tsv"
+            send_data Sample.selected_inf_to_tsv(params[:selected_ids], option={"pj_name": @project.name}), :filename => "#{time_str}_selected_abd.tsv"
             # redirect_to @project
         else
-            send_data Sample.selected_abd_to_tsv(params[:selected_ids]), :filename => "#{time_str}_selected_abd.tsv"
+            send_data Sample.selected_inf_to_tsv(params[:selected_ids]), :filename => "#{time_str}_selected_abd.tsv"
             # redirect_to samples_path
         end
         
@@ -217,7 +217,7 @@ class SamplesController < ApplicationController
         @sample = @project.samples.find(params[:id])
         n1 = @project.name
         n2 = @sample.sample_name
-        up_file = params[:abd_file]
+        up_file = params[:inf_file]
         uploader = AbdUploader.new("#{n1}_#{n2}")
         uploader.store!(up_file)
         redirect_to project_sample_path, notice: "Abundance data uploaded."
@@ -244,7 +244,7 @@ class SamplesController < ApplicationController
         @sample = @project.samples.find(params[:id])
         n1 = @project.name
         n2 = @sample.sample_name
-        file_current = "#{$abd_dir}#{n1}_#{n2}.tsv"
+        file_current = "#{$inf_dir}#{n1}_#{n2}.tsv"
         if File.file?(file_current)
             send_file(
             file_current,
@@ -256,7 +256,7 @@ class SamplesController < ApplicationController
 
     end
 
-    def import_abd_table
+    def import_inf_table
         @project = Project.find(params[:project_id])
         n1 = @project.name
         up_file = params[:file]
@@ -285,7 +285,7 @@ class SamplesController < ApplicationController
 
             keys = all_json.keys
             s_names.each_with_index do |s_name, index|
-                f_path = "#{$abd_dir}#{n1}_#{s_name}.tsv"
+                f_path = "#{$inf_dir}#{n1}_#{s_name}.tsv"
                 f = File.open(f_path, "w")
                 s = "#{n1}\t#{s_name}"
                 i = index

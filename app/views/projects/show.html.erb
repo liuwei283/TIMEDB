@@ -107,14 +107,14 @@
 
 
 
-  <%#=link_to 'Download selected sequencing data', download_selected_abd_project_samples_path(@project.id) %>
+  <%#=link_to 'Download selected sequencing data', download_selected_inf_project_samples_path(@project.id) %>
 
   <%#= form_tag import_project_samples_path([@project]), multipart: true do %>
     <%#= file_field_tag :file %>
     <%#= submit_tag "Import metadata by csv" %>
   <%# end %>
 
-  <%#= form_tag import_abd_table_project_samples_path([@project]), multipart: true do %>
+  <%#= form_tag import_inf_table_project_samples_path([@project]), multipart: true do %>
     <%#= file_field_tag :file %>
     <%#= submit_tag "Import abundance by tsv" %>
   <%# end %>

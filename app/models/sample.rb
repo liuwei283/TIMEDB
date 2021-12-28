@@ -39,7 +39,7 @@ class Sample < ApplicationRecord
     end
   end
 
-  def self.selected_abd_to_tsv(ids, option={})
+  def self.selected_inf_to_tsv(ids, option={})
     len = ids.length()
     if len<1
       return ""
@@ -50,7 +50,7 @@ class Sample < ApplicationRecord
         @project = Project.find(@sample.project_id)
         n1 = @project.name
         n2 = @sample.sample_name
-        file_current = "#{$abd_dir}#{n1}_#{n2}.tsv"
+        file_current = "#{$inf_dir}#{n1}_#{n2}.tsv"
         i = index
         if (File.file?(file_current))
           File.readlines(file_current).each_with_index do |line, index2| 

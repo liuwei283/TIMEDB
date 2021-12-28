@@ -5,9 +5,9 @@ class ProjectsController < ApplicationController
     $tmp_dir = "#{Rails.root}/app/data/tmp/"
 
     def index
-        @vis = ['id', 'project_name', 'primary_site', 'num_of_samples', 'num_of_oberserved_genes', 'major_related_publications',"original_link"]
-        @projects = Project.order(:name)
-        @attrs = Project.column_names
+        @vis = ['id', 'primary_site', 'num_of_projects']
+        @organs = Organ.order(:name)
+        @attrs = Organ.column_names
         @invis = []
         @attrs.each_with_index do |attr, index|
             if !@vis.include?(attr)
@@ -17,43 +17,19 @@ class ProjectsController < ApplicationController
         gon.push invis: @invis
         respond_to do |format|
             format.html
-            format.csv { send_data @projects.to_csv }
-            format.json { render json: ProjectDatatable.new(view_context) }
+            format.csv { send_data @organs.to_csv }
+            #format.json { render json: OrganDatatable.new(view_context) }
         end
     end
-  
-    def show
-        @vis = ['id', 'sample_name', 'experiment_type', 'project_name', 'nr_reads_sequenced', 'country', 'abundance_available', 'associated_phenotype']
-        @user = User.find(session[:user_id])
-        @project = Project.find(params[:id])
-        @attrs = Project.column_names
-        @sample_attrs = Sample.column_names
-        @invis = []
-        @sample_attrs.each_with_index do |attr, index|
-            if !@vis.include?(attr)
-                @invis.push(index+1)
-            end
-        end
-        gon.push invis: @invis
-        
-        id = session[:user_id]
-        @user = User.find(id)
-        @datasets = @user.datasets
-        respond_to do |format|
-            format.html
-            format.csv { send_data @project.samples.to_csv }
-            format.json { render json: ProjectSampleDatatable.new(view_context, @project) }
-        end
-    end
+
   
     def edit
-        @attrs = Project.column_names
-        @project = Project.find(params[:id])
-        @sample_attrs = Sample.column_names
+        @attrs = Organ.column_names
+        @organ = Organ.find(params[:id])
     end
   
     def destroy
-        @project = Project.find(params[:id])
+        @organ = Project.find(params[:id])
         @project.destroy
         redirect_to "/admin"
     end

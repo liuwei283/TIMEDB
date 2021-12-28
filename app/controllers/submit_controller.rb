@@ -275,7 +275,7 @@ class SubmitController < ApplicationController
         next unless !v.blank?
         ds_name = v
         @dataset = @user.datasets.find_by(name: v)
-        data = @dataset.abd_file()
+        data = @dataset.inf_file()
         # file_path = File.join(user_dir, ds_name, file_name)
         # fix the source of file
         # file = File.open file_path

@@ -2,6 +2,9 @@ class DatabaseController < ApplicationController
     $db_data_dir = File.join(Rails.root, "data", "static_viz_data")
 
     def overview
+        @organs = Organ.order(:primary_site)
+
+        #table data to be changed
         table_json = {
             'country': 'pie_GMREPO_country.tsv',  
             'phenotype': 'pie_GMREPO_phenotype.tsv',

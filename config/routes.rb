@@ -4,7 +4,7 @@ Rails.application.routes.draw do
     resources :samples do
       collection do
         post :import 
-        post :import_abd_table
+        post :import_inf_table
       end
       member do
         post :upload_seq
@@ -16,12 +16,18 @@ Rails.application.routes.draw do
     collection { post :import}
     collection { post :download_selected_file }
     collection { post :export_selected }
-    member { post :download_abd_table} 
+    member { post :download_inf_table} 
   end
 
   resources :samples do
     collection do
       post :make_selected_file
+    end
+  end
+
+  resources :organs do
+    collection do
+      post :import
     end
   end
 
@@ -109,6 +115,8 @@ Rails.application.routes.draw do
   post "admin/add_img" => "admin#add_img", :as => "admin/add_img"
   post "admin/delete_samples" => "admin#delete_samples", :as => "admin/delete_samples"
   post "admin/update_all_samples" => "admin#update_all_samples", :as => "admin/update_all_samples"
+  post "admin/update_all_organs" => "admin#update_all_organs", :as => "admin/update_all_organs"
+
 
   namespace :admin do
     post :update_analysis_category_position, to: 'analysis_categories#update_position'
@@ -131,6 +139,6 @@ Rails.application.routes.draw do
   match 'data/demo/*path', to: 'raw_files#demo', as: 'get_demo', via: :get
   match 'data/outputs/*path', to: 'raw_files#outputs', as: 'get_outputs', via: :get
   match 'data/static_viz_data/*path', to: 'raw_files#viz_file', via: :get
-  match 'app/data/abd_files/*path', to: 'raw_files#viz_abd_file', via: :get
+  match 'app/data/inf_files/*path', to: 'raw_files#viz_ainf_file', via: :get
 
 end

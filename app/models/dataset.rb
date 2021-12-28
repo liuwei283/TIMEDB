@@ -7,9 +7,9 @@ class Dataset < ApplicationRecord
   #   end
   # }, on: :create
 
-  def abd_file()
+  def inf_file()
     ids = sample_ids
-    return Sample.selected_abd_to_tsv(ids)
+    return Sample.selected_inf_to_tsv(ids)
   end
 
   def metadata_file()

@@ -86,6 +86,13 @@ ActiveRecord::Schema.define(version: 2021_11_30_115435) do
     t.index ["analysis_pipeline_id"], name: "index_module_requirements_on_analysis_pipeline_id"
   end
 
+  create_table "organs", force: :cascade do |t|
+    t.string "primary_site"
+    t.text "basic_information"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
   create_table "projects", force: :cascade do |t|
     t.string "project_name"
     t.string "primary_site"
@@ -97,8 +104,10 @@ ActiveRecord::Schema.define(version: 2021_11_30_115435) do
     t.string "original_link"
     t.string "details"
     t.string "orignial_dataset"
+    t.bigint "organ_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.index ["organ_id"], name: "index_projects_on_organ_id"
   end
 
   create_table "samples", force: :cascade do |t|
@@ -191,5 +200,6 @@ ActiveRecord::Schema.define(version: 2021_11_30_115435) do
   end
 
   add_foreign_key "datasets", "users"
+  add_foreign_key "projects", "organs"
   add_foreign_key "samples", "projects"
 end
