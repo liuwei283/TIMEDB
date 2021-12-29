@@ -12,7 +12,7 @@ class AdminController < ApplicationController
         @a_attrs = Analysis.column_names
     end
 
-    def modify_sample_abd
+    def modify_sample_inf
         #redirect_to import_inf_table_project_samples_path(:project_id=>params[:project_id], :file=>params[:file])
         @project = Project.find(params[:project_id])
         n1 = @project.project_name
@@ -22,32 +22,22 @@ class AdminController < ApplicationController
         if up_file.respond_to?(:read)
             data = up_file.read
             lines = data.split("\n")
-            names = lines[0].chomp.split("\t")
-            n_sample = names.length() - 1
+            names = lines[0].chomp.split("\t") 
+            n_sample = lines.length() - 1 #number of sample
+            n_key = names.length() - 1
             pj_name = names[0]
-            s_names = names[1..n_sample]
+            keys = names[1..n_key]
             i = 1
             all_json = {}
             while i < lines.length()
                 line = lines[i]
-                buffer = line.split("\t")
-                key = buffer[0].chomp
-                all_json[key] = Array.new(n_sample, "NA")
-                for j in 1..n_sample
-                    v = buffer[j].chomp
-                    all_json[key][j-1] = v
-                end
-                i += 1
-            end
-
-            keys = all_json.keys
-            s_names.each_with_index do |s_name, index|
+                sample_info = line.split("\t")
+                s_name = sample_info[0].chomp
                 f_path = "#{$inf_dir}#{n1}_#{s_name}.tsv"
                 f = File.open(f_path, "w")
                 s = "#{n1}\t#{s_name}"
-                i = index
-                keys.each do |k|
-                    value = all_json[k][i]
+                keys.each_with_index do |k, index|
+                    value =  sample_info[index + 1]
                     if value.to_f != 0
                         s += "\n"
                         s += "#{k}\t#{value}"
@@ -56,11 +46,10 @@ class AdminController < ApplicationController
                 f.write(s)
                 f.close
             end
-
         else
             logger.error "Bad file_data: #{up_file.class.name}: #{up_file.inspect}"
         end
-        redirect_to '/admin', notice: "ALL Abundance data uploaded."
+        redirect_to '/admin', notice: "ALL immune infiltration data uploaded."
     end
 
     def delete_samples
@@ -86,6 +75,8 @@ class AdminController < ApplicationController
         redirect_to '/admin', notice: "Samples imported."
     end
 
+
+    #consider delete later
     def update_all_organs
         Organ.import(params[:file])
         redirect_to '/admin', notice: "Organs imported."
@@ -113,13 +104,10 @@ class AdminController < ApplicationController
             f.write(file.read)
         end
         redirect_to '/admin', notice: "Image added."
-
     end
 
     def modify_viz_source
         VizDataSource.import(params[:file])
         redirect_to '/admin', notice: "Visualization source imported."
     end
-    
-
 end

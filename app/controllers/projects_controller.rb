@@ -6,7 +6,7 @@ class ProjectsController < ApplicationController
 
     def index
         @vis = ['id', 'project_name', 'primary_site', 'num_of_samples', 'num_of_oberserved_genes', 'major_related_publications',"original_link"]
-        @projects = Project.order(:name)
+        @projects = Project.order(:project_name)
         @attrs = Project.column_names
         @invis = []
         @attrs.each_with_index do |attr, index|
@@ -23,11 +23,12 @@ class ProjectsController < ApplicationController
     end
   
     def show
-        @vis = ['id', 'sample_name', 'experiment_type', 'project_name', 'nr_reads_sequenced', 'country', 'abundance_available', 'associated_phenotype']
+        @vis = ['id', 'sample_name', 'project_name', 'num_of_oberserved_genes', 'tissue_or_organ_of_origin', 'primary_diagnosis','gender', 'age', 'tumor_stage','ethnicity','vital_status']
         @user = User.find(session[:user_id])
         @project = Project.find(params[:id])
         @attrs = Project.column_names
         @sample_attrs = Sample.column_names
+        @samples = @project.samples
         @invis = []
         @sample_attrs.each_with_index do |attr, index|
             if !@vis.include?(attr)
@@ -64,7 +65,7 @@ class ProjectsController < ApplicationController
     end
 
     def export_selected
-        @projects = Project.order(:name)
+        @projects = Project.order(:project_name)
         send_data @projects.selected_to_csv(params[:selected_ids])
     end
 
@@ -85,10 +86,10 @@ class ProjectsController < ApplicationController
 
     def download_inf_table
         @project = Project.find(params[:id])
-        name = @project.name
+        name = @project.project_name
         send_file(
             "#{$inf_dir}#{name}.tsv",
-                filename: "#{name}_abd.tsv",
+                filename: "#{name}_inf.tsv",
         )
     end
   
@@ -104,7 +105,7 @@ class ProjectsController < ApplicationController
   
     private 
         def project_params
-            params.require(:project).permit(:name, :related_publications)
+            params.require(:project).permit(:project_name, :primary_site, :major_related_publications)
         end
   
 end

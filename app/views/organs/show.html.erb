@@ -11,14 +11,14 @@
   <%= javascript_pack_tag "datatable" %>
 <%end%>
 
-<% content_for :title, 'Project '+ @project.project_name  %>
+<% content_for :title, 'Organ '+ @organ.primary_site %>
 
 <div class="container">
   <h1>
-    Project Information
+    Organ(Pimary Site) Information
   </h1>
   <%#= link_to 'Edit', edit_project_path(@project) %> 
-  <%= link_to 'Back', projects_path %>
+  <%= link_to 'Back', organs_path %>
   <br/>
 
   <div class="row">
@@ -26,18 +26,18 @@
       <% if attr != 'id' && attr != 'created_at' && attr != 'updated_at'%>
         <div class="col-md-6">
           <strong><%=attr%>: </strong>
-          <%= @project[attr] %>
+          <%= @organ[attr] %>
         </div>
       <% end %>
     <% end %>
   </div>
   <br />
 
-  <h2>Samples</h2>
+  <h2>Projects</h2>
   <p>
     <span class="download_span">
-      Download samples information:
-      <%= link_to "Metadata", project_path(format: "csv") %>
+      Download projects information:
+      <%= link_to "Metadata", organ_path(format: "csv") %>
     </span>
   </p>
 
@@ -46,7 +46,7 @@
     <br />
     <br />
     <% i=1 %>
-    <% @sample_attrs.each do |attr| %>
+    <% @project_attrs.each do |attr| %>
       
         <% if !@vis.include? attr %>
           <button class="toggle-vis" data-column='<%=i.to_s%>'> 
@@ -58,13 +58,13 @@
     <%end%>
   </div>
   <br/>
-  <%= form_tag make_selected_file_samples_path, multipart: true do %>  
-    <%= content_tag :table, role: :datatable, class: "display", id: "table_page", data: { url: project_path(format: :json)} do %>
+  <%= form_tag export_selected_projects_path(format: "csv"), multipart: true do %>  
+    <%= content_tag :table, role: :datatable, class: "display", id: "table_page", data: { url: organ_path(format: :json)} do %>
       <thead>
             <th>
               <input type="checkbox" class="selectAll" name="selectAll" value="all">
             </th>
-            <% @sample_attrs.each do |attr| %>
+            <% @project_attrs.each do |attr| %>
               
               <th> <%= attr %> </th>
               
@@ -75,21 +75,19 @@
       </tbody>
     <% end %>
 
-    <%= submit_tag "dowload selected samples metadata to file", :name => 'metadata', :class => "s_table_sub" %>
-    <%= submit_tag "download selected samples infiltration to file", :name => 'infiltration', :class => "s_table_sub"  %>
+    <%= submit_tag "Download selected metadata" , :class => "s_table_sub"%>
+    <%#= submit_tag "download selected samples infiltration to file", :name => 'infiltration', :class => "s_table_sub"  %>
     <%#= submit_tag "download selected samples sequence to file", :name => 'sequence' %>
-    <br />
 
 
-    <%= hidden_field_tag 'project_id', @project.id %>
 
-    <%= submit_tag "dowload filtered samples metadata to file", :name => 'filter_metadata', :class => "s_table_sub" %>
-    <%= submit_tag "dowload filtered samples infiltration to file", :name => 'filter_inf', :class => "s_table_sub" %>
-    <br />
-  
-    <%= submit_tag "export selected samples to", :name => 'seleted2ds', :class => "s_table_sub"  %>
-    <%= submit_tag "export filtered samples to", :name => 'filter2ds', :class => "s_table_sub"  %>
-    <select id="select_box" name="ds_selected">
+    <%= hidden_field_tag 'organ_id', @organ.id %>
+
+    <%#= submit_tag "dowload filtered samples metadata to file", :name => 'filter_metadata', :class => "s_table_sub" %>
+    <%#= submit_tag "dowload filtered samples infiltration to file", :name => 'filter_inf', :class => "s_table_sub" %>
+    <%#= submit_tag "export selected samples to", :name => 'seleted2ds', :class => "s_table_sub"  %>
+    <%#= submit_tag "export filtered samples to", :name => 'filter2ds', :class => "s_table_sub"  %>
+    <!-- <select id="select_box" name="ds_selected">
       <option value="">--Please choose a dataset--</option>
       <% @datasets.each do |ds|%>
         <option value=<%=ds.name%>> <%=ds.name%></option>
@@ -99,7 +97,7 @@
   <p>
     If you do NOT have any dataset, create one here: 
     <%=link_to 'Create new dataset', new_user_dataset_path(:user_id=>@user.id)%>
-  </p>
+  </p> -->
 
   <p>
     *To avoid frenquent download, please refresh the page to enable download again.

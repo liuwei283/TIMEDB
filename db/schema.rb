@@ -88,7 +88,11 @@ ActiveRecord::Schema.define(version: 2021_11_30_115435) do
 
   create_table "organs", force: :cascade do |t|
     t.string "primary_site"
-    t.text "basic_information"
+    t.integer "num_of_projects"
+    t.text "project_list"
+    t.integer "num_of_samples"
+    t.string "data_type"
+    t.string "program"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
   end
@@ -137,7 +141,6 @@ ActiveRecord::Schema.define(version: 2021_11_30_115435) do
     t.bigint "project_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.string "abundance_available"
     t.index ["project_id"], name: "index_samples_on_project_id"
   end
 

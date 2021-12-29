@@ -13,4 +13,24 @@ class Organ < ApplicationRecord
         organ.save!
       end
     end
-  end
+
+
+    def self.to_csv(options={})
+      CSV.generate(options) do |csv|
+        csv << column_names
+        all.each do |organ|
+          csv << organ.attributes.values_at(*column_names)
+        end
+      end
+    end
+
+    def self.selected_to_csv(organ_ids, options={})
+      CSV.generate(options) do |csv|
+        csv << column_names
+        organ_ids.each do |id|
+          organ = Organ.find(id)
+          csv << organ.attributes.values_at(*column_names)
+        end
+      end
+    end
+end

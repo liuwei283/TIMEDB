@@ -32,7 +32,7 @@ class Sample < ApplicationRecord
       sample = find_by_sample_name(row['sample_name'])|| new
       sample.attributes = row.to_hash.slice(*column_names)
       pname = sample.project_name
-      project = Project.find_by(name: pname)
+      project = Project.find_by(project_name: pname)
       sample.project_id = project.id
       project.update_attribute(:num_of_samples, project.samples.count)
       sample.save!
@@ -48,7 +48,7 @@ class Sample < ApplicationRecord
       ids.each_with_index do |id, index|
         @sample = Sample.find(id)
         @project = Project.find(@sample.project_id)
-        n1 = @project.name
+        n1 = @project.project_name
         n2 = @sample.sample_name
         file_current = "#{$inf_dir}#{n1}_#{n2}.tsv"
         i = index

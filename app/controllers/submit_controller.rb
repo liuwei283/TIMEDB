@@ -284,7 +284,7 @@ class SubmitController < ApplicationController
         time_str = time.strftime("%Y_%m_%d")       
         time_str += ("_" + time.strftime("%k_%M")) 
         time_str = time_str.gsub(' ','')
-        file_name = "#{ds_name}_abd.tsv"
+        file_name = "#{ds_name}_inf.tsv"
         file = File.new(file_name, 'w')
         file.write(data)
         uploader = JobInputUploader.new

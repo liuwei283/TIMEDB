@@ -1,4 +1,4 @@
-class ProjectDatatable < ApplicationDatatable
+class OrganProjectDatatable < ApplicationDatatable
     private
   
     def data
@@ -7,16 +7,9 @@ class ProjectDatatable < ApplicationDatatable
           column << ""
           Project.column_names.each do |attr|
             if attr != 'id'
-              
-          
-              if attr == 'project_name'
-                column << link_to("#{project[attr]}", "https://www.ncbi.nlm.nih.gov/bioproject/#{project[attr]}")
-              else
                 column << "<div class='table_cell'> #{project[attr]} </div>"
-              end
-            
             else
-              column << project[attr]
+                column << project[attr]
             end
           end
           column << link_to('Show', project)
@@ -47,21 +40,21 @@ class ProjectDatatable < ApplicationDatatable
           search_string << "\"#{attr}\" like :search"
         end
       end
-      # search_col =['project_name', 'project_name', 'experiment_type']
+      # search_col =['sample_name', 'project_name', 'experiment_type']
       # search_col.each do |term|
       #   search_string << "#{term} like :search"
       # end
   
       # will_paginate
       # users = User.page(page).per_page(per_page)
-      projects = Project.order("#{sort_column} #{sort_direction}")
+      projects = @obj.projects.order("#{sort_column} #{sort_direction}")
       projects = projects.page(page).per(per_page)
       if params[:search][:value] != ""
         projects = projects.where(search_string.join(' or '), search: "%#{params[:search][:value]}%")
       else
         projects = projects.page(page).per(per_page)
       end
-      #projects = projects.where(search_string.join(' or '), search: "%#{params[:search][:value]}%")
+      #samples = samples.where(search_string.join(' or '), search: "%#{params[:search][:value]}%")
     end
   
     def columns

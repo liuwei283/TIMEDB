@@ -8,9 +8,9 @@ Rails.application.routes.draw do
       end
       member do
         post :upload_seq
-        post :upload_abd
+        post :upload_inf
         get :download_seq
-        get :download_abd
+        get :download_inf
       end
     end
     collection { post :import}
@@ -26,16 +26,15 @@ Rails.application.routes.draw do
   end
 
   resources :organs do
-    collection do
-      post :import
-    end
+    collection { post :import }
+    collection { post :export_selected }
   end
 
   resources :users do 
     resources :datasets do
       member { post :upload_file }
       member { get :download_file}
-      member { get :download_ds_abd}
+      member { get :download_ds_inf}
       member { get :download_ds_metadata}
       member { post :delete_sample}
     end
@@ -107,7 +106,7 @@ Rails.application.routes.draw do
   # admin
   get '/admin', to: 'admin#index', as: "admin_index"
   post "admin/modify_sample_metadata" => "admin#modify_sample_metadata", :as => "admin/modify_sample_metadata"
-  post "admin/modify_sample_abd" => "admin#modify_sample_abd", :as => "admin/modify_sample_abd"
+  post "admin/modify_sample_inf" => "admin#modify_sample_inf", :as => "admin/modify_sample_inf"
   post "admin/modify_viz" => "admin#modify_viz", :as => "admin/modify_viz"
   post "admin/modify_ana_cate" => "admin#modify_ana_cate", :as => "admin/modify_ana_cate"
   post "admin/modify_ana" => "admin#modify_ana", :as => "admin/modify_ana"

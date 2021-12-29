@@ -21,6 +21,9 @@
       <%=link_to 'Samples', '#sample_admin' %>
     </li> 
     <li class="breadcrumb-item">
+      <%=link_to 'Organs', '#organ_admin' %>
+    </li> 
+    <li class="breadcrumb-item">
       <%=link_to 'Analysis Categories', admin_analysis_categories_path %>
     </li> 
     <li class="breadcrumb-item">
@@ -41,6 +44,7 @@
       <ul>
         <li>add project metadata</li>
         <li>add sample metadata</li>
+        <li>add organ(primary site) metadata</li>
         <li>add sample abandance data</li>
         <li>add analysis module</li>
         <li>add visualization module</li>
@@ -121,6 +125,7 @@
     <% end %>
   </section>
   <hr />
+
   <section id="sample_admin" class="admin_block">
     <h4>
     Sample management:
@@ -157,14 +162,14 @@
 
 
     <h5>
-      Modify the abandance:
+      Modify the immune infiltration data:
     </h5>
 
-    <%= form_tag({action: :modify_sample_abd}, multipart: true) do %>
+    <%= form_tag({action: :modify_sample_inf}, multipart: true) do %>
       <p>
         Please select the project whose samples need to be modified
       </p>
-      <%= select_tag :project_id, options_from_collection_for_select(@projects, :id, :name, -1) %>
+      <%= select_tag :project_id, options_from_collection_for_select(@projects, :id, :project_name, -1) %>
       <p> 
         Please select tsv file to be imported:
       </p>
@@ -176,14 +181,28 @@
   <hr />
   <section id="organ_admin" class="admin_block">
     <h4>
-    Organ management:
+    Organ(primary site) management:
     </h4>
+
+    <div id='hidden_helper'>
+    Hide columns: 
     <br />
+    <% i=0 %>
+    <% @organs.column_names.each do |attr| %>
+      
+      <button class="toggle-vis" data-column='<%=i.to_s%>'> 
+        <%= attr.capitalize %>
+      </button>
+      <%i += 1%>
+      
+    <%end%>
+  </div>
 
     <table id="og_table" class="display">
       <thead>
+        
         <% @organs.column_names.each do |attr| %>
-
+          
           <th> <%= attr.capitalize %> </th>
           
         <% end %>
@@ -207,6 +226,7 @@
             
             <% end %>
             <td>
+              <%= link_to 'Show', organ_path(og) %>
               <%= link_to 'Delete', organ_path(og), method: :delete,
                       data: { confirm: 'Are you sure?' } %>
 
@@ -220,20 +240,12 @@
 
     </table>
 
-    <%= link_to  "Add one organ for demo", "/organ/new" %>
-    <h5>
-      Import all organ metadata from csv:
-    </h5>
+    <%= link_to  "Add one organ", "/organs/new" %>
 
-    <%= form_tag({action: :update_all_organs}, multipart: true) do %>
-      <p> 
-        Please select csv file to be imported:
-        <br />
-      </p>
-      <%= file_field_tag 'file' %>
-      <%= submit_tag 'Submit'%>
+    <%= form_tag import_organs_path, multipart: true do %>
+      <%= file_field_tag :file %>
+      <%= submit_tag "Import organs from csv" %>
     <% end %>
-    <br/>
   </section>
 
   <hr>
