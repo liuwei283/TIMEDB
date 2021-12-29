@@ -6,10 +6,12 @@ class OrganDatatable < ApplicationDatatable
         [].tap do |column|
           column << ""
           Organ.column_names.each do |attr|
-            if attr != 'id'
-                column << "<div class='table_cell'> #{organ[attr]} </div>"
-            else
-                column << organ[attr]
+            if attr != 'cover_image'
+              if attr != 'id'
+                  column << "<div class='table_cell'> #{organ[attr]} </div>"
+              else
+                  column << organ[attr]
+              end
             end
           end
           column << link_to('Show', organ)

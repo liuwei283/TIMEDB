@@ -10,7 +10,7 @@ class OrgansController < ApplicationController
         @attrs = Organ.column_names
         @invis = []
         @attrs.each_with_index do |attr, index|
-            if !@vis.include?(attr)
+            if !@vis.include?(attr) && attr != 'cover_image'
                 @invis.push(index+1)
             end
         end
