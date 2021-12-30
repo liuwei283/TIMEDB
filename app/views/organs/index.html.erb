@@ -24,7 +24,7 @@
     <br />
     <% i=2 %>
     <% @attrs.each do |attr| %>
-      <% if attr != 'id'%>
+      <% if attr != 'id' && attr != 'cover_image' %>
         <% if !@vis.include? attr%>
           <button class="toggle-vis" data-column='<%=i.to_s%>'> 
             <%= attr%>
@@ -43,9 +43,9 @@
               <input type="checkbox" class="selectAll" name="selectAll" value="all">
             </th>
             <% @attrs.each do |attr| %>
-              
-              <th> <%= attr %> </th>
-              
+              <% if attr != 'cover_image' %>
+                <th> <%= attr %> </th>
+              <% end %>
             <% end %>
             <th>Action</th>
       </thead>

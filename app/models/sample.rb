@@ -40,28 +40,29 @@ class Sample < ApplicationRecord
   end
 
   def self.selected_inf_to_tsv(ids, option={})
-    len = ids.length()
+    len = ids.length() # number of the samples
     if len<1
       return ""
     else
       out_json = {}
       ids.each_with_index do |id, index|
+
         @sample = Sample.find(id)
         @project = Project.find(@sample.project_id)
         n1 = @project.project_name
         n2 = @sample.sample_name
         file_current = "#{$inf_dir}#{n1}_#{n2}.tsv"
         i = index
-        if (File.file?(file_current))
+        if (File.file?(file_current)) 
           File.readlines(file_current).each_with_index do |line, index2| 
-            if index2 >0
+            if index2 >0 
               contents = line.split("\t")
               k = contents[0].chomp
               v = contents[1].chomp
               if !(out_json.key?(k))
-                out_json[k] = Array.new(len, 0.0)
+                out_json[k] = Array.new(len, 0.0) 
               end
-              out_json[k][i] = v.to_f
+              out_json[k][i] = v.to_f 
             end
           end
         end

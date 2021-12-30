@@ -98,7 +98,7 @@ class OrgansController < ApplicationController
   
     private 
         def organ_params
-            params.require(:organ).permit(:primary_site, :data_type, :program)
+            params.require(:organ).permit(:primary_site, :project_list, :data_type, :program, :cover_image)
         end
   
 end

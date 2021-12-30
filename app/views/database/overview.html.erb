@@ -84,28 +84,32 @@
 up to here -->
 
 
+
 <section id = "organ_card">
-    <div class = "container">
-        <h2>Organs</h2>
-        <div id = "cards_wrapper" class = "container">
-            <div class = "card-deck">
+    <h2>Organs</h2>
+    <div class = "container-fluid container">
+        <div class = "row cols-xs-space cols-sm-space cols-md-space text-center">
+
                 <% @organs.each do |og| %>
-                    <div class = "card">
-                        <div class = "card_img">
+
+                    <div class = "col-lg-4 mb-4">
+                        
                             <%= link_to og do %>
-                                <% if a.cover_image.blank? %>
-                                    <%= image_tag "module.jpg" %>
+                                <% if og.cover_image.blank? %>
+                                    <%= image_tag "module.jpg", class: "rounded-circle z-depth-2", width: "250" %>
                                 <% else %>
-                                    <%= image_tag og.cover_image %>
+                                    <%= image_tag og.cover_image, class: "rounded-circle z-depth-2", width: "250" %>
                                 <% end %>
                             <% end %>
-                        </div>
                     </div>
+
                 <% end %>
-            </div>
         </div>
     </div>
 </section>
+
+
+
 
 <h2> Organs information (changed later)</h2>
 

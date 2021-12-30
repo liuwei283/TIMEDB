@@ -19,10 +19,10 @@
       <% if attr == 'cover_image' %>
         <p> 
           <%= f.label attr.capitalize %> <br>
-          <%= f.file_field :cover_image %>
+          <%= f.text_field :cover_image %>
         </p>
         <% if !@organ.cover_image.nil? %>
-          <%= image_tag(@organ.cover_image, width: '400') %>
+          <%#= image_tag(@organ.cover_image, width: '400') %>
         <% end %>
       <% else %>
         <p> 
