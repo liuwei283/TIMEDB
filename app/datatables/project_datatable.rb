@@ -10,7 +10,7 @@ class ProjectDatatable < ApplicationDatatable
               
           
               if attr == 'project_name'
-                column << link_to("#{project[attr]}", "https://www.ncbi.nlm.nih.gov/bioproject/#{project[attr]}")
+                column << link_to("#{project[attr]}", project.original_link)
               else
                 column << "<div class='table_cell'> #{project[attr]} </div>"
               end

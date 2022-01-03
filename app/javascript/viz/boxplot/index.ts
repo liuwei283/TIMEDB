@@ -40,6 +40,7 @@ function init() {
             colors: { box: groupedChartColors[0], scatter: "pink",
                 violin: "LightSteelBlue"},
             palette: groupedChartColors,
+            
         },
         loadData: {
             boxMain: {
