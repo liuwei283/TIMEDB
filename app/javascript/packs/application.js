@@ -59,6 +59,7 @@ document.addEventListener('DOMContentLoaded', (event) =>  {
     ];
 
     $('[data-toggle="tooltip"]').tooltip();
+    $('[data-toggle="popover"]').popover()
 
 
     $('#alerts .alert-group').each((i, el) => {
