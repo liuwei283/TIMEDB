@@ -30,6 +30,11 @@ Rails.application.routes.draw do
     collection { post :export_selected }
   end
 
+  resources :cancers do
+    collection { post :import }
+    collection { post :export_selected }
+  end
+
   resources :users do 
     resources :datasets do
       member { post :upload_file }
@@ -115,6 +120,8 @@ Rails.application.routes.draw do
   post "admin/delete_samples" => "admin#delete_samples", :as => "admin/delete_samples"
   post "admin/update_all_samples" => "admin#update_all_samples", :as => "admin/update_all_samples"
   post "admin/update_all_organs" => "admin#update_all_organs", :as => "admin/update_all_organs"
+  post "admin/update_all_cancers" => "admin#update_all_cancers", :as => "admin/update_all_cancers"
+
 
 
   namespace :admin do

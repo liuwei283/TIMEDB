@@ -85,33 +85,46 @@ up to here -->
 
 <br />
 <hr />
-<section id = "organ_card">
-    <h2>Organs</h2>
+<section id = "cancer_card">
+    <h2>Cancer Type</h2>
     <div class = "container-fluid container">
         <div class = "row cols-xs-space cols-sm-space cols-md-space text-center">
-            <% @organs.each do |og| %>
-                <% if og.primary_site != "NA" && og.primary_site != "Hematopoietic and reticuloendothelial systems" %>
+
+
+
+            
+            <% @cancers.each do |cc| %>
+                <% if @singleIcon.include?(cc.cancer_type) %>
                     <div class = "col-lg-2 col-lg-offset-1 mb-4">
-                        <%= link_to og do %>
-                            <% if og.cover_image.blank? %>
+                        <%= link_to cc do %>
+                            <% if cc.cover_image.blank? %>
                                 <%= image_tag "module.jpg", class: "rounded-circle z-depth-2" %>
                             <% else %>
-                                <%= image_tag og.cover_image, class: "rounded-circle z-depth-2" %>
+                                <%= image_tag cc.cover_image, class: "rounded-circle z-depth-2" %>
                             <% end %>
                         
                             <%#= image_tag og.primary_site + ".png", class: "rounded-circle z-depth-2" %>
                         <% end %>
-                        <h4> <%= og.primary_site %> </h4>
+                        <h4> <%= cc.primary_site %> </h4>
                     </div>
                 <% end %>
             <% end %>
             <div class = "col-lg-5" > </div>
             <div class = "col-lg-2 col-lg-offset-1 mb-4">
-                    <h4> Others </h4>
-
-
-                    <div id= "othersIcon" type="button" class="fa fa-lightbulb-o fa-lg" data-toggle="popover" title="" data-content= "xdgdsgdgdgr" > contenu de ce que je dois cliquer dessu pour afficher le popover</div>
                     
+                    <div type="button" class="fa fa-lightbulb-o fa-lg" title="Cancers List" data-toggle="popover" title="" data-content= ' 
+                    <%#= render :partial => 'partials/popover' %>
+                    <ul>
+                    <% @cancers.each do |cc| %>
+                        <% if @groupedIcon.include?(cc.cancer_type) %>
+                            <li><%= link_to cc.cancer_type, cc %></li>
+                        <% end %>
+                    <% end %>
+                    </ul>
+                    '> 
+                    <%= image_tag "kidney.png", class: "rounded-circle z-depth-2" %> <%# image will be changed later %>
+                    </div> 
+                    <h4> Others </h4>
 
             </div>
             <div class = "col-lg-5" > </div>
@@ -126,4 +139,5 @@ up to here -->
 <h2> Database static visualization (merged later)</h2>
 
 
-<%=javascript_pack_tag 'db-overview-viz'%> 
+<%#=javascript_pack_tag 'db-overview-viz'%> 
+                        

@@ -4,7 +4,7 @@ class DatasetsController < ApplicationController
         id = session[:user_id]
         @user = User.find(id)
         @dataset = @user.datasets.find(params[:id])
-        @vis = ['id', 'project_name', 'num_of_oberserved_genes',  'tissue_or_organ_of_origin', 'primary_diagnosis','gender', 'age', 'tumor_stage','ethnicity','vital_status']
+        @vis = ['id', 'sample_name', 'project_name', 'num_of_oberserved_genes', 'tissue_or_organ_of_origin', 'primary_diagnosis','gender', 'age', 'tumor_stage','ethnicity','vital_status']
         
         @sample_attrs = Sample.column_names
         @invis = []

@@ -2,7 +2,15 @@ class DatabaseController < ApplicationController
     $db_data_dir = File.join(Rails.root, "data", "static_viz_data")
 
     def overview
-        @organs = Organ.order(:primary_site)
+        @cancers = Cancer.order(:cancer_type)
+        @groupedIcon = ['NA', 'Hematopoietic and reticuloendothelial systems'] #free to change later
+        @singleIcon = []
+        @cancers.each do |cancer|
+            theCancer = cancer.cancer_type 
+            if !@groupedIcon.include?(theCancer)
+                @singleIcon.push(theCancer)
+            end
+        end
 
         #table data to be changed
         table_json = {

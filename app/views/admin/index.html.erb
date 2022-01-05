@@ -21,7 +21,7 @@
       <%=link_to 'Samples', '#sample_admin' %>
     </li> 
     <li class="breadcrumb-item">
-      <%=link_to 'Organs', '#organ_admin' %>
+      <%=link_to 'Cancers', '#cancer_admin' %>
     </li> 
     <li class="breadcrumb-item">
       <%=link_to 'Analysis Categories', admin_analysis_categories_path %>
@@ -44,7 +44,7 @@
       <ul>
         <li>add project metadata</li>
         <li>add sample metadata</li>
-        <li>add organ(primary site) metadata</li>
+        <li>add cancer type metadata</li>
         <li>add sample abandance data</li>
         <li>add analysis module</li>
         <li>add visualization module</li>
@@ -248,6 +248,84 @@
     <%= form_tag import_organs_path, multipart: true do %>
       <%= file_field_tag :file %>
       <%= submit_tag "Import organs from csv" %>
+    <% end %>
+  </section>
+
+
+
+
+
+   <hr />
+     <!--
+  <section id="cancer_admin" class="admin_block">
+    <h4>
+    Cancer type management:
+    </h4>
+
+  
+    <div id='hidden_helper'>
+    Hide columns: 
+    <br />
+    <% i=0 %>
+    <% @organs.column_names.each do |attr| %>
+      
+      <button class="toggle-vis" data-column='<%=i.to_s%>'> 
+        <%= attr.capitalize %>
+      </button>
+      <%i += 1%>
+      
+    <%end%>
+  </div>
+
+  -->
+
+    <table id="ct_table" class="display">
+      <thead>
+        
+        <% @cancer.column_names.each do |attr| %>
+          
+          <th> <%= attr.capitalize %> </th>
+          
+        <% end %>
+        <th>
+          Action
+        </th>
+        
+      </thead>
+
+      <tbody>
+        <% @cancers.each do |cc| %>
+        
+          <tr>
+            <% @cancers.column_names.each do |attr| %>
+              
+              <td> 
+                <div class="table_cell"> 
+                  <%= cc[attr] %> 
+                </div>
+              </td>
+            
+            <% end %>
+            <td>
+              <%= link_to 'Show', cancer_path(cc) %>
+              <%= link_to 'Delete', cancer_path(cc), method: :delete,
+                      data: { confirm: 'Are you sure?' } %>
+
+              <%= link_to 'Edit', edit_cancer_path(cc) %>
+            </td>
+            
+          </tr>
+        
+        <% end %>
+      </tbody>
+
+    </table>
+
+    <%= link_to  "Add one cancer type", "/cancers/new" %>
+
+    <%= form_tag import_cancers_path, multipart: true do %>
+      <%= file_field_tag :file %>
+      <%= submit_tag "Import cancers from csv" %>
     <% end %>
   </section>
 

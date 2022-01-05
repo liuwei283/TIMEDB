@@ -70,6 +70,8 @@ export function getLeafOrder(rootNode): string[] {
     sortTree(rootNode);
     return nodeList;
 }
+
+//actually not sortTree but get all leaf nodes by order
 function sortTree(d): any {
     if (d.children) {
         d.children.forEach(c => {

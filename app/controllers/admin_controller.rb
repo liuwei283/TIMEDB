@@ -4,6 +4,7 @@ class AdminController < ApplicationController
     def index
         @projects = Project.order(:project_name)
         @organs = Organ.order(:primary_site)
+        @cancers = Cancer.order(:cancer_type)
         @ana_cate = AnalysisCategory.order(:name)
         @ac_attrs = AnalysisCategory.column_names
         @viz = Visualizer.order(:name)
@@ -81,6 +82,10 @@ class AdminController < ApplicationController
         Organ.import(params[:file])
         redirect_to '/admin', notice: "Organs imported."
     end
+
+    def update_all_cancers
+        Cancer.import(params[:file])
+        redirect_to '/admin', notice: "Cancers imported."
 
     def modify_viz
         Visualizer.import(params[:file])
