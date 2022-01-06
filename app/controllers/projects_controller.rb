@@ -52,6 +52,10 @@ class ProjectsController < ApplicationController
         @project = Project.find(params[:id])
         @sample_attrs = Sample.column_names
     end
+
+    def visualize 
+        @project = Project.find(params[:id])
+
   
     def destroy
         @project = Project.find(params[:id])

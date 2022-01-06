@@ -3,18 +3,26 @@
     <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.22/js/jquery.dataTables.min.js"></script>
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.22/css/jquery.dataTables.css">
 <%end%>
-<% content_for :title, "Overview" %>
+<% content_for :title, "Project visualization" %>
 
 <div class = "index-banner">
     <div class = "container">
     <h1 class = "display-4 font-weight-bold">
-        Database Overview
+        Project Overview
     </h1>
+    <h2 class = display-4>
+        <%= @Project.project_name %>
+    </h2>
     </div>
     
 </div>
 <br>
-<div id="head" class="container Block">
+
+<h1> Information to be added later </h1> 
+
+<%# this part may be changed later -> text information summary %>
+
+<!-- <div id="head" class="container Block">
 
     
     <div class="row">
@@ -77,11 +85,14 @@
 <div class = "container Block"> 
 
 
-<!-- to be deleted
+
+
+
+ to be deleted
 <h2>Sample distribution</h2>
 <div id = "world-map" class = "container Block"> </div>
 </div>
-up to here -->
+up to here
 
 <br />
 <hr />
@@ -129,11 +140,12 @@ up to here -->
 </section>
 <hr />
 
+-->
+
 
 
 <br />
-<h2> Database static visualization (merged later)</h2>
 
 
-<%=javascript_pack_tag 'db-overview-viz'%> 
+<%=javascript_pack_tag 'pj-overview-viz'%> 
                         

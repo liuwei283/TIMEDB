@@ -214,7 +214,7 @@ export function fillinblock(cid, relation_key, relation_data, content_data){
         var tdata = content_data["t"][tdk];
         //console.log(tdata);
         var container = document.getElementById(cid);
-        var tid = "t"+cid;
+        var tid = "t" + cid;
         container.innerHTML = '';
         var tb = table(tid, tdata);
         container.appendChild(tb);
