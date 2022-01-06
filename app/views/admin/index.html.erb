@@ -178,13 +178,14 @@
     <% end %>
   </section>
 
+<!-- 
   <hr />
   <section id="organ_admin" class="admin_block">
     <h4>
     Organ(primary site) management:
     </h4>
 
-  <!-- 
+
     <div id='hidden_helper'>
     Hide columns: 
     <br />
@@ -199,8 +200,7 @@
     <%end%>
   </div>
 
-  -->
-
+  
     <table id="og_table" class="display">
       <thead>
         
@@ -251,23 +251,22 @@
     <% end %>
   </section>
 
-
+  -->
 
 
 
    <hr />
-     <!--
+   
   <section id="cancer_admin" class="admin_block">
     <h4>
     Cancer type management:
     </h4>
 
-  
     <div id='hidden_helper'>
     Hide columns: 
     <br />
     <% i=0 %>
-    <% @organs.column_names.each do |attr| %>
+    <% @cancers.column_names.each do |attr| %>
       
       <button class="toggle-vis" data-column='<%=i.to_s%>'> 
         <%= attr.capitalize %>
@@ -277,7 +276,6 @@
     <%end%>
   </div>
 
-  -->
 
     <table id="ct_table" class="display">
       <thead>

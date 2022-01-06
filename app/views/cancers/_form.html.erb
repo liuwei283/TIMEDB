@@ -21,7 +21,7 @@
           <%= f.label attr.capitalize %> <br>
           <%= f.text_field :cover_image %>
         </p>
-        <% if !@organ.cover_image.nil? %>
+        <% if !@cancer.cover_image.nil? %>
           <%= image_tag(@cancer.cover_image, width: '400') %>
         <% end %>
       <% else %>

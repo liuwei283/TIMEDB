@@ -12,11 +12,11 @@ class Project < ApplicationRecord
       project.attributes = row.to_hash.slice(*column_names)
       site = project.primary_site
       ctype = project.cancer_type
-      organ = Organ.find_by(primary_site: site)
+      #organ = Organ.find_by(primary_site: site)
       cancer = Cancer.find_by(cancer_type: ctype)
-      project.organ_id = organ.id
+      #project.organ_id = organ.id
       project.cancer_id = cancer.id
-      organ.update_attribute(:num_of_projects, organs.projects.count)
+      #organ.update_attribute(:num_of_projects, organs.projects.count)
       cancer.update_attribute(:num_of_projects, cancer.projects.count)
       project.save!
     end

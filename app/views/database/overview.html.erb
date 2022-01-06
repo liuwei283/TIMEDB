@@ -88,11 +88,7 @@ up to here -->
 <section id = "cancer_card">
     <h2>Cancer Type</h2>
     <div class = "container-fluid container">
-        <div class = "row cols-xs-space cols-sm-space cols-md-space text-center">
-
-
-
-            
+        <div class = "row cols-xs-space cols-sm-space cols-md-space text-center">            
             <% @cancers.each do |cc| %>
                 <% if @singleIcon.include?(cc.cancer_type) %>
                     <div class = "col-lg-2 col-lg-offset-1 mb-4">
@@ -105,7 +101,7 @@ up to here -->
                         
                             <%#= image_tag og.primary_site + ".png", class: "rounded-circle z-depth-2" %>
                         <% end %>
-                        <h4> <%= cc.primary_site %> </h4>
+                        <h4> <%= cc.cancer_type %> </h4>
                     </div>
                 <% end %>
             <% end %>
@@ -122,7 +118,7 @@ up to here -->
                     <% end %>
                     </ul>
                     '> 
-                    <%= image_tag "kidney.png", class: "rounded-circle z-depth-2" %> <%# image will be changed later %>
+                    <%= image_tag "other.png", class: "rounded-circle z-depth-2" %> 
                     </div> 
                     <h4> Others </h4>
 

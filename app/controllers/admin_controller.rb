@@ -3,7 +3,7 @@ class AdminController < ApplicationController
     $inf_dir = "#{Rails.root}/app/data/inf_files/"
     def index
         @projects = Project.order(:project_name)
-        @organs = Organ.order(:primary_site)
+        #@organs = Organ.order(:primary_site)
         @cancers = Cancer.order(:cancer_type)
         @ana_cate = AnalysisCategory.order(:name)
         @ac_attrs = AnalysisCategory.column_names

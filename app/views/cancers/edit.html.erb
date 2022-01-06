@@ -1,0 +1,73 @@
+<% content_for :head do %>
+  <script src="https://cdn.staticfile.org/jquery/1.10.2/jquery.min.js"></script>
+  <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.22/js/jquery.dataTables.min.js"></script>
+  <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.22/css/jquery.dataTables.css">
+  
+  <%= javascript_pack_tag "table_style" %>
+<% end %>
+
+<div class="container">
+  <h1>Edit Cancer type</h1>
+  
+  <%= render 'form' %>
+  
+  <h2>Projects</h2>
+  <div id='hidden_helper'>
+    Hide columns: 
+    <br />
+    <% i=0 %>
+    <% @project_attrs.each do |attr| %>
+      
+        <button class="toggle-vis" data-column='<%=i.to_s%>'> 
+          <%= attr.capitalize %>
+        </button>
+        <%i += 1%>
+      
+    <%end%>
+  </div>
+
+
+  <table id="Table" class="display">
+
+      <thead>
+        <% @project_attrs.each do |attr| %>
+          
+            <th> <%= attr.capitalize %> </th>
+          
+        <% end %>
+        <th>Action</th>
+      </thead>
+
+      <tbody>
+        <% @cancer.projects.each do |project| %>
+        
+          <tr>
+            <% @project_attrs.each do |attr| %>
+              
+                <td> 
+                  <div class="table_cell"> 
+                    <%= project[attr] %> 
+                  </div>
+                </td>
+              
+            <% end %>
+            
+            <td>
+              <%= link_to 'Show', project %>
+              <%= link_to 'Delete', project,
+                method: :delete,
+                data: { confirm: 'Are you sure to delete ' + project.project_name + '?'} %>
+              <%= link_to 'Edit', edit_project_path(project) %> 
+            </td>
+          </tr>
+        
+        <% end %>
+      </tbody>
+
+    </table>
+    
+
+  <%= link_to 'create a new project', new_project_path %>
+
+  <%= link_to 'Back', "/admin" %>
+</div>
