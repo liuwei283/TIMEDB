@@ -24,11 +24,16 @@
   <div class="row">
     <% @attrs.each do |attr| %>
       <% if attr != 'id' && attr != 'created_at' && attr != 'updated_at'%>
-        <% if attr == 'cover_image' %>
+        <% if attr == 'cover_image' && %>
+        
+          <% if !@cancer.cover_image.blank? %>
+
             <div class = 'col-md-2'>
                 <%= image_tag @cancer.cover_image, class: "rounded-circle z-depth-2" %>
             </div>
             <div class = 'col-md-10'></div>
+
+          <% end %>
         <% else %>
             <div class="col-md-6">
                 <strong><%=attr%>: </strong>
@@ -77,6 +82,7 @@
               
             <% end %>
             <th>Action</th>
+            <th>visualization</th>
       </thead>
       <tbody>
       </tbody>

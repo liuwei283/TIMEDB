@@ -7,8 +7,6 @@ class ProjectDatatable < ApplicationDatatable
           column << ""
           Project.column_names.each do |attr|
             if attr != 'id'
-              
-          
               if attr == 'project_name'
                 column << link_to("#{project[attr]}", project.original_link)
               else
@@ -19,7 +17,8 @@ class ProjectDatatable < ApplicationDatatable
               column << project[attr]
             end
           end
-          column << link_to('Show', project)
+          column << link_to('Details', project)
+          column << link_to('Show', overview_project_path(project))
         end
       end
     end

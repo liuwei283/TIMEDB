@@ -116,7 +116,7 @@ ActiveRecord::Schema.define(version: 2021_12_29_142146) do
   end
 
   create_table "samples", force: :cascade do |t|
-    t.string "sample_name"
+    t.string "submitter_id"
     t.string "project_name"
     t.integer "num_of_oberserved_genes"
     t.string "ajcc_pathologic_stage"

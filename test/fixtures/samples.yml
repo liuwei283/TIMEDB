@@ -1,7 +1,7 @@
 # Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
 one:
-  sample_name: MyString
+  submitter_id: MyString
   original_description: MyText
   curated_description: MyText
   project_id: MyString
@@ -31,7 +31,7 @@ one:
   project: 
 
 two:
-  sample_name: MyString
+  submitter_id: MyString
   original_description: MyText
   curated_description: MyText
   project_id: MyString

@@ -1,29 +1,32 @@
 class CreateSamples < ActiveRecord::Migration[6.0]
   def change
     create_table :samples do |t|
-      t.string :sample_name
+      t.string :submitter_id
       t.string :project_name
-      t.integer :num_of_oberserved_genes
-      t.string :ajcc_pathologic_stage
-      t.string :tissue_or_organ_of_origin
-      t.string :primary_diagnosis
-      t.string :year_of_diagnosis
-      t.string :gender
-      t.integer :age
       t.string :tumor_stage
-      t.string :updated_datetime
-      t.string :ethnicity
-      t.text :drug_treatment_type
-      t.text :treatment_or_therapy
-      t.text :site_of_resection_or_biopsy
-      t.string :prior_malignancy
-      t.string :vital_status
-      t.text :synchronous_malignancy
-      t.string :morphology
+      t.string :tissue_or_organ_of_origin
+      t.integer :days_to_last_follow_up
+      t.string :primary_diagnosis
+      t.integer :age_at_diagnosis 
+      t.string :ajcc_pathologic_t
       t.string :ajcc_pathologic_n
-      t.string :ajcc_clinical_m
-      t.float :os
-      t.float :pfs
+      t.string :ajcc_pathologic_m
+      t.string :tumor_grade
+      t.integer :cigarettes_per_day
+      t.integer :years_smoked
+      t.float :weight
+      t.float :alcohol_intensity
+      t.float :height
+      t.float :bmi
+      t.string :gender 
+      t.string :vital_status 
+      t.string :race
+      t.integer :age_at_index
+      t.integer :days_to_death
+      t.string :type
+      t.float :pfs_status
+      t.float :os_status
+ 
       t.references :project, null: false, foreign_key: true
 
       t.timestamps

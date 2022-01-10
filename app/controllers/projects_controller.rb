@@ -5,7 +5,7 @@ class ProjectsController < ApplicationController
     $tmp_dir = "#{Rails.root}/app/data/tmp/"
 
     def index
-        @vis = ['id', 'project_name', 'primary_site', 'num_of_samples', 'num_of_oberserved_genes', 'major_related_publications',"original_link"]
+        @vis = ['id', 'project_name', 'cancer_type', 'number_of_samples', 'preprocessed', 'database',"original_description"]
         @projects = Project.order(:project_name)
         @attrs = Project.column_names
         @invis = []
@@ -23,7 +23,7 @@ class ProjectsController < ApplicationController
     end
   
     def show
-        @vis = ['id', 'sample_name', 'project_name', 'num_of_oberserved_genes', 'tissue_or_organ_of_origin', 'primary_diagnosis','gender', 'age', 'tumor_stage','ethnicity','vital_status']
+        @vis = ['id', 'submitter_id', 'project_name', 'tumor_stage', 'days_to_last_follow_up', 'age_at_diagnosis','ajjc_pathologic_t', 'ajjc_pathologic_n', 'ajjc_pathologic_m','tumor_grade','bmi', 'gender', 'race', 'age_at_index']
         @user = User.find(session[:user_id])
         @project = Project.find(params[:id])
         @attrs = Project.column_names
@@ -46,6 +46,17 @@ class ProjectsController < ApplicationController
             format.json { render json: ProjectSampleDatatable.new(view_context, @project) }
         end
     end
+
+    def overview
+        @project = Project.find(params[:id])
+        
+       ###changed later
+      
+        #here we can push some data
+
+        gon.push table_data: @table_data       
+    end
+
   
     def edit
         @attrs = Project.column_names

@@ -56,7 +56,7 @@
               <%= link_to 'Show', project_sample_path(sample.project, sample) %>
               <%= link_to 'Delete', [sample.project, sample],
                 method: :delete,
-                data: { confirm: 'Are you sure to delete ' + sample.sample_name + '?'} %>
+                data: { confirm: 'Are you sure to delete ' + sample.submitter_id + '?'} %>
               <%= link_to 'Edit', edit_project_sample_path(sample.project, sample.id) %> 
             </td>
           </tr>

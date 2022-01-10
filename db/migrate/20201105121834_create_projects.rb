@@ -12,12 +12,10 @@ class CreateProjects < ActiveRecord::Migration[6.0]
       t.string :submisson_date
       t.string :last_update_date
       t.string :database
-
-      t.text :major_related_publications
-      t.integer :year
-      t.string :original_link
-      t.string :details
-      t.string :orignial_dataset
+      t.string :original_link 
+      t.string :major_related_publications
+      t.string :publications_link
+      
       #t.references :organ, null: false, foreign_key: true
       t.references :cancer, null:false, foreign_key: true
 

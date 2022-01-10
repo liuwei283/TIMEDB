@@ -3,12 +3,17 @@ class DatabaseController < ApplicationController
 
     def overview
         @cancers = Cancer.order(:cancer_type)
-        @groupedIcon = ['NA', 'Hematopoietic and reticuloendothelial systems'] #free to change later
-        @singleIcon = []
+        @groupedIcon = ['NA', 'Hematopoietic and reticuloendothelial systems'] #change to those cancer type with unavailable icons
+        #need other group set for one organ contains multiple cancer type
+        #@singleIcon = []
+        @groupedCancers = []
+        @singleCancers = []
         @cancers.each do |cancer|
             theCancer = cancer.cancer_type 
             if !@groupedIcon.include?(theCancer)
-                @singleIcon.push(theCancer)
+                @singleCancers.push(cancer)
+            else 
+                @groupedCancers.push(cancer)
             end
         end
 

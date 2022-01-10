@@ -5,8 +5,8 @@ class SamplesController < ApplicationController
     $tmp_dir = "#{Rails.root}/app/data/tmp/"
 
     def index
-        @vis = ['id', 'sample_name', 'project_name', 'num_of_oberserved_genes',  'tissue_or_organ_of_origin', 'primary_diagnosis','gender', 'age', 'tumor_stage','ethnicity','vital_status']
-        @samples = Sample.order(:sample_name)
+        @vis = ['id', 'submitter_id', 'project_name', 'tumor_stage', 'days_to_last_follow_up', 'age_at_diagnosis','ajjc_pathologic_t', 'ajjc_pathologic_n', 'ajjc_pathologic_m','tumor_grade','bmi', 'gender', 'race', 'age_at_index']
+        @samples = Sample.order(:submitter_id)
         @sample_attrs = Sample.column_names
         @invis = []
         @sample_attrs.each_with_index do |attr, index|
@@ -39,7 +39,7 @@ class SamplesController < ApplicationController
         @project = Project.find(params[:project_id])
         @sample = @project.samples.find(params[:id])
         @attrs = Sample.column_names
-        inf_name = "#{@project.project_name}_#{@sample.sample_name}.tsv"
+        inf_name = "#{@project.project_name}_#{@sample.submitter_id}.tsv"
         inf_url = File.join("/app/data/inf_files/", inf_name)
         inf_path = File.join($inf_dir, inf_name)
         @inf_exist = (File.exist?(inf_path)) && (File.size(inf_path)>100)
@@ -165,7 +165,7 @@ class SamplesController < ApplicationController
         time_str = time.strftime("%Y_%m_%d")       
         time_str += ("_" + time.strftime("%k_%M")) 
         time_str = time_str.gsub(' ','')
-        @samples = Sample.order(:sample_name)
+        @samples = Sample.order(:submitter_id)
         send_data @samples.selected_to_csv(params[:selected_ids]), :filename => "#{time_str}_selected_metadata.csv"
     end
 
@@ -206,7 +206,7 @@ class SamplesController < ApplicationController
         params[:selected_ids].each do |id|
             @sample = @project.samples.find(id)
             n1 = @project.project_name
-            n2 = @sample.sample_name
+            n2 = @sample.submitter_id
             send_file {"#{$seq_dir}/#{n1}_#{n2}.fasta"}
 
         end
@@ -216,7 +216,7 @@ class SamplesController < ApplicationController
         @project = Project.find(params[:project_id])
         @sample = @project.samples.find(params[:id])
         n1 = @project.project_name
-        n2 = @sample.sample_name
+        n2 = @sample.submitter_id
         up_file = params[:inf_file]
         uploader = AbdUploader.new("#{n1}_#{n2}")
         uploader.store!(up_file)
@@ -227,7 +227,7 @@ class SamplesController < ApplicationController
         @project = Project.find(params[:project_id])
         @sample = @project.samples.find(params[:id])
         n1 = @project.project_name
-        n2 = @sample.sample_name
+        n2 = @sample.submitter_id
         file_current = "#{Rails.root}/app/data/seq/#{n1}_#{n2}.fasta"
         if File.file?(file_current)
             send_file(
@@ -243,7 +243,7 @@ class SamplesController < ApplicationController
         @project = Project.find(params[:project_id])
         @sample = @project.samples.find(params[:id])
         n1 = @project.project_name
-        n2 = @sample.sample_name
+        n2 = @sample.submitter_id
         file_current = "#{$inf_dir}#{n1}_#{n2}.tsv"
         if File.file?(file_current)
             send_file(
@@ -298,6 +298,6 @@ class SamplesController < ApplicationController
 
     private
         def sample_params
-            params.require(:sample).permit(:sample_name, :project_name)
+            params.require(:sample).permit(:submitter_id, :project_name)
         end
 end

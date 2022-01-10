@@ -12,7 +12,8 @@ class CancerProjectDatatable < ApplicationDatatable
                 column << project[attr]
             end
           end
-          column << link_to('Show', project)
+          column << link_to('Details', project)
+          column << link_to('Show', overview_project_path(project))
         end
       end
     end
@@ -40,7 +41,7 @@ class CancerProjectDatatable < ApplicationDatatable
           search_string << "\"#{attr}\" like :search"
         end
       end
-      # search_col =['sample_name', 'project_name', 'experiment_type']
+      # search_col =['submitter_id', 'project_name', 'experiment_type']
       # search_col.each do |term|
       #   search_string << "#{term} like :search"
       # end

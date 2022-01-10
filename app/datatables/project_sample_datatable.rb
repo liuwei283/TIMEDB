@@ -7,7 +7,7 @@ class ProjectSampleDatatable < ApplicationDatatable
           column << ""
           Sample.column_names.each do |attr|
             if attr != 'id'
-              if attr == 'sample_name'
+              if attr == 'submitter_id'
                 column << link_to("#{sample[attr]}", "https://www.ncbi.nlm.nih.gov/sra/#{sample[attr]}")
               else
                 column << "<div class='table_cell'> #{sample[attr]} </div>"
@@ -45,7 +45,7 @@ class ProjectSampleDatatable < ApplicationDatatable
           search_string << "\"#{attr}\" like :search"
         end
       end
-      # search_col =['sample_name', 'project_name', 'experiment_type']
+      # search_col =['submitter_id', 'project_name', 'experiment_type']
       # search_col.each do |term|
       #   search_string << "#{term} like :search"
       # end
