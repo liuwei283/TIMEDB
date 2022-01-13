@@ -92,7 +92,7 @@ class ProjectsController < ApplicationController
     def create        
         @project = Project.new(project_params)
         if @project.save
-            @project.update_attribute(:num_of_samples, @project.samples.count)
+            @project.update_attribute(:number_of_samples, @project.samples.count)
             redirect_to @project
         else
             render 'new'

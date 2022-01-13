@@ -4,8 +4,14 @@ class CancersController < ApplicationController
     $inf_dir = "#{Rails.root}/app/data/inf_files/"
     $tmp_dir = "#{Rails.root}/app/data/tmp/"
 
+    t.string :cancer_type
+        t.integer :number_of_related_projects
+        t.integer :number_of_samples 
+        t.string :related_projects
+        t.string :database
+        
     def index
-        @vis = ['id', 'primary_site', 'num_of_projects', 'project_list', 'num_of_samples', 'data_type', 'program'] #changed later
+        @vis = ['id', 'cancer_type', 'number_of_related_projects', 'number_of_samples', 'related_projects', 'database']
         @cancers = Cancer.order(:cancer_type)
         @attrs = Cancer.column_names
         @invis = []
@@ -22,9 +28,9 @@ class CancersController < ApplicationController
         end
     end
 
-    #show details of the primary site and will be considered to transformed to popover format
+    
     def show
-        @vis = ['id', 'project_name', 'primary_site', 'num_of_samples', 'num_of_oberserved_genes', 'major_related_publications',"original_link"] # changed later
+        @vis = ['id', 'project_name', 'cancer_type', 'number_of_samples', 'preprocessed', 'database',"original_description"]
         @user = User.find(session[:user_id])
         @cancer = Cancer.find(params[:id])
         @attrs = Cancer.column_names
@@ -39,7 +45,7 @@ class CancersController < ApplicationController
         gon.push invis: @invis
         
         id = session[:user_id]
-        @user = User.find(id) # for import the selected samples to datasets of the current user
+        @user = User.find(id) 
         @datasets = @user.datasets
         respond_to do |format|
             format.html
@@ -79,7 +85,7 @@ class CancersController < ApplicationController
     def create        
         @cancer = Cancer.new(cancer_params)
         if @cancer.save
-            @cancer.update_attribute(:num_of_projects, @cancer.projects.count)
+            @cancer.update_attribute(:number_of_related_projects, @cancer.projects.count)
             redirect_to @cancer
         else
             render 'new'
@@ -98,7 +104,7 @@ class CancersController < ApplicationController
   
     private 
         def cancer_params
-            params.require(:cancer).permit(:primary_site, :project_list, :num_of_projects, :num_of_samples, :data_type, :program, :cover_image)
+            params.require(:cancer).permit(:primary_site, :project_list, :number_of_related_projects, :number_of_samples, :data_type, :program, :cover_image)
         end
   
 end

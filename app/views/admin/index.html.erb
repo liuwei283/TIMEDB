@@ -327,6 +327,19 @@
     <% end %>
   </section>
 
+
+  <section id="data_process_admin" class="admin_block">
+    <h4>
+    Data upload and process
+    </h4>
+    <%= form_tag({action: :update_samples_num_table}, multipart: true) do %>
+      <p>
+        Generate/Update sample numbers file for cancer types/projects
+      </p>
+      <%= submit_tag 'Update'%>
+    <% end %>
+    </section>
+
   <hr>
   <br/>
 

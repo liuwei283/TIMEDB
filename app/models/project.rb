@@ -17,7 +17,7 @@ class Project < ApplicationRecord
       #project.organ_id = organ.id
       project.cancer_id = cancer.id
       #organ.update_attribute(:num_of_projects, organs.projects.count)
-      cancer.update_attribute(:num_of_projects, cancer.projects.count)
+      cancer.update_attribute(:number_of_related_projects, cancer.projects.count)
       project.save!
     end
   end

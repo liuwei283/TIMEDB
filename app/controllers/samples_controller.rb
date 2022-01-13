@@ -49,7 +49,7 @@ class SamplesController < ApplicationController
     def create
         @project = Project.find(params[:project_id])
         @sample = @project.samples.create(sample_params)
-        @project.update_attribute(:num_of_samples, @project.samples.count)
+        @project.update_attribute(:number_of_samples, @project.samples.count)
         @sample.update_attribute(:project_name, @project.project_name)
         if @sample.save
             redirect_to project_path(@project)
@@ -62,7 +62,7 @@ class SamplesController < ApplicationController
         @project = Project.find(params[:project_id])
         @sample = @project.samples.find(params[:id])
         @sample.destroy
-        @project.update_attribute(:num_of_samples, @project.samples.count)
+        @project.update_attribute(:number_of_samples, @project.samples.count)
         redirect_to project_path(@project)
     end
 
@@ -86,7 +86,7 @@ class SamplesController < ApplicationController
     def import
         @project = Project.find(params[:project_id])
         Sample.import(params[:file],params[:project_id] )
-        @project.update_attribute(:num_of_samples, @project.samples.count)
+        @project.update_attribute(:number_of_samples, @project.samples.count)
         redirect_to project_path(@project), notice: "Samples imported."
     end
 

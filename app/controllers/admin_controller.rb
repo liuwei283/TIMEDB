@@ -1,6 +1,7 @@
 class AdminController < ApplicationController
     http_basic_authenticate_with name: "admin", password: "Lovelace"
     $inf_dir = "#{Rails.root}/app/data/inf_files/"
+    $ovv_dir = "#{Rails.root}/app/data/db_overview/"
     def index
         @projects = Project.order(:project_name)
         #@organs = Organ.order(:primary_site)
@@ -52,6 +53,36 @@ class AdminController < ApplicationController
         end
         redirect_to '/admin', notice: "ALL immune infiltration data uploaded."
     end
+
+    def update_samples_num_table
+        #generate cancer type and their sample numbers
+        @cancers = Cancers.order(:cancer_type)
+        csf_path = "#{$ovv_dir}cancer_sample_num.tsv"
+        csf = File.open(csf_path, "w")
+        s = "cancer_type\tsample_number"
+        @cancers.each do |cancer|
+            ct = cancer.cancer_type
+            sn = cancer.number_of_samples
+            s += "\n"
+            s += "#{ct}\t#{sn}"
+        end 
+        csf.write(s)
+        csf.close
+        #generate project and their sample numbers
+        @projects = Project.order(:project_name)
+        psf_path = "#{$ovv_dir}project_sample_num.tsv"
+        psf = File.open(csf_path, "w")
+        s = "project\tsample_number"
+        @projects.each do |project|
+            pn = project.project_name
+            sn = project.number_of_samples
+            s += "\n"
+            s += "#{pn}\t#{sn}"
+        end
+        psf.write(s)
+        psf.close
+    end 
+
 
     def delete_samples
         up_file = params[:file]
