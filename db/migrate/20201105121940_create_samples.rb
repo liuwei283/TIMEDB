@@ -12,11 +12,11 @@ class CreateSamples < ActiveRecord::Migration[6.0]
       t.string :ajcc_pathologic_n
       t.string :ajcc_pathologic_m
       t.string :tumor_grade
-      t.integer :cigarettes_per_day
+      t.string :cigarettes_per_day
       t.integer :years_smoked
-      t.float :weight
-      t.float :alcohol_intensity
-      t.float :height
+      t.string :weight
+      t.string :alcohol_intensity
+      t.string :height
       t.float :bmi
       t.string :gender 
       t.string :vital_status 

@@ -1,7 +1,7 @@
 class AdminController < ApplicationController
     http_basic_authenticate_with name: "admin", password: "Lovelace"
     $inf_dir = "#{Rails.root}/app/data/inf_files/"
-    $ovv_dir = "#{Rails.root}/app/data/db_overview/"
+    $ovv_dir = "#{Rails.root}/data/overview/"
     def index
         @projects = Project.order(:project_name)
         #@organs = Organ.order(:primary_site)
@@ -81,8 +81,72 @@ class AdminController < ApplicationController
         end
         psf.write(s)
         psf.close
+
+        redirect_to '/admin', notice: "ALL Projects/Cancer types with samples number files updated."
     end 
 
+    def make_analysis_cancer_files
+        all_analysis_methods = [""] # add seven analysis method here
+        @cancers = Cancer.order(:cancer_type)
+        all_analysis_methods.each do |analysis_method|
+            @cancers.each do |cancer|
+                ctype = cancer.cancer_type
+                cprojects = cancer.projects
+                project_file_names = []
+                cprojects.each do |project|
+                    pname = project.project_name
+                    analysis_project_file_name = p_name + '_' + analysis_method + '.csv'
+                    project_file_names.push(analysis_project_file_name)
+                end
+                firstpname = project_file_names[0]
+                firstFPath = "#{$ovv_dir}analysis/#{analysis_method}/projects/#{firstpname}"
+                ana_headers = CSV.open(firstFPath, &:readline)
+
+                analysis_cancer_name = ctype + "_" + analysis_method + ".csv"
+                cfile_path = "#{$ovv_dir}analysis/#{analysis_method}/cancers/#{analysis_cancer_name}"
+                CSV.open(cfile_path, "wb", write_headers: true, headers: ana_headers) do |csv|
+                    project_file_names.each do |ppath|  # for each of your csv files
+                        absPath = "#{$ovv_dir}analysis/#{analysis_method}/projects/#{ppath}"
+                        CSV.foreach(absPath, headers: true, return_headers: false) do |row| # don't output the headers in the rows
+                            csv << row # append to the final file
+                        end
+                    end
+                end
+            end
+        end
+    end
+
+
+    def make_subtype_cancer_files
+        all_subtype_methods = [""] # add seven analysis method here
+        @cancers = Cancer.order(:cancer_type)
+        all_subtype_methods.each do |subtype_method|
+            @cancers.each do |cancer|
+                ctype = cancer.cancer_type
+                cprojects = cancer.projects
+                project_file_names = []
+                cprojects.each do |project|
+                    pname = project.project_name
+                    subtype_project_file_name = p_name + '_' + subtype_method + '.csv'
+                    project_file_names.push(subtype_project_file_name)
+                end
+                firstpname = project_file_names[0]
+                firstFPath = "#{$ovv_dir}subtype/#{subtype_method}/projects/#{firstpname}"
+                sub_headers = CSV.open(firstFPath, &:readline)
+
+                subtype_cancer_name = ctype + "_" + subtype_method + ".csv"
+                cfile_path = "#{$ovv_dir}subtype/#{subtype_method}/cancers/#{subtype_cancer_name}"
+                CSV.open(cfile_path, "wb", write_headers: true, headers: sub_headers) do |csv|
+                    project_file_names.each do |ppath|  # for each of your csv files
+                        absPath = "#{$ovv_dir}subtype/#{subtype_method}/projects/#{ppath}"
+                        CSV.foreach(absPath, headers: true, return_headers: false) do |row| # don't output the headers in the rows
+                            csv << row # append to the final file
+                        end
+                    end
+                end
+            end
+        end
+    end
 
     def delete_samples
         up_file = params[:file]
@@ -117,6 +181,7 @@ class AdminController < ApplicationController
     def update_all_cancers
         Cancer.import(params[:file])
         redirect_to '/admin', notice: "Cancers imported."
+    end
 
     def modify_viz
         Visualizer.import(params[:file])

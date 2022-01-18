@@ -178,81 +178,6 @@
     <% end %>
   </section>
 
-<!-- 
-  <hr />
-  <section id="organ_admin" class="admin_block">
-    <h4>
-    Organ(primary site) management:
-    </h4>
-
-
-    <div id='hidden_helper'>
-    Hide columns: 
-    <br />
-    <% i=0 %>
-    <% @organs.column_names.each do |attr| %>
-      
-      <button class="toggle-vis" data-column='<%=i.to_s%>'> 
-        <%= attr.capitalize %>
-      </button>
-      <%i += 1%>
-      
-    <%end%>
-  </div>
-
-  
-    <table id="og_table" class="display">
-      <thead>
-        
-        <% @organs.column_names.each do |attr| %>
-          
-          <th> <%= attr.capitalize %> </th>
-          
-        <% end %>
-        <th>
-          Action
-        </th>
-        
-      </thead>
-
-      <tbody>
-        <% @organs.each do |og| %>
-        
-          <tr>
-            <% @organs.column_names.each do |attr| %>
-              
-              <td> 
-                <div class="table_cell"> 
-                  <%= og[attr] %> 
-                </div>
-              </td>
-            
-            <% end %>
-            <td>
-              <%= link_to 'Show', organ_path(og) %>
-              <%= link_to 'Delete', organ_path(og), method: :delete,
-                      data: { confirm: 'Are you sure?' } %>
-
-              <%= link_to 'Edit', edit_organ_path(og) %>
-            </td>
-            
-          </tr>
-        
-        <% end %>
-      </tbody>
-
-    </table>
-
-    <%= link_to  "Add one organ", "/organs/new" %>
-
-    <%= form_tag import_organs_path, multipart: true do %>
-      <%= file_field_tag :file %>
-      <%= submit_tag "Import organs from csv" %>
-    <% end %>
-  </section>
-
-  -->
-
 
 
    <hr />
@@ -280,7 +205,7 @@
     <table id="ct_table" class="display">
       <thead>
         
-        <% @cancer.column_names.each do |attr| %>
+        <% @cancers.column_names.each do |attr| %>
           
           <th> <%= attr.capitalize %> </th>
           
@@ -338,6 +263,21 @@
       </p>
       <%= submit_tag 'Update'%>
     <% end %>
+
+    <%= form_tag({action: :make_analysis_cancer_files}, multipart: true) do %>
+      <p>
+        Make cancers files for different analysis methods
+      </p>
+      <%= submit_tag 'Generate'%>
+    <% end %>
+
+    <%= form_tag({action: :make_subtype_cancer_files}, multipart: true) do %>
+      <p>
+        Make cancers files for different subtype methods
+      </p>
+      <%= submit_tag 'Generate'%>
+    <% end %>
+
     </section>
 
   <hr>

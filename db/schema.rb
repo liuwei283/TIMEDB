@@ -64,6 +64,17 @@ ActiveRecord::Schema.define(version: 2021_12_29_142146) do
     t.index ["user_id"], name: "index_analysis_user_data_on_user_id"
   end
 
+  create_table "cancers", force: :cascade do |t|
+    t.string "cancer_type"
+    t.integer "number_of_related_projects"
+    t.integer "number_of_samples"
+    t.string "related_projects"
+    t.string "database"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.text "cover_image"
+  end
+
   create_table "datasets", force: :cascade do |t|
     t.string "name"
     t.bigint "user_id", null: false
@@ -95,50 +106,54 @@ ActiveRecord::Schema.define(version: 2021_12_29_142146) do
     t.string "program"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.text "cover_image"
   end
 
   create_table "projects", force: :cascade do |t|
     t.string "project_name"
-    t.string "primary_site"
-    t.integer "num_of_samples"
-    t.integer "num_of_oberserved_genes"
+    t.string "cancer_type"
+    t.integer "number_of_samples"
+    t.integer "number_of_oberserved_genes"
+    t.string "preprocessed"
     t.text "original_description"
-    t.text "major_related_publications"
-    t.integer "year"
+    t.string "platform"
+    t.string "submisson_date"
+    t.string "last_update_date"
+    t.string "database"
     t.string "original_link"
-    t.string "details"
-    t.string "orignial_dataset"
-    t.bigint "organ_id", null: false
+    t.string "major_related_publications"
+    t.string "publications_link"
+    t.bigint "cancer_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.index ["organ_id"], name: "index_projects_on_organ_id"
+    t.index ["cancer_id"], name: "index_projects_on_cancer_id"
   end
 
   create_table "samples", force: :cascade do |t|
     t.string "submitter_id"
     t.string "project_name"
-    t.integer "num_of_oberserved_genes"
-    t.string "ajcc_pathologic_stage"
-    t.string "tissue_or_organ_of_origin"
-    t.string "primary_diagnosis"
-    t.string "year_of_diagnosis"
-    t.string "gender"
-    t.integer "age"
     t.string "tumor_stage"
-    t.string "updated_datetime"
-    t.string "ethnicity"
-    t.text "drug_treatment_type"
-    t.text "treatment_or_therapy"
-    t.text "site_of_resection_or_biopsy"
-    t.string "prior_malignancy"
-    t.string "vital_status"
-    t.text "synchronous_malignancy"
-    t.string "morphology"
+    t.string "tissue_or_organ_of_origin"
+    t.integer "days_to_last_follow_up"
+    t.string "primary_diagnosis"
+    t.integer "age_at_diagnosis"
+    t.string "ajcc_pathologic_t"
     t.string "ajcc_pathologic_n"
-    t.string "ajcc_clinical_m"
-    t.float "os"
-    t.float "pfs"
+    t.string "ajcc_pathologic_m"
+    t.string "tumor_grade"
+    t.string "cigarettes_per_day"
+    t.integer "years_smoked"
+    t.string "weight"
+    t.string "alcohol_intensity"
+    t.string "height"
+    t.float "bmi"
+    t.string "gender"
+    t.string "vital_status"
+    t.string "race"
+    t.integer "age_at_index"
+    t.integer "days_to_death"
+    t.string "type"
+    t.float "pfs_status"
+    t.float "os_status"
     t.bigint "project_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
@@ -204,6 +219,6 @@ ActiveRecord::Schema.define(version: 2021_12_29_142146) do
   end
 
   add_foreign_key "datasets", "users"
-  add_foreign_key "projects", "organs"
+  add_foreign_key "projects", "cancers"
   add_foreign_key "samples", "projects"
 end
