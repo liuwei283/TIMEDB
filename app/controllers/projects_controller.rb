@@ -5,7 +5,7 @@ class ProjectsController < ApplicationController
     $tmp_dir = "#{Rails.root}/app/data/tmp/"
 
     def index
-        @vis = ['id', 'project_name', 'cancer_type', 'number_of_samples', 'preprocessed', 'database',"original_description"]
+        @vis = ['id', 'project_name', 'cancer_type', 'number_of_samples', 'preprocessed', 'database',"original_description", "major_related_publications"]
         @projects = Project.order(:project_name)
         @attrs = Project.column_names
         @invis = []
@@ -66,6 +66,7 @@ class ProjectsController < ApplicationController
 
     def visualize 
         @project = Project.find(params[:id])
+    end
 
   
     def destroy
@@ -120,7 +121,7 @@ class ProjectsController < ApplicationController
   
     private 
         def project_params
-            params.require(:project).permit(:project_name, :primary_site, :major_related_publications)
+            params.require(:project).permit(:id, :project_name, :cancer_type, :number_of_samples, :preprocessed, :database,:original_description, :major_related_publications, :original_link, :cancer_id)
         end
   
 end

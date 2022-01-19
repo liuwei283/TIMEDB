@@ -97,6 +97,45 @@ $(function () {
         }
     }); 
 
+    var table = $("#pj_table_page").DataTable({
+        fixedColumns: true,
+        fixedColumns: {
+            leftColumns: 3,
+            rightColumns: 2
+        },
+        processing: true,
+        serverSide: true,
+        ajax: $("#pj_table_page").data('url'),
+        columnDefs: [
+        {
+            targets: 0,
+            orderable: false,
+            className: 'select-checkbox',
+            checkboxes: {
+                selectRow: true,
+            },
+        },
+        {
+            targets: -1,
+            orderable: false  
+        },
+        {
+            targets: -2,
+            orderable: false  
+        },
+        {
+            targets: invis,
+            visible: false
+        }
+        ],
+        searching: true,
+        select: {
+            style:    'multi',
+            selector: 'td:first-child'
+        },
+        scrollX: true,
+    }); 
+
 
     table.on('change', function() {
         //console.log("clicking");

@@ -24,10 +24,36 @@
         /       = link_to user_data_path, class: 'nav-link' do
         /         = icon 'fa', 'home'
         /         | Home
+
         li.nav-item
           = link_to root_path, class: 'nav-link' do
             = icon 'fa', 'home'
             | Home
+
+        li.nav-item.dropdown
+          = link_to '#', class: 'nav-link dropdown-toggle', data: { toggle: 'dropdown' } do 
+            = icon 'fa', 'upload'
+            |  Analyses
+            = icon 'fas', caret_icon 
+          .dropdown-menu 
+            = link_to "/submit/pipelines", class: 'dropdown-item' do 
+              | Analysis Pipelines 
+            = link_to "/submit/job-query", class: 'dropdown-item' do 
+              | Analysis Job Query
+            = link_to "/submit/job-demo", class: 'dropdown-item' do 
+              | Demo pipelines
+
+        li.nav-item.dropdown 
+          = link_to "#", class: 'nav-link dropdown-toggle', data: { toggle: 'dropdown' } do 
+            = icon 'fa', 'chart-bar'
+            |  Visualization
+            = icon 'fas', caret_icon 
+          .dropdown-menu 
+            = link_to "/submit/analyses", class: 'dropdown-item' do
+              | Analysis Visualizations
+            = link_to "/visualizer", class: 'dropdown-item' do 
+              | Demo Visualizations
+
         li.nav-item.dropdown
           = link_to '#', class: 'nav-link dropdown-toggle', data: { toggle: 'dropdown' } do
             = icon 'fa', 'database'
@@ -47,7 +73,11 @@
               / = icon 'fas', 'network-wired'
               | Samples Detail
             
-          li.nav-item.dropdown
+
+          
+
+
+          /*li.nav-item.dropdown
             = link_to '#', class: 'nav-link dropdown-toggle', data: { toggle: 'dropdown' } do
               = icon 'fa', 'upload'
               |  Submit
@@ -63,7 +93,7 @@
               = link_to '/submit/job-demo', class: 'dropdown-item' do
                 / = icon 'fab', 'medium-m'
                 | Demo Query
-          li.nav-item
+          /* li.nav-item
             = link_to '/visualizer', class: 'nav-link' do
               = icon 'fa', 'chart-bar'
               | Visualization
@@ -74,7 +104,7 @@
           li.nav-item
             = link_to '/contact', class: 'nav-link' do
               = icon 'fa', 'phone'
-              | Contact
+              | Contact 
           / li.nav-item
           /   = link_to '#', class: 'nav-link' do
           /     = icon 'fa', 'question'

@@ -4,11 +4,6 @@ class CancersController < ApplicationController
     $inf_dir = "#{Rails.root}/app/data/inf_files/"
     $tmp_dir = "#{Rails.root}/app/data/tmp/"
 
-    t.string :cancer_type
-        t.integer :number_of_related_projects
-        t.integer :number_of_samples 
-        t.string :related_projects
-        t.string :database
         
     def index
         @vis = ['id', 'cancer_type', 'number_of_related_projects', 'number_of_samples', 'related_projects', 'database']
@@ -104,7 +99,7 @@ class CancersController < ApplicationController
   
     private 
         def cancer_params
-            params.require(:cancer).permit(:primary_site, :project_list, :number_of_related_projects, :number_of_samples, :data_type, :program, :cover_image)
+            params.require(:cancer).permit(:id, :cancer_type, :number_of_related_projects, :number_of_samples, :related_projects, :database, :cover_image)
         end
   
 end

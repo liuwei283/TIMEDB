@@ -4,6 +4,9 @@
 
 @import "partials/variables"
 
+#intro_text
+    
+
 .doap-account-card
     margin: 6rem auto
     color: $gray-800
@@ -35,7 +38,7 @@
 footer.page-footer
     // height: $footer-height
     padding: 20px 0
-    background: $gray-900
+    background: $theme_blue
     color: $white
     ul
         padding-left: 0
@@ -45,10 +48,10 @@ footer.page-footer
     h4
         margin: 30px 0
     hr
-        border-bottom: 1px solid #333
-        border-top: 1px solid #111
-    p, ul
-        color: $gray-500
+        border-bottom: 1px solid darken($theme_blue, 5%)
+        border-top: 1px solid darken($theme_blue, 5%)
+    p, ul, h4
+        color: $white
 
 body.welcome
     .navbar
@@ -57,16 +60,27 @@ body.welcome
         border-bottom: 1px solid #aaa
     section
         &.heading
+            background-image: url("export1642564516354.jpg")
+            background-repeat: no-repeat
+            background-size: cover
+            background-position: center center
             position: relative
             padding: 8rem 0 12rem 0
+            color: $black
             h1
-                font-size: 5rem
+                font-size: 4rem
                 font-weight: 300
                 line-height: 1.2
+                color: $black
                 .em
-                    font-size: 4.8rem
-                    color: lighten($pink, 5%)
+                    font-size: 5rem
+                    color: #314893
                     font-weight: bold
+            p
+                color: $black
+            li
+                color: $black
+
             .index-bg
                 position: absolute
                 z-index: 0
@@ -131,7 +145,7 @@ body.welcome
         &#dataset_list
             width: 100%
             height: 15rem
-            background-color: #f8f9fa
+            background-color: $white// #f8f9fa
             color: #000000
             padding: 2em
             .elemet_wrapper 
@@ -154,33 +168,38 @@ body.welcome
         &#function_card
             width: 100%
             height: auto
-            background-color: #f8f9fa
+            background-color: $white// #f8f9fa
             color: #000000
             padding: 2em
+            .container
+                text-align: center
+            
             #cards_wrapper
                 
                 width: 100%
                 padding: 1em
-                
-                .card
-                    border-radius: 50px
-                    box-shadow: 0 0 32px darken($gray-300, 5%)
-                    display: table-cell
-                    height: 100%
-                    width: 25%
-                    overflow: hidden
-                    font-size: 13px
-                    padding: 2em
-                    
-                    .card_img
-                        width: 100%
-                        img
-                            width: 100%   
-                    .card_body
-                        h5
-                            text-align: center
-                        padding: 10px
-                        width: 100%
+
+                .row
+                    display: flex
+                    align-items: center
+
+                    .card
+                        border-radius: 50px
+                        box-shadow: 0 0 32px darken($gray-300, 5%)
+                        display: table-cell
+                        height: 100%
+                        width: 25%
+                        overflow: hidden
+                        font-size: 13px
+                        padding: 2em
+                        
+                        .card_img
+                            width: 100%
+                            img
+                                width: 100%   
+                        h5 
+                            padding: 10px
+                            width: 100%
     
            
     .doap-index-card
@@ -204,3 +223,6 @@ body.welcome
             min-height: 500px
             p 
                 margin-top: 200px
+
+
+

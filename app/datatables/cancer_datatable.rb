@@ -6,13 +6,13 @@ class CancerDatatable < ApplicationDatatable
         [].tap do |column|
           column << ""
           Cancer.column_names.each do |attr|
-            if attr != 'cover_image'
+            #if attr != 'cover_image'
               if attr != 'id'
                   column << "<div class='table_cell'> #{cancer[attr]} </div>"
               else
                   column << cancer[attr]
               end
-            end
+            #end
           end
           column << link_to('Show', cancer)
         end

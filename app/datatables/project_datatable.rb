@@ -18,7 +18,8 @@ class ProjectDatatable < ApplicationDatatable
             end
           end
           column << link_to('Details', project)
-          column << link_to('Show', overview_project_path(project))
+          column << link_to('Details', project)
+          # column << link_to('Show', overview_project_path(project))
         end
       end
     end

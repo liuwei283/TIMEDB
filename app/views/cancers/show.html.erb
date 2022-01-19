@@ -71,7 +71,7 @@
   </div>
   <br/>
   <%= form_tag export_selected_projects_path(format: "csv"), multipart: true do %>  
-    <%= content_tag :table, role: :datatable, class: "display", id: "table_page", data: { url: cancer_path(format: :json)} do %>
+    <%= content_tag :table, role: :datatable, class: "display", id: "pj_table_page", data: { url: cancer_path(format: :json)} do %>
       <thead>
             <th>
               <input type="checkbox" class="selectAll" name="selectAll" value="all">
