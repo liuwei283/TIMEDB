@@ -18,8 +18,22 @@ br
                     - else
                         img.card-img-top src = a.cover_image
                     / img.card-img-top src = a.cover_image
-                    .card_body
-                        h5 =a.name
-                        /= link_to "/submit/#{a.mid.to_s}"
+                    .image_overlay.image_overlay_blur
+                        .image_title
+                            = a.name
+                            //| ksfgjdkshfjkd
+                        .image_description 
+                            = a.description
+                            //
+                            //| jsdgfksdhfkjdhfkjshdfjkshdf 
+                            //| hdkjhfkshfdhf
+
+
+
+
+
+                    / .card_body
+                    /     h5 =a.name
+                    /     /= link_to "/submit/#{a.mid.to_s}"
                     .list-group.list-group-flush
                         = link_to "Submit", "/submit/analysis/#{a.mid.to_s}", class: "list-group-item list-group-item-action text-center"
