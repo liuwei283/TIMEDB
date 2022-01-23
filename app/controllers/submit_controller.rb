@@ -4,6 +4,7 @@ class SubmitController < ApplicationController
   # $user_stor_dir = "#{Rails.root}/data/user"
   def analyses
     @analyses = Analysis.where "hidden = false and mid is not null"
+    @analysis_categories = AnalysisCategory.order(:name)
   end
 
   def pipelines

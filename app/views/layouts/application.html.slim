@@ -30,7 +30,7 @@ html
 
     = render 'partials/nav'
     #wrapper
-      - if %w[analysis].include? controller_name
+      - if %w[analysis submit].include? controller_name
         = render 'partials/side_bar'
       #main
         = yield

@@ -2,6 +2,7 @@
 = f.input :url, hint: "This name will be embeded in URLs. Hence it must be URL-safe."
 = f.input :pid
 = f.input :hidden
+= f.input :description
 = f.input :image_file, as: :file
 - if !@pipeline.cover_image.nil?
   img src = @pipeline.cover_image width="400"

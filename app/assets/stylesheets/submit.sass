@@ -16,6 +16,74 @@
 
 
 
+// Place all the styles related to the Analysis controller here.
+// They will automatically be included in application.css.
+// You can use Sass here: https://sass-lang.com/
+.submit #wrapper
+    display: flex
 
+.submit #main
+    margin-left: 3%
 
-
+#sidebar
+    background: $white
+    min-width: 250px
+    max-width: 250px
+    // max-height: 1000px
+    margin-left: -250px
+    margin-top: 1px
+    position: relative
+    overflow: hidden
+    margin-left: 0
+    &.active
+        margin-left: 0
+        & + #main
+            max-width: calc(100% - 250px)
+    &.has-toolbar
+        .sidebar-content
+            bottom: 3rem
+    &.has-header
+        .sidebar-content
+            top: 2.5rem
+    .sidebar-content
+        position: absolute
+        top: 0
+        bottom: 0
+        left: 0
+        right: 0
+        overflow: auto
+        border-top: 1px solid $gray-300
+        border-right: 1px solid $gray-300
+        ul
+            margin: 0
+            border-bottom: 1px solid $gray-300
+            li
+                &.header
+                    line-height: 30px
+                    // background: $gray-300
+                    font-size: 0.9em
+                    padding-left: 1em
+                    color: $gray-600, 10%
+                    border-bottom: 1px solid $gray-300
+                &:not(.header)
+                    line-height: 48px
+                    a
+                        color: $gray-600
+                        border-left: 2px solid transparent
+                        padding-left: 2em
+                        display: block
+                        &:hover
+                            text-decoration: none
+                            background: lighten($gray-600, 30%)
+                &.active a
+                    color: $white
+                    background: darken($gray-600, 5%)
+                    border-left-color: $light_theme
+                &.fold
+                    cursor: pointer
+                    &:before
+                        +fa
+                        content: "\f0d7"
+                        margin-right: 0.5em
+                    &:hover
+                        background: $gray-100
