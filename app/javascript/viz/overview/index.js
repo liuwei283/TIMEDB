@@ -237,7 +237,7 @@ export function fillinblock(cid, relation_key, relation_data, content_data){
 }
 
 
-export function initPage(main_id, data, tids){
+export function initPage(main_id, data){
     var struct_data = data["struct"];
     var relation_data = data["relation"];
     var init_data = data["init"];
@@ -247,11 +247,11 @@ export function initPage(main_id, data, tids){
     for (var key in init_data){
         fillinblock(key, init_data[key], relation_data, content_data);
     }
-    assign_tb_style(tids);
+    //assign_tb_style(tids);
 }
 
 
-export function catch_change(data, tids){
+export function catch_change(data){
     
     $('select').on('change', function() {
         //console.log(data);

@@ -88,6 +88,7 @@ Rails.application.routes.draw do
 
   # submit pages
   get "submit/analyses", to: "submit#analyses"
+  get "submit/analysesCategory", to: "submit#analysesCategory"
   get "submit/pipelines", to: "submit#pipelines"
   get 'submit/job-query', to: 'submit#query', as: 'query'
   get "submit/job-demo", to: "submit#demo"

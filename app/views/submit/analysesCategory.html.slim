@@ -9,7 +9,7 @@
 br
 #analyses_list.container-fluid.container
     .row.cols-xs-space.cols-sm-space.cols-md-space
-        - @analyses.each do |a|
+        - @analysis_category.analyses.each do |a|
             / - if visible_analysis(a)
             .col-lg-4.mb-4
                 .card

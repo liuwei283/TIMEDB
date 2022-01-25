@@ -3,8 +3,14 @@ class SubmitController < ApplicationController
   PROJECT_ID = 289
   # $user_stor_dir = "#{Rails.root}/data/user"
   def analyses
-    @analyses = Analysis.where "hidden = false and mid is not null"
     @analysis_categories = AnalysisCategory.order(:name)
+    category1 = @analysis_categories[0].name
+    redirect_to action: "analysesCategory", cname: category1
+  end
+
+  def analysesCategory
+    @analysis_categories = AnalysisCategory.order(:name)
+    @analysis_category = AnalysisCategory.find_by name:params[:cname]
   end
 
   def pipelines

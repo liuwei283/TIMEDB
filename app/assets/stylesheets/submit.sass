@@ -1,29 +1,32 @@
-// Place all the styles related to the Submit controller here.
-// They will automatically be included in application.css.
-// You can use Sass here: https://sass-lang.com/
-// body.submit
-//     h1
-//         color: #000
-// .viz-container
-//     display: flex
-
-// #canvas
-//     flex: 50%
-
-// #v-editor
-//     flex: 50%
-
-
-
-
 // Place all the styles related to the Analysis controller here.
 // They will automatically be included in application.css.
 // You can use Sass here: https://sass-lang.com/
+
+@import 'partials/variables'
+=fa
+    font-family: 'Font Awesome 5 Free'
+    font-weight: 900
+    -webkit-font-smoothing: antialiased
+    display: inline-block
+    font-style: normal
+    font-variant: normal
+    text-rendering: auto
+    line-height: 1
+
+$grid-height: 800px
+$sidebar-width: 250px
+
 .submit #wrapper
     display: flex
 
 .submit #main
-    margin-left: 3%
+    //margin-left: 12%
+    margin: auto
+    overflow-y: scroll
+    overflow-x: hidden
+    width: 100vw
+
+$sidebar-background-color: desaturate(lighten($orange, 45%), 80%)
 
 #sidebar
     background: $white
@@ -56,29 +59,27 @@
         border-right: 1px solid $gray-300
         ul
             margin: 0
-            border-bottom: 1px solid $gray-300
+            // border-bottom: 1px solid $gray-300
             li
                 &.header
-                    line-height: 30px
-                    // background: $gray-300
-                    font-size: 0.9em
-                    padding-left: 1em
-                    color: $gray-600, 10%
-                    border-bottom: 1px solid $gray-300
-                &:not(.header)
                     line-height: 48px
+                    // background: $gray-300
+                    font-size: 1.5em
+                    color: $gray-600, 10%
+                    // border-bottom: 1px solid $gray-300
                     a
                         color: $gray-600
                         border-left: 2px solid transparent
-                        padding-left: 2em
+                        text-align: center
                         display: block
                         &:hover
                             text-decoration: none
                             background: lighten($gray-600, 30%)
+                    
                 &.active a
                     color: $white
                     background: darken($gray-600, 5%)
-                    border-left-color: $light_theme
+                    //border-left-color: $light_theme
                 &.fold
                     cursor: pointer
                     &:before
