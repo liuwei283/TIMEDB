@@ -129,8 +129,111 @@ up to here -->
 
 
 <br />
-<h2> Database static visualization (merged later)</h2>
+<h2> Database overview visualization</h2>
 
 
+<div id = "barPlot" class = "container Block">
+    
+    <%# selector row%>
+    <div id="barDescription" class="row description">
+    Some description for bar plot
+    </div>
+    <div class="select_bar form-inline row">
+        <div class="sdiv col">
+            <div class="select_title">
+                Please choose project or cancer type:
+            </div>
+            <select class="form-select col" id = "bar-selector">
+                <option selected="selected" value="project">Project</option>
+                <option value="cancer">Cancer type</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col" id = "barVis">
+        </div>
+    </div>
+</div>
+
+
+<div id = "piePlot" class = "container Block">
+    
+    <%# selector row%>
+    <div id="barDescription" class="row description">
+    Some description for pie plot
+    </div>
+    <div class="select_bar form-inline row">
+
+        <div class="sdiv col">
+            <div class="select_title">
+                Please choose the cell division method:
+            </div>
+            <select class="form-select col pie-react" id = "pie-method-selector">
+                <option selected="selected" value = ""></option>
+                <option value=""></option>
+                <option value=""></option>
+                <option value=""></option>
+                <option value=""></option>
+                <option value=""></option>
+                <option value=""></option>
+                <option value=""></option>
+            </select>
+        </div>
+
+        <div class="sdiv col">
+            <div class="select_title">
+                Please choose the cancer type:
+            </div>
+            <%= select_tag("cancer", options) %>
+            <select class="form-select col" id = "pie-cancer-selector">
+                <% first = true %>
+                <% @cancers.each do |cc| %>
+                    <% if first == true %>
+                        <option selected="selected" value= <%= cc.cancer_type %> >
+                            <%= cc.cancer_type %>
+                        </option>
+                        <% first = false %>
+                    <% else %>
+                        <option value= <%= cc.cancer_type %> >
+                            <%= cc.cancer_type %>
+                        </option>
+                    <% end %>
+                <% end %>
+            </select>
+        </div>
+
+
+        <div class="sdiv col">
+            <select class="form-select col pie-react" id = "pie-project-selector">
+                <% first = true %>
+                <% theCancer = @cancers.first %>
+                <% @theCancer.projects.each do |pj| %>
+                    <% if first == true %>
+                        <option selected="selected" value= <%= pj.project_name %> >
+                            <%= pj.project_name %>
+                        </option>
+                        <% first = false %>
+                    <% else %>
+                        <option value= <%= pj.project_name %> >
+                            <%= pj.project_name %>
+                        </option>
+                    <% end %>
+                <% end %>
+            </select>
+        </div>
+
+    </div>
+
+    <div class="row">
+        <div class="col" id = "barVis">
+        </div>
+    </div>
+</div>
+    
+
+
+
+<h2>
 <%=javascript_pack_tag 'db-overview-viz'%> 
                         

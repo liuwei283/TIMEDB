@@ -47,5 +47,19 @@ class DatabaseController < ApplicationController
         gon.push table_data: @table_data       
     end
 
-
+    def refreshSelector
+        cancer_type = params[:cancer_type]
+        cancer = Cancer.find_by cancer_type:params[:cancer_type]
+        projects = cancer.projects.order(:project_name)
+        pjs_json = []
+        projects.each do |pj|
+            pj_json = {
+                "name" => pj.project_name
+            }
+            pjs_json << pj_json
+        end
+        respond_to do |format|
+            format.json {render json: pjs_json}
+        end
+        
 end

@@ -57,7 +57,7 @@ class AdminController < ApplicationController
     def update_samples_num_table
         #generate cancer type and their sample numbers
         @cancers = Cancers.order(:cancer_type)
-        csf_path = "#{$ovv_dir}cancer_sample_num.tsv"
+        csf_path = "#{$ovv_dir}cancer_sample.tsv"
         csf = File.open(csf_path, "w")
         s = "cancer_type\tsample_number"
         @cancers.each do |cancer|
@@ -70,7 +70,7 @@ class AdminController < ApplicationController
         csf.close
         #generate project and their sample numbers
         @projects = Project.order(:project_name)
-        psf_path = "#{$ovv_dir}project_sample_num.tsv"
+        psf_path = "#{$ovv_dir}project_sample.tsv"
         psf = File.open(csf_path, "w")
         s = "project\tsample_number"
         @projects.each do |project|

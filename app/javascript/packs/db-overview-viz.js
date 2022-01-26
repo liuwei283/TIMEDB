@@ -1,10 +1,9 @@
 import {initPage, catch_change} from "viz/overview";
-//import {data} from "viz/overview/overview-data.js"
+import {data} from "viz/overview/overview-data.js"
 
 
 function init(tids){
-    var main_id = "main";
-    //initPage(main_id, data, tids);
+    initPage(data);
 }
 
 // init state (show first table and graph)
