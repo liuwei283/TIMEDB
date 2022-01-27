@@ -47,6 +47,15 @@ class DatabaseController < ApplicationController
         gon.push table_data: @table_data       
     end
 
+    def download_bar_file
+        name = params[:bar_selected]
+        send_file(
+            "#{Rails.root}/data/overview/" + name + "_samples.tsv",
+            filename: "samples_num.tsv",
+            type: "application.tsv"
+        )
+    end
+
     def refreshSelector
         cancer_type = params[:cancer_type]
         cancer = Cancer.find_by cancer_type:params[:cancer_type]
@@ -61,5 +70,5 @@ class DatabaseController < ApplicationController
         respond_to do |format|
             format.json {render json: pjs_json}
         end
-        
+    end
 end

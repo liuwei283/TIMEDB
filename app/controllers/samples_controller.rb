@@ -39,7 +39,12 @@ class SamplesController < ApplicationController
         @project = Project.find(params[:project_id])
         @sample = @project.samples.find(params[:id])
         @attrs = Sample.column_names
-        inf_name = "#{@project.project_name}_#{@sample.submitter_id}.tsv"
+        # inf_name = "#{@project.project_name}_#{@sample.submitter_id}.tsv"
+        # inf_url = File.join("/app/data/inf_files/", inf_name)
+        # inf_path = File.join($inf_dir, inf_name)
+        # @inf_exist = (File.exist?(inf_path)) && (File.size(inf_path)>100)
+
+        inf_name = "ACC_ALL.tsv"
         inf_url = File.join("/app/data/inf_files/", inf_name)
         inf_path = File.join($inf_dir, inf_name)
         @inf_exist = (File.exist?(inf_path)) && (File.size(inf_path)>100)

@@ -1,0 +1,44 @@
+svg {
+	width = 1200;height = 870
+	Component {
+		y = 20
+		Text {
+			x = @geo(50, -270)
+			text = title
+			fontSize = tickFontSize
+			anchor = @anchor("top","left")
+		}
+		Text {
+			x = @geo(50,-180); y = 30
+			text = "Current:" + "  " + chosenSample + "  " + chosenMethod
+		}
+		PieChart {
+			height = @geo(100, -100); width  = @geo(100, -100); padding = 20 //设置在窗口的中间位置
+			data = test
+			pieProps = {
+				stroke: "white"
+			}
+			:children(d) {
+				Arc {
+                    x1 = d.start; x2 = d.end; r2 = pieR
+					//@expr console.log("d:",d)
+                    fill = d.data.raw.color
+					behavior:tooltip {
+					        content = "name: "+ d.data.name+ "</br>value: "+ d.data.value
+					}  
+                }
+			}
+		}
+		Legend{
+			@props legendPos
+			data = legend
+			behavior:drag {
+				onDrag = @bind(updateLegendPos)
+			}
+			padding = 4
+			lineHeight = 13
+			legendWidth = 15
+			label.fontSize = 10
+		}
+	}
+}

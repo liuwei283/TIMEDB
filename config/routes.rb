@@ -152,4 +152,5 @@ Rails.application.routes.draw do
   match 'data/static_viz_data/*path', to: 'raw_files#viz_file', via: :get
   match 'app/data/inf_files/*path', to: 'raw_files#viz_ainf_file', via: :get
 
+
 end

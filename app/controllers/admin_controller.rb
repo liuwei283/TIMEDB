@@ -1,7 +1,7 @@
 class AdminController < ApplicationController
     http_basic_authenticate_with name: "admin", password: "Lovelace"
     $inf_dir = "#{Rails.root}/app/data/inf_files/"
-    $ovv_dir = "#{Rails.root}/data/overview/"
+    $ovv_dir = "#{Rails.root}/public/data/overview/"
     def index
         @projects = Project.order(:project_name)
         #@organs = Organ.order(:primary_site)
@@ -56,8 +56,8 @@ class AdminController < ApplicationController
 
     def update_samples_num_table
         #generate cancer type and their sample numbers
-        @cancers = Cancers.order(:cancer_type)
-        csf_path = "#{$ovv_dir}cancer_sample.tsv"
+        @cancers = Cancer.order(:cancer_type)
+        csf_path = "#{$ovv_dir}cancer_samples.tsv"
         csf = File.open(csf_path, "w")
         s = "cancer_type\tsample_number"
         @cancers.each do |cancer|
@@ -70,8 +70,8 @@ class AdminController < ApplicationController
         csf.close
         #generate project and their sample numbers
         @projects = Project.order(:project_name)
-        psf_path = "#{$ovv_dir}project_sample.tsv"
-        psf = File.open(csf_path, "w")
+        psf_path = "#{$ovv_dir}project_samples.tsv"
+        psf = File.open(psf_path, "w")
         s = "project\tsample_number"
         @projects.each do |project|
             pn = project.project_name

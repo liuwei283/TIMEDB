@@ -73,7 +73,7 @@
 
 
 import {init as immunebar} from "viz/static_immunebar"
-import {init as immunepie} from "viz/static_immunepie"
+//import {init as immunepie} from "viz/static_immunepie"
 
 var overview_path = "/data/overview/";
 
@@ -81,103 +81,109 @@ export function bar_viz() {
     var bar_selector = document.getElementById("bar-selector");
     var selected_value = bar_selector.value;
     var file_path = overview_path + selected_value + "_samples.tsv";
-    immunebar("barVis", file_path);
+    immunebar("#barVis", file_path);
 }
 
-export function pie_viz() {
-    var pie_method_selector = document.getElementById("pie-method-selector");
-    var method = pie_method_selector.value;
-    var pie_project_selector = document.getElementById("pie-project-selector");
-    var pname = pie_project_selector.value;
+// export function pie_viz() {
+//     var pie_method_selector = document.getElementById("pie-method-selector");
+//     var method = pie_method_selector.value;
+//     var pie_project_selector = document.getElementById("pie-project-selector");
+//     var pname = pie_project_selector.value;
 
-    //method name must be same as data storage folder
-    var file_path = overview_path + "Cell data/" + method + "/" + pname + "_CIBERSORT.csv";
-    immunepie("pieVis", file_path);
-}
+//     //method name must be same as data storage folder
+//     var file_path = overview_path + "Cell data/" + method + "/" + pname + "_CIBERSORT.csv";
+//     immunepie("pieVis", file_path);
+// }
 
 export function all_viz() {
     bar_viz();
-    pie_viz();
+    //pie_viz();
 }
 
-export function initpage(viz_data) {
-    all_viz();
+export function initPage() {
+    //all_viz();
 }
 
-export function catch_change(data){
+export function catch_change(){
 
-    $("#pie-cancer-selector").on('change', function(){
-        $ajax({
-            url: "refreshSelector",
-            type: "GET",
-            data: {cancer_type: $(this).val()},
-            success: function(data) {
-                $("#pie-project-selector").children().remove();
-                var listItems = [];
-                $.each(data, function(index, item) {
-                    pname = item["name"];
-                    listItems += '<option value = "' + pname + '">' + pname + '</option>'; 
-                });
-                $("#pie-project-selector").append(listItems);
-                $("#pie-project-selector").selectedIndex = 0; //Option 10
-            }
-        })
-    });
+    // $("#pie-cancer-selector").on('change', function(){
+    //     $ajax({
+    //         url: "refreshSelector",
+    //         type: "GET",
+    //         data: {cancer_type: $(this).val()},
+    //         success: function(data) {
+    //             $("#pie-project-selector").children().remove();
+    //             var listItems = [];
+    //             $.each(data, function(index, item) {
+    //                 pname = item["name"];
+    //                 listItems += '<option value = "' + pname + '">' + pname + '</option>'; 
+    //             });
+    //             $("#pie-project-selector").append(listItems);
+    //             $("#pie-project-selector").selectedIndex = 0; //Option 10
+    //         }
+    //     })
+    // });
 
 
     
     //note pie visualization refresh mush be with the change of project selector
 
+    $('#bar-selector').on('change', function() {
+        console.log("debug");
+        //bar_viz();
+        var file_name = document.getElementById("bar-selector").value + "_samples.tsv";
+        document.getElementById("bar_download").setAttribute("download", file_name);
+        document.getElementById("bar_download").setAttribute("href", "/data/overview/" + file_name);
 
-    $('#pie-cancer-selector').on('change', function() {
-        bar_viz();
     });
 
-    $('.pie-react').on('change', function() {
-        pie_viz();
-    });
-    $('select').on('change', function() {
-        //console.log(data);
-        var struct_data = data["struct"];
-        var relation_data = data["relation"];
-        var content_data = data["content"];
-        var bro = this.parentElement.parentElement.children;
-        //console.log(bro);
-        var outer_block = this.parentElement.parentElement.parentElement;
-        var nbro = bro.length;
-        //console.log(nbro);
-        var new_k = "";
-        for (var i=0; i<nbro; i++){
-            if (i>0){
-                new_k += "_";
-            }
-            //console.log('string' + new_k);
-            new_k += bro[i].children[1].value;  
-            //console.log(bro[i].children);
-        }
-        //console.log(new_k);
-        var B_i = parseInt(outer_block.id[1]);
-        //console.log(B_i);
-        //console.log(struct_data[B_i]);
-        var type_key = Object.keys(struct_data[B_i])[0];
-        //console.log(type_key);
-        var ntype = type_key.length;
-        if(type_key[0]=="H"){
-            ntype -= 1;
-            type_key = type_key.substring(1);
-        }
+
+    // $('.pie-react').on('change', function() {
+    //     pie_viz();
+    // });
+
+    // $('select').on('change', function() {
+    //     //console.log(data);
+    //     var struct_data = data["struct"];
+    //     var relation_data = data["relation"];
+    //     var content_data = data["content"];
+    //     var bro = this.parentElement.parentElement.children;
+    //     //console.log(bro);
+    //     var outer_block = this.parentElement.parentElement.parentElement;
+    //     var nbro = bro.length;
+    //     //console.log(nbro);
+    //     var new_k = "";
+    //     for (var i=0; i<nbro; i++){
+    //         if (i>0){
+    //             new_k += "_";
+    //         }
+    //         //console.log('string' + new_k);
+    //         new_k += bro[i].children[1].value;  
+    //         //console.log(bro[i].children);
+    //     }
+    //     //console.log(new_k);
+    //     var B_i = parseInt(outer_block.id[1]);
+    //     //console.log(B_i);
+    //     //console.log(struct_data[B_i]);
+    //     var type_key = Object.keys(struct_data[B_i])[0];
+    //     //console.log(type_key);
+    //     var ntype = type_key.length;
+    //     if(type_key[0]=="H"){
+    //         ntype -= 1;
+    //         type_key = type_key.substring(1);
+    //     }
         
-        //console.log(type_key);
-        for (var i=0; i<ntype; i++){
-            var cid = type_key[i] + i + outer_block.id;
-            console.log(cid);
-            fillinblock(cid, new_k, relation_data, content_data);
-        }
-        if (Object.keys(struct_data[B_i])[0].includes("T")){
-            assign_tb_style(tids);
-        }
+    //     //console.log(type_key);
+    //     for (var i=0; i<ntype; i++){
+    //         var cid = type_key[i] + i + outer_block.id;
+    //         console.log(cid);
+    //         fillinblock(cid, new_k, relation_data, content_data);
+    //     }
+    //     if (Object.keys(struct_data[B_i])[0].includes("T")){
+    //         assign_tb_style(tids);
+    //     }
                 
-    });
+    // });
 
 
 }

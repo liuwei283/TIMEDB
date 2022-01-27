@@ -1,0 +1,79 @@
+svg {
+	width = 1200
+	height = 600
+	Component {
+		XYPlot {
+			height = plotSize[0]; width = plotSize[1]; padding = 80
+			data = r
+			discreteCategory = true
+			// valueRange = valueRange
+			Rect {
+				width = 100%
+				height = 100%
+				stroke = "#000"
+				fill = "none"
+			}
+			Bars {
+				:children(d){
+					Rect.full{
+						fill = colors[0]
+						x = 50%
+						anchor = @anchor("top","center")
+						behavior:tooltip {
+							content = "name: " + d.pos + "</br>value: " + d.value
+						}
+					}
+				}
+			}
+			// x轴
+			Text {
+				x = 50%; y = @geo(100,120)
+				anchor = @anchor("middle","center")
+				text = xlabel
+				fill = "#000"
+				fontSize = labelFontSize
+			}
+			// 标题
+			Text{
+				x = 10%; y = -15
+				anchor = @anchor("middle","center")
+				text = title
+				fill = "#000"
+				fontSize = tickFontSize
+			}
+			Text{
+				x = 50%; y = -15
+				anchor = @anchor("middle","center")
+				text = "sample size:" + sampleSize
+				fill = "#000"
+				fontSize = tickFontSize
+			}
+			// 纵坐标名
+			Component{
+				x = -40; y = 50%
+				rotation = @rotate(-90)
+				Text{
+					text = ylabel
+					fill = "#000"
+					anchor = @anchor("middle","center")
+					fontSize = labelFontSize
+				}
+			}
+			// 横轴
+			Axis("bottom") { 
+                y = 100%
+                :label(d) {
+                    Text {
+					@expr console.log(d)
+                        fontSize = 10
+						text = d.value
+                        rotation = @rotate(xAxisRotated)
+                    }
+                }
+            }
+			Axis("left") {
+				includeEndTicks = false;
+			};
+		}
+	}
+}
