@@ -2,6 +2,7 @@
     <script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
     <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.22/js/jquery.dataTables.min.js"></script>
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.22/css/jquery.dataTables.css">
+
 <%end%>
 <% content_for :title, "Overview" %>
 
@@ -157,6 +158,90 @@ up to here -->
         <div class="col" id = "barVis">
         </div>
     </div>
+</div>
+
+<div id = "piePlot" class = "container Block">
+
+    <%# selector row%>
+    <div id="pieDescription" class="row description">
+    Some description for pie plot
+    </div>
+    <div class="select_bar form-inline row">
+
+        <div class="sdiv col">
+            <div class="select_title">
+                Please choose the cell division method:
+            </div>
+            <select class="form-select col pie-react" id = "pie-method-selector">
+                <option selected="selected" value = "XCell">XCell</option>
+                <option value="Timer">Timer</option>
+                <option value="QuantiSeq">QuantiSeq</option>
+                <option value="MCPCounter">MCPCounter</option>
+                <option value="EPIC">EPIC</option>
+                <option value="CIBERSORT">CIBERSORT</option>
+                <option value="CIBERSORTx">CIBERSORTx</option>
+                <option value="ImmuCellAI">ImmuCellAI</option>
+            </select>
+        </div>
+
+        <div class="sdiv col">
+            <div class="select_title">
+                Please choose the cancer type:
+            </div>
+            <%= select_tag :pie_cancer_selector, options_from_collection_for_select(@cancers, :id, :cancer_type, 0) %>
+            <%#= collection_select_tag(:pie_cancer_selector, Cancer.find(:all), :id, :cancer_type, {:include_blank => 'Cancer'}) %>
+            <!--
+            <select class="form-select col" id = "pie-cancer-selector">
+                <% first = true %>
+                <% @cancers.each do |cc| %>
+                    <% if first == true %>
+                        <option selected="selected" value= <%= cc.cancer_type %> >
+                            <%= cc.cancer_type %>
+                        </option>
+                        <% first = false %>
+                    <% else %>
+                        <option value= <%= cc.cancer_type %> >
+                            <%= cc.cancer_type %>
+                        </option>
+                    <% end %>
+                <% end %>
+            </select> -->
+        </div>
+
+        <div class="sdiv col">
+            <div class="select_title">
+                Please choose the project:
+            </div>
+            <%#= collection_select(:pie_project_selector, Cancer.first.projects.all, :project_name, :project_name, {:include_blank => 'Group'}, { :class: "pie_react" }) %>
+            <%= select_tag :pie_project_selector, options_from_collection_for_select(@cancers[0].projects, :id, :project_name, 0) %>
+            
+            <!--
+            <select class="form-select col pie-react" id = "pie-project-selector">
+                <% first = true %>
+                <% theCancer = @cancers.first %>
+                <% theCancer.projects.each do |pj| %>
+                    <% if first == true %>
+                        <option selected="selected" value= <%= pj.project_name %> >
+                            <%= pj.project_name %>
+                        </option>
+                        <% first = false %>
+                    <% else %>
+                        <option value= <%= pj.project_name %> >
+                            <%= pj.project_name %>
+                        </option>
+                    <% end %>
+                <% end %>
+            </select>
+            -->
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col" id = "pieVis">
+        </div>
+    </div>
+
+
 </div>
 
 

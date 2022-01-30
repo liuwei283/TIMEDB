@@ -57,8 +57,9 @@ class DatabaseController < ApplicationController
     end
 
     def refreshSelector
-        cancer_type = params[:cancer_type]
-        cancer = Cancer.find_by cancer_type:params[:cancer_type]
+        logger.info "hgfg"
+        cancer_id = params[:cancer_id]
+        cancer = Cancer.find(cancer_id)
         projects = cancer.projects.order(:project_name)
         pjs_json = []
         projects.each do |pj|
@@ -71,4 +72,11 @@ class DatabaseController < ApplicationController
             format.json {render json: pjs_json}
         end
     end
+
+    def get_drop_down_projects
+        val = params[:cancer_id]
+        #Use val to find records
+        options = Cancer.find(val).projects.collect{|x| "'' : '#{x.project_name}'"}    
+        render :text => "{#{options.join(",")}}" 
+      end
 end

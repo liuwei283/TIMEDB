@@ -4,10 +4,10 @@ svg {
 	Component {
 		XYPlot {
 			height = plotSize[0]; width = plotSize[1]; padding = 80
-			data = r
+			data = result
 			discreteCategory = true
-			// valueRange = valueRange
-			Rect {
+			valueRange = valueRange
+			Rect{
 				width = 100%
 				height = 100%
 				stroke = "#000"
@@ -16,30 +16,24 @@ svg {
 			Bars {
 				:children(d){
 					Rect.full{
+						cornerRadius = 6
+						stroke = colors[1]
 						fill = colors[0]
 						x = 50%
 						anchor = @anchor("top","center")
 						behavior:tooltip {
-							content = "name: " + d.pos + "</br>value: " + d.value
+							content = "name: " + d.pos + "</br>sample number: " + d.value
 						}
 					}
 				}
 			}
 			// x轴
-			Text {
+			Text{
 				x = 50%; y = @geo(100,120)
 				anchor = @anchor("middle","center")
 				text = xlabel
 				fill = "#000"
 				fontSize = labelFontSize
-			}
-			// 标题
-			Text{
-				x = 10%; y = -15
-				anchor = @anchor("middle","center")
-				text = title
-				fill = "#000"
-				fontSize = tickFontSize
 			}
 			Text{
 				x = 50%; y = -15
@@ -48,7 +42,7 @@ svg {
 				fill = "#000"
 				fontSize = tickFontSize
 			}
-			// 纵坐标名
+			// 纵坐标
 			Component{
 				x = -40; y = 50%
 				rotation = @rotate(-90)
@@ -64,16 +58,14 @@ svg {
                 y = 100%
                 :label(d) {
                     Text {
-					@expr console.log(d)
+						y = 5
                         fontSize = 10
 						text = d.value
                         rotation = @rotate(xAxisRotated)
                     }
                 }
             }
-			Axis("left") {
-				includeEndTicks = false;
-			};
+			Axis("left");
 		}
 	}
 }

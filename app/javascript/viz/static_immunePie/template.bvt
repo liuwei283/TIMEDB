@@ -1,0 +1,51 @@
+svg {
+	width = 1400
+	height = 600
+	Component {
+		Text {
+			x = 50%-50
+			text = "Proportion"
+			fontSize = 20
+			anchor = @anchor("top","center")
+		}
+		PieChart {
+			height = @geo(100, -100); width = @geo(100, -100); padding = 20 //设置在窗口的中间位置
+			data = pieData
+			// innerRadius = 50%
+			pieProps = {
+				stroke: "white"
+			}
+			:children(d) {
+				Arc {
+                    x1 = d.start; x2 = d.end
+                    r1 = 40%
+                    r2 = 90%
+                    fill = d.data.raw.color.string
+					behavior:tooltip {
+					    content = "name: "+ d.data.name+ "</br>value: "+ d.data.value.toFixed(3)
+					}
+                }
+			}
+			// 图例
+			:legend(d) {
+				Legend {
+					@expr console.log(d)
+					x = @geo(100, -350)
+					data = d.slice(0,40)
+				}
+				@if d.length > 50 {
+					Legend {
+						x = @geo(100, -100)
+						data = d.slice(40, 80)
+					}
+				}
+				@if d.length > 100 {
+					Legend {
+						x = @geo(0, 50)
+						data = d.slice(80)
+					}
+				}
+			}
+		}
+	}
+}

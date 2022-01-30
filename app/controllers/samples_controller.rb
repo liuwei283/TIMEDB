@@ -44,7 +44,7 @@ class SamplesController < ApplicationController
         # inf_path = File.join($inf_dir, inf_name)
         # @inf_exist = (File.exist?(inf_path)) && (File.size(inf_path)>100)
 
-        inf_name = "ACC_ALL.tsv"
+        inf_name = "ACC_ALL.csv"
         inf_url = File.join("/app/data/inf_files/", inf_name)
         inf_path = File.join($inf_dir, inf_name)
         @inf_exist = (File.exist?(inf_path)) && (File.size(inf_path)>100)

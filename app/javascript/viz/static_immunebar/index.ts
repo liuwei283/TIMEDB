@@ -1,24 +1,22 @@
 import Oviz from "crux";
 import template from "./template.bvt";
 
-let xlabel = "Cancer type";
-const ylabel = "Sample number";
-let title = "which method";
-const sample = 0;
-const valueRange = [0, 1];
+const xlabel = "Categories";
+const ylabel = "Sample numbers";
+const valueRange = [0,70];
 const plotSize = [500,1200];
-const colors = ["#3d8eff", "#000000"];
+const colors = ["#66c", "#fcf"];
 
 const MODULE_NAME = "immuneBar";
 
-export function init(id, path) {
+export function init(id, path, config) {
     // if (!window.gon || window.gon.module_name !== MODULE_NAME) return;
 
     const {visualizer} = Oviz.visualize({
         el: id,
         template,
         data: {
-            xlabel, ylabel, title,
+            xlabel, ylabel,
             labelFontSize: 12, 
             tickFontSize: 14, 
             xAxisRotated: 45,
@@ -27,24 +25,15 @@ export function init(id, path) {
             data: {
                 url: path,
                 type: "tsv",
-                dsvHasHeader: true,
+                dsvHasHeader: false,
                 loaded(data) {
-                    const xAxisKey = data.columns[0];
-                    const yAxisKey = data.columns[1];
-                    const result = [];
-                    let sampleSize: number = 0;
-                    let maxSample: number = 0;
-                    data.forEach(d => {
-                        result.push([d[xAxisKey], d[yAxisKey]]);
-                        sampleSize += d[yAxisKey];
-                        maxSample = maxSample >= d[yAxisKey]? maxSample: d[yAxisKey];
-                    });
-                    if(data.columns[0] != "cancer_type")
-                    this.data.xlabel = data.columns[0];
-                    this.data.r = result;
+                    console.log(data)
+                    console.log(data.slice(1))
+                    valueRange[1] = Math.ceil(Math.max(...data.slice(1).map(d=>d[1]))/50)*50
+                    this.data.result = data.slice(1);
                     this.data.colors = colors;
-                    this.data.sampleSize = sampleSize;
-                    this.data.valueRange = [0, maxSample*1.2]
+                    this.data.sampleSize = data.slice(1).reduce((pre, cur) => pre+parseInt(cur[1]), 0);
+                    this.data.valueRange = valueRange
                     this.data.plotSize = plotSize;
                     this.data.labelFontSize = 12;
                     this.data.tickFontSize = 14;

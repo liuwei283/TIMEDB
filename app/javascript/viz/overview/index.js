@@ -73,7 +73,7 @@
 
 
 import {init as immunebar} from "viz/static_immunebar"
-//import {init as immunepie} from "viz/static_immunepie"
+import {init as immunepie} from "viz/static_immunePie"
 
 var overview_path = "/data/overview/";
 
@@ -84,45 +84,65 @@ export function bar_viz() {
     immunebar("#barVis", file_path);
 }
 
-// export function pie_viz() {
-//     var pie_method_selector = document.getElementById("pie-method-selector");
-//     var method = pie_method_selector.value;
-//     var pie_project_selector = document.getElementById("pie-project-selector");
-//     var pname = pie_project_selector.value;
+export function pie_viz() {
+    //var pie_method_selector = document.getElementById("pie_method_selector");
+    //var method = pie_method_selector.value;
+    //var pie_project_selector = document.getElementById("pie_project_selector");
+    //var pname = pie_project_selector.value;
 
-//     //method name must be same as data storage folder
-//     var file_path = overview_path + "Cell data/" + method + "/" + pname + "_CIBERSORT.csv";
-//     immunepie("pieVis", file_path);
-// }
+    //method name must be same as data storage folder
+    //var file_path = overview_path + "Cell data/" + method + "/" + pname + "_CIBERSORT.csv";
+    var file_path = overview_path + "TCGA_ACC_CIBERSORT.csv";
+    immunepie("#pieVis", file_path);
+}
 
 export function all_viz() {
     bar_viz();
-    //pie_viz();
+    pie_viz();
 }
 
 export function initPage() {
-    //all_viz();
+    all_viz();
 }
 
 export function catch_change(){
 
-    // $("#pie-cancer-selector").on('change', function(){
-    //     $ajax({
-    //         url: "refreshSelector",
-    //         type: "GET",
-    //         data: {cancer_type: $(this).val()},
-    //         success: function(data) {
-    //             $("#pie-project-selector").children().remove();
-    //             var listItems = [];
-    //             $.each(data, function(index, item) {
-    //                 pname = item["name"];
-    //                 listItems += '<option value = "' + pname + '">' + pname + '</option>'; 
-    //             });
-    //             $("#pie-project-selector").append(listItems);
-    //             $("#pie-project-selector").selectedIndex = 0; //Option 10
-    //         }
-    //     })
+    // $("#pie_cancer_selector']").click(function(){
+    //     var url = '/get_drop_down_options?category_id=' + $(this).val()
+    //     $("#group").removeOption(/./)
+    //     $.get(url, function(data) {
+    //       $('#group').addOption(data, false);
+    //     });
+    //   });
+
+    //   $("#pie_cancer_selector").on('change', function(){
+    //     var url = '/get_drop_down_projects?cancer_id=' + $(this).val()
+    //     $("#pie_project_selector").removeOption(/./)
+    //     $.get(url, function(data) {
+    //       $('#pie_project_selector').addOption(data, false);
+    //     });
     // });
+
+
+    $("#pie_cancer_selector").on('change', function(){
+        $.ajax({
+            //url: '@(Url.Action("refreshSelector","database"))',
+            url: "/database/refreshSelector",
+            type: "GET",
+            data: {cancer_id: $(this).val()},
+            success: function(data) {
+                $("#pie_project_selector").children().remove();
+                var listItems = [];
+                $.each(data, function(index, item) {
+                    console.log(item)
+                    var pname = item["name"];
+                    listItems += '<option value = "' + pname + '">' + pname + '</option>'; 
+                });
+                $("#pie_project_selector").append(listItems);
+                $("#pie_project_selector").selectedIndex = 0; //Option 10
+            }
+        })
+    });
 
 
     
@@ -130,7 +150,7 @@ export function catch_change(){
 
     $('#bar-selector').on('change', function() {
         console.log("debug");
-        //bar_viz();
+        bar_viz();
         var file_name = document.getElementById("bar-selector").value + "_samples.tsv";
         document.getElementById("bar_download").setAttribute("download", file_name);
         document.getElementById("bar_download").setAttribute("href", "/data/overview/" + file_name);
@@ -138,9 +158,9 @@ export function catch_change(){
     });
 
 
-    // $('.pie-react').on('change', function() {
-    //     pie_viz();
-    // });
+    $('.pie_react').on('change', function() {
+        pie_viz();
+    });
 
     // $('select').on('change', function() {
     //     //console.log(data);

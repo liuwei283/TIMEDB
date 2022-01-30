@@ -1,0 +1,57 @@
+svg {
+	width = 1200;height = 870
+	Component {
+		y = 20
+		Text {
+			@let len = methodList.length
+			x = 250
+			text = title
+			fontSize = tickFontSize
+			anchor = @anchor("top","left")
+		}
+		PieChart {
+			height = 800; width  = @geo(100, -100); padding = 20 
+			data = pieChartdata[methodList[buttonkey]][sampleList[0]]
+			pieProps = {
+				stroke: "white"
+			}
+			:children(d) {
+				Arc {
+                    x1 = d.start; x2 = d.end; r2 = pieR
+                    fill = d.data.raw.color
+					behavior:tooltip {
+					        content = "name: "+ d.data.name+ "</br>value: "+ d.data.value
+					}  
+                }
+			}
+		}
+		Legend{
+			@props legendPos
+			@expr console.log("legendPos:",legendPos)
+			x = legendPos.x; y = legendPos.y
+			data = legendData[methodList[buttonkey]][sampleList[0]]
+			padding = 4
+			lineHeight = 13
+			legendWidth = 15
+			label.fontSize = 10
+			@expr console.log("legendPos:",legendPos)
+
+		}
+		Container {
+			anchor = @anchor("center","bottom")
+			@let len = methodList.length
+			x = 800-50*len; y = 800
+			@for(item,index) in methodList{
+				Component {
+					x = 100*(index+1); y = 30
+					@let disabled = buttonkey === index
+                	width = 80; height = 30
+                	Rect.full {fill = disabled ? "red" : "#cbf"; cornerRadius = 6}
+                	Text.centered(item) { x = 50%; y = 50%; fill = "#fff" }
+                	cursor = disabled ? null : "pointer"
+                	on:click = disabled ? null:buttonclick(index)
+				}
+			}
+		}
+	}
+}
