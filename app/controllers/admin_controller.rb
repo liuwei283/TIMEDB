@@ -168,6 +168,14 @@ class AdminController < ApplicationController
 
     def update_all_samples
         Sample.import(params[:file])
+        cancers = Cancer.order(:cancer_type)
+        cancers.each do |cancer|
+            samples_num = 0
+            cancers.projects.each do |project|
+                samples_num += project.number_of_samples
+            end
+            cancer.update_attribute(:number_of_samples, samples_num)
+        end
         redirect_to '/admin', notice: "Samples imported."
     end
 
