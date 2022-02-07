@@ -64,6 +64,8 @@ document.addEventListener('DOMContentLoaded', (event) =>  {
         container: 'body',
     })
 
+    $('.carousel').carousel();
+
 
     $('#alerts .alert-group').each((i, el) => {
         const alertGroup = $(el);

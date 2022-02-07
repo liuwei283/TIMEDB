@@ -118,7 +118,7 @@ class AdminController < ApplicationController
 
 
     def make_subtype_cancer_files
-        all_subtype_methods = [""] # add seven analysis method here
+        all_subtype_methods = ["xcell"] # add seven analysis method here
         @cancers = Cancer.order(:cancer_type)
         all_subtype_methods.each do |subtype_method|
             @cancers.each do |cancer|
@@ -127,7 +127,7 @@ class AdminController < ApplicationController
                 project_file_names = []
                 cprojects.each do |project|
                     pname = project.project_name
-                    subtype_project_file_name = p_name + '_' + subtype_method + '.csv'
+                    subtype_project_file_name = pname + '_' + subtype_method + '.csv'
                     project_file_names.push(subtype_project_file_name)
                 end
                 firstpname = project_file_names[0]
@@ -138,6 +138,7 @@ class AdminController < ApplicationController
                 cfile_path = "#{$ovv_dir}subtype/#{subtype_method}/cancers/#{subtype_cancer_name}"
                 CSV.open(cfile_path, "wb", write_headers: true, headers: sub_headers) do |csv|
                     project_file_names.each do |ppath|  # for each of your csv files
+                        csv << [ppath]
                         absPath = "#{$ovv_dir}subtype/#{subtype_method}/projects/#{ppath}"
                         CSV.foreach(absPath, headers: true, return_headers: false) do |row| # don't output the headers in the rows
                             csv << row # append to the final file

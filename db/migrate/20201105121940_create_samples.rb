@@ -26,6 +26,7 @@ class CreateSamples < ActiveRecord::Migration[6.0]
       t.string :type
       t.float :pfs_status
       t.float :os_status
+     
  
       t.references :project, null: false, foreign_key: true
 

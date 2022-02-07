@@ -1,5 +1,12 @@
+//link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet"
+//script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"
+//script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"
+//link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous"
+
+
 - content_for :title
   | Immune
+
 section#intro_text.heading.bg-light.text-light
   / svg.index-bg width="100%" viewBox="0 0 1920 2820"
   /   path d="M0,0 L0,2700 L400,2820 L1920,2620 L1920,0 Z" fill="#343a40"
@@ -34,60 +41,89 @@ section#intro_text.heading.bg-light.text-light
       | metagenomics analysis.
 
 
+section#platform_highlight
+  .container
+    h2
+      | Focus
+    #immuHighlight.carousel.slide data-ride="carousel"
+        ol.carousel-indicators
+          li.active data-target="#immuHighlight" data-slide-to="0"
+          li data-target="#immuHighlight" data-slide-to="1"
+          li data-target="#immuHighlight" data-slide-to="2"
+
+        .carousel-inner
+          .carousel-item.active
+            =image_tag "research.png", :alt=>"Human Gut Metagenomics.png", class: "d-block w-100"
+          .carousel-item
+            =image_tag "bacteria.png", :alt=>"Human Gut Metagenomics.png", class: "d-block w-100"
+          .carousel-item
+            =image_tag "bioinformatics", :alt=>"Human Gut Metagenomics.png", class: "d-block w-100"
+
+        = link_to "#immuHighlight", class: "carousel-control-prev", 'data-slide' =>  'prev', role: "button"
+          span.carousel-control-prev-icon aria-hidden="true"
+          span.sr-only
+            | Previous
+        = link_to "#immuHighlight", class: "carousel-control-next", 'data-slide' =>  'next', role: "button"
+          span.carousel-control-next-icon aria-hidden="true"
+          span.sr-only
+            | Next
+
+
+
 
 section#function_card
   .container
-   i.fa.fa-chevron-down
-   h2
+    i.fa.fa-chevron-down
+    h2
       | Function
 
 
-  #cards_wrapper.container-fluid.container
-    .row.cols-xs-space.cols-sm-space.cols-md-space
-      .col-lg-4.mb-4
-        .card
-          .card_img
-            =link_to '/database/overview'
-              =image_tag "research.png", :alt=>"Human Gut Metagenomics.png"
-    
-      .col-lg-4.mb-4.
-        h5.text-left
-          |Human Gut Metagenomics Database
-        p.text-left
-          |curated database with over 10,000 
-          |metagenomics sequencing data
-        h5.text-right
-          |Visualize your results
-        p.text-right
-          |containing  corresponding visualization of analysis result and basic sample and
-          |basic sample information visualization and so on
-      .col-lg-4.mb-4
-        .card
-          .card_img
-            =link_to "/visualizer"
-              =image_tag "bacteria.png" , :alt=>"Visualize your results.png"
-      .col-lg-4.mb-4
-        .card
-          .card_img
-            =link_to '/submit/analyses'
-              =image_tag "research.png", :alt=>"Human Gut Metagenomics.png"
-      .col-lg-4.mb-4.
-        h5.text-left
-          |Analyses
-        p.text-left
-          |curated database with over 10,000 
-          |metagenomics sequencing data
-        h5.text-right
-          |Pipelines
-        p.text-right
-          |containing diversity analysis, differential testing,   
-          |diseases classifier, PCA,
-          |functional enrichments and so on
-      .col-lg-4.mb-4
-        .card
-          .card_img
-            =link_to "/submit/pipelines"
-              =image_tag "bioinformatics.png", :alt=>"Analyze you data.png"
+    #cards_wrapper.container-fluid.container
+      .row.cols-xs-space.cols-sm-space.cols-md-space
+        .col-lg-4.mb-4
+          .card
+            .card_img
+              =link_to '/database/overview'
+                =image_tag "research.png", :alt=>"Human Gut Metagenomics.png"
+      
+        .col-lg-4.mb-4.
+          h5.text-left
+            |Human Gut Metagenomics Database
+          p.text-left
+            |curated database with over 10,000 
+            |metagenomics sequencing data
+          h5.text-right
+            |Visualize your results
+          p.text-right
+            |containing  corresponding visualization of analysis result and basic sample and
+            |basic sample information visualization and so on
+        .col-lg-4.mb-4
+          .card
+            .card_img
+              =link_to "/visualizer"
+                =image_tag "bacteria.png" , :alt=>"Visualize your results.png"
+        .col-lg-4.mb-4
+          .card
+            .card_img
+              =link_to '/submit/analyses'
+                =image_tag "research.png", :alt=>"Human Gut Metagenomics.png"
+        .col-lg-4.mb-4.
+          h5.text-left
+            |Analyses
+          p.text-left
+            |curated database with over 10,000 
+            |metagenomics sequencing data
+          h5.text-right
+            |Pipelines
+          p.text-right
+            |containing diversity analysis, differential testing,   
+            |diseases classifier, PCA,
+            |functional enrichments and so on
+        .col-lg-4.mb-4
+          .card
+            .card_img
+              =link_to "/submit/pipelines"
+                =image_tag "bioinformatics.png", :alt=>"Analyze you data.png"
 
 
   / #cards_wrapper.container
