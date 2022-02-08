@@ -3,12 +3,13 @@ class CreateCancers < ActiveRecord::Migration[6.0]
       create_table :cancers do |t|
 
         t.string :cancer_type
+        t.string :cancer_name
+        t.string :data_source
         t.integer :number_of_related_projects
         t.integer :number_of_samples 
-        t.string :related_projects
-        t.string :database
+        t.string :sub_cancer
+        t.string :primary_site
         
-
         t.timestamps
       end
     end

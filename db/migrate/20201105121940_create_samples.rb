@@ -1,32 +1,28 @@
 class CreateSamples < ActiveRecord::Migration[6.0]
   def change
     create_table :samples do |t|
-      t.string :submitter_id
+      t.string :sample_name
       t.string :project_name
-      t.string :tumor_stage
-      t.string :tissue_or_organ_of_origin
-      t.integer :days_to_last_follow_up
-      t.string :primary_diagnosis
-      t.integer :age_at_diagnosis 
-      t.string :ajcc_pathologic_t
-      t.string :ajcc_pathologic_n
-      t.string :ajcc_pathologic_m
-      t.string :tumor_grade
-      t.string :cigarettes_per_day
-      t.integer :years_smoked
-      t.string :weight
-      t.string :alcohol_intensity
-      t.string :height
-      t.float :bmi
-      t.string :gender 
-      t.string :vital_status 
-      t.string :race
-      t.integer :age_at_index
-      t.integer :days_to_death
-      t.string :type
-      t.float :pfs_status
-      t.float :os_status
-     
+      t.string :c_tumor_stage
+      t.string :c_tumor_grade
+      t.string :n_year_of_diagnosis
+      t.string  :c_synchronous_malignancy
+      t.string :n_cigarettes_per_day
+      t.string :c_alcohol_history
+      t.string :n_years_smoked
+      t.string :n_alcohol_intensity
+      t.string :n_weight
+      t.string :n_height
+      t.string :n_bmi
+      t.string :c_race
+      t.string :c_gender
+      t.string :n_age
+      t.string :pfs
+      t.string :os
+      t.string :pfs_status
+      t.string :os_status
+      t.string :c_tumor_type
+      t.string :platform
  
       t.references :project, null: false, foreign_key: true
 

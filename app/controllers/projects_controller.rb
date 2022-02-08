@@ -23,7 +23,7 @@ class ProjectsController < ApplicationController
     end
   
     def show
-        @vis = ['id', 'submitter_id', 'project_name', 'tumor_stage', 'days_to_last_follow_up', 'age_at_diagnosis','ajjc_pathologic_t', 'ajjc_pathologic_n', 'ajjc_pathologic_m','tumor_grade','bmi', 'gender', 'race', 'age_at_index']
+        @vis = ['id', 'sample_name', 'project_name', 'tumor_stage', 'days_to_last_follow_up', 'age_at_diagnosis','ajjc_pathologic_t', 'ajjc_pathologic_n', 'ajjc_pathologic_m','tumor_grade','bmi', 'gender', 'race', 'age_at_index']
         @user = User.find(session[:user_id])
         @project = Project.find(params[:id])
         @attrs = Project.column_names

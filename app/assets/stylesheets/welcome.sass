@@ -4,30 +4,44 @@
 
 @import "partials/variables"
 
+
 #introduction
+    padding-top: 10em
     margin-bottom: 5em
-       
-    .circle 
-        width: 100%
-        height: 100%
-        border-radius: 50%
-        padding: 20%
     img
         width: 100%
-    .memberIntro
-        background: $light_theme
-        display: none
+    
     #teamDetails
-        
-        background: $gray-300
+        //background: $gray-300
+        display: block
         .title
-            line-height: 38px
-            color: $light_theme
-            font-size: 3em
-            font-weight: bold
-            margin-bottom: 0.5em
+            padding-top: 20%
+
+    .title
+        line-height: 38px
+        color: $light_theme
+        font-size: 3em
+        font-weight: bold
+        margin-bottom: 0.5em
+        padding-top: 4em
 
 
+    .memberIntro
+        width: 100%
+        
+        color: $white
+        display: none
+        .circle 
+            background: $light_theme
+            width: 90%
+            height: 90%
+            border-radius: 50%
+            padding-right: 20px
+            .title
+                color: $gray-300
+
+#wrapper
+    background-color: #f8f9fa
 
 
 .doap-account-card
@@ -80,7 +94,7 @@ body.welcome
     .navbar
         z-index: 1
     .navbar.navbar-light
-        border-bottom: 1px solid #aaa
+        //border-bottom: 1px solid #aaa
     section
         &.heading
             background-image: url("welcomeBGImage.png")
@@ -88,7 +102,7 @@ body.welcome
             background-size: cover
             background-position: center center
             position: relative
-            padding: 8rem 0 12rem 0
+            padding: 10rem 0 12rem 0
             color: $black
             h1
                 font-size: 4rem
@@ -206,9 +220,9 @@ body.welcome
                     display: flex
                     align-items: center
 
-                    .card
-                        border-radius: 50px
-                        box-shadow: 0 0 32px darken($gray-300, 5%)
+                    .icon
+                        //border-radius: 50px
+                        //box-shadow: 0 0 32px darken($gray-300, 5%)
                         display: table-cell
                         height: 100%
                         width: 25%
@@ -216,13 +230,17 @@ body.welcome
                         font-size: 13px
                         padding: 2em
                         
-                        .card_img
+                        .icon_img
                             width: 100%
                             img
-                                width: 100%   
+                                // display: block
+                                width: 100%
+                                // height: 10vw
+                                // object-fit: cover
                         h5 
                             padding: 10px
                             width: 100%
+
         &#platform_highlight 
             width: 100%
             height: auto
@@ -231,15 +249,37 @@ body.welcome
             padding: 2em
             .container
                 text-align: center
-            #immuHighlight
-                width: 100%
-                padding: 1em
-                .row
-                    display: flex
-                    align-items: center
-                    
-                    img
-                        width: 100%   
+                .carousel
+                    width: 100%
+                    position: relative
+                    padding: 1em
+                    ol.carousel-indicators
+                        display: block
+                        top: 10px
+                        justify-content: center
+                        // display: flex
+                        // align-items: center
+                        margin: 0
+                        padding-left: 15px
+                        padding-right: 15px
+                        li
+                            display: inline-block
+                            background-color: $light_theme
+                            width: 4%
+                            height: 8px
+                            margin-left: 3em
+                            margin-right: 3em
+                            border-radius: 15px
+                            //box-shadow: 0 0 32px darken($gray-300, 5%)
+                            &.active
+                                transform: scale(1.5)
+
+                    .carousel-inner
+                        top: 30px
+                        margin-top: 5%
+                        .carousel-item img
+                            width: 100%
+                            height: 300px
     
            
     .doap-index-card

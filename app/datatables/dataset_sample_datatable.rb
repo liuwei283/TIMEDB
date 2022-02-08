@@ -40,7 +40,7 @@ class DatasetSampleDatatable < ApplicationDatatable
           search_string << "\"#{attr}\" like :search"
         end
       end
-      # search_col =['submitter_id', 'project_name', 'experiment_type']
+      # search_col =['sample_name', 'project_name', 'experiment_type']
       # search_col.each do |term|
       #   search_string << "#{term} like :search"
       # end

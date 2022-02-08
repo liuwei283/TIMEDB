@@ -1,7 +1,7 @@
 class Sample < ApplicationRecord
   belongs_to :project
   has_and_belongs_to_many :datasets
-  validates :submitter_id, presence: true, uniqueness: { 
+  validates :sample_name, presence: true, uniqueness: { 
     message: ->(object, data) do
       "Sample #{data[:value]} already exists. "
     end
@@ -29,7 +29,7 @@ class Sample < ApplicationRecord
 
   def self.import(file)
     CSV.foreach(file.path, headers: true, encoding: 'bom|utf-8') do |row|
-      sample = find_by_submitter_id(row['submitter_id'])|| new
+      sample = find_by_sample_name(row['sample_name'])|| new
       sample.attributes = row.to_hash.slice(*column_names)
       pname = sample.project_name
       project = Project.find_by(project_name: pname)
@@ -50,7 +50,7 @@ class Sample < ApplicationRecord
         @sample = Sample.find(id)
         @project = Project.find(@sample.project_id)
         n1 = @project.project_name
-        n2 = @sample.submitter_id
+        n2 = @sample.sample_name
         file_current = "#{$inf_dir}#{n1}_#{n2}.tsv"
         i = index
         if (File.file?(file_current)) 
@@ -77,7 +77,7 @@ class Sample < ApplicationRecord
       s1 = "#{lefttop_name}"
       ids.each_with_index do |id, index|
         @sample = Sample.find(id)
-        s_name = @sample.submitter_id
+        s_name = @sample.sample_name
         s1 += "\t#{s_name}"
       end
 
@@ -107,11 +107,11 @@ class Sample < ApplicationRecord
     end
 
     if(project!= nil)
-      samples = project.samples.order(:submitter_id)
+      samples = project.samples.order(:sample_name)
       samples = samples.where(search_string.join(' or '), search: "%#{keyword}%")
       
     else
-      samples = Sample.order(:submitter_id)
+      samples = Sample.order(:sample_name)
       samples = samples.where(search_string.join(' or '), search: "%#{keyword}%")
       
     end

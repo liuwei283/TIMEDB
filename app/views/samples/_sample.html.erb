@@ -1,6 +1,6 @@
 <p>
     <strong>Sample:</strong>
-    <%= sample.submitter_id %>
+    <%= sample.sample_name %>
 </p>
  
 <p>
@@ -17,5 +17,5 @@
     <%= link_to 'Edit', edit_project_sample_path(sample.project, sample.id) %> 
     <%= link_to 'Delete', [sample.project, sample],
     method: :delete,
-    data: { confirm: 'Are you sure to delete ' + sample.submitter_id + '?'} %>
+    data: { confirm: 'Are you sure to delete ' + sample.sample_name + '?'} %>
 </p>

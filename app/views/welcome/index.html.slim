@@ -59,14 +59,14 @@ section#platform_highlight
           .carousel-item
             =image_tag "bioinformatics", :alt=>"Human Gut Metagenomics.png", class: "d-block w-100"
 
-        = link_to "#immuHighlight", class: "carousel-control-prev", 'data-slide' =>  'prev', role: "button"
-          span.carousel-control-prev-icon aria-hidden="true"
-          span.sr-only
-            | Previous
-        = link_to "#immuHighlight", class: "carousel-control-next", 'data-slide' =>  'next', role: "button"
-          span.carousel-control-next-icon aria-hidden="true"
-          span.sr-only
-            | Next
+        / = link_to "#immuHighlight", class: "carousel-control-prev", 'data-slide' =>  'prev', role: "button"
+        /   span.carousel-control-prev-icon aria-hidden="true"
+        /   span.sr-only
+        /     | Previous
+        / = link_to "#immuHighlight", class: "carousel-control-next", 'data-slide' =>  'next', role: "button"
+        /   span.carousel-control-next-icon aria-hidden="true"
+        /   span.sr-only
+        /     | Next
 
 
 
@@ -81,10 +81,10 @@ section#function_card
     #cards_wrapper.container-fluid.container
       .row.cols-xs-space.cols-sm-space.cols-md-space
         .col-lg-4.mb-4
-          .card
-            .card_img
+          .icon
+            .icon_img
               =link_to '/database/overview'
-                =image_tag "research.png", :alt=>"Human Gut Metagenomics.png"
+                =image_tag "bright1.png", :alt=>"Human Gut Metagenomics.png"
       
         .col-lg-4.mb-4.
           h5.text-left
@@ -98,15 +98,15 @@ section#function_card
             |containing  corresponding visualization of analysis result and basic sample and
             |basic sample information visualization and so on
         .col-lg-4.mb-4
-          .card
-            .card_img
+          .icon
+            .icon_img
               =link_to "/visualizer"
-                =image_tag "bacteria.png" , :alt=>"Visualize your results.png"
+                =image_tag "bright2.png" , :alt=>"Visualize your results.png"
         .col-lg-4.mb-4
-          .card
-            .card_img
+          .icon
+            .icon_img
               =link_to '/submit/analyses'
-                =image_tag "research.png", :alt=>"Human Gut Metagenomics.png"
+                =image_tag "bright3.png", :alt=>"Human Gut Metagenomics.png"
         .col-lg-4.mb-4.
           h5.text-left
             |Analyses
@@ -120,10 +120,13 @@ section#function_card
             |diseases classifier, PCA,
             |functional enrichments and so on
         .col-lg-4.mb-4
-          .card
-            .card_img
+          .icon
+            .icon_img
               =link_to "/submit/pipelines"
-                =image_tag "bioinformatics.png", :alt=>"Analyze you data.png"
+                =image_tag "bright4.png", :alt=>"Analyze you data.png"
+
+
+
 
 
   / #cards_wrapper.container
