@@ -1,0 +1,60 @@
+svg {
+	width = 1200
+	height = 600
+	Component {
+		XYPlot {
+			height = 500; width = 85%; padding = 50
+			discreteCategory = true
+			valueRange = [0,1]
+			data = data.result
+			stackedData = {
+				stacked: data.classifications
+			}
+			StackedBars {
+				data = "stacked"		  
+				:children(d){
+					Rect.full{
+						fill = data.colorMap.colors[d.key]
+						stroke = "white"
+						strokeOpacity = 0.5
+						strokeWidth = 1
+						width = 40*data.widMap[d.data.pos]/data.barMax
+						x = 50%
+						anchor = @anchor("top","center")
+						behavior:tooltip {
+					    	content = "name: "+ d.key+ "</br>value: "+ (d.data.value*100).toFixed(3)+"%"
+						}
+					}
+				}
+			}
+			
+			Text{
+				x = 50%; y = @geo(100,20)
+				anchor = @anchor("middle","center")
+				text = xlabel
+				fill = "#000"
+				fontSize = 14
+			}
+			Component{
+				x = -40; y = 50%
+				rotation = @rotate(-90)
+				Text{
+					text = ylabel
+					fill = "#000"
+					anchor = @anchor("middle","center")
+					fontSize = 14
+				}
+			}
+			Axis("top") {
+				@props tickprop
+			}
+			Axis("left");
+		}
+		Legend {
+			x = @geo(100, -40); y = 40
+			anchor = @anchor("top", "right")
+			data = data.colorMap.legendData()
+			@expr console.log(data.colorMap.legendData())
+		}
+	}
+}

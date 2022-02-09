@@ -1,11 +1,11 @@
 class ProjectsController < ApplicationController
     http_basic_authenticate_with name: "admin", password: "Lovelace", only: [:new, :create, :edit, :new, :update, :destroy]
     $seq_dir = "#{Rails.root}/app/data/seq/"
-    $inf_dir = "#{Rails.root}/app/data/inf_files/"
+    $inf_dir = "#{Rails.root}/public/data/sample_plot/"
     $tmp_dir = "#{Rails.root}/app/data/tmp/"
 
     def index
-        @vis = ['id', 'project_name', 'cancer_type', 'number_of_samples', 'preprocessed', 'database',"original_description", "major_related_publications"]
+        @vis = ['id', 'project_name', 'cancer_name', 'number_of_samples', 'preprocessed', 'database',"original_description", "major_related_publications"]
         @projects = Project.order(:project_name)
         @attrs = Project.column_names
         @invis = []
@@ -121,7 +121,7 @@ class ProjectsController < ApplicationController
   
     private 
         def project_params
-            params.require(:project).permit(:id, :project_name, :cancer_type, :number_of_samples, :preprocessed, :database,:original_description, :major_related_publications, :original_link, :cancer_id)
+            params.require(:project).permit(:id, :project_name, :cancer_name, :number_of_samples, :preprocessed, :database,:original_description, :major_related_publications, :original_link, :cancer_id)
         end
   
 end

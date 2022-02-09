@@ -21,6 +21,16 @@ document.addEventListener("DOMContentLoaded", () => {
     //         // ​$('.memberIntro').css("display"​​​​​​​​​​​​​​​​​​​​​​​​​​​,"none");​​​​​​
     //     })
     // }
+    $('#teamIntro').on('click', () => {
+        var memberIntroBlocks = document.getElementsByClassName('memberIntro');
+        for (var i=0;i<memberIntroBlocks.length;i+=1){
+            memberIntroBlocks[i].style.display = 'none';
+        }
+        console.log("4egtg")
+        //$(this).style.display = "block";
+        var teamIntroBlock = document.getElementById('teamIntro').style.display = "block";
+    });
+
     $('.member_photo').on('click', (e) => {
         
         var clicked_id = e.target.parentNode.id;

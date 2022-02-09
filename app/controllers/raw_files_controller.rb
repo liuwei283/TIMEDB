@@ -18,7 +18,7 @@ class RawFilesController < ApplicationController
     end
 
     def viz_inf_file
-      path = File.join Rails.root, "app", "data", "inf_files", full_path 
+      path = File.join Rails.root, "public", "data", "sample_plot", full_path 
       send_file path
     end
   

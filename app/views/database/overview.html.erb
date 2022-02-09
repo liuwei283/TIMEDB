@@ -101,7 +101,7 @@ up to here -->
                     
                         <%#= image_tag og.primary_site + ".png", class: "rounded-circle z-depth-2" %>
                     <% end %>
-                    <h4> <%= cc.cancer_type %> </h4>
+                    <h4> <%= cc.cancer_name %> </h4>
                 </div>
             <% end %>
             <div class = "col-lg-5" > </div>
@@ -112,7 +112,7 @@ up to here -->
                     <ul>
                     <% @cancers.each do |cc| %>
                         <% if @groupedCancers.include?(cc) %>
-                            <li><%= link_to cc.cancer_type, cc %></li>
+                            <li><%= link_to cc.cancer_name, cc %></li>
                         <% end %>
                     <% end %>
                     </ul>
@@ -141,16 +141,16 @@ up to here -->
     </div>
   
 
-    <div class="select_bar form-inline row">
+    <div class="select-bar form-inline row">
         <div class="sdiv col">
-            <div class="select_title">
+            <div class="select-title">
                 Please choose project or cancer type:
             </div>
-            <select class="form-select col" id = "bar-selector" name="bar_selected">
+            <select class="form-select col" id = "bar-selector">
                 <option selected="selected" value="project">Project</option>
                 <option value="cancer">Cancer type</option>
             </select>
-            <a id = "bar_download" href="/data/overview/project_samples.tsv" download> slkhf </a>
+            <a id = "bar_download" href="/data/sample_num/project_samples.tsv" download> Click here to download samples number table </a>
         </div>
     </div>
 
@@ -160,48 +160,48 @@ up to here -->
     </div>
 </div>
 
+
 <div id = "piePlot" class = "container Block">
 
     <%# selector row%>
     <div id="pieDescription" class="row description">
     Some description for pie plot
     </div>
-    <div class="select_bar form-inline row">
+
+    <div class="select-bar form-inline row">
 
         <div class="sdiv col">
-            <div class="select_title">
+            <div class="select-title">
                 Please choose the cell division method:
             </div>
-            <select class="form-select col pie-react" id = "pie-method-selector">
-                <option selected="selected" value = "XCell">XCell</option>
-                <option value="Timer">Timer</option>
-                <option value="QuantiSeq">QuantiSeq</option>
-                <option value="MCPCounter">MCPCounter</option>
+            <select class="form-select col pie_react" id = "pie_method_selector">
+                <option selected="selected" value = "CIBERSORT">CIBERSORT</option>
                 <option value="EPIC">EPIC</option>
-                <option value="CIBERSORT">CIBERSORT</option>
-                <option value="CIBERSORTx">CIBERSORTx</option>
-                <option value="ImmuCellAI">ImmuCellAI</option>
+                <option value="MCPcounter">MCPcounter</option>
+                <option value="QuanTIseq">QuanTIseq</option>
+                <option value="TIMER">TIMER</option>
+                <option value="xCell">xCell</option>
             </select>
         </div>
 
         <div class="sdiv col">
-            <div class="select_title">
+            <div class="select-title">
                 Please choose the cancer type:
             </div>
-            <%= select_tag :pie_cancer_selector, options_from_collection_for_select(@cancers, :id, :cancer_type, 0) %>
-            <%#= collection_select_tag(:pie_cancer_selector, Cancer.find(:all), :id, :cancer_type, {:include_blank => 'Cancer'}) %>
+            <%= select_tag :pie_cancer_selector, options_from_collection_for_select(@cancers, :id, :cancer_name, 0) %>
+            <%#= collection_select_tag(:pie_cancer_selector, Cancer.find(:all), :id, :cancer_name, {:include_blank => 'Cancer'}) %>
             <!--
             <select class="form-select col" id = "pie-cancer-selector">
                 <% first = true %>
                 <% @cancers.each do |cc| %>
                     <% if first == true %>
-                        <option selected="selected" value= <%= cc.cancer_type %> >
-                            <%= cc.cancer_type %>
+                        <option selected="selected" value= <%= cc.cancer_name %> >
+                            <%= cc.cancer_name %>
                         </option>
                         <% first = false %>
                     <% else %>
-                        <option value= <%= cc.cancer_type %> >
-                            <%= cc.cancer_type %>
+                        <option value= <%= cc.cancer_name %> >
+                            <%= cc.cancer_name %>
                         </option>
                     <% end %>
                 <% end %>
@@ -209,11 +209,11 @@ up to here -->
         </div>
 
         <div class="sdiv col">
-            <div class="select_title">
+            <div class="select-title">
                 Please choose the project:
             </div>
             <%#= collection_select(:pie_project_selector, Cancer.first.projects.all, :project_name, :project_name, {:include_blank => 'Group'}, { :class: "pie_react" }) %>
-            <%= select_tag :pie_project_selector, options_from_collection_for_select(@cancers[0].projects, :id, :project_name, 0) %>
+            <%= select_tag :pie_project_selector, options_from_collection_for_select(@cancers[0].projects, :id, :project_name, 0), class: 'pie_react'%>
             
             <!--
             <select class="form-select col pie-react" id = "pie-project-selector">
@@ -240,8 +240,58 @@ up to here -->
         <div class="col" id = "pieVis">
         </div>
     </div>
+</div>
 
+<div id = "landscape" class = "container Block">
 
+    <%# selector row%>
+    <div id="landscapeDescription" class="row description">
+    Some description for Immune Subtype Landscape
+    </div>
+    
+    <div class="select-bar form-inline row">
+        <div class = "row">
+            <div class="sdiv col">
+                <div class="select-title">
+                    Please choose the immune subtype method:
+                </div>
+                <select class="form-select col landscape_selector" id = "subtype_method_selector">
+                    <option selected="selected" value = "TIMEDB">TIMEDB Subtyping</option>
+                    <option value="C1-C6">Thorsson et al. 2018 (C1-C6)</option>
+                </select>
+            </div>
+
+            <div class="sdiv col">
+                <div class="select-title">
+                    Please choose the TIMEDB subtype method:
+                </div>
+                <select class="form-select col landscape_selector" id = "TIMEDB_selector">
+                    <option selected="selected" value = "CIBERSORT">CIBERSORT</option>
+                    <option value="EPIC">EPIC</option>
+                </select>
+            </div>
+
+            <div class="sdiv col">
+                <div class="select-title">
+                    Please choose the cancer name:
+                </div>
+                <select class="form-select col landscape_selector" id = "landscape_cancer_selector">
+                    <% first = true %>
+                    <option selected="selected" value = "all">All cancers</option>
+                    <% @cancers.each do |cc| %>
+                        <option value= <%= cc.cancer_name %> >
+                            <%= cc.cancer_name %>
+                        </option>
+                    <% end %>
+                </select> 
+            </div>
+        </div>
+    
+    </div>
+    <div class="row">
+        <div class="col" id = "landscapeVis">
+        </div>
+    </div>
 </div>
 
 

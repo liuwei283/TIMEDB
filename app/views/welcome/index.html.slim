@@ -59,14 +59,14 @@ section#platform_highlight
           .carousel-item
             =image_tag "bioinformatics", :alt=>"Human Gut Metagenomics.png", class: "d-block w-100"
 
-        / = link_to "#immuHighlight", class: "carousel-control-prev", 'data-slide' =>  'prev', role: "button"
-        /   span.carousel-control-prev-icon aria-hidden="true"
-        /   span.sr-only
-        /     | Previous
-        / = link_to "#immuHighlight", class: "carousel-control-next", 'data-slide' =>  'next', role: "button"
-        /   span.carousel-control-next-icon aria-hidden="true"
-        /   span.sr-only
-        /     | Next
+        = link_to "#immuHighlight", class: "carousel-control-prev", 'data-slide' =>  'prev', role: "button"
+          span.carousel-control-prev-icon aria-hidden="true"
+          span.sr-only
+            | Previous
+        = link_to "#immuHighlight", class: "carousel-control-next", 'data-slide' =>  'next', role: "button"
+          span.carousel-control-next-icon aria-hidden="true"
+          span.sr-only
+            | Next
 
 
 

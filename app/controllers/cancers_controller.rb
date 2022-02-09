@@ -1,13 +1,13 @@
 class CancersController < ApplicationController
     http_basic_authenticate_with name: "admin", password: "Lovelace", only: [:new, :create, :edit, :update, :destroy]
     $seq_dir = "#{Rails.root}/app/data/seq/"
-    $inf_dir = "#{Rails.root}/app/data/inf_files/"
+    $inf_dir = "#{Rails.root}/public/data/sample_plot/"
     $tmp_dir = "#{Rails.root}/app/data/tmp/"
 
         
     def index
-        @vis = ['id', 'cancer_type', 'number_of_related_projects', 'number_of_samples', 'related_projects', 'database']
-        @cancers = Cancer.order(:cancer_type)
+        @vis = ['id', 'cancer_name', 'number_of_related_projects', 'number_of_samples', 'related_projects', 'database']
+        @cancers = Cancer.order(:cancer_name)
         @attrs = Cancer.column_names
         @invis = []
         @attrs.each_with_index do |attr, index|
@@ -25,7 +25,7 @@ class CancersController < ApplicationController
 
     
     def show
-        @vis = ['id', 'project_name', 'cancer_type', 'number_of_samples', 'preprocessed', 'database',"original_description"]
+        @vis = ['id', 'project_name', 'cancer_name', 'number_of_samples', 'preprocessed', 'database',"original_description"]
         @user = User.find(session[:user_id])
         @cancer = Cancer.find(params[:id])
         @attrs = Cancer.column_names
@@ -68,7 +68,7 @@ class CancersController < ApplicationController
     end
 
     def export_selected
-        @cancers = Cancer.order(:cancer_type)
+        @cancers = Cancer.order(:cancer_name)
         send_data @cancers.selected_to_csv(params[:selected_ids])
     end
 
@@ -99,7 +99,7 @@ class CancersController < ApplicationController
   
     private 
         def cancer_params
-            params.require(:cancer).permit(:id, :cancer_type, :number_of_related_projects, :number_of_samples, :related_projects, :database, :cover_image)
+            params.require(:cancer).permit(:id, :cancer_name, :number_of_related_projects, :number_of_samples, :related_projects, :database, :cover_image)
         end
   
 end

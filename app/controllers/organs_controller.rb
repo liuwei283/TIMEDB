@@ -1,7 +1,7 @@
 class OrgansController < ApplicationController
     http_basic_authenticate_with name: "admin", password: "Lovelace", only: [:new, :create, :edit, :update, :destroy]
     $seq_dir = "#{Rails.root}/app/data/seq/"
-    $inf_dir = "#{Rails.root}/app/data/inf_files/"
+    $inf_dir = "#{Rails.root}/public/data/sample_plot/"
     $tmp_dir = "#{Rails.root}/app/data/tmp/"
 
     def index

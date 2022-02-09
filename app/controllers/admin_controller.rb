@@ -1,11 +1,11 @@
 class AdminController < ApplicationController
     http_basic_authenticate_with name: "admin", password: "Lovelace"
-    $inf_dir = "#{Rails.root}/app/data/inf_files/"
+    $inf_dir = "#{Rails.root}/public/data/sample_plot/"
     $data_dir = "#{Rails.root}/public/"
     def index
         @projects = Project.order(:project_name)
         #@organs = Organ.order(:primary_site)
-        @cancers = Cancer.order(:cancer_type)
+        @cancers = Cancer.order(:cancer_name)
         @ana_cate = AnalysisCategory.order(:name)
         @ac_attrs = AnalysisCategory.column_names
         @viz = Visualizer.order(:name)
@@ -56,12 +56,12 @@ class AdminController < ApplicationController
 
     def update_samples_num_table
         #generate cancer type and their sample numbers
-        @cancers = Cancer.order(:cancer_type)
+        @cancers = Cancer.order(:cancer_name)
         csf_path = "#{$data_dir}sample_num/cancer_samples.tsv"
         csf = File.open(csf_path, "w")
-        s = "cancer_type\tsample_number"
+        s = "cancer_name\tsample_number"
         @cancers.each do |cancer|
-            ct = cancer.cancer_type
+            ct = cancer.cancer_name
             sn = cancer.number_of_samples
             s += "\n"
             s += "#{ct}\t#{sn}"
@@ -87,10 +87,10 @@ class AdminController < ApplicationController
 
     def make_analysis_cancer_files
         all_analysis_methods = [""] # add seven analysis method here
-        @cancers = Cancer.order(:cancer_type)
+        @cancers = Cancer.order(:cancer_name)
         all_analysis_methods.each do |analysis_method|
             @cancers.each do |cancer|
-                ctype = cancer.cancer_type
+                ctype = cancer.cancer_name
                 cprojects = cancer.projects
                 project_file_names = []
                 cprojects.each do |project|
@@ -118,31 +118,50 @@ class AdminController < ApplicationController
 
 
     def make_subtype_cancer_files
-        all_subtype_methods = ["xcell"] # add seven analysis method here
-        @cancers = Cancer.order(:cancer_type)
+        # integrate project data to cancer data
+        all_subtype_methods = ["CIBERSORT", "EPIC"] # add eight analysis method here
+        cancers = Cancer.order(:cancer_name)
         all_subtype_methods.each do |subtype_method|
-            @cancers.each do |cancer|
-                ctype = cancer.cancer_type
+
+            cancers.each do |cancer|
+                ctype = cancer.cancer_name
                 cprojects = cancer.projects
-                project_file_names = []
-                cprojects.each do |project|
-                    pname = project.project_name
-                    subtype_project_file_name = pname + '_' + subtype_method + '.csv'
-                    project_file_names.push(subtype_project_file_name)
-                end
-                firstpname = project_file_names[0]
-                firstFPath = "#{$ovv_dir}subtype/#{subtype_method}/projects/#{firstpname}"
+                firstpname = cprojects.first.project_name
+                firstFName =  firstpname + '_' + subtype_method + '.csv' 
+                firstFPath = "#{$data_dir}subtype/#{subtype_method}/project/#{firstFName}"
                 sub_headers = CSV.open(firstFPath, &:readline)
 
-                subtype_cancer_name = ctype + "_" + subtype_method + ".csv"
-                cfile_path = "#{$ovv_dir}subtype/#{subtype_method}/cancers/#{subtype_cancer_name}"
+                subtype_cancer_name = ctype + '_' + subtype_method + ".csv"
+                cfile_path = "#{$data_dir}subtype/#{subtype_method}/cancer/#{subtype_cancer_name}"
                 CSV.open(cfile_path, "wb", write_headers: true, headers: sub_headers) do |csv|
-                    project_file_names.each do |ppath|  # for each of your csv files
-                        csv << [ppath]
-                        absPath = "#{$ovv_dir}subtype/#{subtype_method}/projects/#{ppath}"
-                        CSV.foreach(absPath, headers: true, return_headers: false) do |row| # don't output the headers in the rows
+                    cprojects.each do |project|  # for each of your csv files
+                        pname = project.project_name
+                        csv << [pname]
+                        fname = pname + '_' + subtype_method + '.csv' 
+                        fpath = "#{$data_dir}subtype/#{subtype_method}/project/#{fname}"
+                        CSV.foreach(fpath, headers: true, return_headers: false) do |row| # don't output the headers in the rows
                             csv << row # append to the final file
                         end
+                    end
+                end
+            end
+
+            #integrate all TCGA projects to a single file
+            fnameTCGA = subtype_method + '_TCGA_all.csv'
+            fpathTCGA = "#{$data_dir}subtype/#{subtype_method}/#{fnameTCGA}"
+            firstctype = cancers.first.cancer_name
+            firstTCGAfname = "TCGA_" + firstctype + '_' + subtype_method  + ".csv"
+            firstTCGAfpath = "#{$data_dir}subtype/#{subtype_method}/project/#{firstTCGAfame}"
+            sub_headers = CSV.open(firstTCGAfpath, &:readline)
+
+            CSV.open(fpathTCGA, "wb", write_headers: true, headers: sub_headers) do |csv|
+                cancers.each do |cancer|
+                    ctype = cancer.cancer_name
+                    fname = "TCGA_" + ctype + '_' + subtype_method  + ".csv"
+                    fpath = "#{$data_dir}subtype/#{subtype_method}/project/#{fname}"
+                    csv << [ctype]
+                    CSV.foreach(fpath, headers: true, return_headers: false) do |row|
+                        csv << row
                     end
                 end
             end
@@ -169,7 +188,7 @@ class AdminController < ApplicationController
 
     def update_all_samples
         Sample.import(params[:file])
-        cancers = Cancer.order(:cancer_type)
+        cancers = Cancer.order(:cancer_name)
         cancers.each do |cancer|
             samples_num = 0
             cancers.projects.each do |project|
@@ -221,3 +240,9 @@ class AdminController < ApplicationController
         redirect_to '/admin', notice: "Visualization source imported."
     end
 end
+
+
+project_name    sample_name
+key1    value1
+key2    value2
+...

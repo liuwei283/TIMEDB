@@ -1,7 +1,7 @@
 class SamplesController < ApplicationController
     http_basic_authenticate_with name: "admin", password: "Lovelace", only: [:new, :create, :edit, :new, :update, :destroy]
     $seq_dir = "#{Rails.root}/app/data/seq/"
-    $inf_dir = "#{Rails.root}/app/data/inf_files/"
+    $inf_dir = "#{Rails.root}/public/data/sample_plot/"
     $tmp_dir = "#{Rails.root}/app/data/tmp/"
 
     def index
@@ -40,12 +40,12 @@ class SamplesController < ApplicationController
         @sample = @project.samples.find(params[:id])
         @attrs = Sample.column_names
         # inf_name = "#{@project.project_name}_#{@sample.sample_name}.tsv"
-        # inf_url = File.join("/app/data/inf_files/", inf_name)
+        # inf_url = File.join("/public/data/sample_plot/", inf_name)
         # inf_path = File.join($inf_dir, inf_name)
         # @inf_exist = (File.exist?(inf_path)) && (File.size(inf_path)>100)
 
         inf_name = "ACC_ALL.csv"
-        inf_url = File.join("/app/data/inf_files/", inf_name)
+        inf_url = File.join("/public/data/sample_plot/", inf_name)
         inf_path = File.join($inf_dir, inf_name)
         @inf_exist = (File.exist?(inf_path)) && (File.size(inf_path)>100)
         gon.push file: inf_url

@@ -80,21 +80,6 @@ $(function () {
             selector: 'td:first-child'
         },
         scrollX: true,
-        rowCallback: function(row, data) {
-            if ( data[34] == "<div class='table_cell'> YES </div>" )
-            {
-                $('td:eq(8)', row).css('background-color', '#83FDC0');
-                
-            }
-            else if( data[34] == "<div class='table_cell'> NO </div>" )
-            {
-                $(row).find('td:eq(8)').css('background-color', '#FA9288');
-                
-            }
-            else{
-                //$(row).find('td:eq(7)').css('background-color', 'orange')
-            }         
-        }
     }); 
 
     var table = $("#pj_table_page").DataTable({
