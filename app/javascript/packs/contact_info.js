@@ -21,31 +21,31 @@ document.addEventListener("DOMContentLoaded", () => {
     //         // ​$('.memberIntro').css("display"​​​​​​​​​​​​​​​​​​​​​​​​​​​,"none");​​​​​​
     //     })
     // }
-    $('#teamIntro').on('click', () => {
-        var memberIntroBlocks = document.getElementsByClassName('memberIntro');
-        for (var i=0;i<memberIntroBlocks.length;i+=1){
-            memberIntroBlocks[i].style.display = 'none';
-        }
-        console.log("4egtg")
-        //$(this).style.display = "block";
-        var teamIntroBlock = document.getElementById('teamIntro').style.display = "block";
-    });
+    // $('#teamIntro').on('click', () => {
+    //     var memberIntroBlocks = document.getElementsByClassName('memberIntro');
+    //     for (var i=0;i<memberIntroBlocks.length;i+=1){
+    //         memberIntroBlocks[i].style.display = 'none';
+    //     }
+    //     console.log("4egtg")
+    //     //$(this).style.display = "block";
+    //     var teamIntroBlock = document.getElementById('teamIntro').style.display = "block";
+    // });
 
     $('.member_photo').on('click', (e) => {
         
         var clicked_id = e.target.parentNode.id;
         console.log(clicked_id);
         var target_id =  clicked_id + "Details";
-        var teamIntroBlock = document.getElementById('teamIntro');
+        var teamIntroBlock = document.getElementById('teamDetails');
         teamIntroBlock.style.display = "none";
-        var memberIntroBlocks = document.getElementsByClassName('memberIntro');
+        var memberIntroBlocks = document.getElementsByClassName('memberDetails');
         for (var i=0;i<memberIntroBlocks.length;i+=1){
             memberIntroBlocks[i].style.display = 'none';
         }
         var memberIntroBlock = document.getElementById(target_id);
         console.log(target_id);
         memberIntroBlock.style.display = "block";
-        memberIntroBlock.style.borderRadius = "50%";
+        //memberIntroBlock.style.borderRadius = "50%";
         // $('#target_id').css('display'​​​​​​​​​​​​​​​​​​​​​​​​​​​,'block');​​​​​​
         // ​$('.memberIntro').css("display"​​​​​​​​​​​​​​​​​​​​​​​​​​​,"none");​​​​​​
         
