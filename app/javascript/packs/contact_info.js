@@ -48,6 +48,10 @@ document.addEventListener("DOMContentLoaded", () => {
         //memberIntroBlock.style.borderRadius = "50%";
         // $('#target_id').css('display'​​​​​​​​​​​​​​​​​​​​​​​​​​​,'block');​​​​​​
         // ​$('.memberIntro').css("display"​​​​​​​​​​​​​​​​​​​​​​​​​​​,"none");​​​​​​
+        var moreInfoBackBlock = document.getElementById("moreInfoBack");
+        moreInfoBackBlock.style.display = "none";
+        var teamIntroBackBlock = document.getElementById("teamDetailsBack");
+        teamIntroBackBlock.style.display = "block";
         
     });
 });

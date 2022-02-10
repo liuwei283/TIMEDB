@@ -26,6 +26,9 @@ class ProjectsController < ApplicationController
         @vis = ['id', 'sample_name', 'project_name', 'tumor_stage', 'days_to_last_follow_up', 'age_at_diagnosis','ajjc_pathologic_t', 'ajjc_pathologic_n', 'ajjc_pathologic_m','tumor_grade','bmi', 'gender', 'race', 'age_at_index']
         @user = User.find(session[:user_id])
         @project = Project.find(params[:id])
+        @pname = @project.project_name
+        @cancer = Cancer.find(@project.cancer_id)
+        @ctype = @cancer.cancer_name
         @attrs = Project.column_names
         @sample_attrs = Sample.column_names
         @samples = @project.samples
@@ -35,7 +38,9 @@ class ProjectsController < ApplicationController
                 @invis.push(index+1)
             end
         end
-        gon.push invis: @invis
+        gon.push invis: @invis,
+                 project_name: @pname,
+                 cancer_type: @ctype
         
         id = session[:user_id]
         @user = User.find(id)
