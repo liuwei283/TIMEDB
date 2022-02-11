@@ -101,7 +101,7 @@ up to here
     <div class = "container-fluid container">
         <div class = "row cols-xs-space cols-sm-space cols-md-space text-center">            
             <% @cancers.each do |cc| %>
-                <% if @singleIcon.include?(cc.cancer_type) %>
+                <% if @singleIcon.include?(cc.cancer_name) %>
                     <div class = "col-lg-2 col-lg-offset-1 mb-4">
                         <%= link_to cc do %>
                             <% if cc.cover_image.blank? %>
@@ -112,7 +112,7 @@ up to here
                         
                             <%#= image_tag og.primary_site + ".png", class: "rounded-circle z-depth-2" %>
                         <% end %>
-                        <h4> <%= cc.cancer_type %> </h4>
+                        <h4> <%= cc.cancer_name %> </h4>
                     </div>
                 <% end %>
             <% end %>
@@ -123,8 +123,8 @@ up to here
                     <%#= render :partial => 'partials/popover' %>
                     <ul>
                     <% @cancers.each do |cc| %>
-                        <% if @groupedIcon.include?(cc.cancer_type) %>
-                            <li><%= link_to cc.cancer_type, cc %></li>
+                        <% if @groupedIcon.include?(cc.cancer_name) %>
+                            <li><%= link_to cc.cancer_name, cc %></li>
                         <% end %>
                     <% end %>
                     </ul>

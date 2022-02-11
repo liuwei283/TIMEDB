@@ -1,11 +1,11 @@
 class ProjectsController < ApplicationController
     http_basic_authenticate_with name: "admin", password: "Lovelace", only: [:new, :create, :edit, :new, :update, :destroy]
     $seq_dir = "#{Rails.root}/app/data/seq/"
-    $inf_dir = "#{Rails.root}/app/data/inf_files/"
+    $inf_dir = "#{Rails.root}/public/data/sample_plot/"
     $tmp_dir = "#{Rails.root}/app/data/tmp/"
 
     def index
-        @vis = ['id', 'project_name', 'cancer_type', 'number_of_samples', 'preprocessed', 'database',"original_description", "major_related_publications"]
+        @vis = ['id', 'project_name', 'cancer_name', 'number_of_samples', 'preprocessed', 'database',"original_description", "major_related_publications"]
         @projects = Project.order(:project_name)
         @attrs = Project.column_names
         @invis = []
@@ -26,6 +26,9 @@ class ProjectsController < ApplicationController
         @vis = ['id', 'sample_name', 'project_name', 'tumor_stage', 'days_to_last_follow_up', 'age_at_diagnosis','ajjc_pathologic_t', 'ajjc_pathologic_n', 'ajjc_pathologic_m','tumor_grade','bmi', 'gender', 'race', 'age_at_index']
         @user = User.find(session[:user_id])
         @project = Project.find(params[:id])
+        @pname = @project.project_name
+        @cancer = Cancer.find(@project.cancer_id)
+        @ctype = @cancer.cancer_name
         @attrs = Project.column_names
         @sample_attrs = Sample.column_names
         @samples = @project.samples
@@ -35,7 +38,9 @@ class ProjectsController < ApplicationController
                 @invis.push(index+1)
             end
         end
-        gon.push invis: @invis
+        gon.push invis: @invis,
+                 project_name: @pname,
+                 cancer_type: @ctype
         
         id = session[:user_id]
         @user = User.find(id)
@@ -121,7 +126,7 @@ class ProjectsController < ApplicationController
   
     private 
         def project_params
-            params.require(:project).permit(:id, :project_name, :cancer_type, :number_of_samples, :preprocessed, :database,:original_description, :major_related_publications, :original_link, :cancer_id)
+            params.require(:project).permit(:id, :project_name, :cancer_name, :number_of_samples, :preprocessed, :database,:original_description, :major_related_publications, :original_link, :cancer_id)
         end
   
 end

@@ -264,11 +264,11 @@
       <%= submit_tag 'Update'%>
     <% end %>
 
-    <%= form_tag({action: :make_analysis_cancer_files}, multipart: true) do %>
+    <%# <%= form_tag({action: :make_analysis_cancer_files}, multipart: true) do 
       <p>
         Make cancers files for different analysis methods
       </p>
-      <%= submit_tag 'Generate'%>
+      <%= submit_tag 'Generate'
     <% end %>
 
     <%= form_tag({action: :make_subtype_cancer_files}, multipart: true) do %>

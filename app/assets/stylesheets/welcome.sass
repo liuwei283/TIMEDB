@@ -11,34 +11,59 @@
     img
         width: 100%
     
-    #teamDetails
-        //background: $gray-300
-        display: block
-        .title
-            padding-top: 20%
-
     .title
         line-height: 38px
         color: $light_theme
         font-size: 3em
         font-weight: bold
         margin-bottom: 0.5em
-        padding-top: 4em
+        padding-top: 25%
+    
+    #teamDetails
+        //background: $gray-300
+        display: block
+        .title
+            //padding-top: 20%
+            text-align: center
+            //vertical-align: middle
 
-
-    .memberIntro
-        width: 100%
-        
+    .memberDetails
         color: $white
         display: none
-        .circle 
-            background: $light_theme
-            width: 90%
-            height: 90%
-            border-radius: 50%
-            padding-right: 20px
-            .title
-                color: $gray-300
+        background: $light_theme
+        width: 90%
+        height: 90%
+        border-radius: 50%
+        padding-right: 5%
+        padding-top: 5%
+        text-align: center
+
+        .title
+            color: $gray-300
+            text-align: center  
+
+    .flip-card
+        background-color: transparent
+        perspective: 2000px
+        .flip-card-inner
+            width: 100%
+            height: 100%
+            position: relative
+            transform-style: preserve-3d
+            transition: transform 0.8s cubic-bezier(0.75, 0, 0.85, 1);
+            
+        &:hover .flip-card-inner
+            transform: rotateY(180deg)
+        .flip-card-front, .flip-card-back
+            position: absolute
+            width: 100%
+            height: 100%
+            -webkit-backface-visibility: hidden
+            backface-visibility: hidden
+        .flip-card-back
+            transform: rotateY(180deg)
+        #teamDetailsBack
+            display: none
 
 #wrapper
     background-color: #f8f9fa
@@ -251,35 +276,35 @@ body.welcome
                 text-align: center
                 .carousel
                     width: 100%
-                    position: relative
-                    padding: 1em
+                    //position: relative
+                    padding-top: 2em
                     ol.carousel-indicators
-                        display: block
-                        top: 10px
-                        justify-content: center
+                        //display: block
+                        //top: 20em
+                        //justify-content: center
                         // display: flex
                         // align-items: center
-                        margin: 0
-                        padding-left: 15px
-                        padding-right: 15px
+                        //margin: auto
+                        //padding-left: 15px
+                        //padding-right: 15px
                         li
-                            display: inline-block
+                            //display: inline-block
                             background-color: $light_theme
-                            width: 4%
-                            height: 8px
+                            //width: 4%
+                            //height: 8px
                             margin-left: 3em
                             margin-right: 3em
-                            border-radius: 15px
+                            //border-radius: 50%
                             //box-shadow: 0 0 32px darken($gray-300, 5%)
                             &.active
-                                transform: scale(1.5)
+                                transform: scale(1.8)
 
                     .carousel-inner
-                        top: 30px
-                        margin-top: 5%
+                        //top: 6em
+                        //margin-top: 5%
                         .carousel-item img
                             width: 100%
-                            height: 300px
+                            //height: 400px
     
            
     .doap-index-card

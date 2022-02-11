@@ -13,7 +13,6 @@ class CancerProjectDatatable < ApplicationDatatable
             end
           end
           column << link_to('Details', project)
-          column << link_to('Show', project)
         end
       end
     end

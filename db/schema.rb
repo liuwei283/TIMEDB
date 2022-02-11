@@ -65,7 +65,7 @@ ActiveRecord::Schema.define(version: 2021_12_29_142146) do
   end
 
   create_table "cancers", force: :cascade do |t|
-    t.string "cancer_type"
+    t.string "cancer_name"
     t.integer "number_of_related_projects"
     t.integer "number_of_samples"
     t.string "related_projects"
@@ -110,7 +110,7 @@ ActiveRecord::Schema.define(version: 2021_12_29_142146) do
 
   create_table "projects", force: :cascade do |t|
     t.string "project_name"
-    t.string "cancer_type"
+    t.string "cancer_name"
     t.integer "number_of_samples"
     t.integer "number_of_oberserved_genes"
     t.string "preprocessed"

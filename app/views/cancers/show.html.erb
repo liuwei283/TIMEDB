@@ -11,7 +11,7 @@
   <%= javascript_pack_tag "datatable" %>
 <%end%>
 
-<% content_for :title, 'Cancer '+ @cancer.cancer_type %>
+<% content_for :title, 'Cancer '+ @cancer.cancer_name %>
 
 <div class="container">
   <h1>
@@ -82,7 +82,6 @@
               
             <% end %>
             <th>Action</th>
-            <th>visualization</th>
       </thead>
       <tbody>
       </tbody>

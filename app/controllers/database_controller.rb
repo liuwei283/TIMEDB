@@ -2,14 +2,14 @@ class DatabaseController < ApplicationController
     $db_data_dir = File.join(Rails.root, "data", "static_viz_data")
 
     def overview
-        @cancers = Cancer.order(:cancer_type)
+        @cancers = Cancer.order(:cancer_name)
         @groupedIcon = ['NA', 'Hematopoietic and reticuloendothelial systems'] #change to those cancer type with unavailable icons
         #need other group set for one organ contains multiple cancer type
         #@singleIcon = []
         @groupedCancers = []
         @singleCancers = []
         @cancers.each do |cancer|
-            theCancer = cancer.cancer_type 
+            theCancer = cancer.cancer_name 
             if !@groupedIcon.include?(theCancer)
                 @singleCancers.push(cancer)
             else 

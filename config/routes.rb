@@ -151,7 +151,7 @@ Rails.application.routes.draw do
   match 'data/demo/*path', to: 'raw_files#demo', as: 'get_demo', via: :get
   match 'data/outputs/*path', to: 'raw_files#outputs', as: 'get_outputs', via: :get
   match 'data/static_viz_data/*path', to: 'raw_files#viz_file', via: :get
-  match 'app/data/inf_files/*path', to: 'raw_files#viz_inf_file', via: :get
+  match 'public/data/sample_plot/*path', to: 'raw_files#viz_inf_file', via: :get
   get "/database/refreshSelector", to: 'database#refreshSelector'
 
 end

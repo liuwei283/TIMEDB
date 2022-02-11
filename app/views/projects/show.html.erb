@@ -33,92 +33,147 @@
   </div>
   <br />
 
-  <h2>Samples</h2>
-  <p>
-    <span class="download_span">
-      Download samples information:
-      <%= link_to "Metadata", project_path(format: "csv") %>
-    </span>
-  </p>
+  <div class = "container">
+    <ul class = "nav nav-tabs">
+      <li class = "active"><a data-toggle = "tab" href = "#sampleDetails">Samples</a></li>
+      <li><a data-toggle = "tab" href = "#projectOverview">Overview</a></li>
+    </ul>
+    <div class = "tab-content">
 
-  <div id='hidden_helper'>
-    Click to view hidden columns:
-    <br />
-    <br />
-    <% i=1 %>
-    <% @sample_attrs.each do |attr| %>
-      
-        <% if !@vis.include? attr %>
-          <button class="toggle-vis" data-column='<%=i.to_s%>'> 
-            <%= attr%>
-          </button>
-        <% end %>
-        <%i += 1%>
-      
-    <%end%>
-  </div>
-  <br/>
-  <%= form_tag make_selected_file_samples_path, multipart: true do %>  
-    <%= content_tag :table, role: :datatable, class: "display", id: "table_page", data: { url: project_path(format: :json)} do %>
-      <thead>
-            <th>
-              <input type="checkbox" class="selectAll" name="selectAll" value="all">
-            </th>
-            <% @sample_attrs.each do |attr| %>
-              
-              <th> <%= attr %> </th>
-              
-            <% end %>
-            <th>Action</th>
-      </thead>
-      <tbody>
-      </tbody>
-    <% end %>
-
-    <%= submit_tag "dowload selected samples metadata to file", :name => 'metadata', :class => "s_table_sub" %>
-    <%= submit_tag "download selected samples infiltration to file", :name => 'infiltration', :class => "s_table_sub"  %>
-    <%#= submit_tag "download selected samples sequence to file", :name => 'sequence' %>
-    <br />
-
-
-    <%= hidden_field_tag 'project_id', @project.id %>
-
-    <%= submit_tag "dowload filtered samples metadata to file", :name => 'filter_metadata', :class => "s_table_sub" %>
-    <%= submit_tag "dowload filtered samples infiltration to file", :name => 'filter_inf', :class => "s_table_sub" %>
-    <br />
-  
-    <%= submit_tag "export selected samples to", :name => 'seleted2ds', :class => "s_table_sub"  %>
-    <%= submit_tag "export filtered samples to", :name => 'filter2ds', :class => "s_table_sub"  %>
-    <select id="select_box" name="ds_selected">
-      <option value="">--Please choose a dataset--</option>
-      <% @datasets.each do |ds|%>
-        <option value=<%=ds.name%>> <%=ds.name%></option>
-      <%end%>
-    </select>
-  <% end %>
-  <p>
-    If you do NOT have any dataset, create one here: 
-    <%=link_to 'Create new dataset', new_user_dataset_path(:user_id=>@user.id)%>
-  </p>
-
-  <p>
-    *To avoid frenquent download, please refresh the page to enable download again.
-  </p>
+      <div id = "sampleDetails" class = "tab-pane fade in active">
 
 
 
-  <%#=link_to 'Download selected sequencing data', download_selected_inf_project_samples_path(@project.id) %>
 
-  <%#= form_tag import_project_samples_path([@project]), multipart: true do %>
-    <%#= file_field_tag :file %>
-    <%#= submit_tag "Import metadata by csv" %>
-  <%# end %>
 
-  <%#= form_tag import_inf_table_project_samples_path([@project]), multipart: true do %>
-    <%#= file_field_tag :file %>
-    <%#= submit_tag "Import infiltration by tsv" %>
-  <%# end %>
+                          <p>
+                            <span class="download_span">
+                              Download samples information:
+                              <%= link_to "Metadata", project_path(format: "csv") %>
+                            </span>
+                          </p>
 
+                          <div id='hidden_helper'>
+                            Click to view hidden columns:
+                            <br />
+                            <br />
+                            <% i=1 %>
+                            <% @sample_attrs.each do |attr| %>
+                              
+                                <% if !@vis.include? attr %>
+                                  <button class="toggle-vis" data-column='<%=i.to_s%>'> 
+                                    <%= attr%>
+                                  </button>
+                                <% end %>
+                                <%i += 1%>
+                              
+                            <%end%>
+                          </div>
+                          <br/>
+                          <%= form_tag make_selected_file_samples_path, multipart: true do %>  
+                            <%= content_tag :table, role: :datatable, class: "display", id: "table_page", data: { url: project_path(format: :json)} do %>
+                              <thead>
+                                    <th>
+                                      <input type="checkbox" class="selectAll" name="selectAll" value="all">
+                                    </th>
+                                    <% @sample_attrs.each do |attr| %>
+                                      
+                                      <th> <%= attr %> </th>
+                                      
+                                    <% end %>
+                                    <th>Action</th>
+                              </thead>
+                              <tbody>
+                              </tbody>
+                            <% end %>
+
+                            <%= submit_tag "dowload selected samples metadata to file", :name => 'metadata', :class => "s_table_sub" %>
+                            <%= submit_tag "download selected samples infiltration to file", :name => 'infiltration', :class => "s_table_sub"  %>
+                            <%#= submit_tag "download selected samples sequence to file", :name => 'sequence' %>
+                            <br />
+
+
+                            <%= hidden_field_tag 'project_id', @project.id %>
+
+                            <%= submit_tag "dowload filtered samples metadata to file", :name => 'filter_metadata', :class => "s_table_sub" %>
+                            <%= submit_tag "dowload filtered samples infiltration to file", :name => 'filter_inf', :class => "s_table_sub" %>
+                            <br />
+                          
+                            <%= submit_tag "export selected samples to", :name => 'seleted2ds', :class => "s_table_sub"  %>
+                            <%= submit_tag "export filtered samples to", :name => 'filter2ds', :class => "s_table_sub"  %>
+                            <select id="select_box" name="ds_selected">
+                              <option value="">--Please choose a dataset--</option>
+                              <% @datasets.each do |ds|%>
+                                <option value=<%=ds.name%>> <%=ds.name%></option>
+                              <%end%>
+                            </select>
+                          <% end %>
+                          <p>
+                            If you do NOT have any dataset, create one here: 
+                            <%=link_to 'Create new dataset', new_user_dataset_path(:user_id=>@user.id)%>
+                          </p>
+
+                          <p>
+                            *To avoid frenquent download, please refresh the page to enable download again.
+                          </p>
+
+
+
+                          <%#=link_to 'Download selected sequencing data', download_selected_inf_project_samples_path(@project.id) %>
+
+                          <%#= form_tag import_project_samples_path([@project]), multipart: true do %>
+                            <%#= file_field_tag :file %>
+                            <%#= submit_tag "Import metadata by csv" %>
+                          <%# end %>
+
+                          <%#= form_tag import_inf_table_project_samples_path([@project]), multipart: true do %>
+                            <%#= file_field_tag :file %>
+                            <%#= submit_tag "Import infiltration by tsv" %>
+                          <%# end %>
+
+
+
+          
+      </div>
+      <div id = "projectOverview" class = "tab-pane fade">
+
+        <div id = "landscape" class = "container Block">
+
+            <%# selector row%>
+            <div id="landscapeDescription" class="row description">
+            Some description for Immune Subtype Landscape in project overview
+            </div>
+            
+            <div class="select-bar form-inline row">
+                <div class = "row">
+                    <div class="sdiv col">
+                        <div class="select-title">
+                            Please choose the immune subtype method:
+                        </div>
+                        <select class="form-select col landscape_selector" id = "subtype_method_selector">
+                            <option selected="selected" value = "TIMEDB">TIMEDB Subtyping</option>
+                            <option value="C1-C6">Thorsson et al. 2018 (C1-C6)</option>
+                        </select>
+                    </div>
+
+                    <div class="sdiv col">
+                        <div class="select-title">
+                            Please choose the TIMEDB subtype method:
+                        </div>
+                        <select class="form-select col landscape_selector" id = "TIMEDB_selector">
+                            <option selected="selected" value = "CIBERSORT">CIBERSORT</option>
+                            <option value="EPIC">EPIC</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col" id = "landscapeVis">
+                </div>
+            </div>
+        </div>
+      </div>
+    </div>
 </div>
 
 
