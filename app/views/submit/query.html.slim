@@ -5,6 +5,16 @@
   .container
     h1.display-4.font-weight-bold.text-center Job Query
 
+    section#job-submit-history
+      .container
+        h1 Submission History
+        br
+        ul.list-group
+          - @tasks.each do |task|
+            li.list-group-item = task.tid
+          li.list-group-item Examples
+          li.list-group-item Examples
+          li.list-group-item Examples
 
 .container
   #vapp-job-query

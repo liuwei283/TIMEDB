@@ -34,17 +34,16 @@
   <br />
 
   <div class = "container">
-    <ul class = "nav nav-tabs">
-      <li class = "active"><a data-toggle = "tab" href = "#sampleDetails">Samples</a></li>
-      <li><a data-toggle = "tab" href = "#projectOverview">Overview</a></li>
+    <ul class="nav nav-tabs" id="project-datils-tab" role="tablist">
+    <li class="nav-item">
+      <a class="nav-link active" id="sample-table-tab" data-toggle="tab" href="#sample-details" role="tab" aria-controls="sample-details" aria-selected="true">Samples</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" id="project-overview-tab" data-toggle="tab" href="#project-overview" role="tab" aria-controls="project-overview" aria-selected="false">Overview</a>
+    </li>
     </ul>
-    <div class = "tab-content">
-
-      <div id = "sampleDetails" class = "tab-pane fade in active">
-
-
-
-
+    <div class="tab-content" id="projectDeailsTabContent">
+      <div class="tab-pane fade show active" id="sample-details" role="tabpanel" aria-labelledby="sample-table-tab">
 
                           <p>
                             <span class="download_span">
@@ -54,20 +53,26 @@
                           </p>
 
                           <div id='hidden_helper'>
-                            Click to view hidden columns:
-                            <br />
-                            <br />
-                            <% i=1 %>
-                            <% @sample_attrs.each do |attr| %>
-                              
-                                <% if !@vis.include? attr %>
-                                  <button class="toggle-vis" data-column='<%=i.to_s%>'> 
-                                    <%= attr%>
-                                  </button>
-                                <% end %>
-                                <%i += 1%>
-                              
-                            <%end%>
+
+                            <div class="dropdown">
+                              <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownAttributes" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Click to view hidden columns:
+                              </button>
+                              <div class="dropdown-menu" aria-labelledby="dropdownAttributes">
+                                <% i=1 %>
+                                <% @sample_attrs.each do |attr| %>
+                                  <% if !@vis.include? attr %>
+                                    <% attr = attr.gsub(/^n_/, "") %>
+                                    <% attr = attr.gsub(/^c_/, "") %>
+                                    <div class = "dropdown-item">
+                                      <input id = <%= attr %> type= "checkbox" class="toggle-vis" data-column='<%=i.to_s%>'>  
+                                      <label for= <%= attr %> > <%= attr %></label>
+                                    </div>
+                                  <% end %>
+                                  <%i += 1%>
+                                <%end%>
+                              </div>
+                            </div>
                           </div>
                           <br/>
                           <%= form_tag make_selected_file_samples_path, multipart: true do %>  
@@ -77,37 +82,50 @@
                                       <input type="checkbox" class="selectAll" name="selectAll" value="all">
                                     </th>
                                     <% @sample_attrs.each do |attr| %>
-                                      
+                                      <% attr = attr.gsub(/^n_/, "") %>
+                                      <% attr = attr.gsub(/^c_/, "") %>
+                          
                                       <th> <%= attr %> </th>
                                       
                                     <% end %>
-                                    <th>Action</th>
+                                    <th>action</th>
                               </thead>
                               <tbody>
                               </tbody>
                             <% end %>
+                            
 
-                            <%= submit_tag "dowload selected samples metadata to file", :name => 'metadata', :class => "s_table_sub" %>
-                            <%= submit_tag "download selected samples infiltration to file", :name => 'infiltration', :class => "s_table_sub"  %>
-                            <%#= submit_tag "download selected samples sequence to file", :name => 'sequence' %>
-                            <br />
+                            <div class="dropdown">
+                              <button class="btn btn-secondary dropdown-toggle" type="button" id="projectSampleTableDropdownButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Download
+                              </button>
+                              <div class="dropdown-menu" aria-labelledby="projectSampleTableDropdownButton">
+                                <%= submit_tag "dowload selected samples metadata to file", :name => 'metadata', :class => "s_table_sub dropdown-item" %>
+                                <div class="dropdown-divider"></div>
+                                <%= submit_tag "download selected samples infiltration to file", :name => 'infiltration', :class => "s_table_sub dropdown-item"  %>
+                                <div class="dropdown-divider"></div>
+                                <%= submit_tag "dowload filtered samples metadata to file", :name => 'filter_metadata', :class => "s_table_sub dropdown-item" %>
+                                <div class="dropdown-divider"></div>
+                                <%= submit_tag "dowload filtered samples infiltration to file", :name => 'filter_inf', :class => "s_table_sub dropdown-item" %>
+                                <div class="dropdown-divider"></div>
+                                <%= submit_tag "export selected samples to", :name => 'seleted2ds', :class => "s_table_sub dropdown-item"  %>
+                                <div class="dropdown-divider"></div>
+                                <%= submit_tag "export filtered samples to", :name => 'filter2ds', :class => "s_table_sub dropdown-item"  %>
+                              </div>
+                            </div>
 
-
-                            <%= hidden_field_tag 'project_id', @project.id %>
-
-                            <%= submit_tag "dowload filtered samples metadata to file", :name => 'filter_metadata', :class => "s_table_sub" %>
-                            <%= submit_tag "dowload filtered samples infiltration to file", :name => 'filter_inf', :class => "s_table_sub" %>
-                            <br />
-                          
-                            <%= submit_tag "export selected samples to", :name => 'seleted2ds', :class => "s_table_sub"  %>
-                            <%= submit_tag "export filtered samples to", :name => 'filter2ds', :class => "s_table_sub"  %>
-                            <select id="select_box" name="ds_selected">
+                            <select id="select_box" name="ds_selected" >
                               <option value="">--Please choose a dataset--</option>
                               <% @datasets.each do |ds|%>
                                 <option value=<%=ds.name%>> <%=ds.name%></option>
                               <%end%>
                             </select>
+
+                            <%= hidden_field_tag 'project_id', @project.id %>
+
                           <% end %>
+                          <br />
+                            
                           <p>
                             If you do NOT have any dataset, create one here: 
                             <%=link_to 'Create new dataset', new_user_dataset_path(:user_id=>@user.id)%>
@@ -132,10 +150,10 @@
                           <%# end %>
 
 
-
-          
       </div>
-      <div id = "projectOverview" class = "tab-pane fade">
+      <div class="tab-pane fade" id="project-overview" role="tabpanel" aria-labelledby="project-overview-tab">
+        <br>
+        <br>
 
         <div id = "landscape" class = "container Block">
 
@@ -145,35 +163,101 @@
             </div>
             
             <div class="select-bar form-inline row">
-                <div class = "row">
-                    <div class="sdiv col">
-                        <div class="select-title">
-                            Please choose the immune subtype method:
-                        </div>
-                        <select class="form-select col landscape_selector" id = "subtype_method_selector">
-                            <option selected="selected" value = "TIMEDB">TIMEDB Subtyping</option>
-                            <option value="C1-C6">Thorsson et al. 2018 (C1-C6)</option>
-                        </select>
-                    </div>
-
-                    <div class="sdiv col">
-                        <div class="select-title">
-                            Please choose the TIMEDB subtype method:
-                        </div>
-                        <select class="form-select col landscape_selector" id = "TIMEDB_selector">
-                            <option selected="selected" value = "CIBERSORT">CIBERSORT</option>
-                            <option value="EPIC">EPIC</option>
-                        </select>
-                    </div>
+              <div class="sdiv col">
+                <div class="select-title">
+                    Please choose the cell division method:
                 </div>
+                <select class="form-select col" id = "landscape_method_selector">
+                    <option selected="selected" value = "CIBERSORT">CIBERSORT</option>
+                    <option value="EPIC">EPIC</option>
+                    <option value="MCPcounter">MCPcounter</option>
+                    <option value="QuanTIseq">QuanTIseq</option>
+                    <option value="TIMER">TIMER</option>
+                    <option value="xCell">xCell</option>
+                </select>
+              </div>
             </div>
-            <div class="row">
-                <div class="col" id = "landscapeVis">
+
+            <div class="row vizBlock">
+                <div class="col vis" id = "landscapeVis">
                 </div>
             </div>
         </div>
+
+        <hr />
+        <br />
+
+        <div id = "bar" class = "container Block">
+
+            <%# selector row%>
+            <div id="barDescription" class="row description">
+            Some description for Immune Cell Data bar in project overview
+            </div>
+            
+            <div class="select-bar form-inline row">
+              <div class="sdiv col">
+                <div class="select-title">
+                    Please choose the cell division method:
+                </div>
+                <select class="form-select col" id = "bar_method_selector">
+                    <option selected="selected" value = "CIBERSORT">CIBERSORT</option>
+                    <option value="EPIC">EPIC</option>
+                    <option value="MCPcounter">MCPcounter</option>
+                    <option value="QuanTIseq">QuanTIseq</option>
+                    <option value="TIMER">TIMER</option>
+                    <option value="xCell">xCell</option>
+                </select>
+              </div>
+            </div>
+            <div class="row vizBlock">
+                <div class="col vis" id = "barVis">
+                </div>
+            </div>
+        </div>
+
+        <hr />
+        <br />
+
+        <div id = "line" class = "container Block">
+            <%# selector row%>
+            <div id="lineDescription" class="row description">
+            Some description for survival chart in project overview
+            </div>
+            <div class="row vizBlock">
+                <div class="col" id = "lineVis">
+                </div>
+            </div>
+        </div>
+
+        <hr />
+        <br />
+
+        <div id = "regulator" class = "container Block">
+            <%# selector row%>
+            <div id="regulatorDescription" class="row description">
+            Some description for immune regulator in project overview
+            </div>
+            <div class="row vizBlock">
+                <div class="col vis" id = "regulatorVis">
+                </div>
+            </div>
+        </div>
+      
+        <%=javascript_pack_tag 'pj-overview-viz' %>
       </div>
+
+      
+      
     </div>
+
+
+        
+  <div>
+
+
+
+
+                
 </div>
 
 

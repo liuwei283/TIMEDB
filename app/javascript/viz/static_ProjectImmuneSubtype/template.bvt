@@ -1,0 +1,51 @@
+svg {
+	width = 10500
+	height = 800
+	Component {
+		x = 100
+		y = 100
+		Legend {
+			x = -75; y = 30
+			data = ClinicalData.colorMap.legendData()
+		}
+		ComplexStackedBar {
+			x = 50
+			baseWidth = 20
+			plotSize = [3000, 500]
+			@props ClinicalData
+			:xAxis {
+                Axis("top") {
+                    line.stroke = "none"
+                    tick.stroke = "none"
+					:label(tick) {
+						Component {
+							@let txt = tick.value.split("__")
+							y = -10
+							Text {
+								y = 520
+								text = ClinicalData.widMap[tick.value]
+								anchor = @anchor("m", "c")
+								fontSize = 13
+							}
+							Text {
+								@let t1 = txt[0].split("_").map(d=>d.split(" ")).flat().map(d => d[0].toUpperCase()+".").join(" ")
+								// rotation = @rotate(txt[0].length>=10 || txt[1].length>=10 ? 15: 0)
+								y = -15
+								text = txt[0].length >= 10 ? t1: txt[0];
+								anchor = @anchor("m", "c")
+								fontSize = 13
+							}
+							Text {
+								@let t1 = txt[1].split("_").map(d=>d.split(" ")).flat().map(d => d[0]).join(". ")
+								// rotation = @rotate(txt[0].length>=10 || txt[1].length>=10 ? 15: 0)
+								text = txt[1].length >= 10 ? t1: txt[1];
+								anchor = @anchor("m", "c")
+								fontSize = 13
+							}
+						}
+					}
+                }
+			}
+		}
+	}
+}

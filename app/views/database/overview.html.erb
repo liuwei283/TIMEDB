@@ -88,42 +88,59 @@ up to here -->
 <hr />
 <section id = "cancer_icon">
     <h2>Cancer Type</h2>
-    <div class = "container-fluid container">
+    
+    <div id = "cancerIcons" class="collapse" aria-expanded="false" class = "container-fluid container">
         <div class = "row cols-xs-space cols-sm-space cols-md-space text-center">            
             <% @singleCancers.each do |cc| %>
                 <div class = "col-lg-2 col-lg-offset-1 mb-4">
                     <%= link_to cc do %>
-                        <% if cc.cover_image.blank? %>
-                            <%= image_tag "module.jpg", class: "rounded-circle z-depth-2" %>
-                        <% else %>
-                            <%= image_tag cc.cover_image, class: "rounded-circle z-depth-2" %>
-                        <% end %>
-                    
-                        <%#= image_tag og.primary_site + ".png", class: "rounded-circle z-depth-2" %>
+                        <%= image_tag cc.cancer_type + ".png", class: "rounded-circle z-depth-2" %>
                     <% end %>
                     <h4> <%= cc.cancer_name %> </h4>
                 </div>
             <% end %>
-            <div class = "col-lg-5" > </div>
+            
             <div class = "col-lg-2 col-lg-offset-1 mb-4">
-                    
                     <div type="button" class="fa fa-lightbulb-o fa-lg" title="Cancers List" data-toggle="popover" title="" data-content= ' 
                     <%#= render :partial => 'partials/popover' %>
                     <ul>
-                    <% @cancers.each do |cc| %>
-                        <% if @groupedCancers.include?(cc) %>
-                            <li><%= link_to cc.cancer_name, cc %></li>
-                        <% end %>
+                    <% @kidneyCancers.each do |kc| %>
+                        <li><%= link_to kc.cancer_name, kc %></li>
                     <% end %>
                     </ul>
                     '> 
-                    <%= image_tag "other.png", class: "rounded-circle z-depth-2" %> 
+                    <%= image_tag "Kidney.png", class: "rounded-circle z-depth-2" %> 
                     </div> 
-                    <h4> Others </h4>
+                    <h4> Kidney related cancers </h4>
             </div>
-            <div class = "col-lg-5" > </div>
+            <div class = "col-lg-2 col-lg-offset-1 mb-4">
+                    <div type="button" class="fa fa-lightbulb-o fa-lg" title="Cancers List" data-toggle="popover" title="" data-content= ' 
+                    <%#= render :partial => 'partials/popover' %>
+                    <ul>
+                    <% @leukemiaCancers.each do |lc| %>
+                        <li><%= link_to lc.cancer_name, lc %></li>
+                    <% end %>
+                    </ul>
+                    '> 
+                    <%= image_tag "Leukemia.png", class: "rounded-circle z-depth-2" %> 
+                    </div> 
+                    <h4> Leukemia related cancers </h4>
+            </div>
+            <div class = "col-lg-2 col-lg-offset-1 mb-4">
+                <% cancer_other = Cancer.find_by(cancer_type: "Other") %>
+                <%= link_to cancer_other do %>
+                    <%= image_tag "Other.png", class: "rounded-circle z-depth-2" %>
+                <% end %>
+                <h4> <%= "Others" %> </h4>
+            </div>
+            <div class = "col-lg-2 col-lg-offset-1 mb-4">
+                    <h1> . . . </h1>
+            </div>
         </div>
     </div>
+    <div>
+        <a id = "collapseButton" role="button" class="collapsed" data-toggle="collapse" href="#cancerIcons" aria-expanded="false" aria-controls="cancerIcons"></a>
+    <div>
 </section>
 <hr />
 
@@ -134,10 +151,9 @@ up to here -->
 
 
 <div id = "barPlot" class = "container Block">
-    
-    <%# selector row%>
+
     <div id="barDescription" class="row description">
-    <h3>Some description for bar plot</h3>
+    <h4>Some description for bar plot</h4>
     </div>
   
 
@@ -154,18 +170,21 @@ up to here -->
         </div>
     </div>
 
-    <div class="row">
+    <div class="row vizBlock">
         <div class="col" id = "barVis">
         </div>
     </div>
 </div>
+
+<hr>
+<br>
 
 
 <div id = "piePlot" class = "container Block">
 
     <%# selector row%>
     <div id="pieDescription" class="row description">
-    Some description for pie plot
+        <h4>Some description for pie plot</h4>
     </div>
 
     <div class="select-bar form-inline row">
@@ -236,40 +255,23 @@ up to here -->
         </div>
     </div>
 
-    <div class="row">
+    <div class="row vizBlock">
         <div class="col" id = "pieVis">
         </div>
     </div>
 </div>
 
+<hr>
+<br>
+
 <div id = "landscape" class = "container Block">
 
     <%# selector row%>
     <div id="landscapeDescription" class="row description">
-    Some description for Immune Subtype Landscape
+        <h4>Some description for Immune Subtype Landscape</h4>
     </div>
     
     <div class="select-bar form-inline row">
-        <div class = "row">
-            <div class="sdiv col">
-                <div class="select-title">
-                    Please choose the immune subtype method:
-                </div>
-                <select class="form-select col landscape_selector" id = "subtype_method_selector">
-                    <option selected="selected" value = "TIMEDB">TIMEDB Subtyping</option>
-                    <option value="C1-C6">Thorsson et al. 2018 (C1-C6)</option>
-                </select>
-            </div>
-
-            <div class="sdiv col">
-                <div class="select-title">
-                    Please choose the TIMEDB subtype method:
-                </div>
-                <select class="form-select col landscape_selector" id = "TIMEDB_selector">
-                    <option selected="selected" value = "CIBERSORT">CIBERSORT</option>
-                    <option value="EPIC">EPIC</option>
-                </select>
-            </div>
 
             <div class="sdiv col">
                 <div class="select-title">
@@ -285,14 +287,52 @@ up to here -->
                     <% end %>
                 </select> 
             </div>
-        </div>
+            
+        
     
     </div>
-    <div class="row">
+    <div class="row vizBlock">
         <div class="col" id = "landscapeVis">
         </div>
     </div>
 </div>
+
+<hr>
+<br>
+
+
+<div id = "regulatorPlot" class = "container Block">
+
+    <%# selector row%>
+    <div id="regulatorDescription" class="row description">
+        <h4>Some description for immuneregulator plot</h4>
+    </div>
+
+    <div class="select-bar form-inline row">
+
+        <div class="sdiv col">
+            <div class="select-title">
+                Please choose the cancer type:
+            </div>
+            <%= select_tag :regulator_cancer_selector, options_from_collection_for_select(@cancers, :id, :cancer_name, 0) %>
+        </div>
+
+        <div class="sdiv col">
+            <div class="select-title">
+                Please choose the project:
+            </div>
+            <%= select_tag :regulator_project_selector, options_from_collection_for_select(@cancers[0].projects, :id, :project_name, 0)%>
+        </div>
+    </div>
+
+    <div class="row vizBlock">
+        <div class="col" id = "regulatorVis">
+        </div>
+    </div>
+</div>
+
+
+
 
 
 <h2>

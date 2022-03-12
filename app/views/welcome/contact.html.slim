@@ -5,73 +5,93 @@
         .flip-card-front
           #teamDetails
             .title
-              |Our
+              | Our
               br
-              |Team
+              | Team
               br
             .content
-              |This is necessary when you want an element after 
-              br
-              |a floated element to 
-              br
-              |sit below the float. For an example, see the 2 column layout demo. 
-              br
-              |The footer should sit below both the sidebar and main content.
-              br
-              |To clear a float, add the clear property to the element 
-              br
-              |that needs to clear the float. 
-              br
-              |This is usually the element after the floated element.
+              | Based at the City University of Hong Kong and led by Dr. Shuaicheng LI, we are a multidisciplinary group of first-class, aspiring undergraduate and Ph.D. Most of our members have a strong knowledge base in bioinformatics and computer science, and through our tireless efforts, we have built the TIMEDB immune infiltration platform. This platform provides you with a wealth of standardized immune data and related data analysis for free, making it a valuable aid to your immune research, making it easier to conduct research and empowers your journey of discovery.
           #lscDetails.memberDetails.circle
             .title
-              |LI Shuaicheng
+              | Dr. LI Shuaicheng
             .content
-              |Computer Science
-              |City University of Hong Kong
+              | Associate Professor
+              br 
+              | Department of Computer Science
+              br
+              | Research Interests: Bioinformatics, algorithms, machine learning, omics data analysis.
+
           
           #wyxDetails.memberDetails.circle
             .title
-              |WANG Xueying
+              | Dr. WANG Xueying
             .content
-              |Computer Science
-              |City University of Hong Kong
+              | PhD in Computer science，
+              br
+              | City University of Hong Kong
+              br
+              | In charge of the TIMEDB immune infiltration platform.
+
           #clxDetails.memberDetails.circle
             .title
-              |CHEN Lingxi
+              |Dr. CHEN Lingxi
             .content
-              |Computer Science
-              |City University of Hong Kong
+              | PostDoc
+              br
+              | Works in computational biology and cancer study.   
+              br
+              | Contact: chanlingxi@gmail.com  
           #lwDetails.memberDetails.circle
             .title
-              |LIU Wei
+              | LIU Wei
             .content
-              |Computer Science
-              |City University of Hong Kong
+              | Computer Science
+              br 
+              | City University of Hong Kong
           #zyzDetails.memberDetails.circle
             .title
-              |ZHANG Yuanzheng
+              | ZHANG Yuanzheng
             .content
-              |Computer Science
-              |City University of Hong Kong
+              | Bachelor of Engineering
+              br
+              | Biomedical Engineering
+              br
+              | College of Medicine and Biological Information Engineering
+              br
+              | Northeastern University
+              br
+              | Developed the visualization framework and several visualization analyses.
+
           #ldwDetails.memberDetails.circle
             .title
-              |LIU Dawei
+              | LIU Dawei
             .content
-              |Computer Science
-              |City University of Hong Kong
+              | Majoring in Software Engineering
+              br
+              | Software College of Northeastern University
+              br
+              | Developed the visualization framework and several visualization analyses.
+
           #zcxDetails.memberDetails.circle
             .title
-              |ZHOU Chenxin
+              | ZHOU Chenxin
             .content
-              |Computer Science
-              |City University of Hong Kong
+              | School of Business Administration
+              br
+              | Northeastern University
+              br
+              | Collecting and collating immunization data
+
           #ssDetails.memberDetails.circle
             .title
-              |SHI Shuai
+              | SHI Shuai
             .content
-              |Creative Media
-              |City University of Hong Kong
+              | School of Creative Media
+              br
+              | City University of Hong Kong
+              br
+              | Lover of UXUI and graphic design,responsible for the web design of the platform
+
         .flip-card-back
           #teamDetailsBack
             .title
@@ -94,34 +114,36 @@
               br
               |This is usually the element after the floated element.
           #moreInfoBack
-            .title
-              | City University of Hong Kong
-            .content
-              | Some more information
-              | about our team and our platform
+            =image_tag "ICON BIG.png"
 
 
 
     .col-md-6.col-lg-6.G
       .row.h-100 
         #lsc.col-md-4.col-lg-4.B.h-30.pb-3.member_photo
-          =image_tag "kidney.png"
+          =image_tag "lishuaicheng.jpg", class: "rounded-circle"
+          h6 LI Shuaicheng
         #wyx.col-md-4.col-lg-4.B.h-30.pb-3.member_photo
-          =image_tag "kidney.png"
+          =image_tag "wangxueying.jpg", class: "rounded-circle"
+          h6 WANG Xueying
         #clx.col-md-4.col-lg-4.B.h-30.pb-3.member_photo
-          =image_tag "kidney.png"
+          =image_tag "chenlingxi.jpeg", class: "rounded-circle"
+          h6 CHEN Lingxi
         #lw.col-md-4.col-lg-4.B.h-30.pb-3.member_photo
-          =image_tag "kidney.png"
+          =image_tag "liuwei.jpg", class: "rounded-circle"
+          h6 LIU Wei
         #zyz.col-md-4.col-lg-4.B.h-30.pb-3.member_photo
-          =image_tag "kidney.png"
+          =image_tag "zhangyuanzheng.jpg", class: "rounded-circle"
+          h6 ZHANG Yuanzheng
         #ldw.col-md-4.col-lg-4.B.h-30.pb-3.member_photo
-          =image_tag "kidney.png"
+          =image_tag "liudawei.jpg", class: "rounded-circle"
+          h6 LIU Dawei
         #zcx.col-md-4.col-lg-4.B.h-30.pb-3.member_photo
-          =image_tag "kidney.png"
+          =image_tag "zhouchenxin.jpg", class: "rounded-circle"
+          h6 ZHANG Chenxin
         #ss.col-md-4.col-lg-4.B.h-30.pb-3.member_photo
-          =image_tag "kidney.png"
-        #wyx.col-md-4.col-lg-4.B.h-30.pb-3.member_photo
-          =image_tag "kidney.png"
+          =image_tag "shishuai.jpg", class: "rounded-circle"
+          h6 SHI Shuai
 
 =javascript_pack_tag 'contact_info' 
 

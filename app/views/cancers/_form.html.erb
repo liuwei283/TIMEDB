@@ -16,20 +16,10 @@
 
   <% @attrs.each do |attr| %>
     <% if attr != 'id' && attr != 'created_at' && attr != 'updated_at' %>
-      <% if attr == 'cover_image' %>
-        <p> 
-          <%= f.label attr.capitalize %> <br>
-          <%= f.text_field :cover_image %>
-        </p>
-        <% if !@cancer.cover_image.nil? %>
-          <%= image_tag(@cancer.cover_image, width: '400') %>
-        <% end %>
-      <% else %>
-        <p> 
-          <%= f.label attr.capitalize %> <br>
-          <%= f.text_field attr %>
-        </p>
-      <% end %>
+      <p> 
+        <%= f.label attr.capitalize %> <br>
+        <%= f.text_field attr %>
+      </p>
     <% end %>
   <% end %>
   <p>

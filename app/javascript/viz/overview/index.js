@@ -75,50 +75,57 @@
 import {init as immunebar} from "viz/static_immunebar"
 import {init as immunepie} from "viz/static_immunePie"
 import {init as immunelandscape} from "viz/static_immuneSubtypeLandscape"
+import {init as immuneRegulator} from "viz/static_immuneRegulators"
 
-var data_path = "/data/";
+var data_path = "/public/data/";
 
 export function bar_viz() {
-    var bar_selector = document.getElementById("bar-selector");
-    var selected_value = bar_selector.value;
-    var file_path = data_path + selected_value + "_samples.tsv";
-    immunebar("#barVis", file_path);
+    // var bar_selector = document.getElementById("bar-selector");
+    // var selected_value = bar_selector.value;
+    // var file_path = data_path + selected_value + "_samples.tsv";
+    // immunebar("#barVis", file_path);
 }
 
 export function pie_viz() {
-    var pie_method_selector = document.getElementById("pie_method_selector");
-    var method = pie_method_selector.value;
-    var pie_project_selector = document.getElementById("pie_project_selector");
-    var pname = pie_project_selector.value;
+    // var pie_method_selector = document.getElementById("pie_method_selector");
+    // var method = pie_method_selector.value;
+    // var pie_project_selector = document.getElementById("pie_project_selector");
+    // var pname = pie_project_selector.value;
 
-    //method name must be same as data storage folder
-    var file_path = data_path + "cell_data/" + method + "/" + pname + "_" + method + ".csv";
-    immunepie("#pieVis", file_path);
+    // //method name must be same as data storage folder
+    // var file_path = data_path + "cell_data/" + method + "/" + pname + "_" + method + ".csv";
+    // immunepie("#pieVis", file_path);
 }
 
 export function landscape_viz() {
-    var subtype_method_selector = document.getElementById("subtype_method_selector");
-    var selected_method = subtype_method_selector.value;
-    if (selected_method == "TIMEDB") {
-        var selected_method = document.getElementById("TIMEDB_selector").value;
-    }
-    else {
-        document.getElementById("TIMEDB_selector").disabled = true;
-    }
-    var selected_cancer = document.getElemetById("landscape_cancer_selector").value;
-    if (selected_cancer == "all") {
-        var file_path = data_path + "subtype/" + selected_method + "/" + selected_method + "_TCGA_all.csv"; 
-    }
-    else {
-        var file_path = data_path + "subtype/" + selected_method + "/cancer/" + selected_cancer + "_" + selected_method + ".csv";
-    }
-    immunelandscape("#landscapeVis");
+    // var selected_cancer = document.getElemetById("landscape_cancer_selector").value;
+    // if (selected_cancer == "all") {
+    //     var file_path = data_path + "subtype/" + "C1-C6_TCGA_all.csv"; 
+    // }
+    // else {
+    //     var file_path = data_path + "subtype/cancer/" + selected_cancer + "_C1-C6.csv";
+    // }
+    var file_path = "/public/data/subtype/c1_xcell.csv"
+    immunelandscape("#landscapeVis", file_path);
+}
+
+export function regulator_viz() {
+    var regulator_project_selector = document.getElementById("regulator_project_selector");
+    var pname = regulator_project_selector.value;
+
+    //var subtype_file_path = data_path + "subtype/C1-C6/" + pname + "_C1-C6.csv";
+    //var rna_file_path = data_path + "RNA/visualization/" + pname + ".csv";
+    var rna_file_path = "/public/data/RNA/regulator_RNAdata.csv"
+    var subtype_file_path = "/public/data/subtype/regulator_subtype.csv"
+    
+    immuneRegulator("#regulatorVis", subtype_file_path, rna_file_path);
 }
 
 export function all_viz() {
-    bar_viz();
-    pie_viz();
-    landscape_viz();
+    //bar_viz();
+    //pie_viz();
+    //landscape_viz();
+    regulator_viz();
 }
 
 export function initPage() {
@@ -127,107 +134,72 @@ export function initPage() {
 
 export function catch_change(){
 
-    // $("#pie_cancer_selector']").click(function(){
-    //     var url = '/get_drop_down_options?category_id=' + $(this).val()
-    //     $("#group").removeOption(/./)
-    //     $.get(url, function(data) {
-    //       $('#group').addOption(data, false);
-    //     });
-    //   });
+    // $("#pie_cancer_selector").on('change', function(){
+    //     $.ajax({
+    //         //url: '@(Url.Action("refreshSelector","database"))',
+    //         url: "/database/refreshSelector",
+    //         type: "GET",
+    //         data: {cancer_id: $(this).val()},
+    //         success: function(data) {
+    //             $("#pie_project_selector").children().remove();
+    //             var listItems = [];
+    //             $.each(data, function(index, item) {
+    //                 console.log(item)
+    //                 var pname = item["name"];
+    //                 listItems += '<option value = "' + pname + '">' + pname + '</option>'; 
+    //             });
+    //             $("#pie_project_selector").append(listItems);
+    //             $("#pie_project_selector").selectedIndex = 0; //Option 10
+    //         }
+    //     })
+    // });
 
-    //   $("#pie_cancer_selector").on('change', function(){
-    //     var url = '/get_drop_down_projects?cancer_id=' + $(this).val()
-    //     $("#pie_project_selector").removeOption(/./)
-    //     $.get(url, function(data) {
-    //       $('#pie_project_selector').addOption(data, false);
-    //     });
+    // $('.pie_react').on('change', function() {
+    //     pie_viz();
     // });
 
 
-    // catch changes for pie plot
-    $("#pie_cancer_selector").on('change', function(){
+    // // catch changes for bar plot
+    // $('#bar-selector').on('change', function() {
+    //     console.log("debug");
+    //     bar_viz();
+    //     var file_name = document.getElementById("bar-selector").value + "_samples.tsv";
+    //     document.getElementById("bar_download").setAttribute("download", file_name);
+    //     document.getElementById("bar_download").setAttribute("href", "/data/sample_num/" + file_name);
+
+    // });
+
+    
+    $('#regulator_project_selector').on('change', function() {
+        regulator_viz();
+    });
+
+
+
+
+    $("#regulator_cancer_selector").on('change', function(){
         $.ajax({
             //url: '@(Url.Action("refreshSelector","database"))',
             url: "/database/refreshSelector",
             type: "GET",
             data: {cancer_id: $(this).val()},
             success: function(data) {
-                $("#pie_project_selector").children().remove();
+                $("#regulator_project_selector").children().remove();
                 var listItems = [];
                 $.each(data, function(index, item) {
                     console.log(item)
                     var pname = item["name"];
                     listItems += '<option value = "' + pname + '">' + pname + '</option>'; 
                 });
-                $("#pie_project_selector").append(listItems);
-                $("#pie_project_selector").selectedIndex = 0; //Option 10
+                $("#regulator_project_selector").append(listItems);
+                $("#regulator_project_selector").selectedIndex = 0; //Option 10
             }
         })
     });
 
-    $('.pie_react').on('change', function() {
-        pie_viz();
-    });
-
-
-    // catch changes for bar plot
-    $('#bar-selector').on('change', function() {
-        console.log("debug");
-        bar_viz();
-        var file_name = document.getElementById("bar-selector").value + "_samples.tsv";
-        document.getElementById("bar_download").setAttribute("download", file_name);
-        document.getElementById("bar_download").setAttribute("href", "/data/sample_num/" + file_name);
-
-    });
-
     // catch changes for landcape plot
-    $('.landscape_selector').on('change', function() {
-        landscape_viz();
-    });
-
-
-    // $('select').on('change', function() {
-    //     //console.log(data);
-    //     var struct_data = data["struct"];
-    //     var relation_data = data["relation"];
-    //     var content_data = data["content"];
-    //     var bro = this.parentElement.parentElement.children;
-    //     //console.log(bro);
-    //     var outer_block = this.parentElement.parentElement.parentElement;
-    //     var nbro = bro.length;
-    //     //console.log(nbro);
-    //     var new_k = "";
-    //     for (var i=0; i<nbro; i++){
-    //         if (i>0){
-    //             new_k += "_";
-    //         }
-    //         //console.log('string' + new_k);
-    //         new_k += bro[i].children[1].value;  
-    //         //console.log(bro[i].children);
-    //     }
-    //     //console.log(new_k);
-    //     var B_i = parseInt(outer_block.id[1]);
-    //     //console.log(B_i);
-    //     //console.log(struct_data[B_i]);
-    //     var type_key = Object.keys(struct_data[B_i])[0];
-    //     //console.log(type_key);
-    //     var ntype = type_key.length;
-    //     if(type_key[0]=="H"){
-    //         ntype -= 1;
-    //         type_key = type_key.substring(1);
-    //     }
-        
-    //     //console.log(type_key);
-    //     for (var i=0; i<ntype; i++){
-    //         var cid = type_key[i] + i + outer_block.id;
-    //         console.log(cid);
-    //         fillinblock(cid, new_k, relation_data, content_data);
-    //     }
-    //     if (Object.keys(struct_data[B_i])[0].includes("T")){
-    //         assign_tb_style(tids);
-    //     }
-                
+    // $('.landscape_selector').on('change', function() {
+    //     landscape_viz();
     // });
-
 
 }

@@ -85,8 +85,9 @@ class AdminController < ApplicationController
         redirect_to '/admin', notice: "ALL Projects/Cancer types with samples number files updated."
     end 
 
+    #actually no need to do file integration here - cell data
     def make_analysis_cancer_files
-        all_analysis_methods = [""] # add seven analysis method here
+        all_analysis_methods = [""] # add eight analysis method here for cell data
         @cancers = Cancer.order(:cancer_name)
         all_analysis_methods.each do |analysis_method|
             @cancers.each do |cancer|
@@ -119,7 +120,8 @@ class AdminController < ApplicationController
 
     def make_subtype_cancer_files
         # integrate project data to cancer data
-        all_subtype_methods = ["CIBERSORT", "EPIC"] # add eight analysis method here
+        # for subtype data, we will only have the C1-C6 now
+        all_subtype_methods = ["C1-C6"] # add eight subtype method here
         cancers = Cancer.order(:cancer_name)
         all_subtype_methods.each do |subtype_method|
 
@@ -165,6 +167,42 @@ class AdminController < ApplicationController
                     end
                 end
             end
+        end
+    end
+
+    def update_columns
+        projects = Project.all
+        cancers = Cancer.all
+
+        #automatically calculatethe empty or to-be-updated columns 
+        projects.each do |project|
+
+            #number of genes
+            file_name = project.project_name + ".csv"
+            file_path = "#{$data_dir}RNA/visualization/" + file_name
+            num_gene = CSV.foreach(file_path, headers: true).count
+            project.update_attribute(:num_of_genes, num_gene)
+
+            #number of samples
+            project.update_attribute(:num_of_samples, project.samples.count)
+
+        end
+
+        #update the numnber of projets for cancers
+        cancers.each do |cancer|
+
+            #update the number of projects
+            cancer.update_attribute(:number_of_related_projects, cancer.projects.count)
+
+            #update the number of samples
+            num_samples = 0
+            projects_of_cancer = cancer.projects
+            projects_of_cancer.each do |project|
+                num_samples += project.samples.count
+            end
+            cancer.update_arrtribute(:number_of_samples, num_samples)
+
+
         end
     end
 
@@ -241,8 +279,3 @@ class AdminController < ApplicationController
     end
 end
 
-
-project_name    sample_name
-key1    value1
-key2    value2
-...

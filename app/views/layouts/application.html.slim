@@ -3,7 +3,7 @@ html
   head
     title = yield :title
     = csrf_meta_tags
-    = favicon_link_tag '/favicon.ico'
+    = favicon_link_tag 'ICON SMALL.png'
     = render 'partials/assets'
     = yield :head
 
@@ -30,7 +30,7 @@ html
 
     = render 'partials/nav'
     #wrapper
-      - if %w[analysis submit].include? controller_name
+      - if %w[analysis].include? controller_name or controller_name == 'submit' and action_name == 'analysesCategory'
         = render 'partials/side_bar'
       #main
         = yield

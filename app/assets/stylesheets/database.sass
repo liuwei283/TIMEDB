@@ -3,20 +3,56 @@
 // You can use Sass here: https://sass-lang.com/
 
 #cancer_icon img 
-    box-shadow: 0 0 32px darken(#dee2e6, 5%)
-    width: 100%
+    
 
-h4 
-    padding-top: 1em
-    color: #3262a8
+
 
 
 body.database
     background-color: #f8f9fa
     //#wrapper
         //margin: 2em
-    #world-map
-        width: 960px
+    h4 
+        padding-top: 1em
+        color: #3262a8
+    #cancer_icon
+        #collapseButton
+            font-size: 1.5em
+        #collapseButton.collapsed:after 
+            content: '+ Show more cancers'
+
+        #collapseButton:not(.collapsed):after 
+            content: '- Show less'
+
+        #cancerIcons.collapse:not(.show) 
+            display: block
+            height: 49em
+            overflow: hidden
+            //-moz-box-shadow: inset 0 -32px 32px -32px #000000
+            //-webkit-box-shadow: inset 0 -32px 32px -32px #000000
+            //box-shadow: inset 0 -100px 100px -100px #000000
+        
+            
+
+        #cancerIcons.collapsing
+            height: 50em
+
+        h1
+            vertical-align: middle
+            padding-top: 35%
+            color: #3262a8
+        h4 
+            padding-top: 1em
+            color: #3262a8
+        img
+            //box-shadow: 0 0 32px darken(#dee2e6, 5%)
+            width: 100%
+
+    .vizBlock
+        overflow-y: scroll
+        overflow-x: scroll
+        padding: 2em
+
     .navbar
         z-index: 1
     .navbar.navbar-light

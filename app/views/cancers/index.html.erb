@@ -18,23 +18,29 @@
     <%= link_to "CSV", cancers_path(format: "csv") %>
   </p>
 
+
   <div id='hidden_helper'>
-    Click to view hidden columns:
-    <br/> 
-    <br />
-    <% i=2 %>
-    <% @attrs.each do |attr| %>
-      <% if attr != 'id' && attr != 'cover_image' %>
-        <% if !@vis.include? attr%>
-          <button class="toggle-vis" data-column='<%=i.to_s%>'> 
-            <%= attr%>
-          </button>
-        <% end %>
-        <%i += 1%>
-      <%end%>
-    <%end%>
+    <div class="dropdown">
+      <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownAttributes" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        Click to view hidden columns:
+      </button>
+      <div class="dropdown-menu" aria-labelledby="dropdownAttributes">
+        <% i=2 %>
+        <% @attrs.each do |attr| %>
+          <% if attr != 'id' %>
+            <% if !@vis.include? attr %>
+              <div class = "dropdown-item">
+                <input id = <%= attr %> type= "checkbox" class="toggle-vis" data-column='<%=i.to_s%>'>  
+                <label for= <%= attr %> > <%= attr %></label>
+              </div>
+            <% end %>
+            <%i += 1%>
+          <% end %>
+        <%end%>
+      </div>
+    </div>
   </div>
-  <br/>
+  <br />
 
   <%= form_tag export_selected_cancers_path(format: "csv"), multipart: true do %> 
     <%= content_tag :table, role: :datatable, class: "display", id: "table_page", data: { url: cancers_path(format: :json)} do %>
@@ -47,7 +53,7 @@
                 <th> <%= attr %> </th>
               <%# end %>
             <% end %>
-            <th>Action</th>
+            <th>action</th>
       </thead>
       <tbody>
       </tbody>

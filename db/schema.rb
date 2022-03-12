@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_12_29_142146) do
+ActiveRecord::Schema.define(version: 2021_11_30_115435) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -66,13 +66,14 @@ ActiveRecord::Schema.define(version: 2021_12_29_142146) do
 
   create_table "cancers", force: :cascade do |t|
     t.string "cancer_name"
+    t.string "cancer_type"
+    t.string "data_source"
     t.integer "number_of_related_projects"
     t.integer "number_of_samples"
-    t.string "related_projects"
-    t.string "database"
+    t.string "sub_cancer"
+    t.string "primary_site"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.text "cover_image"
   end
 
   create_table "datasets", force: :cascade do |t|
@@ -111,9 +112,11 @@ ActiveRecord::Schema.define(version: 2021_12_29_142146) do
   create_table "projects", force: :cascade do |t|
     t.string "project_name"
     t.string "cancer_name"
-    t.integer "number_of_samples"
-    t.integer "number_of_oberserved_genes"
+    t.integer "num_of_samples"
+    t.string "data_type"
     t.string "preprocessed"
+    t.string "TIMEDB_processing"
+    t.integer "num_of_oberserved_genes"
     t.text "original_description"
     t.string "platform"
     t.string "submisson_date"
@@ -131,29 +134,20 @@ ActiveRecord::Schema.define(version: 2021_12_29_142146) do
   create_table "samples", force: :cascade do |t|
     t.string "sample_name"
     t.string "project_name"
-    t.string "tumor_stage"
-    t.string "tissue_or_organ_of_origin"
-    t.integer "days_to_last_follow_up"
-    t.string "primary_diagnosis"
-    t.integer "age_at_diagnosis"
-    t.string "ajcc_pathologic_t"
-    t.string "ajcc_pathologic_n"
-    t.string "ajcc_pathologic_m"
-    t.string "tumor_grade"
-    t.string "cigarettes_per_day"
-    t.integer "years_smoked"
-    t.string "weight"
-    t.string "alcohol_intensity"
-    t.string "height"
-    t.float "bmi"
-    t.string "gender"
-    t.string "vital_status"
-    t.string "race"
-    t.integer "age_at_index"
-    t.integer "days_to_death"
-    t.string "type"
-    t.float "pfs_status"
-    t.float "os_status"
+    t.string "c_tumor_stage"
+    t.string "c_tumor_grade"
+    t.string "c_sample_histology"
+    t.string "c_race"
+    t.string "c_gender"
+    t.string "n_age"
+    t.string "pfs"
+    t.string "os"
+    t.string "pfs_status"
+    t.string "os_status"
+    t.string "c_tumor_type"
+    t.string "c_tumor_subtype"
+    t.string "c_source_name"
+    t.string "c_treatment"
     t.bigint "project_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false

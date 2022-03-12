@@ -3,17 +3,21 @@ class DatabaseController < ApplicationController
 
     def overview
         @cancers = Cancer.order(:cancer_name)
-        @groupedIcon = ['NA', 'Hematopoietic and reticuloendothelial systems'] #change to those cancer type with unavailable icons
-        #need other group set for one organ contains multiple cancer type
+        @kidneyIcon = ["Kidney Chromophobe", "Kidney Renal Clear Cell Carcinoma", "Wilms Tumor", "Clear Cell Sarconma of the Kidney", "Kidney Renal Papillary Cell Carcinoma"]
+        @leukemiaIcon = ["Acute Myeloid Leukemia", "Chronic Myelogenous Leukemia", "Acute lymphocytic leukemia", "Acute lymphocytic leukemia"]
         #@singleIcon = []
-        @groupedCancers = []
+        #@groupedCancers = []
+        @kidneyCancers = []
+        @leukemiaCancers = []
         @singleCancers = []
         @cancers.each do |cancer|
-            theCancer = cancer.cancer_name 
-            if !@groupedIcon.include?(theCancer)
+            theCancer = cancer.cancer_type
+            if @kidneyIcon.include?(theCancer)
+                @kidneyCancers.push(cancer)
+            elsif @leukemiaIcon.include?(theCancer)
+                @leukemiaCancers.push(cancer)
+            elsif theCancer != "Other"
                 @singleCancers.push(cancer)
-            else 
-                @groupedCancers.push(cancer)
             end
         end
 

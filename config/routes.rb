@@ -35,7 +35,7 @@ Rails.application.routes.draw do
     collection { post :export_selected }
   end
 
-  resources :users do 
+  resources :users do
     resources :datasets do
       member { post :upload_file }
       member { get :download_file}
@@ -76,7 +76,7 @@ Rails.application.routes.draw do
 
   # database pages
   get 'database/overview', to: 'database#overview'
-  #get 'database/refreshSelector', to: 'database#refreshSelector'
+  get 'user/show', to: 'users#show'
   # get 'demo', to: 'demo#show'
   
   # visualizer
@@ -151,6 +151,7 @@ Rails.application.routes.draw do
   match 'data/demo/*path', to: 'raw_files#demo', as: 'get_demo', via: :get
   match 'data/outputs/*path', to: 'raw_files#outputs', as: 'get_outputs', via: :get
   match 'data/static_viz_data/*path', to: 'raw_files#viz_file', via: :get
+  match 'public/data/*path', to: 'raw_files#public_file', via: :get
   match 'public/data/sample_plot/*path', to: 'raw_files#viz_inf_file', via: :get
   get "/database/refreshSelector", to: 'database#refreshSelector'
 

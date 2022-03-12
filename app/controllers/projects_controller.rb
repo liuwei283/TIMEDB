@@ -4,8 +4,10 @@ class ProjectsController < ApplicationController
     $inf_dir = "#{Rails.root}/public/data/sample_plot/"
     $tmp_dir = "#{Rails.root}/app/data/tmp/"
 
+
+    
     def index
-        @vis = ['id', 'project_name', 'cancer_name', 'number_of_samples', 'preprocessed', 'database',"original_description", "major_related_publications"]
+        @vis = ['id', 'project_name', 'cancer_name', 'num_of_samples', 'preprocessed', 'database', "original_description", "major_related_publications"]
         @projects = Project.order(:project_name)
         @attrs = Project.column_names
         @invis = []
@@ -23,7 +25,9 @@ class ProjectsController < ApplicationController
     end
   
     def show
-        @vis = ['id', 'sample_name', 'project_name', 'tumor_stage', 'days_to_last_follow_up', 'age_at_diagnosis','ajjc_pathologic_t', 'ajjc_pathologic_n', 'ajjc_pathologic_m','tumor_grade','bmi', 'gender', 'race', 'age_at_index']
+
+
+        @vis = ['id', 'sample_name', 'project_name', 'c_tumor_stage', 'n_year_of_diagnosis', 'c_tumor_grade','n_bmi', 'c_gender', 'c_race', 'platform']
         @user = User.find(session[:user_id])
         @project = Project.find(params[:id])
         @pname = @project.project_name
@@ -97,8 +101,9 @@ class ProjectsController < ApplicationController
   
     def create        
         @project = Project.new(project_params)
+        @attrs = Project.column_names
         if @project.save
-            @project.update_attribute(:number_of_samples, @project.samples.count)
+            @project.update_attribute(:num_of_samples, @project.samples.count)
             redirect_to @project
         else
             render 'new'
@@ -108,6 +113,7 @@ class ProjectsController < ApplicationController
     def download_inf_table
         @project = Project.find(params[:id])
         name = @project.project_name
+        
         send_file(
             "#{$inf_dir}#{name}.tsv",
                 filename: "#{name}_inf.tsv",
@@ -126,7 +132,7 @@ class ProjectsController < ApplicationController
   
     private 
         def project_params
-            params.require(:project).permit(:id, :project_name, :cancer_name, :number_of_samples, :preprocessed, :database,:original_description, :major_related_publications, :original_link, :cancer_id)
+            params.require(:project).permit(:project_name, :cancer_name, :num_of_samples, :cancer_id)
         end
   
 end

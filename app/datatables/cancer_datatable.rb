@@ -8,7 +8,11 @@ class CancerDatatable < ApplicationDatatable
           Cancer.column_names.each do |attr|
             #if attr != 'cover_image'
               if attr != 'id'
-                  column << "<div class='table_cell'> #{cancer[attr]} </div>"
+                  if attr == 'data_source'
+                    column << "<div class = 'table_cell'> <button type = 'button'> #{cancer[attr]} </button> </div>"
+                  else
+                    column << "<div class='table_cell'> #{cancer[attr]} </div>"
+                  end
               else
                   column << cancer[attr]
               end

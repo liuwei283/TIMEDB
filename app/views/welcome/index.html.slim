@@ -53,11 +53,11 @@ section#platform_highlight
 
         .carousel-inner
           .carousel-item.active
-            =image_tag "research.png", :alt=>"Human Gut Metagenomics.png", class: "d-block w-100"
+            =image_tag "database.png", :alt=>"Human Gut Metagenomics.png", class: "d-block w-100"
           .carousel-item
-            =image_tag "bacteria.png", :alt=>"Human Gut Metagenomics.png", class: "d-block w-100"
+            =image_tag "visualization.png", :alt=>"Human Gut Metagenomics.png", class: "d-block w-100"
           .carousel-item
-            =image_tag "bioinformatics", :alt=>"Human Gut Metagenomics.png", class: "d-block w-100"
+            =image_tag "analysis.png", :alt=>"Human Gut Metagenomics.png", class: "d-block w-100"
 
         = link_to "#immuHighlight", class: "carousel-control-prev", 'data-slide' =>  'prev', role: "button"
           span.carousel-control-prev-icon aria-hidden="true"
@@ -84,7 +84,7 @@ section#function_card
           .icon
             .icon_img
               =link_to '/database/overview'
-                =image_tag "bright1.png", :alt=>"Human Gut Metagenomics.png"
+                =image_tag "icons brightmode12.png", :alt=>"Human Gut Metagenomics.png"
       
         .col-lg-4.mb-4.
           h5.text-left
@@ -101,12 +101,12 @@ section#function_card
           .icon
             .icon_img
               =link_to "/visualizer"
-                =image_tag "bright2.png" , :alt=>"Visualize your results.png"
+                =image_tag "icons brightmode22" , :alt=>"Visualize your results.png"
         .col-lg-4.mb-4
           .icon
             .icon_img
               =link_to '/submit/analyses'
-                =image_tag "bright3.png", :alt=>"Human Gut Metagenomics.png"
+                =image_tag "icons brightmode32", :alt=>"Human Gut Metagenomics.png"
         .col-lg-4.mb-4.
           h5.text-left
             |Analyses
@@ -123,7 +123,7 @@ section#function_card
           .icon
             .icon_img
               =link_to "/submit/pipelines"
-                =image_tag "bright4.png", :alt=>"Analyze you data.png"
+                =image_tag "icons brightmode42", :alt=>"Analyze you data.png"
 
 
 
@@ -166,19 +166,7 @@ section#function_card
   /           |basic sample information visualization and so on
       
 
-section#dataset_list
-    .container
-      h2
-        | My dataset
 
-      
-      .elemet_wrapper
-        - @dataset_list.each do |dataset|
-          span.ds
-            = link_to dataset.name, user_dataset_path(:user_id=>@user.id, :id => dataset.id)
-        span#add_foler_icon
-          =link_to new_user_dataset_path(:user_id=>@user.id)
-            = image_tag 'folder-plus.svg'
         
           / a.btn.btn-xlg.btn-doap.btn-outline-light.text-uppercase.font-weight-bold href='/docs/index.html'
           /   | Learn More

@@ -6,7 +6,7 @@ class CancersController < ApplicationController
 
         
     def index
-        @vis = ['id', 'cancer_name', 'number_of_related_projects', 'number_of_samples', 'related_projects', 'database']
+        @vis = ['id', 'cancer_name', 'cancer_type', 'data_source', 'number_of_related_projects', 'number_of_samples', 'sub_cancer', 'primary_site']
         @cancers = Cancer.order(:cancer_name)
         @attrs = Cancer.column_names
         @invis = []
@@ -25,7 +25,8 @@ class CancersController < ApplicationController
 
     
     def show
-        @vis = ['id', 'project_name', 'cancer_name', 'number_of_samples', 'preprocessed', 'database',"original_description"]
+        @vis = ['id', 'project_name', 'cancer_name', 'num_of_samples', 'preprocessed', 'database', "original_description", "major_related_publications"]
+
         @user = User.find(session[:user_id])
         @cancer = Cancer.find(params[:id])
         @attrs = Cancer.column_names
@@ -99,7 +100,7 @@ class CancersController < ApplicationController
   
     private 
         def cancer_params
-            params.require(:cancer).permit(:id, :cancer_name, :number_of_related_projects, :number_of_samples, :related_projects, :database, :cover_image)
+            params.require(:cancer).permit(:id, :cancer_name, :cancer_type, :data_source, :number_of_related_projects, :number_of_samples, :sub_cancer, :primary_site)
         end
   
 end

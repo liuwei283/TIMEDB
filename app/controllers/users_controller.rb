@@ -4,6 +4,8 @@ class UsersController < ApplicationController
     def show
         id = session[:user_id]
         @user = User.find(id)
+        @tasks = @user.tasks
+        @dataset_list = @user.datasets
     end
 
 

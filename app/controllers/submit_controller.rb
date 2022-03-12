@@ -68,6 +68,9 @@ class SubmitController < ApplicationController
       @task_list = []
     end
     gon.push tasks: @task_list
+
+    @tasks = @user.tasks
+
   end
 
   def pipeline
