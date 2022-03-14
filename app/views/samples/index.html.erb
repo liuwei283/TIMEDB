@@ -57,7 +57,7 @@
             <th>
               <input type="checkbox" class="selectAll" name="selectAll" value="all"> 
             </th>
-            <% @sample_attrs.each do |attr| %>
+            <% @all_sample_attrs.each do |attr| %>
               <% attr = attr.gsub(/^n_/, "") %>
               <% attr = attr.gsub(/^c_/, "") %>
               <th> <%= attr %> </th>

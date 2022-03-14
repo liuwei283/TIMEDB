@@ -5,10 +5,30 @@ class SamplesController < ApplicationController
     $tmp_dir = "#{Rails.root}/app/data/tmp/"
 
     def index
-        @samples = Sample.all
-        @projects = project.all
-        @project.each do |project|
-            
+
+        #get all possible attributes
+        #@samples = Sample.all
+        @projects = Project.all
+        @all_sample_attrs = Sample.column_names
+        @projects.each do |project|
+            #file_path = "#{Rails.root}/public/data/Clinical/project/" + project.project_name
+            file_path = "#{Rails.root}/public/data/Clinical/ClinicaldataTest.csv"
+
+            sub_headers = CSV.open(file_path, &:readline)
+            Rails.logger.info(sub_headers.class)
+            @all_sample_attrs = @all_sample_attrs | sub_headers
+        #     #logger.debug "sdwdwdwdwd"
+        end
+            # CSV.foreach(file_path, headers: true, encoding: 'bom|utf-8') do |row|
+            #     sample = find_by_sample_name(row['sample_name'])|| new
+            #     sample.attributes = row.to_hash.slice(*column_names)
+            #     pname = sample.project_name
+            #     project = Project.find_by(project_name: pname)
+            #     sample.project_id = project.id
+            #     project.update_attribute(:number_of_samples, project.samples.count)
+            #     sample.save!
+            #   end
+        
 
 
 

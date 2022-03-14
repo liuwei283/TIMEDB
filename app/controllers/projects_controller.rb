@@ -25,7 +25,7 @@ class ProjectsController < ApplicationController
     end
   
     def show
-
+        Rails.logger.info "sdwdwdwdwd"
 
         @vis = ['id', 'sample_name', 'project_name', 'c_tumor_stage', 'n_year_of_diagnosis', 'c_tumor_grade','n_bmi', 'c_gender', 'c_race', 'platform']
         @user = User.find(session[:user_id])

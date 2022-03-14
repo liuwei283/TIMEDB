@@ -1,6 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
     all_viz();
-    console.log("ededed")
 });
 catch_change();
 
@@ -93,7 +92,7 @@ var cancer_type = window.gon.cancer_type
 export function landscape_viz() {
     var subtype_method_selector = document.getElementById("landscape_method_selector");
     var selected_method = subtype_method_selector.value;
-    //var clinical_file_path = data_path + "Clinical/" + project_name + ".csv";
+    //var clinical_file_path = data_path + "Clinical/project/" + project_name + ".csv";
     //var subtype_file_path = data_path + "subtype/C1-C6/project/" + project_name + "_C1-C6.csv";
     var clinical_file_path = data_path + "Clinical/ClinicalDataTest.csv"
     var subtype_file_path = data_path + "subtype/projectSubtypeSurvival.csv"
@@ -112,7 +111,7 @@ export function bar_viz() {
 }
 
 export function line_viz() {
-    //var clinical_file_path = data_path + "clinical/" + project_name + ".csv"
+    //var clinical_file_path = data_path + "clinical/project/" + project_name + ".csv"
     //var subtype_file_path = data_path + "subtype/C1-C6/project/" + project_name + "_C1-C6.csv";
     var clinical_file_path = data_path + "Clinical/ClinicalDataTest.csv"
     var subtype_file_path = data_path + "subtype/projectSubtypeSurvival.csv"

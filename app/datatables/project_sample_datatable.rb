@@ -18,7 +18,7 @@ class ProjectSampleDatatable < ApplicationDatatable
     end
   
     def count
-      Sample.count
+      samples.count
     end
   
     def total_entries
