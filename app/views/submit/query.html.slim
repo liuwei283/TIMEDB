@@ -2,19 +2,22 @@
 - content_for :title
   |Query
 .index-banner
-  .container
-    h1.display-4.font-weight-bold.text-center Job Query
 
-    section#job-submit-history
-      .container
-        h1 Submission History
-        br
-        ul.list-group
-          - @tasks.each do |task|
-            li.list-group-item = task.tid
-          li.list-group-item Examples
-          li.list-group-item Examples
-          li.list-group-item Examples
+  
+  .container
+
+    section#dataset_list
+      h2.display-4.font-weight-bold.text-center My dataset
+      br
+      .element_wrapper
+        - @dataset_list.each do |dataset|
+          span.ds
+            = link_to dataset.name, user_dataset_path(:user_id=>@user.id, :id => dataset.id)
+        span#add_folder_icon
+          = link_to new_user_dataset_path(:user_id=>@user.id) do
+            = image_tag 'folder-plus.svg'
+    hr
+    h2.display-4.font-weight-bold.text-center Job Query
 
 .container
   #vapp-job-query

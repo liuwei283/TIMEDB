@@ -88,7 +88,7 @@
                                       <th> <%= attr %> </th>
                                       
                                     <% end %>
-                                    <th>action</th>
+                                    <th>details</th>
                               </thead>
                               <tbody>
                               </tbody>
@@ -162,7 +162,7 @@
             Some description for Immune Subtype Landscape in project overview
             </div>
             
-            <div class="select-bar form-inline row">
+            <%# <div class="select-bar form-inline row">
               <div class="sdiv col">
                 <div class="select-title">
                     Please choose the cell division method:
@@ -171,12 +171,12 @@
                     <option selected="selected" value = "CIBERSORT">CIBERSORT</option>
                     <option value="EPIC">EPIC</option>
                     <option value="MCPcounter">MCPcounter</option>
-                    <option value="QuanTIseq">QuanTIseq</option>
+                    <option value="quanTIseq">quanTIseq</option>
                     <option value="TIMER">TIMER</option>
                     <option value="xCell">xCell</option>
                 </select>
               </div>
-            </div>
+            </div> %>
 
             <div class="row vizBlock">
                 <div class="col vis" id = "landscapeVis">
@@ -200,12 +200,19 @@
                     Please choose the cell division method:
                 </div>
                 <select class="form-select col" id = "bar_method_selector">
-                    <option selected="selected" value = "CIBERSORT">CIBERSORT</option>
+                    <option selected="selected" value = "ABIS">ABIS</option>
+
+                    <option value = "CIBERSORTX">CIBERSORTX</option>
+                    <option value = "ConsensusTME">ConsensusTME</option>
                     <option value="EPIC">EPIC</option>
+                    <option value="ImmuCellAI">ImmuCellAI</option>
                     <option value="MCPcounter">MCPcounter</option>
-                    <option value="QuanTIseq">QuanTIseq</option>
+                    <option value="quanTIseq">quanTIseq</option>
                     <option value="TIMER">TIMER</option>
                     <option value="xCell">xCell</option>
+                   
+
+
                 </select>
               </div>
             </div>

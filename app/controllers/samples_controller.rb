@@ -6,33 +6,31 @@ class SamplesController < ApplicationController
 
     def index
 
-        #get all possible attributes
-        #@samples = Sample.all
-        @projects = Project.all
-        @all_sample_attrs = Sample.column_names
-        @projects.each do |project|
-            #file_path = "#{Rails.root}/public/data/Clinical/project/" + project.project_name
-            file_path = "#{Rails.root}/public/data/Clinical/ClinicaldataTest.csv"
-
-            sub_headers = CSV.open(file_path, &:readline)
-            Rails.logger.info(sub_headers.class)
-            @all_sample_attrs = @all_sample_attrs | sub_headers
-        #     #logger.debug "sdwdwdwdwd"
-        end
-            # CSV.foreach(file_path, headers: true, encoding: 'bom|utf-8') do |row|
-            #     sample = find_by_sample_name(row['sample_name'])|| new
-            #     sample.attributes = row.to_hash.slice(*column_names)
-            #     pname = sample.project_name
-            #     project = Project.find_by(project_name: pname)
-            #     sample.project_id = project.id
-            #     project.update_attribute(:number_of_samples, project.samples.count)
-            #     sample.save!
-            #   end
         
+        @projects = Project.all
+        # @all_sample_attrs = Sample.column_names
+        # @projects.each do |project|
+        #     #file_path = "#{Rails.root}/public/data/Clinical/project/" + project.project_name
+        #     file_path = "#{Rails.root}/public/data/Clinical/ClinicaldataTest.csv"
 
-
-
-        @vis = ['id', 'sample_name', 'project_name', 'c_tumor_stage', 'n_year_of_diagnosis', 'c_tumor_grade','n_bmi', 'c_gender', 'c_race', 'platform']
+        #     sub_headers = CSV.open(file_path, &:readline)
+        #     Rails.logger.info(sub_headers.class)
+        #     @all_sample_attrs = @all_sample_attrs | sub_headers
+        # #     #logger.debug "sdwdwdwdwd"
+        # end
+        # get all possible attributes
+        # @samples = Sample.all
+        #     CSV.foreach(file_path, headers: true, encoding: 'bom|utf-8') do |row|
+        #         sample = find_by_sample_name(row['sample_name'])|| new
+        #         sample.attributes = row.to_hash.slice(*column_names)
+        #         pname = sample.project_name
+        #         project = Project.find_by(project_name: pname)
+        #         sample.project_id = project.id
+        #         project.update_attribute(:number_of_samples, project.samples.count)
+        #         sample.save!
+        #       end
+        
+        @vis = ['id', 'sample_name', 'project_name', 'c_tumor_stage', 'c_tumor_grade', 'c_sample_histology', 'c_race', 'c_gender', 'n_age', 'pfs', 'os', 'pfs_status', 'os_status', 'c_tumor_type', 'c_tumor_subtype', 'c_source_name', 'c_treatment']
         @samples = Sample.order(:sample_name)
         @sample_attrs = Sample.column_names
         @invis = []

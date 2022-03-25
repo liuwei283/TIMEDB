@@ -61,6 +61,8 @@ class SubmitController < ApplicationController
     id = params[:id]
     uid = session[:user_id]
     @user = User.find(uid)
+    @dataset_list = @user.datasets
+
     # user_dir = File.join($user_stor_dir, @user.id.to_s)
     if @user.task_ids
       @task_list = @user.task_ids.split(',')

@@ -2,7 +2,7 @@ class CreateCancers < ActiveRecord::Migration[6.0]
     def change
       create_table :cancers do |t|
 
-        t.string :cancer_name
+        t.string :c_cancer_name
         t.string :cancer_type
         t.string :data_source
         t.integer :number_of_related_projects

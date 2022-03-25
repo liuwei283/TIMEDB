@@ -6,8 +6,8 @@ class CancersController < ApplicationController
 
         
     def index
-        @vis = ['id', 'cancer_name', 'cancer_type', 'data_source', 'number_of_related_projects', 'number_of_samples', 'sub_cancer', 'primary_site']
-        @cancers = Cancer.order(:cancer_name)
+        @vis = ['id', 'c_cancer_name', 'cancer_type', 'data_source', 'number_of_related_projects', 'number_of_samples', 'sub_cancer', 'primary_site']
+        @cancers = Cancer.order(:c_cancer_name)
         @attrs = Cancer.column_names
         @invis = []
         @attrs.each_with_index do |attr, index|
@@ -25,7 +25,7 @@ class CancersController < ApplicationController
 
     
     def show
-        @vis = ['id', 'project_name', 'cancer_name', 'num_of_samples', 'preprocessed', 'database', "original_description", "major_related_publications"]
+        @vis = ['id', 'project_name', 'c_cancer_name', 'num_of_samples', 'preprocessed', 'database', "original_description", "major_related_publications"]
 
         @user = User.find(session[:user_id])
         @cancer = Cancer.find(params[:id])
@@ -69,7 +69,7 @@ class CancersController < ApplicationController
     end
 
     def export_selected
-        @cancers = Cancer.order(:cancer_name)
+        @cancers = Cancer.order(:c_cancer_name)
         send_data @cancers.selected_to_csv(params[:selected_ids])
     end
 
@@ -100,7 +100,7 @@ class CancersController < ApplicationController
   
     private 
         def cancer_params
-            params.require(:cancer).permit(:id, :cancer_name, :cancer_type, :data_source, :number_of_related_projects, :number_of_samples, :sub_cancer, :primary_site)
+            params.require(:cancer).permit(:id, :c_cancer_name, :cancer_type, :data_source, :number_of_related_projects, :number_of_samples, :sub_cancer, :primary_site)
         end
   
 end

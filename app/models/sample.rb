@@ -34,7 +34,7 @@ class Sample < ApplicationRecord
       pname = sample.project_name
       project = Project.find_by(project_name: pname)
       sample.project_id = project.id
-      project.update_attribute(:number_of_samples, project.samples.count)
+      project.update_attribute(:num_of_samples, project.samples.count)
       sample.save!
     end
   end

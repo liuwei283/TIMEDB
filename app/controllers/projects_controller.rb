@@ -7,7 +7,7 @@ class ProjectsController < ApplicationController
 
     
     def index
-        @vis = ['id', 'project_name', 'cancer_name', 'num_of_samples', 'preprocessed', 'database', "original_description", "major_related_publications"]
+        @vis = ['id', 'project_name', 'c_cancer_name', 'num_of_samples', 'preprocessed', 'database', "original_description", "major_related_publications"]
         @projects = Project.order(:project_name)
         @attrs = Project.column_names
         @invis = []
@@ -25,14 +25,14 @@ class ProjectsController < ApplicationController
     end
   
     def show
-        Rails.logger.info "sdwdwdwdwd"
 
-        @vis = ['id', 'sample_name', 'project_name', 'c_tumor_stage', 'n_year_of_diagnosis', 'c_tumor_grade','n_bmi', 'c_gender', 'c_race', 'platform']
+        @vis = ['id', 'sample_name', 'project_name', 'c_tumor_stage', 'c_tumor_grade', 'c_sample_histology', 'c_race', 'c_gender', 'n_age', 'pfs', 'os', 'pfs_status', 'os_status', 'c_tumor_type', 'c_tumor_subtype', 'c_source_name', 'c_treatment']
+
         @user = User.find(session[:user_id])
         @project = Project.find(params[:id])
         @pname = @project.project_name
         @cancer = Cancer.find(@project.cancer_id)
-        @ctype = @cancer.cancer_name
+        @ctype = @cancer.c_cancer_name
         @attrs = Project.column_names
         @sample_attrs = Sample.column_names
         @samples = @project.samples
@@ -132,7 +132,7 @@ class ProjectsController < ApplicationController
   
     private 
         def project_params
-            params.require(:project).permit(:project_name, :cancer_name, :num_of_samples, :cancer_id)
+            params.require(:project).permit(:project_name, :c_cancer_name, :num_of_samples, :cancer_id)
         end
   
 end
