@@ -17,13 +17,12 @@ export function init(id, subtypePath, CellDataPath, config) {
                 dsvHasHeader: false,
                 loaded(data) {
                     this.data.c16Classification = C16Classifier(data);
-                    console.log("C16Classifior:");
-                    console.log(this.data.c16Classification);
                 }
             },
             CellData: {
                 url: CellDataPath,
                 type: "csv",
+                dsvHasHeader: false,
                 dependsOn: ["subtype"],
                 loaded(data) {
                     return CellProcessor(data, this.data.c16Classification);

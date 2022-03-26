@@ -18,17 +18,6 @@ class SamplesController < ApplicationController
         #     @all_sample_attrs = @all_sample_attrs | sub_headers
         # #     #logger.debug "sdwdwdwdwd"
         # end
-        # get all possible attributes
-        # @samples = Sample.all
-        #     CSV.foreach(file_path, headers: true, encoding: 'bom|utf-8') do |row|
-        #         sample = find_by_sample_name(row['sample_name'])|| new
-        #         sample.attributes = row.to_hash.slice(*column_names)
-        #         pname = sample.project_name
-        #         project = Project.find_by(project_name: pname)
-        #         sample.project_id = project.id
-        #         project.update_attribute(:number_of_samples, project.samples.count)
-        #         sample.save!
-        #       end
         
         @vis = ['id', 'sample_name', 'project_name', 'c_tumor_stage', 'c_tumor_grade', 'c_sample_histology', 'c_race', 'c_gender', 'n_age', 'pfs', 'os', 'pfs_status', 'os_status', 'c_tumor_type', 'c_tumor_subtype', 'c_source_name', 'c_treatment']
         @samples = Sample.order(:sample_name)
@@ -64,15 +53,15 @@ class SamplesController < ApplicationController
         @project = Project.find(params[:project_id])
         @sample = @project.samples.find(params[:id])
         @attrs = Sample.column_names
-        # inf_name = "#{@project.project_name}_#{@sample.sample_name}.tsv"
-        # inf_url = File.join("/public/data/sample_plot/", inf_name)
-        # inf_path = File.join($inf_dir, inf_name)
-        # @inf_exist = (File.exist?(inf_path)) && (File.size(inf_path)>100)
-
-        inf_name = "ACC_ALL.csv"
+        inf_name = "#{@project.project_name}_#{@sample.sample_name}.tsv"
         inf_url = File.join("/public/data/sample_plot/", inf_name)
         inf_path = File.join($inf_dir, inf_name)
         @inf_exist = (File.exist?(inf_path)) && (File.size(inf_path)>100)
+
+        #inf_name = "ACC_ALL.csv"
+        #inf_url = File.join("/public/data/sample_plot/", inf_name)
+        #inf_path = File.join($inf_dir, inf_name)
+        #@inf_exist = (File.exist?(inf_path)) && (File.size(inf_path)>100)
         gon.push file: inf_url
     end
 

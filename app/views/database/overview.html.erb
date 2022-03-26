@@ -96,7 +96,7 @@ up to here -->
                     <%= link_to cc do %>
                         <%= image_tag cc.cancer_type + ".png", class: "rounded-circle z-depth-2" %>
                     <% end %>
-                    <h4> <%= cc.c_cancer_name %> </h4>
+                    <h4> <%= cc.cancer_name %> </h4>
                 </div>
             <% end %>
             
@@ -105,7 +105,7 @@ up to here -->
                     <%#= render :partial => 'partials/popover' %>
                     <ul>
                     <% @kidneyCancers.each do |kc| %>
-                        <li><%= link_to kc.c_cancer_name, kc %></li>
+                        <li><%= link_to kc.cancer_name, kc %></li>
                     <% end %>
                     </ul>
                     '> 
@@ -118,7 +118,7 @@ up to here -->
                     <%#= render :partial => 'partials/popover' %>
                     <ul>
                     <% @leukemiaCancers.each do |lc| %>
-                        <li><%= link_to lc.c_cancer_name, lc %></li>
+                        <li><%= link_to lc.cancer_name, lc %></li>
                     <% end %>
                     </ul>
                     '> 
@@ -223,7 +223,7 @@ up to here -->
             <div class="select-title">
                 Please choose the cancer type:
             </div>
-            <%= select_tag :pie_cancer_selector, options_from_collection_for_select(@cancers, :id, :c_cancer_name, 0) %>
+            <%= select_tag :pie_cancer_selector, options_from_collection_for_select(@cancers, :id, :cancer_name, 0) %>
             <%#= collection_select_tag(:pie_cancer_selector, Cancer.find(:all), :id, :cancer_name, {:include_blank => 'Cancer'}) %>
             <!--
             <select class="form-select col" id = "pie-cancer-selector">
@@ -309,8 +309,8 @@ up to here -->
                     <% first = true %>
                     <option selected="selected" value = "all">All cancers</option>
                     <% @cancers.each do |cc| %>
-                        <option value= <%= cc.c_cancer_name %> >
-                            <%= cc.c_cancer_name %>
+                        <option value= <%= cc.cancer_name %> >
+                            <%= cc.cancer_name %>
                         </option>
                     <% end %>
                 </select> 
@@ -355,7 +355,7 @@ up to here -->
             <div class="select-title">
                 Please choose the cancer type:
             </div>
-            <%= select_tag :regulator_cancer_selector, options_from_collection_for_select(@cancers, :id, :c_cancer_name, 0) %>
+            <%= select_tag :regulator_cancer_selector, options_from_collection_for_select(@cancers, :id, :cancer_name, 0) %>
         </div>
 
         <div class="sdiv col">

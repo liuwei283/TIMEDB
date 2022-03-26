@@ -1,6 +1,6 @@
 svg {
-	width = 10500
-	height = 800
+	width = 1800
+	height = 700
 	Component {
 		x = 100
 		y = 100
@@ -11,7 +11,8 @@ svg {
 		ComplexStackedBar {
 			x = 50
 			baseWidth = 20
-			plotSize = [3000, 500]
+			// plotSize = [50*Object.keys(ClinicalData.widMap).length, 500]
+			plotSize = [1500, 500]
 			@props ClinicalData
 			:xAxis {
                 Axis("top") {
@@ -47,5 +48,6 @@ svg {
                 }
 			}
 		}
+		
 	}
 }

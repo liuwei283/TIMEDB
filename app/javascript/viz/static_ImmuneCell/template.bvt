@@ -1,9 +1,10 @@
 svg {
-	width = 2000
+	width = 1800
 	height = 700
 	Component {
         x = 50
         y = 50
+        @expr console.log(CellData)
 		Container {
             x = -25; y = 30
 			Rows {
@@ -27,7 +28,7 @@ svg {
             ComplexGroupedBars {
                 :background {}
                 :box {}
-                plotSize = [1500, 500]
+                plotSize = [1550, 500]
                 xAxisRo = @rotate(45)
                 @props CellData
                 Rect.full {

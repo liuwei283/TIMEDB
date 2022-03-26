@@ -7,7 +7,7 @@ class ProjectsController < ApplicationController
 
     
     def index
-        @vis = ['id', 'project_name', 'c_cancer_name', 'num_of_samples', 'preprocessed', 'database', "original_description", "major_related_publications"]
+        @vis = ['id', 'project_name', 'cancer_name', 'num_of_samples', 'preprocessed', 'database', "original_description", "major_related_publications"]
         @projects = Project.order(:project_name)
         @attrs = Project.column_names
         @invis = []
@@ -32,7 +32,7 @@ class ProjectsController < ApplicationController
         @project = Project.find(params[:id])
         @pname = @project.project_name
         @cancer = Cancer.find(@project.cancer_id)
-        @ctype = @cancer.c_cancer_name
+        @ctype = @cancer.cancer_name
         @attrs = Project.column_names
         @sample_attrs = Sample.column_names
         @samples = @project.samples
@@ -132,7 +132,7 @@ class ProjectsController < ApplicationController
   
     private 
         def project_params
-            params.require(:project).permit(:project_name, :c_cancer_name, :num_of_samples, :cancer_id)
+            params.require(:project).permit(:project_name, :cancer_name, :num_of_samples, :cancer_id)
         end
   
 end

@@ -2,12 +2,12 @@ class CreateProjects < ActiveRecord::Migration[6.0]
   def change
     create_table :projects do |t|
       t.string :project_name
-      t.string :c_cancer_name
+      t.string :cancer_name
       t.integer :num_of_samples
       t.string :data_type
       t.string :preprocessed
       t.string :TIMEDB_processing
-      t.integer :num_of_oberserved_genes
+      t.integer :num_of_observed_genes
       t.text :original_description
       t.string :platform
       t.string :submisson_date

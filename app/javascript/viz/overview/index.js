@@ -1,76 +1,3 @@
-// export function selector(sid, slt_data, selector_name) {
-//     var slt = document.createElement("select");
-//     slt.className = "form-select col";
-//     slt.id = sid;
-//     if (selector_name != null) {
-//         slt.name = selector_name;
-//     }
-    
-// }
-
-
-// export function construct_block(Bid, block_data) {
-//     var block_div = document.createElement("div");
-//     block_div.className = "container Block";
-//     block_div.id = Bid;
-
-//     var keys = Object.keys(block_data);
-//     var contentsType = keys[0];
-//     var selects = block_data[key];
-//     var num_of_contents = key.length;
-//     var i = 0;
-
-//     // create text description/header
-//     if (key[0] == "H") {
-//         var cid = "H" + Bid;
-//         var head_block = document.createElement("div");
-//         head_block.id = cid;
-//         head_block.className = "row description";
-//         block_div.appendChild(head_block);
-//         key = key.substring(1);
-//         num_of_content -= 1;
-//     }
-
-//     // first create selector row - a div block
-//     var slt_row = document.createElement("div");
-//     slt_row.className = "select_bar form_inline row";
-//     var num_of_selectors = selects.length;
-
-//     //create selector elements
-//     for (var j = 0; j < num_of_selectors; j++) {
-//         var sblock = document.createElement("div");
-//         var stitle = document.createElement("div");
-//         var selectbox = selects[j]['select']
-//         sblock.className = "sdiv col";
-//         stitle.className = "select_title"
-//         stitle.innerHTML = selects[j]['title'];
-//         var sid = 'S' + j + Bid;
-//         var selector_name = null;
-//         if (selects[j].hasOwnProperty('name')) {
-//             selector_name = selects[j]['name'];
-//         }
-//         var slt = selector(sid, selectbox, selector_name);//make the jth select box
-
-
-//     }
-
-
-
-// }
-
-
-
-
-
-// export function makeHTMLframe(body) {
-//     var nBlock = struct_data.length;
-//     for (var i = 0; i < nBlock; i++) {
-//         var id = "B" + i;
-//         var B = construct_block(id, struct_data[i]);
-//         body.appendChild(B);
-//     }
-// }
-
 
 import {init as immunebar} from "viz/static_immunebar"
 import {init as immunepie} from "viz/static_immunePie"
@@ -95,13 +22,10 @@ export function pie_viz() {
     console.log(pname);
 
     //method name must be same as data storage folder
-    var file_path = data_path + "cell_data/" + method + "/" + pname + "_" + method + ".csv";
-    immunepie("#pieVis", file_path);
-
-    var method = document.getElementById("pie_method_selector").value;
-    var pname = document.getElementById("pie_project_selector").value;
     var file_name = pname + "_" + method + ".csv";
     var file_path = data_path + "cell_data/" + method + "/" + file_name;
+    immunepie("#pieVis", file_path);
+
     document.getElementById("pie_download").setAttribute("download", file_name);
     document.getElementById("pie_download").setAttribute("href", file_path);
 }
@@ -109,13 +33,18 @@ export function pie_viz() {
 export function landscape_viz() {
     var selected_cancer = document.getElementById("landscape_cancer_selector").value;
     if (selected_cancer == "all") {
+        var file_name = "c1_c6_TCGA_all.csv"
         var file_path = data_path + "subtype/c1_c6/" + "c1_c6_TCGA_all.csv"; 
     }
     else {
-        var file_path = data_path + "subtype/c1_c6/cancer/" + selected_cancer + "_c1_c6.csv";
+        var file_name = selected_cancer + "_c1_c6.csv"
+        var file_path = data_path + "subtype/c1_c6/cancer/" + file_name;
     }
     //var file_path = "/public/data/subtype/c1_xcell.csv"
     immunelandscape("#landscapeVis", file_path);
+
+    document.getElementById("landscape_download").setAttribute("download", file_name);
+    document.getElementById("landscape_download").setAttribute("href", file_path);
 }
 
 export function regulator_viz() {
@@ -195,7 +124,6 @@ export function catch_change(){
 
     });
 
-
     // catch changes for bar plot
     $('#bar-selector').on('change', function() {
         //console.log("debug");
@@ -213,19 +141,6 @@ export function catch_change(){
 
     $('#landscape_cancer_selector').on('change', function() {
         landscape_viz();
-
-        var selected_cancer = document.getElementById("landscape_cancer_selector").value;
-        if (selected_cancer == "all") {
-            var file_name = "c1_c6_TCGA_all.csv"
-            var file_path = data_path + "subtype/c1_c6/" + "c1_c6_TCGA_all.csv"; 
-        }
-        else {
-            var file_name = selected_cancer + "_c1_c6.csv"
-            var file_path = data_path + "subtype/c1_c6/cancer/" + file_name;
-        }
-
-        document.getElementById("landscape_download").setAttribute("download", file_name);
-        document.getElementById("landscape_download").setAttribute("href", file_path);
     });
     
 

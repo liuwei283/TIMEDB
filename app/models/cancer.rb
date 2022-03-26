@@ -1,6 +1,6 @@
 class Cancer < ApplicationRecord
     has_many :projects
-    validates :c_cancer_name, presence: true, uniqueness: { 
+    validates :cancer_name, presence: true, uniqueness: { 
       message: ->(object, data) do
         "Cancer #{data[:value]} already exists. "
       end
@@ -8,7 +8,7 @@ class Cancer < ApplicationRecord
   
     def self.import(file)
       CSV.foreach(file.path, headers: true, encoding: 'bom|utf-8') do |row|
-        cancer = find_by_c_cancer_name(row['c_cancer_name'])|| new
+        cancer = find_by_cancer_name(row['cancer_name'])|| new
         cancer.attributes = row.to_hash.slice(*column_names)
         cancer.save!
       end

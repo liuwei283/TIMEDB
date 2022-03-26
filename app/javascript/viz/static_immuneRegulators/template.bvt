@@ -1,6 +1,6 @@
 svg {
 	width = 2000
-	height = 700
+	height = 550
 	Component.full {
 		x = 100
 		y = 100

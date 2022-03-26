@@ -24,20 +24,48 @@ export function C16Processor(row) {
 }
 
 export function CellProcessor(data, c16Classification) {
-    // the data should dsvHasHeader
+    // // the data should not dsvHasHeader
+    // // rows are C16, cols are gene
+    // // matrix is Array<col>, process for each gene to get the col
+    // c16Classification = c16Classification.group;
+    // const result = {};
+    // const classifications = Object.keys(c16Classification).sort();
+    // data.forEach(d => {
+    //     Object.entries(c16Classification).forEach(([key, value]: [string, string[]]) => {
+    //         if(result[key] == null) result[key] = {};
+    //         if(isNaN(value.map(val => parseFloat(d[val]))[0])) return;
+    //         result[key][d[""]] = C16Processor(value.map(val => parseFloat(d[val])))
+    //     });
+    // });
+    // const colorMap = Oviz.color.schemeCategory("light", classifications);
+    // return {stat: result, classifications, colorMap, valueRange: [0, 1], ylabel: "Mean Fraction with Standard Error"};
+
+    // the data should not dsvHasHeader
     // rows are C16, cols are gene
     // matrix is Array<col>, process for each gene to get the col
-    c16Classification = c16Classification.group
-    const result = {}
+    let c16map = c16Classification.mapper;
+    c16Classification = c16Classification.group;
+    const result = {};
     const classifications = Object.keys(c16Classification).sort();
-    data.forEach(d => {
-        Object.entries(c16Classification).forEach(([key, value]: [string, string[]]) => {
-            if(result[key] == null) result[key] = {};
-            if(isNaN(value.map(val => parseFloat(d[val]))[0])) return;
-            result[key][d[""]] = C16Processor(value.map(val => parseFloat(d[val])))
+    let cellType = data[0].slice(2);
+    Object.entries(c16Classification).forEach(([key, value]: [string, string[]]) => {
+        result[key] = {};
+        cellType.forEach(cell => result[key][cell] = []);
+    })
+    console.log(result)
+    data.slice(1).forEach(d => {
+        d.slice(2).forEach((cell, index) => {
+            if(isNaN(parseFloat(cell))) return;
+            console.log(c16map[d[0]])
+            if(c16map[d[0]] == null) return;
+            result[c16map[d[0]]][cellType[index]].push(parseFloat(cell))
         })
     });
+    Object.entries(c16Classification).forEach(([key, value]: [string, string[]]) => {
+        cellType.forEach(cell => result[key][cell] = C16Processor(result[key][cell]));
+    })
     const colorMap = Oviz.color.schemeCategory("light", classifications);
+    console.log({stat: result, classifications, colorMap, valueRange: [0, 1], ylabel: "Mean Fraction with Standard Error"})
     return {stat: result, classifications, colorMap, valueRange: [0, 1], ylabel: "Mean Fraction with Standard Error"};
 }
 
