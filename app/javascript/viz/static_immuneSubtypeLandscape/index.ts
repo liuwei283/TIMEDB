@@ -46,8 +46,8 @@ function staticDataProcessor(data) {
     const widMap = {}
     let pro = []
     data.slice(1).forEach((d, index)=>{
-        if(d[0].slice(-4) == ".csv") {
-            curr = d[0].slice(0, -4);
+        if(d[0].slice(-4) == ".csv" || d[1]=="" || d[1] == null) {
+            curr = d[0];
             projects[curr] = [];
             pro.push(curr);
         }
@@ -65,14 +65,14 @@ function staticDataProcessor(data) {
         pro.forEach(p => result[c][p] = 0)
     })
     data.slice(1).forEach((d, index)=>{
-        if(d[0].slice(-4) == ".csv") {
+        if(d[0].slice(-4) == ".csv" || d[1]=="" || d[1] == null) {
             widMap[curr] = counter;
             projects[curr] = Object.entries(temp).map((d: any)=>[d[0], d[1]/counter]);
             cat.forEach(c=>{
                 temp[c] = 0;
             })
             counter = 0;
-            curr = d[0].slice(0, -4);
+            curr = d[0];
         } else {
             if(d[1]!= null) {
                 result[d[1]][curr]++;

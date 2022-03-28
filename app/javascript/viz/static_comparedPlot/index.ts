@@ -13,42 +13,49 @@ import { plotDataloaded } from"./data";
 
 const MODULE_NAME = "static_comparedPlot";
 
+import { registerDefaultBioInfoComponents } from "crux/dist/element/global";
 
-export function init(id, path) {
-    if (!window.gon || window.gon.module_name !== MODULE_NAME) return;
-    const {visualizer} = Oviz.visualize({
-        el: "#canvas",
+registerDefaultBioInfoComponents();
+
+export function init(id,path,type){
+    Oviz.visualize({
+        el:id,
         template,
-        components: {GridPlot},
+        renderer:"svg",
+        width:2000,
+        height:5000,
+        theme: "light",
         data: {
-            buttonkey: 1, 
+            buttonkey: 1,
             buttonclick(d){
-                this.buttonkey = this.buttonkey + d
-                this.redraw()
+                this.buttonkey += d;
+                console.log("buttonkey:",this.buttonkey);
+                this.redraw();
             },
             config:{
-                gridheight:120,
-                gridwidth:120,
+                gridheight:94,
+                gridwidth:94,
                 padding:4,
             },
+            plotType:type
+            //type = "bar" or "pie"
         },
         loadData: {
             comparedData: {
-                fileKey: "comparedData",
                 type: "csv",
+                url: path,
                 loaded: plotDataloaded,
             },
-            clinicData:{
-                fileKey:"clinicData",
-                type:"csv",
-                loaded(){}
-            }
+          
         },
-        setup() {
-            console.log("this.data",this["_data"]); 
-            registerEditorConfig(generateDiverConfig(this));
+        setup() { 
+            console.log("this.data:",this["_data"]);
+            //registerEditorConfig(editorConfig(this), editorRef);
         },
-    });
-    return visualizer;
+    })
 }
-register(MODULE_NAME, init);
+
+
+
+
+

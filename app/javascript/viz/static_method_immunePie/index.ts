@@ -17,7 +17,7 @@ import { registerDefaultBioInfoComponents } from "crux/dist/element/global";
 
 registerDefaultBioInfoComponents();
 
-export function init(id,path, type){
+export function init(id,path,config){
     Oviz.visualize({
         el:id,
         template,

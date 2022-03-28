@@ -36,5 +36,6 @@ html
         = yield
       #disable-fill
     - unless %w[analysis].include? controller_name
+      
       = render 'partials/footer'
     = yield :page_script

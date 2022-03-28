@@ -3,7 +3,7 @@ svg{
     width = 2000
     Component {
         x=config.gridwidth;y=config.gridheight
-        @if(plotType == true){
+        @if(plotType){
             Container{
                 Columns{
                     y=-config.gridheight/2
@@ -15,12 +15,14 @@ svg{
                                 width = config.gridwidth-config.padding*2
                                 stroke = "#000"
                                 fill = "none"
+                                
                             }
-                            Text{
+                            Text.centered{
                                 text = item
-                                x = config.gridwidth/2
+                                x = config.gridwidth/2-3
                                 y = config.gridheight/4
                                 anchor = @anchor("middle", "center")
+                                fontSize = 10
                             }
                         }
                     }
@@ -28,21 +30,22 @@ svg{
             }
             Container{
                 Rows{
-                    x=-50
+                    x=-38
                     @for (citem,cindex) in celldata{
                         Container{
                             padding = config.padding
                             Rect {
-                                width = config.gridwidth/2 - config.padding - 3.7
+                                width = config.gridwidth/2 - config.padding - 4.5
                                 height = config.gridheight-2*config.padding 
                                 stroke = "#000"
                                 fill = "none"
                             }
-                            Text {
+                            Text.centered {
                                 text = citem
-                                x=config.gridwidth/4-5;y =config.gridheight/2
+                                x=config.gridwidth/4-7;y =config.gridheight/2+2
                                 anchor = @anchor("middle", "center")
                                 rotation= @rotate(-90)
+                                fontSize = 10
                             }
                         }
                     }
@@ -52,6 +55,8 @@ svg{
                 Columns{
                     @for (item,index) in BarData{
                         @let ditem = item[buttonkey-1]
+                        @expr console.log("buttonkey",buttonkey)
+                        @expr console.log("item",item[-1])
                         @let pitem = Object.values(ditem)[0] 
                         @if index != (methoddata.length-1){
                             Container{

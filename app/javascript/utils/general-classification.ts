@@ -48,19 +48,25 @@ export function CellProcessor(data, c16Classification) {
     const result = {};
     const classifications = Object.keys(c16Classification).sort();
     let cellType = data[0].slice(2);
+    console.log("cellType!!!!!!!")
+    console.log(cellType)
+    console.log("last one!!!!!!!")
+    console.log(data.slice(-1)[0])
+    console.log(cellType.slice(-1)[0])
     Object.entries(c16Classification).forEach(([key, value]: [string, string[]]) => {
         result[key] = {};
         cellType.forEach(cell => result[key][cell] = []);
-    })
-    console.log(result)
+    });
     data.slice(1).forEach(d => {
+        if(c16map[d[0]] == null) return;
+        if(d[0]==""||d[0]==null) return;
         d.slice(2).forEach((cell, index) => {
             if(isNaN(parseFloat(cell))) return;
-            console.log(c16map[d[0]])
-            if(c16map[d[0]] == null) return;
             result[c16map[d[0]]][cellType[index]].push(parseFloat(cell))
         })
     });
+    console.log("result!!!!!!!")
+    console.log(result)
     Object.entries(c16Classification).forEach(([key, value]: [string, string[]]) => {
         cellType.forEach(cell => result[key][cell] = C16Processor(result[key][cell]));
     })

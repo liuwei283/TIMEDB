@@ -72,7 +72,7 @@ export function plotDataloaded(_data){
                 this.data.barcolors= barresult.colors
             }
     })
-    console.log("this.data.barlegenddata:",this.data.barlegenddata)
+    
     
     //piedata
     different_method_data.forEach((ditem,dindex)=> { 
@@ -103,10 +103,10 @@ export function plotDataloaded(_data){
     this.data.tempBardata = plotData.BarData;
     this.data.tempPiedata = plotData.PieData;
 
-    this.data.plotType = true;
+    //this.data.plotType = true;
     this.data.gridSize = [210,92]
 
-    console.log("_data:",_data)
+    
     
 }
 
@@ -131,7 +131,6 @@ export function chooseSamples(v:any){
     cellpageindex[1]  = generalparm(newdata[0].data)
     let eachmethodcells = [];
     newdata.forEach((ditem,dindex)=> { 
-        console.log("ditem:",ditem)
         const barresult = eachBardata(ditem.data,dindex,cellpageindex[1],v.data.rowcolumns) 
         plotData.BarData.push(barresult.eachBardata)
         eachmethodcells.push({"method":ditem.methodkey,"result":barresult.cellvalues})
@@ -267,7 +266,6 @@ export function mapColor(cell){
         "Tgd cells":"#FD754B",
     }
     for (const [key, value] of Object.entries(colorMap)) {
-        console.log(`${key}: ${value}`);
         key == cell? colour = value:null
     }
     return colour
@@ -277,7 +275,6 @@ export function mapColor(cell){
 
 //生成bar的数据
 export function eachBardata(ditem,dindex,number,cellarray){
-    console.log("dindex:",dindex)
     let eachBardata = [];
     let cells
     let columns = ditem.columns; 
@@ -292,7 +289,6 @@ export function eachBardata(ditem,dindex,number,cellarray){
         let eachlegendata = [] 
         let dddata = ditem.slice(10*i,10*(i+1)) 
         columns.forEach((colitem,colindex) => { 
-            //console.log("colindex:",colindex)
             let eachcolumns = [];
             let eachcolumnvalues = {"cellname":colitem,"values":[],rank:i}
             dddata.forEach((item,index)=> {
@@ -307,14 +303,10 @@ export function eachBardata(ditem,dindex,number,cellarray){
                 plotData.categories.push([item["sample_name"]]);
                 const color = Oviz.color.Color.hsl((index%6)*60, 60+Math.floor((index/6))*10, 60+Math.floor((index/6))*10)
                 colors[item["sample_name"]] = color.string
-                //console.log("item:",item)
                 if(dindex==0&&colindex==1){
-                    console.log("yes")
                     eachlegendata.push({type: "Custom",label:item["sample_name"],fill:color.string});
                     sampleData.push(item["sample_name"]);
                 }
-                //console.log("eachlegendata",eachlegendata)
-                //console.log("sampleData",sampleData)
             });
             const ecolumnsobject ={[colitem]:eachcolumns} 
             BarData_dindex.push(ecolumnsobject)
@@ -356,7 +348,6 @@ export function chooseMethod(chosenMethod,data){
             item == ditem? afterdata.push(data[dindex]):null
         });
     });
-    console.log("afterdata:",afterdata)
     return afterdata;
 }
 
@@ -369,7 +360,6 @@ export function generalparm(item){
 //过滤方法
 export function filterMethod(v:any){
     v.data.PieData = chooseMethod(v.data.chosenMethod,v.data.tempPiedata);
-    console.log("editor:",v.data.chosenMethod,v.data.tempPiedata)
     v.forceRedraw = true;
     v.run();
 }

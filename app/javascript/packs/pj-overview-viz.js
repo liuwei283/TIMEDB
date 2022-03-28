@@ -82,6 +82,7 @@ import {init as immunelandscape} from "viz/static_ProjectImmuneSubtype"
 import {init as immunebar} from "viz/static_ImmuneCell"
 import {init as immuneline} from "viz/static_SurvivalLine"
 import {init as immuneRegulator} from "viz/static_immuneRegulators"
+import {init as immuneCompare} from "viz/static_comparedPlot"
 
 
 
@@ -129,11 +130,26 @@ export function regulator_viz() {
     
 }
 
+
+export function compared_viz() {
+    var type = document.getElementById("compare_type_selector").value;
+    var file_name = project_name + "_Consensus.csv";
+    var file_path = data_path + "cell_data/Consensus/" + file_name;
+
+    document.getElementById("compared_data").setAttribute("download", file_name);
+    document.getElementById("compared_data").setAttribute("href", file_path);
+    
+    immuneCompare("#comparedVis", file_path, type);
+}
+
 export function all_viz() {
     landscape_viz();
     bar_viz();
     line_viz();
     regulator_viz();
+
+    compared_viz();
+
 }
 
 export function catch_change(){
@@ -145,4 +161,23 @@ export function catch_change(){
         landscape_viz();//remember to change to the right plot
     });
 
+    $('#compare_type_selector').on('change', function() {
+        compared_viz();
+    });
+
 }
+
+
+$('.viz_download').on('click', (e) => {
+    var clicked_id = e.target.id;
+    const svgContainerClone = document.getElementById(clicked_id + "Vis").cloneNode(true);
+    const svgBlob = new Blob([svgContainerClone.innerHTML], { type: "image/svg+xml;charset=utf-8" });
+    const svgUrl = URL.createObjectURL(svgBlob);
+    const downloadLink = document.createElement("a");
+    downloadLink.href = svgUrl;
+    downloadLink.download = clicked_id + ".svg";
+    document.body.appendChild(downloadLink);
+    downloadLink.click();
+    document.body.removeChild(downloadLink);
+})
+

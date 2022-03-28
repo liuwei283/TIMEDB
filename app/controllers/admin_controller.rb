@@ -228,6 +228,53 @@ class AdminController < ApplicationController
 
     end
 
+    # def split_processed_columns_file
+    #     #redirect_to import_inf_table_project_samples_path(:project_id=>params[:project_id], :file=>params[:file])
+    #     up_file = params[:file]
+    #     reprocess_info =  = CSV.parse(upfile, headers: true)
+
+    #     split_json = {}
+
+    #     row_num = reprocess_info.length()
+    #     for i in 
+    #     reprocess_info.each do |key, index|
+        
+    #     # uploader = AbdUploader.new(n1)
+    #     # uploader.store!(up_file)
+    #     if up_file.respond_to?(:read)
+    #         data = up_file.read
+    #         lines = data.split("\n")
+    #         names = lines[0].chomp.split("\t") 
+    #         n_sample = lines.length() - 1 #number of sample
+    #         n_key = names.length() - 1
+    #         pj_name = names[0]
+    #         keys = names[1..n_key]
+    #         i = 1
+    #         all_json = {}
+    #         while i < lines.length()
+    #             line = lines[i]
+    #             sample_info = line.split("\t")
+    #             s_name = sample_info[0].chomp
+    #             f_path = "#{$inf_dir}#{n1}_#{s_name}.tsv"
+    #             f = File.open(f_path, "w")
+    #             s = "#{n1}\t#{s_name}"
+    #             keys.each_with_index do |k, index|
+    #                 value =  sample_info[index + 1]
+    #                 if value.to_f != 0
+    #                     s += "\n"
+    #                     s += "#{k}\t#{value}"
+    #                 end
+    #             end
+    #             i+=1
+    #             f.write(s)
+    #             f.close
+    #         end
+    #     else
+    #         logger.error "Bad file_data: #{up_file.class.name}: #{up_file.inspect}"
+    #     end
+    #     redirect_to '/admin', notice: "ALL immune infiltration data uploaded."
+    # end
+
     def delete_samples
         up_file = params[:file]
         if up_file.respond_to?(:read)
