@@ -3,6 +3,7 @@ class ProjectsController < ApplicationController
     $seq_dir = "#{Rails.root}/app/data/seq/"
     $inf_dir = "#{Rails.root}/public/data/sample_plot/"
     $tmp_dir = "#{Rails.root}/app/data/tmp/"
+    $data_dir = "#{Rails.root}/public/data/"
 
 
     
@@ -26,11 +27,16 @@ class ProjectsController < ApplicationController
   
     def show
 
+        
 
-        @vis = ['id', 'sample_name', 'project_name', 'c_tumor_stage', 'n_year_of_diagnosis', 'c_tumor_grade','n_bmi', 'c_gender', 'c_race', 'platform']
-        @user = User.find(session[:user_id])
         @project = Project.find(params[:id])
         @pname = @project.project_name
+
+
+        @vis = ['id', 'sample_name', 'project_name', 'c_tumor_stage', 'c_tumor_grade', 'c_sample_histology', 'c_race', 'c_gender', 'n_age', 'pfs', 'os', 'pfs_status', 'os_status', 'c_tumor_type', 'c_tumor_subtype', 'c_source_name', 'c_treatment']
+
+        @user = User.find(session[:user_id])
+       
         @cancer = Cancer.find(@project.cancer_id)
         @ctype = @cancer.cancer_name
         @attrs = Project.column_names
@@ -53,6 +59,25 @@ class ProjectsController < ApplicationController
             format.html
             format.csv { send_data @project.samples.to_csv }
             format.json { render json: ProjectSampleDatatable.new(view_context, @project) }
+        end
+
+        #table data to be changed
+        table_file_path = $data_dir + "processedColumns/" + @pname + ".tsv"
+
+        @table_data = []
+
+        @table_info_exist = File.file?(table_file_path)
+
+        if(@table_info_exist)
+            File.readlines(table_file_path).each_with_index do |line, i|
+                #line = line.gsub(/"/, '' )
+                contents = line.chomp.split("\t")
+                if i == 0
+                    @table_header = contents
+                else 
+                    @table_data.push([contents])
+                end
+            end
         end
     end
 

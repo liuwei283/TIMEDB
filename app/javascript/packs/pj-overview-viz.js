@@ -1,6 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
     all_viz();
-    console.log("ededed")
 });
 catch_change();
 
@@ -85,49 +84,64 @@ import {init as immuneline} from "viz/static_SurvivalLine"
 import {init as immuneRegulator} from "viz/static_immuneRegulators"
 
 
+import {init as immuneCompare} from "viz/static_comparedPlot"
+
+
 
 var data_path = "/public/data/";
 var project_name = window.gon.project_name
 var cancer_type = window.gon.cancer_type
 
 export function landscape_viz() {
-    var subtype_method_selector = document.getElementById("landscape_method_selector");
-    var selected_method = subtype_method_selector.value;
-    //var clinical_file_path = data_path + "Clinical/" + project_name + ".csv";
-    //var subtype_file_path = data_path + "subtype/C1-C6/project/" + project_name + "_C1-C6.csv";
-    var clinical_file_path = data_path + "Clinical/ClinicalDataTest.csv"
-    var subtype_file_path = data_path + "subtype/projectSubtypeSurvival.csv"
+    //var subtype_method_selector = document.getElementById("landscape_method_selector");
+    //var selected_method = subtype_method_selector.value;
+    var clinical_file_path = data_path + "Clinical/sample/Clinical_" + project_name + ".csv";
+    var subtype_file_path = data_path + "subtype/c1_c6/project/" + project_name + "_c1_c6.csv";
+    //var clinical_file_path = data_path + "Clinical/ClinicalDataTest.csv"
+    //var subtype_file_path = data_path + "subtype/projectSubtypeSurvival.csv"
     immunelandscape("#landscapeVis", subtype_file_path, clinical_file_path);
 }
 
 export function bar_viz() {
     var subtype_method_selector = document.getElementById("bar_method_selector");
     var selected_method = subtype_method_selector.value;
-    //var cellData_file_path = data_path + "cell_data/" + selected_method + "/" + project_name + "_" + selected_method + ".csv";
-    //var subtype_file_path = data_path + "subtype/C1-C6/project/" + project_name + "_C1-C6.csv";
-    var cellData_file_path = data_path + "cell_data/CellData.csv";
-    var subtype_file_path = data_path + "subtype/immuneCell.csv";
+    var cellData_file_path = data_path + "cell_data/" + selected_method + "/" + project_name + "_" + selected_method + ".csv";
+    var subtype_file_path = data_path + "subtype/c1_c6/project/" + project_name + "_c1_c6.csv";
+    //var cellData_file_path = data_path + "cell_data/CellData.csv";
+    //var subtype_file_path = data_path + "subtype/immuneCell.csv";
     immunebar("#barVis", subtype_file_path, cellData_file_path);//remember to change to the right plot
 
 }
 
 export function line_viz() {
-    //var clinical_file_path = data_path + "clinical/" + project_name + ".csv"
-    //var subtype_file_path = data_path + "subtype/C1-C6/project/" + project_name + "_C1-C6.csv";
-    var clinical_file_path = data_path + "Clinical/ClinicalDataTest.csv"
-    var subtype_file_path = data_path + "subtype/projectSubtypeSurvival.csv"
+    var clinical_file_path = data_path + "Clinical/sample/Clinical_" + project_name + ".csv"
+    var subtype_file_path = data_path + "subtype/c1_c6/project/" + project_name + "_c1_c6.csv";
+    //var clinical_file_path = data_path + "Clinical/ClinicalDataTest.csv"
+    //var subtype_file_path = data_path + "subtype/projectSubtypeSurvival.csv"
     immuneline("#lineVis", subtype_file_path, clinical_file_path);
 }
 
 export function regulator_viz() {
-    //var subtype_file_path = data_path + "subtype/C1-C6/project/" + project_name + "_C1-C6.csv";
-    //var rna_file_path = data_path + "RNA/visualization/" + project_name + ".csv";
+    var subtype_file_path = data_path + "subtype/c1_c6/project/" + project_name + "_c1_c6.csv";
+    var rna_file_path = data_path + "immuneregulator/immuReg_" + project_name + ".csv";
 
-    var rna_file_path = "/public/data/RNA/regulator_RNAdata.csv"
-    var subtype_file_path = "/public/data/subtype/regulator_subtype.csv"
+    //var rna_file_path = "/public/data/RNA/regulator_RNAdata.csv"
+    //var subtype_file_path = "/public/data/subtype/regulator_subtype.csv"
 
     immuneRegulator("#regulatorVis", subtype_file_path, rna_file_path);
     
+}
+
+
+export function compared_viz() {
+    var type = document.getElementById("compare_type_selector").value;
+    var file_name = project_name + "_Consensus.csv";
+    var file_path = data_path + "cell_data/Consensus/" + file_name;
+
+    document.getElementById("compared_data").setAttribute("download", file_name);
+    document.getElementById("compared_data").setAttribute("href", file_path);
+    
+    immuneCompare("#comparedVis", file_path, type);
 }
 
 export function all_viz() {
@@ -135,6 +149,9 @@ export function all_viz() {
     bar_viz();
     line_viz();
     regulator_viz();
+
+    compared_viz();
+
 }
 
 export function catch_change(){
@@ -146,4 +163,23 @@ export function catch_change(){
         landscape_viz();//remember to change to the right plot
     });
 
+    $('#compare_type_selector').on('change', function() {
+        compared_viz();
+    });
+
 }
+
+
+$('.viz_download').on('click', (e) => {
+    var clicked_id = e.target.id;
+    const svgContainerClone = document.getElementById(clicked_id + "Vis").cloneNode(true);
+    const svgBlob = new Blob([svgContainerClone.innerHTML], { type: "image/svg+xml;charset=utf-8" });
+    const svgUrl = URL.createObjectURL(svgBlob);
+    const downloadLink = document.createElement("a");
+    downloadLink.href = svgUrl;
+    downloadLink.download = clicked_id + ".svg";
+    document.body.appendChild(downloadLink);
+    downloadLink.click();
+    document.body.removeChild(downloadLink);
+})
+

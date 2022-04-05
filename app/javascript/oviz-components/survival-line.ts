@@ -32,7 +32,7 @@ export class SurvivalLine extends Component<SurvivalLineOption> {
             height = prop.plotSize[1]
             width = prop.plotSize[0]
 			valueRange = prop.valueRange
-            categoryRange = null
+            // categoryRange = null
 			data = _data
             @props prop
             @yield background default {
@@ -53,7 +53,7 @@ export class SurvivalLine extends Component<SurvivalLineOption> {
             }
             Axis("bottom") {
                 y = 100%;
-                includeEndTicks = false
+                // includeEndTicks = false
                 :label(d) {
                     Text {
                         anchor = @anchor("middle", "center"); y = 10
@@ -134,6 +134,7 @@ export class SurvivalLine extends Component<SurvivalLineOption> {
                 Polyline {
                     stroke = _colorMap.colors[index]
                     strokeWidth = 2
+                    @expr console.log(d)
                     points = @scaled(d)
                     behavior:tooltip {
                         content = generateTooltip({d, index})
@@ -162,6 +163,7 @@ export class SurvivalLine extends Component<SurvivalLineOption> {
                     anchor = @anchor("center","right")
                     fontSize = 14
                 }
+                @expr console.log("Xxxxxxxxxxxxxxxxx")
             }
         }
         `;
@@ -182,15 +184,17 @@ export class SurvivalLine extends Component<SurvivalLineOption> {
                     });
                     temp[g] = temp[g].map((d, index, arr) => [d, 1-(index+1)/arr.length]);
                     const len = temp[g].length;
-                    this._NARdata[g] = [[0, len]]
-                    this._data[g] = [[0, 1], [temp[g][0][0], 1]];
+                    this._NARdata[g] = [[0, len]];
+                    this._data[g] = [[0, 1]];
+                    if(!isNaN(temp[g][0][0])) this._data[g].push([temp[g][0][0], 1])
+                    else this._data[g].push([1, 1])
                     temp[g].forEach((d, index, arr) => {
-                        if( !isNaN(d[0]) && (index >= arr.length || d[0] != arr[index+1][0])) {
+                        if( !isNaN(d[0]) && arr[index+1] != null && (index >= arr.length || d[0] != arr[index+1][0])) {
                             this._data[g].push(d);
                             this._NARdata[g].push([d[0], Math.round(len*d[1])]);
                             if(!isNaN(arr[index+1][0])) this._data[g].push([arr[index+1][0], d[1]]);
                         }
-                    })
+                    });
                 });
             }
         }

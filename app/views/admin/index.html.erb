@@ -278,6 +278,13 @@
       <%= submit_tag 'Generate'%>
     <% end %>
 
+    <%= form_tag({action: :update_columns}, multipart: true) do %>
+      <p>
+        Calculate and update columns for database
+      </p>
+      <%= submit_tag 'Update'%>
+    <% end %>
+
     </section>
 
   <hr>

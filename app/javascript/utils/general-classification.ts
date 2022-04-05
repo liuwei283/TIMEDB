@@ -8,7 +8,7 @@ export function C16Classifier(data) {
         if(result["C"+d[1]] == null) result["C"+d[1]] = [];
         result["C"+d[1]].push(d[0]);
         mapper[d[0]] = "C"+d[1];
-    })
+    });
     return {group: result, mapper};
 }
 
@@ -24,19 +24,59 @@ export function C16Processor(row) {
 }
 
 export function CellProcessor(data, c16Classification) {
-    // the data should dsvHasHeader
+    // // the data should not dsvHasHeader
+    // // rows are C16, cols are gene
+    // // matrix is Array<col>, process for each gene to get the col
+    // c16Classification = c16Classification.group;
+    // const result = {};
+    // const classifications = Object.keys(c16Classification).sort();
+    // data.forEach(d => {
+    //     Object.entries(c16Classification).forEach(([key, value]: [string, string[]]) => {
+    //         if(result[key] == null) result[key] = {};
+    //         if(isNaN( value.map( val => parseFloat(d[val]) )[0] ) ) return;
+    //         result[key][d[""]] = C16Processor(value.map(val => parseFloat(d[val])))
+    //     });
+    // });
+    // const colorMap = Oviz.color.schemeCategory("light", classifications);
+    // return {stat: result, classifications, colorMap, valueRange: [0, 1], ylabel: "Mean Fraction with Standard Error"};
+
+    // the data should not dsvHasHeader
     // rows are C16, cols are gene
     // matrix is Array<col>, process for each gene to get the col
-    c16Classification = c16Classification.group
-    const result = {}
+    console.log(data)
+    let c16map = c16Classification.mapper;
+    c16Classification = c16Classification.group;
+    const result = {};
     const classifications = Object.keys(c16Classification).sort();
-    data.forEach(d => {
-        Object.entries(c16Classification).forEach(([key, value]: [string, string[]]) => {
-            if(result[key] == null) result[key] = {};
-            result[key][d[""]] = C16Processor(value.map(val => parseFloat(d[val])))
+    let cellType = data[0].slice(2);
+    console.log("cellType!!!!!!!")
+    console.log(cellType)
+    console.log("last one!!!!!!!")
+    console.log(data.slice(-1)[0])
+    console.log(cellType.slice(-1)[0])
+    Object.entries(c16Classification).forEach(([key, value]: [string, string[]]) => {
+        result[key] = {};
+        cellType.forEach(cell => result[key][cell] = []);
+    });
+    data.slice(1).forEach(d => {
+        if(c16map[d[0]] == null) return;
+        if(d[0]==""||d[0]==null) return;
+        d.slice(2).forEach((cell, index) => {
+            if(isNaN(parseFloat(cell))) return;
+            result[c16map[d[0]]][cellType[index]].push(parseFloat(cell))
         })
     });
+    console.log("result!!!!!!!")
+    console.log(result)
+    Object.entries(c16Classification).forEach(([key, value]: [string, string[]]) => {
+        cellType.forEach(cell => {
+            let temp = [0,0,0,0,0,0];
+            if(result[key][cell] != [] && result[key][cell].length != 0) temp = C16Processor(result[key][cell]);
+            result[key][cell] = temp;
+        });
+    })
     const colorMap = Oviz.color.schemeCategory("light", classifications);
+    console.log({stat: result, classifications, colorMap, valueRange: [0, 1], ylabel: "Mean Fraction with Standard Error"})
     return {stat: result, classifications, colorMap, valueRange: [0, 1], ylabel: "Mean Fraction with Standard Error"};
 }
 
@@ -73,13 +113,13 @@ export function ClinicalProcessor(data, c16Classification ) {
     const result = {};
     const categories = [];
     const group = Object.keys(c16Classification.group).sort();
+    const valid = Object.keys(c16Classification.mapper);
     const mapper = c16Classification.mapper;
     const survivalData = {os: {}, pfs: {}}
     Object.entries(c16Classification.mapper).forEach((d: [string, string]) => {
         mapper[d[0].slice(0,12)] = d[1];
     });
     const widMap = {}
-    // const idKey = "ID";
     const idKey = data.columns[0];
     const osKey = "os";
     const pfsKey = "pfs";
@@ -91,6 +131,7 @@ export function ClinicalProcessor(data, c16Classification ) {
     data.columns.forEach(col => {
         if(col.slice(0, 2) == "c_") {
             data.slice(1).forEach(d => {
+                if(! valid.includes(d[idKey])) return;
                 let colName = col.slice(2)+"__"+d[col];
                 if(widMap[colName] == null) {
                     widMap[colName] = 0;
@@ -106,34 +147,8 @@ export function ClinicalProcessor(data, c16Classification ) {
             });
         }
     });
-    // const ret = {os: {}, pfs: {}};
     group.forEach(g => {
         result[g] = Object.entries(result[g]).map((d: [string, number]) => [d[0], d[1]/widMap[d[0]]]);
-        // survivalData.os[g].sort((a, b) =>  {
-        //     if(isNaN(a) || (a-b >= 0)) return 1;
-        //     else return -1;
-        // });
-        // survivalData.os[g]= survivalData.os[g].map((d, index, arr) => [d, 1-(index+1)/arr.length]);
-        // ret.os[g] = [[0,1], [survivalData.os[g][0][0], 1]]
-        // survivalData.os[g].forEach((d, index, arr) => {
-        //     if( !isNaN(d[0]) && (index >= arr.length || d[0] != arr[index+1][0])) {
-        //         ret.os[g].push(d);
-        //         if(!isNaN(arr[index+1][0])) ret.os[g].push([arr[index+1][0], d[1]]);
-        //     }
-        // })
-
-        // survivalData.pfs[g].sort((a, b) =>  {
-        //     if(isNaN(a) || (a-b >= 0)) return 1;
-        //     else return -1;
-        // });
-        // survivalData.pfs[g] = survivalData.pfs[g].map((d, index, arr) => [d, 1-(index+1)/arr.length]);
-        // ret.pfs[g] = [[0,1], [survivalData.pfs[g][0][0], 1]]
-        // survivalData.pfs[g].forEach((d, index, arr) => {
-        //     if( !isNaN(d[0]) && (index >= arr.length || d[0] != arr[index+1][0])) {
-        //         ret.pfs[g].push(d);
-        //         if(!isNaN(arr[index+1][0])) ret.pfs[g].push([arr[index+1][0], d[1]]);
-        //     }
-        // })
     });
     const colorMap = Oviz.color.schemeCategory("light", group);
     return {data: result, classifications: group, widMap, colorMap, survivalData};

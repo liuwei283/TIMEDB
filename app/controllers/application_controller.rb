@@ -3,7 +3,7 @@ class ApplicationController < ActionController::Base
 
     $user_stor_dir = "#{Rails.root}/data/user" 
     private
-
+    
     def require_cookie
         # no cookie found 
         unless session[:user_id]

@@ -3,10 +3,11 @@ import { ComponentOption, } from "crux/dist/element/component-options";
 import { Component, XYPlotOption } from "crux/dist/element";
 
 export interface ComplexGroupedBarplotOption extends XYPlotOption {
-    plotSize: [number, number]; // [width, height]
-    valueRange: [number, number];
     stat: any;
     classifications: Array<string>;
+
+    plotSize: [number, number]; // [width, height]
+    valueRange: [number, number];
     colorMap: any; // ColorSchemeCategory
     xlabel: string;
     ylabel: string;
@@ -25,7 +26,7 @@ export class ComplexGroupedBars extends Component<ComplexGroupedBarplotOption> {
 			discreteCategory = true
 			valueRange = prop.valueRange
 			data = result
-            @props prop
+            @props prop.opt.xyplot
             @yield background default {
                 Rect {
                     width = 100%
@@ -36,7 +37,7 @@ export class ComplexGroupedBars extends Component<ComplexGroupedBarplotOption> {
             }
 			GroupedBars {
 				data = prop.classifications
-				:children(d){
+				:children(d) {
                     @yield bar with d default {
                         Rect.full{
                             fill = _colorMap.colors[d.key]

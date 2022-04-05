@@ -1,14 +1,15 @@
 svg {
-	width = 10500
-	height = 700
+	width = 1000
+	height = 800
 	Component {
 		Component {
+			@expr console.log(ClinicalData)
 			x = 100; y = 100
 			@if ClinicalData.survivalData.pfs != null && Object.values(ClinicalData.survivalData.pfs).reduce((prev, curr) => prev || (curr != null && curr != []), false) {
 				SurvivalLine {
-					rawData = ClinicalData.survivalData.os
+					rawData = ClinicalData.survivalData.pfs
 					classifications = ClinicalData.classifications
-					title = "OS"
+					title = "PFS"
 					@props xy
 				}
 			}
@@ -36,11 +37,11 @@ svg {
 		}
 		Component {
 			x = 600; y = 100
-			@if ClinicalData.survivalData.pfs != null && Object.values(ClinicalData.survivalData.pfs).reduce((prev, curr) => prev || (curr != null && curr != []), false) {
+			@if Object.values(ClinicalData.survivalData.pfs).reduce((prev, curr) => prev || (curr != null && curr != []), false) {
 				SurvivalLine {
-					rawData = ClinicalData.survivalData.pfs
+					rawData = ClinicalData.survivalData.os
 					classifications = ClinicalData.classifications
-					title = "PFS"
+					title = "OS"
 					@props xy
 				}
 			}

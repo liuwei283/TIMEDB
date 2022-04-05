@@ -14,7 +14,7 @@ br
             .col-lg-4.mb-4
                 .card
                     - if a.cover_image.blank?
-                        img.card-img-top =image_tag("module.jpg")
+                        =image_tag "module.jpg", :class => "card-img-top"
                     - else
                         img.card-img-top src = a.cover_image
                     / img.card-img-top src = a.cover_image
@@ -27,10 +27,6 @@ br
                             //
                             //| jsdgfksdhfkjdhfkjshdfjkshdf 
                             //| hdkjhfkshfdhf
-
-
-
-
 
                     / .card_body
                     /     h5 =a.name

@@ -8,20 +8,15 @@ svg {
 			fontSize = tickFontSize
 			anchor = @anchor("top","left")
 		}
-		Text {
-			x = @geo(50,-180); y = 30
-			text = "Current:" + "  " + chosenSample + "  " + chosenMethod
-		}
 		PieChart {
 			height = @geo(100, -100); width  = @geo(100, -100); padding = 20 //设置在窗口的中间位置
-			data = test
+			data = piesData[methodList[buttonkey]]
 			pieProps = {
 				stroke: "white"
 			}
 			:children(d) {
 				Arc {
                     x1 = d.start; x2 = d.end; r2 = pieR
-					//@expr console.log("d:",d)
                     fill = d.data.raw.color
 					behavior:tooltip {
 					        content = "name: "+ d.data.name+ "</br>value: "+ d.data.value
@@ -31,14 +26,45 @@ svg {
 		}
 		Legend{
 			@props legendPos
-			data = legend
-			behavior:drag {
-				onDrag = @bind(updateLegendPos)
-			}
+			data = legendsData[methodList[buttonkey]]
+			//behavior:drag {
+				//onDrag = @bind(updateLegendPos)
+			//}
 			padding = 4
 			lineHeight = 13
 			legendWidth = 15
 			label.fontSize = 10
 		}
+		Container {
+			anchor = @anchor("center","bottom")
+			@let len = methodList.length
+			x = 800-50*len; y = 800
+			@for(item,index) in methodList{
+				@if(index<len/2){
+					Component {
+						x = 120*(index+len/2); y = 20
+						@let disabled = buttonkey === index
+        	        	width = 90; height = 30
+        	        	Rect.full {fill = disabled ? "red" : "#cbf"; cornerRadius = 6}
+        	        	Text.centered(item) { x = 50%; y = 50%; fill = "#fff" }
+        	        	cursor = disabled ? null:"pointer"
+        	        	on:click = disabled ? null:buttonclick(index)
+					}
+				}
+				@else{
+					Component {
+						x = 120*(index); y = 70
+						@let disabled = buttonkey === index
+        	        	width = 90; height = 30
+        	        	Rect.full {fill = disabled ? "red" : "#cbf"; cornerRadius = 6}
+        	        	Text.centered(item) { x = 50%; y = 50%; fill = "#fff" }
+        	        	cursor = disabled ? null:"pointer"
+        	        	on:click = disabled ? null:buttonclick(index)
+					}
+				}
+				
+			}
+		}
 	}
+
 }

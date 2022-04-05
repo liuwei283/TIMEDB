@@ -7,7 +7,7 @@ class CreateProjects < ActiveRecord::Migration[6.0]
       t.string :data_type
       t.string :preprocessed
       t.string :TIMEDB_processing
-      t.integer :num_of_oberserved_genes
+      t.integer :num_of_observed_genes
       t.text :original_description
       t.string :platform
       t.string :submisson_date

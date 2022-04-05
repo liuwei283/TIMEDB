@@ -1,52 +1,52 @@
 import Oviz from "crux";
-import { editorConfig, editorRef } from "./editor";
 import template from "./template.bvt";
-import{ pieDataloaded } from "./data"
 
 import { groupedChartColors} from "oviz-common/palette";
 import { ComplexBoxplot, processBoxData } from "oviz-components/complex-boxplot";
-import {register} from "page/visualizers";
-import { rankDict, sortByRankKey } from "utils/bio-info";
+import { EditText } from "oviz-components/edit-text";
+import { GridPlot } from "oviz-components/grid-plot";
 import { registerEditorConfig } from "utils/editor";
-import { PieChart } from "crux/dist/element";
-//import { chooseMethod } from "viz/comparedBar2";
-import { isThisTypeNode } from "typescript";
+import { register } from "page/visualizers";
+import { generateDiverConfig } from"./editor";
+import { plotDataloaded } from"./data";
 
+
+const MODULE_NAME = "static_comparedPlot";
 
 import { registerDefaultBioInfoComponents } from "crux/dist/element/global";
 
 registerDefaultBioInfoComponents();
 
-export function init(id,path,config){
+export function init(id,path,type){
     Oviz.visualize({
         el:id,
         template,
         renderer:"svg",
-        width:1200,
-        height:870,
+        width:2000,
+        height:5000,
         theme: "light",
         data: {
-            buttonkey: 0,
+            buttonkey: 1,
             buttonclick(d){
-                this.buttonkey = d;
+                this.buttonkey += d;
                 console.log("buttonkey:",this.buttonkey);
                 this.redraw();
             },
-            legendPos: {x: 900, y: 0},
-            updateLegendPos(ev, el, deltaPos) {
-                this.legendPos.x += deltaPos[0];
-                this.legendPos.y += deltaPos[1];
-                console.log("yes!")
-                this.redraw();
+            config:{
+                gridheight:94,
+                gridwidth:94,
+                padding:4,
             },
+            plotType:type
+            //type = "bar" or "pie"
         },
         loadData: {
-            pieData: {
-                type: "tsv",
+            comparedData: {
+                type: "csv",
                 url: path,
-                multiple: false,
-                loaded: pieDataloaded,
+                loaded: plotDataloaded,
             },
+          
         },
         setup() { 
             console.log("this.data:",this["_data"]);
@@ -54,4 +54,8 @@ export function init(id,path,config){
         },
     })
 }
+
+
+
+
 

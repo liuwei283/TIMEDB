@@ -87,3 +87,5 @@ gem 'rails-assets-datatables', source: 'https://rails-assets.org'
 gem 'kaminari'
 gem 'ajax-datatables-rails'
 gem 'jquery-datatables-rails'
+
+#gem 'cookies_eu'

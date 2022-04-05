@@ -33,13 +33,39 @@
   </div>
   <br />
 
+  <h3> Reprocessed columns</h3>
+  <% if @table_info_exist %>
+    <table class = "table table-striped">
+      <thead>
+        <tr class = "row">
+          <% @table_header.each do |header|%>
+            <th class = "col-md-6"><%= header %></th>
+          <% end %>
+        </tr>
+      </thead>
+      <tbody>
+        <% @table_data.each do |row| %>
+          <tr class = "row">
+            <% row[0].each do |cell|%>
+              <td class = "col-md-6"><%= cell %> </td>
+            <% end %>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  <% end %>
+  
+
   <div class = "container">
     <ul class="nav nav-tabs" id="project-datils-tab" role="tablist">
     <li class="nav-item">
       <a class="nav-link active" id="sample-table-tab" data-toggle="tab" href="#sample-details" role="tab" aria-controls="sample-details" aria-selected="true">Samples</a>
     </li>
     <li class="nav-item">
-      <a class="nav-link" id="project-overview-tab" data-toggle="tab" href="#project-overview" role="tab" aria-controls="project-overview" aria-selected="false">Overview</a>
+      <a class="nav-link" id="project-overview-tab" data-toggle="tab" href="#project-overview" role="tab" aria-controls="project-overview" aria-selected="false">C1-C6 Overview</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" id="fraction-overview-tab" data-toggle="tab" href="#fraction-overview" role="tab" aria-controls="fraction-overview" aria-selected="false">Fraction Overview</a>
     </li>
     </ul>
     <div class="tab-content" id="projectDeailsTabContent">
@@ -88,7 +114,7 @@
                                       <th> <%= attr %> </th>
                                       
                                     <% end %>
-                                    <th>action</th>
+                                    <th>details</th>
                               </thead>
                               <tbody>
                               </tbody>
@@ -159,10 +185,10 @@
 
             <%# selector row%>
             <div id="landscapeDescription" class="row description">
-            Some description for Immune Subtype Landscape in project overview
+              <h4>Some description for Immune Subtype Landscape in project overview</h4>
             </div>
             
-            <div class="select-bar form-inline row">
+            <%# <div class="select-bar form-inline row">
               <div class="sdiv col">
                 <div class="select-title">
                     Please choose the cell division method:
@@ -171,12 +197,12 @@
                     <option selected="selected" value = "CIBERSORT">CIBERSORT</option>
                     <option value="EPIC">EPIC</option>
                     <option value="MCPcounter">MCPcounter</option>
-                    <option value="QuanTIseq">QuanTIseq</option>
+                    <option value="quanTIseq">quanTIseq</option>
                     <option value="TIMER">TIMER</option>
                     <option value="xCell">xCell</option>
                 </select>
               </div>
-            </div>
+            </div> %>
 
             <div class="row vizBlock">
                 <div class="col vis" id = "landscapeVis">
@@ -191,7 +217,7 @@
 
             <%# selector row%>
             <div id="barDescription" class="row description">
-            Some description for Immune Cell Data bar in project overview
+              <h4>Some description for Immune Cell Data bar in project overview</h4>
             </div>
             
             <div class="select-bar form-inline row">
@@ -200,12 +226,19 @@
                     Please choose the cell division method:
                 </div>
                 <select class="form-select col" id = "bar_method_selector">
-                    <option selected="selected" value = "CIBERSORT">CIBERSORT</option>
+                    <option selected="selected" value = "ABIS">ABIS</option>
+
+                    <option value = "CIBERSORTX">CIBERSORTX</option>
+                    <option value = "ConsensusTME">ConsensusTME</option>
                     <option value="EPIC">EPIC</option>
+                    <option value="ImmuCellAI">ImmuCellAI</option>
                     <option value="MCPcounter">MCPcounter</option>
-                    <option value="QuanTIseq">QuanTIseq</option>
+                    <option value="quanTIseq">quanTIseq</option>
                     <option value="TIMER">TIMER</option>
                     <option value="xCell">xCell</option>
+                   
+
+
                 </select>
               </div>
             </div>
@@ -221,7 +254,7 @@
         <div id = "line" class = "container Block">
             <%# selector row%>
             <div id="lineDescription" class="row description">
-            Some description for survival chart in project overview
+              <h4>Some description for survival chart in project overview</h4>
             </div>
             <div class="row vizBlock">
                 <div class="col" id = "lineVis">
@@ -235,7 +268,7 @@
         <div id = "regulator" class = "container Block">
             <%# selector row%>
             <div id="regulatorDescription" class="row description">
-            Some description for immune regulator in project overview
+              <h4>Some description for immune regulator in project overview</h4>
             </div>
             <div class="row vizBlock">
                 <div class="col vis" id = "regulatorVis">
@@ -243,9 +276,76 @@
             </div>
         </div>
       
-        <%=javascript_pack_tag 'pj-overview-viz' %>
       </div>
 
+      <div class="tab-pane fade" id="fraction-overview" role="tabpanel" aria-labelledby="fraction-overview-tab">
+
+        <div class = "container Block">
+            <%# selector row%>
+            <div id="comparedDescription" class="row description">
+              <h4>Some description for compared plot in project fraction overview</h4>
+            </div>
+
+            <div class="select-bar form-inline row">
+              <div class="sdiv col">
+                <div class="select-title">
+                    Please choose the visualization plot:
+                </div>
+                <select class="form-select col" id = "compare_type_selector">
+                    <option selected="selected" value = "bar">bar</option>
+                    <option value = "pie">pie</option>
+                </select>
+              </div>
+            </div>
+
+            <br>
+
+            <div class="dropdown">
+                <button class="btn btn-secondary dropdown-toggle" type="button" id="compared_download_dropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Dwonload
+                </button>
+                <div class="dropdown-menu" aria-labelledby="compared_download_dropdwon">
+                    <a class="dropdown-item" id = "compared_data" download href="">Download consensus data</a> 
+                    <a class="dropdown-item viz_download" id = "compared">Download compared plot</a>
+                </div>
+            </div>
+
+
+            <div class="row vizBlock">
+                <div class="col vis" id = "comparedVis">
+                </div>
+            </div>
+        </div>
+
+      <br>
+      <br>
+      <br>
+      <br>
+      <br>
+      <br>
+      <br>
+      <br>
+      <br>
+      <br>
+      <br>
+      <br>
+      <br>
+      <br>
+      <br>
+      <br>
+      <br>
+      <br>
+      <br>
+      <br>
+      <br>
+      <br>
+      <br>
+      <br>
+      <br>
+      <br>
+
+      </div>
+      <%=javascript_pack_tag 'pj-overview-viz' %>
       
       
     </div>
@@ -259,6 +359,3 @@
 
                 
 </div>
-
-
-
