@@ -82,6 +82,8 @@ import {init as immunelandscape} from "viz/static_ProjectImmuneSubtype"
 import {init as immunebar} from "viz/static_ImmuneCell"
 import {init as immuneline} from "viz/static_SurvivalLine"
 import {init as immuneRegulator} from "viz/static_immuneRegulators"
+
+
 import {init as immuneCompare} from "viz/static_comparedPlot"
 
 

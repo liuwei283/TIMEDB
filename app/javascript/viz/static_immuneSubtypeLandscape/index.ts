@@ -81,9 +81,6 @@ function staticDataProcessor(data) {
             }
         }
         if(index == data.slice(1).length-1) {
-            console.log(index)
-            console.log(curr)
-            console.log(result)
             widMap[curr] = counter;
             projects[curr] = Object.entries(temp).map((d: any)=>[d[0], d[1]/counter]);
             cat.forEach(c=>{

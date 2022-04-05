@@ -33,7 +33,7 @@ export function CellProcessor(data, c16Classification) {
     // data.forEach(d => {
     //     Object.entries(c16Classification).forEach(([key, value]: [string, string[]]) => {
     //         if(result[key] == null) result[key] = {};
-    //         if(isNaN(value.map(val => parseFloat(d[val]))[0])) return;
+    //         if(isNaN( value.map( val => parseFloat(d[val]) )[0] ) ) return;
     //         result[key][d[""]] = C16Processor(value.map(val => parseFloat(d[val])))
     //     });
     // });
@@ -43,6 +43,7 @@ export function CellProcessor(data, c16Classification) {
     // the data should not dsvHasHeader
     // rows are C16, cols are gene
     // matrix is Array<col>, process for each gene to get the col
+    console.log(data)
     let c16map = c16Classification.mapper;
     c16Classification = c16Classification.group;
     const result = {};
@@ -68,7 +69,11 @@ export function CellProcessor(data, c16Classification) {
     console.log("result!!!!!!!")
     console.log(result)
     Object.entries(c16Classification).forEach(([key, value]: [string, string[]]) => {
-        cellType.forEach(cell => result[key][cell] = C16Processor(result[key][cell]));
+        cellType.forEach(cell => {
+            let temp = [0,0,0,0,0,0];
+            if(result[key][cell] != [] && result[key][cell].length != 0) temp = C16Processor(result[key][cell]);
+            result[key][cell] = temp;
+        });
     })
     const colorMap = Oviz.color.schemeCategory("light", classifications);
     console.log({stat: result, classifications, colorMap, valueRange: [0, 1], ylabel: "Mean Fraction with Standard Error"})

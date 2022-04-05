@@ -5,6 +5,9 @@ svg {
 		ComplexStackedBar {
 			x = 50
 			y = 50
+			baseWidth = Math.min(1100/Object.keys(data.widMap).length, 40)
+			plotSize = [1100, 500]
+			@expr console.log(data)
 			@props data
 		}
 		// Legend {

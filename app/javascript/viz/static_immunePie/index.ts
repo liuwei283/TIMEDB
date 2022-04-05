@@ -3,19 +3,21 @@ import template from "./template.bvt";
 
 const plotSize = [500,1200];
 
-const MODULE_NAME = "immunePie";
+let title = "Proportion";
 
-function dataprocessor(data) {
+function Dataprocessor(v, data) {
     let categories = data.columns.slice(1);
-    if(data.columns[1] == "Method") {
+    if(data.columns[1] == "Method" || data.columns[1] == "method") {
+        v.data.title = data[0]["Method"] || data[0]["method"];
         categories = categories.slice(1);
     }
-    let tryit: Map<string, number> = data[1];
+    let tryit = {};
     categories.forEach(category => {
         tryit[category] = 0;
     });
     data.forEach(d => {
         categories.forEach(category => {
+            if(isNaN(parseFloat(d[category]))) return;
             tryit[category] += parseFloat(d[category]);
         });
     });
@@ -35,18 +37,18 @@ function dataprocessor(data) {
 }
 
 export function init(id, path, config) {
-    // if (!window.gon || window.gon.module_name !== MODULE_NAME) return;
 
     const {visualizer} = Oviz.visualize({
         el: id,
         template,
+        data: { title },
         loadData: {
             data: {
                 url: path,
                 type: "csv",
                 dsvHasHeader: true,
                 loaded(data) {
-                    this.data.pieData = dataprocessor(data)
+                    this.data.pieData = Dataprocessor(this, data)
                 },
             },
         },
