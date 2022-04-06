@@ -9,10 +9,6 @@
                         <path d="M40 0 v 200 l -10 10 l 10 10 v 120 l 10 10 l -10 10 v 140" fill="transparent" stroke="#253959" stroke-width = "3px"></path> 
                     </svg>
 
-                    <div class=" jump">
-                         <img v-bind:src="require('../assets/images/nav-up-pink.png')" style="float :left"> 
-                        <p style="padding-top:20px">Don't know how to upload data? Click to download the  <a href="/submit/demotest" >demo file!</a>   </p>
-                    </div> 
                     <!-- <img v-if="!submittted" v-bind:src="require('../assets/images/nav-submit-gray.png')"> -->
                     <img v-if="submitted == true" v-bind:src="require('../assets/images/nav-submit-blue.png')">
                     <img v-else v-bind:src="require('../assets/images/nav-submit-gray.png')">
@@ -27,136 +23,61 @@
                         
                         <!-- Inputs -->
                         <div v-if="!submitted">
-                            <h6 class="text-right">{{ app.name }}
-                                <!-- <i class="fa  fa-question-circle" b-tooltip.hover
-                                            :title="app.description"></i> -->
-                            </h6>
-                            <h2 class = "text-right"> JOB SUBMISSISON </h2>
+                            <br>
                             <div class = "row">
+                                <div class="col-md-5">
+                                    <br><br><br>
+                                    <div class="row" style="margin:0">
+                                        <div class="col-md-5 text-center" style="border:solid;border-radius:20px;padding:20px">{{testdata.file1}}</div>
+                                        <div class="col-md-5 offset-2 text-center" style="border:solid;border-radius:20px;padding:20px">{{testdata.file2}}</div>
+                                    </div>
+                                    <br>
 
+                                        <div style="border:solid;border-radius:10px;text-align:center;word-wrap:break-word;">
+                                            sxwsdwdwdwdqwdqwdwqdwqdqwd
 
-                                <div class="set-input-section col-md-8" ref="inputSection">
-                                    <h4 class = "text-left">Upload Input File</h4>
-                                    <template v-if="displayedInputs.length > 0">
-                                        <div class="row">
-                                            
-                                                
-                                                    <div class="col-md-4" v-for="input in displayedInputs" :key="input.id">
-                                                        <label :for="`i-${input.id}`">{{ input.name }}
-                                                            <span v-if="input.required" class="required">*</span>
-                                                            <!-- <i class="fa fa-question-circle" b-tooltip.hover
-                                                            :title="input.description"></i> -->
-                                                        </label>
-                                                        <div @click = "uploadToggle" :id="`popup-trigger-${input.id}`"> <img v-bind:src="require('../assets/images/nav-upload.png')"></div>
-                                                        
+                                            <p>{{testdata.description1}}</p>
 
-                                                        <!-- <select class="form-control custom-select" 
-                                                            v-if="input.name=='second_i'"
-                                                            :id="`i-${input.id}`"
-                                                            :name="`i-${input.id}`"
-                                                            :required="input.required"
-                                                            v-model="selected[`i-${input.id}`]"
-                                                            :state="inputValid[`i-${input.id}`]"
-                                                        >
-                                                            <option value="">--Please choose a file--</option>
-                                                            <option v-for="(option, index) in select_box_option" :key="index" :value="option.value" :disabled="option.disabled">
-                                                                {{option.lable}}
-                                                            </option>
-                                                        </select>
-
-                                                        <b-form-file
-                                                            v-else
-                                                            :id="`i-${input.id}`"
-                                                            v-model="files[`i-${input.id}`]"
-                                                            :state="inputValid[`i-${input.id}`]"
-                                                            placeholder="Choose a file or drop it here..."
-                                                            drop-placeholder="Drop file here..."
-                                                            :name="`i-${input.id}`"
-                                                            :required="input.required"
-                                                        >
-                                                        <img v-bind:src="require('../assets/images/nav-upload.png')">
-                                                        </b-form-file> -->
-
-                                                    </div>
-
+                                            <h1 style="color:#314893;text-align:center; padding-top:120px; padding-bottom:120px">
+                                            PICTURE
+                                            </h1>
+                                            <p>{{testdata.description2}}</p>
                                         </div>
-                                    </template>
+
                                 </div>
 
+                                <div class="col-md-6 offset-1">
+                                    <h4 class="text-right">{{ app.name }}
+                                        <!-- <i class="fa  fa-question-circle" b-tooltip.hover
+                                                    :title="app.description"></i> -->
+                                    </h4>
+                                    <h1 class = "text-right"> JOB SUBMISSISON </h1>
+
+                                    <hr>
+                                        <div class="col-md-6" style="word-wrap:break-word;border-right:solid;float:left">
+                                            <br>
+                                            <h3 style="color:#314893; text-align:center">Set Input Data</h3><br>
+
+                                            <div style="border:solid;border-radius:20px;text-align:center;padding:20px">{{testdata.infor1}}</div><br>
+                                            <div style="border:solid;border-radius:20px;text-align:center;padding:20px">{{testdata.infor2}}</div><br>
+                                            <div style="border:solid;border-radius:20px;text-align:center;padding:20px">{{testdata.infor3}}</div><br>
 
 
-
-                                <div class="set-param-section mt-4 col-md-4" style="word-wrap:break-word;border-left:solid; padding-left:40px">
-                                    <h4>Set Parameters</h4>
-                                    <template v-if="displayedParams.length > 0">
-                                        <div class="row">
-                                            <div class="col-md-12" v-for="param in displayedParams" :key="param.id">
-                                                <label :for="`p-${param.id}`">{{ param.name }}
-                                                    <span v-if="param.required" class="required">*</span>
-                                                    <i class="fa  fa-question-circle" b-tooltip.hover
-                                                    :title="param.description"></i>
-                                                </label>
-                                                <div v-if="param.param_type === 'string'">
-                                                    <b-form-input :id="`p-${param.id}`" :value="param.default" :required="param.required"
-                                                                :name="`p-${param.id}`" :state="inputValid[`p-${param.id}`]" />
-                                                </div>
-                                                <div v-else-if="param.param_type === 'int'">
-                                                    <b-form-input :id="`p-${param.id}`" :value="param.default" type="number" step="1"
-                                                                :required="param.required" :name="`p-${param.id}`"
-                                                                :state="inputValid[`p-${param.id}`]"/>
-                                                </div>
-                                                <div v-else-if="param.param_type === 'float'">
-                                                    <b-form-input :id="`p-${param.id}`" :value="param.default" type="number"
-                                                                step="0.01" :required="param.required"
-                                                                :name="`p-${param.id}`" :state="inputValid[`p-${param.id}`]"/>
-                                                </div>
-                                                <div v-else-if="param.param_type === 'boolean'">
-                                                    <b-form-select :id="`p-${param.id}`" :options="boolSelectOpt" :required="param.required"
-                                                                :name="`p-${param.id}`" :state="inputValid[`p-${param.id}`]"/>
-                                                </div>
-                                                <div v-else-if="param.param_type === 'enum'">
-                                                    <select :id="`p-${param.id}`" class="form-control custom-select" 
-                                                            :required="param.required" :name="`p-${param.id}`" 
-                                                            :state="inputValid[`p-${param.id}`]">
-                                                        <option v-for="option in param.options" :value="option" :key="option"
-                                                                :selected="param.default == option ? 'selected' : ''">
-                                                            {{ option }}
-                                                        </option>
-                                                    </select>
-                                                </div>
-                                                <div v-else-if="param.param_type === 'splitchr'">
-                                                    <b-form-select :id="`p-${param.id}`" :options="boolSelectOpt" 
-                                                                :required="param.required" :name="`p-${param.id}`" 
-                                                                :state="inputValid[`p-${param.id}`]" />
-                                                </div>
-                                            </div>
                                         </div>
-                                    </template>
-                                    <p v-if="displayedParams.length == 0">No Parameters.</p>
+                                        <br>
+                                        <div class="col-md-6" style="word-wrap:break-word; padding-left:40px;float:right">
+                                                <h3 style="color:#314893; text-align:center">Set Parameters</h3><br>
+                                                No Parameters
+                                        </div>
                                 </div>
 
                             </div>
 
-                            <!-- <div class="col-md-4 " style="word-wrap:break-word;border-left:solid; padding-left:40px">
-                                <h2 style="color:blue; text-align:center">Set Parameters</h2><br>
-                                <form>
-                                    <input type="text" class="form-control" placeholder=""><br>
-                                    <input type="text" class="form-control" placeholder=""><br>
-                                    <input type="text" class="form-control" placeholder=""><br>
-                                    <input type="text" class="form-control" placeholder=""><br>
-                                    <button type="submit" class="btn btn-primary btn-lg" style="float:right">SUBMIT</button>
-                                </form>
-                            </div> -->
-                        
-                            <!-- Params -->
-                            
-                           
-                            <b-btn @click="submitTask" class="float-right mt-2"><i class="fa fa-location-arrow"></i> Submit</b-btn>
-                            <div class="is-loading w-100" v-if="isLoading">
-                                <i class="fas fa-spinner fa-pulse fa-5x m-0"></i>
-                                <h3 class="mt-4">Submitting task……</h3>
-                            </div>
+                            <br><hr>
+                            <button type="submit" class="btn  btn-lg" style="background-color:#314893;color:white;float:right; border-radius:50%;margin-left:20px"> > </button> 
+                            <button type="submit" class="btn btn-lg" style="background-color:#314893;color:white;float:right">SUBMIT</button>
                         </div>
+                        
                         <div v-else>
                             <div class="text-center job-info">
                                 <h1>Successfully</h1>
@@ -245,7 +166,7 @@
             return {
                 id: window.gon.id,
                 app: {
-                    name: 'test app for immune platform',
+                    name: 'Gutmeta PCA',
                     description: 'some descriptions for this app',
                     inputs: [
                         {
@@ -304,6 +225,17 @@
                 files: {
 
                 },
+
+                testdata:{
+                    file1: 'this is file1',
+                    file2: 'this is file2',
+                    description1:"dhwauhduagwduywgadugawgduawdgwduadgawudgawud agdugwydagygwyadga agydgwaydygawdyawdyawd",
+                    description2:"dahwudhaudwg agdygwdyg adgay dgaywdgyawdgywadgyawgda aduadguwgdy",
+                    infor1:"Group Info",
+                    infor2:"User Abd",
+                    infor3:"Second i",
+                },
+
                 selected: {},
                 boolSelectOpt: [
                     { value: true, text: 'Yes' },
