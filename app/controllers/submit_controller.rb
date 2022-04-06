@@ -21,9 +21,7 @@ class SubmitController < ApplicationController
     gon.push isJobDemoPage: true
   end
 
-  def demotest
-    
-  end
+
 
   def query_app_task_test
     @result_json = {

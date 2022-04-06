@@ -9,9 +9,9 @@
                         <path d="M40 0 v 200 l -10 10 l 10 10 v 120 l 10 10 l -10 10 v 140" fill="transparent" stroke="#253959" stroke-width = "3px"></path> 
                     </svg>
 
-                    <div class=" jump">
+                    <div v-if="demo==false" class=" jump">
                          <img v-bind:src="require('../assets/images/nav-up-pink.png')" style="float :left"> 
-                        <p style="padding-top:20px">Don't know how to upload data? Click to download the  <a href="/submit/demotest" >demo file!</a>   </p>
+                        <p style="padding-top:20px">Don't know how to upload data? Click to download the  <a href="#" @click = "clickDemo" >demo file!</a>   </p>
                     </div> 
                     <!-- <img v-if="!submittted" v-bind:src="require('../assets/images/nav-submit-gray.png')"> -->
                     <img v-if="submitted == true" v-bind:src="require('../assets/images/nav-submit-blue.png')">
@@ -26,7 +26,7 @@
                         <alert-center ref="alertCenter" />
                         
                         <!-- Inputs -->
-                        <div v-if="!submitted">
+                        <div v-if= "!submitted && !demo">
                             <h6 class="text-right">{{ app.name }}
                                 <!-- <i class="fa  fa-question-circle" b-tooltip.hover
                                             :title="app.description"></i> -->
@@ -157,6 +157,61 @@
                                 <h3 class="mt-4">Submitting task……</h3>
                             </div>
                         </div>
+                        <div v-else-if= "demo==true">
+                            <br>
+                            <div class = "row">
+                                <div class="col-md-5">
+                                    <br><br><br>
+                                    <div class="row" style="margin:0">
+                                        <div class="col-md-5 text-center" style="border:solid;border-radius:20px;padding:20px">{{testdata.file1}}</div>
+                                        <div class="col-md-5 offset-2 text-center" style="border:solid;border-radius:20px;padding:20px">{{testdata.file2}}</div>
+                                    </div>
+                                    <br>
+
+                                        <div style="border:solid;border-radius:10px;text-align:center;word-wrap:break-word;">
+                                            sxwsdwdwdwdqwdqwdwqdwqdqwd
+
+                                            <p>{{testdata.description1}}</p>
+
+                                            <h1 style="color:#314893;text-align:center; padding-top:120px; padding-bottom:120px">
+                                            PICTURE
+                                            </h1>
+                                            <p>{{testdata.description2}}</p>
+                                        </div>
+
+                                </div>
+
+                                <div class="col-md-6 offset-1">
+                                    <h4 class="text-right">{{ app.name }}
+
+                                    </h4>
+                                    <h1 class = "text-right"> JOB SUBMISSISON </h1>
+
+                                    <hr>
+                                        <div class="col-md-6" style="word-wrap:break-word;border-right:solid;float:left">
+                                            <br>
+                                            <h3 style="color:#314893; text-align:center">Set Input Data</h3><br>
+
+                                            <div style="border:solid;border-radius:20px;text-align:center;padding:20px">{{testdata.infor1}}</div><br>
+                                            <div style="border:solid;border-radius:20px;text-align:center;padding:20px">{{testdata.infor2}}</div><br>
+                                            <div style="border:solid;border-radius:20px;text-align:center;padding:20px">{{testdata.infor3}}</div><br>
+
+
+                                        </div>
+                                        <br>
+                                        <div class="col-md-6" style="word-wrap:break-word; padding-left:40px;float:right">
+                                                <h3 style="color:#314893; text-align:center">Set Parameters</h3><br>
+                                                No Parameters
+                                        </div>
+                                </div>
+
+                            </div>
+
+                            <br><hr>
+                            <button type="submit" class="btn  btn-lg" style="background-color:#314893;color:white;float:right; border-radius:50%;margin-left:20px" @click= "closeDemo"> > </button> 
+                            <button type="submit" class="btn btn-lg" style="background-color:#314893;color:white;float:right">SUBMIT</button>
+
+                        </div>
                         <div v-else>
                             <div class="text-center job-info">
                                 <h1>Successfully</h1>
@@ -174,9 +229,6 @@
 
 
 
-                                <!-- <p>Job submitted successfully. The job ID is <span class="text-danger">{{jobID}}</span>. </p>
-                                <br>
-                                <p>You can check your job status via this job ID in <a :href="`/submit/job-query?job_id=${jobID}`">job query page</a>.</p> -->
                             </div>
                         </div>
                     </div>
@@ -225,6 +277,12 @@
 
     </div>
 </template>
+
+
+
+
+
+
 
 <script>
     import _ from 'lodash';
@@ -313,6 +371,18 @@
                 submitted: false,
                 jobID: 'nhvxhjdsvlcbsd',
                 isLoading: false,
+                demo: false,
+
+                testdata:{
+                    file1: 'this is file1',
+                    file2: 'this is file2',
+                    description1:"dhwauhduagwduywgadugawgduawdgwduadgawudgawud agdugwydagygwyadga agydgwaydygawdyawdyawd",
+                    description2:"dahwudhaudwg agdygwdyg adgay dgaywdgyawdgywadgyawgda aduadguwgdy",
+                    infor1:"Group Info",
+                    infor2:"User Abd",
+                    infor3:"Second i",
+                },
+
             };
         },
         created() {
@@ -469,7 +539,16 @@
                     popup_uploader.classList.toggle('active')
                 }
                 
-            }
+            },
+            clickDemo(){
+
+                this.demo=true;
+
+            },
+            closeDemo(){
+                this.demo=false;
+            },
+
         },
         components: {
             VueTagsInput, AlertCenter, GlobalSaveButton,

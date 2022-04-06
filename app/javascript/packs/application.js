@@ -14,7 +14,6 @@ const ALERT_TIMEOUT = 5000;
 import JobSubmit from '../job-submit.vue';
 import JobQuery from '../job-query.vue';
 import JobSubmitPipeline from "../job-submit-pipeline.vue";
-import JobDemo from "../job-demo.vue";
 
 import VApp from "page/vapp.vue";
 
@@ -57,7 +56,7 @@ document.addEventListener('DOMContentLoaded', (event) =>  {
         ['#vapp-job-submit', JobSubmit],
         ['#vapp-job-query', JobQuery],
         ['#vapp-job-submit-pipeline', JobSubmitPipeline],
-        ['#vapp-job-demo',JobDemo]
+
     ];
 
     $('[data-toggle="tooltip"]').tooltip();
