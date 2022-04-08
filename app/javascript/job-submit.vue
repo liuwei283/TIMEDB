@@ -158,7 +158,6 @@
                             </div>
                         </div>
                         <div v-else-if= "demo==true">
-                            <br>
                             <div class = "row">
                                 <div class="col-md-5">
                                     <br><br><br>
@@ -169,7 +168,6 @@
                                     <br>
 
                                         <div style="border:solid;border-radius:10px;text-align:center;word-wrap:break-word;">
-                                            sxwsdwdwdwdqwdqwdwqdwqdqwd
 
                                             <p>{{testdata.description1}}</p>
 
