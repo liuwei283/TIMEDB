@@ -26,7 +26,7 @@
                         <alert-center ref="alertCenter" />
                         
                         <!-- Inputs -->
-                        <div v-if= "!submitted && !demo">
+                        <div v-if= "!submitted ">
                             <h6 class="text-right">{{ app.name }}
                                 <!-- <i class="fa  fa-question-circle" b-tooltip.hover
                                             :title="app.description"></i> -->
@@ -34,13 +34,13 @@
                             <h2 class = "text-right"> JOB SUBMISSISON </h2>
                             <div class = "row">
 
-
-                                <div class="set-input-section col-md-8" ref="inputSection">
-                                    <h4 class = "text-left">Upload Input File</h4>
-                                    <template v-if="displayedInputs.length > 0">
+                                
+                                <div class="set-input-section" :class="checkDemo(0)" ref="inputSection">
+                                    <h4 class = "text-center">Upload Input File</h4>
+                                    <template v-if="!demo && displayedInputs.length>0 ">
                                         <div class="row">
                                             
-                                                
+
                                                     <div class="col-md-4" v-for="input in displayedInputs" :key="input.id">
                                                         <label :for="`i-${input.id}`">{{ input.name }}
                                                             <span v-if="input.required" class="required">*</span>
@@ -81,12 +81,41 @@
 
                                         </div>
                                     </template>
+                                    <template v-if="demo">
+                                        <br>
+                                        <div class="row" style="margin:0">
+                                            <div class="col-md-5 text-center" style="border:solid;border-radius:20px;padding:20px">{{testdata.file1}}</div>
+                                            <div class="col-md-5 offset-2 text-center" style="border:solid;border-radius:20px;padding:20px">{{testdata.file2}}</div>
+                                        </div>
+                                        <br>
+
+                                        <div style="border:solid;border-radius:10px;text-align:center;word-wrap:break-word;">
+
+                                            <p>{{testdata.description1}}</p>
+
+                                            <h1 style="color:#314893;text-align:center; padding-top:70px; padding-bottom:70px">
+                                            PICTURE
+                                            </h1>
+                                            <p>{{testdata.description2}}</p>
+                                        </div>
+                                    </template>
                                 </div>
 
+                                <template v-if="demo">
+                                    <div class="offset-1 col-md-3 mt-5" style="word-wrap:break-word;float:left">
+                                            <br>
+                                            <h4 style=" text-align:center">Set Input Data</h4><br>
+
+                                            <div style="border:solid;border-radius:20px;text-align:center;padding:20px">{{testdata.infor1}}</div><br>
+                                            <div style="border:solid;border-radius:20px;text-align:center;padding:20px">{{testdata.infor2}}</div><br>
+                                            <div style="border:solid;border-radius:20px;text-align:center;padding:20px">{{testdata.infor3}}</div><br>
 
 
+                                        </div>
+                                </template>
 
-                                <div class="set-param-section mt-4 col-md-4" style="word-wrap:break-word;border-left:solid; padding-left:40px">
+
+                                <div class="set-param-section mt-4 " :class=" checkDemo(1)" style="word-wrap:break-word;border-left:solid; padding-left:40px">
                                     <h4>Set Parameters</h4>
                                     <template v-if="displayedParams.length > 0">
                                         <div class="row">
@@ -150,14 +179,14 @@
                         
                             <!-- Params -->
                             
-                           
+                            <b-btn v-if="demo" @click="closeDemo" class="float-right mt-2" style="border-radius:50%;margin-left:20px"> > </b-btn>
                             <b-btn @click="submitTask" class="float-right mt-2"><i class="fa fa-location-arrow"></i> Submit</b-btn>
                             <div class="is-loading w-100" v-if="isLoading">
                                 <i class="fas fa-spinner fa-pulse fa-5x m-0"></i>
                                 <h3 class="mt-4">Submitting task……</h3>
                             </div>
                         </div>
-                        <div v-else-if= "demo==true">
+                        <!--<div v-else-if= "demo==true">
                             <div class = "row">
                                 <div class="col-md-5">
                                     <br><br><br>
@@ -209,7 +238,7 @@
                             <button type="submit" class="btn  btn-lg" style="background-color:#314893;color:white;float:right; border-radius:50%;margin-left:20px" @click= "closeDemo"> > </button> 
                             <button type="submit" class="btn btn-lg" style="background-color:#314893;color:white;float:right">SUBMIT</button>
 
-                        </div>
+                        </div> -->
                         <div v-else>
                             <div class="text-center job-info">
                                 <h1>Successfully</h1>
@@ -541,10 +570,24 @@
             clickDemo(){
 
                 this.demo=true;
-
             },
             closeDemo(){
                 this.demo=false;
+            },
+            checkDemo(index){
+                if(index==0){
+                    if(this.demo==true){
+                        return "col-md-5";
+                    }else{
+                        return "col-md-8";
+                    }
+                }else if(index==1){
+                    if(this.demo==true){
+                        return "col-md-3";
+                    }else{
+                        return "col-md-4";
+                    }                    
+                }
             },
 
         },
