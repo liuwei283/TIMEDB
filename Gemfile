@@ -1,5 +1,5 @@
-source 'https://rubygems.org'
-git_source(:github) { |repo| "https://github.com/#{repo}.git" }
+source 'http://rubygems.org'
+git_source(:github) { |repo| "http://github.com/#{repo}.git" }
 
 ruby '2.7.1'
 
@@ -82,8 +82,8 @@ end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
 gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
-gem 'rails-assets-jquery', source: 'https://rails-assets.org'
-gem 'rails-assets-datatables', source: 'https://rails-assets.org'
+gem 'rails-assets-jquery', source: 'http://rails-assets.org'
+gem 'rails-assets-datatables', source: 'http://rails-assets.org'
 gem 'kaminari'
 gem 'ajax-datatables-rails'
 gem 'jquery-datatables-rails'

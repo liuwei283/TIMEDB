@@ -2,8 +2,8 @@
 lock "~> 3.17.0"
 
 set :application, "immune_platform"
-set :repo_url, "git@gitlab.com:Kristaxueying/immune_platform.git"
-set :branch, proc { `git rev-parse --abbrev-ref immuneplatform`.chomp }
+set :repo_url, "git@144.214.37.165:wangxueying/timedb.git"
+set :branch, proc { `git rev-parse --abbrev-ref master`.chomp }
 # Default branch is :master
 # ask :branch, `git rev-parse --abbrev-ref HEAD`.chomp
 
