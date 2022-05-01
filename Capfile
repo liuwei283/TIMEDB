@@ -35,6 +35,7 @@ require "capistrano/bundler"
 # require "capistrano/passenger"
 require 'capistrano/puma'
 install_plugin Capistrano::Puma
+install_plugin Capistrano::Puma::Daemon
 require 'capistrano/rails'
 require 'capistrano/rails/db'
 
