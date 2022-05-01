@@ -103,6 +103,7 @@ Rails.application.routes.draw do
   get 'submit/analysis/:id', to: 'submit#index', as: 'submit_analysis'
   get 'submit/pipeline/:id', to: 'submit#pipeline', as: 'submit_pipeline'
 
+
   post 'query-app-task', to: 'submit#query_app_task', format: 'json'
     post 'query-app-task-dummy', to: 'submit#query_app_task_dummy'
   post 'query-demo-tasks', to: 'submit#query_demo_tasks', format: 'json'

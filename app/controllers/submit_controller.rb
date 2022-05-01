@@ -23,9 +23,7 @@ class SubmitController < ApplicationController
     @pipelines = AnalysisPipeline.where "hidden = false and pid is not null"
   end
 
-  def demo
-    gon.push isJobDemoPage: true
-  end
+
 
   def query_app_task_test
     @result_json = {

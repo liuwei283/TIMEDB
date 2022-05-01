@@ -73,16 +73,6 @@
         </div>
 
 
-
-
-
-
-
-
-
-
-
-
         <div class = "col-md-12" id = "submit-app-back" v-if="started && !submitted">
             <div class = "row">
                 <div class="col-md-2">
