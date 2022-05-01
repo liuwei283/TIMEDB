@@ -21,6 +21,19 @@ class DatabaseController < ApplicationController
             end
         end
 
+        cancers_projects = {}
+        cancers = []
+        @cancers.each do |cancer|
+            cname = cancer.cancer_name
+            cancers.push(cname)
+            cur_projects = []
+            cancer.projects.each do |project|
+                cur_projects.push(project.project_name)
+            end
+            cancers_projects[cname] = cur_projects
+        end
+        gon.push cancers: cancers, projects: cancers_projects 
+
              
     end
 
@@ -55,5 +68,5 @@ class DatabaseController < ApplicationController
         #Use val to find records
         options = Cancer.find(val).projects.collect{|x| "'' : '#{x.project_name}'"}    
         render :text => "{#{options.join(",")}}" 
-      end
+    end
 end

@@ -88,4 +88,6 @@ gem 'kaminari'
 gem 'ajax-datatables-rails'
 gem 'jquery-datatables-rails'
 
+#gem 'bootstrap-select-rails'
+
 #gem 'cookies_eu'

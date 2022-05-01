@@ -1,7 +1,7 @@
 import Oviz from "crux";
 import template from "./template.bvt";
 
-const plotSize = [500,1200];
+const plotSize = [500, 800];
 
 let title = "Proportion";
 

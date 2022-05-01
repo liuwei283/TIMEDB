@@ -2,9 +2,10 @@ class ApplicationDatatable
     delegate :params, to: :@view
     delegate :link_to, to: :@view
   
-    def initialize(view, obj=nil)
+    def initialize(view, obj=nil, config = nil)
       @view = view
       @obj = obj
+      @config = config
     end
   
     def as_json(options = {})

@@ -1,0 +1,63 @@
+svg {
+	width = 1100; height = 600
+	XYPlot {
+		height = 500;width = 1000
+		padding = padding
+		data = { boxData: boxdata}
+		valueRange = valueRange
+		AxisBackground { dashArray = "1, 2"}
+		AxisBackground {
+			orientation = "vertical"
+			includeEndTicks = true
+			dashArray = "1, 2"
+		}
+		Rect{
+			width = 100%
+			height = 100%
+			stroke = "#000"
+			fill = "none"
+        }
+        Boxes {
+			showMean = true
+			data = "boxData"
+			:box (_d) {
+				Rect.full  {
+                    fill = colors[0]
+					stroke = "orange"
+					x = 33%
+					width = 33%
+				}
+			}
+			:median(d) {}
+			:mean(means) {
+				Line {x1 = 33%; x2 = 66%; stroke = "red"}
+			}
+			:whiskle (d) {
+				@expr console.log("whiskle (d)",d)
+				Line { x1 = 41.25%; x2 = 57.75%; y1 = 0; y2 = 0; stroke = "#000" }
+				Line { x1 = 41.25%; x2 = 57.75%; y1 = 100%; y2 = 100%; stroke = "#000" }
+				Line { x1 = 50%; x2 = 50%; y1 = 0; y2 = 100%; stroke = "#0078d7"; dashArray = "3, 2" }
+			}
+		}
+		@expr console.log(boxdata)
+        @for (d,i) in boxdata.categories{
+			Component {
+				rotation = @rotate(45)
+                y = @geo(100,5); // x = (i+0.5)*gridwidth
+				x = @scaled-x(i)
+				Text{
+					key = i
+                    text = d
+		        }
+            }
+        } 
+		Axis("left");
+		Component {
+			x = -25; y = 50%
+			rotation = @rotate(-90)
+			Text(ylabel) { anchor = @anchor("bottom", "center") }
+		}
+		Text {text = title; anchor = @anchor("bottom", "center"); x = 50%; y = -5; fontSize = 15}
+		Text(xlabel) { x = 50%; y = @geo(100,120); anchor = @anchor("top", "center") }
+	}
+}

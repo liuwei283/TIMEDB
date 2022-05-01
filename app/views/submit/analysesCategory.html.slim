@@ -1,35 +1,97 @@
-- content_for :title
-  | Analyses
+/ / - content_for :title
+/ /   | Analyses
 
-.index-banner
-  .container
-    h1.display-4.font-weight-bold Analyses
-    p.lead.mt-4
-      | DOAP offers a repository of publicly available workflows (chains or pipelines of connected modules) suitable for many different types of data analysis.
-br
-#analyses_list.container-fluid.container
-    .row.cols-xs-space.cols-sm-space.cols-md-space
-        - @analysis_category.analyses.each do |a|
-            / - if visible_analysis(a)
-            .col-lg-4.mb-4
-                .card
-                    - if a.cover_image.blank?
-                        =image_tag "module.jpg", :class => "card-img-top"
-                    - else
-                        img.card-img-top src = a.cover_image
-                    / img.card-img-top src = a.cover_image
-                    .image_overlay.image_overlay_blur
-                        .image_title
-                            = a.name
-                            //| ksfgjdkshfjkd
-                        .image_description 
-                            = a.description
-                            //
-                            //| jsdgfksdhfkjdhfkjshdfjkshdf 
-                            //| hdkjhfkshfdhf
+/ / .index-banner.d-none
+/ /   .container
+/ /     h1.display-4.font-weight-bold Analyses
+/ /     p.lead.mt-4
+/ /       | DOAP offers a repository of publicly available workflows (chains or pipelines of connected modules) suitable for many different types of data analysis.
 
-                    / .card_body
-                    /     h5 =a.name
-                    /     /= link_to "/submit/#{a.mid.to_s}"
-                    .list-group.list-group-flush
-                        = link_to "Submit", "/submit/analysis/#{a.mid.to_s}", class: "list-group-item list-group-item-action text-center"
+/ / .index-banner.d-none
+/ /   .container
+/ /     h2.display-4 Start Analysis
+/ /     p.lead.mt-4
+/ /       | GutMeta provides common applied methods of metagenomics sequence analysis. Official tutorial is available at Tutorial. You may try submit the tasks with our demo input files, and view the ideal results on the demo jobs page.
+
+/ / .index-banner.d-none
+/ /   .container
+/ /     h2.display-4 Module
+/ /     p.lead.mt-4
+/     / | Choose a module
+
+
+/ / #analyses_list.container-fluid.container.d-none
+/ /     #accordion
+/ /         .card
+/ /             .card-header#headingOne
+/ /                 h5.mb-0
+/ /                     button.btn.btn-link data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne"
+/ /                         Collapsible Modules
+/ /             #collapseOne.collapse.show  aria-labelledby="headingOne" data-parent="#accordion"
+/ /                 #card-body
+/ /                     .row.cols-xs-space.cols-sm-space.cols-md-space
+/ /                         - @analyses_category.analysis.each do |a|
+/ /                             / - if visible_analysis(a)
+/ /                             .col-lg-4.mb-4
+/ /                                 .card
+/ /                                     - if a.cover_image.blank?
+/ /                                         / img.card-img-top = image_tag("module.jpg")
+/ /                                         =image_tag "module.jpg", class: "card-img-top"
+/ /                                     - else
+/                                         img.card-img-top src = a.cover_image
+/ /                                     / img.card-img-top src = a.cover_image
+/ /                                     .image_overlay.image_overlay_blur
+/ /                                         .image_title
+/ /                                             = a.name
+/ /                                             //| ksfgjdkshfjkd
+/ /                                         .image_description 
+/ /                                             = a.description
+/ /                                     / .card_body
+/ /                                     /     h5 =a.name
+/ /                                         /= link_to "/submit/#{a.mid.to_s}"
+/ /                                     .list-group.list-group-flush.d-none
+/ /                                         = link_to "Submit", "/submit/analysis/#{a.mid.to_s}", class: "list-group-item list-group-item-action text-center"
+
+
+/ #analyses_list0.container-fluid.container.d-none
+
+/     .row.cols-xs-space.cols-sm-space.cols-md-space
+/         - @analysis_category.analyses.each do |a|
+/             / - if visible_analysis(a)
+/             .col-lg-4.mb-4
+/                 .card
+/                     - if a.cover_image.blank?
+/                         =image_tag "module.jpg", :class => "card-img-top"
+/                     - else
+/                         img.card-img-top src = a.cover_image
+/                     / img.card-img-top src = a.cover_image
+/                     .image_overlay.image_overlay_blur
+/                         .image_title
+/                             = a.name
+/                             //| ksfgjdkshfjkd
+/                         .image_description 
+/                             = a.description
+/                             //
+/                             //| jsdgfksdhfkjdhfkjshdfjkshdf 
+/                             //| hdkjhfkshfdhf
+
+/                     / .card_body
+/                     /     h5 =a.name
+/                     /     /= link_to "/submit/#{a.mid.to_s}"
+/                     .list-group.list-group-flush
+/                         = link_to "Submit", "/submit/analysis/#{a.mid.to_s}", class: "list-group-item list-group-item-action text-center"
+
+/ / .index-banner.d-none
+/ /   .container
+/ /     h2.display-4 Job Submission
+/ /     p.lead.mt-4.d-none
+/ /       | Some text here
+
+/ / .container.d-none
+/ /     h4 Choose analysis
+/ /     select.form-control.custom-select#analysis
+/ /         - @analysis_category.analyses.each do |a|
+/ /             option = a.mid.to_s + " - " + a.name
+
+.container#vueapp
+  #vapp-job-submit

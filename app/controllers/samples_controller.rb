@@ -5,8 +5,6 @@ class SamplesController < ApplicationController
     $tmp_dir = "#{Rails.root}/app/data/tmp/"
 
     def index
-
-        
         @projects = Project.all
         # @all_sample_attrs = Sample.column_names
         # @projects.each do |project|
@@ -57,6 +55,16 @@ class SamplesController < ApplicationController
         inf_url = File.join("/public/data/sample_plot/", inf_name)
         inf_path = File.join($inf_dir, inf_name)
         @inf_exist = (File.exist?(inf_path)) && (File.size(inf_path)>100)
+
+        pname = @project.project_name
+        sname = @sample.sample_name
+        sample_clinical_file_path = "#{Rails.root}/public/data/clinical/sample/Clinical_#{pname}.csv"
+        samples_info = CSV.parse(File.read(sample_clinical_file_path), headers: TRUE)
+        
+        @table_headers = samples_info.headers
+        @sample_row = samples_info.find {|row| row['sample_name'] == sname}
+        @sample_info = @sample_row.to_h
+
 
         #inf_name = "ACC_ALL.csv"
         #inf_url = File.join("/public/data/sample_plot/", inf_name)

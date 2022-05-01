@@ -1,0 +1,1 @@
+json.array! @analyses, :id, :name, :cover_image, :mid, :description

@@ -1,5 +1,12 @@
 Rails.application.routes.draw do
 
+  get 'debug', to: 'debug#index'
+  post 'debug', to: 'debug#add'
+  get 'debug/delete/:id', to: 'debug#delete'
+  post '/submit/analysis/:str', to: 'submit#handler'
+  get '/submit/analyses/:id', to: 'submit#analyses'
+
+
   resources :projects do
     resources :samples do
       collection do

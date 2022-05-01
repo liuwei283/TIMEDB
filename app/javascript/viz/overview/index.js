@@ -1,4 +1,3 @@
-
 import {init as immunebar} from "viz/static_immunebar"
 import {init as immunepie} from "viz/static_immunePie"
 import {init as immunelandscape} from "viz/static_immuneSubtypeLandscape"
@@ -40,7 +39,6 @@ export function landscape_viz() {
         var file_name = selected_cancer + "_c1_c6.csv"
         var file_path = data_path + "subtype/c1_c6/cancer/" + file_name;
     }
-    //var file_path = "/public/data/subtype/c1_xcell.csv"
     immunelandscape("#landscapeVis", file_path);
 
     document.getElementById("landscape_download").setAttribute("download", file_name);
@@ -78,8 +76,6 @@ export function initPage() {
     all_viz();
 }
 
-
-
 $('.viz_download').on('click', (e) => {
     var clicked_id = e.target.id;
     const svgContainerClone = document.getElementById(clicked_id + "Vis").cloneNode(true);
@@ -95,10 +91,8 @@ $('.viz_download').on('click', (e) => {
 
 export function catch_change(){
 
-
     $("#pie_cancer_selector").on('change', function(){
         $.ajax({
-            //url: '@(Url.Action("refreshSelector","database"))',
             url: "/database/refreshSelector",
             type: "GET",
             data: {cancer_id: $(this).val()},
@@ -111,7 +105,7 @@ export function catch_change(){
                     listItems += '<option value = "' + pname + '">' + pname + '</option>'; 
                 });
                 $("#pie_project_selector").append(listItems);
-                $("#pie_project_selector").selectedIndex = 0; //Option 10
+                $("#pie_project_selector").selectedIndex = 0;
             }
         })
 
@@ -124,9 +118,7 @@ export function catch_change(){
 
     });
 
-    // catch changes for bar plot
     $('#bar-selector').on('change', function() {
-        //console.log("debug");
         bar_viz();
         var file_name = document.getElementById("bar-selector").value + "_samples.tsv";
         document.getElementById("bar_download").setAttribute("download", file_name);
@@ -142,11 +134,6 @@ export function catch_change(){
     $('#landscape_cancer_selector').on('change', function() {
         landscape_viz();
     });
-    
-
-
-
-
 
     $("#regulator_cancer_selector").on('change', function(){
         $.ajax({
@@ -168,10 +155,5 @@ export function catch_change(){
         })
         regulator_viz();
     });
-
-    // catch changes for landcape plot
-    // $('.landscape_selector').on('change', function() {
-    //     landscape_viz();
-    // });
 
 }
