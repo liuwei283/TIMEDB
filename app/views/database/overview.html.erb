@@ -96,7 +96,7 @@ up to here -->
             <% @singleCancers.each do |cc| %>
                 <div class = "col-lg-2 col-lg-offset-1 mb-4">
                     <%= link_to cc do %>
-                        <%= image_tag cc.cancer_type + ".png", class: "rounded-circle z-depth-2" %>
+                        <%= image_tag cc.cancer_type + ".png", alt: "Cancer image", class: "rounded-circle z-depth-2" %>
                     <% end %>
                     <h4> <%= cc.cancer_name %> </h4>
                 </div>
@@ -111,7 +111,7 @@ up to here -->
                     <% end %>
                     </ul>
                     '> 
-                    <%= image_tag "Kidney.png", class: "rounded-circle z-depth-2" %> 
+                    <%= image_tag "Kidney.png", alt: "Kidney", class: "rounded-circle z-depth-2" %> 
                     </div> 
                     <h4> Kidney related cancers </h4>
             </div>
@@ -124,14 +124,14 @@ up to here -->
                     <% end %>
                     </ul>
                     '> 
-                    <%= image_tag "Leukemia.png", class: "rounded-circle z-depth-2" %> 
+                    <%= image_tag "Leukemia.png", alt: "Cancer image", class: "rounded-circle z-depth-2" %> 
                     </div> 
                     <h4> Leukemia related cancers </h4>
             </div>
             <div class = "col-lg-2 col-lg-offset-1 mb-4">
                 <% cancer_other = Cancer.find_by(cancer_type: "Other") %>
                 <%= link_to cancer_other do %>
-                    <%= image_tag "Other.png", class: "rounded-circle z-depth-2" %>
+                    <%= image_tag "Other.png", alt: "Cancer image", class: "rounded-circle z-depth-2" %>
                 <% end %>
                 <h4> <%= "Others" %> </h4>
             </div>
