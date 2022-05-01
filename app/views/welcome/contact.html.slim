@@ -1,17 +1,151 @@
-.index-banner
-  .container
-    h1.display-4.font-weight-bold.text-center Contact us
-.container
-  card.text-center
-    h3 Authors
-    li Yiqi Jiang, yiqijiang3-c@my.cityu.edu.hk 
-    li CHE Lijia, lijiache2-c@my.cityu.edu.hk
-    li Wangyanfei, mintywangtvt@gmail.com 
-    li LI Shuai Cheng, shuaicli@cityu.edu.hk 
+#introduction.container-fluid.container
+  .row.d-md-blockrow.cols-xs-space.cols-sm-space.cols-md-space.text-center
+    .col-md-6.col-lg-6.B.intro.flip-card
+      .flip-card-inner
+        .flip-card-front
+          #teamDetails
+            .title
+              | Our
+              br
+              | Team
+              br
+            .content
+              | Based at the City University of Hong Kong and led by Dr. Shuaicheng LI, we are a multidisciplinary group of first-class, aspiring undergraduate and Ph.D. Most of our members have a strong knowledge base in bioinformatics and computer science, and through our tireless efforts, we have built the TIMEDB immune infiltration platform. This platform provides you with a wealth of standardized immune data and related data analysis for free, making it a valuable aid to your immune research, making it easier to conduct research and empowers your journey of discovery.
+          #lscDetails.memberDetails.circle
+            .title
+              | Dr. LI Shuaicheng
+            .content
+              | Associate Professor
+              br 
+              | Department of Computer Science
+              br
+              | Research Interests: Bioinformatics, algorithms, machine learning, omics data analysis.
 
-    p If you have any questions or suggestions, you can contact us by sending an email to yiqijiang3-c@my.cityu.edu.hk or shuaicli@cityu.edu.hk.
+          
+          #wyxDetails.memberDetails.circle
+            .title
+              | Dr. WANG Xueying
+            .content
+              | PhD in Computer science，
+              br
+              | City University of Hong Kong
+              br
+              | In charge of the TIMEDB immune infiltration platform.
 
-    p All rights are reserved to Prof. LI Shuai Cheng.
+          #clxDetails.memberDetails.circle
+            .title
+              |Dr. CHEN Lingxi
+            .content
+              | PostDoc
+              br
+              | Works in computational biology and cancer study.   
+              br
+              | Contact: chanlingxi@gmail.com  
+          #lwDetails.memberDetails.circle
+            .title
+              | LIU Wei
+            .content
+              | Computer Science
+              br 
+              | City University of Hong Kong
+          #zyzDetails.memberDetails.circle
+            .title
+              | ZHANG Yuanzheng
+            .content
+              | Bachelor of Engineering
+              br
+              | Biomedical Engineering
+              br
+              | College of Medicine and Biological Information Engineering
+              br
+              | Northeastern University
+              br
+              | Developed the visualization framework and several visualization analyses.
 
-  div 
-    script type="text/javascript" src="//rf.revolvermaps.com/0/0/8.js?i=536ucelbrcc&amp;m=0&amp;c=ff0000&amp;cr1=ffffff&amp;f=arial&amp;l=33" async="async"
+          #ldwDetails.memberDetails.circle
+            .title
+              | LIU Dawei
+            .content
+              | Majoring in Software Engineering
+              br
+              | Software College of Northeastern University
+              br
+              | Developed the visualization framework and several visualization analyses.
+
+          #zcxDetails.memberDetails.circle
+            .title
+              | ZHOU Chenxin
+            .content
+              | School of Business Administration
+              br
+              | Northeastern University
+              br
+              | Collecting and collating immunization data
+
+          #ssDetails.memberDetails.circle
+            .title
+              | SHI Shuai
+            .content
+              | School of Creative Media
+              br
+              | City University of Hong Kong
+              br
+              | Lover of UXUI and graphic design,responsible for the web design of the platform
+
+        .flip-card-back
+          #teamDetailsBack
+            .title
+              |Our
+              br
+              |Team
+              br
+            .content
+              |This is necessary when you want an element after 
+              br
+              |a floated element to 
+              br
+              |sit below the float. For an example, see the 2 column layout demo. 
+              br
+              |The footer should sit below both the sidebar and main content.
+              br
+              |To clear a float, add the clear property to the element 
+              br
+              |that needs to clear the float. 
+              br
+              |This is usually the element after the floated element.
+          #moreInfoBack
+            =image_tag "ICON BIG.png"
+
+
+
+    .col-md-6.col-lg-6.G
+      .row.h-100 
+        #lsc.col-md-4.col-lg-4.B.h-30.pb-3.member_photo
+          =image_tag "lishuaicheng.jpg", class: "rounded-circle"
+          h6 LI Shuaicheng
+        #wyx.col-md-4.col-lg-4.B.h-30.pb-3.member_photo
+          =image_tag "wangxueying.jpg", class: "rounded-circle"
+          h6 WANG Xueying
+        #clx.col-md-4.col-lg-4.B.h-30.pb-3.member_photo
+          =image_tag "chenlingxi.jpeg", class: "rounded-circle"
+          h6 CHEN Lingxi
+        #lw.col-md-4.col-lg-4.B.h-30.pb-3.member_photo
+          =image_tag "liuwei.jpg", class: "rounded-circle"
+          h6 LIU Wei
+        #zyz.col-md-4.col-lg-4.B.h-30.pb-3.member_photo
+          =image_tag "zhangyuanzheng.jpg", class: "rounded-circle"
+          h6 ZHANG Yuanzheng
+        #ldw.col-md-4.col-lg-4.B.h-30.pb-3.member_photo
+          =image_tag "liudawei.jpg", class: "rounded-circle"
+          h6 LIU Dawei
+        #zcx.col-md-4.col-lg-4.B.h-30.pb-3.member_photo
+          =image_tag "zhouchenxin.jpg", class: "rounded-circle"
+          h6 ZHANG Chenxin
+        #ss.col-md-4.col-lg-4.B.h-30.pb-3.member_photo
+          =image_tag "shishuai.jpg", class: "rounded-circle"
+          h6 SHI Shuai
+
+=javascript_pack_tag 'contact_info'
+
+div 
+  script type="text/javascript" src="//rf.revolvermaps.com/0/0/8.js?i=536ucelbrcc&amp;m=0&amp;c=ff0000&amp;cr1=ffffff&amp;f=arial&amp;l=33" async="async"

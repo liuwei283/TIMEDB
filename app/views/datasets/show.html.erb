@@ -22,27 +22,37 @@
             <%= link_to "download metadata", download_ds_metadata_user_dataset_path %>
         </span>
         <span class="download_span">
-            Download sample abundance:
-            <%= link_to "download abundance", download_ds_abd_user_dataset_path %>
+            Download sample infiltration:
+            <%= link_to "download infiltration", download_ds_inf_user_dataset_path %>
         </span>
     </p>
     <h2>Samples</h2>
 
+
     <div id='hidden_helper'>
-        Click to view hidden columns: 
-        <br />
-        <% i=2 %>
-        <% @sample_attrs.each do |attr| %>
-        <% if attr != 'id'%>
-            <% if !@vis.include? attr%>
-                <button class="toggle-vis" data-column='<%=i.to_s%>'> 
-                    <%= attr%>
-                </button>
+        <div class="dropdown">
+        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownAttributes" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            Click to view hidden columns:
+        </button>
+        <div class="dropdown-menu" aria-labelledby="dropdownAttributes">
+            <% i=2 %>
+            <% @sample_attrs.each do |attr| %>
+            <% if attr != 'id' %>
+                <% if !@vis.include? attr %>
+                <% attr = attr.gsub(/^n_/, "") %>
+                <% attr = attr.gsub(/^c_/, "") %>
+                <div class = "dropdown-item">
+                    <input id = <%= attr %> type= "checkbox" class="toggle-vis" data-column='<%=i.to_s%>'>  
+                    <label for= <%= attr %> > <%= attr %></label>
+                </div>
+                <% end %>
+                <%i += 1%>
             <% end %>
-            <%i += 1%>
-        <%end%>
-        <%end%>
+            <%end%>
+        </div>
+        </div>
     </div>
+    <br />
 
     <%= form_tag delete_sample_user_dataset_path, multipart: true do %>  
         <%= content_tag :table, role: :datatable, class: "display", id: "table_page", data: { url: user_dataset_path(format: :json)} do %>
@@ -51,7 +61,8 @@
                     <input type="checkbox" class="selectAll" name="selectAll" value="all">
                 </th>
                 <% @sample_attrs.each do |attr| %>
-                    
+                    <% attr = attr.gsub(/^n_/, "") %>
+                    <% attr = attr.gsub(/^c_/, "") %>
                     <th> <%= attr %> </th>
                     
                 <% end %>

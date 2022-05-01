@@ -9,5 +9,11 @@ class AnalysisPipeline < ApplicationRecord
     accepts_nested_attributes_for :module_requirements, allow_destroy: true
   
     validates :name, presence: true
-    
+    def can_be_destroyed
+        if self.tasks.blank?
+          return true
+        else
+          return false
+        end
+    end
 end

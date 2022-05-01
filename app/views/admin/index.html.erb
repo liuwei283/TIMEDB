@@ -21,12 +21,17 @@
       <%=link_to 'Samples', '#sample_admin' %>
     </li> 
     <li class="breadcrumb-item">
+      <%=link_to 'Cancers', '#cancer_admin' %>
+    </li> 
+    <li class="breadcrumb-item">
       <%=link_to 'Analysis Categories', admin_analysis_categories_path %>
     </li> 
     <li class="breadcrumb-item">
       <%=link_to 'Analyses', admin_analyses_path %>
     </li> 
-    
+    <li class="breadcrumb-item">
+      <%=link_to 'tasks', admin_tasks_path %>
+    </li> 
   </ol>
 
 
@@ -39,6 +44,7 @@
       <ul>
         <li>add project metadata</li>
         <li>add sample metadata</li>
+        <li>add cancer type metadata</li>
         <li>add sample abandance data</li>
         <li>add analysis module</li>
         <li>add visualization module</li>
@@ -119,6 +125,7 @@
     <% end %>
   </section>
   <hr />
+
   <section id="sample_admin" class="admin_block">
     <h4>
     Sample management:
@@ -155,14 +162,14 @@
 
 
     <h5>
-      Modify the abandance:
+      Modify the immune infiltration data:
     </h5>
 
-    <%= form_tag({action: :modify_sample_abd}, multipart: true) do %>
+    <%= form_tag({action: :modify_sample_inf}, multipart: true) do %>
       <p>
         Please select the project whose samples need to be modified
       </p>
-      <%= select_tag :project_id, options_from_collection_for_select(@projects, :id, :name, -1) %>
+      <%= select_tag :project_id, options_from_collection_for_select(@projects, :id, :project_name, -1) %>
       <p> 
         Please select tsv file to be imported:
       </p>
@@ -170,6 +177,116 @@
       <%= submit_tag 'Submit'%>
     <% end %>
   </section>
+
+
+
+   <hr />
+   
+  <section id="cancer_admin" class="admin_block">
+    <h4>
+    Cancer type management:
+    </h4>
+
+    <div id='hidden_helper'>
+    Hide columns: 
+    <br />
+    <% i=0 %>
+    <% @cancers.column_names.each do |attr| %>
+      
+      <button class="toggle-vis" data-column='<%=i.to_s%>'> 
+        <%= attr.capitalize %>
+      </button>
+      <%i += 1%>
+      
+    <%end%>
+  </div>
+
+
+    <table id="ct_table" class="display">
+      <thead>
+        
+        <% @cancers.column_names.each do |attr| %>
+          
+          <th> <%= attr.capitalize %> </th>
+          
+        <% end %>
+        <th>
+          Action
+        </th>
+        
+      </thead>
+
+      <tbody>
+        <% @cancers.each do |cc| %>
+        
+          <tr>
+            <% @cancers.column_names.each do |attr| %>
+              
+              <td> 
+                <div class="table_cell"> 
+                  <%= cc[attr] %> 
+                </div>
+              </td>
+            
+            <% end %>
+            <td>
+              <%= link_to 'Show', cancer_path(cc) %>
+              <%= link_to 'Delete', cancer_path(cc), method: :delete,
+                      data: { confirm: 'Are you sure?' } %>
+
+              <%= link_to 'Edit', edit_cancer_path(cc) %>
+            </td>
+            
+          </tr>
+        
+        <% end %>
+      </tbody>
+
+    </table>
+
+    <%= link_to  "Add one cancer type", "/cancers/new" %>
+
+    <%= form_tag import_cancers_path, multipart: true do %>
+      <%= file_field_tag :file %>
+      <%= submit_tag "Import cancers from csv" %>
+    <% end %>
+  </section>
+
+
+  <section id="data_process_admin" class="admin_block">
+    <h4>
+    Data upload and process
+    </h4>
+    <%= form_tag({action: :update_samples_num_table}, multipart: true) do %>
+      <p>
+        Generate/Update sample numbers file for cancer types/projects
+      </p>
+      <%= submit_tag 'Update'%>
+    <% end %>
+
+    <%# <%= form_tag({action: :make_analysis_cancer_files}, multipart: true) do 
+      <p>
+        Make cancers files for different analysis methods
+      </p>
+      <%= submit_tag 'Generate'
+    <% end %>
+
+    <%= form_tag({action: :make_subtype_cancer_files}, multipart: true) do %>
+      <p>
+        Make cancers files for different subtype methods
+      </p>
+      <%= submit_tag 'Generate'%>
+    <% end %>
+
+    <%= form_tag({action: :update_columns}, multipart: true) do %>
+      <p>
+        Calculate and update columns for database
+      </p>
+      <%= submit_tag 'Update'%>
+    <% end %>
+
+    </section>
+
   <hr>
   <br/>
 

@@ -15,9 +15,11 @@
 
 $grid-height: 800px
 $sidebar-width: 250px
+
 .analysis #wrapper
     display: flex
     height: calc(100vh - 70px) // 100 viewport height - navbar height
+    
 
 .analysis #main
     overflow-y: scroll
@@ -25,6 +27,7 @@ $sidebar-width: 250px
     width: 100vw
 
 $sidebar-background-color: desaturate(lighten($orange, 45%), 80%)
+
 #sidebar
     background: $white
     min-width: 250px
@@ -78,7 +81,7 @@ $sidebar-background-color: desaturate(lighten($orange, 45%), 80%)
                 &.active a
                     color: $white
                     background: darken($gray-600, 5%)
-                    border-left-color: $theme
+                    border-left-color: $light_theme
                 &.fold
                     cursor: pointer
                     &:before
@@ -163,7 +166,7 @@ $sidebar-background-color: desaturate(lighten($orange, 45%), 80%)
             text-shadow: 0 0 1px #222
         &:not(.active):hover
             // border-color: transparent
-            border-bottom: 1px solid $theme
+            border-bottom: 1px solid $light_theme
             text-decoration: none
             background: lighten($gray-600, 30%)
     .tab-content

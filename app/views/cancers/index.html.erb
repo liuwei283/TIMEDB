@@ -1,0 +1,69 @@
+<% content_for :head do %>
+  <script src="https://cdn.staticfile.org/jquery/1.10.2/jquery.min.js"></script>
+  <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.22/js/jquery.dataTables.min.js"></script>
+  <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/select/1.3.1/js/dataTables.select.min.js"></script>
+  <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/fixedcolumns/3.3.2/js/dataTables.fixedColumns.min.js"></script>
+  <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.22/css/jquery.dataTables.css">
+  <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/select/1.3.1/css/select.dataTables.min.css">
+  <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/fixedcolumns/3.3.2/css/fixedColumns.dataTables.min.css">
+  <%= javascript_pack_tag "datatable" %>
+<% end %>
+
+<% content_for :title, 'Cancer types' %>
+<div class="container">
+  <h1>Cancers Information</h1>
+
+  <p>
+    Download all cancers information:
+    <%= link_to "CSV", cancers_path(format: "csv") %>
+  </p>
+
+
+  <div id='hidden_helper'>
+    <div class="dropdown">
+      <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownAttributes" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        Click to view hidden columns:
+      </button>
+      <div class="dropdown-menu" aria-labelledby="dropdownAttributes">
+        <% i=2 %>
+        <% @attrs.each do |attr| %>
+          <% if attr != 'id' %>
+            <% if !@vis.include? attr %>
+              <div class = "dropdown-item">
+                <input id = <%= attr %> type= "checkbox" class="toggle-vis" data-column='<%=i.to_s%>'>  
+                <label for= <%= attr %> > <%= attr %></label>
+              </div>
+            <% end %>
+            <%i += 1%>
+          <% end %>
+        <%end%>
+      </div>
+    </div>
+  </div>
+  <br />
+
+  <%= form_tag export_selected_cancers_path(format: "csv"), multipart: true do %> 
+    <%= content_tag :table, role: :datatable, class: "display", id: "table_page", data: { url: cancers_path(format: :json)} do %>
+      <thead>
+            <th>
+              <input type="checkbox" class="selectAll" name="selectAll" value="all">
+            </th>
+            <% @attrs.each do |attr| %>
+              <%# if attr != 'cover_image' %>
+                <th> <%= attr %> </th>
+              <%# end %>
+            <% end %>
+            <th>details</th>
+      </thead>
+      <tbody>
+      </tbody>
+    <% end %>
+
+    
+    <%= submit_tag "Download selected metadata" , :class => "s_table_sub"%>
+  <% end %>
+
+  <p>
+    *To avoid frenquent download, please refresh the page to enable download again.
+  </p>
+</div>

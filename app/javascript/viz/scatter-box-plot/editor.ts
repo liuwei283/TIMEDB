@@ -1,7 +1,7 @@
 import { setSyntheticLeadingComments } from "typescript";
 import { EditorDef } from "utils/editor";
 import { generateBoxConfig } from "viz/boxplot/editor";
-import { setMainData } from ".";
+import { setColors, setMainData } from ".";
 
 export const editorRef = {} as any;
 
@@ -54,7 +54,8 @@ function xyConfig(v) {
                     value: {
                         current: v.data.xLabel,
                         callback(d) {
-                            setMainData(v.data.mainDict[v.data.rank], v, d);
+                            v.data.xLabel = d;
+                            setMainData(v.data.mainDict[v.data.rank], v, v.data.xLabel, v.data.yLabel);
                             editorRef.xLower.value = v.data.data.categoryRange[0];
                             editorRef.xUpper.value = v.data.data.categoryRange[1];
                             run(v);
@@ -102,7 +103,8 @@ function xyConfig(v) {
                     value: {
                         current: v.data.yLabel,
                         callback(d) {
-                            setMainData(v.data.mainDict[v.data.rank], v, null, d);
+                            v.data.yLabel=d;
+                            setMainData(v.data.mainDict[v.data.rank], v, v.data.xLabel, v.data.yLabel);
                             editorRef.yLower.value = v.data.data.valueRange[0];
                             editorRef.yUpper.value = v.data.data.valueRange[1];
                             run(v);
@@ -199,10 +201,11 @@ export function editorConfig(v): EditorDef {
                                         callback(d) {
                                             v.data.colorKey = d;
                                             const colorMetaInfo = v.data.metaInfo[v.data.colorKey];
-                                            v.data.data.colorGetter = (s) => v.data.metaInfo[v.data.colorKey].color(s[v.data.colorKey]);
+                                            v.data.data.colorGetter = (s) => v.data.metaInfo[d].color(s[d]);
                                             v.data.classLegend = colorMetaInfo.values.map((x, i) => {
                                                 return {label: x, fill: colorMetaInfo.color(x), type: "Rect"};
                                             });
+                                            // setColors(v);
                                             run(v);
                                         },
                                     },
@@ -217,6 +220,7 @@ export function editorConfig(v): EditorDef {
                                             v.data.catKey = d;
                                             v.data.categories = v.data.metaInfo[d].values;
                                             setMainData(v.data.mainDict[v.data.rank], v);
+                                            setColors(v);
                                             run(v);
                                         },
                                     },
@@ -376,6 +380,7 @@ export function editorConfig(v): EditorDef {
                                     for (const o of obj) {
                                         v.data.metaInfo[o.name].update(v, o);
                                     }
+                                    setColors(v);
                                     run(v);
                                 },
                             },

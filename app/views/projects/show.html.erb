@@ -11,7 +11,7 @@
   <%= javascript_pack_tag "datatable" %>
 <%end%>
 
-<% content_for :title, 'Project '+ @project.name  %>
+<% content_for :title, 'Project '+ @project.project_name  %>
 
 <div class="container">
   <h1>
@@ -33,93 +33,338 @@
   </div>
   <br />
 
-  <h2>Samples</h2>
-  <p>
-    <span class="download_span">
-      Download samples information:
-      <%= link_to "Metadata", project_path(format: "csv") %>
-    </span>
-  </p>
-
-  <div id='hidden_helper'>
-    Click to view hidden columns:
-    <br />
-    <br />
-    <% i=1 %>
-    <% @sample_attrs.each do |attr| %>
-      
-        <% if !@vis.include? attr %>
-          <button class="toggle-vis" data-column='<%=i.to_s%>'> 
-            <%= attr%>
-          </button>
-        <% end %>
-        <%i += 1%>
-      
-    <%end%>
-  </div>
-  <br/>
-  <%= form_tag make_selected_file_samples_path, multipart: true do %>  
-    <%= content_tag :table, role: :datatable, class: "display", id: "table_page", data: { url: project_path(format: :json)} do %>
+  <h3> Reprocessed columns</h3>
+  <% if @table_info_exist %>
+    <table class = "table table-striped">
       <thead>
-            <th>
-              <input type="checkbox" class="selectAll" name="selectAll" value="all">
-            </th>
-            <% @sample_attrs.each do |attr| %>
-              
-              <th> <%= attr %> </th>
-              
-            <% end %>
-            <th>Action</th>
+        <tr class = "row">
+          <% @table_header.each do |header|%>
+            <th class = "col-md-6"><%= header %></th>
+          <% end %>
+        </tr>
       </thead>
       <tbody>
+        <% @table_data.each do |row| %>
+          <tr class = "row">
+            <% row[0].each do |cell|%>
+              <td class = "col-md-6"><%= cell %> </td>
+            <% end %>
+          </tr>
+        <% end %>
       </tbody>
-    <% end %>
-
-    <%= submit_tag "dowload selected samples metadata to file", :name => 'metadata', :class => "s_table_sub" %>
-    <%= submit_tag "download selected samples abundance to file", :name => 'abundance', :class => "s_table_sub"  %>
-    <%#= submit_tag "download selected samples sequence to file", :name => 'sequence' %>
-    <br />
-
-
-    <%= hidden_field_tag 'project_id', @project.id %>
-
-    <%= submit_tag "dowload filtered samples metadata to file", :name => 'filter_metadata', :class => "s_table_sub" %>
-    <%= submit_tag "dowload filtered samples abundance to file", :name => 'filter_abd', :class => "s_table_sub" %>
-    <br />
-  
-    <%= submit_tag "export selected samples to", :name => 'seleted2ds', :class => "s_table_sub"  %>
-    <%= submit_tag "export filtered samples to", :name => 'filter2ds', :class => "s_table_sub"  %>
-    <select id="select_box" name="ds_selected">
-      <option value="">--Please choose a dataset--</option>
-      <% @datasets.each do |ds|%>
-        <option value=<%=ds.name%>> <%=ds.name%></option>
-      <%end%>
-    </select>
+    </table>
   <% end %>
-  <p>
-    If you do NOT have any dataset, create one here: 
-    <%=link_to 'Create new dataset', new_user_dataset_path(:user_id=>@user.id)%>
-  </p>
+  
 
-  <p>
-    *To avoid frenquent download, please refresh the page to enable download again.
-  </p>
+  <div class = "container">
+    <ul class="nav nav-tabs" id="project-datils-tab" role="tablist">
+    <li class="nav-item">
+      <a class="nav-link active" id="sample-table-tab" data-toggle="tab" href="#sample-details" role="tab" aria-controls="sample-details" aria-selected="true">Samples</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" id="subtype-overview-tab" data-toggle="tab" href="#subtype-overview" role="tab" aria-controls="subtype-overview" aria-selected="false">Subtype Overview</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" id="fraction-overview-tab" data-toggle="tab" href="#fraction-overview" role="tab" aria-controls="fraction-overview" aria-selected="false">Fraction Overview</a>
+    </li>
+    </ul>
+    <div class="tab-content" id="projectDeailsTabContent">
+      <div class="tab-pane fade show active" id="sample-details" role="tabpanel" aria-labelledby="sample-table-tab">
+
+                          <p>
+                            <span class="download_span">
+                              Download samples information:
+                              <%= link_to "Metadata", project_path(format: "csv") %>
+                            </span>
+                          </p>
+
+                          <div id='hidden_helper'>
+
+                            <div class="dropdown">
+                              <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownAttributes" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Click to view hidden columns:
+                              </button>
+                              <div class="dropdown-menu" aria-labelledby="dropdownAttributes">
+                                <% i=1 %>
+                                <% @sample_attrs.each do |attr| %>
+                                  <% if !@vis.include? attr %>
+                                    <% attr = attr.gsub(/^n_/, "") %>
+                                    <% attr = attr.gsub(/^c_/, "") %>
+                                    <div class = "dropdown-item">
+                                      <input id = <%= attr %> type= "checkbox" class="toggle-vis" data-column='<%=i.to_s%>'>  
+                                      <label for= <%= attr %> > <%= attr %></label>
+                                    </div>
+                                  <% end %>
+                                  <%i += 1%>
+                                <%end%>
+                              </div>
+                            </div>
+                          </div>
+                          <br/>
+                          <%= form_tag make_selected_file_samples_path, multipart: true do %>  
+                            <%= content_tag :table, role: :datatable, class: "display", id: "table_page", data: { url: project_path(format: :json)} do %>
+                              <thead>
+                                    <th>
+                                      <input type="checkbox" class="selectAll" name="selectAll" value="all">
+                                    </th>
+                                    <% @table_headers.each do |attr| %>
+                                      <%# <% attr = attr.gsub(/^n_/, "") %> 
+                                      <%# <% attr = attr.gsub(/^c_/, "") %>
+                          
+                                      <th> <%= attr %> </th>
+                                      
+                                    <% end %>
+                                    <th>details</th>
+                                    
+                              </thead>
+                              <tbody>
+                              </tbody>
+                            <% end %>
+                            
+
+                            <div class="dropdown">
+                              <button class="btn btn-secondary dropdown-toggle" type="button" id="projectSampleTableDropdownButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Download
+                              </button>
+                              <div class="dropdown-menu" aria-labelledby="projectSampleTableDropdownButton">
+                                <%= submit_tag "dowload selected samples metadata to file", :name => 'metadata', :class => "s_table_sub dropdown-item" %>
+                                <div class="dropdown-divider"></div>
+                                <%= submit_tag "download selected samples infiltration to file", :name => 'infiltration', :class => "s_table_sub dropdown-item"  %>
+                                <div class="dropdown-divider"></div>
+                                <%= submit_tag "dowload filtered samples metadata to file", :name => 'filter_metadata', :class => "s_table_sub dropdown-item" %>
+                                <div class="dropdown-divider"></div>
+                                <%= submit_tag "dowload filtered samples infiltration to file", :name => 'filter_inf', :class => "s_table_sub dropdown-item" %>
+                                <div class="dropdown-divider"></div>
+                                <%= submit_tag "export selected samples to", :name => 'seleted2ds', :class => "s_table_sub dropdown-item"  %>
+                                <div class="dropdown-divider"></div>
+                                <%= submit_tag "export filtered samples to", :name => 'filter2ds', :class => "s_table_sub dropdown-item"  %>
+                              </div>
+                            </div>
+
+                            <select id="select_box" name="ds_selected" >
+                              <option value="">--Please choose a dataset--</option>
+                              <% @datasets.each do |ds|%>
+                                <option value=<%=ds.name%>> <%=ds.name%></option>
+                              <%end%>
+                            </select>
+
+                            <%= hidden_field_tag 'project_id', @project.id %>
+
+                          <% end %>
+                          <br />
+                            
+                          <p>
+                            If you do NOT have any dataset, create one here: 
+                            <%=link_to 'Create new dataset', new_user_dataset_path(:user_id=>@user.id)%>
+                          </p>
+
+                          <p>
+                            *To avoid frenquent download, please refresh the page to enable download again.
+                          </p>
 
 
 
-  <%#=link_to 'Download selected sequencing data', download_selected_abd_project_samples_path(@project.id) %>
+                          <%#=link_to 'Download selected sequencing data', download_selected_inf_project_samples_path(@project.id) %>
 
-  <%#= form_tag import_project_samples_path([@project]), multipart: true do %>
-    <%#= file_field_tag :file %>
-    <%#= submit_tag "Import metadata by csv" %>
-  <%# end %>
+                          <%#= form_tag import_project_samples_path([@project]), multipart: true do %>
+                            <%#= file_field_tag :file %>
+                            <%#= submit_tag "Import metadata by csv" %>
+                          <%# end %>
 
-  <%#= form_tag import_abd_table_project_samples_path([@project]), multipart: true do %>
-    <%#= file_field_tag :file %>
-    <%#= submit_tag "Import abundance by tsv" %>
-  <%# end %>
+                          <%#= form_tag import_inf_table_project_samples_path([@project]), multipart: true do %>
+                            <%#= file_field_tag :file %>
+                            <%#= submit_tag "Import infiltration by tsv" %>
+                          <%# end %>
 
+
+      </div>
+      <div class="tab-pane fade" id="subtype-overview" role="tabpanel" aria-labelledby="subtype-overview-tab">
+        <br>
+        <br>
+
+        <div id = "subtype-landscape" class = "container Block">
+            <div id="landscapeDescription" class="row description">
+              <h4>Some description for Immune Subtype Landscape in project overview</h4>
+            </div>
+
+            <div class="row vizBlock">
+                <div class="col vis" id = "subtype-landscapeVis">
+                </div>
+            </div>
+        </div>
+
+        <hr />
+
+        <div id = "subtype-boxplot" class = "container Block">
+
+            <div id="boxplotDescription" class="row description">
+              <h4>Some description for Immune Cell Data bar in project overview</h4>
+            </div>
+            
+            <div class="select-bar form-inline row">
+              <div class="sdiv col">
+                <div class="select-title">
+                    Please choose the cell division method:
+                </div>
+                <select class="form-select col" id = "subtype-boxplot-method-selector">
+                    <option selected="selected" value = "ABIS">ABIS</option>
+                    <option value = "CIBERSORTX">CIBERSORT</option>
+                    <option value = "CIBERSORTX">CIBERSORTX</option>
+                    <option value = "ConsensusTME">Consensus</option>
+                    <option value = "ConsensusTME">ConsensusTME</option>
+                    <option value="EPIC">EPIC</option>
+                    <option value="ImmuCellAI">ImmuCellAI</option>
+                    <option value="MCPcounter">MCPcounter</option>
+                    <option value="quanTIseq">quanTIseq</option>
+                    <option value="TIMER">TIMER</option>
+                    <option value="xCell">xCell</option>
+                </select>
+              </div>
+            </div>
+            <div class="row vizBlock">
+                <div class="col vis" id = "subtype-boxplotVis">
+                </div>
+            </div>
+        </div>
+
+        <hr />
+
+        <div id = "subtype-curve" class = "container Block">
+            <div id="curveDescription" class="row description">
+              <h4>Some description for KM Curve in project overview</h4>
+            </div>
+            <div class="row vizBlock">
+                <div class="col" id = "subtype-curveVis">
+                </div>
+            </div>
+        </div>
+
+        <hr />
+        <br />
+
+        <div id = "subtype-regulator" class = "container Block">
+            <div id="regulatorDescription" class="row description">
+              <h4>Some description for immune regulator in project overview</h4>
+            </div>
+            <div class="row vizBlock">
+                <div class="col vis" id = "subtype-regulatorVis">
+                </div>
+            </div>
+        </div>
+      
+      </div>
+
+      <div class="tab-pane fade" id="fraction-overview" role="tabpanel" aria-labelledby="fraction-overview-tab">
+
+        <div id = "fraction-pie" class = "container Block">
+            <div class="row description">
+              <h4>Some description for Project Clinical Feature Piechart in project fraction overview</h4>
+            </div>
+
+            <div class="select-bar form-inline row">
+              <div class="sdiv col">
+                <div class="select-title">
+                    Please choose the attribute:
+                </div>
+                <select class="form-select col" id = "fraction-pie-selector">
+                  <% @selector_attrs.each_with_index do |selector_items, i| %>
+                    <% if i == 0 %>
+                      <option selected="selected" value = <%= selector_items%> > <%= selector_items %> </option>
+                    <% else %>
+                      <option value = <%= selector_items%> > <%= selector_items %> </option>
+                    <% end %>
+                  <% end %>
+                </select>
+              </div>
+            </div>
+
+            <br>
+
+            <div class="row vizBlock">
+                <div class="col vis" id = "fraction-pieVis">
+                </div>
+            </div>
+        </div>
+
+
+        <div id = "fraction-boxplot" class = "container Block">
+            <div class="row description">
+              <h4>Some description for Cell Fraction Boxplot in project fraction overview</h4>
+            </div>
+
+            <div class="select-bar form-inline row">
+              <div class="sdiv col">
+                <div class="select-title">
+                    Please choose the method:
+                </div>
+                <select class="form-select col" id = "fraction-boxplot-selector">
+
+                    <option selected="selected" value = "Consensus">Consensus</option>
+                    <option disabled>──────────</option>
+                    <option value = "ABIS">ABIS</option>
+                    <option value = "CIBERSORTX">CIBERSORT</option>
+                    <option value = "CIBERSORTX">CIBERSORTX</option>
+                    <option value = "ConsensusTME">ConsensusTME</option>
+                    <option value="EPIC">EPIC</option>
+                    <option value="ImmuCellAI">ImmuCellAI</option>
+                    <option value="MCPcounter">MCPcounter</option>
+                    <option value="quanTIseq">quanTIseq</option>
+                    <option value="TIMER">TIMER</option>
+                    <option value="xCell">xCell</option>
+
+                </select>
+              </div>
+            </div>
+
+            <br>
+
+            <div class="row vizBlock">
+                <div class="col vis" id = "fraction-boxplotVis">
+                </div>
+            </div>
+        </div>
+
+        <div id = "fraction-landscape" class = "container Block">
+            <div class="row description">
+              <h4>Some description for Cell Fraction Landscape in project fraction overview</h4>
+            </div>
+
+            <div class="select-bar form-inline row">
+              <div class="sdiv col">
+                <div class="select-title">
+                    Please choose the visualization type:
+                </div>
+                <select class="form-select col" id = "fraction-landscape-selector">
+
+                    <option selected="selected" value = "pie">Pie Chart</option>
+                    <option value = "bar">Bar Plot</option>
+
+                </select>
+              </div>
+            </div>
+
+            <br>
+
+            <div class="row vizBlock">
+                <div class="col vis" id = "fraction-landscapeVis">
+                </div>
+            </div>
+        </div>
+
+   
+
+      </div>
+      <%=javascript_pack_tag 'pj-overview-viz' %>
+      
+      
+    </div>
+
+
+        
+  <div>
+
+
+
+
+                
 </div>
-
-
-

@@ -21,6 +21,8 @@ html, body
 @import "partials/bootstrap-ex"
 @import "font-awesome-sprockets"
 @import "font-awesome"
+// @import "bootstrap-select"
+
 
 // .index-banner
 //     color: $gray-100
@@ -49,6 +51,7 @@ html, body
 
 #wrapper
     min-height: calc(100vh - 70px - 250px)
+
 #disable-fill
     position: absolute
     top: 0
@@ -98,13 +101,19 @@ a.no-link:hover
 
 $nav-height: 70px
 #topbar
-    background-color: $gray-900
+    z-index: 3
+    width: 100%
+    position: sticky
+    top: 0
+    background-color: #f8f9fa
     height: $nav-height
+    border-bottom: 0.5px solid darken(#f8f9fa, 20%)
     span
-        color: white
+        color: $light_theme
     .nav-link
         padding: 1rem 1rem
-        color: white
+        color: $light_theme
+    
     .dropdown-menu
         box-shadow: 0 0 8px rgba(0,0,0,.1)
     .dropdown-toggle
@@ -112,5 +121,9 @@ $nav-height: 70px
             content: none
         .fa, .fas
             margin: 0 0 0 .25rem
+
+.popover
+    width: 600px
+    margin: auto
 
 @import "./*"

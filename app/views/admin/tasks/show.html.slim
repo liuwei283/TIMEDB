@@ -1,0 +1,84 @@
+- content_for :title do
+  | Task
+.container
+  ol.breadcrumb
+    li.breadcrumb-item = link_to 'Tasks', admin_tasks_path
+    li.breadcrumb-item.active = link_to @task.id, admin_task_path(@task)
+  .card
+    .card-body
+      h2.card-title
+        | Task&nbsp;
+        = @task.id
+      hr
+
+      table.table.table-bordered
+        tbody
+          tr 
+            td.col-md-4 Deepomics task id
+            td.col-md-6 = @task.tid
+          tr 
+            td.col-md-4 Status 
+            td.col-md-6
+              - if @task.status == "finished"
+                | finished <i class="fa fa-check-circle text-success"></i>  
+              - elsif @task.status == "failed"
+                | failed <i class="fa fa-times-circle text-danger"></i> 
+          tr 
+            td Is Demo
+            td 
+              span = @task.is_demo ? "Yes" : "No"
+              span &nbsp; 
+              span
+                = link_to admin_set_demo_task_path(id:@task.id), method: :post, class: 'btn btn-primary' do
+                  | Set/reset demo task
+          tr
+            td App 
+            td = @task.getAppName
+          tr 
+            td Module/Pipeline 
+            td = @task.analysis ? "Module" : "Pipeline"
+          tr 
+            td App ID
+            td = @task.getAppId
+          tr 
+            td Result Mapped
+            td = @task.task_outputs.blank? ? "No" : "Yes"
+
+      .ml-3
+        button.btn.btn-small.bg-info
+          = link_to "Deepomics Query Result", @task.getDeepomicsUrl
+        pre.bg-light.bg-gradient.json_container
+          = @log
+        - if !@task.task_outputs.blank?
+          span.mx-2 Mapped output:
+          br
+          - @task.task_outputs.each do |topt|
+            button.my-1.btn.btn-secondary data-toggle="collapse"  data-target="#output-#{topt.id}"  aria-expanded="false" aria-controls="#output-#{topt.id}"
+              = "output-#{topt.id} #{topt.analysis.name}"
+            pre.bg-light.bg-gradient.json_container.collapse.multi-collapse id="output-#{topt.id}"
+              = topt.file_paths.to_json
+            br
+        .btn-group.mr-2
+              = link_to admin_clear_outputs_path(id:@task.id), method: :post, class: 'btn btn-danger' do
+                / = icon 'fas', 'exclamation'
+                | Clear & Re-map Outputs
+        / button.btn.btn-danger Clear outputs
+
+
+- content_for :page_script do 
+  javascript: 
+    document.addEventListener("DOMContentLoaded", () => {
+      const containers = document.getElementsByClassName("json_container");
+      for (cnt of containers) {
+        const data = cnt.innerHTML;
+        cnt.innerHTML = JSON.stringify(JSON.parse(data), undefined, 2);
+      }
+    });
+  sass: 
+    pre
+      max-height: 45rem
+      overflow: scroll
+    button a
+      color: white
+      &:hover
+        color: white

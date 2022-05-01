@@ -1,5 +1,5 @@
 import { Component, ComponentOption } from "crux/dist/element";
-import {TextOption} from "crux/dist/element/primitive/text";
+import { TextOption } from "crux/dist/element/primitive/text";
 import { event } from "crux/dist/utils";
 
 interface EditTextOption extends ComponentOption {
@@ -38,9 +38,10 @@ export class EditText extends Component<TextOption & EditTextOption> {
     public willRender() {
         if (this._firstRender) {
             this.originalText = this.prop.text;
+            this.text = this.prop.text;
             this.setDisplayText();
             this.$on["dblclick"] = () => {
-                event.emit("edit-text-start", {text: this.prop.text,
+                event.emit("edit-text-start", {text: this.text,
                     originalText: this.originalText,
                     id: this.uid});
             };

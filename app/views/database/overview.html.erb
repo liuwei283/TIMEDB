@@ -1,7 +1,8 @@
 <% content_for :head do %>
-    <script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
-    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.22/js/jquery.dataTables.min.js"></script>
-    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.22/css/jquery.dataTables.css">
+
+
+
+
 <%end%>
 <% content_for :title, "Overview" %>
 
@@ -14,6 +15,8 @@
     
 </div>
 <br>
+
+
 <div id="head" class="container Block">
 
     
@@ -75,12 +78,317 @@
     <br/>
 </div>
 <div class = "container Block"> 
+
+
+<!-- to be deleted
 <h2>Sample distribution</h2>
 <div id = "world-map" class = "container Block"> </div>
 </div>
+up to here -->
 
-<%=javascript_pack_tag 'db-overview-viz'%>
+<br />
+<hr />
+<section id = "cancer_icon">
+    <h2>Cancer Type</h2>
+    
+    <div id = "cancerIcons" class="collapse" aria-expanded="false" class = "container-fluid container">
+        <div class = "row cols-xs-space cols-sm-space cols-md-space text-center">            
+            <% @singleCancers.each do |cc| %>
+                <div class = "col-lg-2 col-lg-offset-1 mb-4">
+                    <%= link_to cc do %>
+                        <%= image_tag cc.cancer_type + ".png", class: "rounded-circle z-depth-2" %>
+                    <% end %>
+                    <h4> <%= cc.cancer_name %> </h4>
+                </div>
+            <% end %>
+            
+            <div class = "col-lg-2 col-lg-offset-1 mb-4">
+                    <div type="button" class="fa fa-lightbulb-o fa-lg" title="Cancers List" data-toggle="popover" title="" data-content= ' 
+                    <%#= render :partial => 'partials/popover' %>
+                    <ul>
+                    <% @kidneyCancers.each do |kc| %>
+                        <li><%= link_to kc.cancer_name, kc %></li>
+                    <% end %>
+                    </ul>
+                    '> 
+                    <%= image_tag "Kidney.png", class: "rounded-circle z-depth-2" %> 
+                    </div> 
+                    <h4> Kidney related cancers </h4>
+            </div>
+            <div class = "col-lg-2 col-lg-offset-1 mb-4">
+                    <div type="button" class="fa fa-lightbulb-o fa-lg" title="Cancers List" data-toggle="popover" title="" data-content= ' 
+                    <%#= render :partial => 'partials/popover' %>
+                    <ul>
+                    <% @leukemiaCancers.each do |lc| %>
+                        <li><%= link_to lc.cancer_name, lc %></li>
+                    <% end %>
+                    </ul>
+                    '> 
+                    <%= image_tag "Leukemia.png", class: "rounded-circle z-depth-2" %> 
+                    </div> 
+                    <h4> Leukemia related cancers </h4>
+            </div>
+            <div class = "col-lg-2 col-lg-offset-1 mb-4">
+                <% cancer_other = Cancer.find_by(cancer_type: "Other") %>
+                <%= link_to cancer_other do %>
+                    <%= image_tag "Other.png", class: "rounded-circle z-depth-2" %>
+                <% end %>
+                <h4> <%= "Others" %> </h4>
+            </div>
+            <div class = "col-lg-2 col-lg-offset-1 mb-4">
+                    <h1> . . . </h1>
+            </div>
+        </div>
+    </div>
+    <div>
+        <div id = "collapseButton" role="button" class="collapsed" data-toggle="collapse" href="#cancerIcons" aria-expanded="false" aria-controls="cancerIcons"></div>
+    <div>
+</section>
+<hr />
 
 
 
+<br />
+<h2> Database overview visualization</h2>
 
+
+<div id = "barPlot" class = "container Block">
+
+    <div id="barDescription" class="row description">
+    <h4>Some description for bar plot</h4>
+    </div>
+  
+
+    <div class="select-bar form-inline row">
+        <div class="sdiv col">
+            <div class="select-title">
+                Please choose project or cancer type:
+            </div>
+            <select class="form-select col" id = "bar-selector">
+                <option selected="selected" value="project">Project</option>
+                <option value="cancer">Cancer type</option>
+            </select>
+        </div>
+    </div>
+    <%# <a id = "bar_download" href="/data/sample_num/project_samples.tsv" download><button type = "button" class = "btn btn-secondary"> Click here to download samples number table </button> </a>
+    <button id = "bar" type = "button" class = "btn btn-secondary viz_download">Download Chart</button> %>
+
+    <div class="dropdown">
+        <button class="btn btn-secondary dropdown-toggle" type="button" id="bar_download_dropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            Dwonload
+        </button>
+        <div class="dropdown-menu" aria-labelledby="bar_download_dropdwon">
+            <a class="dropdown-item" id = "bar_download" download href="/data/sample_num/project_samples.tsv">Download sample number table</a> 
+            <a class="dropdown-item viz_download" id = "bar">Download bar chart</a>
+        </div>
+    </div>
+
+    <div class="row vizBlock">
+        <div class="col" id = "barVis">
+        </div>
+    </div>
+</div>
+
+<hr>
+<br>
+
+
+<div id = "piePlot" class = "container Block">
+    <div id="pieDescription" class="row description">
+        <h4>Some description for pie plot</h4>
+    </div>
+
+    <div class="select-bar form-inline row">
+
+        <div class="sdiv col">
+            <div class="select-title">
+                Please choose the cell division method:
+            </div>
+            <select class="form-select col pie_react" id = "pie_method_selector">
+                    <option selected="selected" value = "ABIS">ABIS</option>
+
+                    <option value = "CIBERSORTX">CIBERSORTX</option>
+                    <option value = "ConsensusTME">ConsensusTME</option>
+                    <option value="EPIC">EPIC</option>
+                    <option value="ImmuCellAI">ImmuCellAI</option>
+                    <option value="MCPcounter">MCPcounter</option>
+                    <option value="quanTIseq">quanTIseq</option>
+                    <option value="TIMER">TIMER</option>
+                    <option value="xCell">xCell</option>
+                   
+            </select>
+        </div>
+
+        <div class="sdiv col">
+            <div class="select-title">
+                Please choose the cancer type:
+            </div>
+            <%= select_tag :pie_cancer_selector, options_from_collection_for_select(@cancers, :id, :cancer_name, 0) %>
+            <%#= collection_select_tag(:pie_cancer_selector, Cancer.find(:all), :id, :cancer_name, {:include_blank => 'Cancer'}) %>
+            <!--
+            <select class="form-select col" id = "pie-cancer-selector">
+                <% first = true %>
+                <% @cancers.each do |cc| %>
+                    <% if first == true %>
+                        <option selected="selected" value= <%= cc.cancer_name %> >
+                            <%= cc.cancer_name %>
+                        </option>
+                        <% first = false %>
+                    <% else %>
+                        <option value= <%= cc.cancer_name %> >
+                            <%= cc.cancer_name %>
+                        </option>
+                    <% end %>
+                <% end %>
+            </select> -->
+        </div>
+
+        <div class="sdiv col">
+            <div class="select-title">
+                Please choose the project:
+            </div>
+            <%#= collection_select(:pie_project_selector, Cancer.first.projects.all, :project_name, :project_name, {:include_blank => 'Group'}, { :class: "pie_react" }) %>
+            <%= select_tag :pie_project_selector, options_from_collection_for_select(@cancers[0].projects, :project_name, :project_name, 0), class: 'pie_react'%>
+            
+            <!--
+            <select class="form-select col pie-react" id = "pie-project-selector">
+                <% first = true %>
+                <% theCancer = @cancers.first %>
+                <% theCancer.projects.each do |pj| %>
+                    <% if first == true %>
+                        <option selected="selected" value= <%= pj.project_name %> >
+                            <%= pj.project_name %>
+                        </option>
+                        <% first = false %>
+                    <% else %>
+                        <option value= <%= pj.project_name %> >
+                            <%= pj.project_name %>
+                        </option>
+                    <% end %>
+                <% end %>
+            </select>
+            -->
+        </div>
+    </div>
+
+    <%#a id = "pie_download" href="/public/data/cell_data/ABIS/TCGA_ACC_ABIS.csv" download> <button type = "button" class = "btn btn-secondary"> Click here to download cell division data </button></a %>
+
+    <div class="dropdown">
+        <button class="btn btn-secondary dropdown-toggle" type="button" id="pie_download_dropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            Dwonload
+        </button>
+        <div class="dropdown-menu" aria-labelledby="pie_download_dropdown">
+            <a class="dropdown-item" id = "pie_download" download href="/public/data/cell_data/ABIS/TCGA_ACC_ABIS.csv">Download cell data</a> 
+            <a class="dropdown-item viz_download" id = "pie">Download pie chart</a>
+        </div>
+    </div>
+
+    <div class="row vizBlock">
+        <div class="col" id = "pieVis">
+        </div>
+    </div>
+</div>
+
+<hr>
+<br>
+
+<div id = "landscape" class = "container Block">
+
+    <%# selector row%>
+    <div id="landscapeDescription" class="row description">
+        <h4>Some description for Immune Subtype Landscape</h4>
+    </div>
+    
+    <div class="select-bar form-inline row">
+
+            <div class="sdiv col">
+                <div class="select-title">
+                    Please choose the cancer name:
+                </div>
+                <select class="form-select col landscape_selector" id = "landscape_cancer_selector">
+                    <% first = true %>
+                    <option selected="selected" value = "all">All cancers</option>
+                    <% @cancers.each do |cc| %>
+                        <option value= <%= cc.cancer_name %> >
+                            <%= cc.cancer_name %>
+                        </option>
+                    <% end %>
+                </select> 
+            </div>
+            
+        
+    
+    </div>
+
+    <%#a id = "landscape_download" href="/public/data/subtype/c1_c6/c1_c6_TCGA_all.csv" download><button type = "button" class = "btn btn-secondary"> Click here to download subtype data </button> </a %>
+
+    <div class="dropdown">
+        <button class="btn btn-secondary dropdown-toggle" type="button" id="landscape_download_dropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            Dwonload
+        </button>
+        <div class="dropdown-menu" aria-labelledby="landscape_download_dropdown">
+            <a class="dropdown-item" id = "landscape_download" download href="/public/data/subtype/c1_c6/c1_c6_TCGA_all.csv">Download subtype data</a> 
+            <a class="dropdown-item viz_download" id = "landscape">Download landscape chart</a>
+        </div>
+    </div>
+
+    <div class="row vizBlock">
+        <div class="col" id = "landscapeVis">
+        </div>
+    </div>
+</div>
+
+<hr>
+<br>
+
+
+<div id = "regulatorPlot" class = "container Block">
+
+    <%# selector row%>
+    <div id="regulatorDescription" class="row description">
+        <h4>Some description for immuneregulator plot</h4>
+    </div>
+
+    <div class="select-bar form-inline row">
+
+        <div class="sdiv col">
+            <div class="select-title">
+                Please choose the cancer type:
+            </div>
+            <%= select_tag :regulator_cancer_selector, options_from_collection_for_select(@cancers, :id, :cancer_name, 0) %>
+        </div>
+
+        <div class="sdiv col">
+            <div class="select-title">
+                Please choose the project:
+            </div>
+            <%= select_tag :regulator_project_selector, options_from_collection_for_select(@cancers[0].projects, :project_name, :project_name, 0)%>
+        </div>
+    </div>
+
+    <div class="dropdown">
+        <button class="btn btn-secondary dropdown-toggle" type="button" id="regulator_download" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            Dropdown regulator related data
+        </button>
+        <div class="dropdown-menu" aria-labelledby="regulator_download">
+            <a class="dropdown-item" id = "regulator_subtype" download href="">Download subtype data</a> 
+            <a class="dropdown-item" id = "regulator_rna" download href="">Download RNA data</a>
+            <div class="dropdown-divider"></div>
+            <a class="dropdown-item viz_download" id = "regulator">Download landscape chart</a>
+
+        </div>
+    </div>
+
+    <div class="row vizBlock">
+        <div class="col" id = "regulatorVis">
+        </div>
+    </div>
+</div>
+
+
+<%# <div id = "vapp-database">
+</div> %>
+
+<h2>
+<%=javascript_pack_tag 'db-overview-viz'%> 
+                        

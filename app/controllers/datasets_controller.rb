@@ -4,7 +4,7 @@ class DatasetsController < ApplicationController
         id = session[:user_id]
         @user = User.find(id)
         @dataset = @user.datasets.find(params[:id])
-        @vis = ['id', 'sample_name', 'experiment_type', 'project_name', 'nr_reads_sequenced', 'country', 'abundance_available', 'associated_phenotype']
+        @vis = ['id', 'sample_name', 'project_name', 'c_tumor_stage', 'c_tumor_grade', 'c_sample_histology', 'c_race', 'c_gender', 'n_age', 'pfs', 'os', 'pfs_status', 'os_status', 'c_tumor_type', 'c_tumor_subtype', 'c_source_name', 'c_treatment']
         
         @sample_attrs = Sample.column_names
         @invis = []
@@ -101,9 +101,9 @@ class DatasetsController < ApplicationController
         redirect_to user_dataset_path
     end
 
-    def download_ds_abd
+    def download_ds_inf
         @dataset = @user.datasets.find(params[:id])
-        send_data @dataset.abd_file(), :filename => "#{@dataset.name}_abd.tsv"
+        send_data @dataset.inf_file(), :filename => "#{@dataset.name}_inf.tsv"
     end
 
     def download_ds_metadata

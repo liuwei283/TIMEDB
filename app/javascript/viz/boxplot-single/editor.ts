@@ -23,6 +23,11 @@ export function editorConfig(v): EditorDef {
                             type: "list",
                             items: [
                                 {
+                                    title: "Chart(alpha)",
+                                    type: "text",
+                                    content: "alpha"
+                                },
+                                {
                                     title: "Taxonomic rank",
                                     type: "select",
                                     options: v.data.ranks,

@@ -1,300 +1,159 @@
-import {init as hist}  from "viz/static_histogram"
-import {init as donghnut}  from "viz/static_donghnut"
-import {init as boxplot} from "viz/static_grouped-boxplot"
-import {init as tree} from "viz/static_tree"
-import {assign_tb_style} from "./overview-style.js"
+import {init as immunebar} from "viz/static_immunebar"
+import {init as immunepie} from "viz/static_immunePie"
+import {init as immunelandscape} from "viz/static_immuneSubtypeLandscape"
+import {init as immuneRegulator} from "viz/static_immuneRegulators"
 
-export function viz(vid, vdata){
-    var paths = vdata["file"];
-    var type = vdata["type"];
-    var config = vdata["config"];
-    switch (type){
-        case "hist":{
-            hist(vid, paths[0], config);
-            break;
-        }
-        case "boxplot":{
-            boxplot(vid, paths[0], config);
-            break;
-        }
-        case "tree":{
-            tree(vid, paths, config);
-            break;
-        }
-        
-        case "donghnut":{
-            donghnut(vid, paths[0], config);
-            break;
-        }
-        default:{
-            
-        }
-    }
+var data_path = "/public/data/";
 
+export function bar_viz() {
+    var bar_selector = document.getElementById("bar-selector");
+    var selected_value = bar_selector.value;
+    var file_path = data_path + "sample_num/" + selected_value + "_samples.tsv";
+    immunebar("#barVis", file_path);
 }
 
-export function description(hid, des_data){
-    document.getElementById(hid).innerHTML = des_data;
+export function pie_viz() {
+    var pie_method_selector = document.getElementById("pie_method_selector");
+    var method = pie_method_selector.value;
+    var pie_project_selector = document.getElementById("pie_project_selector");
+    var pname = pie_project_selector.value;
+    console.log(method);
+    console.log(pname);
+
+    //method name must be same as data storage folder
+    var file_name = pname + "_" + method + ".csv";
+    var file_path = data_path + "cell_data/" + method + "/" + file_name;
+    immunepie("#pieVis", file_path);
+
+    document.getElementById("pie_download").setAttribute("download", file_name);
+    document.getElementById("pie_download").setAttribute("href", file_path);
 }
 
-export function table(tid, tb_data){
-    //create table
-    var tb = document.createElement("table");
-    tb.className = "display";
-    tb.id = tid;
-    //class = "display"
-
-    //create th
-    var thead = document.createElement("thead");
-    var tr  = document.createElement("tr");
-    var th_content = tb_data["head"];
-    var ncol = th_content.length;
-    for (var i=0; i<ncol; i++){
-        var th = document.createElement("th");
-        th.innerHTML = th_content[i];
-        tr.appendChild(th);
+export function landscape_viz() {
+    var selected_cancer = document.getElementById("landscape_cancer_selector").value;
+    if (selected_cancer == "all") {
+        var file_name = "c1_c6_TCGA_all.csv"
+        var file_path = data_path + "subtype/c1_c6/" + "c1_c6_TCGA_all.csv"; 
     }
-    thead.appendChild(tr);
-
-
-    //create tbody
-    var tbody = document.createElement("tbody");
-    var tb_contents = tb_data["body"];
-    var nrow = tb_contents.length;
-    for(var i=0; i<nrow; i++){
-        var tr  = document.createElement("tr");
-        for (var j=0; j<ncol; j++){
-            var td = document.createElement("td");
-            td.innerHTML = tb_contents[i][j];
-            tr.appendChild(td);
-        }
-        tbody.appendChild(tr);
+    else {
+        var file_name = selected_cancer + "_c1_c6.csv"
+        var file_path = data_path + "subtype/c1_c6/cancer/" + file_name;
     }
+    immunelandscape("#landscapeVis", file_path);
 
-    // embedded
-    tb.appendChild(thead);
-    tb.appendChild(tbody);
-    return tb
+    document.getElementById("landscape_download").setAttribute("download", file_name);
+    document.getElementById("landscape_download").setAttribute("href", file_path);
 }
 
-export function selector(sid, slt_data){
-    var slt = document.createElement("select");
-    slt.className = "form-select col";
-    slt.id = sid;
-    slt.name = sid;
-    // create options
-    var first = true;
-    for(var option in slt_data){
-        var op = document.createElement("option");
-        if(first){
-            op.selected = true;
-            first = false;
-        }
-        op.innerHTML = option;
-        op.value = slt_data[option];
-        slt.appendChild(op);
-    }
-    return slt;
-}
+export function regulator_viz() {
+    var regulator_project_selector = document.getElementById("regulator_project_selector");
+    var pname = regulator_project_selector.value;
 
-export function text(pid, str){
-    var p = document.createElement("p");
-    p.id = pid;
-    p.innerHTML = str;
-    return p;
-}
-
-
-
-export function construct_block(Bid, block_data){
-    var block_div = document.createElement("div");
-    block_div.className = "container Block";
-    block_div.id = Bid;
-
-    var keys = Object.keys(block_data);
-    var key = keys[0];
-    var selects = block_data[key];
-
-    var ncontent = key.length;
-    var i = 0;
-
-    // create text description if any
-    if(key[0]=="H"){
-        var cid = "H"+Bid
-        var head_block = document.createElement("div");
-        head_block.id = cid;
-        head_block.className = "row description";
-        block_div.appendChild(head_block);
-        key = key.substring(1);
-        ncontent -= 1;
-    }
-
-
-    // first create selects row
-    var slt_row = document.createElement("div");
-    slt_row.className = "select_bar form-inline row";
-    var nslt = selects.length;
-
-    // create select element
-    // update function: title on select box
-    for(var j=0; j<nslt; j++){
-        var sblock = document.createElement("div");
-        var stitle = document.createElement('div');
-        var selectbox = selects[j]['select'];
-        sblock.className = "sdiv col";
-        stitle.className = "select_title"
-        stitle.innerHTML = selects[j]['title'];
-        var sid = 'S'+j+Bid;
-        var slt = selector(sid, selectbox);
-        sblock.append(stitle);
-        sblock.append(slt);
-        slt_row.appendChild(sblock);
-    }
-    block_div.appendChild(slt_row);
-
+    var subtype_fname = pname + "_c1_c6.csv";
+    var rna_fname = "immuReg_" + pname + ".csv";
     
-    
-    // then create content
-    var block = document.createElement("div");
-    block.className = "row";
-    
-    for(var i=0; i<ncontent; i++){
-        var type = key[i];
-        var cid = type+i+Bid
-        var content_block = document.createElement("div");
-        content_block.id = cid;
-        if(ncontent>1 && i==0){
-            content_block.className = "col-md-4";
-        }
-        else if(ncontent>1 && i==1){
-            content_block.className = "col-md-8";
-        }
-        else{
-            content_block.className = "col";
-        }
-        
-        block.appendChild(content_block);
-    }
-    block_div.appendChild(block);
-    return block_div
-}
+    var subtype_file_path = data_path + "subtype/c1_c6/project/" + subtype_fname;
+    var rna_file_path = data_path + "immuneregulator/" + rna_fname;
 
-// by this function, all containers are made and added in body element
-export function makeHTMLframe(body, struct_data){
-    var nBlock = struct_data.length;
-    for(var i=0; i<nBlock; i++){
-        var id = "B"+i;
-        var B = construct_block(id, struct_data[i]);
-        body.appendChild(B);
-    }
-}
+    immuneRegulator("#regulatorVis", subtype_file_path, rna_file_path);
 
-// fill in the block with data, (table, text, viz for default value)
-export function fillinblock(cid, relation_key, relation_data, content_data){
-    // is description
-    if(cid[0] == 'H'){
-        var hdk = relation_data['h'][relation_key];
-        var hdata = content_data['h'][hdk];
-        var hid = cid;
-        description(hid, hdata);
-    }
-    
-    // have graph
-    if(cid[0] == 'V'){
-        var vdk = relation_data["v"][relation_key];
-        var vdata = content_data['v'][vdk]; 
-        var vid = "#" + cid;
-        viz(vid, vdata);
-    }
-    // have table
-    if(cid[0] == 'T'){
-        //console.log(relation_key);
-        var tdk = relation_data["t"][relation_key];
-        //console.log(tdk);
-        var tdata = content_data["t"][tdk];
-        //console.log(tdata);
-        var container = document.getElementById(cid);
-        var tid = "t"+cid;
-        container.innerHTML = '';
-        var tb = table(tid, tdata);
-        container.appendChild(tb);
-        
-    }
-    
-    // have text
-    if(cid[0] == 'X'){
-        var xdk = relation_data["x"][relation_key];
-        var xdata = content_data["x"][xdk];
-        var container = document.getElementById(cid);
-        var xid = "x"+cid;
-        container.innerHTML = '';
-        var text = text(xid, xdata);
-        container.appendChild(text);
+    document.getElementById("regulator_subtype").setAttribute("download", subtype_fname);
+    document.getElementById("regulator_subtype").setAttribute("href", subtype_file_path);
 
-    }
-
-    
-}
-
-
-export function initPage(main_id, data, tids){
-    
-    var struct_data = data["struct"];
-    var relation_data = data["relation"];
-    var init_data = data["init"];
-    var content_data = data["content"];
-    var body = document.getElementById(main_id);
-    makeHTMLframe(body, struct_data);
-    for (var key in init_data){
-        fillinblock(key, init_data[key], relation_data, content_data);
-    }
-    assign_tb_style(tids);
+    document.getElementById("regulator_rna").setAttribute("download", rna_fname);
+    document.getElementById("regulator_rna").setAttribute("href", rna_file_path);
 
 }
 
+export function all_viz() {
+    bar_viz();
+    pie_viz();
+    landscape_viz();
+    regulator_viz();
+}
 
-export function catch_change(data, tids){
-    
-    $('select').on('change', function() {
-        //console.log(data);
-        var struct_data = data["struct"];
-        var relation_data = data["relation"];
-        var content_data = data["content"];
-        var bro = this.parentElement.parentElement.children;
-        //console.log(bro);
-        var outer_block = this.parentElement.parentElement.parentElement;
-        var nbro = bro.length;
-        //console.log(nbro);
-        var new_k = "";
-        for (var i=0; i<nbro; i++){
-            if (i>0){
-                new_k += "_";
+export function initPage() {
+    all_viz();
+}
+
+$('.viz_download').on('click', (e) => {
+    var clicked_id = e.target.id;
+    const svgContainerClone = document.getElementById(clicked_id + "Vis").cloneNode(true);
+    const svgBlob = new Blob([svgContainerClone.innerHTML], { type: "image/svg+xml;charset=utf-8" });
+    const svgUrl = URL.createObjectURL(svgBlob);
+    const downloadLink = document.createElement("a");
+    downloadLink.href = svgUrl;
+    downloadLink.download = clicked_id + ".svg";
+    document.body.appendChild(downloadLink);
+    downloadLink.click();
+    document.body.removeChild(downloadLink);
+})
+
+export function catch_change(){
+
+    $("#pie_cancer_selector").on('change', function(){
+        $.ajax({
+            url: "/database/refreshSelector",
+            type: "GET",
+            data: {cancer_id: $(this).val()},
+            success: function(data) {
+                $("#pie_project_selector").children().remove();
+                var listItems = [];
+                $.each(data, function(index, item) {
+                    console.log(item)
+                    var pname = item["name"];
+                    listItems += '<option value = "' + pname + '">' + pname + '</option>'; 
+                });
+                $("#pie_project_selector").append(listItems);
+                $("#pie_project_selector").selectedIndex = 0;
             }
-            //console.log('string' + new_k);
-            new_k += bro[i].children[1].value;  
-            //console.log(bro[i].children);
-        }
-        //console.log(new_k);
-        var B_i = parseInt(outer_block.id[1]);
-        //console.log(B_i);
-        //console.log(struct_data[B_i]);
-        var type_key = Object.keys(struct_data[B_i])[0];
-        //console.log(type_key);
-        var ntype = type_key.length;
-        if(type_key[0]=="H"){
-            ntype -= 1;
-            type_key = type_key.substring(1);
-        }
-        
-        //console.log(type_key);
-        for (var i=0; i<ntype; i++){
-            var cid = type_key[i] + i + outer_block.id;
-            console.log(cid);
-            fillinblock(cid, new_k, relation_data, content_data);
-        }
-        if (Object.keys(struct_data[B_i])[0].includes("T")){
-            assign_tb_style(tids);
-        }
-                
+        })
+
+        pie_viz();
+
     });
+
+    $('.pie_react').on('change', function() {
+        pie_viz();
+
+    });
+
+    $('#bar-selector').on('change', function() {
+        bar_viz();
+        var file_name = document.getElementById("bar-selector").value + "_samples.tsv";
+        document.getElementById("bar_download").setAttribute("download", file_name);
+        document.getElementById("bar_download").setAttribute("href", "/public/data/sample_num/" + file_name);
+
+    });
+
+    
+    $('#regulator_project_selector').on('change', function() {
+        regulator_viz();
+    });
+
+    $('#landscape_cancer_selector').on('change', function() {
+        landscape_viz();
+    });
+
+    $("#regulator_cancer_selector").on('change', function(){
+        $.ajax({
+            //url: '@(Url.Action("refreshSelector","database"))',
+            url: "/database/refreshSelector",
+            type: "GET",
+            data: {cancer_id: $(this).val()},
+            success: function(data) {
+                $("#regulator_project_selector").children().remove();
+                var listItems = [];
+                $.each(data, function(index, item) {
+                    console.log(item)
+                    var pname = item["name"];
+                    listItems += '<option value = "' + pname + '">' + pname + '</option>'; 
+                });
+                $("#regulator_project_selector").append(listItems);
+                $("#regulator_project_selector").selectedIndex = 0; //Option 10
+            }
+        })
+        regulator_viz();
+    });
+
 }

@@ -1,0 +1,84 @@
+<% content_for:head do%>
+
+  <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.22/js/jquery.dataTables.min.js"></script>
+  <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/select/1.3.1/js/dataTables.select.min.js"></script>
+  <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/fixedcolumns/3.3.2/js/dataTables.fixedColumns.min.js"></script>
+
+  <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.22/css/jquery.dataTables.css">
+  <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/select/1.3.1/css/select.dataTables.min.css">
+  <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/fixedcolumns/3.3.2/css/fixedColumns.dataTables.min.css">
+  <%# <%= javascript_pack_tag "task-datatable" %>
+  <%= javascript_tag do %>
+    $(function () { 
+      var table = $("#table_page").DataTable({
+          searching: true,
+      }); 
+  })
+  <% end %>
+<%end%>
+
+<% content_for :title, 'Admin | Tasks' %>
+<div class="container">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item">
+      <%=link_to 'Admin home', '/admin' %>
+    </li> 
+    <li class="breadcrumb-item">
+      <%=link_to 'Projects', '#project_admin' %>
+    </li> 
+    <li class="breadcrumb-item">
+      <%=link_to 'Samples', '#sample_admin' %>
+    </li> 
+    <li class="breadcrumb-item">
+      <%=link_to 'Analysis Categories', admin_analysis_categories_path %>
+    </li> 
+    <li class="breadcrumb-item">
+      <%=link_to 'Analyses', admin_analyses_path %>
+    </li> 
+    <li class="breadcrumb-item">
+      <%=link_to 'tasks', admin_tasks_path %>
+    </li> 
+  </ol>
+
+  <h1>
+    Tasks
+  </h1>
+  <br/>
+
+
+  <%= content_tag :table, role: :datatable, class: "table table-striped table-bordered", id: "table_page" do %>
+    <thead>
+          <% @task_columns.each do |tc| %>
+            
+            <th> <%= tc %> </th>
+           
+          <% end %>
+          <th>Action</th>
+    </thead>
+    <tbody>
+      <% @tasks.each do |t| %>
+        <tr>
+          <% @task_columns.each do |attr| %>
+            <td> 
+              <div class="table_cell"> 
+                <%= attr == "description" ? t.description : t[attr] %> 
+              </div>
+            </td>
+          <% end %>
+          <td>
+           <div class="btn-group mr-2">
+              <%= link_to admin_task_path(t), class:'btn btn-sm btn-secondary' do %>
+                <i class="fas fa-search"></i> Check
+              <% end %>
+            </div>
+        </tr>
+      <% end %>
+    </tbody>
+  <% end %>
+
+
+</div>
+
+
+
+

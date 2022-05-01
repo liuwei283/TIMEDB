@@ -34,7 +34,6 @@ export default class FilterSamplesBind extends Vue {
 
     private showAll() {
         this.data.samples.forEach(d => d.show = true);
-        console.log("eeee");
         this.$nextTick(() => {
             this.$forceUpdate();
         });

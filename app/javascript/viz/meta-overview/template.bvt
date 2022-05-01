@@ -52,20 +52,31 @@ Component {
             y = yPos
             height = mainHeight
             static = true
-            Tree { //left side tree
-                height = mainHeight
-                width = offsetX
-                x = sizeSettings.padding
-                data = ovTree
-                direction = "right"
-                link.stroke = "#000"
-                :leaf {
-                    Component{}
+            @if drawTree {
+                Tree { //left side tree
+                    height = mainHeight
+                    width = offsetX
+                    x = sizeSettings.padding
+                    data = ovTree
+                    direction = "right"
+                    link.stroke = "#000"
+                    :leaf {
+                        Component{}
+                    }
+                    :node {
+                        Component{}
+                    }
                 }
-                :node {
-                    Component{}
+            } @else {
+                @for (sp, i) in species {
+                    Text {
+                        text = speciesMap[sp]
+                        anchor = @anchor("m", "r")
+                        y = gridH * (i + 0.5); x = offsetX - 5
+                    }
                 }
             }
+            
 
             Component {
                 static = true
@@ -110,7 +121,8 @@ Component {
                     @for (item, index) in boxplot.boxData{
                         Boxes {
                             static = true
-                            @let color = index === 0 ? colors.control : colors.gout
+                            // @let color = index === 0 ? colors.control : colors.gout
+                            @let color = metaInfo["Group"].color(boxplot.classifications[index])
                             key = index
                             data = "boxData" + (index + 1).toString()
                             showMean = true
@@ -378,13 +390,16 @@ Component {
         Rows {
             @for (c, i) in boxplot.classifications {
                 Component {
-                    @let color = i === 0 ? colors.control : colors.gout
+                    @let color = metaInfo["Group"].color(c)
                     height = 25
                     Line {
                         y1 = 4; y2 = 21; x = 10; stroke = color
                     }
                     Rect {
-                        x = 5; y = 8; height = 9; width = 10; fill = color
+                        x = 5; y = 8; height = 9; width = 10; stroke = color; strokeWidth = 1.5; fill = "white"
+                    }
+                    Line {
+                        x1 = 5; x2 = 15; y = 12; stroke = color
                     }
                     Text(c) {
                         anchor = @anchor("l", "m"); fontSize = 10; x = 18; y = 12

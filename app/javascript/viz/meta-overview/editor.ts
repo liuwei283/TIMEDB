@@ -170,7 +170,7 @@ export function editorConfig(v: any): EditorDef {
                                         get title() {
                                             return "Filter Samples";
                                         },
-                                        callback(hiddenSamples) {
+                                        callback(_, hiddenSamples) {
                                             v.data.hiddenSamples = new Set(hiddenSamples);
                                             filterSamples(v);
                                             v.root._sizeUpdated = true;

@@ -1,0 +1,4 @@
+- @analysis_categories.each do |c|
+    ul.list-unstyled.analysis
+        li.header class=('active' if @analysis_category == c)
+            = link_to c.name, {:controller => "submit", :action => "analysesCategory", :cname => c.name }

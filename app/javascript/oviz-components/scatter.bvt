@@ -17,21 +17,63 @@ GridPlot {
         }
     }
     :content(scatterData) {
+        @if clusterData && prop.drawEllipse {
+            @for (datum, cluster) in clusterData {
+                Component {
+                    x = @scaled-x(datum.center.x) - datum.ellipseData.dx
+                    y = @scaled-y(datum.center.y) - datum.ellipseData.dy
+                    @let clusterFill = colorGetter({cluster})
+                    Path {
+                        d = datum.ellipseData.ellipsePath
+                        strokeWidth = 2
+                        fill = prop.ellipseColor; fillOpacity = 0.2
+                        stroke = clusterFill
+                    }
+                    Path {
+                        d = datum.ellipseData.xAxisPath; dashArray = "4, 2"
+                        stroke = clusterFill
+                    }
+                    Path {
+                        d = datum.ellipseData.yAxisPath; dashArray = "4, 2"
+                        stroke = clusterFill
+                    }
+                }
+            }
+        }
+        @if clusterData && prop.drawCenterStrokes {
+            Dots {
+                :children(d) {
+                    @if (d.data.show) {
+                    Component {
+                        key = `linke${d.data.sampleId}` // this part is hard-coded
+                        Line {
+                            x2 = @scaled-x(clusterData[d.data.cluster].center.x) - @scaled-x(d.pos)
+                            y2 = @scaled-y(clusterData[d.data.cluster].center.y) - @scaled-y(d.value)
+                            stroke = prop.strokeColor
+                        }
+                    }
+                }
+                }
+            }
+        }
         Dots {
             :children(d) {
                 @if (d.data.show) {
                 Component {
                     key = d.data.sampleId // this part is hard-coded
                     cursor = "pointer"
-                    @let shape = prop.shapeGetter(d.data)
+                    @let shape = shapeGetter(d.data)
                     Component(shape) {
                         r = prop.scatterSize / 2; height = prop.scatterSize; width = prop.scatterSize;
-                        anchor = @anchor("c", "m"); fill = prop.hollow ? "#fff" : prop.colorGetter(d.data)
-                        stroke = prop.hollow ? prop.colorGetter(d.data) : "none" 
-                        strokeWidth = prop.hollow ? 2 : 0
+                        anchor = @anchor("c", "m")
+                        fill = prop.hollow ? "#fff" : colorGetter(d.data)
+                        fillOpacity = prop.scatterOpacity
+                        stroke = prop.hollow ? colorGetter(d.data) : "none" 
+                        strokeWidth = prop.hollow ? 1 : 0
                         behavior:tooltip {
-                            content = prop.generateTooltip(d.data)
+                            content = generateTooltip(d.data)
                         }
+                        @props prop.opt.scatter
                     }
                     on:click = markScatter(d)
                     on:dblclick = hideScatter(d)

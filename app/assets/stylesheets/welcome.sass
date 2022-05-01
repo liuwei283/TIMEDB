@@ -4,6 +4,82 @@
 
 @import "partials/variables"
 
+
+#introduction
+    padding-top: 10em
+    margin-bottom: 5em
+    img
+        width: 100%
+        
+    .member_photo
+        img
+            box-shadow: 0 0 64px darken(#dee2e6, 5%)
+        h6
+            padding-top: 1em
+    
+    .title
+        line-height: 38px
+        color: $light_theme
+        font-size: 3em
+        font-weight: bold
+        margin-bottom: 0.5em
+        padding-top: 25%
+
+    .content
+        padding-left: 10%
+        padding-right: 10%
+
+    
+    #teamDetails
+        //background: $gray-300
+        display: block
+        .title
+            //padding-top: 20%
+            text-align: center
+            //vertical-align: middle
+
+    .memberDetails
+        color: $white
+        display: none
+        background: $light_theme
+        width: 90%
+        height: 90%
+        border-radius: 50%
+        padding-right: 5%
+        padding-top: 5%
+        text-align: center
+
+        .title
+            color: $gray-300
+            text-align: center  
+
+    .flip-card
+        background-color: transparent
+        perspective: 2000px
+        .flip-card-inner
+            width: 100%
+            height: 100%
+            position: relative
+            transform-style: preserve-3d
+            transition: transform 0.8s cubic-bezier(0.75, 0, 0.85, 1);
+            
+        &:hover .flip-card-inner
+            transform: rotateY(180deg)
+        .flip-card-front, .flip-card-back
+            position: absolute
+            width: 100%
+            height: 100%
+            -webkit-backface-visibility: hidden
+            backface-visibility: hidden
+        .flip-card-back
+            transform: rotateY(180deg)
+        #teamDetailsBack
+            display: none
+
+#wrapper
+    background-color: #f8f9fa
+
+
 .doap-account-card
     margin: 6rem auto
     color: $gray-800
@@ -35,7 +111,7 @@
 footer.page-footer
     // height: $footer-height
     padding: 20px 0
-    background: $gray-900
+    background: $light_theme
     color: $white
     ul
         padding-left: 0
@@ -45,28 +121,39 @@ footer.page-footer
     h4
         margin: 30px 0
     hr
-        border-bottom: 1px solid #333
-        border-top: 1px solid #111
-    p, ul
-        color: $gray-500
+        border-bottom: 1px solid darken($light_theme, 5%)
+        border-top: 1px solid darken($light_theme, 5%)
+    p, ul, h4
+        color: $white
 
 body.welcome
     .navbar
         z-index: 1
     .navbar.navbar-light
-        border-bottom: 1px solid #aaa
+        //border-bottom: 1px solid #aaa
     section
         &.heading
+            background-image: url("welcomeBGImage.png")
+            background-repeat: no-repeat
+            background-size: cover
+            background-position: center center
             position: relative
-            padding: 8rem 0 12rem 0
+            padding: 10rem 0 12rem 0
+            color: $black
             h1
-                font-size: 5rem
+                font-size: 4rem
                 font-weight: 300
                 line-height: 1.2
+                color: $black
                 .em
-                    font-size: 4.8rem
-                    color: lighten($pink, 5%)
+                    font-size: 5rem
+                    color: #314893
                     font-weight: bold
+            p
+                color: $black
+            li
+                color: $black
+
             .index-bg
                 position: absolute
                 z-index: 0
@@ -128,59 +215,85 @@ body.welcome
                     bottom: -1rem
                     height: 2px
                     background: $gray-400
-        &#dataset_list
-            width: 100%
-            height: 15rem
-            background-color: #f8f9fa
-            color: #000000
-            padding: 2em
-            .elemet_wrapper 
-                padding: 2em 0em
-                span.ds
-                    border-radius: 10px
-                    box-shadow: 0 0 32px darken($gray-300, 5%)
-                    height: 5rem
-                    background-color: #ffffff
-                    width: 20%
-                    margin: 1rem 3rem 1rem 0rem
-                    font-weight: bold
-                    color: #000000
-                    padding: 2rem
-                    text-align: center
-                    font-size: small
-                    a
-                        color:#000000
-
+        
         &#function_card
             width: 100%
             height: auto
             background-color: #f8f9fa
             color: #000000
             padding: 2em
+            .container
+                text-align: center
+            
             #cards_wrapper
                 
                 width: 100%
                 padding: 1em
-                
-                .card
-                    border-radius: 50px
-                    box-shadow: 0 0 32px darken($gray-300, 5%)
-                    display: table-cell
-                    height: 100%
-                    width: 25%
-                    overflow: hidden
-                    font-size: 13px
-                    padding: 2em
-                    
-                    .card_img
-                        width: 100%
-                        img
-                            width: 100%   
-                    .card_body
-                        h5
-                            text-align: center
-                        padding: 10px
-                        width: 100%
+
+                .row
+                    display: flex
+                    align-items: center
+
+                    .icon
+                        //border-radius: 50px
+                        //box-shadow: 0 0 32px darken($gray-300, 5%)
+                        display: table-cell
+                        height: 100%
+                        width: 25%
+                        overflow: hidden
+                        font-size: 13px
+                        padding: 2em
+                        
+                        .icon_img
+                            width: 100%
+                            img
+                                // display: block
+                                width: 100%
+                                // height: 10vw
+                                // object-fit: cover
+                        h5 
+                            padding: 10px
+                            width: 100%
+
+        &#platform_highlight 
+            width: 100%
+            height: auto
+            background-color: #f8f9fa
+            color: #000000
+            padding: 2em
+            .container
+                text-align: center
+                .carousel
+                    width: 100%
+                    //position: relative
+                    padding-top: 5em
+                    ol.carousel-indicators
+                        //display: block
+                        top: 1em
+                        //justify-content: center
+                        // display: flex
+                        // align-items: center
+                        //margin: auto
+                        //padding-left: 15px
+                        //padding-right: 15px
+                        li
+                            //display: inline-block
+                            background-color: $light_theme
+                            //width: 4%
+                            //height: 8px
+                            margin-left: 3em
+                            margin-right: 3em
+                            //border-radius: 10px
+                            //box-shadow: 0 0 32px darken($gray-300, 5%)
+                            &.active
+                                transform: scale(1.8)
+
+                    .carousel-inner
+                        //top: 6em
+                        //margin-top: 5%
+                        .carousel-item img
+                            width: 100%
+                            //height: 400px
     
            
     .doap-index-card
@@ -204,3 +317,6 @@ body.welcome
             min-height: 500px
             p 
                 margin-top: 200px
+
+
+

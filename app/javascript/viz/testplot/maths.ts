@@ -1,0 +1,100 @@
+import {minmax} from "crux/dist/utils/math";
+// find the valid bound
+export function findUpperBoundDec(x, sigDigit, power = 0) {
+    if (x < 0) {
+        console.error("Bound must be positive value");
+        return;
+    }
+    if (x === 0) return 0;
+    
+    if (x < Math.pow(10, sigDigit - 1))
+        return findUpperBoundDec(10 * x, sigDigit, power + 1);
+    else if (x > Math.pow(10, sigDigit))
+        return findUpperBoundDec(10 * x, sigDigit, power - 1);
+    else {
+        const numTen = 10 * Math.floor(x / 10);
+        const dig = x - numTen;
+        return (numTen + (dig > 5 ? 10 : dig === 0 ? 0 : 5)) / Math.pow(10, power);
+    }
+}
+
+export function findLowerBoundDec(x, sigDigit, power = 0) {
+    if (x < 0) {
+        console.error("Bound must be positive value");
+        return;
+    }
+    if (x === 0) return 0;
+    if (x < Math.pow(10, sigDigit - 1))
+        return findLowerBoundDec(10 * x, sigDigit, power + 1);
+    else
+        return Math.floor(x) / Math.pow(10, power);
+}
+
+export function findUpperBound(x: number, sigDigit: number, power = 0): number {
+    if (x < 0) {
+        console.error("Bound must be positive value");
+        throw Error("Bound must be positive value");
+    }
+    if (x === 0) return 0;
+    if (x < Math.pow(10, sigDigit - 1))
+        return findUpperBound(10 * x, sigDigit, power + 1);
+    else if (x > Math.pow(10, sigDigit)){
+        return findUpperBound(x/10, sigDigit, power - 1)}
+    else {
+        const numTen = 10 * Math.floor(x / 10);
+        const dig = x - numTen;
+        if(power<-2){
+            const data=(dig /Math.pow(10, power))
+            const data2=data.toFixed(2)
+            return parseFloat(data2);
+        }   
+        else{
+            if (x<1){
+                return (((Math.ceil(dig)) / Math.pow(10, power+1))+2);
+            }
+            else
+                return ((numTen +Math.ceil(dig)) / Math.pow(10, power));
+        }
+    }
+}
+
+export function findLowerBound(x: number, sigDigit: number = 2): number {
+    if (x <= 2)
+        return findLowerBoundDec(x, sigDigit);
+    if (x <= 100 && x>2){
+        return parseFloat(Math.floor(x).toPrecision(sigDigit));
+    }
+    if (x > 100)
+        return Math.floor(x)
+}
+
+export function computeLog(number, base = 10): number {
+    return Math.log(number) / Math.log(base);
+}
+
+export function findBoundsForValues(values: number[], sigDigit: number,
+                                    isSym: boolean= false, padding: number = 0) {
+    let [min, max] = minmax(values);
+    if (padding !== 0) {
+        const range = max - min;
+        min = min - range * padding;
+        max = max + range * padding;
+    }
+    let lowerBound, upperBound;
+    if (min < 0 && max > 0) {
+        if (isSym) {
+            const bound = findUpperBound( max > -min ? max : -min , sigDigit);
+            return [-bound, bound];
+        } else {
+            upperBound = findUpperBound(max, sigDigit);
+            lowerBound = Math.sign(min) * findUpperBound(Math.abs(min), sigDigit);
+        }
+    } else if (max > 0) {
+        upperBound = findUpperBound(max, sigDigit);
+        lowerBound = findLowerBound(min, sigDigit);
+    } else if (max < 0) {
+        upperBound = -findLowerBound(-max, sigDigit);
+        lowerBound = findLowerBound(min, sigDigit);
+    }
+    return [lowerBound, upperBound];
+}
