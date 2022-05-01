@@ -1,6 +1,5 @@
 source 'https://rubygems.org'
 source 'http://insecure.rails-assets.org'
-
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
 ruby '2.7.1'
@@ -22,6 +21,8 @@ gem 'turbolinks', '~> 5'
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
 gem 'jbuilder', '~> 2.7'
 
+gem 'devise'
+gem 'rolify'
 gem 'slim'
 gem 'font-awesome-sass', '~> 5.4.1'
 gem 'slim-rails'
@@ -34,16 +35,10 @@ gem 'hashids'
 gem 'simple_form'
 gem 'rubyzip'
 gem 'redcarpet'
+gem "httparty"
 
 # bio-tabix for tabix data query api
 gem 'bio-tabix', github: 'lhc70000/bio-tabix'
-# Use Redis adapter to run Action Cable in production
-# gem 'redis', '~> 4.0'
-# Use Active Model has_secure_password
-# gem 'bcrypt', '~> 3.1.7'
-
-# Use Active Storage variant
-# gem 'image_processing', '~> 1.2'
 
 # Reduces boot times through caching; required in config/boot.rb
 gem 'bootsnap', '>= 1.4.2', require: false
@@ -64,7 +59,6 @@ group :development do
   gem 'spring-watcher-listen', '~> 2.0.0'
   gem 'rubocop'
   # Access an interactive console on exception pages or by calling 'console' anywhere in the code.
-  gem "capistrano", "~> 3.10", require: false
   gem "capistrano-rails", "~> 1.3", require: false
   gem 'capistrano-bundler', require: false
   gem 'capistrano-rbenv', require: false
@@ -72,6 +66,8 @@ group :development do
   gem 'capistrano3-puma'
   gem 'capistrano-rails-console', require: false
   gem 'capistrano-rails-db', require: false
+  gem 'ed25519', '>= 1.2', '< 2.0'
+  gem 'bcrypt_pbkdf', '>= 1.0', '< 2.0'
 end
 
 group :test do
@@ -89,7 +85,3 @@ gem 'rails-assets-datatables', source: 'http://insecure.rails-assets.org'
 gem 'kaminari'
 gem 'ajax-datatables-rails'
 gem 'jquery-datatables-rails'
-
-#gem 'bootstrap-select-rails'
-
-#gem 'cookies_eu'
