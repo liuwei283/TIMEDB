@@ -88,62 +88,6 @@ up to here -->
 
 <br />
 <hr />
-<section id = "cancer_icon">
-    <h2>Cancer Type</h2>
-    
-    <div id = "cancerIcons" class="collapse" aria-expanded="false" class = "container-fluid container">
-        <div class = "row cols-xs-space cols-sm-space cols-md-space text-center">            
-            <% @singleCancers.each do |cc| %>
-                <div class = "col-lg-2 col-lg-offset-1 mb-4">
-                    <%= link_to cc do %>
-                        <%= image_tag cc.cancer_type + ".png", class: "rounded-circle z-depth-2" %>
-                    <% end %>
-                    <h4> <%= cc.cancer_name %> </h4>
-                </div>
-            <% end %>
-            
-            <div class = "col-lg-2 col-lg-offset-1 mb-4">
-                    <div type="button" class="fa fa-lightbulb-o fa-lg" title="Cancers List" data-toggle="popover" title="" data-content= ' 
-                    <%#= render :partial => 'partials/popover' %>
-                    <ul>
-                    <% @kidneyCancers.each do |kc| %>
-                        <li><%= link_to kc.cancer_name, kc %></li>
-                    <% end %>
-                    </ul>
-                    '> 
-                    <%= image_tag "Kidney.png", class: "rounded-circle z-depth-2" %> 
-                    </div> 
-                    <h4> Kidney related cancers </h4>
-            </div>
-            <div class = "col-lg-2 col-lg-offset-1 mb-4">
-                    <div type="button" class="fa fa-lightbulb-o fa-lg" title="Cancers List" data-toggle="popover" title="" data-content= ' 
-                    <%#= render :partial => 'partials/popover' %>
-                    <ul>
-                    <% @leukemiaCancers.each do |lc| %>
-                        <li><%= link_to lc.cancer_name, lc %></li>
-                    <% end %>
-                    </ul>
-                    '> 
-                    <%= image_tag "Leukemia.png", class: "rounded-circle z-depth-2" %> 
-                    </div> 
-                    <h4> Leukemia related cancers </h4>
-            </div>
-            <div class = "col-lg-2 col-lg-offset-1 mb-4">
-                <% cancer_other = Cancer.find_by(cancer_type: "Other") %>
-                <%= link_to cancer_other do %>
-                    <%= image_tag "Other.png", class: "rounded-circle z-depth-2" %>
-                <% end %>
-                <h4> <%= "Others" %> </h4>
-            </div>
-            <div class = "col-lg-2 col-lg-offset-1 mb-4">
-                    <h1> . . . </h1>
-            </div>
-        </div>
-    </div>
-    <div>
-        <div id = "collapseButton" role="button" class="collapsed" data-toggle="collapse" href="#cancerIcons" aria-expanded="false" aria-controls="cancerIcons"></div>
-    <div>
-</section>
 <hr />
 
 
