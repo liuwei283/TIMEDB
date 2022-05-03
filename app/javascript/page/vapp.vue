@@ -36,8 +36,8 @@
                     <p v-if="msgBoxUseHTML" class="my-2" v-html="msgBoxContent"></p>
                     <p v-else class="my-2">
                         <pre>{{msgBoxContent}}</pre>
-                </p>
-            </b-modal>
+                    </p>
+                </b-modal>
             </div>
         </div>
         <EditText/>

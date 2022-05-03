@@ -2,6 +2,7 @@ class CreateSamples < ActiveRecord::Migration[6.0]
   def change
     create_table :samples do |t|
       t.string :sample_name
+      t.string :cancer_name
       t.string :project_name
       t.string :c_tumor_stage
       t.string :c_tumor_grade

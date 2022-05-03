@@ -3,169 +3,119 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 catch_change();
 
-import { data } from "jquery";
-// export function selector(sid, slt_data, selector_name) {
-//     var slt = document.createElement("select");
-//     slt.className = "form-select col";
-//     slt.id = sid;
-//     if (selector_name != null) {
-//         slt.name = selector_name;
-//     }
-    
-// }
 
-
-// export function construct_block(Bid, block_data) {
-//     var block_div = document.createElement("div");
-//     block_div.className = "container Block";
-//     block_div.id = Bid;
-
-//     var keys = Object.keys(block_data);
-//     var contentsType = keys[0];
-//     var selects = block_data[key];
-//     var num_of_contents = key.length;
-//     var i = 0;
-
-//     // create text description/header
-//     if (key[0] == "H") {
-//         var cid = "H" + Bid;
-//         var head_block = document.createElement("div");
-//         head_block.id = cid;
-//         head_block.className = "row description";
-//         block_div.appendChild(head_block);
-//         key = key.substring(1);
-//         num_of_content -= 1;
-//     }
-
-//     // first create selector row - a div block
-//     var slt_row = document.createElement("div");
-//     slt_row.className = "select_bar form_inline row";
-//     var num_of_selectors = selects.length;
-
-//     //create selector elements
-//     for (var j = 0; j < num_of_selectors; j++) {
-//         var sblock = document.createElement("div");
-//         var stitle = document.createElement("div");
-//         var selectbox = selects[j]['select']
-//         sblock.className = "sdiv col";
-//         stitle.className = "select_title"
-//         stitle.innerHTML = selects[j]['title'];
-//         var sid = 'S' + j + Bid;
-//         var selector_name = null;
-//         if (selects[j].hasOwnProperty('name')) {
-//             selector_name = selects[j]['name'];
-//         }
-//         var slt = selector(sid, selectbox, selector_name);//make the jth select box
-
-
-//     }
+import {init as subtypeLandscape} from "viz/static_ProjectImmuneSubtype"
+import {init as subtypeBoxplot} from "viz/static_ImmuneCell"
+import {init as subtypeCurve} from "viz/static_SurvivalLine"
+import {init as subtypeRegulator} from "viz/static_immuneRegulators"
 
 
 
-// }
+import {init as fractionPie} from "viz/static_fraction_pie"
+import {init as fractionBoxplot} from "viz/static_fraction_boxplot"
+import {init as fractionGroupBoxplot} from "viz/static_fraction_grouped_boxplot"
+import {init as fractionLandscape} from "viz/static_comparedPlot"
 
 
 
-
-
-// export function makeHTMLframe(body) {
-//     var nBlock = struct_data.length;
-//     for (var i = 0; i < nBlock; i++) {
-//         var id = "B" + i;
-//         var B = construct_block(id, struct_data[i]);
-//         body.appendChild(B);
-//     }
-// }
-
-
-import {init as immunelandscape} from "viz/static_ProjectImmuneSubtype"
-import {init as immunebar} from "viz/static_ImmuneCell"
-import {init as immuneline} from "viz/static_SurvivalLine"
-import {init as immuneRegulator} from "viz/static_immuneRegulators"
-
-
-import {init as immuneCompare} from "viz/static_comparedPlot"
 
 
 
 var data_path = "/public/data/";
-var project_name = window.gon.project_name
-var cancer_type = window.gon.cancer_type
+var project_name = window.gon.project_name;
+var cancer_type = window.gon.cancer_type;
 
-export function landscape_viz() {
-    //var subtype_method_selector = document.getElementById("landscape_method_selector");
-    //var selected_method = subtype_method_selector.value;
-    var clinical_file_path = data_path + "Clinical/sample/Clinical_" + project_name + ".csv";
-    var subtype_file_path = data_path + "subtype/c1_c6/project/" + project_name + "_c1_c6.csv";
-    //var clinical_file_path = data_path + "Clinical/ClinicalDataTest.csv"
-    //var subtype_file_path = data_path + "subtype/projectSubtypeSurvival.csv"
-    immunelandscape("#landscapeVis", subtype_file_path, clinical_file_path);
+var clinical_file_path = data_path + "clinical/sample/Clinical_" + project_name + ".csv";
+var subtype_file_path = data_path + "subtype/c1_c6/project/" + project_name + "_c1_c6.csv";
+var subtype_file_path = data_path + "subtype/c1_c6/project/" + project_name + "_c1_c6.csv";
+var rna_file_path = data_path + "immuneregulator/immuReg_" + project_name + ".csv";
+
+
+
+export function subtype_landscape_viz() {
+    subtypeLandscape("#subtype-landscapeVis", subtype_file_path, clinical_file_path);
 }
 
-export function bar_viz() {
-    var subtype_method_selector = document.getElementById("bar_method_selector");
+export function subtype_boxplot_viz() {
+    var subtype_method_selector = document.getElementById("subtype-boxplot-method-selector");
     var selected_method = subtype_method_selector.value;
     var cellData_file_path = data_path + "cell_data/" + selected_method + "/" + project_name + "_" + selected_method + ".csv";
-    var subtype_file_path = data_path + "subtype/c1_c6/project/" + project_name + "_c1_c6.csv";
-    //var cellData_file_path = data_path + "cell_data/CellData.csv";
-    //var subtype_file_path = data_path + "subtype/immuneCell.csv";
-    immunebar("#barVis", subtype_file_path, cellData_file_path);//remember to change to the right plot
-
+    subtypeBoxplot("#subtype-boxplotVis", subtype_file_path, cellData_file_path);//remember to change to the right plot
 }
 
-export function line_viz() {
-    var clinical_file_path = data_path + "Clinical/sample/Clinical_" + project_name + ".csv"
-    var subtype_file_path = data_path + "subtype/c1_c6/project/" + project_name + "_c1_c6.csv";
-    //var clinical_file_path = data_path + "Clinical/ClinicalDataTest.csv"
-    //var subtype_file_path = data_path + "subtype/projectSubtypeSurvival.csv"
-    immuneline("#lineVis", subtype_file_path, clinical_file_path);
+export function subtype_curve_viz() {
+    subtypeCurve("#subtype-curveVis", subtype_file_path, clinical_file_path);
 }
 
-export function regulator_viz() {
-    var subtype_file_path = data_path + "subtype/c1_c6/project/" + project_name + "_c1_c6.csv";
-    var rna_file_path = data_path + "immuneregulator/immuReg_" + project_name + ".csv";
+export function subtype_regulator_viz() {
+    subtypeRegulator("#subtype-regulatorVis", subtype_file_path, rna_file_path);
+}
 
-    //var rna_file_path = "/public/data/RNA/regulator_RNAdata.csv"
-    //var subtype_file_path = "/public/data/subtype/regulator_subtype.csv"
+export function fraction_pie_viz() {
+    var selected_column = document.getElementById("fraction-pie-selector").value;
+    fractionPie("#fraction-pieVis", clinical_file_path, 'c_' + selected_column);
+    console.log('c_' + selected_column)
+}
 
-    immuneRegulator("#regulatorVis", subtype_file_path, rna_file_path);
-    
+export function fraction_boxplot_viz() {
+    var selected_method = document.getElementById("fraction-boxplot-selector").value;
+    var cellData_file_path = data_path + "cell_data/" + selected_method + "/" + project_name + "_" + selected_method + ".csv";
+
+    if (selected_method == "Consensus") {
+        fractionGroupBoxplot("#fraction-boxplotVis", cellData_file_path)
+    }
+    else {
+        fractionBoxplot("#fraction-boxplotVis", cellData_file_path);
+    }
 }
 
 
-export function compared_viz() {
-    var type = document.getElementById("compare_type_selector").value;
+
+
+export function fraction_landscape_viz() {
+    var type = document.getElementById("fraction-landscape-selector").value;
     var file_name = project_name + "_Consensus.csv";
     var file_path = data_path + "cell_data/Consensus/" + file_name;
 
-    document.getElementById("compared_data").setAttribute("download", file_name);
-    document.getElementById("compared_data").setAttribute("href", file_path);
+    // document.getElementById("compared_data").setAttribute("download", file_name);
+    // document.getElementById("compared_data").setAttribute("href", file_path);
     
-    immuneCompare("#comparedVis", file_path, type);
+    fractionLandscape("#fraction-landscapeVis", file_path, type);
 }
 
 export function all_viz() {
-    landscape_viz();
-    bar_viz();
-    line_viz();
-    regulator_viz();
+    //subtype overview
+    subtype_landscape_viz();
+    subtype_boxplot_viz();
+    subtype_curve_viz();
+    subtype_regulator_viz();
 
-    compared_viz();
+    //fraction overview
+    fraction_pie_viz()
+    fraction_boxplot_viz()
+    fraction_landscape_viz();
 
 }
 
 export function catch_change(){
-    $('#landscape_method_selector').on('change', function() {
-        landscape_viz();
+
+    $('#subtype-boxplot-method-selector').on('change', function() {
+        subtype_boxplot_viz();
     });
 
-    $('#bar_method_selector').on('change', function() {
-        landscape_viz();//remember to change to the right plot
+    $('#fraction-landscape-selector').on('change', function() {
+        fraction_landscape_viz();
     });
 
-    $('#compare_type_selector').on('change', function() {
-        compared_viz();
+    $('#fraction-boxplot-selector').on('change', function() {
+        fraction_boxplot_viz();
     });
+
+    $('#fraction-pie-selector').on('change', function() {
+        fraction_pie_viz();
+    });
+
+
 
 }
 

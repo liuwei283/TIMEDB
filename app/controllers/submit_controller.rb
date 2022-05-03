@@ -11,14 +11,16 @@ class SubmitController < ApplicationController
   def analysesCategory
     @analysis_categories = AnalysisCategory.order(:name)
     @analysis_category = AnalysisCategory.find_by name:params[:cname]
+
+    gon.push cname: params[:cname]
+
+    logger.error (params[:cname])
+    
+    @analyses = @analysis_category.analyses
   end
 
   def pipelines
     @pipelines = AnalysisPipeline.where "hidden = false and pid is not null"
-  end
-
-  def demo
-    gon.push isJobDemoPage: true
   end
 
 

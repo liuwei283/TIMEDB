@@ -131,7 +131,7 @@ class AdminController < ApplicationController
                 cprojects = cancer.projects
                 if cprojects.count > 0
                     firstpname = cprojects.first.project_name
-                    firstFName =  firstpname + '_' + subtype_method + '.csv' 
+                    firstFName =  'TCGA_ACC_' + subtype_method + '.csv' 
                     firstFPath = "#{$data_dir}subtype/#{subtype_method}/project/#{firstFName}"
                     sub_headers = CSV.open(firstFPath, &:readline)
 
@@ -143,8 +143,10 @@ class AdminController < ApplicationController
                             csv << [pname]
                             fname = pname + '_' + subtype_method + '.csv' 
                             fpath = "#{$data_dir}subtype/#{subtype_method}/project/#{fname}"
-                            CSV.foreach(fpath, headers: true, return_headers: false) do |row| # don't output the headers in the rows
-                                csv << row # append to the final file
+                            if File.exists?(fpath)
+                                CSV.foreach(fpath, headers: true, return_headers: false) do |row| # don't output the headers in the rows
+                                    csv << row # append to the final file
+                                end
                             end
                         end
                     end
