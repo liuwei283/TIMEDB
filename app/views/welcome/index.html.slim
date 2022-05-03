@@ -3,11 +3,10 @@
 //script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"
 //link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous"
 
-
+-use_dark = session[:dark]
 - content_for :title
   | Immune
-
-section#intro_text.heading.bg-light.text-light
+section#intro_text.heading 
   / svg.index-bg width="100%" viewBox="0 0 1920 2820"
   /   path d="M0,0 L0,2700 L400,2820 L1920,2620 L1920,0 Z" fill="#343a40"
   .container
@@ -84,7 +83,7 @@ section#function_card
           .icon
             .icon_img
               =link_to '/database/overview'
-                =image_tag "icons brightmode12.png", :alt=>"Human Gut Metagenomics.png"
+                =image_tag (use_dark ? 'icons darkmode12.png' : 'icons brightmode12.png'), :alt=>"Human Gut Metagenomics.png"
       
         .col-lg-4.mb-4.
           h5.text-left
@@ -101,12 +100,12 @@ section#function_card
           .icon
             .icon_img
               =link_to "/visualizer"
-                =image_tag "icons brightmode22" , :alt=>"Visualize your results.png"
+                =image_tag (use_dark ? 'icons darkmode22.png' : 'icons brightmode22.png'), :alt=>"Visualize your results.png"
         .col-lg-4.mb-4
           .icon
             .icon_img
               =link_to '/submit/analyses'
-                =image_tag "icons brightmode32", :alt=>"Human Gut Metagenomics.png"
+                =image_tag (use_dark ? 'icons darkmode32.png' : 'icons brightmode32.png'), :alt=>"Human Gut Metagenomics.png"
         .col-lg-4.mb-4.
           h5.text-left
             |Analyses
@@ -123,7 +122,7 @@ section#function_card
           .icon
             .icon_img
               =link_to "/submit/pipelines"
-                =image_tag "icons brightmode42", :alt=>"Analyze you data.png"
+                =image_tag (use_dark ? 'icons darkmode42.png' : 'icons brightmode42.png'), :alt=>"Analyze you data.png"
 
 
 

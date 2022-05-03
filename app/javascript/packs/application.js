@@ -105,4 +105,38 @@ document.addEventListener('DOMContentLoaded', (event) =>  {
         }, ALERT_TIMEOUT);
     });
 
+    if($('#dark').length){
+        //all
+        $('#topbar').toggleClass('dark bg-light navbar-light dark-head        ');
+        $('#state_now').toggleClass('fa-sun fa-moon');
+        $('.container').toggleClass('text-light');
+        $('#wrapper').css('background-color','#333');
+        $('section').toggleClass('dark text-light');
+        $('h1').css('color',"#86E5E9");
+        $('h2').css('color',"#86E5E9");
+
+        $('.footer.page-footer').css('background','#86E5E9');
+        
+        //home
+        $('.heading').css("background-image","url('assets/welcomeBGImagedark.png')");
+        $('i.fa.fa-chevron-down').css('color',"#86E5E9");
+        $('span.em').css('color',"#86E5E9");
+        $('h5.text-left').css('color',"#86E5E9");
+        $('h5.text-right').css('color',"#cc4f78");
+        //work space
+        $('#dataset_list').css('background-color','#3b3b3b');
+        $('.query-card').css('background-color','#3b3b3b');
+
+        // //Analysis visualization
+         $('#sidebar').css('background-color','#333');
+         $('#run-app').css('background-color','#333');
+
+        // //admin/analysis_categories
+        // $('.card').css('background-color','#343a40');
+        // $('.sortable-list > .list-group-item').css('background-color','#3b3b3b');
+
+        // //admin
+        // $('.breadcrumb').css('background-color','#3b3b3b');
+        
+    };
 });
