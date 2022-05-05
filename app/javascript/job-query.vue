@@ -326,6 +326,7 @@ export default {
 
 <style lang="scss">
 #job-query {
+    background-color: #f8f9fa;
     min-height: 900px;
     max-height: 1200px;
     margin-top: 10px;
@@ -336,6 +337,8 @@ export default {
 }
 
 #job-query .query-card {
+    background-color: #f8f9fa;
+
     margin: 20px;
 	padding: 3rem;
 }

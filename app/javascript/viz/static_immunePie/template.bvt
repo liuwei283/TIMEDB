@@ -1,17 +1,20 @@
 svg {
-	width = 800
+	width = 1000
 	height = 600
 	Component {
 		Text {
-			x = 50%-50
+			x = 500
 			text = title
 			fontSize = 20
 			anchor = @anchor("top","center")
 		}
 		PieChart {
-			height = @geo(100, -100); width = @geo(100, -100); padding = 20 //设置在窗口的中间位置
+			anchor = @anchor("m","c")
+			x = 500
+			y = 300
+			height = 500
+			height = 500
 			data = pieData
-			// innerRadius = 50%
 			pieProps = {
 				stroke: "white"
 			}
@@ -29,29 +32,11 @@ svg {
 			// 图例
 			:legend(d) {
 				Legend {
-					x = @geo(100, 0)
-					anchor = @anchor("t", "r")
+					x = 800
+					anchor = @anchor("t", "l")
 					bg.stroke = "none"
 					bg.fill = "none"
-					data = d.slice(0,40)
-				}
-				@if d.length > 50 {
-					Legend {
-						x = @geo(100, -100)
-						anchor = @anchor("t", "r")
-						bg.stroke = "none"
-						bg.fill = "none"
-						data = d.slice(40, 80)
-					}
-				}
-				@if d.length > 100 {
-					Legend {
-						x = @geo(0, 50)
-						anchor = @anchor("t", "r")
-						bg.stroke = "none"
-						bg.fill = "none"
-						data = d.slice(80)
-					}
+					data = d
 				}
 			}
 		}

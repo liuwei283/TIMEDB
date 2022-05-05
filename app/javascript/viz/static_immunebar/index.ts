@@ -9,7 +9,7 @@ const colors = ["#66c", "#fcf"];
 
 const MODULE_NAME = "immuneBar";
 
-export function init(id, path, config) {
+export function init(id, path) {
     // if (!window.gon || window.gon.module_name !== MODULE_NAME) return;
 
     const {visualizer} = Oviz.visualize({

@@ -1,0 +1,35 @@
+svg {
+	width = 600;height = 600
+	Component {
+		y = 20
+		Text {
+			x = 100;y = 40
+			fontSize = 14
+			text = "Current Column:" + "  "+ generText(chosenColumn) + "  " 
+		}
+		PieChart {
+			height = @geo(100, -100); width  = @geo(100, -100); padding = 20 
+			data = plot[chosenColumn]
+			pieProps = {
+				stroke: "white"
+			}
+			:children(d) {
+				Arc {
+                    x1 = d.start; x2 = d.end; r2 = 120
+                    fill = d.data.raw.color
+					behavior:tooltip {
+					        content = "name: "+ d.data.name+ "</br>value: "+ d.data.value
+					}  
+                }
+			}
+		}
+		Legend{
+			@props legendPos
+			data = legend[chosenColumn]
+			padding = 4
+			lineHeight = 13
+			legendWidth = 15
+			label.fontSize = 10
+		}
+	}
+}

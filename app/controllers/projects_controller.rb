@@ -27,8 +27,6 @@ class ProjectsController < ApplicationController
   
     def show
 
-        
-
         @project = Project.find(params[:id])
         @pname = @project.project_name
 
@@ -43,23 +41,17 @@ class ProjectsController < ApplicationController
         @sample_attrs = Sample.column_names
         @samples = @project.samples
         @invis = []
-        @sample_attrs.each_with_index do |attr, index|
-            if !@vis.include?(attr)
+        @sample_attrs.each_with_index do |s_attr, index|
+            if !@vis.include?(s_attr)
                 @invis.push(index+1)
             end
         end
-        gon.push invis: @invis,
-                 project_name: @pname,
-                 cancer_type: @ctype
+
         
         id = session[:user_id]
         @user = User.find(id)
         @datasets = @user.datasets
-        respond_to do |format|
-            format.html
-            format.csv { send_data @project.samples.to_csv }
-            format.json { render json: ProjectSampleDatatable.new(view_context, @project) }
-        end
+
 
         #table data to be changed
         table_file_path = $data_dir + "processedColumns/" + @pname + ".tsv"
@@ -79,6 +71,47 @@ class ProjectsController < ApplicationController
                 end
             end
         end
+
+        # transfer columns names to project fraction oerview
+        @selector_attrs = []
+        @sample_attrs.each do |s_attr|
+            if s_attr.include?("c_")
+                @selector_attrs.push(s_attr.gsub("c_", ""))
+            end
+        end
+
+
+
+
+
+
+        pname = @project.project_name
+        sample_clinical_file_path = "#{Rails.root}/public/data/clinical/sample/Clinical_#{pname}.csv"
+        samples_info = CSV.parse(File.read(sample_clinical_file_path), headers: TRUE)
+        
+        @table_headers = ['id']
+        @table_headers.concat(samples_info.headers)
+
+        @samples_info = samples_info.map(&:to_h)
+
+        logger.error '----------------------'
+        @samples_info.each do |row_info|
+            cur_sname = row_info['sample_name']
+            logger.error cur_sname
+            cur_sid = Sample.find_by(sample_name:cur_sname).id
+            row_info['id'] = cur_sid
+        end
+
+        respond_to do |format|
+            format.html
+            format.csv { send_data @project.samples.to_csv }
+            format.json { render json: ProjectSampleDatatable.new(view_context, @samples_info, @table_headers) }
+        end
+
+        gon.push invis: @invis,
+        project_name: @pname,
+        cancer_type: @ctype
+
     end
 
     def overview

@@ -50,6 +50,7 @@ html, body
 
 #wrapper
     min-height: calc(100vh - 70px - 250px)
+
 #disable-fill
     position: absolute
     top: 0
@@ -99,8 +100,13 @@ a.no-link:hover
 
 $nav-height: 70px
 #topbar
+    z-index: 3
+    width: 100%
+    position: sticky
+    top: 0
     //background-color: #f8f9fa
     height: $nav-height
+    border-bottom: 0.5px solid darken(#f8f9fa, 20%)
     span
         //color: $light_theme
     .nav-link
