@@ -154,10 +154,6 @@
                                             </div>
                                         </div>
 
-                                <template v-if="demo">
-                                    <div class="offset-1 col-md-3 mt-5" style="word-wrap:break-word;float:left">
-                                            <br>
-                                            <h4 style=" text-align:center">Set Input Data</h4><br>
 
                                     </div>
                                     
