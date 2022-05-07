@@ -5,24 +5,26 @@ svg {
         x = 50
         y = 50
         @expr console.log(CellData)
-		Container {
-            x = -25; y = 30
-			Rows {
-				Container {
-					padding = 4
-					x = -25
-					Text {
-						text = "Classifications"
-						fontSize = 15
-					}
-				}
-				Container {
-					Legend {
-						data = CellData.colorMap.legendData()
-					}
-				}
-			}
-		}
+        Container {
+            Container {
+                x = -25; y = 30
+                Rows {
+                    Container {
+                        padding = 4
+                        x = -25
+                        Text {
+                            text = "Classifications"
+                            fontSize = 15
+                        }
+                    }
+                    Container {
+                        Legend {
+                            data = CellData.colorMap.legendData()
+                        }
+                    }
+                }
+            }
+        }
         Container {
             x = 100
             ComplexGroupedBars {
@@ -31,6 +33,9 @@ svg {
                 plotSize = [1550, 500]
                 xAxisRo = @rotate(45)
                 @props CellData
+                generateTooltip = (d) => {
+                    return d.data.pos + "</br>" +d.key + ": " + (100 * d.data.value).toFixed(2) + "%</br>" + CellData.stat[d.key][d.data.pos].join("</br>")
+                }
                 Rect.full {
                     fill = "none"
                     stroke = "black"
@@ -42,7 +47,8 @@ svg {
                             Text(tick.value) {
                                 @let tickX = @scaled-x(tick.value)
                                 @let tickY = 5
-                                y = 5; anchor = @anchor("r", "m")
+                                y = 10
+                                anchor = @anchor("r", "m")
                                 rotation = @rotate(-20)
                                 fontSize = prop.tickFontSize
                             }

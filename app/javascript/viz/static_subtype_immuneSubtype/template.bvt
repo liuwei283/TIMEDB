@@ -10,10 +10,14 @@ svg {
 		}
 		ComplexStackedBar {
 			x = 50
-			baseWidth = 20
-			// plotSize = [50*Object.keys(ClinicalData.widMap).length, 500]
-			plotSize = [1500, 500]
+			baseWidth = 40
+			@let widBar = 60*Object.keys(ClinicalData.widMap).length
+			plotSize = [widBar, 500]
 			@props ClinicalData
+			generateTooltip = (d) => {
+				return d.data.pos.split("__").join("</br>").split("_").join(" ") +  " : "  + ClinicalData.widMap[d.data.pos] + " samples<br>" 
+						+ d.key + " : " + (100 * d.data.value).toFixed(2) + "%"
+			}
 			:xAxis {
                 Axis("top") {
                     line.stroke = "none"

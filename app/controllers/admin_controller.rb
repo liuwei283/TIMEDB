@@ -50,8 +50,8 @@ class AdminController < ApplicationController
                 f.close
             end
         else
-            logger.error "Bad file_data: #{up_file.class.name}: #{up_file.inspect}"
-        end
+            .error "Bad file_data: #{up_file.class.name}: #{up_file.inspect}"
+        endlogger
         redirect_to '/admin', notice: "ALL immune infiltration data uploaded."
     end
 

@@ -5,6 +5,9 @@
 @import "partials/variables"
 
 
+@import "partials/variables"
+
+
 #introduction
     padding-top: 10em
     margin-bottom: 5em
@@ -61,7 +64,7 @@
             height: 100%
             position: relative
             transform-style: preserve-3d
-            transition: transform 0.8s cubic-bezier(0.75, 0, 0.85, 1);
+            transition: transform 0.8s cubic-bezier(0.75, 0, 0.85, 1)
             
         &:hover .flip-card-inner
             transform: rotateY(180deg)
@@ -75,6 +78,7 @@
             transform: rotateY(180deg)
         #teamDetailsBack
             display: none
+
 
 #wrapper
     background-color: #f8f9fa
@@ -317,6 +321,3 @@ body.welcome
             min-height: 500px
             p 
                 margin-top: 200px
-
-
-

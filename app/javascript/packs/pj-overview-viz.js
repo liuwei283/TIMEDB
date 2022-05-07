@@ -4,14 +4,14 @@ document.addEventListener('DOMContentLoaded', () => {
 catch_change();
 
 
-import {init as subtypeLandscape} from "viz/static_ProjectImmuneSubtype"
-import {init as subtypeBoxplot} from "viz/static_ImmuneCell"
-import {init as subtypeCurve} from "viz/static_SurvivalLine"
-import {init as subtypeRegulator} from "viz/static_immuneRegulators"
+import {init as subtypeLandscape} from "viz/static_subtype_immuneSubtype"
+import {init as subtypeBoxplot} from "viz/static_subtype_immuneCell"
+import {init as subtypeCurve} from "viz/static_subtype_survival"
+import {init as subtypeRegulator} from "viz/static_overview_immuneRegulators"
 
 
 
-import {init as fractionPie} from "viz/static_fraction_pie"
+import {init as fractionPie} from "viz/static_fraction_Pie"
 import {init as fractionBoxplot} from "viz/static_fraction_boxplot"
 import {init as fractionGroupBoxplot} from "viz/static_fraction_grouped_boxplot"
 import {init as fractionLandscape} from "viz/static_comparedPlot"

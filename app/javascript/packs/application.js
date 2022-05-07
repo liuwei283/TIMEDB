@@ -60,7 +60,11 @@ document.addEventListener('DOMContentLoaded', (event) =>  {
         //['#vapp-database', editorTest],
     ];
 
-    $('[data-toggle="tooltip"]').tooltip();
+    $('[data-toggle="tooltip"]').tooltip({
+        html:true,
+        container: 'body',
+
+    });
     $('[data-toggle="popover"]').popover({
         html:true,
         container: 'body',

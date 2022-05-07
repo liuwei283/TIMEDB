@@ -1,8 +1,9 @@
 require 'zip'
 
 class WelcomeController < ApplicationController
+  #skip_before_action :validate_cookie, only: [:index, :contact]
   def index
-    @user = User.find(session[:user_id])
+    #@user = User.find(session[:user_id])
   end
 
   # def tutorial
@@ -43,5 +44,40 @@ class WelcomeController < ApplicationController
     send_data compressed_filestream.read, filename: "#{@analysis.name}.zip"
       
 
+  end
+
+  def require_cookie
+    # no cookie found 
+    logger.error "----------------------------------"
+    logger.error "----------------------------------"
+
+    unless session[:user_id]
+        @user = User.new
+        @user.dataset_n = 0
+        @user.save
+        session[:user_id] = @user.id
+        
+    end
+    # check user
+    id = session[:user_id]
+    if User.exists? id
+        
+        @user = User.find(id)
+        @user.touch
+
+    else 
+        # already expired
+        @user = User.new
+        @user.dataset_n = 0
+        @user.save
+        session[:user_id] = @user.id
+    end
+    logger.error session[:user_id]
+    
+    #user_dir = File.join($user_stor_dir, session[:user_id].to_s)  
+    # unless File.directory?(user_dir)
+    #     Dir.mkdir(user_dir)
+    # end
+    # redirect_to root_path, alert: 'Happy to use our website!' 
   end
 end
