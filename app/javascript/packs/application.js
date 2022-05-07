@@ -125,12 +125,12 @@ document.addEventListener('DOMContentLoaded', (event) =>  {
         $('h5.text-left').css('color',"#86E5E9");
         $('h5.text-right').css('color',"#cc4f78");
         //work space
-        $('#dataset_list').css('background-color','#3b3b3b');
-        $('.query-card').css('background-color','#3b3b3b');
-
+        $('#dataset_list').css('background-color','#333');
+        $('#job-query').css('background-color','#333');
+        $('.query-card').css('background-color','#333');
         // //Analysis visualization
-         $('#sidebar').css('background-color','#333');
-         $('#run-app').css('background-color','#333');
+        $('#sidebar').css('background-color','#333');
+        $('#run-app').css('background-color','#333');
 
         // //admin/analysis_categories
         // $('.card').css('background-color','#343a40');
