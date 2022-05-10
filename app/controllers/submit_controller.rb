@@ -16,7 +16,7 @@ class SubmitController < ApplicationController
 
     logger.error (params[:cname])
     
-    @analyses = @analysis_category.analyses
+    @analyses = @analysis_category.analyses.all
   end
 
   def pipelines

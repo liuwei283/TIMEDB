@@ -44,7 +44,7 @@
                                 <img v-bind:src="require('../assets/images/module.png')" class="card-img-top">
                                 <div class = "image_overlay image_overlay_blur">
                                     <div class = "image_title">
-                                        Just for testing
+                                        Test only
                                     </div>
                                     <div class = "image_decscription">
                                         just for testing
@@ -84,7 +84,6 @@
                     <div v-if="demo==false" class="jump before">
                         <img v-bind:src="require('../assets/images/nav-up-pink.png')" style="float :left; margin-right: 5px"> 
                         <p style="padding-top:20px">Don't know how to upload data? Click to download the  <a href="#" @click = "clickDemo" >demo file!</a>   </p>
-
                     </div>
                     <div v-else class="jump after">
                         <img v-bind:src="require('../assets/images/nav-up-pink.png')" style="float :left; margin-right: 5px"> 
@@ -95,8 +94,7 @@
                     <img v-else v-bind:src="require('../assets/images/nav-submit-gray.png')">
 
 
-                    <br>
-                        
+                    <br>                      
                 </div>
                 <div class="col-md-10">
                     <div id="run-app">
@@ -121,12 +119,12 @@
                                             <br>
                                             <div class="row" style="margin:0">
                                                 <div class="col-md-5 text-center" style="border:solid;border-radius:20px;padding:20px">
-                                                    <a href="/public/data/module_demo/test_demo1.tsv" download = "testing">Download</a>
-                                                    <!-- <a :href="`/public/data/module_demo/${app.name}_demo1.tsv`" download = "testing">Download</a> -->
+                                                    <!-- <a href="/public/data/module_demo/demo1.tsv" download = "testing">Download</a> -->
+                                                    <a :href="`/public/data/module_demo/${app.name}_demo1.tsv`" download = "demo1">Download</a>
                                                 </div>
                                                 <div class="col-md-5 offset-2 text-center" style="border:solid;border-radius:20px;padding:20px">
-                                                    <!-- <a :href="`/public/data/module_demo/${app.name}_demo2.tsv`" download = "testing">Download</a> -->
-                                                    <a href="/public/data/module_demo/test_demo2.tsv" download = "testing">Download</a>
+                                                    <a :href="`/public/data/module_demo/${app.name}_demo2.tsv`" download = "demo2">Download</a>
+                                                    <!-- <a href="/public/data/module_demo/test_demo2.tsv" download = "testing">Download</a> -->
                                                 </div>
                                             </div>
                                             <br>
@@ -275,23 +273,14 @@
                     <p class = "text-center">{{input.description}}</p>
                 </div>
                 <div class = "col-md-1"></div>
-                
-
                 <div class = "col-md-12 text-center" :id ="`closeToggle-${input.id}`">
                     <button type = "button" class = "btn" @click="uploadToggle"><i class="fa-solid fa-arrow-up"></i> Upload</button>
                 </div>
-
         </div>
 
 
     </div>
 </template>
-
-
-
-
-
-
 
 <script>
     import _ from 'lodash';
@@ -313,11 +302,9 @@
             return {
                 id: window.gon.id,
                 category_name: window.gon.cname,
-                app: {
-                    
+                app: { 
                 },
                 files: {
-
                 },
                 selected: {},
                 boolSelectOpt: [
@@ -473,6 +460,7 @@
                     };
                     this.id = newid;
                     this.app = newapp;
+
                     this.params_desc = this.app.params[0].descriptions;
                 }
 
@@ -494,70 +482,67 @@
                         this.app = newapp;
                     });
                 }
-
             },
 
             submitTask() {
                 // send selected file to files
 
-                this.submitted = true;
+                //this.submitted = true;
 
-                
-                // const { alertCenter } = this.$refs;
-                // let allRight = true;
-                // document.querySelectorAll('input').forEach((input) => {
-                //     if(input.required) {
-                //         const valid = !!input.value && !!_.trim(input.value);
-                //         Vue.set(this.inputValid, input.name, valid);
-                //         if (!valid) {
-                //             allRight = false;
-                //         }
-                //     }
-                // })
-                // if (allRight) {
-                //     let alertData;
-                //     $("#disable-fill").fadeIn(10);
-                //     this.isLoading = true;
-                //     axios.post(
-                //         `/submit-app-task/`,
-                //        objectToFormData({
-                //             "app_id": this.app.id,
-                //             "inputs": this.files,
-                //             "params": this.formatParams(),
-                //             "selected": this.selected,
-                //             "mid": this.id,
-                //         }),
-                //         {
-                //             headers: {
-                //                 'X-Requested-With': 'XMLHttpRequest',
-                //                 'X-CSRF-Token': document.head.querySelector('meta[name="csrf-token"]').content,
-                //                 'Content-Type': 'multipart/form-data',
-                //             },
-                //         },
-                //     ).then((response) => {
-                //         if (response.data.code) {
-                //             this.jobID = response.data.data.task_id;
-                //             this.submitted = true;
-                //         } else {
-                //             alertData = response.data.msg;
-                //         }
-                //     }).catch((reason) => {
-                //         alertData = reason;
-                //     }).finally(() => {
-                //         setTimeout(() => {
-                //             $("#disable-fill").fadeOut(10);
-                //             this.isLoading = false;
-                //             if (!!alertData) {
-                //                 alertCenter.add('danger', alertData);
-                //             }
-                //         }, 500);
-                //     });
-                // }
+                const { alertCenter } = this.$refs;
+                let allRight = true;
+                document.querySelectorAll('input').forEach((input) => {
+                    if(input.required) {
+                        const valid = !!input.value && !!_.trim(input.value);
+                        Vue.set(this.inputValid, input.name, valid);
+                        if (!valid) {
+                            allRight = false;
+                        }
+                    }
+                })
+                if (allRight) {
+                    let alertData;
+                    $("#disable-fill").fadeIn(10);
+                    this.isLoading = true;
+                    axios.post(
+                        `/submit-app-task/`,
+                       objectToFormData({
+                            "app_id": this.app.id,
+                            "inputs": this.files,
+                            "params": this.formatParams(),
+                            "selected": this.selected,
+                            "mid": this.id,
+                        }),
+                        {
+                            headers: {
+                                'X-Requested-With': 'XMLHttpRequest',
+                                'X-CSRF-Token': document.head.querySelector('meta[name="csrf-token"]').content,
+                                'Content-Type': 'multipart/form-data',
+                            },
+                        },
+                    ).then((response) => {
+                        if (response.data.code) {
+                            this.jobID = response.data.data.task_id;
+                            this.submitted = true;
+                        } else {
+                            alertData = response.data.msg;
+                        }
+                    }).catch((reason) => {
+                        alertData = reason;
+                    }).finally(() => {
+                        setTimeout(() => {
+                            $("#disable-fill").fadeOut(10);
+                            this.isLoading = false;
+                            if (!!alertData) {
+                                alertCenter.add('danger', alertData);
+                            }
+                        }, 500);
+                    });
+                }
 
                 if (this.submitted == true) {
                     var delay = 10000; // time in milliseconds
 
- 
                     setTimeout(function(){
                         window.location.href = 'job-query'
                     },delay);
