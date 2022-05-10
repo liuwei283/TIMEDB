@@ -85,8 +85,8 @@ Rails.application.routes.draw do
   get 'database/overview', to: 'database#overview'
   get 'user/show', to: 'users#show'
   # get 'demo', to: 'demo#show'
-  post 'welcome/accept_cookies', to: 'welcome#require_cookie'
-  post "welcome/require_cookie" => "welcome#require_cookie", :as => "welcome/require_cookie"
+  #post 'welcome/accept_cookies', to: 'welcome#require_cookie'
+  post "welcome/require_cookie", to: "welcome#require_cookie", as: "require_cookie"
   
   # visualizer
   scope '/visualizer' do
