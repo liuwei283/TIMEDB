@@ -113,11 +113,10 @@ document.addEventListener('DOMContentLoaded', (event) =>  {
         $('.container').toggleClass('text-light');
         $('#wrapper').css('background-color','#333');
         $('section').toggleClass('dark text-light');
-        $('h1').css('color',"#86E5E9");
-        $('h2').css('color',"#86E5E9");
-
+        $(':header').css('color',"#86E5E9");
+        $(".col-md-2 h4 ").css('color',"#fff");
         $('.footer.page-footer').css('background','#86E5E9');
-        
+
         //home
         $('.heading').css("background-image","url('assets/welcomeBGImagedark.png')");
         $('i.fa.fa-chevron-down').css('color',"#86E5E9");
@@ -135,10 +134,17 @@ document.addEventListener('DOMContentLoaded', (event) =>  {
         // //admin/analysis_categories
         // $('.card').css('background-color','#343a40');
         // $('.sortable-list > .list-group-item').css('background-color','#3b3b3b');
+        $('.ov-number').css('color',"#86E5E9");
+        $('#collapseButton').css('background-color',"#86E5E9");
+        $('#collapseButton').css("box-shadow","none");
+        $('.popup').css('background-color',"#333");
 
-        // //admin
-        // $('.breadcrumb').css('background-color','#3b3b3b');
-        
+        $('.card').css('background-color',"#343a40");
+        $('.list-group-item').css('background-color',"#6c757d");
+        $('#pj_table').toggleClass('dark-table');
+        $('#ct_table').toggleClass('dark-table');
+        $('#tk_table').toggleClass('dark-table');
+
     };
 });
 

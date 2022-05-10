@@ -74,49 +74,49 @@
       
     <%end%>
   </div>
-
-    <table id="pj_table" class="display">
-      <thead>
-        
-        <% @projects.column_names.each do |attr| %>
+    <div  id="pj_table">
+      <table class="display" >
+        <thead>
           
-          <th> <%= attr.capitalize %> </th>
+          <% @projects.column_names.each do |attr| %>
+            
+            <th> <%= attr.capitalize %> </th>
+            
+          <% end %>
+          <th>
+            Action
+          </th>
           
-        <% end %>
-        <th>
-          Action
-        </th>
-        
-      </thead>
+        </thead>
 
-      <tbody>
-        <% @projects.each do |pj| %>
-        
-          <tr>
-            <% @projects.column_names.each do |attr| %>
+        <tbody>
+          <% @projects.each do |pj| %>
+          
+            <tr>
+              <% @projects.column_names.each do |attr| %>
+                
+                <td> 
+                  <div class="table_cell"> 
+                    <%= pj[attr] %> 
+                  </div>
+                </td>
               
-              <td> 
-                <div class="table_cell"> 
-                  <%= pj[attr] %> 
-                </div>
+              <% end %>
+              <td>
+                <%= link_to 'Show', project_path(pj) %>
+                <%= link_to 'Delete', project_path(pj), method: :delete,
+                        data: { confirm: 'Are you sure?' } %>
+
+                <%= link_to 'Edit', edit_project_path(pj) %>
               </td>
-            
-            <% end %>
-            <td>
-              <%= link_to 'Show', project_path(pj) %>
-              <%= link_to 'Delete', project_path(pj), method: :delete,
-                      data: { confirm: 'Are you sure?' } %>
+              
+            </tr>
+          
+          <% end %>
+        </tbody>
 
-              <%= link_to 'Edit', edit_project_path(pj) %>
-            </td>
-            
-          </tr>
-        
-        <% end %>
-      </tbody>
-
-    </table>
-
+      </table>
+    </div>
     <%= link_to  "Add one project", "/projects/new" %>
 
     <%= form_tag import_projects_path, multipart: true do %>
@@ -201,48 +201,49 @@
     <%end%>
   </div>
 
-
-    <table id="ct_table" class="display">
-      <thead>
-        
-        <% @cancers.column_names.each do |attr| %>
+    <div id="ct_table">
+      <table class="display">
+        <thead>
           
-          <th> <%= attr.capitalize %> </th>
+          <% @cancers.column_names.each do |attr| %>
+            
+            <th> <%= attr.capitalize %> </th>
+            
+          <% end %>
+          <th>
+            Action
+          </th>
           
-        <% end %>
-        <th>
-          Action
-        </th>
-        
-      </thead>
+        </thead>
 
-      <tbody>
-        <% @cancers.each do |cc| %>
-        
-          <tr>
-            <% @cancers.column_names.each do |attr| %>
+        <tbody>
+          <% @cancers.each do |cc| %>
+          
+            <tr>
+              <% @cancers.column_names.each do |attr| %>
+                
+                <td> 
+                  <div class="table_cell"> 
+                    <%= cc[attr] %> 
+                  </div>
+                </td>
               
-              <td> 
-                <div class="table_cell"> 
-                  <%= cc[attr] %> 
-                </div>
+              <% end %>
+              <td>
+                <%= link_to 'Show', cancer_path(cc) %>
+                <%= link_to 'Delete', cancer_path(cc), method: :delete,
+                        data: { confirm: 'Are you sure?' } %>
+
+                <%= link_to 'Edit', edit_cancer_path(cc) %>
               </td>
-            
-            <% end %>
-            <td>
-              <%= link_to 'Show', cancer_path(cc) %>
-              <%= link_to 'Delete', cancer_path(cc), method: :delete,
-                      data: { confirm: 'Are you sure?' } %>
+              
+            </tr>
+          
+          <% end %>
+        </tbody>
 
-              <%= link_to 'Edit', edit_cancer_path(cc) %>
-            </td>
-            
-          </tr>
-        
-        <% end %>
-      </tbody>
-
-    </table>
+      </table>
+    </div>
 
     <%= link_to  "Add one cancer type", "/cancers/new" %>
 

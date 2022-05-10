@@ -41,7 +41,7 @@
   </div>
   <br />
 
-  <%= form_tag export_selected_projects_path(format: "csv"), multipart: true do %> 
+  <%= form_tag export_selected_projects_path(format: "csv"),class:(session[:dark] ? "dark-table":""), multipart: true do %> 
     <%= content_tag :table, role: :datatable, class: "display", id: "table_page", data: { url: projects_path(format: :json)} do %>
       <thead>
             <th>
