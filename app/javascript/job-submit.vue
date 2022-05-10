@@ -313,7 +313,7 @@
                 ],
                 inputValid: {},
                 submitted: false,
-                jobID: 'nhvxhjdsvlcbsd',
+                jobID: '',
                 isLoading: false,
                 analyses: [],
                 demo: false,
@@ -500,6 +500,7 @@
                         }
                     }
                 })
+                console.log("it is all right")
                 if (allRight) {
                     let alertData;
                     $("#disable-fill").fadeIn(10);
