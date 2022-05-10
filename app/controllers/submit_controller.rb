@@ -1,5 +1,5 @@
 class SubmitController < ApplicationController
-  UID = 45
+  UID = 49
   PROJECT_ID = 393
   # $user_stor_dir = "#{Rails.root}/data/user"
   def analyses
