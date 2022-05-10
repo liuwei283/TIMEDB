@@ -1,7 +1,7 @@
-import {init as immunebar} from "viz/static_immunebar"
-import {init as immunepie} from "viz/static_immunePie"
-import {init as immunelandscape} from "viz/static_immuneSubtypeLandscape"
-import {init as immuneRegulator} from "viz/static_immuneRegulators"
+import {init as immunebar} from "viz/static_overview_immuneBar"
+import {init as immunepie} from "viz/static_overview_immunePie"
+import {init as immunelandscape} from "viz/static_overview_immuneSubtypeLandscape"
+import {init as immuneRegulator} from "viz/static_overview_immuneRegulators"
 
 var data_path = "/public/data/";
 

@@ -3,7 +3,7 @@ import template from "./template.bvt";
 import { SurvivalLine } from "oviz-components/survival-line";
 import { C16Classifier, ClinicalProcessor } from "utils/general-classification";
 
-let xlabel = "Time(month)";
+let xlabel = "Time(Day)";
 let ylabel = "Survival";
 
 export function init(id, subtypePath, clinicalDataPath, config) {

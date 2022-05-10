@@ -8,7 +8,7 @@ import { GridPlot } from "oviz-components/grid-plot";
 import { registerEditorConfig } from "utils/editor";
 import { register } from "page/visualizers";
 import { generateDiverConfig } from"./editor";
-import { plotDataloaded } from"./data";
+import { plotDataloaded,processconfig } from"./data";
 
 
 const MODULE_NAME = "static_comparedPlot";
@@ -17,28 +17,24 @@ import { registerDefaultBioInfoComponents } from "crux/dist/element/global";
 
 registerDefaultBioInfoComponents();
 
-export function init(id,path,type){
+export function init(id,path,type="pie"){
     Oviz.visualize({
         el:id,
         template,
         renderer:"svg",
-        width:2000,
-        height:5000,
         theme: "light",
         data: {
-            buttonkey: 0,
+            buttonkey: 1,
             buttonclick(d){
                 this.buttonkey = d;
-                console.log("buttonkey:",this.buttonkey);
                 this.redraw();
             },
             config:{
-                gridheight:120,
-                gridwidth:120,
+                gridheight:98,
+                gridwidth:98,
                 padding:4,
             },
             plotType:type
-            //type = "bar" or "pie"
         },
         loadData: {
             comparedData: {
@@ -46,17 +42,15 @@ export function init(id,path,type){
                 url: path,
                 loaded: plotDataloaded,
             },
-            clinicData:{
-                type:"csv",
-                loaded(){}
-            }
         },
         setup() { 
             console.log("this.data:",this["_data"]);
+            processconfig(this)
             //registerEditorConfig(editorConfig(this), editorRef);
         },
     })
 }
+
 
 
 

@@ -14,13 +14,59 @@ class DatasetsController < ApplicationController
             end
         end
         gon.push invis: @invis
+
+        #get all projects
+        projects = {}
+        samples = @dataset.samples.order(:sample_name)
+        samples.each do |sample|
+            sname = sample.sample_name
+            pname = sample.project_name
+            logger.error sname
+            if projects.key?(pname)
+                projects[pname].push(sname)
+            else
+                projects[pname] = [sname]
+            end
+        end
+        
+        #merge all attributes
+        @table_headers = ['id']
+        projects.each_key do |pname|
+            sample_clinical_file_path = "#{Rails.root}/public/data/clinical/sample/Clinical_#{pname}.csv"
+            file_info = CSV.parse(File.read(sample_clinical_file_path), headers: TRUE)
+            @table_headers = @table_headers | file_info.headers
+        end
+        @samples_info = []
+        projects.each_key do |pname|
+            sample_clinical_file_path = "#{Rails.root}/public/data/clinical/sample/Clinical_#{pname}.csv"
+            file_info = CSV.parse(File.read(sample_clinical_file_path), headers: TRUE)
+            cur_headers = file_info.headers
+            snames = projects[pname]
+            file_info.each do |row|
+                if snames.include? row['sample_name']
+                    row_info = @table_headers.to_h { |attrb| [attrb, 'Nil'] }
+                    sid = Sample.find_by(sample_name: row['sample_name']).id
+                    row_info['id'] = sid
+                    cur_headers.each do |cur_header|
+                        row_info[cur_header] = row[cur_header]
+                    end
+                    @samples_info.push(row_info)
+                end
+            end
+        end
+
+        @samples_info.each do |samp|
+            @table_headers.each do |th|
+                logger.error samp[th]
+            end
+        end
         # user_dir = File.join($user_stor_dir, id.to_s)
         # ds_dir = File.join(user_dir, @dataset.name)
         # Dir.mkdir(ds_dir) unless File.exists?(ds_dir)
         # @file_list = Dir.entries(ds_dir)[2..-1]
         respond_to do |format|
             format.html
-            format.json { render json: DatasetSampleDatatable.new(view_context, @dataset) }
+            format.json { render json: DatasetSampleDatatable.new(view_context, @samples_info, @table_headers) }
         end
     end
 

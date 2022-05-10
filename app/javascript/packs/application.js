@@ -30,6 +30,7 @@ import ReorderSample from "viz/meta-overview/reorder-sample.vue";
 import Reorder from "viz/meta-overview/reorder.vue";
 import { registerDefaultEditorConfig } from "utils/editor";
 
+
 Vue.component("reorder", Reorder);
 Vue.component("filter-samples", FilterSamples);
 Vue.component("filter-samples-bind", FilterSamplesBind);
@@ -38,6 +39,8 @@ Vue.component("color-picker", ColorPicker);
 Vue.component("section-files", SectionFiles);
 Vue.component("reorder-species", ReorderSpecies);
 Vue.component("meta-info", MetaInfo);
+
+
 
 function initVApp() {
     if (document.getElementById("vapp")) {
@@ -60,7 +63,11 @@ document.addEventListener('DOMContentLoaded', (event) =>  {
         //['#vapp-database', editorTest],
     ];
 
-    $('[data-toggle="tooltip"]').tooltip();
+    $('[data-toggle="tooltip"]').tooltip({
+        html:true,
+        container: 'body',
+
+    });
     $('[data-toggle="popover"]').popover({
         html:true,
         container: 'body',
@@ -106,6 +113,11 @@ document.addEventListener('DOMContentLoaded', (event) =>  {
         }, ALERT_TIMEOUT);
     });
 
+    $('#cookies-eu-accept').on('click', () => {
+        $('#cookies-eu-banner').css("display", "None")
+    })
+
 });
+
 
 

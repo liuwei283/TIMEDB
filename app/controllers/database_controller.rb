@@ -32,6 +32,7 @@ class DatabaseController < ApplicationController
             end
             cancers_projects[cname] = cur_projects
         end
+        @cancer_attrs = Cancer.column_names
         gon.push cancers: cancers, projects: cancers_projects 
 
              

@@ -2,7 +2,6 @@ import Oviz from "crux";
 import template from "./template.bvt";
 import { ComplexHeatMap } from "oviz-components/complex-heatmap";
 import { C16Classifier, RNAProcessor } from "utils/general-classification";
-import { groupedColors2 } from "oviz-common/palette";
 import { nameMapper, CheckPoints } from "utils/general-classification";
 
 const startColor = "white";
@@ -16,7 +15,6 @@ export function init(id, subtypePath, RNAdataPath, config) {
         template,
         components: { ComplexHeatMap },
         data: {
-            groupedColors2,
             config : {
                 rotation : 0,
                 valSize: 8,
@@ -44,8 +42,8 @@ export function init(id, subtypePath, RNAdataPath, config) {
                 dsvHasHeader: false,
                 loaded(data) {
                     this.data.c16Classification = C16Classifier(data);
-                    console.log("C16Classifior:");
-                    console.log(this.data.c16Classification);
+                    const classifications = Object.keys(this.data.c16Classification.group).sort();
+                    this.data.colorMap = Oviz.color.schemeCategory("light", classifications).colors;
                 }
             },
             RNAdata: {
@@ -55,9 +53,8 @@ export function init(id, subtypePath, RNAdataPath, config) {
                 dependsOn: ["subtype"],
                 loaded(data) {
                     const RNAdata = RNAProcessor(data, this.data.c16Classification);
-                    console.log(RNAdata);
-                    const maxs = []
-                    const mins = []
+                    const maxs = [];
+                    const mins = [];
                     Object.entries(RNAdata).forEach(([key, item]: [string, any]) => {
                         maxs.push(Math.max(... item.matrix.flat().map(d => Math.max(d, 0))));
                         mins.push(Math.min(... item.matrix.flat().map(d => Math.min(d, 0))));
@@ -70,6 +67,8 @@ export function init(id, subtypePath, RNAdataPath, config) {
         setup() {
             this.defineGradient("bg", "vertical", [endColor, startColor]);
             this.defineGradient("ng", "vertical", [startColor, nendColor]);
+            this.size = {height: 400+Object.keys(this.data.colorMap).length, width: 1800}
+            console.log(this)
         },
     });
     return visualizer;

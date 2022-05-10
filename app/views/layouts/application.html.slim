@@ -36,6 +36,11 @@ html
         = yield
       #disable-fill
     - unless %w[analysis].include? controller_name
-      
+      - if session[:user_id].nil?
+        #cookies-eu-banner
+          .container
+            | We use Cookies to offer a better browsing experience.
+            button.btn.btn-sm.btn-outline-light#cookies-eu-accept
+              = link_to "Accept", "welcome/require_cookie", method: :post
       = render 'partials/footer'
     = yield :page_script
