@@ -1,19 +1,17 @@
 import Oviz from "crux";
 import template from "./template.bvt";
 import { ComplexStackedBar } from "oviz-components/complex-stacked-bar";
-import { SurvivalLine } from "oviz-components/survival-line";
-import { DraggableContainer } from "oviz-components/draggable-container";
 import { C16Classifier, ClinicalProcessor } from "utils/general-classification";
 
-const xlabel = "project type";
-const ylabel = "proportion";
+let xlabel = "Time(day)";
+let ylabel = "Survival";
 
 export function init(id, subtypePath, clinicalDataPath, config) {
 
     const {visualizer} = Oviz.visualize({
         el: id,
         template,
-        components: { ComplexStackedBar, DraggableContainer, SurvivalLine },
+        components: { ComplexStackedBar },
         data: { xlabel, ylabel, xy: {xlabel, ylabel} },
         loadData: {
             subtype: {
@@ -33,6 +31,10 @@ export function init(id, subtypePath, clinicalDataPath, config) {
                 },
             },
         },
+        setup() {
+            console.log(this)
+            this.size = {height: 700, width: 200+60*Object.keys(this.data.ClinicalData.widMap).length};
+        }
     });
     return visualizer;
 }

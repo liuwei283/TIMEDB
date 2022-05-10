@@ -102,7 +102,7 @@
                           </div>
                           <br/>
                           <%= form_tag make_selected_file_samples_path, multipart: true do %>  
-                            <%= content_tag :table, role: :datatable, class: "display", id: "table_page", data: { url: project_path(format: :json)} do %>
+                            <%= content_tag :table, role: :datatable, class: "display", id: "table_page", data: { url: project_path(format: :json)} do %> 
                               <thead>
                                     <th>
                                       <input type="checkbox" class="selectAll" name="selectAll" value="all">
@@ -120,6 +120,8 @@
                               <tbody>
                               </tbody>
                             <% end %>
+                            <%=image_tag "loading_icon.gif", id: "loadingSpinner", class: "row", style: "margin: auto;"%>
+
                             
 
                             <div class="dropdown">

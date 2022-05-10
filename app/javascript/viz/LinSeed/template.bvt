@@ -1,0 +1,85 @@
+svg {
+	width = 1000
+	height = 800
+	Component.full {
+		DraggableContainer {
+			x = 50
+			y = 50
+			Container {
+				Rows {
+					@for (item, index) in LinSeedData {
+						Container {
+							padding = rowPadding
+							Columns {
+								Container {
+									Rect {
+										width = plotSize[0]
+										height = plotSize[1]
+										fill = "none"
+										stroke = "black"
+									}
+									XYPlot {
+										y = plotSize[1]*0.05
+										width = plotSize[0]
+										height = plotSize[1]*0.9
+										discreteCategory = true
+										valueRange = [0, 1]
+										data = item
+										Axis("left") {
+											includeEndTicks = true
+										}
+										AxisBackground {
+											includeEndTicks = true
+											dashArray = "2,2"
+										}
+										Polyline {
+											points = @scaled(item)
+											stroke = color.lineColor
+											strokeWidth = 4
+										}
+										@if showDots {
+											Dots {
+												dots.r = 5
+												dots.fill = color.dotColor
+											}
+										}
+										@if index == Object.keys(LinSeedData).slice(-1)[0] {
+											Axis("bottom") {
+												// y = 100% + plotSize[1]*0.05
+												y = @geo(100, plotSize[1]*0.05)
+												label.fontSize = labelSize
+												label.rotation = @rotate(labelRotation)
+												label.anchor = labelRotation == 0? @anchor("t", "c") : @anchor("l", "t")
+											}
+										}
+									}
+								}
+								Container {
+									rotation = @rotate(90)
+									x = nameHeight
+									Rect {
+										width = plotSize[1]
+										height = nameHeight
+										fill = "#CCCCCC"
+										stroke = "black"
+									}
+									Text.centered {
+										x = 0.5*plotSize[1]
+										y = 0.5*nameHeight
+										text = index
+									}
+								}
+							}
+						}
+					}
+				}
+				Text.centered.detached {
+					x = -10
+					y = 50%
+					rotation = @rotate(-90)
+					text = yLabel
+				}
+			}
+		}
+	}
+}

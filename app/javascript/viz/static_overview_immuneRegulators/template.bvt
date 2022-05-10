@@ -1,5 +1,5 @@
 svg {
-	width = 2000
+	width = 1800
 	height = 550
 	Component.full {
 		x = 100
@@ -91,7 +91,8 @@ svg {
 											height = d.prop.squareLength
 											stroke = "white"
 											strokeWidth = 2
-											fill = groupedColors2[parseInt(d.item)]
+											@expr console.log(d)
+											fill = colorMap[d.item]
 										}
 										Text {
 											anchor = @anchor("middle", "center")

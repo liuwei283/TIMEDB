@@ -23,20 +23,20 @@
     <div class="row">
         <div class="col">
             <div class="ov-number">
-                11688
+                xxxx
             </div>
             <div class="ov-type">
-                Samples
+                Cancer types
             </div>
             
             
         </div>
         <div class="col">
             <div class="ov-number">
-                5813
+                xxxx
             </div>
             <div class="ov-type">
-                Individuals
+                Projects
             </div>
             
             
@@ -44,10 +44,10 @@
 
         <div class="col">
             <div class="ov-number">
-                54
+                xxxx
             </div>
             <div class="ov-type">
-                Projects
+                Samples
             </div>
             
            
@@ -55,10 +55,10 @@
 
         <div class="col">
             <div class="ov-number">
-                29
+                xxxx
             </div>
             <div class="ov-type">
-                Diseases
+                Deconvolution tools
             </div>
             
             
@@ -66,13 +66,20 @@
 
         <div class="col">
             <div class="ov-number">
-                15
+                xxxx
             </div>
             <div class="ov-type">
-                Countries
+                Immune cell types
             </div>
-            
-            
+        </div>
+
+        <div class="col">
+            <div class="ov-number">
+                C1 - C6
+            </div>
+            <div class="ov-type">
+                Subtypes
+            </div>
         </div>
     </div>
     <br/>
@@ -95,15 +102,28 @@ up to here -->
         <div class = "row cols-xs-space cols-sm-space cols-md-space text-center">            
             <% @singleCancers.each do |cc| %>
                 <div class = "col-lg-2 col-lg-offset-1 mb-4">
+                    <div data-toggle="tooltip" data-html="true" title= '
+                    <div class="row">
+                        <% @cancer_attrs.each do |attr| %>
+                        <% if attr != "id" && attr != "created_at" && attr != "updated_at"%>
+                            <div class="col-md-12">
+                                <strong><%=attr%>: </strong>
+                                <%= cc[attr] %>
+                            </div>
+                        <% end %>
+                        <% end %>
+                    </div>
+                    '> 
                     <%= link_to cc do %>
                         <%= image_tag(cc.cancer_type + ".png", class: "rounded-circle z-depth-2") %>
                     <% end %>
+                    </div>
                     <h4> <%= cc.cancer_name %> </h4>
                 </div>
             <% end %>
             
             <div class = "col-lg-2 col-lg-offset-1 mb-4">
-                    <div type="button" class="fa fa-lightbulb-o fa-lg" title="Cancers List" data-toggle="popover" title="" data-content= ' 
+                    <div type="button" class="fa fa-lightbulb-o fa-lg" title="Cancers List" data-toggle="popover" data-content= ' 
                     <ul>
                     <% @kidneyCancers.each do |kc| %>
                         <li><%= link_to kc.cancer_name, kc %></li>
@@ -112,7 +132,7 @@ up to here -->
                     '> 
                     <%= image_tag("kidney.png", class: "rounded-circle z-depth-2") %> 
                     </div>
-                    <h4> Kidney related cancers </h4>
+                    <h4> Kidney</h4>
             </div>
             <div class = "col-lg-2 col-lg-offset-1 mb-4">
                     <div type="button" class="fa fa-lightbulb-o fa-lg" title="Cancers List" data-toggle="popover" title="" data-content= ' 
@@ -124,7 +144,7 @@ up to here -->
                     '> 
                     <%= image_tag("Leukemia.png", class: "rounded-circle z-depth-2") %> 
                     </div> 
-                    <h4> Leukemia related cancers </h4>
+                    <h4> Leukemia</h4>
             </div>
             <div class = "col-lg-2 col-lg-offset-1 mb-4">
                 <% cancer_other = Cancer.find_by(cancer_type: "Other") %>
@@ -206,6 +226,8 @@ up to here -->
                     <option selected="selected" value = "ABIS">ABIS</option>
 
                     <option value = "CIBERSORTX">CIBERSORTX</option>
+                    <option value = "CIBERSORTX">CIBERSORT</option>
+
                     <option value = "ConsensusTME">ConsensusTME</option>
                     <option value="EPIC">EPIC</option>
                     <option value="ImmuCellAI">ImmuCellAI</option>

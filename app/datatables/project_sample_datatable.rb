@@ -12,7 +12,8 @@ class ProjectSampleDatatable < ApplicationDatatable
             column << sample[attr]
           end
         end
-        column << link_to('Show', "1/samples/2")
+        project_id = Sample.find(sample['id']).project_id
+        column << link_to('Show', "/projects/#{project_id}/samples/#{sample['id']}") 
       end
     end
   end

@@ -35,12 +35,14 @@ svg {
 				fill = "#000"
 				fontSize = labelFontSize
 			}
+			// title
 			Text{
-				x = 50%; y = -15
+				x = 50%; y = -30
 				anchor = @anchor("middle","center")
-				text = "sample size:" + sampleSize
+				text = "Total sample:" + sampleSize
 				fill = "#000"
 				fontSize = tickFontSize
+				style:font-weight = "bold"
 			}
 			// 纵坐标
 			Component{

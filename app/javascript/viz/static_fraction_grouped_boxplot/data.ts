@@ -7,8 +7,8 @@ import {register} from "page/visualizers";
 
 
 const boxW = 6;
-const gapRatio=0.3;
-const yLabel = "proportion"
+const gapRatio = 0.3;
+const yLabel = "Proportion"
 
 //_data = this.data
 export function plotDataloaded(_data){
@@ -20,6 +20,7 @@ export function plotDataloaded(_data){
     _data.forEach((item,index) => {
         methodData.includes(item.method)? null :methodData.push(item.method)
     });
+
     console.log("methodData:",methodData)
     
     //the different method data array[{methodkey: data:[]},{}...]
@@ -49,8 +50,8 @@ export function plotDataloaded(_data){
 
     let categories; //cell catagories
     let boxData = {};
-    let myScheme = ["#19CAAD","#D6D5B7","#8CC7B5","#D1BA74","#A0EEE1","#E6CEAC"
-                    ,"#BEE7E9","#ECAD9E","#BEEDC7","#F4606C"]
+    let myScheme = ["#191a1e","#283033","#7f9ba9","#95b6bf","#b2d4de",
+                    "#8a8fa5","#9c3539","#e55668","#eadcdb","#b1a79d"]
     const plotSize = [1000,400]
     result.forEach((ritem,rindex) => {
         categories= ritem.categories
@@ -67,7 +68,9 @@ export function plotDataloaded(_data){
         return {type: "Custom", label: x, fill: myScheme[i]};
     });
     console.log("legend:",this.data.legendData)
-    return {plotSize,data:boxData,yLabel,valueRange,discreteCategory: true,categories,boxW,gapRatio,methodData};
+
+    let labelOffsetVer = 40
+    return {plotSize,data:boxData,yLabel,valueRange,discreteCategory: true,categories,boxW,gapRatio,methodData,labelOffsetVer};
     
 }
 
@@ -84,7 +87,7 @@ export function eachgroupdata(oriData,values:number[][],samplekey:string,groupke
             i+"" == "NaN" ? i = 0:null
             cellData[cellitem].push(i)
             method=item[groupkey]
-            console.log(method)
+            //console.log(method)
             allvalues.push(i)
         });
         const initialData = cellData[cellitem]

@@ -17,9 +17,10 @@ svg {
 				Arc {
                     x1 = d.start; x2 = d.end; r2 = 120
                     fill = d.data.raw.color
+					@expr console.log("d:",d)
 					behavior:tooltip {
-					        content = "name: "+ d.data.name+ "</br>value: "+ d.data.value
-					}  
+						content = "Category: "+ d.data.name + "</br>Sample size: "+ d.data.value + "</br>Proportion: "+ d.data.raw.proportion +"%"
+					}
                 }
 			}
 		}
