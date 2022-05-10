@@ -17,13 +17,11 @@ export function init(id,path,config = "c_ajcc_pathologic_n"){
         theme: "light",
         components: { GridPlot, EditText},
         data: {
-            legendPos: {x: 800, y: 0},
+            legendPos: {x: 400, y: 100},
             chosenColumn:config,
             generText(str){
                 str = str+"";
-                console.log(typeof(str))
-                str = str.replace(/_/g," ").replace(/c/g,"").replace(/n/g,"")
-                console.log(str)
+                str = str.substring(1,str.length).replace(/_/g," ")
                 return str;
             }
         },

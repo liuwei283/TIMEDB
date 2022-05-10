@@ -1,15 +1,15 @@
 import Oviz from "crux";
 import template from "./template.bvt";
 
-const xlabel = "Categories";
-const ylabel = "Sample numbers";
+const xlabel = "";
+const ylabel = "sample sizes";
 const valueRange = [0,70];
 const plotSize = [500,1200];
 const colors = ["#66c", "#fcf"];
 
 const MODULE_NAME = "immuneBar";
 
-export function init(id, path) {
+export function init(id, path, config) {
     // if (!window.gon || window.gon.module_name !== MODULE_NAME) return;
 
     const {visualizer} = Oviz.visualize({

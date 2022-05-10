@@ -1,0 +1,34 @@
+svg {
+	width = 1200
+	height = 600
+	Component {
+		y = 100
+		Container {
+			x = 25; y = 30
+			Legend {
+				data = data.colorMap.legendData()
+			}
+		}
+		ComplexStackedBar {
+			x = 150
+			@let widBar = 100*Object.keys(data.widMap).length
+			plotSize = [widBar, 500]
+			@props data
+			baseWidth = 40
+			generateTooltip = (d) => {
+				let total = data.widMap[d.data.pos]
+				return d.data.pos + "</br>" + "total sample: " + total + " samples</br>" + d.key + ": " + Math.round(d.data.value * total) + " samples"
+			}
+            :xAxis {
+                Axis("top") {
+                    line.stroke = "none"
+                    tick.stroke = "none"
+					label.y = -5
+					label.rotation = @rotate(labelRotation)
+					label.anchor = labelRotation == 0? @anchor("b", "c") : @anchor("r", "m")
+					label.fontSize = labelSize
+                }
+            }
+		}
+	}
+}

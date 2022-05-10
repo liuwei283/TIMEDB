@@ -84,10 +84,9 @@ $(function () {
             $('td:eq(2)', row).css('background-color', '#e9ecef');
             $('td:eq(3)', row).css('background-color', '#e9ecef');
             //$('td:eq(4)', row).css('border-style', 'outset');
-
-
-
-
+        },
+        initComplete: function(settings, json) {
+            $('#loadingSpinner').hide();
         }
 
     }); 

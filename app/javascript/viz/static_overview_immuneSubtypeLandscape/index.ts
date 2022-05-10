@@ -2,8 +2,8 @@ import Oviz from "crux";
 import template from "./template.bvt";
 import { ComplexStackedBar } from "oviz-components/complex-stacked-bar";
 
-const xlabel = "project type";
-const ylabel = "proportion";
+const xLabel = "project type";
+const yLabel = "expression";
 
 export function init(id, path, config) {
 
@@ -12,7 +12,9 @@ export function init(id, path, config) {
         template,
         components: { ComplexStackedBar },
         data: {
-            xlabel, ylabel,
+            xLabel, yLabel,
+            labelRotation: 0,
+            labelSize: 14,
             tickprop : {
                 opt: {
                     line: {
@@ -22,7 +24,8 @@ export function init(id, path, config) {
                         stroke: "none"
                     }
                 }
-            }
+            },
+            plotSize: [1100, 500]
         },
         loadData: {
             data: {
@@ -34,6 +37,10 @@ export function init(id, path, config) {
                 },
             },
         },
+        setup() {
+            console.log(this)
+            this.size = {height: 700, width: 200+100*Object.keys(this.data.data.widMap).length};
+        }
     });
     return visualizer;
 }
@@ -51,9 +58,9 @@ function staticDataProcessor(data) {
             projects[curr] = [];
             pro.push(curr);
         }
-        if(d[1] != null) categories.add(d[1]);
+        if(d[1] != null) categories.add("C"+d[1]);
         if(index == data.slice(1).length-1) {
-            if(d[1] != null) categories.add(d[1]);
+            if(d[1] != null) categories.add("C"+d[1]);
         }
     })
     let cat = Array.from(categories);
@@ -75,12 +82,15 @@ function staticDataProcessor(data) {
             curr = d[0];
         } else {
             if(d[1]!= null) {
-                result[d[1]][curr]++;
-                temp[d[1]]++;
+                result["C"+d[1]][curr]++;
+                temp["C"+d[1]]++;
                 counter++;
             }
         }
         if(index == data.slice(1).length-1) {
+            console.log(index)
+            console.log(curr)
+            console.log(result)
             widMap[curr] = counter;
             projects[curr] = Object.entries(temp).map((d: any)=>[d[0], d[1]/counter]);
             cat.forEach(c=>{
@@ -95,8 +105,5 @@ function staticDataProcessor(data) {
     })
     let classifications = cat;
     const colorMap = Oviz.color.schemeCategory("dark", cat);
-    const colors = Object.values(colorMap);
-    let barMax = Object.values(widMap).reduce((pre:number, cur:number) =>  pre + cur, 0)
-    console.log({data: ret, classifications, widMap})
-    return {data: ret, classifications, widMap}
+    return {data: ret, classifications, widMap, colorMap, baseWidth: Math.min(1100/Object.keys(widMap).length, 40)}
 }

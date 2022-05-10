@@ -10,7 +10,7 @@ Rails.application.routes.draw do
   resources :projects do
     resources :samples do
       collection do
-        post :import 
+        post :import
         post :import_inf_table
       end
       member do
@@ -85,6 +85,8 @@ Rails.application.routes.draw do
   get 'database/overview', to: 'database#overview'
   get 'user/show', to: 'users#show'
   # get 'demo', to: 'demo#show'
+  #post 'welcome/accept_cookies', to: 'welcome#require_cookie'
+  post "welcome/require_cookie", to: "welcome#require_cookie", as: "require_cookie"
   
   # visualizer
   scope '/visualizer' do

@@ -1,5 +1,4 @@
 import Oviz from "crux";
-import { editorConfig, editorRef } from "./editor";
 import template from "./template.bvt";
 
 import { groupedChartColors} from "oviz-common/palette";
@@ -11,12 +10,13 @@ import { PieChart } from "crux/dist/element";
 import { isThisTypeNode } from "typescript";
 
 
-const MODULE_NAME = "static_fraction_pie";
+const MODULE_NAME = "static_fraction_Pie";
 
 const title = "Proportion of Immune Cells for Each Sample";
 const tickFontSize = 20;
 
 export function plotDataloaded(_data){
+    console.log("_data:",_data)
     let quotaList = []
     let plotData = {}
     _data.columns.slice(2).forEach(item => {
@@ -39,7 +39,7 @@ export function plotDataloaded(_data){
             index = index+1
             plotData[ditem][key] = count(each,key)
             const color = Oviz.color.Color.hsl((index%6)*60, 60+Math.floor((index/6))*10, 60+Math.floor((index/6))*10)
-            temp[ditem].push({value:count(each,key),name:key,color:color.string})
+            temp[ditem].push({value:count(each,key),name:key,color:color.string,proportion:((count(each,key)/_data.length)*100).toFixed(2)})
             legend[ditem].push({label:key,fill:color.string})
         }
     })
@@ -47,6 +47,7 @@ export function plotDataloaded(_data){
 
     this.data.plot = temp
     this.data.legend = legend
+    this.data.listlength = _data.length
     console.log("temp:",temp)
 }
 

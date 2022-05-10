@@ -9,6 +9,7 @@ import { registerHierTree} from "./hier-tree";
 import { registerScatterBoxPlot } from "./scatter-box-plot";
 import { registerScatterplot} from "./scatterplot";
 import { registerClassifier } from "./classifier";
+import { registerLinSeed } from "./LinSeed";
 
 declare global {
     interface GonInfo {
@@ -46,6 +47,8 @@ export function registerViz(moduleName) {
         case "classifier":
             registerClassifier();
             break;
+        case "LinSeed":
+            registerLinSeed();
 
     }
 
