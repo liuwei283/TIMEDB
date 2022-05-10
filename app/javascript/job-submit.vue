@@ -214,11 +214,11 @@
                             </div>
                             
                             <b-btn v-if="demo" @click="closeDemo" class="float-right mt-2" style="border-radius:50%;margin-left:20px"> > </b-btn>
-                            <b-btn @click="onSubmit" class="float-right mt-2"><i class="fa fa-location-arrow"></i> Submit</b-btn>
-                            <div class="is-loading w-100" v-if="isLoading">
+                            <b-btn @click="submitTask" class="float-right mt-2"><i class="fa fa-location-arrow"></i> Submit</b-btn>
+                            <!-- <div class="is-loading w-100" v-if="isLoading">
                                 <i class="fas fa-spinner fa-pulse fa-5x m-0"></i>
                                 <h3 class="mt-4">Submitting task……</h3>
-                            </div>
+                            </div> -->
                         </div>
                         
                     </div>
@@ -349,7 +349,6 @@
             //         this.files['i-' + this.app.inputs[k].id]  = null;
             //     }
             // });
-            this.loadRecapthca();
         },
         computed: {
             displayedInputs() {
@@ -364,16 +363,6 @@
         watch: {
         },
         methods: {
-            loadRecapthca() {
-                 // load google recapctha api
-                const script = document.createElement('script')
-                script.id = "recaptcha";
-                // script.src=`https://www.google.com/recaptcha/api.js?render=${this.sitekey}`;
-                script.src= `https://recaptcha.net/recaptcha/api.js?render=${this.sitekey}`;
-                script.async = true
-                script.defer = true
-                document.head.appendChild(script)
-            },
             setStatusColor(status) {
                 switch (status) {
                     case 'wait':
@@ -495,12 +484,12 @@
                 }
             },
 
-            onSubmit(e) {
-                // check recaptcha
-                if (!grecaptcha) {
-                    this.loadRecapthca();
-                }
-                e.preventDefault();
+            submitTask() {
+                // send selected file to files
+
+                //this.submitted = true;
+
+                const { alertCenter } = this.$refs;
                 let allRight = true;
                 document.querySelectorAll('input').forEach((input) => {
                     if(input.required) {
@@ -511,76 +500,46 @@
                         }
                     }
                 })
+                console.log("it is all right")
                 if (allRight) {
+                    let alertData;
                     $("#disable-fill").fadeIn(10);
                     this.isLoading = true;
-                    grecaptcha.ready(() => {
-                        grecaptcha.execute(this.sitekey, {action: 'submit'})
-                        .then((token) => {
-                            axios.post( `/api/recaptcha/`, objectToFormData({token}),
-                                {
-                                    headers: {
-                                        'X-Requested-With': 'XMLHttpRequest',
-                                        'X-CSRF-Token': document.head.querySelector('meta[name="csrf-token"]').content,
-                                        'Content-Type': 'multipart/form-data',
-                                    },
-                                },
-                            ).then((response) => {
-                                if (response.data.code) {
-                                    this.submitTask();
-                                } else {
-                                    setTimeout(() => {
-                                         $("#disable-fill").fadeOut(10);
-                                        this.isLoading = false;
-                                    }, 300);
-                                    this.$refs.alertCenter.add('danger', "Google Recaptcha Check failed");     
-                                }
-                            });
-                        });
+                    axios.post(
+                        `/submit-app-task/`,
+                       objectToFormData({
+                            "app_id": this.app.id,
+                            "inputs": this.files,
+                            "params": this.formatParams(),
+                            "selected": this.selected,
+                            "mid": this.id,
+                        }),
+                        {
+                            headers: {
+                                'X-Requested-With': 'XMLHttpRequest',
+                                'X-CSRF-Token': document.head.querySelector('meta[name="csrf-token"]').content,
+                                'Content-Type': 'multipart/form-data',
+                            },
+                        },
+                    ).then((response) => {
+                        if (response.data.code) {
+                            this.jobID = response.data.data.task_id;
+                            this.submitted = true;
+                        } else {
+                            alertData = response.data.msg;
+                        }
+                    }).catch((reason) => {
+                        alertData = reason;
+                    }).finally(() => {
+                        setTimeout(() => {
+                            $("#disable-fill").fadeOut(10);
+                            this.isLoading = false;
+                            if (!!alertData) {
+                                alertCenter.add('danger', alertData);
+                            }
+                        }, 500);
                     });
                 }
-            },
-
-            submitTask() {
-                let alertData;
-                axios.post(
-                    `/submit-app-task/`,
-                    objectToFormData({
-                        "app_id": this.app.id,
-                        "inputs": this.files,
-                        "demo_mapped": this.demoMapped,
-                        "params": this.formatParams(),
-                        "selected": this.selected,
-                        "mid": this.id,
-                    }),
-                    {
-                        headers: {
-                            'X-Requested-With': 'XMLHttpRequest',
-                            'X-CSRF-Token': document.head.querySelector('meta[name="csrf-token"]').content,
-                            'Content-Type': 'multipart/form-data',
-                        },
-                    },
-                ).then((response) => {
-                    if (response.data.code) {
-                        this.taskID = response.data.data.task_id;
-                        this.submitted = true;
-                    } else {
-                        alertData = response.data.msg || response.data.data;
-                    }
-                }).catch((reason) => {
-                    alertData = reason;
-                }).finally(() => {
-                    $("#disable-fill").fadeOut(10);
-                    this.isLoading = false;
-                    if (!!alertData) {
-                        this.$refs.alertCenter.add('danger', alertData);
-                    }
-                    if (this.submitted) {
-                        setTimeout(() => {
-                            location.replace(`/submit/query-task?task_id=${this.taskID}`)
-                        }, 600);
-                    }
-                });
 
                 if (this.submitted == true) {
                     var delay = 10000; // time in milliseconds
@@ -633,6 +592,17 @@
             closeDemo(){
                 this.demo=false;
             },
+            // checkDemo(index){
+            //     if(index==0){
+            //         return "col-md-6";
+            //     }else if(index==1){
+            //         if(this.demo==true){
+            //             return "col-md-3";
+            //         }else{
+            //             return "col-md-4";
+            //         }                    
+            //     }
+            // },
             check_class(block) {
                 if(block == 0){
                     if(this.demo) return "col-md-3"
