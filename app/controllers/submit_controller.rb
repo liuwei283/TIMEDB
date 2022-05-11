@@ -13,6 +13,7 @@ class SubmitController < ApplicationController
     @analysis_category = AnalysisCategory.find_by name:params[:cname]
 
     gon.push cname: params[:cname]
+    gon.push dark: session[:dark]
 
     logger.error (params[:cname])
     

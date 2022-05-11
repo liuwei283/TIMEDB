@@ -6,7 +6,6 @@
             {{a.id}}: {{a.name}}
             </li>
         </ul>
-
         <div class="prepare" v-if="!submitted">
             <div class="index-banner">
                 <div class="container">
@@ -97,7 +96,7 @@
                     <br>                      
                 </div>
                 <div class="col-md-10">
-                    <div id="run-app">
+                    <div id="run-app" v-bind:class="{dark:use_dark}">
                         <alert-center ref="alertCenter" />
                         
                         <!-- Inputs -->
@@ -300,6 +299,7 @@
     export default {
         data() {
             return {
+                use_dark: window.gon.dark,
                 id: window.gon.id,
                 category_name: window.gon.cname,
                 app: { 
@@ -625,7 +625,7 @@
     //background-color: #000;
 }
 #run-app {
-    background-color: #f8f9fa;
+    //background-color: #f8f9fa;
 }
 
 #run-app #alert-center {
@@ -780,6 +780,7 @@ h2.display-4 {
 
 .jump{
     border:solid;
+    border-color: #333;
     border-radius:20px;
     overflow:auto;
     position: absolute;
