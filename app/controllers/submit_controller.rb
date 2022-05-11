@@ -331,7 +331,9 @@ class SubmitController < ApplicationController
           })
         end
       end
-      
+
+      Rails.logger.debug "===========>"
+      Rails.logger.info(inputs)
       
       # submit task
       client = LocalApi::Client.new
@@ -508,6 +510,8 @@ class SubmitController < ApplicationController
     task_output.analysis = @analysis
     file_paths = {}
     files_to_do = mrs['outputs'][0]['files']
+    logger.debug "===========================>Find task output information!"
+    logger.info files_to_do
     
     @analysis.files_info.each do |dataType, info|
       @viz_data_source = VizDataSource.find_by(data_type:dataType)
@@ -516,7 +520,7 @@ class SubmitController < ApplicationController
           info['outputFileName'].each do |fName|
             if matchPattern(of1['name'], fName)
               file_paths[dataType] = [] if file_paths[dataType].blank?
-              file_paths[dataType] << {id: 0, 
+              file_paths[dataType] << {id: 0,
                                       url: File.join('/data/outputs', of1['path'], of1['name']), 
                                       is_demo: true}
               files_to_do.delete(of1)
