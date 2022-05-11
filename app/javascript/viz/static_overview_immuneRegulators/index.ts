@@ -67,7 +67,7 @@ export function init(id, subtypePath, RNAdataPath, config) {
         setup() {
             this.defineGradient("bg", "vertical", [endColor, startColor]);
             this.defineGradient("ng", "vertical", [startColor, nendColor]);
-            this.size = {height: 400+Object.keys(this.data.colorMap).length, width: 1800}
+            this.size = {height: 400+Object.keys(this.data.colorMap).length, width: 1850}
             console.log(this)
         },
     });

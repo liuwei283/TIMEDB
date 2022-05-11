@@ -11,6 +11,7 @@ export interface ComplexGroupedBarplotOption extends XYPlotOption {
     colorMap: any; // ColorSchemeCategory
     xlabel: string;
     ylabel: string;
+    generateTooltip?: (d) => string;
 }
 
 export class ComplexGroupedBars extends Component<ComplexGroupedBarplotOption> {
@@ -42,6 +43,9 @@ export class ComplexGroupedBars extends Component<ComplexGroupedBarplotOption> {
                         Rect.full{
                             fill = _colorMap.colors[d.key]
                             @props prop.opt.bar
+                            behavior:tooltip {
+                                content = prop.generateTooltip(d)
+                            }
                         }
                     }
 					Component.full {
@@ -77,13 +81,14 @@ export class ComplexGroupedBars extends Component<ComplexGroupedBarplotOption> {
                                 Line {x1 = 33%; x2 = 66%; y = median; stroke = "#800080"; dashArray = "2, 2"}
                             }
                         }
+                        @expr console.log(prop.stat[d.key][d.data.pos])
+                        behavior:tooltip {
+                            content = prop.generateTooltip(d)
+                        }
 					}
                     @yield mean with d default {
 					    Line {x1 = 33%; x2 = 66%; stroke = "#ed2939"}
                     }
-                    // behavior:tooltip {
-                    //     content = "category: "+ d.key+ "</br>name: "+ d.data.pos
-                    // }
 				}
 			}
             @yield xAxis default {
@@ -138,7 +143,8 @@ export class ComplexGroupedBars extends Component<ComplexGroupedBarplotOption> {
             ...super.defaultProp,
             plotSize: [800, 400],
             xlabel: "",
-            ylabel: ""
+            ylabel: "",
+            generateTooltip: (d) => "no content"
         };
     }
 

@@ -1,29 +1,38 @@
 import Oviz from "crux";
-import { ComponentOption, } from "crux/dist/element/component-options";
 import { Component, XYPlotOption } from "crux/dist/element";
 
 export interface SurvivalLineOption extends XYPlotOption {
     data: any;
     rawData: any;
     classifications: Array<string>;
-    NARdata: any; // if need NAR table, it's should be provided
+    NARshow: boolean;
+    NARdata: any; // if need self make NAR table, it's should be provided
     valueRange: [number, number];
-    categoryRange: [number, number];
+    // categoryRange: [number, number];
     plotSize: [number, number]; // [width, height]
     colorMap: any; // ColorSchemeCategory
     xlabel: string;
     ylabel: string;
     title: string;
-    NARshow: boolean;
     generateTooltip?: (d) => string;
 }
 
+// data sample
+// rawData : {
+//     c1: [0, 1, 2, 3, 4]
+//     c2: [0, 1, 2, 3, 4]
+// }
+// classifications : [
+//     "c1", 
+//     "c2"
+// ]
+
 export class SurvivalLine extends Component<SurvivalLineOption> {
 
-    private NARshow: boolean = true;
     private _colorMap;
     private _data;
     private _NARdata;
+    private xMax;
     private generateTooltip: (d) => string = (d) => d.index + ": " + d.d.length + " samples";
 
     public render() {
@@ -32,7 +41,9 @@ export class SurvivalLine extends Component<SurvivalLineOption> {
             height = prop.plotSize[1]
             width = prop.plotSize[0]
 			valueRange = prop.valueRange
-            // categoryRange = null
+            hasPadding = false
+            // categoryRange = [0, xMax]
+            // margin = [ 5, 5]
 			data = _data
             @props prop
             @yield background default {
@@ -53,7 +64,7 @@ export class SurvivalLine extends Component<SurvivalLineOption> {
             }
             Axis("bottom") {
                 y = 100%;
-                // includeEndTicks = false
+                includeEndTicks = false
                 :label(d) {
                     Text {
                         anchor = @anchor("middle", "center"); y = 10
@@ -99,7 +110,7 @@ export class SurvivalLine extends Component<SurvivalLineOption> {
                                     y = yy
                                     x = -30
                                     Text {
-                                        fontSize = 10
+                                        // fontSize = 11
                                         text = index+":"
                                         @props prop.opt.NARRow
                                     }
@@ -134,7 +145,6 @@ export class SurvivalLine extends Component<SurvivalLineOption> {
                 Polyline {
                     stroke = _colorMap.colors[index]
                     strokeWidth = 2
-                    @expr console.log(d)
                     points = @scaled(d)
                     behavior:tooltip {
                         content = generateTooltip({d, index})
@@ -163,7 +173,6 @@ export class SurvivalLine extends Component<SurvivalLineOption> {
                     anchor = @anchor("center","right")
                     fontSize = 14
                 }
-                @expr console.log("Xxxxxxxxxxxxxxxxx")
             }
         }
         `;
@@ -197,6 +206,7 @@ export class SurvivalLine extends Component<SurvivalLineOption> {
                     });
                 });
             }
+            this.xMax = Math.max(...Object.values(this._data).map((sample : any[]) => sample.map(d=>d[0])).flat());
         }
     }
 

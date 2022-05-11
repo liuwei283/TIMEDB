@@ -33,8 +33,10 @@ svg {
                 plotSize = [1550, 500]
                 xAxisRo = @rotate(45)
                 @props CellData
+			    @let labels = ["Min", "Q1", "Median", "Q3", "Max", "Mean"]
                 generateTooltip = (d) => {
-                    return d.data.pos + "</br>" +d.key + ": " + (100 * d.data.value).toFixed(2) + "%</br>" + CellData.stat[d.key][d.data.pos].join("</br>")
+                    return d.data.pos + "</br>" + "subtype" + ": " + d.key + "</br>" 
+                        + CellData.stat[d.key][d.data.pos].map((data, index) => labels[index] + ": " + (100 * data).toFixed(2) + "%").join("</br>")
                 }
                 Rect.full {
                     fill = "none"
