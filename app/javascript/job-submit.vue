@@ -129,7 +129,7 @@
                                             <br>
 
                                             <div style="border:solid;border-radius:10px;text-align:center;word-wrap:break-word;height:300px;overflow:scroll;">
-                                                <img :src="`https://deepomics.org${app.image}`" alt="Italian Trulli">
+                                                <img :src="`https://deepomics.org${app.image.url}`" alt="Italian Trulli">
                                                 <p>{{app.description}}</p>
                                             </div>
                                         </div>
@@ -313,7 +313,7 @@
                 ],
                 inputValid: {},
                 submitted: false,
-                jobID: 'nhvxhjdsvlcbsd',
+                jobID: '',
                 isLoading: false,
                 analyses: [],
                 demo: false,
@@ -335,20 +335,9 @@
             this.select_box_option = oplist;
 
             axios.get('/submit/analysesCategory.json', { params: { cname: this.category_name}  }).then(response => {this.analyses = response.data; console.log(response.data)});
-
-
-            console.log(this.analyses)
             for (var k in this.app.inputs){
-                // alert(k);
                 this.files['i-' + this.app.inputs[k].id]  = null;
             }
-            // axios.get(`https://deepomics.org/api/apps/${this.id}/`).then((response) => {
-            //     this.app = response.data.app;
-            //     for (var k in this.app.inputs){
-            //         // alert(k);
-            //         this.files['i-' + this.app.inputs[k].id]  = null;
-            //     }
-            // });
         },
         computed: {
             displayedInputs() {
@@ -417,7 +406,7 @@
                                 param_type: "string",
                                 default: "default value",
                                 required: true,
-                                descriptions: "some descriptioons some descriphvvu uihiuhohnu some descriptions",
+                                description: "some descriptioons some descriphvvu uihiuhohnu some descriptions",
                             },
                             {
                                 id: "pid2",
@@ -425,7 +414,7 @@
                                 param_type: "string",
                                 default: "default value",
                                 required: true,
-                                descriptions: "some descriptions some descriptions some deescriptions some descriptions",
+                                description: "some descriptions some descriptions some deescriptions some descriptions",
 
                             },
                             {
@@ -435,25 +424,25 @@
                                 options: [1, 2, 3, 4, 5],
                                 default: "default value",
                                 required: true,
-                                descriptions: "some descripxcvgkflkulguy ome descriuljkh tions some descriptions some descriptions",
+                                description: "some descripxcvgkflkulguy ome descriuljkh tions some descriptions some descriptions",
 
                             },
                             {
                                 name: "parameter 4",
-                                id: "pid3",
+                                id: "pid4",
                                 param_type: "string",
                                 default: "default value",
                                 required: true,
-                                descriptions: "some descripxcvgkflkulguy ome descriuljkh tions some descriptions some descriptions",
+                                description: "some descripxcvgkflkulguy ome descriuljkh tions some descriptions some descriptions",
 
                             },
                             {
                                 name: "parameter 5",
-                                id: "pid3",
+                                id: "pid5",
                                 param_type: "string",
                                 default: "default value",
                                 required: true,
-                                descriptions: "some descripxcvgkflkulguy ome descriuljkh tions some descriptions some descriptions",
+                                description: "some descripxcvgkflkulguy ome descriuljkh tions some descriptions some descriptions",
 
                             }
                         ],
@@ -461,7 +450,7 @@
                     this.id = newid;
                     this.app = newapp;
 
-                    this.params_desc = this.app.params[0].descriptions;
+                    this.params_desc = this.app.params[0].description;
                 }
 
                 else {
@@ -472,14 +461,14 @@
                     //     inputs: [],
                     //     params: [],
                     // };
-                    axios.get(`https://deepomics.org/api/apps/${app.mid}/`).then((response) => {
+                    axios.get(`https://deepomics.org/api/apps/${newid}/`).then((response) => {
                         let newapp = response.data.app;
                         for (var k in this.app.inputs) {
                             this.files['i-' + this.app.inputs[k].id]  = null;
                         }
-                        console.log(newapp);
                         this.id = newid;
                         this.app = newapp;
+                        this.params_desc = this.app.params[0].description;
                     });
                 }
             },
@@ -500,6 +489,7 @@
                         }
                     }
                 })
+                console.log("it is all right")
                 if (allRight) {
                     let alertData;
                     $("#disable-fill").fadeIn(10);
@@ -524,6 +514,7 @@
                         if (response.data.code) {
                             this.jobID = response.data.data.task_id;
                             this.submitted = true;
+                            
                         } else {
                             alertData = response.data.msg;
                         }
@@ -539,7 +530,6 @@
                         }, 500);
                     });
                 }
-
                 if (this.submitted == true) {
                     var delay = 10000; // time in milliseconds
 
@@ -614,7 +604,7 @@
                 }
             },
             provide_param_desc(param) {
-                $("#params_desc").text(param.descriptions)
+                $("#params_desc").text(param.description)
 
             }
 

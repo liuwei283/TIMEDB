@@ -1,6 +1,6 @@
 class SubmitController < ApplicationController
-  UID = 45
-  PROJECT_ID = 289
+  UID = 49
+  PROJECT_ID = 393
   # $user_stor_dir = "#{Rails.root}/data/user"
   def analyses
     @analysis_categories = AnalysisCategory.order(:name)

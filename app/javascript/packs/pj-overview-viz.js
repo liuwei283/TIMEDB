@@ -11,7 +11,6 @@ import {init as subtypeRegulator} from "viz/static_overview_immuneRegulators"
 
 
 
-import {init as fractionPie} from "viz/static_fraction_pie"
 import {init as fractionBoxplot} from "viz/static_fraction_boxplot"
 import {init as fractionGroupBoxplot} from "viz/static_fraction_grouped_boxplot"
 import {init as fractionLandscape} from "viz/static_comparedPlot"
@@ -51,11 +50,11 @@ export function subtype_regulator_viz() {
     subtypeRegulator("#subtype-regulatorVis", subtype_file_path, rna_file_path);
 }
 
-export function fraction_pie_viz() {
-    var selected_column = document.getElementById("fraction-pie-selector").value;
-    fractionPie("#fraction-pieVis", clinical_file_path, 'c_' + selected_column);
-    console.log('c_' + selected_column)
-}
+// export function fraction_pie_viz() {
+//     var selected_column = document.getElementById("fraction-pie-selector").value;
+//     fractionPie("#fraction-pieVis", clinical_file_path, 'c_' + selected_column);
+//     console.log('c_' + selected_column)
+// }
 
 export function fraction_boxplot_viz() {
     var selected_method = document.getElementById("fraction-boxplot-selector").value;
@@ -91,7 +90,7 @@ export function all_viz() {
     subtype_regulator_viz();
 
     //fraction overview
-    fraction_pie_viz()
+    //fraction_pie_viz()
     fraction_boxplot_viz()
     fraction_landscape_viz();
 
@@ -111,9 +110,9 @@ export function catch_change(){
         fraction_boxplot_viz();
     });
 
-    $('#fraction-pie-selector').on('change', function() {
-        fraction_pie_viz();
-    });
+    // $('#fraction-pie-selector').on('change', function() {
+    //     fraction_pie_viz();
+    // });
 
 
 
