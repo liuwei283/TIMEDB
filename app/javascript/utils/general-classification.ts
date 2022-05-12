@@ -120,7 +120,7 @@ export function ClinicalProcessor(data, c16Classification ) {
         mapper[d[0].slice(0,12)] = d[1];
     });
     const widMap = {}
-    const idKey = data.columns[0];
+    const idKey = "sample_name";
     const osKey = "os";
     const pfsKey = "pfs";
     group.forEach(c => {

@@ -5,7 +5,9 @@ svg {
 		Component {
 			@expr console.log(ClinicalData)
 			x = 100; y = 100
-			@if ClinicalData.survivalData.pfs != null && Object.values(ClinicalData.survivalData.pfs).reduce((prev, curr) => prev || (curr != null && curr != []), false) {
+			@let showPfs = ClinicalData.survivalData.pfs != null && Object.values(ClinicalData.survivalData.pfs).reduce((prev, curr) => prev || (curr != null && curr != []), false)
+			@expr console.log("SHOWPFS" + showPfs)
+			@if showPfs {
 				SurvivalLine {
 					rawData = ClinicalData.survivalData.pfs
 					classifications = ClinicalData.classifications
@@ -37,7 +39,9 @@ svg {
 		}
 		Component {
 			x = 600; y = 100
-			@if Object.values(ClinicalData.survivalData.pfs).reduce((prev, curr) => prev || (curr != null && curr != []), false) {
+			@let showOs = ClinicalData.survivalData.os != null && Object.values(ClinicalData.survivalData.os).reduce((prev, curr) => prev || (curr != null && curr != []), false) 
+			@expr console.log("showOs" + showOs)
+			@if showOs {
 				SurvivalLine {
 					rawData = ClinicalData.survivalData.os
 					classifications = ClinicalData.classifications

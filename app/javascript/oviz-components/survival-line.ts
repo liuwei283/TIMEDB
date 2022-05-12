@@ -43,7 +43,8 @@ export class SurvivalLine extends Component<SurvivalLineOption> {
 			valueRange = prop.valueRange
             hasPadding = false
             // categoryRange = [0, xMax]
-            // margin = [ 5, 5]
+            // margin = [ 0.05, 0.05]
+            margin = [0.05, 0.05]
 			data = _data
             @props prop
             @yield background default {
