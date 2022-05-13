@@ -7,7 +7,7 @@
             </li>
         </ul>
 
-        <h2> Do not reort any bugs related this page now! Testing single/multiple upload!
+        <h2> Do not report any bugs related this page now! Testing single/multiple upload!
         </h2>
 
         <div class="prepare" v-if="!submitted">
@@ -100,23 +100,21 @@
             <div class = "row">
                 <div class="col-md-2">
                     <img v-bind:src="require('../assets/images/nav-up-blue.png')">
-                    <svg width="100px" height="500px" version="1.1" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M40 0 v 200 l -10 10 l 10 10 v 120 l 10 10 l -10 10 v 140" fill="transparent" stroke="#253959" stroke-width = "3px"></path> 
+                    <svg width="100px" height="700px" version="1.1" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M40 0 v 250 l -10 10 l 10 10 v 250 l 10 10 l -10 10 v 220" fill="transparent" stroke="#253959" stroke-width = "3px"></path> 
                     </svg>
 
-                    <div v-if="demo==false" class="jump before">
-                        <img v-bind:src="require('../assets/images/nav-up-pink.png')" style="float :left; margin-right: 5px"> 
-                        <p style="padding-top:20px">Don't know how to upload data? Click to download the  <a href="#" @click = "clickDemo" >demo file!</a>   </p>
+
+                    
+                    <div id = "submit-modal-trigger">
+                        <img v-bind:src="require('../assets/images/nav-up-pink.png')" style="float :left; margin-right: 10px"> 
+                        <p style="">Don't know how to upload data? Click to check the  <b-btn v-b-modal.submit-helper class = "btn btn-secondary"> Submit Helper </b-btn> </p>
                     </div>
-                    <div v-else class="jump after">
-                        <img v-bind:src="require('../assets/images/nav-up-pink.png')" style="float :left; margin-right: 5px"> 
-                        <p style="padding-top:30px"><a href = "#" @click = "closeDemo">Close helper!</a></p>
-                    </div>
+
+                    
                     <!-- <img v-if="!submittted" v-bind:src="require('../assets/images/nav-submit-gray.png')"> -->
                     <img v-if="submitted == true" v-bind:src="require('../assets/images/nav-submit-blue.png')">
                     <img v-else v-bind:src="require('../assets/images/nav-submit-gray.png')">
-
-
                     <br>                      
                 </div>
                 <div class="col-md-10">
@@ -130,66 +128,62 @@
                                             :title="app.description"></i> -->
                             </h6>
                             <h2 class = "text-right"> JOB SUBMISSISON </h2>
-                            <div class = "row">
-
-                                
-                                <div class="set-input-section col-md-6" ref="inputSection">
+                            <br>
+                            <br>
+                            <div class = "row justify-content-around">
+                                <div class = "col-md-6">
                                     <h4 class = "text-center">File Submission</h4>
-
-                                    <div class = "row">
-                                        <div v-if="demo" id = "demo-helper" class = "col-md-8">
-                                            <h4 class = "text-center">Submission Helper</h4>
-                                            <br>
-                                            <div class="row" style="margin:0">
-                                                <div v-for="input in displayedInputs" :key="input.id" class = "col-md-5 text-center submit-box">
-                                                    <a :href="`/public/data/module_demo/${app.name}_demo_${input.name}.tsv`" :download=input.name >Download Demo {{ input.name}} </a>
-                                                </div>
-                                                <!-- <div class="col-md-5 text-center submit-box">
-                                                    <a href="/public/data/module_demo/demo1.tsv" download = "testing">Download</a>
-                                                    <a :href="`/public/data/module_demo/${app.name}_demo1.tsv`" download = "demo1">Download</a>
-                                                </div>
-                                                <div class="col-md-5 offset-2 text-center" style="border:solid;border-radius:20px;padding:20px">
-                                                    <a :href="`/public/data/module_demo/${app.name}_demo2.tsv`" download = "demo2">Download</a>
-                                                    <a href="/public/data/module_demo/test_demo2.tsv" download = "testing">Download</a>
-                                                </div>  -->
-                                            </div>
-                                            <br>
-
-                                            <div class = "submit-box text-center" style="word-wrap:break-word;height:300px;overflow:scroll;">
-                                                <img :src="`https://deepomics.org${app.image.url}`" alt="Analysis image">
-                                                <p>{{app.description}}</p>
-                                            </div>
+                                </div>
+                                <div class = "col-md-6">
+                                    <h4 class = "text-center">Set Parameters</h4>
+                                </div>
+                            </div>
+                            <div class = "row">
+                                <div class="col-md-6" ref="inputSection">
+                        
+                                    <div class = "row container justify-content-center">
+                                        <div v-for="input in displayedInputs" :key="input.id" class = "text-center submit-box col-md-6">
+                                            <a :href="`/public/data/module_demo/${app.name}_demo_${input.name}.tsv`" :download=input.name >Demo {{ input.name}} </a>
                                         </div>
-                                        <div v-if="demo" class = "col-md-1"></div>
-                                        <div v-if="displayedInputs.length>0" :class="check_class(0)">
-                                            <div class = "row justify-content-around">
-                                                <div :class="check_class(1)" v-for="input in displayedInputs" :key="input.id">
+                                        <!-- <div class="col-md-5 text-center submit-box">
+                                            <a href="/public/data/module_demo/demo1.tsv" download = "testing">Download</a>
+                                            <a :href="`/public/data/module_demo/${app.name}_demo1.tsv`" download = "demo1">Download</a>
+                                        </div>
+                                        <div class="col-md-5 offset-2 text-center" style="border:solid;border-radius:20px;padding:20px">
+                                            <a :href="`/public/data/module_demo/${app.name}_demo2.tsv`" download = "demo2">Download</a>
+                                            <a href="/public/data/module_demo/test_demo2.tsv" download = "testing">Download</a>
+                                        </div>  -->
+                                    </div>
+
+                                    <div class = "row submit-box justify-content-center">
+                                        <div v-if="displayedInputs.length>0">
+                                            <div class = "row justify-content-center">
+                                                <div class="col-md-6" v-for="input in displayedInputs" :key="input.id">
                                                     <label :for="`i-${input.id}`">{{ input.name }}
                                                         <span v-if="input.required" class="required">*</span>
                                                         <!-- <i class="fa fa-question-circle" b-tooltip.hover
                                                         :title="input.description"></i> -->
                                                     </label>
-                                                    <div @click = "uploadToggle" :id="`popup-trigger-${input.id}`"  class="uploadPng">
-                                                        <img v-bind:src="require('../assets/images/big_upload.png')">
+                                                    <div @click = "uploadToggle" :id="`popup-trigger-${input.id}`"  class="uploadPng text-center row justify-content-center">
+                                                        <img v-bind:src="require('../assets/images/big_upload.png')" >
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div class="row form-group select d-flex justify-content-around">
+                                            <div class="row justify-content-center">
                                                 <p v-if="picked_single_multiple=='single' && selected != ''">
                                                     Small notice: please be noted that you have selected single type analysis.
                                                     <br>
                                                     you should guarantee that selected datasets are from single project source to submit tasks, 
                                                     and you should not upload any file which will be ignored.
                                                 </p>
-                                                <label class="col-form-label select ">
+                                                <label class="col-form-label select">
                                                     <span>
-                                                    Select a dataset to merge: </span>
+                                                    Or Select a dataset to merge: </span>
                                                     <i class="fa fa-question-circle" v-b-tooltip.rightbottom.hover title="You may choose one dataset to upload merged files"></i>
                                                 </label>
-                                                <b-form-select class="form-control select" 
+                                                <b-form-select class="form-control select  col-md-8" 
                                                     name="selected-dataset"
                                                     v-model="selected"
-                                                    :disabled="picked_single_multiple=='single' && files[`i-${input.id}`] != null"
                                                 >
                                                     <option value="" key="default">--Default No Dataset--</option>
                                                     <option v-for="(option, index) in select_box_option" :key="index" :value="option.value" :disabled="option.disabled">
@@ -203,10 +197,10 @@
                                 </div>
 
 
-                                <div class="set-param-section mt-4 col-md-6" style="word-wrap:break-word;border-left:solid; padding-left:40px">
-                                    <h4>Set Parameters</h4>
-                                    <div class = "row">
-                                        <div v-if="displayedParams.length > 0" class = "col-md-6" style="height:200px;overflow:scroll; vertical-align:center">
+                                <div class="set-param-section col-md-6" style="word-wrap:break-word; padding-left:40px">
+
+                                    <div class = "row submit-box">
+                                        <div v-if="displayedParams.length > 0" class = "col-md-6" style="height:300px;overflow:scroll; vertical-align:center">
                                             <div class="row">
                                                 <div class="col-md-12" v-for="param in displayedParams" :key="param.id">
                                                     <label :for="`p-${param.id}`">{{ param.name }}
@@ -256,7 +250,6 @@
                                     <p v-if="displayedParams.length == 0">No Parameters.</p>
                                 </div>
                             </div>
-                            <b-btn v-if="demo" @click="closeDemo" class="float-right mt-2" style="border-radius:50%;margin-left:20px"> > </b-btn>
                             <b-btn @click="submitTask" class="float-right mt-2"><i class="fa fa-location-arrow"></i> Submit</b-btn>
                             
                         </div>
@@ -341,8 +334,17 @@
             <i class="fas fa-spinner fa-pulse fa-5x m-0"></i>
             <h3 class="mt-4">Submitting task……</h3>
         </div>
-
-
+        <b-modal v-if="started" id = "submit-helper" size="xl" scrollable title="Submission Helper" centered>
+            <br>
+            <div class = "text-center container">
+                <img v-bind:src="require('../assets/images/' + selected_analysis.name + '_intro.jpg')" style= "width : 100%"> 
+                <div v-html="selected_analysis.rendered_doc" class = "text-left container">
+                </div>
+            </div>
+            <div class = "col-md-12">
+                <button type="button" class = "btn btn-secondary"> Close helper </button>
+            </div>
+        </b-modal>
     </div>
 </template>
 
@@ -357,10 +359,6 @@
     import GlobalSaveButton from 'components/global-save-button.vue';
     import Router from '../router';
     import * as $ from "jquery";
-import { filterSamples } from 'viz/meta-overview/data';
-import { template } from 'crux/src/template/tag';
-import { filterMethod } from 'viz/static_comparedPlot/data';
-
 
     Vue.use(BootstrapVue);
 
@@ -511,7 +509,7 @@ import { filterMethod } from 'viz/static_comparedPlot/data';
                     this.params_desc = this.app.params[0].description;
                 }
                 else {
-                    newid = s_ana.mid
+                    var newid = s_ana.mid
                     this.selected_analysis = s_ana;
                     axios.get(`https://deepomics.org/api/apps/${newid}/`).then((response) => {
                         let newapp = response.data.app;
@@ -669,7 +667,6 @@ import { filterMethod } from 'viz/static_comparedPlot/data';
                 
             },
             clickDemo(){
-
                 this.demo=true;
             },
             closeDemo(){
@@ -704,7 +701,7 @@ import { filterMethod } from 'viz/static_comparedPlot/data';
 
         },
         components: {
-            VueTagsInput, AlertCenter, GlobalSaveButton,
+            VueTagsInput, AlertCenter, GlobalSaveButton
         },
     };
 </script>
@@ -713,6 +710,8 @@ import { filterMethod } from 'viz/static_comparedPlot/data';
 @import '~bootstrap/scss/bootstrap.scss';
 @import '~bootstrap-vue/src/index.scss';
 @import '../assets/stylesheets/partials/variables';
+
+
 
 .container {
     margin: 2em;
@@ -879,6 +878,7 @@ import { filterMethod } from 'viz/static_comparedPlot/data';
     transform: scale(1.0);
 }
 
+
 h2.display-4 {
     text-transform: uppercase;
 }
@@ -888,16 +888,20 @@ h2.display-4 {
 }
 
 
-.jump{
-    border:solid;
-    border-radius:20px;
-    overflow:auto;
-    position: absolute;
-    top:90px;
-    padding: 0px;
-    background-color: rgb(252, 157, 154);
-    z-index:1;
-}
+// #modal-trigger {
+//     overflow:auto;
+//     position: absolute;
+//     top:90px;
+//     z-index:1;
+//     width: 200px;
+// }
+
+// #modal-trigger image {
+//     overflow:auto;
+//     position: absolute;
+//     z-index:1;
+// }
+
 .before {
     width: 300px;
 }
@@ -917,11 +921,37 @@ input[type="radio"] {
     width: 100px;
 }
 
+.bt-secondary {
+    color: white !important;
+}
+
 .submit-box {
-    border: solid;
+    box-shadow: 0 0 64px darken(#dee2e6, 5%);
     border-radius: 20px;
     padding: 20px;
+    width: 100%;
 }
+.submit-box image {
+    width: 100%;
+}
+
+#submit-helper .container {
+    width: 80%;
+}
+
+#submit-modal-trigger{
+    //border:solid;
+    border-radius:20px;
+    overflow:auto;
+    position: absolute;
+    top:90px;
+    padding: 0px;
+    z-index:1;
+    width: 300px;
+}
+
+
+
 
 
 
