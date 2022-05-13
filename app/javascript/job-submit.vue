@@ -7,6 +7,9 @@
             </li>
         </ul>
 
+        <h2> Do not reort any bugs related this page now! Testing single/multiple upload!
+        </h2>
+
         <div class="prepare" v-if="!submitted">
             <div class="index-banner">
                 <div class="container">
@@ -18,17 +21,37 @@
                     </p>
                 </div>
             </div>
+            <div id = "singleMultipleSelect">
+                <div class="container">
+                    <h2 class="display-5">
+                        Please choose to upload single or multical file(s)/dataset(s): 
+                    </h2>
+                    <br>
+                    <button type = "button" id = "single-button" class = "btn btn-dark btn-lg btn-select" @click="updateFilesType('single')">
+                    Single
+                    </button>
+                    <button type = "button" id = "multiple-button" class = "btn btn-secondary btn-lg btn-select" @click="updateFilesType('multiple')">
+                    Multiple
+                    </button>
+
+                    <!-- <input type="radio" id="single" value="single" v-model="picked_single_multiple">
+                    <label for="single">Single</label>
+                    <input type="radio" id="multiple" value="multiple" v-model="picked_single_multiple">
+                    <label for="multiple">Multiple</label> -->
+                    <!-- <br>
+                    <p class="lead mt-2">You will upload {{ picked_single_multiple }} file(s)/dataset(s)</p> -->
+                </div>
+            </div>
             <div class="index-banner">
                 <div class="container">
                     <h2 class="display-4">
                         Module
                     </h2>
                     <p class="lead mt-2">
-                        Please choose a module below.
+                        Please choose a module below:
                     </p>
                 </div>
             </div>
-
             <div class="container-fluid container" id="analyses_list">
                 <div id="accordion">
                     <!-- <div id="head-for-analysis-list">
@@ -37,22 +60,22 @@
                             Totally {{analyses.length + 1}} Module(s) available
                         </button></h5> -->
                     <!-- </div> -->
-                    
-                    <div class="row cols-xs-space cols-sm-space cols-md-space">
-                        <div class="col-lg-4 mb-4 cardContainer" @click="updateApp(null, true)">
-                            <div class="card">
-                                <img v-bind:src="require('../assets/images/module.png')" class="card-img-top">
-                                <div class = "image_overlay image_overlay_blur">
-                                    <div class = "image_title">
-                                        Test only
-                                    </div>
-                                    <div class = "image_decscription">
-                                        just for testing
-                                    </div>
-                                </div>
+                    <div class="cols-xs-space cols-sm-space cols-md-space">
+
+                        <div class = "row" id = "supervisedSelect" v-if="isConv==true">
+                            <div>
+                                <h2 class="display-5">
+                                    Submit tasks to supervised or unsupervised analyses:
+                                </h2>
+                                <br>
+                                <input type="radio" class = "btn-check" name="supervise-select" autocomplete="off" id="supervised" value="supervised" v-model="picked_supervised" checked>
+                                <label for="supervised" class = "btn btn-outline-secondary">Supervised Deconvolution</label>
+                                <input type="radio" class = "btn-check" name="supervise-select" autocomplete="off" id="unsupervised" value="unsupervised" v-model="picked_supervised">
+                                <label for="unsupervised" class = "btn btn-outline-secondary">Unsupervised Deconvolution</label>
+
                             </div>
                         </div>
-                        <div class="col-lg-4 mb-4" v-for="a in analyses" :key="a.id" @click="updateApp(a, true)">
+                        <div class="col-lg-4 mb-4 row container" v-for="a in displayedAnalyses" :key="a.id" @click="updateApp(a, true)">
                             <div class="card">
                                 <img v-if="a.cover_image == null" v-bind:src="require('../assets/images/module.png')" class="card-img-top">
                                 <img v-else :src="a.cover_image" class="card-img-top">
@@ -118,27 +141,28 @@
                                             <h4 class = "text-center">Submission Helper</h4>
                                             <br>
                                             <div class="row" style="margin:0">
-                                                <div class="col-md-5 text-center" style="border:solid;border-radius:20px;padding:20px">
-                                                    <!-- <a href="/public/data/module_demo/demo1.tsv" download = "testing">Download</a> -->
+                                                <div v-for="input in displayedInputs" :key="input.id" class = "col-md-5 text-center submit-box">
+                                                    <a :href="`/public/data/module_demo/${app.name}_demo_${input.name}.tsv`" :download=input.name >Download Demo {{ input.name}} </a>
+                                                </div>
+                                                <!-- <div class="col-md-5 text-center submit-box">
+                                                    <a href="/public/data/module_demo/demo1.tsv" download = "testing">Download</a>
                                                     <a :href="`/public/data/module_demo/${app.name}_demo1.tsv`" download = "demo1">Download</a>
                                                 </div>
                                                 <div class="col-md-5 offset-2 text-center" style="border:solid;border-radius:20px;padding:20px">
                                                     <a :href="`/public/data/module_demo/${app.name}_demo2.tsv`" download = "demo2">Download</a>
-                                                    <!-- <a href="/public/data/module_demo/test_demo2.tsv" download = "testing">Download</a> -->
-                                                </div>
+                                                    <a href="/public/data/module_demo/test_demo2.tsv" download = "testing">Download</a>
+                                                </div>  -->
                                             </div>
                                             <br>
 
-                                            <div style="border:solid;border-radius:10px;text-align:center;word-wrap:break-word;height:300px;overflow:scroll;">
-                                                <img :src="`https://deepomics.org${app.image.url}`" alt="Italian Trulli">
+                                            <div class = "submit-box text-center" style="word-wrap:break-word;height:300px;overflow:scroll;">
+                                                <img :src="`https://deepomics.org${app.image.url}`" alt="Analysis image">
                                                 <p>{{app.description}}</p>
                                             </div>
                                         </div>
                                         <div v-if="demo" class = "col-md-1"></div>
-                                        
-
                                         <div v-if="displayedInputs.length>0" :class="check_class(0)">
-                                            <div class = "row">
+                                            <div class = "row justify-content-around">
                                                 <div :class="check_class(1)" v-for="input in displayedInputs" :key="input.id">
                                                     <label :for="`i-${input.id}`">{{ input.name }}
                                                         <span v-if="input.required" class="required">*</span>
@@ -150,9 +174,30 @@
                                                     </div>
                                                 </div>
                                             </div>
+                                            <div class="row form-group select d-flex justify-content-around">
+                                                <p v-if="picked_single_multiple=='single' && selected != ''">
+                                                    Small notice: please be noted that you have selected single type analysis.
+                                                    <br>
+                                                    you should guarantee that selected datasets are from single project source to submit tasks, 
+                                                    and you should not upload any file which will be ignored.
+                                                </p>
+                                                <label class="col-form-label select ">
+                                                    <span>
+                                                    Select a dataset to merge: </span>
+                                                    <i class="fa fa-question-circle" v-b-tooltip.rightbottom.hover title="You may choose one dataset to upload merged files"></i>
+                                                </label>
+                                                <b-form-select class="form-control select" 
+                                                    name="selected-dataset"
+                                                    v-model="selected"
+                                                    :disabled="picked_single_multiple=='single' && files[`i-${input.id}`] != null"
+                                                >
+                                                    <option value="" key="default">--Default No Dataset--</option>
+                                                    <option v-for="(option, index) in select_box_option" :key="index" :value="option.value" :disabled="option.disabled">
+                                                        {{option.lable}}
+                                                    </option>
+                                                </b-form-select>
+                                            </div>
                                         </div>
-
-
                                     </div>
                                     
                                 </div>
@@ -210,15 +255,10 @@
                                     
                                     <p v-if="displayedParams.length == 0">No Parameters.</p>
                                 </div>
-
                             </div>
-                            
                             <b-btn v-if="demo" @click="closeDemo" class="float-right mt-2" style="border-radius:50%;margin-left:20px"> > </b-btn>
                             <b-btn @click="submitTask" class="float-right mt-2"><i class="fa fa-location-arrow"></i> Submit</b-btn>
-                            <div class="is-loading w-100" v-if="isLoading">
-                                <i class="fas fa-spinner fa-pulse fa-5x m-0"></i>
-                                <h3 class="mt-4">Submitting task……</h3>
-                            </div>
+                            
                         </div>
                         
                     </div>
@@ -249,22 +289,42 @@
                 <div class = "col-md-4 text-center" id = "upload-card">
                     <!-- <img v-bind:src="require('../assets/images/nav-upload.png')"> -->
                     <!-- <h1 class="text-center">Upload</h1> -->
-                    <div class = "text-center">
+                    <!-- <div class = "text-center">
                         <i class="fa fa-upload fa-10x"></i>
-                    </div>
-                    <br>
-                    <br>
-                    <b-form-file
-                        :id="`i-${input.id}`"
-                        v-model="files[`i-${input.id}`]"
-                        :state="inputValid[`i-${input.id}`]"
-                        placeholder="Choose a file or drop it here..."
-                        drop-placeholder="Drop file here..."
-                        :name="`i-${input.id}`"
-                        :required="input.required"
-                    >
-                    </b-form-file>
+                    </div> -->
+                    <!-- <br>
+                    <br> -->
+                    <!-- <div id = "uploadDatasetSelect" v-if="picked_single_multiple=='single'">
+                        <div class="container">
+                            <h2 class="display-5">
+                                Please select uploading files or use datasets to submit analysis tasks: 
+                            </h2>
+                            <input type="radio" id="upload" value="upload" v-model="picked_upload_dataset">
+                            <label for="upload">Upload files</label>
+                            <input type="radio" id="dataset" value="dataset" v-model="picked_upload_dataset">
+                            <label for="dataset">Use datasets</label>
+                        </div>
+                    </div> -->
 
+                    <p v-if="picked_single_multiple=='single' && selected != ''">
+                        Please be noted that you have selected single type analysis. 
+                        <br>
+                        Since you have selected datasets, you are not allowed to upload any file.
+                    </p>
+                    <div>
+                        <b-form-file
+                            :id="`file-i-${input.id}`"
+                            v-model="files[`i-${input.id}`]"
+                            :state="inputValid[`i-${input.id}`]"
+                            placeholder="Choose a file or drop it here..."
+                            drop-placeholder="Drop file here..."
+                            :name="`i-${input.id}`"
+                            :required="input.required"
+                            :disabled="picked_single_multiple=='single' && selected != ''"
+                            :multiple="picked_single_multiple=='multiple'"
+                        >
+                        </b-form-file>
+                    </div>
                 </div>
                 <div class = "col-md-2"></div>
 
@@ -274,8 +334,12 @@
                 </div>
                 <div class = "col-md-1"></div>
                 <div class = "col-md-12 text-center" :id ="`closeToggle-${input.id}`">
-                    <button type = "button" class = "btn" @click="uploadToggle"><i class="fa-solid fa-arrow-up"></i> Upload</button>
+                    <button type = "button" class = "btn" @click="uploadToggle"><i class="fa fa-upload"></i> Upload</button>
                 </div>
+        </div>
+        <div class="is-loading w-100" v-if="isLoading">
+            <i class="fas fa-spinner fa-pulse fa-5x m-0"></i>
+            <h3 class="mt-4">Submitting task……</h3>
         </div>
 
 
@@ -293,6 +357,9 @@
     import GlobalSaveButton from 'components/global-save-button.vue';
     import Router from '../router';
     import * as $ from "jquery";
+import { filterSamples } from 'viz/meta-overview/data';
+import { template } from 'crux/src/template/tag';
+import { filterMethod } from 'viz/static_comparedPlot/data';
 
 
     Vue.use(BootstrapVue);
@@ -300,13 +367,20 @@
     export default {
         data() {
             return {
-                id: window.gon.id,
+                ds_info : {},
+                id : null,
+                selected_analysis : null,
+                isConv: false,
+                analysis_category: window.gon.cname,
                 category_name: window.gon.cname,
                 app: { 
                 },
                 files: {
                 },
-                selected: {},
+                file_names: {
+
+                },
+                selected: "",
                 boolSelectOpt: [
                     { value: true, text: 'Yes' },
                     { value: false, text: 'No' },
@@ -319,25 +393,29 @@
                 demo: false,
                 started: false,
                 params_desc: null,
-
+                picked_single_multiple: "single",
+                picked_supervised: "supervised"
             };
         },
         created() {
+            this.ds_info = window.gon.select_box_option;
+            if (this.analysis_category == "Deconvolution Analysis") {
+                this.isConv = true;
+            }
             this.updateApp(null, false);
-            this.selected = {};
             this.select_box_option = [];
-            var ds = window.gon.select_box_option;
+
             var oplist = [];
-            for (var key in ds){
+            for (var key in this.ds_info){
                 var op = {value: key, lable: key};
                 oplist.push(op);
             }
             this.select_box_option = oplist;
 
             axios.get('/submit/analysesCategory.json', { params: { cname: this.category_name}  }).then(response => {this.analyses = response.data; console.log(response.data)});
-            for (var k in this.app.inputs){
-                this.files['i-' + this.app.inputs[k].id]  = null;
-            }
+            // for (var k in this.app.inputs){
+            //     this.files['i-' + this.app.inputs[k].id]  = null;
+            // }
         },
         computed: {
             displayedInputs() {
@@ -347,9 +425,28 @@
             displayedParams() {
                 // eslint-disable-next-line
                 return _.sortBy(this.app.params.filter(x => !x._destroy), ['name']);
+            },
+            displayedAnalyses() {
+                var filtered_analyses = this.analyses;
+                if (this.isConv == true) {
+                    if (this.picked_supervised == "supervised") {
+                        filtered_analyses = filtered_analyses.filter(item => !(item.name == "TIMEDB Deconv LinSeed"));
+                    }
+                    else {
+                        filtered_analyses = filtered_analyses.filter(item => (item.name == "TIMEDB Deconv LinSeed"));
+                    }
+                }
+                return filtered_analyses; 
             }
         },
         watch: {
+            selected:function(newValue) {
+                if (newValue != null && this.picked_single_multiple == 'single') {
+                    for (var k in this.app.inputs) {
+                        this.files['i-' + this.app.inputs[k].id]  = null;
+                    }
+                }
+            }
         },
         methods: {
             setStatusColor(status) {
@@ -374,12 +471,12 @@
                             .map(({ name, value }) => ({ [name]: value}));
             },
 
-            updateApp(app, flag) {
+            updateApp(s_ana, flag) {
                 this.started = flag;
-                let newid, newapp;
-                if (app == null) {
-                    newid = window.gon.id;
+                let newapp;
+                if (s_ana == null) {
                     newapp = {
+                        id : "-1",
                         image : "/media/img/instance/Sudden_Cardiac_Death_Detection.png",
                         name: 'test app for immune platform',
                         description: 'Sudden cardiac death (SCD) is a sudden, unexpected death caused by loss of heart function (sudden cardiac arrest). Sudden cardiac death is the largest cause of natural death in the United States, causing about 325,000 adult deaths in the United States each year. Sudden cardiac death is responsible for half of all heart disease deaths.\n\nSudden cardiac death occurs most frequently in adults in their mid-30s to mid-40s, and affects men twice as often as it does women. This condition is rare in children, affecting only 1 to 2 per 100,000 children each year.\n\n**Reference**: WH, L., \u0026 Dan, E. (2010). Genetic Variations in NOS1AP are Associated with Sudden Cardiac Death in U.S. White Community Based Populations.",',
@@ -390,14 +487,6 @@
                                 description: "some descriptions1",
                                 required: true,
                             },
-                            {
-                                id: "id2",
-                                name: "name2",
-                                description: "some descriptions2",
-                                required: true,
-
-                            },
-                            
                         ],
                         params: [
                             {
@@ -415,58 +504,21 @@
                                 default: "default value",
                                 required: true,
                                 description: "some descriptions some descriptions some deescriptions some descriptions",
-
-                            },
-                            {
-                                name: "parameter 3",
-                                id: "pid3",
-                                param_type: "enum",
-                                options: [1, 2, 3, 4, 5],
-                                default: "default value",
-                                required: true,
-                                description: "some descripxcvgkflkulguy ome descriuljkh tions some descriptions some descriptions",
-
-                            },
-                            {
-                                name: "parameter 4",
-                                id: "pid4",
-                                param_type: "string",
-                                default: "default value",
-                                required: true,
-                                description: "some descripxcvgkflkulguy ome descriuljkh tions some descriptions some descriptions",
-
-                            },
-                            {
-                                name: "parameter 5",
-                                id: "pid5",
-                                param_type: "string",
-                                default: "default value",
-                                required: true,
-                                description: "some descripxcvgkflkulguy ome descriuljkh tions some descriptions some descriptions",
-
                             }
                         ],
                     };
-                    this.id = newid;
                     this.app = newapp;
-
                     this.params_desc = this.app.params[0].description;
                 }
-
                 else {
-                    newid = app.mid;
-                    // newapp = {
-                    //     name: app.name,
-                    //     description: app.description,
-                    //     inputs: [],
-                    //     params: [],
-                    // };
+                    newid = s_ana.mid
+                    this.selected_analysis = s_ana;
                     axios.get(`https://deepomics.org/api/apps/${newid}/`).then((response) => {
                         let newapp = response.data.app;
                         for (var k in this.app.inputs) {
                             this.files['i-' + this.app.inputs[k].id]  = null;
+                            this.file_names['i-' + this.app.inputs[k].id]  = this.app.inputs[k].name
                         }
-                        this.id = newid;
                         this.app = newapp;
                         this.params_desc = this.app.params[0].description;
                     });
@@ -480,6 +532,8 @@
 
                 const { alertCenter } = this.$refs;
                 let allRight = true;
+                let is_single = (this.picked_single_multiple == 'single')
+            
                 document.querySelectorAll('input').forEach((input) => {
                     if(input.required) {
                         const valid = !!input.value && !!_.trim(input.value);
@@ -489,19 +543,41 @@
                         }
                     }
                 })
-                console.log("it is all right")
+
+                //there will be double check later
+                if (this.selected != "" && is_single) {
+                    if (this.ds_info[this.selected] > 1) {
+                        allRight = false
+                    }
+                    for (var file_inputs in this.files) {
+                        if (file_inputs != null) {
+                            allRight = false;
+                        }
+                    }
+                }
+
                 if (allRight) {
+                    let submitted_mid;
+                    if (this.picked_single_multiple == 'multiple') {
+                        submitted_mid = this.selected_analysis.multiple_mid;
+                    }
+                    else {
+                        submitted_mid = this.selected_analysis.mid;
+                    }
                     let alertData;
                     $("#disable-fill").fadeIn(10);
                     this.isLoading = true;
                     axios.post(
                         `/submit-app-task/`,
+                        
                        objectToFormData({
-                            "app_id": this.app.id,
                             "inputs": this.files,
                             "params": this.formatParams(),
                             "selected": this.selected,
-                            "mid": this.id,
+                            "search_mid": this.selected_analysis.mid,
+                            "mid": submitted_mid,
+                            "is_single": this.picked_single_multiple=='single',
+                            "file_names": this.file_names,
                         }),
                         {
                             headers: {
@@ -530,6 +606,10 @@
                         }, 500);
                     });
                 }
+                else {
+                    alertCenter.add('danger', "Please recheck your inputs. Something error here!");
+                }
+
                 if (this.submitted == true) {
                     var delay = 10000; // time in milliseconds
 
@@ -538,6 +618,20 @@
                     },delay);
                     
                 }
+            },
+            updateFilesType(type) {
+                if (type == 'single') {
+                    this.picked_single_multiple = "single";
+                    
+                }
+                else {
+                    this.picked_single_multiple = "multiple";
+                    
+                }
+                document.getElementById("single-button").classList.toggle("btn-secondary");
+                document.getElementById("single-button").classList.toggle("btn-dark");
+                document.getElementById("multiple-button").classList.toggle("btn-secondary");
+                document.getElementById("multiple-button").classList.toggle("btn-dark");
             },
             setSelectBox(){
                 var i = 0;
@@ -620,6 +714,10 @@
 @import '~bootstrap-vue/src/index.scss';
 @import '../assets/stylesheets/partials/variables';
 
+.container {
+    margin: 2em;
+}
+
 #submit-app-back.active {
     filter: blur(5px);
     //background-color: #000;
@@ -685,15 +783,13 @@
     font-size: 0.8em;
 }
 .is-loading {
-    margin: 0 1px;
-    padding: 8rem 4rem;
+    position: fixed;
+    top: 50%;
+    right: 50%;
+    transform: translate(-50%, -50%);
     text-align: center;
     color: #000;
-    position: absolute;
-    top:0;
     z-index: 1000;
-    width: 100%;
-    height: 100%;
 }
 
 .row {
@@ -745,10 +841,24 @@
 }
 
 
-.popup .col-md-4 {
+.popup #description-card {
     padding-top: 5%;
     color: white;
     background-color: $light_theme;
+    height: 50%;
+    //margin-left: 5%;
+    //margin-right: 5%;
+    //width: 30%;
+    //background-color: #000;
+    border: 1px solid $gray-400;
+    border-radius: 5px;
+    text-align: center;
+}
+
+.popup #upload-card {
+    padding-top: 5%;
+    color: black;
+    background-color: white;
     height: 50%;
     //margin-left: 5%;
     //margin-right: 5%;
@@ -794,6 +904,25 @@ h2.display-4 {
 .after {
     width: 180px;
 }
+
+input[type="radio"] {
+  width: 3em;
+  height: 1em;
+  border: 0.15em solid currentColor;
+  border-radius: 50%;
+}
+
+.btn-select {
+    margin: 0.5em;
+    width: 100px;
+}
+
+.submit-box {
+    border: solid;
+    border-radius: 20px;
+    padding: 20px;
+}
+
 
 
 </style>
