@@ -106,9 +106,9 @@
 
 
                     
-                    <div id = "submit-modal-trigger">
-                        <img v-bind:src="require('../assets/images/nav-up-pink.png')" style="float :left; margin-right: 10px"> 
-                        <p style="">Don't know how to upload data? Click to check the  <b-btn v-b-modal.submit-helper class = "btn btn-secondary"> Submit Helper </b-btn> </p>
+                    <div id = "submit-modal-trigger" style="vertical-align:center">
+                        <img v-bind:src="require('../assets/images/nav-up-pink.png')" style="margin-right: 10px"> 
+                        <i class="fa fa-arrow-right"></i>  <b-btn v-b-modal.submit-helper class = "btn btn-secondary"> Submit Helper </b-btn>
                     </div>
 
                     
@@ -164,7 +164,7 @@
                                                         <!-- <i class="fa fa-question-circle" b-tooltip.hover
                                                         :title="input.description"></i> -->
                                                     </label>
-                                                    <div @click = "uploadToggle" :id="`popup-trigger-${input.id}`"  class="uploadPng text-center row justify-content-center">
+                                                    <div v-b-modal="'upload-' + input.id" class="uploadPng text-center row justify-content-center">
                                                         <img v-bind:src="require('../assets/images/big_upload.png')" >
                                                     </div>
                                                 </div>
@@ -276,60 +276,66 @@
             </div>
         </div>
 
-        <div class = "popup row" :id="`popup-upload-${input.id}`" v-for="input in displayedInputs" :key="input.id">
-            
-                <div class = "col-md-1"></div>
-                <div class = "col-md-4 text-center" id = "upload-card">
-                    <!-- <img v-bind:src="require('../assets/images/nav-upload.png')"> -->
-                    <!-- <h1 class="text-center">Upload</h1> -->
-                    <!-- <div class = "text-center">
-                        <i class="fa fa-upload fa-10x"></i>
-                    </div> -->
-                    <!-- <br>
-                    <br> -->
-                    <!-- <div id = "uploadDatasetSelect" v-if="picked_single_multiple=='single'">
-                        <div class="container">
-                            <h2 class="display-5">
-                                Please select uploading files or use datasets to submit analysis tasks: 
-                            </h2>
-                            <input type="radio" id="upload" value="upload" v-model="picked_upload_dataset">
-                            <label for="upload">Upload files</label>
-                            <input type="radio" id="dataset" value="dataset" v-model="picked_upload_dataset">
-                            <label for="dataset">Use datasets</label>
+        <b-modal class= "file-submit-modal" :id="`upload-${input.id}`" size="lg" :title="`Submit input file - ${input.name}`" centered v-for="input in displayedInputs" :key="input.id">
+                <div class = "row justify-content-around">
+                    <div class = "col-md-5 text-center">
+                        <div class = "row text-center container">
+                            <p> click to download demo file for this input: </p>
+                            <a :href="`/public/data/module_demo/${app.name}_demo_${input.name}.tsv`" :download=input.name >Demo {{ input.name}} </a>
                         </div>
-                    </div> -->
+                        <!-- <img v-bind:src="require('../assets/images/nav-upload.png')"> -->
+                        <!-- <h1 class="text-center">Upload</h1> -->
+                        <!-- <div class = "text-center">
+                            <i class="fa fa-upload fa-10x"></i>
+                        </div> -->
+                        <!-- <br>
+                        <br> -->
+                        <!-- <div id = "uploadDatasetSelect" v-if="picked_single_multiple=='single'">
+                            <div class="container">
+                                <h2 class="display-5">
+                                    Please select uploading files or use datasets to submit analysis tasks: 
+                                </h2>
+                                <input type="radio" id="upload" value="upload" v-model="picked_upload_dataset">
+                                <label for="upload">Upload files</label>
+                                <input type="radio" id="dataset" value="dataset" v-model="picked_upload_dataset">
+                                <label for="dataset">Use datasets</label>
+                            </div>
+                        </div> -->
 
-                    <p v-if="picked_single_multiple=='single' && selected != ''">
-                        Please be noted that you have selected single type analysis. 
-                        <br>
-                        Since you have selected datasets, you are not allowed to upload any file.
-                    </p>
-                    <div>
-                        <b-form-file
-                            :id="`file-i-${input.id}`"
-                            v-model="files[`i-${input.id}`]"
-                            :state="inputValid[`i-${input.id}`]"
-                            placeholder="Choose a file or drop it here..."
-                            drop-placeholder="Drop file here..."
-                            :name="`i-${input.id}`"
-                            :required="input.required"
-                            :disabled="picked_single_multiple=='single' && selected != ''"
-                            :multiple="picked_single_multiple=='multiple'"
-                        >
-                        </b-form-file>
+                        <div class = "row container">
+                            <p v-if="picked_single_multiple=='single' && selected != ''">
+                                Please be noted that you have selected single type analysis. 
+                                <br>
+                                Since you have selected datasets, you are not allowed to upload any file.
+                            </p>
+                            <div>
+                                <b-form-file
+                                    :id="`file-i-${input.id}`"
+                                    v-model="files[`i-${input.id}`]"
+                                    :state="inputValid[`i-${input.id}`]"
+                                    placeholder="Choose a file or drop it here..."
+                                    drop-placeholder="Drop file here..."
+                                    :name="`i-${input.id}`"
+                                    :required="input.required"
+                                    :disabled="picked_single_multiple=='single' && selected != ''"
+                                    :multiple="picked_single_multiple=='multiple'"
+                                >
+                                </b-form-file>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class = "col-md-6" id = "description-card">
+                        <div class = "row container">
+                            <p class = "text-left">
+                            <span v-for="des_patch in input.description.split('.')" v-bind:key="des_patch">
+                                {{des_patch}} <br>
+                            </span>
+                            </p>
+                        </div>
                     </div>
                 </div>
-                <div class = "col-md-2"></div>
-
-                <div class = "col-md-4 text-center" id = "description-card">
-                    <!-- <h2>File description</h2> -->
-                    <p class = "text-center">{{input.description}}</p>
-                </div>
-                <div class = "col-md-1"></div>
-                <div class = "col-md-12 text-center" :id ="`closeToggle-${input.id}`">
-                    <button type = "button" class = "btn" @click="uploadToggle"><i class="fa fa-upload"></i> Upload</button>
-                </div>
-        </div>
+        </b-modal>
         <div class="is-loading w-100" v-if="isLoading">
             <i class="fas fa-spinner fa-pulse fa-5x m-0"></i>
             <h3 class="mt-4">Submitting task……</h3>
@@ -340,9 +346,6 @@
                 <img v-bind:src="require('../assets/images/' + selected_analysis.name + '_intro.jpg')" style= "width : 100%"> 
                 <div v-html="selected_analysis.rendered_doc" class = "text-left container">
                 </div>
-            </div>
-            <div class = "col-md-12">
-                <button type="button" class = "btn btn-secondary"> Close helper </button>
             </div>
         </b-modal>
     </div>
@@ -439,12 +442,17 @@
         },
         watch: {
             selected:function(newValue) {
-                if (newValue != null && this.picked_single_multiple == 'single') {
+                if (newValue != "" && this.picked_single_multiple == 'single') {
                     for (var k in this.app.inputs) {
                         this.files['i-' + this.app.inputs[k].id]  = null;
                     }
                 }
-            }
+            },
+            files:function(newValue, oldValue) {
+                console.log(newValue.size);
+                console.log(oldValue.size);
+
+            },
         },
         methods: {
             setStatusColor(status) {
@@ -537,6 +545,8 @@
                         const valid = !!input.value && !!_.trim(input.value);
                         Vue.set(this.inputValid, input.name, valid);
                         if (!valid) {
+                            console.log(input);
+                            console.log("Input files has problems")
                             allRight = false;
                         }
                     }
@@ -545,15 +555,18 @@
                 //there will be double check later
                 if (this.selected != "" && is_single) {
                     if (this.ds_info[this.selected] > 1) {
+                        console.log("Selected datasets has multiple project sources.")
                         allRight = false
                     }
                     for (var file_inputs in this.files) {
                         if (file_inputs != null) {
+                            console.log("You should upload any files if you select datsets under single mode.")
                             allRight = false;
                         }
                     }
                 }
 
+                console.log("Something wrong here")
                 if (allRight) {
                     let submitted_mid;
                     if (this.picked_single_multiple == 'multiple') {
@@ -646,26 +659,6 @@
             copyToClipboard(){
                 navigator.clipboard.writeText(this.jobID);
             },
-            uploadToggle(event){
-                console.log("here")
-                var blur = document.getElementById("submit-app-back");
-                blur.classList.toggle('active')
-                console.log(event.target);
-                var target_id = event.target.parentNode.id
-                if(target_id.includes("closeToggle")) {
-                    var input_id = target_id.replace("closeToggle-", "");
-                    console.log(input_id);
-                    var popup_uploader = document.getElementById("popup-upload-" + input_id);
-                    popup_uploader.classList.toggle('active')
-                }
-                else {
-                    var input_id = target_id.replace("popup-trigger-", "");
-                    console.log(input_id);
-                    var popup_uploader = document.getElementById("popup-upload-" + input_id);
-                    popup_uploader.classList.toggle('active')
-                }
-                
-            },
             clickDemo(){
                 this.demo=true;
             },
@@ -712,10 +705,6 @@
 @import '../assets/stylesheets/partials/variables';
 
 
-
-.container {
-    margin: 2em;
-}
 
 #submit-app-back.active {
     filter: blur(5px);
@@ -791,82 +780,15 @@
     z-index: 1000;
 }
 
-.row {
-    display: flex;
-    align-items: center;
-}
-
 .set-input-section img {
     width: 80%;
 }
 
-#jobIDButton, button {
+#jobIDButton {
     background-color: $light_theme;
     color: white;
 }
 
-.popup {
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 60%;
-    height: 60%;
-    box-shadow: 0 5px 30px rgba(0,0,0,.30);
-    background-color: #f8f9fa;
-    visibility: hidden;
-    opacity: 0;
-    transition: 0.5s;
-    border-radius: 15px;
-}
-
-.popup button {
-    background-color: $light_theme;
-    color: white
-}
-
-.popup.active {
-    visibility: visible;
-    opacity: 1;
-    transition: 0.5s;
-
-}
-
-.popup .fa {
-    width: 100%;
-    display: inline-block;
-    text-align: center;
-    vertical-align: center;
-}
-
-
-.popup #description-card {
-    padding-top: 5%;
-    color: white;
-    background-color: $light_theme;
-    height: 50%;
-    //margin-left: 5%;
-    //margin-right: 5%;
-    //width: 30%;
-    //background-color: #000;
-    border: 1px solid $gray-400;
-    border-radius: 5px;
-    text-align: center;
-}
-
-.popup #upload-card {
-    padding-top: 5%;
-    color: black;
-    background-color: white;
-    height: 50%;
-    //margin-left: 5%;
-    //margin-right: 5%;
-    //width: 30%;
-    //background-color: #000;
-    border: 1px solid $gray-400;
-    border-radius: 5px;
-    text-align: center;
-}
 
 .uploadPng {
     cursor: pointer;
@@ -902,13 +824,6 @@ h2.display-4 {
 //     z-index:1;
 // }
 
-.before {
-    width: 300px;
-}
-.after {
-    width: 180px;
-}
-
 input[type="radio"] {
   width: 3em;
   height: 1em;
@@ -935,6 +850,10 @@ input[type="radio"] {
     width: 100%;
 }
 
+#submit-helper {
+    z-index: 40000 !important;
+}
+
 #submit-helper .container {
     width: 80%;
 }
@@ -950,9 +869,13 @@ input[type="radio"] {
     width: 300px;
 }
 
+.file-submit-modal {
+    vertical-align: center;
+}
 
+.file-submit-modal .row {
+    vertical-align: center;
 
-
-
+}
 
 </style>
