@@ -2,6 +2,8 @@ import Oviz from "crux";
 import template from "./template.bvt";
 import { ComplexGroupedBars } from "oviz-components/complex-grouped-bars";
 import { C16Classifier, CellProcessor } from "utils/general-classification";
+import { registerEditorConfig } from "utils/editor";
+import { editorConfig } from "./editor";
 
 export function init(id, subtypePath, CellDataPath, config) {
 
@@ -9,7 +11,21 @@ export function init(id, subtypePath, CellDataPath, config) {
         el: id,
         template,
         components: { ComplexGroupedBars },
-        data: {},
+        data: {
+            startX: 100, 
+            startY: 0, 
+            width: 1550, 
+            height: 500, 
+            titleSize: 11, 
+            labelSize: 11, 
+            title: "", 
+            ylabel: "", 
+            xlabel: "", 
+            plotRotation: 0, 
+            xRotation: 0, 
+            yRotation: 0,
+            groups: {}
+        },
         loadData: {
             subtype: {
                 url: subtypePath,
@@ -25,10 +41,15 @@ export function init(id, subtypePath, CellDataPath, config) {
                 dsvHasHeader: false,
                 dependsOn: ["subtype"],
                 loaded(data) {
-                    return CellProcessor(data, this.data.c16Classification);
+                    this.data.CellData = CellProcessor(data, this.data.c16Classification);
+                    this.data.groups = this.data.CellData.colorMap
                 }
             }
         },
+        setup() {
+            console.log(this)
+            registerEditorConfig(editorConfig(this));
+        }
     });
 
     return visualizer;

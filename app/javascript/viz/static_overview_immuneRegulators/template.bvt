@@ -71,7 +71,8 @@ svg {
 		}
 		@let first = Object.keys(RNAdata)[0]
 		Columns {
-			x = 100
+			x = startX
+			y = startY
 			@for (item, groupKey) in RNAdata {
 				Container {
 					// padding = config.squareLength+config.xPadding
@@ -91,7 +92,6 @@ svg {
 											height = d.prop.squareLength
 											stroke = "white"
 											strokeWidth = 2
-											@expr console.log(d)
 											fill = colorMap[d.item]
 										}
 										Text {

@@ -3,65 +3,42 @@ svg {
 	height = 800
 	Component {
 		Component {
-			@expr console.log(ClinicalData)
 			x = 100; y = 100
-			@let showPfs = ClinicalData.survivalData.pfs != null && Object.values(ClinicalData.survivalData.pfs).reduce((prev, curr) => prev || (curr != null && curr != []), false)
-			@expr console.log("SHOWPFS" + showPfs)
-			@if showPfs {
-				SurvivalLine {
-					rawData = ClinicalData.survivalData.pfs
-					classifications = ClinicalData.classifications
-					title = "PFS"
-					@props xy
-				}
-			}
-			@else {
-				Component {
-					width = 300
-					height = 300
-					Rect.full {
-						fill = "none"
-						stroke = "black"
-					}
-					Text.centered {
-						x = 50%
-						y = 50%
-						fontSize = 20
-						text = "No valide OS information"
-					}
-				}
-			}
 			Legend {
 				x = 425; y = 30
 				anchor = @anchor("top", "right")
 				data = ClinicalData.colorMap.legendData()
 			}
 		}
-		Component {
-			x = 600; y = 100
-			@let showOs = ClinicalData.survivalData.os != null && Object.values(ClinicalData.survivalData.os).reduce((prev, curr) => prev || (curr != null && curr != []), false) 
-			@expr console.log("showOs" + showOs)
-			@if showOs {
-				SurvivalLine {
-					rawData = ClinicalData.survivalData.os
-					classifications = ClinicalData.classifications
-					title = "OS"
-					@props xy
-				}
-			}
-			@else {
-				Component {
-					width = 300
-					height = 300
-					Rect.full {
-						fill = "none"
-						stroke = "black"
+		@for plot in plots {
+			Component {
+				@let data = plotData[plot]
+				x = data.startX; y = data.startY
+				@let showOs = ClinicalData.survivalData[plot] != null && Object.values(ClinicalData.survivalData[plot]).reduce((prev, curr) => prev || (curr != null && curr != []), false) 
+				@if showOs {
+					SurvivalLine {
+						rawData = ClinicalData.survivalData[plot]
+						classifications = ClinicalData.classifications
+						title = plot.toUpperCase()
+						xlabel = data.xlabel
+						ylabel = data.ylabel
+						plotSize = [data.width, data.height]
 					}
-					Text.centered {
-						x = 50%
-						y = 50%
-						fontSize = 20
-						text = "No valide PFS information"
+				}
+				@else {
+					Component {
+						width = 300
+						height = 300
+						Rect.full {
+							fill = "none"
+							stroke = "black"
+						}
+						Text.centered {
+							x = 50%
+							y = 50%
+							fontSize = 20
+							text = "No valide " + plot.toUpperCase() + " information"
+						}
 					}
 				}
 			}
