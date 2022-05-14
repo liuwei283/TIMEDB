@@ -60,7 +60,7 @@
                             Totally {{analyses.length + 1}} Module(s) available
                         </button></h5> -->
                     <!-- </div> -->
-                    <div class="cols-xs-space cols-sm-space cols-md-space">
+                    <div class="cols-xs-space cols-sm-space cols-md-space container">
 
                         <div class = "row" id = "supervisedSelect" v-if="isConv==true">
                             <div>
@@ -75,7 +75,7 @@
 
                             </div>
                         </div>
-                        <div class="col-lg-4 mb-4 row container" v-for="a in displayedAnalyses" :key="a.id" @click="updateApp(a, true)">
+                        <div class="col-lg-4 mb-4 row submit-container" v-for="a in displayedAnalyses" :key="a.id" @click="updateApp(a, true)">
                             <div class="card">
                                 <img v-if="a.cover_image == null" v-bind:src="require('../assets/images/module.png')" class="card-img-top">
                                 <img v-else :src="a.cover_image" class="card-img-top">
@@ -141,7 +141,7 @@
                             <div class = "row">
                                 <div class="col-md-6" ref="inputSection">
                         
-                                    <div class = "row container justify-content-center">
+                                    <div class = "row submit-container justify-content-center">
                                         <div v-for="input in displayedInputs" :key="input.id" class = "text-center submit-box col-md-6">
                                             <a :href="`/public/data/module_demo/${app.name}_demo_${input.name}.tsv`" :download=input.name >Demo {{ input.name}} </a>
                                         </div>
@@ -251,6 +251,8 @@
                                 </div>
                             </div>
                             <b-btn @click="submitTask" class="float-right mt-2"><i class="fa fa-location-arrow"></i> Submit</b-btn>
+
+                            
                             
                         </div>
                         
@@ -279,7 +281,7 @@
         <b-modal class= "file-submit-modal" :id="`upload-${input.id}`" size="lg" :title="`Submit input file - ${input.name}`" centered v-for="input in displayedInputs" :key="input.id">
                 <div class = "row justify-content-around">
                     <div class = "col-md-5 text-center">
-                        <div class = "row text-center container">
+                        <div class = "row text-center submit-container">
                             <p> click to download demo file for this input: </p>
                             <a :href="`/public/data/module_demo/${app.name}_demo_${input.name}.tsv`" :download=input.name >Demo {{ input.name}} </a>
                         </div>
@@ -302,7 +304,7 @@
                             </div>
                         </div> -->
 
-                        <div class = "row container">
+                        <div class = "row submit-container">
                             <p v-if="picked_single_multiple=='single' && selected != ''">
                                 Please be noted that you have selected single type analysis. 
                                 <br>
@@ -310,7 +312,7 @@
                             </p>
                             <div>
                                 <b-form-file
-                                    :id="`file-i-${input.id}`"
+                                    :id="`i-${input.id}`"
                                     v-model="files[`i-${input.id}`]"
                                     :state="inputValid[`i-${input.id}`]"
                                     placeholder="Choose a file or drop it here..."
@@ -326,28 +328,30 @@
                     </div>
 
                     <div class = "col-md-6" id = "description-card">
-                        <div class = "row container">
+                        <div class = "row submit-container">
                             <p class = "text-left">
                             <span v-for="des_patch in input.description.split('.')" v-bind:key="des_patch">
-                                {{des_patch}} <br>
+                                {{des_patch}} <br><br>
                             </span>
                             </p>
                         </div>
                     </div>
                 </div>
         </b-modal>
-        <div class="is-loading w-100" v-if="isLoading">
-            <i class="fas fa-spinner fa-pulse fa-5x m-0"></i>
-            <h3 class="mt-4">Submitting task……</h3>
-        </div>
+        
         <b-modal v-if="started" id = "submit-helper" size="xl" scrollable title="Submission Helper" centered>
             <br>
-            <div class = "text-center container">
+            <div class = "text-center submit-container">
                 <img v-bind:src="require('../assets/images/' + selected_analysis.name + '_intro.jpg')" style= "width : 100%"> 
-                <div v-html="selected_analysis.rendered_doc" class = "text-left container">
+                <div v-html="selected_analysis.rendered_doc" class = "text-left submit-container">
                 </div>
             </div>
         </b-modal>
+
+        <div class="is-loading w-100" v-if="isLoading">
+            <i class="fas fa-spinner fa-pulse fa-5x m-0"></i>
+            <h3 class="mt-4">We are preparing your submission. Please wait for some minutes.</h3>
+        </div>
     </div>
 </template>
 
@@ -443,6 +447,7 @@
         watch: {
             selected:function(newValue) {
                 if (newValue != "" && this.picked_single_multiple == 'single') {
+                    console.log(newValue);
                     for (var k in this.app.inputs) {
                         this.files['i-' + this.app.inputs[k].id]  = null;
                     }
@@ -487,12 +492,6 @@
                         name: 'test app for immune platform',
                         description: 'Sudden cardiac death (SCD) is a sudden, unexpected death caused by loss of heart function (sudden cardiac arrest). Sudden cardiac death is the largest cause of natural death in the United States, causing about 325,000 adult deaths in the United States each year. Sudden cardiac death is responsible for half of all heart disease deaths.\n\nSudden cardiac death occurs most frequently in adults in their mid-30s to mid-40s, and affects men twice as often as it does women. This condition is rare in children, affecting only 1 to 2 per 100,000 children each year.\n\n**Reference**: WH, L., \u0026 Dan, E. (2010). Genetic Variations in NOS1AP are Associated with Sudden Cardiac Death in U.S. White Community Based Populations.",',
                         inputs: [
-                            {
-                                id: "id1",
-                                name: "name1",
-                                description: "some descriptions1",
-                                required: true,
-                            },
                         ],
                         params: [
                             {
@@ -520,12 +519,13 @@
                     var newid = s_ana.mid
                     this.selected_analysis = s_ana;
                     axios.get(`https://deepomics.org/api/apps/${newid}/`).then((response) => {
-                        let newapp = response.data.app;
+                        this.app = response.data.app;
                         for (var k in this.app.inputs) {
+                            console.log(k)
                             this.files['i-' + this.app.inputs[k].id]  = null;
                             this.file_names['i-' + this.app.inputs[k].id]  = this.app.inputs[k].name
+                            console.log("i" + this.app.inputs[k].id)
                         }
-                        this.app = newapp;
                         this.params_desc = this.app.params[0].description;
                     });
                 }
@@ -540,7 +540,7 @@
                 let allRight = true;
                 let is_single = (this.picked_single_multiple == 'single')
             
-                document.querySelectorAll('input').forEach((input) => {
+                document.querySelectorAll("input[name^='p-'], select[name^='p-']").forEach((input) => {
                     if(input.required) {
                         const valid = !!input.value && !!_.trim(input.value);
                         Vue.set(this.inputValid, input.name, valid);
@@ -559,11 +559,24 @@
                         allRight = false
                     }
                     for (var file_inputs in this.files) {
-                        if (file_inputs != null) {
-                            console.log("You should upload any files if you select datsets under single mode.")
+                        if (this.files[file_inputs] != null) {
+                            console.log("You should not upload any files if you select datsets under single mode.")
                             allRight = false;
                         }
                     }
+                }
+
+                if (this.selected == "" && allRight == true) {
+                    var anyFile = false;
+
+                    for (var file_inputs in this.files) {
+                        if (this.files[file_inputs] != null) {
+                            console.log(file_inputs)
+                            anyFile = true;
+                        }
+                    }
+
+                    allRight = anyFile == true
                 }
 
                 console.log("Something wrong here")
@@ -578,6 +591,7 @@
                     let alertData;
                     $("#disable-fill").fadeIn(10);
                     this.isLoading = true;
+                    console.log(this.isLoading);
                     axios.post(
                         `/submit-app-task/`,
                         
@@ -704,7 +718,9 @@
 @import '~bootstrap-vue/src/index.scss';
 @import '../assets/stylesheets/partials/variables';
 
-
+.submit-container {
+    margin: 2em;
+}
 
 #submit-app-back.active {
     filter: blur(5px);
@@ -771,13 +787,16 @@
     font-size: 0.8em;
 }
 .is-loading {
-    position: fixed;
-    top: 50%;
-    right: 50%;
-    transform: translate(-50%, -50%);
+    margin: 0 1px;
+    padding: 8rem 4rem;
     text-align: center;
     color: #000;
+    position: fixed !important;
+    top: 30% !important;
+    left: 0;
     z-index: 1000;
+    width: 100%;
+    height: 100%;
 }
 
 .set-input-section img {
@@ -854,7 +873,7 @@ input[type="radio"] {
     z-index: 40000 !important;
 }
 
-#submit-helper .container {
+#submit-helper .submit-container {
     width: 80%;
 }
 

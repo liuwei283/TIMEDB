@@ -33,9 +33,12 @@ class Dataset < ApplicationRecord
     samples.delete(@samples)
   end
 
-  def mergeFile()
+  def mergeFile(ds_name)
     #get all projects with samples
-    projects = getProjectSources()
+    projects = getProjectSources(ds_name)
+  
+
+
     @merged_files = {}
     @merged_files["Clinical data"] = []
     @merged_files["Gene expression data"] = []
@@ -56,23 +59,29 @@ class Dataset < ApplicationRecord
       end
       @merged_files["Clinical data"].push(file_for_selected_samples)
 
+
       #merge gene expression files
       file_info = CSV.parse(File.read(sample_rna_file_path), headers: TRUE)
 
-      remained_col = sname.push["GeneSymbol"]
+      remained_col = snames.push("GeneSymbol")
+
       
       filtered_rna_info = file_info.by_col!.delete_if do |column_name,column_values|
         !remained_col.include? column_name
+
       end
       
       filtered_rna_file = filtered_rna_info.to_csv
       @merged_files["Gene expression data"].push(filtered_rna_file)
+
     end
+
     return @merged_files
   end
 
 
-  def getProjectSources()
+  def getProjectSources(ds_name)
+    @dataset = Dataset.find_by name: ds_name
     projects = {}
     samples = @dataset.samples.order(:sample_name)
     samples.each do |sample|
@@ -81,10 +90,13 @@ class Dataset < ApplicationRecord
         logger.error sname
         if projects.key?(pname)
             projects[pname].push(sname)
+
         else
             projects[pname] = [sname]
+
         end
     end
+
     return projects
   end
 

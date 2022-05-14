@@ -33,30 +33,12 @@ class DatasetSampleDatatable < ApplicationDatatable
   end
 
   def fetch_samples
-    search_string = []
-    @config.each do |attr|
-      # if Sample.columns_hash[attr].type != :string
-      #   search_string << "cast(\"#{attr}\" as varchar(10)) like :search"
-      # else
-      search_string << "\"#{attr}\" like :search"
-      # end
+    if @obj.length == 0
+      return @obj
     end
-    # search_col =['sample_name', 'project_name', 'experiment_type']
-    # search_col.each do |term|
-    #   search_string << "#{term} like :search"
-    # end
-    
-
-
-    # will_paginate
-    # users = User.page(page).per_page(per_page)
-    # samples = @obj.samples.order("#{sort_column} #{sort_direction}")
+    search_string = []
     obj_start = (page-1) * per_page
     obj_end = obj_start + per_page
-    # @obj = @obj.slice(0, 5)
-    # puts sort_column
-    # puts sort_direction
-    # puts @obj[0][sort_column]
     if sort_direction == "asc"
       @obj = @obj.sort_by { |s_record| s_record[sort_column] }
     else
@@ -76,7 +58,6 @@ class DatasetSampleDatatable < ApplicationDatatable
         end
       end
       samples = samples.slice(obj_start, per_page)
-      
     else
       samples = @obj.slice(obj_start, per_page)
     end

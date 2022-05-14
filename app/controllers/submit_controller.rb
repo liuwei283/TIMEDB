@@ -25,7 +25,7 @@ class SubmitController < ApplicationController
     data = {}
     @datasets.each do |ds|
       ds_name = ds.name
-      ps_num = ds.getProjectSources().length
+      ps_num = ds.getProjectSources(ds_name).length
       # ds_dir = File.join(user_dir, ds_name)
       # file_list = Dir.entries(ds_dir)[2..-1]
       data[ds_name] = ps_num
@@ -227,6 +227,7 @@ class SubmitController < ApplicationController
       code: false,
       data: ''
     }
+
     begin
       app_id = params[:app_id]
       app_inputs = params[:inputs]
@@ -285,6 +286,8 @@ class SubmitController < ApplicationController
       code: false,
       data: ''
     }
+
+
     begin
       app_id = params[:mid]
       app_inputs = params[:inputs]
@@ -311,27 +314,47 @@ class SubmitController < ApplicationController
       end
 
 
-      if (app_selected != null)
+
+      if (app_selected != "")
+
         ds_name = app_selected
         @dataset = @user.datasets.find_by(name: ds_name)
-        merged_files = @dataset.mergeFile()
+
+        Rails.logger.debug "Sucess here - 1"
+
+        merged_files = @dataset.mergeFile(ds_name)
+        Rails.logger.debug merged_files.keys
+
+        Rails.logger.debug "Sucess here - 2"
+       
 
         app_inputs.keys.each do |input_id|
           cur_file_paths = []
           fname = file_names[input_id]
+          Rails.logger.debug fname
           match_merged_files = merged_files[fname]
+          Rails.logger.debug match_merged_files.length
           match_merged_files.each_with_index do |m_file, idx|
-            file_name = fname + "_" + idx
+            file_name = fname + "_" + idx.to_s + ".csv"
+            Rails.logger.debug file_name
             file = File.new(file_name, 'w')
             file.write(m_file)
-            file.close
+            Rails.logger.debug "make files"
             uploader = JobInputUploader.new(giveFilePrefix())
+       
             uploader.store!(file)
+            Rails.logger.debug "make files"
+
+            Rails.logger.debug "upload files" + uploader.filename
+
             cur_file_paths.push('/data/' + uploader.filename)
             file.close
           end
           combine_inputs_array[input_id] += cur_file_paths
         end
+
+        Rails.logger.debug "Sucess here - 3"
+
       end
 
       app_inputs&.each do |input_id, uploaded_file|
@@ -344,6 +367,8 @@ class SubmitController < ApplicationController
           end   
         end
       end
+      Rails.logger.debug "Sucess here - 4"
+
 
       if is_single
         app_inputs.keys.each do |input_id|
@@ -367,6 +392,8 @@ class SubmitController < ApplicationController
       end
 
       Rails.logger.debug "===========>"
+      Rails.logger.debug "===========>"
+
       Rails.logger.info(inputs)
       
       # submit task
