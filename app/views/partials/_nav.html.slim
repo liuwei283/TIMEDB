@@ -10,50 +10,11 @@
     .collapse.navbar-collapse.order-1.order-md-0.dual-collapse2
       ul.navbar-nav.ml-auto
         - caret_icon = 'caret-down'
-        / - if user_signed_in?
-        /   li.nav-item
-        /     - if current_user.has_role? :developer
-        /       = link_to user_home_path, class: 'nav-link' do
-        /         = icon 'fa', 'home'
-        /         | Home
-        /     - elsif current_user.has_role? :researcher
-        /       = link_to user_projects_path, class: 'nav-link' do
-        /         = icon 'fa', 'home'
-        /         | Home
-        /     - else
-        /       = link_to user_data_path, class: 'nav-link' do
-        /         = icon 'fa', 'home'
-        /         | Home
-
         li.nav-item
           = link_to root_path, class: 'nav-link' do
             = icon 'fa', 'home'
             | Home
-
-        li.nav-item.dropdown
-          = link_to '#', class: 'nav-link dropdown-toggle', data: { toggle: 'dropdown' } do 
-            = icon 'fa', 'upload'
-            |  Analyses
-            = icon 'fas', caret_icon 
-          .dropdown-menu 
-            = link_to "/submit/pipelines", class: 'dropdown-item' do 
-              | Analysis Pipelines 
-            = link_to "/submit/job-query", class: 'dropdown-item' do 
-              | Work space
-            = link_to "/submit/job-demo", class: 'dropdown-item' do 
-              | Demo pipelines
-
-        li.nav-item.dropdown 
-          = link_to "#", class: 'nav-link dropdown-toggle', data: { toggle: 'dropdown' } do 
-            = icon 'fa', 'chart-bar'
-            |  Visualization
-            = icon 'fas', caret_icon 
-          .dropdown-menu 
-            = link_to "/submit/analyses", class: 'dropdown-item' do
-              | Analysis Visualizations
-            = link_to "/visualizer", class: 'dropdown-item' do 
-              | Demo Visualizations
-
+        
         li.nav-item.dropdown
           = link_to '#', class: 'nav-link dropdown-toggle', data: { toggle: 'dropdown' } do
             = icon 'fa', 'database'
@@ -72,41 +33,42 @@
             = link_to samples_path, class: 'dropdown-item' do
               / = icon 'fas', 'network-wired'
               | Samples Detail
+
+        li.nav-item.dropdown
+          = link_to '#', class: 'nav-link dropdown-toggle', data: { toggle: 'dropdown' } do 
+            = icon 'fa', 'upload'
+            |  Analyses
+            = icon 'fas', caret_icon 
+          .dropdown-menu 
+            = link_to "/submit/analyses", class: 'dropdown-item' do
+              | Modules
+            = link_to "/submit/pipelines", class: 'dropdown-item' do 
+              | Pipelines
+
+        / li.nav-item.dropdown 
+        /   = link_to "#", class: 'nav-link dropdown-toggle', data: { toggle: 'dropdown' } do 
+        /     = icon 'fa', 'chart-bar'
+        /     |  Visualization
+        /     = icon 'fas', caret_icon 
+        /   .dropdown-menu 
+            
+        /     = link_to "/visualizer", class: 'dropdown-item' do 
+        /       | Demo Visualizations
+
+        li.nav-item
+            = link_to '/submit/job-query', class: 'nav-link' do
+              = icon 'fa', 'tasks'
+              | Workspace
+        li.nav-item
+            = link_to '', class: 'nav-link' do
+              = icon 'fa', 'file-alt'
+              | Tutorial
+        li.nav-item
+            = link_to '/contact', class: 'nav-link' do
+              = icon 'fa', 'phone'
+              | Cite us
+        
         
 
           
-
-
-          /*li.nav-item.dropdown
-            = link_to '#', class: 'nav-link dropdown-toggle', data: { toggle: 'dropdown' } do
-              = icon 'fa', 'upload'
-              |  Submit
-              = icon 'fas', caret_icon
-            .dropdown-menu
-              = link_to "/submit/analyses", class: 'dropdown-item' do
-                | Analyses
-              = link_to "/submit/pipelines", class: 'dropdown-item' do
-                | Pipelines
-              = link_to '/submit/job-query', class: 'dropdown-item' do
-                / = icon 'fab', 'medium-m'
-                | Job Query
-              = link_to '/submit/job-demo', class: 'dropdown-item' do
-                / = icon 'fab', 'medium-m'
-                | Demo Query
-          /* li.nav-item
-            = link_to '/visualizer', class: 'nav-link' do
-              = icon 'fa', 'chart-bar'
-              | Visualization
-          li.nav-item
-            = link_to '/docs', class: 'nav-link' do
-              = icon 'fa', 'file-alt'
-              | Tutorial
-          / li.nav-item
-          /   = link_to '/contact', class: 'nav-link' do
-          /     = icon 'fa', 'phone'
-          /     | Cite us
-          / li.nav-item
-          /   = link_to '#', class: 'nav-link' do
-          /     = icon 'fa', 'question'
-          /     | FAQ
 

@@ -140,6 +140,9 @@ class SamplesController < ApplicationController
     def export_filtered2dataset
         id = session[:user_id]
         @user = User.find(id)
+
+
+
         ds_name = params[:ds_selected]  
         @dataset = @user.datasets.find_by(name: ds_name)
         if params[:project_id]
@@ -160,6 +163,10 @@ class SamplesController < ApplicationController
     def export_selected2dataset
         id = session[:user_id]
         @user = User.find(id)
+        logger.error "=======>"
+        logger.error @user
+        logger.error params[:ds_selected]
+
         ds_name = params[:ds_selected]  
         @dataset = @user.datasets.find_by(name: ds_name)
         @dataset.add_samples(params[:selected_ids]) 
