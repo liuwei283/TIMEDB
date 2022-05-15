@@ -9,8 +9,8 @@ export const editorRef = {} as any;
 
 const generalSetting = ["startX", "startY", "width", "height", "titleSize", "labelSize", "title", "ylabel", "xlabel", "plotRotation", "xRotation", "yRotation"]
 
-export const generateGeneralConfig = (v): any => ({
-    id: "color",
+export const generateGeneralConfig = (v, eid): any => ({
+    id: eid,
     title: "Color Setting",
     layout: "single-page",
     view: {
@@ -29,8 +29,8 @@ export const generateGeneralConfig = (v): any => ({
     }
 })
 
-export const generateColorConfig = (v): any => ({
-    id: "color",
+export const generateColorConfig = (v, eid): any => ({
+    id: eid,
     title: "Color Setting",
     layout: "single-page",
     view: {
@@ -52,11 +52,11 @@ export const generateColorConfig = (v): any => ({
     }
 })
 
-export function editorConfig(v): EditorDef {
+export function editorConfig(v, eid): EditorDef {
     return {
         sections: [
-            generateGeneralConfig(v),
-            generateColorConfig(v),
+            generateGeneralConfig(v, eid),
+            generateColorConfig(v, eid),
         ],
     };
 }

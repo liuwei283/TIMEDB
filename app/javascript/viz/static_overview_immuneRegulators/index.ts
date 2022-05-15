@@ -10,10 +10,10 @@ const startColor = "white";
 const endColor = "red";
 const nendColor = "blue";
 
-export function init(id, subtypePath, RNAdataPath, config) {
+export function init(vid, subtypePath, RNAdataPath, eid) {
 
     const {visualizer} = Oviz.visualize({
-        el: id,
+        el: vid,
         template,
         components: { ComplexHeatMap },
         data: {
@@ -90,7 +90,7 @@ export function init(id, subtypePath, RNAdataPath, config) {
             this.defineGradient("ng", "vertical", [startColor, nendColor]);
             this.size = {height: 400+Object.keys(this.data.colorMap).length, width: 1850}
             console.log(this)
-            registerEditorConfig(editorConfig(this));
+            registerEditorConfig(editorConfig(this, eid));
         },
     });
     return visualizer;

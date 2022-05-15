@@ -4,6 +4,7 @@ svg {
 	Component {
 		Text {
 			x = 500
+			y = 50
 			text = title
 			fontSize = 20
 			anchor = @anchor("top","center")

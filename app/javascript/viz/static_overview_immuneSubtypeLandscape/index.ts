@@ -1,14 +1,16 @@
 import Oviz from "crux";
 import template from "./template.bvt";
 import { ComplexStackedBar } from "oviz-components/complex-stacked-bar";
+import { registerEditorConfig } from "utils/editor";
+import { editorConfig } from "./editor";
 
 const xLabel = "project type";
 const yLabel = "expression";
 
-export function init(id, path, config) {
+export function init(vid, path, eid) {
 
     const {visualizer} = Oviz.visualize({
-        el: id,
+        el: vid,
         template,
         components: { ComplexStackedBar },
         data: {
@@ -40,6 +42,8 @@ export function init(id, path, config) {
         setup() {
             console.log(this)
             this.size = {height: 700, width: 200+100*Object.keys(this.data.data.widMap).length};
+            registerEditorConfig(editorConfig(this, eid));
+
         }
     });
     return visualizer;

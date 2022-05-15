@@ -38,10 +38,10 @@ function Dataprocessor(v, data) {
     return pieData
 }
 
-export function init(id, path, config) {
+export function init(vid, path, eid) {
 
     const {visualizer} = Oviz.visualize({
-        el: id,
+        el: vid,
         template,
         data: { 
             title,
@@ -71,7 +71,7 @@ export function init(id, path, config) {
         setup() { 
             this.data.plotSize = plotSize;
             console.log(this["_data"]);
-            // registerEditorConfig(editorConfig(this));
+            registerEditorConfig(editorConfig(this, eid));
         },
     });
 }
