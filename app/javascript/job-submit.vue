@@ -100,8 +100,8 @@
             <div class = "row">
                 <div class="col-md-2">
                     <img v-bind:src="require('../assets/images/nav-up-blue.png')">
-                    <svg width="100px" height="700px" version="1.1" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M40 0 v 250 l -10 10 l 10 10 v 250 l 10 10 l -10 10 v 220" fill="transparent" stroke="#253959" stroke-width = "3px"></path> 
+                    <svg width="100px" height="600px" version="1.1" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M40 0 v 200 l -10 10 l 10 10 v 200 l 10 10 l -10 10 v 160" fill="transparent" stroke="#253959" stroke-width = "3px"></path> 
                     </svg>
 
 
@@ -130,7 +130,11 @@
                             <h2 class = "text-right"> JOB SUBMISSISON </h2>
                             <br>
                             <br>
-                            <div class = "row justify-content-around">
+                            <br>
+                            <br>
+                            <br>
+                            <br>
+                            <div class = "container row justify-content-around">
                                 <div class = "col-md-6">
                                     <h4 class = "text-center">File Submission</h4>
                                 </div>
@@ -141,21 +145,21 @@
                             <div class = "row">
                                 <div class="col-md-6 h-100" ref="inputSection">
                         
-                                    <div class = "row submit-container justify-content-center h-30">
+                                    <!-- <div class = "row submit-container justify-content-center h-100">
                                         <div v-for="input in displayedInputs" :key="input.id" class = "text-center submit-box col-md-6">
                                             <a :href="`/public/data/module_demo/${app.name}_demo_${input.name}.tsv`" :download=input.name >Demo {{ input.name}} </a>
                                         </div>
-                                        <!-- <div class="col-md-5 text-center submit-box">
+                                        <div class="col-md-5 text-center submit-box">
                                             <a href="/public/data/module_demo/demo1.tsv" download = "testing">Download</a>
                                             <a :href="`/public/data/module_demo/${app.name}_demo1.tsv`" download = "demo1">Download</a>
                                         </div>
                                         <div class="col-md-5 offset-2 text-center" style="border:solid;border-radius:20px;padding:20px">
                                             <a :href="`/public/data/module_demo/${app.name}_demo2.tsv`" download = "demo2">Download</a>
                                             <a href="/public/data/module_demo/test_demo2.tsv" download = "testing">Download</a>
-                                        </div>  -->
-                                    </div>
+                                        </div> 
+                                    </div> -->
 
-                                    <div class = "row submit-box justify-content-center h-70">
+                                    <div class = "row submit-box justify-content-center h-100">
                                         <div v-if="displayedInputs.length>0">
                                             <div class = "row justify-content-center">
                                                 <div class="col-md-6" v-for="input in displayedInputs" :key="input.id">
@@ -250,6 +254,8 @@
                                     <p v-if="displayedParams.length == 0">No Parameters.</p>
                                 </div>
                             </div>
+                            <br>
+                            <br>
                             <b-btn @click="submitTask" class="float-right mt-2"><i class="fa fa-location-arrow"></i> Submit</b-btn>
 
                             
