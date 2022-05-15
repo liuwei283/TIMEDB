@@ -348,7 +348,7 @@
         <b-modal v-if="started" id = "submit-helper" size="xl" scrollable title="Submission Helper" centered>
             <br>
             <div class = "text-center submit-container">
-                <img v-bind:src="require('../assets/images/' + selected_analysis.name + '.jpg')" style= "width : 100%"> 
+                <img v-bind:src="require('../assets/images/' + selected_analysis.name + '_structure.jpg')" style= "width : 100%"> 
                 <div v-html="selected_analysis.rendered_doc" class = "text-left submit-container">
                 </div>
             </div>
