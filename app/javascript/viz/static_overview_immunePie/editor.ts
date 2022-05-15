@@ -41,10 +41,14 @@ export const generateColorConfig = (v, eid): any => ({
             component: "color-picker",
             data: {
                 title: "groups colors",
-                scheme: copyObject(v.data.groups.colors),
+                scheme: v.data.pieData.map(d=>d.color),
                 id: "pwcolor",
                 callback(colors) {
-                    v.data.groups.colors = {...colors};
+                    console.log(colors)
+                    colors.forEach((color, index) => {
+                        v.data.groups.pieData[index].color = color
+                    })
+                    // v.data.groups.pieData.colors = {...colors};
                     run(v);
                 },
             },
