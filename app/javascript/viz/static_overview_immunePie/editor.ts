@@ -10,8 +10,8 @@ export const editorRef = {} as any;
 const generalSetting = ["startX", "startY", "width", "height", "titleSize", "labelSize", "title", "ylabel", "xlabel", "plotRotation", "xRotation", "yRotation"]
 
 export const generateGeneralConfig = (v, eid): any => ({
-    id: eid,
-    title: "Color Setting",
+    id: eid + "1",
+    title: "General Setting",
     layout: "single-page",
     view: {
         type: "list",
@@ -30,7 +30,7 @@ export const generateGeneralConfig = (v, eid): any => ({
 })
 
 export const generateColorConfig = (v, eid): any => ({
-    id: eid,
+    id: eid + "2",
     title: "Color Setting",
     layout: "single-page",
     view: {

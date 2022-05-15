@@ -274,7 +274,7 @@ export default {
         this.regulatorProjectSelected = this.regulatorProjects[0];
     },
     mounted() {
-        //event.rpcRegisterReceiver("getVue", () => this);
+        event.rpcRegisterReceiver("getVue", () => this);
         this.all_viz();
     },
     methods: {
@@ -316,8 +316,8 @@ export default {
         all_viz() {
             //this.barViz();
             this.pieViz();
-            this.landscapeViz();
-            this.regulatorViz();
+            // this.landscapeViz();
+            // this.regulatorViz();
         },
         updateProjects() {
             this.pie_projects = this.projects[this.pieCancerSelected];
@@ -397,8 +397,8 @@ export default {
 .v-editor {
     position: absolute;
     top: 10px;
-    z-index:20;
     transition: all 0.3s;
     right: 10px;
+    z-index: 1 !important;
 }
 </style>
