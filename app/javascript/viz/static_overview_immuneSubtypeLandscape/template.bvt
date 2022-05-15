@@ -17,7 +17,7 @@ svg {
 			baseWidth = 40
 			generateTooltip = (d) => {
 				let total = data.widMap[d.data.pos]
-				return d.data.pos + "</br>" + "total sample: " + total + " samples</br>" + d.key + ": " + Math.round(d.data.value * total) + " samples"
+				return "cancer name: " + d.data.pos + "</br>" + "total sample: " + total + " samples</br>" + d.key + ": " + Math.round(d.data.value * total) + " samples"
 			}
             :xAxis {
                 Axis("top") {

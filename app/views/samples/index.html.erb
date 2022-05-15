@@ -51,7 +51,7 @@
   </div>
   <br />
 
-  <%= form_tag make_selected_file_samples_path, multipart: true do %>
+  <%= form_tag make_selected_file_samples_path,class:(session[:dark] ? "dark-table":""), multipart: true do %>
     <%= content_tag :table, role: :datatable, class: "display", id: "table_page", data: { url: samples_path(format: :json)} do %>
       <thead>
             <th>

@@ -4,18 +4,24 @@ svg {
 	Component {
 		x = 100
 		y = 100
+		Text {
+			x = -75; y = -55
+			text = "Hover on the acronym to show the full name"
+		}
 		Legend {
 			x = -75; y = 30
 			data = ClinicalData.colorMap.legendData()
 		}
+		// @let widBar = 80*Object.keys(ClinicalData.widMap).length
 		ComplexStackedBar {
-			x = 50
+			x = startX
+			y = startY
 			baseWidth = 40
-			@let widBar = 60*Object.keys(ClinicalData.widMap).length
-			plotSize = [widBar, 500]
+			plotSize = [width, height]
 			@props ClinicalData
+			colorMap = groups
 			generateTooltip = (d) => {
-				return d.data.pos.split("__").join("</br>").split("_").join(" ") +  " : "  + ClinicalData.widMap[d.data.pos] + " samples<br>" 
+				return "category name: "+d.data.pos.split("__").join("</br>type: ").split("_").join(" ") +  "</br>total sample: "  + ClinicalData.widMap[d.data.pos] + " samples<br>" 
 						+ d.key + " : " + (100 * d.data.value).toFixed(2) + "%"
 			}
 			:xAxis {
@@ -39,19 +45,57 @@ svg {
 								text = txt[0].length >= 10 ? t1: txt[0];
 								anchor = @anchor("m", "c")
 								fontSize = 13
+								behavior:tooltip {
+									content = txt[0].split("_").map(d => d[0].toUpperCase()+d.slice(1)).join(" ")
+								}
 							}
 							Text {
 								@let t1 = txt[1].split("_").map(d=>d.split(" ")).flat().map(d => d[0]).join(". ")
-								// rotation = @rotate(txt[0].length>=10 || txt[1].length>=10 ? 15: 0)
 								text = txt[1].length >= 10 ? t1: txt[1];
 								anchor = @anchor("m", "c")
 								fontSize = 13
+								behavior:tooltip {
+									content = txt[1]
+								}
 							}
 						}
 					}
                 }
 			}
 		}
-		
+		Text {
+			x = -90
+			y = 200
+			text = "full name of acronyms"
+		}
+		Columns {
+			x = -90
+			y = 220
+			Rows {
+				@let rows = acronyms.slice(0, 60)
+				@for (acronym, index) in rows {
+					Container {
+						padding = 1
+						Text {
+							text = acronym
+							fontSize = 8
+						}
+					}
+				}
+			}
+			Rows {
+				x = 10
+				@let rows = acronyms.slice(60)
+				@for (acronym, index) in rows {
+					Container {
+						padding = 1
+						Text {
+							text = acronym
+							fontSize = 8
+						}
+					}
+				}
+			}
+		}
 	}
 }

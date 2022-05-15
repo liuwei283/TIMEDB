@@ -1,5 +1,7 @@
 import Oviz from "crux";
 import template from "./template.bvt";
+import { registerEditorConfig } from "utils/editor";
+import { editorConfig } from "./editor";
 
 const plotSize = [500, 800];
 
@@ -41,7 +43,21 @@ export function init(id, path, config) {
     const {visualizer} = Oviz.visualize({
         el: id,
         template,
-        data: { title },
+        data: { 
+            title,
+            startX: 100, 
+            startY: 0, 
+            width: 1550, 
+            height: 500, 
+            titleSize: 11, 
+            labelSize: 11, 
+            ylabel: "", 
+            xlabel: "", 
+            plotRotation: 0, 
+            xRotation: 0, 
+            yRotation: 0,
+            groups: {}
+        },
         loadData: {
             data: {
                 url: path,
@@ -55,6 +71,7 @@ export function init(id, path, config) {
         setup() { 
             this.data.plotSize = plotSize;
             console.log(this["_data"]);
+            // registerEditorConfig(editorConfig(this));
         },
     });
 }

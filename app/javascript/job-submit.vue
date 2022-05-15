@@ -139,9 +139,9 @@
                                 </div>
                             </div>
                             <div class = "row">
-                                <div class="col-md-6" ref="inputSection">
+                                <div class="col-md-6 h-100" ref="inputSection">
                         
-                                    <div class = "row submit-container justify-content-center">
+                                    <div class = "row submit-container justify-content-center h-30">
                                         <div v-for="input in displayedInputs" :key="input.id" class = "text-center submit-box col-md-6">
                                             <a :href="`/public/data/module_demo/${app.name}_demo_${input.name}.tsv`" :download=input.name >Demo {{ input.name}} </a>
                                         </div>
@@ -155,7 +155,7 @@
                                         </div>  -->
                                     </div>
 
-                                    <div class = "row submit-box justify-content-center">
+                                    <div class = "row submit-box justify-content-center h-70">
                                         <div v-if="displayedInputs.length>0">
                                             <div class = "row justify-content-center">
                                                 <div class="col-md-6" v-for="input in displayedInputs" :key="input.id">
@@ -197,7 +197,7 @@
                                 </div>
 
 
-                                <div class="set-param-section col-md-6" style="word-wrap:break-word; padding-left:40px">
+                                <div class="set-param-section col-md-6 h-100" style="word-wrap:break-word; padding-left:40px">
 
                                     <div class = "row submit-box">
                                         <div v-if="displayedParams.length > 0" class = "col-md-6" style="height:300px;overflow:scroll; vertical-align:center">
@@ -728,6 +728,11 @@
 }
 #run-app {
     background-color: #f8f9fa;
+}
+
+#run-app .row {
+    display: flex;
+    align-items: center;
 }
 
 #run-app #alert-center {
