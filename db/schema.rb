@@ -78,6 +78,8 @@ ActiveRecord::Schema.define(version: 2021_11_30_115435) do
 
   create_table "datasets", force: :cascade do |t|
     t.string "name"
+    t.string "description"
+    t.string "tag"
     t.bigint "user_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
@@ -133,6 +135,7 @@ ActiveRecord::Schema.define(version: 2021_11_30_115435) do
 
   create_table "samples", force: :cascade do |t|
     t.string "sample_name"
+    t.string "cancer_name"
     t.string "project_name"
     t.string "c_tumor_stage"
     t.string "c_tumor_grade"

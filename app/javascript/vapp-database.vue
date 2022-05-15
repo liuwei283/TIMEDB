@@ -5,6 +5,7 @@
                 <h4>Some description for bar plot</h4>
             </div>
             <div class="select-bar form-inline row">
+
                 <div class="sdiv col">
                     <div class="select-title">
                         Please choose project or cancer type:
@@ -15,8 +16,9 @@
                         </option>
                     </select>
                     
-                    <div v-show= "bar_selected == 'project' ">
-                        <br>
+                </div>
+
+                    <div v-if= "bar_selected == 'project' " class ="sdiv col">
                         <div class="select-title">
                         Please choose the cancer type of the projects:
                         </div>
@@ -27,15 +29,14 @@
                         </select>
                     </div>
 
-                </div>
             </div>
             <div class="dropdown">
                 <button class="btn btn-secondary dropdown-toggle" type="button" id="bar_download_dropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     Download
                 </button>
                 <div class="dropdown-menu" aria-labelledby="bar_download_dropdwon">
-                    <a class="dropdown-item" id = "bar_download" :download="`${bar_selected}_samples.tsv`" :href="`${data_path}/sample_num/${bar_selected}_samples.tsv`" >Download sample number table</a> 
-                    <a class="dropdown-item viz_download" id = "bar">Download bar chart</a>
+                    <a class="dropdown-item" @click="download_bar" id = "bar_download">Download sample number table</a> 
+                    <a class="dropdown-item viz_download" id = "bar" @click="down_graph($event)">Download bar chart</a>
                 </div>
             </div>
             <div class="row vizBlock">
@@ -93,8 +94,8 @@
                 Download
             </button>
             <div class="dropdown-menu" aria-labelledby="pie_download_dropdown">
-                <a class="dropdown-item" id = "pie_download" :download="`${pieProjectSelected}_${pieMethodSelected}.tsv`" :href="`/public/data/${data_path}/cell_data/${pieMethodSelected}/${pieProjectSelected}.csv`">Download cell data</a> 
-                <a class="dropdown-item viz_download" id = "pie">Download pie chart</a>
+                <a class="dropdown-item" id = "pie_download" @click="download_pie">Download cell data</a> 
+                <a class="dropdown-item viz_download" id = "pie" @click="down_graph($event)">Download pie chart</a>
             </div>
         </div>
 
@@ -129,8 +130,8 @@
                     Download
                 </button>
                 <div class="dropdown-menu" aria-labelledby="bar_download_dropdwon">
-                    <a class="dropdown-item" id = "landscape_download" :download="`c1_c6_TCGA_all.tsv`" :href="`${data_path}/subtype/c1_c6/c1_c6_TCGA_all.tsv`" >Download sample number table</a> 
-                    <a class="dropdown-item viz_download" id = "landscape">Download landscape chart </a>
+                    <a class="dropdown-item" id = "landscape_download" @click="download_landscape" >Download sample number table</a> 
+                    <a class="dropdown-item viz_download" id = "landscape" @click="down_graph($event)">Download landscape chart </a>
                 </div>
             </div>
             <div class="row vizBlock">
@@ -175,10 +176,10 @@
                 Dropdown regulator related data
                 </button>
             <div class="dropdown-menu" aria-labelledby="regulator_download">
-                <a class="dropdown-item" id = "regulator_subtype" download href="">Download subtype data</a> 
-                <a class="dropdown-item" id = "regulator_rna" download href="">Download RNA data</a>
+                <a class="dropdown-item" id = "regulator_subtype" @click="download_regulator_subtype">Download subtype data</a> 
+                <a class="dropdown-item" id = "regulator_rna" @click="download_regulator_rna">Download RNA data</a>
                 <div class="dropdown-divider"></div>
-                <a class="dropdown-item viz_download" id = "regulator">Download landscape chart</a>
+                <a class="dropdown-item viz_download" id = "regulator" @click="down_graph($event)">Download regulator chart</a>
 
             </div>
             </div>
@@ -296,11 +297,6 @@ export default {
             
         },
         regulatorViz(){
-
-            //immuneRegulator("#regulatorVis", this.data_path + "/sample_num/" + this.bar_selected + "_samples.tsv");
-                // var regulator_project_selector = document.getElementById("regulator_project_selector");
-                // var pname = regulator_project_selector.value;
-
                 var subtype_fname = this.regulatorProjectSelected + "_c1_c6.csv";
                 var rna_fname = "immuReg_" + this.regulatorProjectSelected + ".csv";
                 
@@ -308,8 +304,6 @@ export default {
                 var rna_file_path = this.data_path + "/immuneregulator/" + rna_fname;
 
                 immuneRegulator("#regulatorVis", subtype_file_path, rna_file_path);
-
-
         },
         all_viz() {
             this.barViz();
@@ -327,8 +321,53 @@ export default {
             this.regulatorProjects=this.projects[this.regulatorCancerSelected];
             console.log(this.regulatorProjects);
             this.regulatorProjectSelected = this.regulatorProjects[0];
-        }  
+        } ,
+        download_bar(){
 
+            window.location.href = this.data_path+"/sample_num/" + this.bar_selected + "_samples.tsv";
+
+
+            
+        },
+        download_pie(){
+            window.location.href = this.data_path+"/sample_num/" + this.bar_selected + "_samples.tsv";
+            var file_name = this.pieProjectSelected + "_" + this.pieMethodSelected + ".csv";
+            var file_path = this.data_path + "/cell_data/" + this.pieMethodSelected + "/" + file_name;
+            window.location.href = file_path;
+        },
+        download_landscape(){
+            if (this.landscape_selected == "all") {
+                var file_name = "c1_c6_TCGA_all.csv"
+                var file_path =this.data_path+ "/subtype/c1_c6/" + "c1_c6_TCGA_all.csv"; 
+            }
+            else {
+                var file_name = this.landscape_selected + "_c1_c6.csv"
+                var file_path = this.data_path + "/subtype/c1_c6/cancer/" + file_name;
+            }
+            window.location.href = file_path;
+        },
+        download_regulator_subtype(){
+            var subtype_fname = this.regulatorProjectSelected + "_c1_c6.csv";    
+            var subtype_file_path = this.data_path + "/subtype/c1_c6/project/" + subtype_fname;
+            window.location.href = subtype_file_path;
+        },
+        download_regulator_rna(){
+                var rna_fname = "immuReg_" + this.regulatorProjectSelected + ".csv";
+                var rna_file_path = this.data_path + "/immuneregulator/" + rna_fname;
+                window.location.href = rna_file_path;
+        },
+        down_graph(e){
+                var clicked_id = e.target.id;
+                const svgContainerClone = document.getElementById(clicked_id + "Vis").cloneNode(true);
+                const svgBlob = new Blob([svgContainerClone.innerHTML], { type: "image/svg+xml;charset=utf-8" });
+                const svgUrl = URL.createObjectURL(svgBlob);
+                const downloadLink = document.createElement("a");
+                downloadLink.href = svgUrl;
+                downloadLink.download = clicked_id + ".svg";
+                document.body.appendChild(downloadLink);
+                downloadLink.click();
+                document.body.removeChild(downloadLink);
+        }
     }
 }
 </script>
