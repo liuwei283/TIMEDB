@@ -1,7 +1,9 @@
 nav#sidebar.active
     .sidebar-content
         -if controller_name == 'analyses'
-        = render 'partials/viz_sidebar'
+            = render 'partials/viz_sidebar'
+        -if controller_name == 'submit' && action_name == 'analysesCategory'
+            = render 'partials/analyses_sidebar'
     .sidebar-header
         = yield :sidebar_header
     .sidebar-toolbar

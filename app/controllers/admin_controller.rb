@@ -1,8 +1,11 @@
 class AdminController < ApplicationController
     http_basic_authenticate_with name: "admin", password: "Lovelace"
-    $abd_dir = "#{Rails.root}/app/data/abd_files/"
+    $inf_dir = "#{Rails.root}/public/data/sample_plot/"
+    $data_dir = "#{Rails.root}/public/data/"
     def index
-        @projects = Project.order(:name)
+        @projects = Project.order(:project_name)
+        #@organs = Organ.order(:primary_site)
+        @cancers = Cancer.order(:cancer_name)
         @ana_cate = AnalysisCategory.order(:name)
         @ac_attrs = AnalysisCategory.column_names
         @viz = Visualizer.order(:name)
@@ -11,56 +14,268 @@ class AdminController < ApplicationController
         @a_attrs = Analysis.column_names
     end
 
-    def modify_sample_abd
-        #redirect_to import_abd_table_project_samples_path(:project_id=>params[:project_id], :file=>params[:file])
+    def modify_sample_inf
+        #redirect_to import_inf_table_project_samples_path(:project_id=>params[:project_id], :file=>params[:file])
         @project = Project.find(params[:project_id])
-        n1 = @project.name
+        n1 = @project.project_name
         up_file = params[:file]
         # uploader = AbdUploader.new(n1)
         # uploader.store!(up_file)
         if up_file.respond_to?(:read)
             data = up_file.read
             lines = data.split("\n")
-            names = lines[0].chomp.split("\t")
-            n_sample = names.length() - 1
+            names = lines[0].chomp.split("\t") 
+            n_sample = lines.length() - 1 #number of sample
+            n_key = names.length() - 1
             pj_name = names[0]
-            s_names = names[1..n_sample]
+            keys = names[1..n_key]
             i = 1
             all_json = {}
             while i < lines.length()
                 line = lines[i]
-                buffer = line.split("\t")
-                key = buffer[0].chomp
-                all_json[key] = Array.new(n_sample, "NA")
-                for j in 1..n_sample
-                    v = buffer[j].chomp
-                    all_json[key][j-1] = v
-                end
-                i += 1
-            end
-
-            keys = all_json.keys
-            s_names.each_with_index do |s_name, index|
-                f_path = "#{$abd_dir}#{n1}_#{s_name}.tsv"
+                sample_info = line.split("\t")
+                s_name = sample_info[0].chomp
+                f_path = "#{$inf_dir}#{n1}_#{s_name}.tsv"
                 f = File.open(f_path, "w")
                 s = "#{n1}\t#{s_name}"
-                i = index
-                keys.each do |k|
-                    value = all_json[k][i]
+                keys.each_with_index do |k, index|
+                    value =  sample_info[index + 1]
                     if value.to_f != 0
                         s += "\n"
                         s += "#{k}\t#{value}"
                     end
                 end
+                i+=1
                 f.write(s)
                 f.close
             end
-
         else
             logger.error "Bad file_data: #{up_file.class.name}: #{up_file.inspect}"
         end
-        redirect_to '/admin', notice: "ALL Abundance data uploaded."
+        redirect_to '/admin', notice: "ALL immune infiltration data uploaded."
     end
+
+    def update_samples_num_table
+        #generate cancer type and their sample numbers
+        @cancers = Cancer.order(:cancer_name)
+        csf_path = "#{$data_dir}sample_num/cancer_samples.tsv"
+        csf = File.open(csf_path, "w")
+        s = "cancer_name\tsample_number"
+        @cancers.each do |cancer|
+            ct = cancer.cancer_name
+            sn = cancer.number_of_samples
+            s += "\n"
+            s += "#{ct}\t#{sn}"
+        end 
+        csf.write(s)
+        csf.close
+        #generate project and their sample numbers
+        @projects = Project.order(:project_name)
+        psf_path = "#{$data_dir}sample_num/project_samples.tsv"
+        psf = File.open(psf_path, "w")
+        s = "project\tsample_number"
+        @projects.each do |project|
+            pn = project.project_name
+            sn = project.samples.count
+            s += "\n"
+            s += "#{pn}\t#{sn}"
+        end
+        psf.write(s)
+        psf.close
+
+        redirect_to '/admin', notice: "ALL Projects/Cancer types with samples number files updated."
+    end 
+
+    #actually no need to do file integration here - cell data
+    def make_analysis_cancer_files
+        all_analysis_methods = [""] # add eight analysis method here for cell data
+        @cancers = Cancer.order(:cancer_name)
+        all_analysis_methods.each do |analysis_method|
+            @cancers.each do |cancer|
+                ctype = cancer.cancer_name
+                cprojects = cancer.projects
+                project_file_names = []
+                cprojects.each do |project|
+                    pname = project.project_name
+                    analysis_project_file_name = p_name + '_' + analysis_method + '.csv'
+                    project_file_names.push(analysis_project_file_name)
+                end
+                firstpname = project_file_names[0]
+                firstFPath = "#{$ovv_dir}analysis/#{analysis_method}/projects/#{firstpname}"
+                ana_headers = CSV.open(firstFPath, &:readline)
+
+                analysis_cancer_name = ctype + "_" + analysis_method + ".csv"
+                cfile_path = "#{$ovv_dir}analysis/#{analysis_method}/cancers/#{analysis_cancer_name}"
+                CSV.open(cfile_path, "wb", write_headers: true, headers: ana_headers) do |csv|
+                    project_file_names.each do |ppath|  # for each of your csv files
+                        absPath = "#{$ovv_dir}analysis/#{analysis_method}/projects/#{ppath}"
+                        CSV.foreach(absPath, headers: true, return_headers: false) do |row| # don't output the headers in the rows
+                            csv << row # append to the final file
+                        end
+                    end
+                end
+            end
+        end
+    end
+
+
+    def make_subtype_cancer_files
+        # integrate project data to cancer data
+        # for subtype data, we will only have the C1-C6 now
+        all_subtype_methods = ["c1_c6"] # add eight subtype method here
+        cancers = Cancer.order(:cancer_name)
+        all_subtype_methods.each do |subtype_method|
+
+            cancers.each do |cancer|
+                ctype = cancer.cancer_name
+                cprojects = cancer.projects
+                if cprojects.count > 0
+                    firstpname = cprojects.first.project_name
+                    firstFName =  'TCGA_ACC_' + subtype_method + '.csv' 
+                    firstFPath = "#{$data_dir}subtype/#{subtype_method}/project/#{firstFName}"
+                    sub_headers = CSV.open(firstFPath, &:readline)
+
+                    subtype_cancer_name = ctype + '_' + subtype_method + ".csv"
+                    cfile_path = "#{$data_dir}subtype/#{subtype_method}/cancer/#{subtype_cancer_name}"
+                    CSV.open(cfile_path, "wb", write_headers: true, headers: sub_headers) do |csv|
+                        cprojects.each do |project|  # for each of your csv files
+                            pname = project.project_name
+                            csv << [pname]
+                            fname = pname + '_' + subtype_method + '.csv' 
+                            fpath = "#{$data_dir}subtype/#{subtype_method}/project/#{fname}"
+                            if File.exists?(fpath)
+                                CSV.foreach(fpath, headers: true, return_headers: false) do |row| # don't output the headers in the rows
+                                    csv << row # append to the final file
+                                end
+                            end
+                        end
+                    end
+                end
+            end
+
+            #integrate all TCGA projects to a single file
+            fnameTCGA = subtype_method + '_TCGA_all.csv'
+            fpathTCGA = "#{$data_dir}subtype/#{subtype_method}/#{fnameTCGA}"
+            firstctype = cancers.first.cancer_name
+            firstTCGAfname = "TCGA_" + firstctype + '_' + subtype_method  + ".csv"
+            firstTCGAfpath = "#{$data_dir}subtype/#{subtype_method}/project/#{firstTCGAfname}"
+            sub_headers = CSV.open(firstTCGAfpath, &:readline)
+
+            CSV.open(fpathTCGA, "wb", write_headers: true, headers: sub_headers) do |csv|
+                cancers.each do |cancer|
+                    ctype = cancer.cancer_name
+                    fname = "TCGA_" + ctype + '_' + subtype_method  + ".csv"
+                    fpath = "#{$data_dir}subtype/#{subtype_method}/project/#{fname}"
+                    if File.exists?(fpath)
+                        csv << [ctype]
+                        CSV.foreach(fpath, headers: true, return_headers: false) do |row|
+                            csv << row
+                        end
+                    end
+                end
+            end
+        end
+        redirect_to '/admin', notice: "ALL subtype files has been integrated!"
+
+    end
+
+    def update_columns
+        projects = Project.all
+        cancers = Cancer.all
+
+        #automatically calculatethe empty or to-be-updated columns 
+        projects.each do |project|
+
+            #number of genes
+            file_name = project.project_name + ".csv"
+            file_path = "#{$data_dir}RNA/visualization/immuReg_" + file_name
+            if File.exists?(file_path)
+                num_gene = CSV.foreach(file_path, headers: true).count - 1
+                project.update_attribute(:num_of_observed_genes, num_gene)
+            end
+            
+            #number of samples
+            project.update_attribute(:num_of_samples, project.samples.count)
+
+        end
+
+        #update the numnber of projets for cancers
+        #update subtype for cancers
+        cancers.each do |cancer|
+
+            #update the number of projects
+            cancer.update_attribute(:number_of_related_projects, cancer.projects.count)
+
+            projects_of_cancer = cancer.projects
+
+            num_samples = 0
+            subtype = []
+            projects_of_cancer.each do |project|
+                #update the number of samples
+                num_samples += project.samples.count
+
+                #update the subtype from c_tumor_subtype
+                samples_of_project = project.samples
+                samples_of_project.each do |sample|
+                    s_tumor_type = sample.c_tumor_type
+                    if !subtype.include?(s_tumor_type)
+                        subtype.push(s_tumor_type)
+                    end
+                end
+            end
+            cancer.update_attribute(:number_of_samples, num_samples)
+            cancer.update_attribute(:sub_cancer, subtype.join(","))
+        end
+        redirect_to '/admin', notice: "ALL columns of cancers has been calculated!"
+
+    end
+
+    # def split_processed_columns_file
+    #     #redirect_to import_inf_table_project_samples_path(:project_id=>params[:project_id], :file=>params[:file])
+    #     up_file = params[:file]
+    #     reprocess_info =  = CSV.parse(upfile, headers: true)
+
+    #     split_json = {}
+
+    #     row_num = reprocess_info.length()
+    #     for i in 
+    #     reprocess_info.each do |key, index|
+        
+    #     # uploader = AbdUploader.new(n1)
+    #     # uploader.store!(up_file)
+    #     if up_file.respond_to?(:read)
+    #         data = up_file.read
+    #         lines = data.split("\n")
+    #         names = lines[0].chomp.split("\t") 
+    #         n_sample = lines.length() - 1 #number of sample
+    #         n_key = names.length() - 1
+    #         pj_name = names[0]
+    #         keys = names[1..n_key]
+    #         i = 1
+    #         all_json = {}
+    #         while i < lines.length()
+    #             line = lines[i]
+    #             sample_info = line.split("\t")
+    #             s_name = sample_info[0].chomp
+    #             f_path = "#{$inf_dir}#{n1}_#{s_name}.tsv"
+    #             f = File.open(f_path, "w")
+    #             s = "#{n1}\t#{s_name}"
+    #             keys.each_with_index do |k, index|
+    #                 value =  sample_info[index + 1]
+    #                 if value.to_f != 0
+    #                     s += "\n"
+    #                     s += "#{k}\t#{value}"
+    #                 end
+    #             end
+    #             i+=1
+    #             f.write(s)
+    #             f.close
+    #         end
+    #     else
+    #         logger.error "Bad file_data: #{up_file.class.name}: #{up_file.inspect}"
+    #     end
+    #     redirect_to '/admin', notice: "ALL immune infiltration data uploaded."
+    # end
 
     def delete_samples
         up_file = params[:file]
@@ -82,7 +297,27 @@ class AdminController < ApplicationController
 
     def update_all_samples
         Sample.import(params[:file])
+        cancers = Cancer.order(:cancer_name)
+        cancers.each do |cancer|
+            samples_num = 0
+            cancer.projects.each do |project|
+                samples_num += project.samples.count
+            end
+            cancer.update_attribute(:number_of_samples, samples_num)
+        end
         redirect_to '/admin', notice: "Samples imported."
+    end
+
+
+    #consider delete later
+    def update_all_organs
+        Organ.import(params[:file])
+        redirect_to '/admin', notice: "Organs imported."
+    end
+
+    def update_all_cancers
+        Cancer.import(params[:file])
+        redirect_to '/admin', notice: "Cancers imported."
     end
 
     def modify_viz
@@ -107,13 +342,11 @@ class AdminController < ApplicationController
             f.write(file.read)
         end
         redirect_to '/admin', notice: "Image added."
-
     end
 
     def modify_viz_source
         VizDataSource.import(params[:file])
         redirect_to '/admin', notice: "Visualization source imported."
     end
-    
-
 end
+

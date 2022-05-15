@@ -5,7 +5,6 @@ import * as d3 from "d3";
 import * as _ from "lodash";
 import { feature } from "topojson";
 
-
 const width = 1060,
     height = 500,
     paddingB = 100,

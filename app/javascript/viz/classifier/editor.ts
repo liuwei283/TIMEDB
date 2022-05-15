@@ -1,9 +1,8 @@
-import { genDefaultPalette, withDefaultPalette } from "oviz-common/palette";
 import { EditorDef } from "utils/editor";
 import { copyObject } from "utils/object";
 
 function run(v) {
-    v.forceDraw = true;
+    v.forceRedraw = true;
     v.run();
 }
 export const editorRef = {} as any;

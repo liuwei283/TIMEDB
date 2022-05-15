@@ -7,9 +7,9 @@ class Dataset < ApplicationRecord
   #   end
   # }, on: :create
 
-  def abd_file()
+  def inf_file()
     ids = sample_ids
-    return Sample.selected_abd_to_tsv(ids)
+    return Sample.selected_inf_to_tsv(ids)
   end
 
   def metadata_file()
@@ -32,5 +32,73 @@ class Dataset < ApplicationRecord
     @samples = Sample.find(ids)
     samples.delete(@samples)
   end
+
+  def mergeFile(ds_name)
+    #get all projects with samples
+    projects = getProjectSources(ds_name)
+  
+
+
+    @merged_files = {}
+    @merged_files["Clinical data"] = []
+    @merged_files["Gene expression data"] = []
+    projects.each_key do |pname|
+      sample_clinical_file_path = "#{Rails.root}/public/data/clinical/sample/Clinical_#{pname}.csv"
+      sample_rna_file_path = "#{Rails.root}/public/data/RNA/RNA_#{pname}.csv"
+      snames = projects[pname]
+
+      #merge clinical files
+      file_info = CSV.parse(File.read(sample_clinical_file_path), headers: TRUE)
+      cur_headers = file_info.headers
+      file_for_selected_samples = CSV.generate(write_headers: true, headers: cur_headers) do |csv|
+        file_info.each do |row|
+          if snames.include? row['sample_name']
+            csv << row
+          end
+        end
+      end
+      @merged_files["Clinical data"].push(file_for_selected_samples)
+
+
+      #merge gene expression files
+      file_info = CSV.parse(File.read(sample_rna_file_path), headers: TRUE)
+
+      remained_col = snames.push("GeneSymbol")
+
+      
+      filtered_rna_info = file_info.by_col!.delete_if do |column_name,column_values|
+        !remained_col.include? column_name
+
+      end
+      
+      filtered_rna_file = filtered_rna_info.to_csv
+      @merged_files["Gene expression data"].push(filtered_rna_file)
+
+    end
+
+    return @merged_files
+  end
+
+
+  def getProjectSources(ds_name)
+    @dataset = Dataset.find_by name: ds_name
+    projects = {}
+    samples = @dataset.samples.order(:sample_name)
+    samples.each do |sample|
+        sname = sample.sample_name
+        pname = sample.project_name
+        logger.error sname
+        if projects.key?(pname)
+            projects[pname].push(sname)
+
+        else
+            projects[pname] = [sname]
+
+        end
+    end
+
+    return projects
+  end
+
 
 end

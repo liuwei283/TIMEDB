@@ -22,6 +22,14 @@ class Analysis < ApplicationRecord
     def files_info_json
       JSON.pretty_generate self.files_info
     end
+
+    def can_be_destroyed
+      if self.tasks.blank?
+        return true
+      else
+        return false
+      end
+    end
     
     private
 
@@ -48,5 +56,5 @@ class Analysis < ApplicationRecord
       j += i
       lines.drop(j + 1).take_while { |l| !l.starts_with?('#') }.prepend(lines[j])
            .map(&:strip).reject(&:empty?).join("\n")
-    end
+  end
 end

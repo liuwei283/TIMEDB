@@ -17,8 +17,13 @@ class RawFilesController < ApplicationController
       send_file path
     end
 
-    def viz_abd_file
-      path = File.join Rails.root, "app", "data", "abd_files", full_path 
+    def public_file
+      path = File.join Rails.root, "public", "data", full_path 
+      send_file path
+    end
+
+    def viz_inf_file
+      path = File.join Rails.root, "public", "data", "sample_plot", full_path 
       send_file path
     end
   
@@ -44,11 +49,6 @@ class RawFilesController < ApplicationController
       else
         params[:path]
       end
-    end
-
-    def database
-      path = File.join Rails.root, 'data/public', full_path
-      send_file path
     end
 
   end

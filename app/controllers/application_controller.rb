@@ -1,9 +1,17 @@
 class ApplicationController < ActionController::Base
-    before_action :require_cookie
+    before_action :validate_cookie
 
     $user_stor_dir = "#{Rails.root}/data/user" 
-    private
 
+    def change_dark
+        session[:dark] = !session[:dark]
+        respond_to do |format|
+            format.js {render inline: "location.reload();" }
+        end
+    end
+
+    private
+    
     def require_cookie
         # no cookie found 
         unless session[:user_id]
@@ -11,6 +19,7 @@ class ApplicationController < ActionController::Base
             @user.dataset_n = 0
             @user.save
             session[:user_id] = @user.id
+            session[:dark] = false
             
         end
         # check user
@@ -26,12 +35,24 @@ class ApplicationController < ActionController::Base
             @user.dataset_n = 0
             @user.save
             session[:user_id] = @user.id
-            
         end
-        
-        #user_dir = File.join($user_stor_dir, session[:user_id].to_s)  
-        # unless File.directory?(user_dir)
-        #     Dir.mkdir(user_dir)
-        # end
     end
+
+    def validate_cookie
+        # logger.error !params[:controller] == 'welcome'
+        # logger.error "----------------------------------"
+        # logger.error session[:user_id]
+        # check if guest user has not already accepted the toc from session
+        logger.error session[:user_id]
+        if session[:user_id].nil?
+            redirect_to root_path, alert: 'Please accept cookie to continue.'
+            logger.error params[:user_id]
+            logger.error "----------------------------------"
+            logger.error "----------------------------------"
+            logger.error "----------------------------------"
+            logger.error "application controller validate cookie"
+            logger.error session[:user_id]
+        end
+    end
+
 end

@@ -35,8 +35,14 @@
                 = link_to edit_admin_analysis_category_analysis_path(c, a), class: 'btn btn-sm btn-secondary mr-2' do
                   = icon 'fas', 'edit'
                   | Edit
-                = link_to admin_analysis_category_analysis_path(c, a), method: :delete, class: 'btn btn-sm btn-danger', data: {confirm: "Are you sure?"} do
-                  = icon 'fas', 'trash'
-                  | Delete
+                -if a.can_be_destroyed
+                  = link_to admin_analysis_category_analysis_path(c, a), method: :delete, class: 'btn btn-sm btn-danger', data: {confirm: "Are you sure?"} do
+                    = icon 'fas', 'trash'
+                    | Delete
+                - else
+                  <button class="btn btn-sm btn-danger disabled" data-toggle="tooltip" data-placement="right"  title="This analysis has active tasks, cannot be deleted">
+                    <i class="fas fa-trash"></i>Delete
+                  </button>
+
 - content_for :page_script do
   =javascript_pack_tag 'admin-form'

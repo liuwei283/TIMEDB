@@ -1,7 +1,8 @@
 <% content_for :head do %>
-    <script src="https://cdn.staticfile.org/jquery/2.1.1/jquery.min.js"></script>
-    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.22/js/jquery.dataTables.min.js"></script>
-    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.22/css/jquery.dataTables.css">
+
+
+
+
 <%end%>
 <% content_for :title, "Overview" %>
 
@@ -14,26 +15,28 @@
     
 </div>
 <br>
+
+
 <div id="head" class="container Block">
 
     
     <div class="row">
         <div class="col">
             <div class="ov-number">
-                11688
+                xxxx
             </div>
             <div class="ov-type">
-                Samples
+                Cancer types
             </div>
             
             
         </div>
         <div class="col">
             <div class="ov-number">
-                5813
+                xxxx
             </div>
             <div class="ov-type">
-                Individuals
+                Projects
             </div>
             
             
@@ -41,10 +44,10 @@
 
         <div class="col">
             <div class="ov-number">
-                54
+                xxxx
             </div>
             <div class="ov-type">
-                Projects
+                Samples
             </div>
             
            
@@ -52,10 +55,10 @@
 
         <div class="col">
             <div class="ov-number">
-                29
+                xxxx
             </div>
             <div class="ov-type">
-                Diseases
+                Deconvolution tools
             </div>
             
             
@@ -63,24 +66,109 @@
 
         <div class="col">
             <div class="ov-number">
-                15
+                xxxx
             </div>
             <div class="ov-type">
-                Countries
+                Immune cell types
             </div>
-            
-            
+        </div>
+
+        <div class="col">
+            <div class="ov-number">
+                C1 - C6
+            </div>
+            <div class="ov-type">
+                Subtypes
+            </div>
         </div>
     </div>
     <br/>
 </div>
 <div class = "container Block"> 
+
+
+<!-- to be deleted
 <h2>Sample distribution</h2>
 <div id = "world-map" class = "container Block"> </div>
 </div>
+up to here -->
 
-<%=javascript_pack_tag 'db-overview-viz'%>
+<br />
+<hr />
+<section id = "cancer_icon">
+    <h2>Cancer Type</h2>
+    
+    <div id = "cancerIcons" class="collapse" aria-expanded="false" class = "container-fluid container">
+        <div class = "row cols-xs-space cols-sm-space cols-md-space text-center">            
+            <% @singleCancers.each do |cc| %>
+                <div class = "col-lg-2 col-lg-offset-1 mb-4">
+                    <div data-toggle="tooltip" data-html="true" title= '
+                    <div class="row">
+                        <% @cancer_attrs.each do |attr| %>
+                        <% if attr != "id" && attr != "created_at" && attr != "updated_at"%>
+                            <div class="col-md-12">
+                                <strong><%=attr%>: </strong>
+                                <%= cc[attr] %>
+                            </div>
+                        <% end %>
+                        <% end %>
+                    </div>
+                    '> 
+                    <%= link_to cc do %>
+                        <%= image_tag(cc.cancer_type + ".png", class: "rounded-circle z-depth-2") %>
+                    <% end %>
+                    </div>
+                    <h4> <%= cc.cancer_name %> </h4>
+                </div>
+            <% end %>
+            
+            <div class = "col-lg-2 col-lg-offset-1 mb-4">
+                    <div type="button" class="fa fa-lightbulb-o fa-lg" title="Cancers List" data-toggle="popover" data-content= ' 
+                    <ul>
+                    <% @kidneyCancers.each do |kc| %>
+                        <li><%= link_to kc.cancer_name, kc %></li>
+                    <% end %>
+                    </ul>
+                    '> 
+                    <%= image_tag("kidney.png", class: "rounded-circle z-depth-2") %> 
+                    </div>
+                    <h4> Kidney</h4>
+            </div>
+            <div class = "col-lg-2 col-lg-offset-1 mb-4">
+                    <div type="button" class="fa fa-lightbulb-o fa-lg" title="Cancers List" data-toggle="popover" title="" data-content= ' 
+                    <ul>
+                    <% @leukemiaCancers.each do |lc| %>
+                        <li><%= link_to lc.cancer_name, lc %></li>
+                    <% end %>
+                    </ul>
+                    '> 
+                    <%= image_tag("Leukemia.png", class: "rounded-circle z-depth-2") %> 
+                    </div> 
+                    <h4> Leukemia</h4>
+            </div>
+            <div class = "col-lg-2 col-lg-offset-1 mb-4">
+                <% cancer_other = Cancer.find_by(cancer_type: "Other") %>
+                <%= link_to cancer_other do %>
+                    <%= image_tag("other.png", class: "rounded-circle z-depth-2") %>
+                <% end %>
+                <h4> <%= "Others" %> </h4>
+            </div>
+            <div class = "col-lg-2 col-lg-offset-1 mb-4">
+                    <h1> . . . </h1>
+            </div>
+        </div>
+    </div>
+    <div>
+        <div id = "collapseButton" role="button" class="collapsed" data-toggle="collapse" href="#cancerIcons" aria-expanded="false" aria-controls="cancerIcons"></div>
+    <div>
+</section>
+<hr />
 
 
 
+<br />
+<h2> Database overview visualization</h2>
 
+<div id ="vapp-database">
+</div>
+                        

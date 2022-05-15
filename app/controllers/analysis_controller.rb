@@ -6,7 +6,7 @@ class AnalysisController < ApplicationController
         redirect_to action: "show", url_name: aurl
     end
     def show 
-        @analysis = Analysis.find_by url:params[:url_name]
+        @analysis = Analysis. url:params[:url_name]
         files_info = @analysis.files_info
         
         @analysisUserDatum = AnalysisUserDatum.findOrInitializeBy @analysis.id, session[:user_id]

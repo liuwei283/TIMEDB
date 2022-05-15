@@ -37,7 +37,7 @@ require 'capistrano/puma'
 require 'capistrano/rails'
 require 'capistrano/rails/db'
 install_plugin Capistrano::Puma
-
+install_plugin Capistrano::Puma::Daemon
 require 'capistrano/rails/console'
 
 # Load custom tasks from `lib/capistrano/tasks` if you have any defined

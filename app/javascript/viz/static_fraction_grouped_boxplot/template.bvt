@@ -1,0 +1,99 @@
+svg {
+	Component {
+		Container {
+			x = 10;y  = 20
+			Legend {
+				@props legendPos
+				data = legendData
+				padding = 4
+				lineHeight = 13
+				legendWidth = 15
+				label.fontSize = 10
+				:legend(d) {
+					Component {
+						Line {  x = 50%; y1 = 1; y2 = 12; stroke = d.fill;strokeWidth = 1.5 }
+						Rect {
+							x = 2.5;y = 2.5
+							stroke = d.fill; strokeWidth = 1.5
+							height = 8;width = 10
+							fill = "none"					
+						}
+						Line {  x1 = 3; x2 = 12; y = 6.5; stroke = d.fill;strokeWidth = 1.5 }
+					}				
+				}
+			}
+		}
+		Container {
+			x = 120;y=50
+			GridPlot{
+				@props comparedBox
+            	//xAxisRotated=true
+				//:bottomAxis{}
+				:content{
+					@for(item,index) in comparedBox.data{
+						Boxes {
+							@let i = index[index.length-1]
+                        	x = i * (comparedBox.boxW + 2)
+							key = index
+							data = index
+							showMean = true
+                        	showNotch = false
+							:box (_d) {
+                            	Rect {
+                                	strokeWidth = 2
+									stroke = item.color
+                                	width = comparedBox.boxW
+                                	height = 100%
+									fill = "none"
+                            	}
+                        	}
+							:whiskle(d) {
+                            	Line { x = comparedBox.boxW / 2; y1 = 0; y2 = 100%;strokeWidth = 2;stroke=item.color}
+                        	}
+							:outlier(d) {
+                            	Component {
+							    	x = comparedBox.gridW * - (1-comparedBox.gapRatio)/2 + comparedBox.boxW/ 2
+									Circle.centered {
+										r = 2; 
+										stroke = item.color
+										fill = "none"
+										on:mouseenter = setActive(d,i)
+									}
+                            	}
+                        	}
+							:mean(means) {}
+							:median(d) {
+                            	Line { x2 = comparedBox.boxW; stroke = item.color; strokeWidth = 2}
+                        	}
+						}
+					
+					}
+					@if AcitiveDots.index!="null" {
+						Component {
+							@let offset=AcitiveDots.rank-1
+							@let text = String(AcitiveDots.number)
+							Line {
+								x1 = 0; y1 =  @scaled-y(AcitiveDots.number); x2 = 100%; y2 = @scaled-y(AcitiveDots.number);
+								stroke="#666"
+								dashArray=[3,3]
+							}
+							Text{
+								x = 3;y = @scaled-y(AcitiveDots.number) 
+								anchor = @anchor("left","bottom")
+                            	text = "Value:"+text
+								fontSize = 10
+							}
+						}
+					}
+				}
+				:bottomAxis{
+					Axis("bottom"){
+                        y = 100%
+                        label.fontSize = xlabelFontsize
+                    }
+				}
+				
+			}
+		}
+	}
+}

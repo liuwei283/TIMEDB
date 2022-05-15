@@ -43,7 +43,6 @@ export function findUpperBound(x: number, sigDigit: number, power = 0): number {
     else {
         const numTen = 10 * Math.floor(x / 10);
         const dig = x - numTen;
-        console.log(dig)
         return (numTen +Math.ceil(dig)) / Math.pow(10, power);
     }
 }

@@ -49,7 +49,31 @@ export function editorConfig(v):EditorDef {
                             },
                         },
                         {
-                            title: "Column Label Rotation Angle",
+                            title: "width",
+                            type: "input",
+                            format: "float",
+                            value: {
+                                current: v.data.gridW,
+                                callback(d) {
+                                    v.data.gridW = parseFloat(d);
+                                    run(v);
+                                },
+                            },
+                        },
+                        {
+                            title: "height",
+                            type: "input",
+                            format: "float",
+                            value: {
+                                current: v.data.gridH,
+                                callback(d) {
+                                    v.data.gridH =parseFloat(d);
+                                    run(v);
+                                },
+                            },
+                        },
+                        {
+                            title: "Rotation Angle",
                             type: "input",
                             format: "int",
                             value: {
@@ -60,8 +84,8 @@ export function editorConfig(v):EditorDef {
                                     if (val > 90) val = 90;
                                     v.data.config.colLabelRotation = val;
                                     run(v);
-                                }
-                              }
+                                },
+                            },
                         },
                     ],
                 },

@@ -47,11 +47,11 @@ module ApplicationHelper
 
   def page_is_dark?
     (controller_name == 'welcome' && action_name == 'index') ||
-      (controller_name == 'sessions') ||
-      (controller_name == 'registrations') ||
-      (controller_name == 'passwords') ||
-      (controller_name == 'confirmations') ||
-      (controller_name == 'unlocks')
+    (controller_name == 'sessions') ||
+    (controller_name == 'registrations') ||
+    (controller_name == 'passwords') ||
+    (controller_name == 'confirmations') ||
+    (controller_name == 'unlocks')
   end
 
   def current_layout

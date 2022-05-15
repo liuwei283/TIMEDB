@@ -5,14 +5,15 @@ svg {
        @for (data, i) in heatmapDataD {
            DiscreteHeatMap {
                x = 3
-               width = 25 * data.columns.length
+               width = width[i] * gridW
+               @expr console.log(width)
                drawRows = i === 0? true : false
                data = data.data
                colors = colors
                valueMap = valueMap
                values = values
-               gridW = 25
-               gridH = 15
+               gridW = gridW
+               gridH = gridH
                colName = config.colName
                rowName = config.rowName
                columns = data.columns

@@ -5,6 +5,7 @@ import { ascending, descending} from "d3-array";
 import { cluster,  hierarchy } from "d3-hierarchy";
 import { scaleLinear } from "d3-scale";
 import { groupedColors2, rainbow1, rainbowL} from "oviz-common/palette";
+import DataUtils from "utils/data";
 import { findBoundsForValues} from "utils/maths";
 
 const defaultScheme = groupedColors2;
@@ -34,8 +35,6 @@ const defaultScheme = groupedColors2;
 // ];
 
 export const brewPalette = [
-    "#8dd3c7",
-    "#ffffb3",
     "#bebada",
     "#fb8072",
     "#80b1d3",
@@ -46,6 +45,8 @@ export const brewPalette = [
     "#bc80bd",
     "#ccebc5",
     "#ffed6f",
+    "#8dd3c7",
+    "#ffffb3",
 ];
 
 const rainbow2 = [
@@ -69,6 +70,8 @@ export function getLeafOrder(rootNode): string[] {
     sortTree(rootNode);
     return nodeList;
 }
+
+//actually not sortTree but get all leaf nodes by order
 function sortTree(d): any {
     if (d.children) {
         d.children.forEach(c => {
@@ -136,7 +139,8 @@ export function main(d) {
         });
         this.data.mainDict[speciesID] = temp;
     });
-    this.data.mainHeatmap = [];
+    this.data.initialSpeciesMap = {};
+    // this.data.mainHeatmap = [];
     const spComp = [];
     this.data.species.forEach(s => {
         const row = [];
@@ -151,8 +155,10 @@ export function main(d) {
             id: s,
             sum: row.reduce((a, b) => a + b, 0),
         });
-        this.data.mainHeatmap.push(row);
+        // this.data.mainHeatmap.push(row);
+        this.data.initialSpeciesMap[s] = row;
     });
+    
     const top5species = spComp.sort((a, b) => a.sum - b.sum)
           .splice(0, 21)
           .map(x => x.id)
@@ -168,7 +174,7 @@ export function main(d) {
                 if (getLastRank(a) < getLastRank(b)) return -1;
                 else return 1;
               }
-          });
+          });    
     const spDict = {};
     d.forEach(x => {
         const datum = {...x};
@@ -178,7 +184,9 @@ export function main(d) {
     });
     this.data.hist = {
                     indexes: [...top5species].reverse(),
+                    // indexes: [this.data.species],
                     result: {}};
+    // this.data.species.forEach(k => {
     top5species.forEach(k => {
         this.data.hist.result[k] = Object.keys(spDict[k])
                             .map(x => [x, spDict[k][x]]);
@@ -209,6 +217,7 @@ export function removeNodeLength(rootNode): any {
 }
 
 export function meta(d) {
+    if (d.columns.indexOf("Group") < 0) throw new Error("must provide \"Group\" in meta file");
     const sampleIdKey = d.columns[0];
     this.data.metaFeatures = d.columns.slice(1, d.columns.length);
     this.data.metaDict = {};
@@ -222,8 +231,9 @@ export function meta(d) {
     this.data.discaredFeatures = [];
     let curPos = 0;
     this.data.metaFeatures.forEach((k, i) => {
-        if (k === "Age" || k === "age" || k === "BMI" || !isNaN(parseFloat(d[0][k]))) {
-            const [min, max] = minmax(d.map(x => x[k]));
+        if (!DataUtils.isDistcint(d, k)) {
+            const [min, max] = minmax(d.map(x => parseFloat(x[k]))
+                .filter(x => !isNaN(x)));
             this.data.metaInfo[k] = new MetaInfo(k, true, min, max, []);
             this.data.metaData[k] = this.data.samples.map(x => this.data.metaDict[x][k]);
         } else {
@@ -245,10 +255,33 @@ export function meta(d) {
         }
     });
     // compute left boxplot
-    const categories = [...this.data.species];
+    let categories = [...this.data.species];
     const classifications = this.data.metaInfo["Group"].values;
     const boxData = [{values: [], outliers: [], means: [], categories}, {values: [], outliers: [], means: [], categories}];
     const allValues = [];
+    const meanDict = {};
+    categories.forEach((c, i) => {
+        const initialData = [];
+        this.data.samples.forEach(s => {
+            allValues.push(this.data.mainDict[c][s]);
+            if (this.data.metaDict[s].Group === classifications[0]) {
+                initialData.push(this.data.mainDict[c][s]);
+            }
+        });
+        const result = [];
+        const stat1 = new Oviz.algo.Statistics(initialData);
+        const interQuartileRange = stat1.Q3() - stat1.Q1();
+        initialData.forEach(d => {
+            if (!((d < stat1.Q3() - 1.5 * interQuartileRange) || (d > stat1.Q3() + 1.5 * interQuartileRange))) {
+                result.push(d);
+            }
+        });
+        const stat2 = new Oviz.algo.Statistics(result);
+        meanDict[c] = stat2.mean();
+    });
+    this.data.species = categories = categories.sort((a, b) => meanDict[a] - meanDict[b]);
+    this.data.mainHeatmap = [];
+    this.data.species.forEach(s => this.data.mainHeatmap.push(this.data.initialSpeciesMap[s]));
     categories.forEach((c, i) => {
         const initialData = [[], []];
         this.data.samples.forEach(s => {
@@ -277,8 +310,9 @@ export function meta(d) {
             boxData[j].means.push(stat2.mean());
         });
     });
+    
     const valueRange = findBoundsForValues(allValues, 2);
-    this.data.boxplot = {categories, classifications, boxData, valueRange};
+    this.data.boxplot = {categories: this.data.species, classifications, boxData, valueRange};
 }
 class TreeNode {
     protected name: string;
