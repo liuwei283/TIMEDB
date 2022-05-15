@@ -159,17 +159,17 @@
                                         </div> 
                                     </div> -->
 
-                                    <div class = "row submit-box justify-content-center h-100">
+                                    <div class = "row submit-box justify-content-center">
                                         <div v-if="displayedInputs.length>0">
-                                            <div class = "row justify-content-center">
-                                                <div class="col-md-6" v-for="input in displayedInputs" :key="input.id">
+                                            <div class = "row justify-content-around">
+                                                <div class="col-md-6 text-center" v-for="input in displayedInputs" :key="input.id">
                                                     <label :for="`i-${input.id}`">{{ input.name }}
                                                         <span v-if="input.required" class="required">*</span>
                                                         <!-- <i class="fa fa-question-circle" b-tooltip.hover
                                                         :title="input.description"></i> -->
                                                     </label>
-                                                    <div v-b-modal="'upload-' + input.id" class="uploadPng text-center row justify-content-center">
-                                                        <img v-bind:src="require('../assets/images/big_upload.png')" >
+                                                    <div v-b-modal="'upload-' + input.id" class="uploadPng text-center justify-content-center container">
+                                                        <img v-bind:src="require('../assets/images/big_upload.png')" style="width:90%">
                                                     </div>
                                                 </div>
                                             </div>
@@ -464,6 +464,9 @@
                 console.log(oldValue.size);
 
             },
+            picked_supervised:function() {
+                this.started = false;
+            }
         },
         methods: {
             setStatusColor(status) {
@@ -735,6 +738,7 @@
 #run-app {
     background-color: #f8f9fa;
 }
+
 
 #run-app .row {
     display: flex;
