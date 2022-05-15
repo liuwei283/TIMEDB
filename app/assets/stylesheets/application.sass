@@ -22,6 +22,29 @@ html, body
 @import "font-awesome-sprockets"
 @import "font-awesome"
 
+#cookies-eu-banner
+    background: $gray-900
+    // border-bottom-style: rigid
+    border-bottom: 2px ridge $gray-800
+    padding: 10px 10px
+    text-align: center
+    color: $white
+    a
+        text-decoration: underline
+        color: #78b7ca
+        font-style: italic
+    button
+        margin-left: 1rem
+        background-color: $gray-700
+        &:hover
+            background-color: $gray-200
+    //     margin: 10px
+    //     border: none
+    //     color: $white
+    //     background-color: rgba(0,0,0,0.7)
+
+
+
 // .index-banner
 //     color: $gray-100
 //     background: image-url("texture-1.jpg")
@@ -34,21 +57,36 @@ html, body
 #user-setting:hover .tooltiptext 
     opacity: 1
 
-.tooltiptext
-    opacity: 0
-    transition: opacity 0.5s
-    width: 10rem
-    background-color: black
-    color: #fff
-    text-align: center
+// .tooltiptext
+//     opacity: 0
+//     transition: opacity 0.5s
+//     width: 30rem
+//     background-color: black
+//     color: #fff
+//     text-align: left
+//     padding: 0.2rem 0
+//     margin: 25px 0
+//     border-radius: 10px    
+//     position: absolute
+//     z-index: 10
+.tooltip-inner 
+    max-width: 500px
+    /* If max-width does not work, try using width instead */
+    width: 400px !important
+    min-width: 300px
+    text-align: left !important
     padding: 0.2rem 0
     margin: 25px 0
-    border-radius: 6px    
-    position: absolute
-    z-index: 10
+    border-radius: 10px #f8f9fa
+    background-color: #f8f9fa !important
+    color: black !important
+    border: solid 1px #aaadb1 !important
+
 
 #wrapper
     min-height: calc(100vh - 70px - 250px)
+    background-color: #f8f9fa
+
 #disable-fill
     position: absolute
     top: 0
@@ -98,13 +136,19 @@ a.no-link:hover
 
 $nav-height: 70px
 #topbar
-    background-color: $gray-900
+    z-index: 3
+    width: 100%
+    position: sticky
+    top: 0
+    background-color: #f8f9fa
     height: $nav-height
+    border-bottom: 0.5px solid darken(#f8f9fa, 20%)
     span
-        color: white
+        color: $light_theme
     .nav-link
         padding: 1rem 1rem
-        color: white
+        color: $light_theme
+    
     .dropdown-menu
         box-shadow: 0 0 8px rgba(0,0,0,.1)
     .dropdown-toggle
@@ -112,5 +156,13 @@ $nav-height: 70px
             content: none
         .fa, .fas
             margin: 0 0 0 .25rem
+
+.popover
+    width: 600px
+    margin: auto
+
+
+
+
 
 @import "./*"

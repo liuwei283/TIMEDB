@@ -39,18 +39,53 @@ export class SignedHeatMap extends Component<SignedHeatMapOption> {
                             Component {
                                 width = prop.gridW
                                 height = prop.gridH
-                                behavior:tooltip {
-                                    content = ("correlation: " + parseFloat(prop.data[row][col]["r"]).toFixed(3)
-                                            + " </br> p-value: " + parseFloat(prop.data[row][col]["p"]).toFixed(3)) }
-                                Rect {
-                                    // key = n
-                                    height = 100%; width = 100%;
-                                    fill = getColor(prop.data[row][col]["r"]);
-                                }
-                                @if prop.showPAnno {
-                                    @if (prop.data[row][col]["p"] > 0.7) {
+                                @if prop.showPAnno{
+                                    Rect {
+                                        // key = n
+                                        height = 100%; width = 100%;
+                                        fill = getColor(prop.data[row][col]["r"]);
+                                        behavior:tooltip {
+                                            content = ("correlation: " + parseFloat(prop.data[row][col]["r"]).toFixed(3)
+                                                    + " </br> p-value: " + parseFloat(prop.data[row][col]["p"]).toFixed(3)) }
+                                        @if (prop.data[row][col]["p"] <=0.05 && prop.data[row][col]["p"] >= 0.01) {
                                         Text.centered {
                                             text = "*"
+                                            fontSize = prop.gridH
+                                            fill = "black"
+                                            x = prop.gridW/2; y = prop.gridH/2
+                                        }
+                                    }
+                                    @if (prop.data[row][col]["p"] <= 0.01){
+                                        Text.centered {
+                                            text = "**"
+                                            fontSize = prop.gridH
+                                            fill = "black"
+                                            x = prop.gridW/2; y = prop.gridH/2
+                                        }
+                                    }
+                                    }
+                                }
+                                @else{
+                                    Rect {
+                                        // key = n
+                                        height = 100%; width = 100%;
+                                        fill = getColor(prop.data[row][col]["r"]);
+                                        behavior:tooltip {
+                                            content = ("correlation: " + parseFloat(prop.data[row][col]["r"]).toFixed(3)) }
+                                    }
+                                }
+                                @if prop.showPAnno {
+                                    @if (prop.data[row][col]["p"] <=0.05 && prop.data[row][col]["p"] >= 0.01) {
+                                        Text.centered {
+                                            text = "*"
+                                            fontSize = prop.gridH
+                                            fill = "black"
+                                            x = prop.gridW/2; y = prop.gridH/2
+                                        }
+                                    }
+                                    @if (prop.data[row][col]["p"] <= 0.01){
+                                        Text.centered {
+                                            text = "**"
                                             fontSize = prop.gridH
                                             fill = "black"
                                             x = prop.gridW/2; y = prop.gridH/2
@@ -138,7 +173,7 @@ export class SignedHeatMap extends Component<SignedHeatMapOption> {
 
     public didCreate() {
         if (this.prop.rows.length * this.prop.gridH > 950)
-            this.$v.size.height = this.prop.rows.length * this.prop.gridH + 150;
+            this.$v.size.height = this.prop.rows.length * this.prop.gridH + 200;
     }
     public willRender() {
         this.rowLabelSize = this.prop.gridH > 12 ? this.prop.gridH - 2 : this.prop.gridH;

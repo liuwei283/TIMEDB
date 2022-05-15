@@ -58,6 +58,14 @@ function init() {
                 this.notesProps.y += deltaPos[1];
                 this.redraw();
             },
+            page: 1,
+            clickButton(delta) {
+                // console.log(this);
+                this.page += delta;
+                this.redraw();
+                // console.log(this)
+                // window.alert(this.$v.data.page);
+            },
         },
         loadData: {
             clsPickData: {
@@ -189,8 +197,9 @@ function init() {
                         });
                     this.data.specifyData = {
                         plotSize, valueRange: [0, 1], categoryRange: [0, 1],
+                        discreteCategories: false,
                         yLabel: "sensitivity", xLabel: "1 - specify",
-                        margin: [0.05, 0.05],
+                        margin: [0, 0.05],
                         data: {
                             line: {values: line, key: "median"},
                             area: {values: area, key: "low-high"},
@@ -226,7 +235,7 @@ function init() {
     return visualizer;
 }
 
-export function registerBoxplot() {
+export function registerClassifier() {
     register(MODULE_NAME, init);
 }
 

@@ -3,14 +3,12 @@ html
   head
     title = yield :title
     = csrf_meta_tags
-    = favicon_link_tag '/favicon.ico'
+    = favicon_link_tag 'ICON SMALL.png'
     = render 'partials/assets'
     = yield :head
-
+    -if session[:dark]
+        script#dark
   - body_class = [controller_name]
-  - if page_is_dark?
-    - body_class << 'bg-dark'
-    - body_class << 'text-light'
   body class=(body_class.join ' ')
     = include_gon
     / flash
@@ -30,11 +28,17 @@ html
 
     = render 'partials/nav'
     #wrapper
-      - if %w[analysis].include? controller_name
+      - if %w[analysis].include? controller_name or controller_name == 'submit' and action_name == 'analysesCategory'
         = render 'partials/side_bar'
       #main
         = yield
       #disable-fill
     - unless %w[analysis].include? controller_name
+      - if session[:user_id].nil?
+        #cookies-eu-banner
+          .container
+            | We use Cookies to offer a better browsing experience.
+            button.btn.btn-sm.btn-outline-light#cookies-eu-accept
+              = link_to "Accept", "welcome/require_cookie", method: :post
       = render 'partials/footer'
     = yield :page_script

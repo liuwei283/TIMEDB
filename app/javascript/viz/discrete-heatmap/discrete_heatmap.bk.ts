@@ -65,8 +65,8 @@ export class DiscreteHeatMap extends Component<DiscreteHeatMapOption> {
     }
 
     protected getTooltipContent(d, i, j) {
-        return `${this.prop.rowName}: ${this.prop.rows[i]}</br>
-            ${this.prop.colName}: ${this.prop.columns[j]}</br>
+        return `rows: ${this.prop.rows[i]}</br>
+            columns: ${this.prop.columns[j]}</br>
             data: ${this.prop.valueMap.get(d)}`;
     }
 }

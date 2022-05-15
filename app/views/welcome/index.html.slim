@@ -1,14 +1,20 @@
+//link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet"
+//script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"
+//script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"
+//link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous"
+
+-use_dark = session[:dark]
 - content_for :title
-  | Gutmeta
-section.heading.bg-light.text-light
-  svg.index-bg width="100%" viewBox="0 0 1920 2820"
-    path d="M0,0 L0,2700 L400,2820 L1920,2620 L1920,0 Z" fill="#343a40"
+  | Immune
+section#intro_text.heading 
+  / svg.index-bg width="100%" viewBox="0 0 1920 2820"
+  /   path d="M0,0 L0,2700 L400,2820 L1920,2620 L1920,0 Z" fill="#343a40"
   .container
     h1
-      | Gut&nbsp;
-      span.em Microbiome
+      //| Gut&nbsp;
+      span.em IMAP
       br
-      | Analysis Platform
+      | Immune Analysis Platform
     / p.index-lead
     /   | With the Focus on Cancer Studies
     p
@@ -21,6 +27,7 @@ section.heading.bg-light.text-light
         li
           | co-analysis and visualizing user data with the samples in our databases
       
+    p
       | We collected over 10,000 samples of whole-genome shotgun sequencing metagenomics data in the dataset,
       | curated process the data to taxonomy abundance and functional profiling abundance. 
       | The analysis pipeline had been implemented on Deepomics.org, 
@@ -33,61 +40,132 @@ section.heading.bg-light.text-light
       | metagenomics analysis.
 
 
+section#platform_highlight
+  .container
+    h2
+      | Focus
+    #immuHighlight.carousel.slide data-ride="carousel"
+        ol.carousel-indicators
+          li.active data-target="#immuHighlight" data-slide-to="0"
+          li data-target="#immuHighlight" data-slide-to="1"
+          li data-target="#immuHighlight" data-slide-to="2"
+
+        .carousel-inner
+          .carousel-item.active
+            =image_tag "database.png", :alt=>"Human Gut Metagenomics.png", class: "d-block w-100"
+          .carousel-item
+            =image_tag "visualization.png", :alt=>"Human Gut Metagenomics.png", class: "d-block w-100"
+          .carousel-item
+            =image_tag "analysis.png", :alt=>"Human Gut Metagenomics.png", class: "d-block w-100"
+
+        = link_to "#immuHighlight", class: "carousel-control-prev", 'data-slide' =>  'prev', role: "button"
+          span.carousel-control-prev-icon aria-hidden="true"
+          span.sr-only
+            | Previous
+        = link_to "#immuHighlight", class: "carousel-control-next", 'data-slide' =>  'next', role: "button"
+          span.carousel-control-next-icon aria-hidden="true"
+          span.sr-only
+            | Next
+
+
+
 
 section#function_card
   .container
-   h2
+    i.fa.fa-chevron-down
+    h2
       | Function
 
-  #cards_wrapper.container
-    .card-deck
-      .card
-        .card_img
-          =link_to '/database/overview'
-            =image_tag "research.png", :alt=>"Human Gut Metagenomics.png"
-        .card_body
-          h5
+
+    #cards_wrapper.container-fluid.container
+      .row.cols-xs-space.cols-sm-space.cols-md-space
+        .col-lg-4.mb-4
+          .icon
+            .icon_img
+              =link_to '/database/overview'
+                =image_tag (use_dark ? 'icons darkmode12.png' : 'icons brightmode12.png'), :alt=>"Human Gut Metagenomics.png"
+      
+        .col-lg-4.mb-4.
+          h5.text-left
             |Human Gut Metagenomics Database
-          p.card-text
+          p.text-left
             |curated database with over 10,000 
             |metagenomics sequencing data
-      .card
-        .card_img
-          =link_to "/submit/analyses"
-            =image_tag "bioinformatics.png", :alt=>"Analyze you data.png"
-        .card_body
-          h5
-            |Analyze your data
-          p.card-text
-            |containing diversity analysis, differential testing, 
-            
-            |diseases classifier, PCA,
-            
-            |functional enrichments and so on
-      .card
-        .card_img
-          =link_to "/visualizer"
-            =image_tag "bacteria.png" , :alt=>"Visualize your results.png"
-        .card_body
-          h5
-            |Visualize your results 
-          p.card-text
+          h5.text-right
+            |Visualize your results
+          p.text-right
             |containing  corresponding visualization of analysis result and basic sample and
             |basic sample information visualization and so on
+        .col-lg-4.mb-4
+          .icon
+            .icon_img
+              =link_to "/visualizer"
+                =image_tag (use_dark ? 'icons darkmode22.png' : 'icons brightmode22.png'), :alt=>"Visualize your results.png"
+        .col-lg-4.mb-4
+          .icon
+            .icon_img
+              =link_to '/submit/analyses'
+                =image_tag (use_dark ? 'icons darkmode32.png' : 'icons brightmode32.png'), :alt=>"Human Gut Metagenomics.png"
+        .col-lg-4.mb-4.
+          h5.text-left
+            |Analyses
+          p.text-left
+            |curated database with over 10,000 
+            |metagenomics sequencing data
+          h5.text-right
+            |Pipelines
+          p.text-right
+            |containing diversity analysis, differential testing,   
+            |diseases classifier, PCA,
+            |functional enrichments and so on
+        .col-lg-4.mb-4
+          .icon
+            .icon_img
+              =link_to "/submit/pipelines"
+                =image_tag (use_dark ? 'icons darkmode42.png' : 'icons brightmode42.png'), :alt=>"Analyze you data.png"
 
-section#dataset_list
-    .container
-      h2
-        | My dataset
 
+
+
+
+  / #cards_wrapper.container
+  /   .card-deck
+  /     .card
+  /       .card_img
+  /         =link_to '/database/overview'
+  /           =image_tag "research.png", :alt=>"Human Gut Metagenomics.png"
+  /       .card_body
+  /         h5
+  /           |Human Gut Metagenomics Database
+  /         p.card-text
+  /           |curated database with over 10,000 
+  /           |metagenomics sequencing data
+  /     .card
+  /       .card_img
+  /         =link_to "/submit/analyses"
+  /           =image_tag "bioinformatics.png", :alt=>"Analyze you data.png"
+  /       .card_body
+  /         h5
+  /           |Analyze your data
+  /         p.card-text
+  /           |containing diversity analysis, differential testing, 
+            
+  /           |diseases classifier, PCA,
+            
+  /           |functional enrichments and so on
+  /     .card
+  /       .card_img
+  /         =link_to "/visualizer"
+  /           =image_tag "bacteria.png" , :alt=>"Visualize your results.png"
+  /       .card_body
+  /         h5
+  /           |Visualize your results 
+  /         p.card-text
+  /           |containing  corresponding visualization of analysis result and basic sample and
+  /           |basic sample information visualization and so on
       
-      .elemet_wrapper
-        - @dataset_list.each do |dataset|
-          span.ds
-            = link_to dataset.name, user_dataset_path(:user_id=>@user.id, :id => dataset.id)
-        span#add_foler_icon
-          =link_to new_user_dataset_path(:user_id=>@user.id)
-            = image_tag 'folder-plus.svg'
+
+
         
           / a.btn.btn-xlg.btn-doap.btn-outline-light.text-uppercase.font-weight-bold href='/docs/index.html'
           /   | Learn More

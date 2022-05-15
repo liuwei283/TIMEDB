@@ -1,0 +1,153 @@
+svg {
+	width = 1850
+	height = 550
+	Component.full {
+		x = 100
+		y = 100
+		Component {
+			x = -75
+			Container {
+				Rows {
+					Container {
+						padding = 4
+						x = -25
+						Text {
+							text = "Immune Checkpoint"
+							fontSize = 15
+						}
+					}
+					Container {
+						Legend {
+							data = checkPointColor.legendData()
+						}
+					}
+				}
+			}
+			Container {
+				y = 100
+				Rows {
+					Container {
+						padding = 4
+						Text {
+							text = "mRNA"
+							fontSize = 15
+						}
+					}
+					Container {
+						Text {
+							text = "Expression"
+							fontSize = 15
+						}
+					}
+					Component {
+						x = 10
+						y = 5
+						Rect {
+							height = 50; width = 20
+							fill = @gradient("bg")
+						}
+						Axis {
+							yScale = @scale-linear(valueRange.dataRange[1], 0, 0, 50)
+							x = 20
+							orientation = "right"
+							includeEndTicks = false
+						}
+						Component.full {
+							y = 50
+							Rect {
+								height = 50; width = 20
+								fill = @gradient("ng")
+							}
+							Axis {
+								yScale = @scale-linear(0, valueRange.negdataRange[0], 0, 50)
+								x = 20
+								orientation = "right"
+								includeEndTicks = false
+							}
+						}
+					}
+				}
+			}	
+		}
+		@let first = Object.keys(RNAdata)[0]
+		Columns {
+			x = startX
+			y = startY
+			@for (item, groupKey) in RNAdata {
+				Container {
+					// padding = config.squareLength+config.xPadding
+					width = (config.squareLength+config.xPadding) * (item.colNames.length+1)
+					height = (config.squareLength+config.yPadding) * item.rowNames.length
+					ComplexHeatMap {
+						@props config
+						@props item
+						@props valueRange
+						:rowAxis(d) {
+							Component {
+								@if (groupKey == first) {
+									Component {
+										x = -d.prop.squareLength
+										Rect.centered {
+											width = d.prop.squareLength
+											height = d.prop.squareLength
+											stroke = "white"
+											strokeWidth = 2
+											fill = colorMap[d.item]
+										}
+										Text {
+											anchor = @anchor("middle", "center")
+											text = d.item
+											fill = "white"
+											fontSize = @scaled(11)
+										}
+									}
+								}
+							}
+						}
+						:colAxis(d) {
+							Component {
+								x = 2*d.prop.squareLength
+								Rect.centered {
+									x = -d.prop.squareLength
+									width = d.prop.squareLength
+									height = d.prop.squareLength
+									stroke = "white"
+									strokeWidth = 2
+									fill = checkPointColor.colors[nameMapper[d.item].CheckPoint]
+								}
+								Rect.centered {
+									x = 80
+									width = 2
+									height = d.prop.squareLength
+									fill = "000"
+								}
+								Text{
+									y = -d.prop.squareLength/2
+									key = d.key
+									text = d.item
+									fill = "#000"
+									fontSize = @scaled(11)
+								}
+								@if(d.key == Math.floor(d.prop.colNames.length/2)) {
+									Component {
+										x = 90
+										rotation = @rotate(d.prop.colNames.length>=5? -90: -75)
+										Text {
+											anchor = @anchor("t", "c")
+											text = groupKey
+											fill = "#000"
+											fontSize = @scaled(11)
+										}
+									}
+								}
+							}
+						}
+						:correlation {}
+						rect.stroke = "white"
+						rect.strokeWidth = 2
+					}
+				}
+			}
+		}
+	}
+}

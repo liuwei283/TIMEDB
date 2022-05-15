@@ -52,10 +52,12 @@ export function registerDefaultEditorConfig() {
 export function registerEditorConfig(editorConf, editorRef?) {
     const vue = event.rpc("getVue");
     if (vue) {
-        console.log(`registered`);
-        if (window.gon.viz_mode === viz_mode.ANALYSIS) editorConf.sections = [fileConf, ...editorConf.sections];
+        if (window.gon.viz_mode === viz_mode.ANALYSIS)
+            editorConf.sections = [fileConf, ...editorConf.sections];
         vue.conf = editorConf;
-        if (editorRef) vue.$root.$data.editorRef = editorRef;
+        if (editorRef) {
+            vue.$root.$data.editorRef = editorRef;
+        }
     }
 }
 export { EditorDef, ToolbarDef };

@@ -81,21 +81,54 @@ $(function () {
         },
         scrollX: true,
         rowCallback: function(row, data) {
-            if ( data[34] == "<div class='table_cell'> YES </div>" )
-            {
-                $('td:eq(8)', row).css('background-color', '#83FDC0');
-                
-            }
-            else if( data[34] == "<div class='table_cell'> NO </div>" )
-            {
-                $(row).find('td:eq(8)').css('background-color', '#FA9288');
-                
-            }
-            else{
-                //$(row).find('td:eq(7)').css('background-color', 'orange')
-            }         
+            $('td:eq(2)', row).css('background-color', '#e9ecef');
+            $('td:eq(3)', row).css('background-color', '#e9ecef');
+            //$('td:eq(4)', row).css('border-style', 'outset');
+        },
+        initComplete: function(settings, json) {
+            $('#loadingSpinner').hide();
         }
+
     }); 
+
+    // var table = $("#pj_table_page").DataTable({
+    //     fixedColumns: true,
+    //     fixedColumns: {
+    //         leftColumns: 3,
+    //         rightColumns: 2
+    //     },
+    //     processing: true,
+    //     serverSide: true,
+    //     ajax: $("#pj_table_page").data('url'),
+    //     columnDefs: [
+    //     {
+    //         targets: 0,
+    //         orderable: false,
+    //         className: 'select-checkbox',
+    //         checkboxes: {
+    //             selectRow: true,
+    //         },
+    //     },
+    //     {
+    //         targets: -1,
+    //         orderable: false  
+    //     },
+    //     {
+    //         targets: -2,
+    //         orderable: false  
+    //     },
+    //     {
+    //         targets: invis,
+    //         visible: false
+    //     }
+    //     ],
+    //     searching: true,
+    //     select: {
+    //         style:    'multi',
+    //         selector: 'td:first-child'
+    //     },
+    //     scrollX: true,
+    // }); 
 
 
     table.on('change', function() {
@@ -178,8 +211,8 @@ $(function () {
         //console.log('submitting');
     });
 
-    $('button.toggle-vis').on( 'click', function (e) {
-      e.preventDefault();
+    $('input.toggle-vis').on( 'click', function (e) {
+      //e.preventDefault();
       $(this).toggleClass('clicked');
       // Get the column API object
       var column = table.column( $(this).attr('data-column') );

@@ -1,0 +1,77 @@
+svg {
+	width = 1500
+	height = 600
+	Component {
+		XYPlot {
+			x = startX
+			y = startY
+			height = height
+			width = width
+			padding = 80
+			data = result
+			discreteCategory = true
+			valueRange = valueRange
+			Rect{
+				width = 100%
+				height = 100%
+				stroke = "#000"
+				fill = "none"
+			}
+			Bars {
+				:children(d){
+					Rect.full{
+						cornerRadius = 6
+						stroke = groups.colors[0]
+						fill = groups.colors[0]
+						x = 50%
+						anchor = @anchor("top","center")
+						behavior:tooltip {
+							content = "name: " + d.pos + "</br>sample number: " + d.value
+						}
+					}
+				}
+			}
+			// x轴
+			Text{
+				x = 50%; y = @geo(100,120)
+				anchor = @anchor("middle","center")
+				text = xlabel
+				fill = "#000"
+				fontSize = labelSize
+			}
+			// title
+			Text{
+				x = 50%; y = -30
+				anchor = @anchor("middle","center")
+				text = "Total sample:" + sampleSize
+				fill = "#000"
+				fontSize = titleSize
+				style:font-weight = "bold"
+			}
+			// 纵坐标
+			Component{
+				x = -40; y = 50%
+				rotation = @rotate(-90)
+				Text{
+					text = ylabel
+					fill = "#000"
+					anchor = @anchor("middle","center")
+					fontSize = labelSize
+				}
+			}
+			// 横轴
+			Axis("bottom") { 
+                y = 100%
+                :label(d) {
+                    Text {
+						y = 5
+                        fontSize = 10
+						text = d.value
+                        rotation = @rotate(xRotation)
+                    }
+                }
+            }
+			Axis("left");
+		}
+	}
+}

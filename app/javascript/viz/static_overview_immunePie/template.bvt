@@ -1,0 +1,45 @@
+svg {
+	width = 1000
+	height = 600
+	Component {
+		Text {
+			x = 500
+			y = 50
+			text = title
+			fontSize = 20
+			anchor = @anchor("top","center")
+		}
+		PieChart {
+			anchor = @anchor("m","c")
+			x = 500
+			y = 300
+			height = 500
+			height = 500
+			data = pieData
+			pieProps = {
+				stroke: "white"
+			}
+			:children(d) {
+				Arc {
+                    x1 = d.start; x2 = d.end
+                    r1 = 40%
+                    r2 = 90%
+                    fill = d.data.raw.color.string
+					behavior:tooltip {
+					    content = "name: "+ d.data.name+ "</br>value: "+ d.data.value.toFixed(3)
+					}
+                }
+			}
+			// 图例
+			:legend(d) {
+				Legend {
+					x = 800
+					anchor = @anchor("t", "l")
+					bg.stroke = "none"
+					bg.fill = "none"
+					data = d
+				}
+			}
+		}
+	}
+}

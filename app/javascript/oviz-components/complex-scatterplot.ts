@@ -1,8 +1,9 @@
 import Oviz from "crux";
 import { Component } from "crux/dist/element";
-import { findBoundsForValues } from "utils/maths";
 import { GridPlotOption } from "./grid-plot";
 import template from "./scatter.bvt";
+
+export const shapes = ["Circle", "Rect", "Triangle"];
 
 export interface ErrorEllipseDatum {
     dx: number;
@@ -18,33 +19,34 @@ export interface ScatterClusterDatum {
 }
 
 export interface ComplextScatterplotOption extends GridPlotOption {
-    hollow: boolean;
-    scatterSize: number;
-    hiddenSamples: Set<string>;
+    hollow: boolean; // indicates whether the scatter is hollow or solid
+    scatterSize: number; // indicates how big the scatter is 
+    scatterOpacity: number;
     scatterFill?: string;
     scatterStroke?: string;
-    generateTooltip: (d) => string;
+    generateTooltip?: (d) => string;
+    shapeGetter?: (d) => string;
+    colorGetter?: (d) => string;
+    colors?: string[];
+    clusters?: string[];
+    groups?: string[];
+    strokeColor: string;
+    ellipseColor: string;
+    drawEllipse: boolean;
+    drawCenterStrokes: boolean;
 }
+
 export class ComplexScatterplot extends Component<ComplextScatterplotOption> {
 
     public dataChanged: boolean = true;
-    public rankChanged: boolean;
-    public axisChanged: boolean;
-    public config: any;
-    public colors: string;
 
-    public ranks: Array<{ value: string; text: string }>;
-    public availableAxises: Array<{ value: string; text: string }>;
+    protected clusterData: any;
 
-    protected scatterData: any;
-    public scatterVectorData: any[];
-    public vectorLabel: string;
-    public groups: string[];
-    public clusters: string[];
-
-    public mainDict: Record<string, any>;
-    public clusterDict;
-    public sampleInfoDict: any;
+    private shapeGetter: (d) => string = () => "Circle";
+    private colorGetter: (d) => string = () => "#aaa";
+    private generateTooltip: (d) => string = (d) => (Object.keys(d)
+                                .filter(k => !["pos", "value", "show"].includes(k))
+                                .map(k => `${k}: ${d[k]}`).join("<br>"));
 
     private markedScatter: string;
 
@@ -53,105 +55,29 @@ export class ComplexScatterplot extends Component<ComplextScatterplotOption> {
         { y: 0, dashArray: "1,2", stroke: "#aaa"},
     ];
 
-    // private _dataChanged = true;
-
     public render = Oviz.t`${template}`;
 
-    // public willRender() {
-    //     // 
-    //     if (this._firstRender) {
-    //         this.scatterData = this.prop.data;
-    //         this.hiddenSamples = this.prop.hiddenSamples;
-    //     }
-    // }
-/*
-    willRender() {
-        if (this._firstRender) {
-            this.legend1Pos = {x: 45, y: 115};
-            this.legend2Pos = {x: 45, y: 55};
-            const shapes = ["Circle", "Rect", "Triangle"];
-            if (this.clusters) {
-                this.colorMap = this.getMap(this.clusters, this.colors);
-                if (this.groups) {
-                    this.shapeMap = this.getMap(this.groups, shapes);
-                    this.groupLegendData = this.groups.map((x, i) => {
-                        return {type: "custom", label: x, fill: "grey"};
-                    });
-                }
-            } else if (this.groups) {
-                this.colorMap = this.getMap(this.groups, this.colors);
-                this.groupLegendData = this.groups.map((x, i) => {
-                    return {type: "custom", label: x, fill: this.colors[i]}
-                });
-            }
-        }
-
-        if (this.rankChanged) {
-            this.rankLabel = this.ranks[this.config.rankIndex].text;
-            this.scatterData = this.mainDict[this.rankLabel];
-            this.availableAxises = this.scatterData.columns.filter((_, i) => i > 0)
-                                .map((x, i) => ({"value": i, "text": x}));
-            this.config.xAxisIndex = editorRef.xAxis.value = 0;
-            this.config.yAxisIndex = editorRef.yAxis.value = 1;
-
-            editorRef.xAxis.config.options = editorRef.yAxis.config.options = this.availableAxises;
-
-            this.rankChanged = false;
-        }
-
-        if (this._firstRender || this.dataChanged) {
-            this.xLabel = this.availableAxises[this.config.xAxisIndex].text;
-            if (this.config.yAxisIndex === 1 && this.availableAxises.length === 1){
-                this.yLabel = this.availableAxises[0].text;
-                this.config.yAxisIndex = 0;
-            }
-
-            this.yLabel = this.availableAxises[this.config.yAxisIndex].text;
-            this.parsedScatterData = this.scatterData.map((d, i) => {
-                const datum = {sampleId: d.sampleId, 
-                    group: this.sampleInfoDict[d.sampleId].group,
-                    cluster: this.clusterDict ? this.clusterDict[d.sampleId][this.rankLabel] :null};
-                datum[this.xLabel] = d[this.xLabel];
-                datum[this.yLabel] = d[this.yLabel];
-                return datum;
+    public willRender() {
+        if (this.prop.shapeGetter) this.shapeGetter = this.prop.shapeGetter;
+        else if (this.prop.groups) this.shapeGetter = (d) => shapes[this.prop.groups.indexOf(d.group)];
+        if (this.prop.colorGetter) this.colorGetter = this.prop.colorGetter;
+        else if (this.prop.clusters && this.prop.colors)
+            this.colorGetter = (d) => this.prop.colors[this.prop.clusters.indexOf(d.cluster)];;
+        if (this.prop.generateTooltip) this.generateTooltip = this.prop.generateTooltip;
+        if (this.prop.clusters && this.dataChanged) {
+            this.clusterData = {};
+            const svgRatioX = this.prop.plotSize[0] / (this.prop.categoryRange[1] - this.prop.categoryRange[0]);
+            const svgRatioY = this.prop.plotSize[1] / (this.prop.valueRange[1] - this.prop.valueRange[0]);
+            this.prop.clusters.forEach(key => {
+                const initialData = this.prop.data.filter(x => x.cluster === key);
+                const clusterDatum = this.computeErrorEllipse(initialData, this.prop.xLabel, this.prop.yLabel,
+                    svgRatioX, svgRatioY);
+                this.clusterData[key] = clusterDatum;
             });
-
-            if (this.clusters) {
-                this.categoryRange = this.rangeIsValid(this.config.categoryRange) ?  this.config.categoryRange
-                    : findBoundsForValues(this.scatterData.map(d => d[this.xLabel]), 1, false, 0.1);
-                this.valueRange = this.rangeIsValid(this.config.valueRange) ? this.config.valueRange
-                    : findBoundsForValues(this.scatterData.map(d => d[this.yLabel]), 1, false, 0.1);
-            } else {
-                this.categoryRange = this.rangeIsValid(this.config.categoryRange) ?  this.config.categoryRange
-                : findBoundsForValues(this.scatterData.map(d => d[this.xLabel]), 1);
-                this.valueRange = this.rangeIsValid(this.config.valueRange) ? this.config.valueRange
-                    : findBoundsForValues(this.scatterData.map(d => d[this.yLabel]), 1);
-            }
-
-            const svgRatioX = this.config.plotWidth / (this.categoryRange[1] - this.categoryRange[0]);
-            const svgRatioY = this.config.plotHeight / (this.valueRange[1] - this.valueRange[0]);
-
-            if (this.clusters) {
-                const parsedData = {};
-                this.clusters.forEach(key => {
-                    const initialData = this.parsedScatterData.filter(x => x.cluster === key);
-                    const clusterDatum = this.computeErrorEllipse(initialData, this.xLabel, this.yLabel,
-                        svgRatioX, svgRatioY);
-                    parsedData[key] = clusterDatum;
-                });
-                this.parsedClusterData = parsedData;
-            }
-            if (this.clusters) {
-                this.colorMap = this.getMap(this.clusters, this.colors);
-            } else if (this.groups) {
-                this.colorMap = this.getMap(this.groups, this.colors);
-            }
             this.dataChanged = false;
         }
     }
-*/
 
-// 这个是旧的椭圆算法
     protected computeErrorEllipse(samples, xIndex, yIndex, svgRatioX, svgRatioY): ScatterClusterDatum {
         const ellipseData = {cx: 0, cy: 0, rx: 0, ry: 0, rotationAngle: 0};
         const s = 5.991;
@@ -209,7 +135,6 @@ export class ComplexScatterplot extends Component<ComplextScatterplotOption> {
             this.redraw();
         }
     }
-
     protected hideScatter(d) {
         const result = confirm(`You want to hide ${d.data.sampleId}?`);
         if (result) {
@@ -233,20 +158,16 @@ export class ComplexScatterplot extends Component<ComplextScatterplotOption> {
                 }), "");
     }
 
-    protected getMap(keyArray, valueArray) {
-        const map = new Map();
-        keyArray.forEach((key, i) => {
-            map.set(key, valueArray[i]);
-        });
-        return map;
-    }
-
     public defaultProp() {
         return {
             ...super.defaultProp,
             scatterSize: 8,
             flip: false,
             hollow: false,
+            strokeColor: "#999",
+            ellipseColor: "lightYellow",
+            drawEllipse: true,
+            scatterOpacity: 0.9,
         };
     }
 }

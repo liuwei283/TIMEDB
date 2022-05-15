@@ -1,0 +1,182 @@
+svg {
+    height = 3000
+    width= 3000
+    Rows{
+        x=100
+        y=100
+        Tree {
+            height = 200
+            width = 700
+            data = treedata
+            direction = "right"
+            link.stroke = "#000"
+            linkStyle = "rightAngle"
+        }
+        Container{
+            y=20
+            Component{
+                XYPlot{
+                    height=config.plotSize[0]; width = config.plotSize[1]; 
+                    discreteCategory = true;
+                    valueRange = scatterData.valueRange
+                    data = scatterData.data
+                    dataHandler = {
+                        default: {
+                            value: d => d.value,
+                            pos: d => d.key,
+                            min: d =>0,
+                        },
+                    }
+                    Rect{
+                        width = 100%
+                        height = 100%
+                        stroke = "#000"
+                        fill = "none"
+                    }
+                    Dots {
+                        :children(d) {
+                            Component {
+                                @if d.data.key== markedDots{
+                                    Component{
+                                        Circle.centered { r = 6; fill ="red";}
+                                    }
+                                }
+                                @else{
+                                    Component {
+                                        Circle.centered { r = 6; fill ="#133c55" }
+                                    }
+                                }
+                                on:click = markDots(d.data.key)
+                            }
+    
+                        }
+                    }
+                    Line{
+                        x1 = 0; y1 = @scaled-y(1); x2 = 100%; y2 = @scaled-y(1);
+                        stroke="#da5552"
+                        dashArray=[3,3]
+                    }
+                    Axis("left"){includeEndTicks = false}
+                    Component {
+                        x=-40;y=50%
+                        rotation=@rotate(-90)
+                        Text {
+                            anchor = @anchor("center","middle")
+                            text="dn/ds"
+                        }      
+                    }
+
+                    
+
+                }
+                }
+            }
+
+        Container {
+            y=config.plotSize[0]
+            Component{
+            //x=100
+            //y=config.plotSize[0]
+                XYPlot {
+                    @props prop
+                    height = config.plotSize[0]; width = config.plotSize[1]; 
+                    discreteCategory = true
+                    valueRange = stackedData.valueRange
+                    data = stackedData.data
+                    @expr console.log("000000",stackedData.data)
+                    stackedData = {
+                        stacked: stackedData.classifications
+                    }
+                    Rect{
+                        width = 100%
+                        height = 100%
+                        stroke = "#000"
+                        fill = "none"
+                    }
+                    StackedBars {
+                        data = "stacked"	  
+                        :children(d){
+                            @if d.data.pos== markedDots{
+                                Rect.full{
+                                    fill = stackedData.markedColorMap[d.key]
+
+                                    width = 25
+                                    x = 50%
+                                    anchor = @anchor("top","center")
+                                }
+                            }
+                            @else{
+                                Rect.full{
+
+                                    fill = stackedData.colorMap[d.key]
+                                    width = 25
+                                    x = 50%
+                                    anchor = @anchor("top","center")
+                                    on:click=markDots(d.data.pos) 
+                                
+                                }
+                            }
+                        }
+                    }
+                    Axis("bottom") { y = 100%;includeEndTicks = false }
+                    Axis("left"){includeEndTicks = false}
+                    Component {
+                        rotation=@rotate(-90)
+                        x=-40;y=50%
+                        Text {
+                            anchor = @anchor("center","middle")
+                            text="Number"
+                        }      
+                    }
+                }
+                Legend {
+                    x = 50; y = 20
+                    padding = 8
+                    data = stackedData.legendData
+                    lineHeight = 15
+                    legendWidth = 20
+                }
+            }
+            Component{
+            //x=100
+                y=config.plotSize[0]+20
+                @if (markedDots != null){
+                    @for (item,index) in sigData.result{
+                        @if (item.sampleID == markedDots){
+                            @let data = item.Values
+                            ThreeDNA {
+                                data=data.result
+                                plotSize=config.plotSize      
+                                mainDict=data.valueRange
+                                colorMap=data.colorMap
+                                labelFontSize=config.labelFontSize
+                                legendData=data.legendData
+                                tickFontSize=config.tickFontSize
+                                title=data.sampleID
+                                yLabel=sigData.yLabel
+                                xLabel=sigData.xLabel
+                            }
+                        }
+                    }
+                }
+                @else{
+                    @let data=sigData.result[0].Values//The diagram of the first sample is displayed by default
+                    ThreeDNA {
+                        data=data.result
+                        plotSize=config.plotSize      
+                        mainDict=data.valueRange
+                        colorMap=data.colorMap
+                        labelFontSize=config.labelFontSize
+                        legendData=data.legendData
+                        tickFontSize=config.tickFontSize
+                        title=data.sampleID
+                        yLabel=sigData.yLabel
+                        xLabel=sigData.xLabel
+                    } 
+                }
+            }
+        }   
+
+    }
+    
+}

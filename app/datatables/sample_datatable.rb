@@ -7,11 +7,7 @@ class SampleDatatable < ApplicationDatatable
           column << ""
           Sample.column_names.each do |attr|
             if attr != 'id'
-              if attr == 'sample_name'
-                column << link_to("#{sample[attr]}", "https://www.ncbi.nlm.nih.gov/sra/#{sample[attr]}")
-              else
-                column << "<div class='table_cell'> #{sample[attr]} </div>"
-              end
+              column << "<div class='table_cell'> #{sample[attr]} </div>"
             else
               column << sample[attr]
             end

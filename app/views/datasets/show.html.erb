@@ -22,27 +22,14 @@
             <%= link_to "download metadata", download_ds_metadata_user_dataset_path %>
         </span>
         <span class="download_span">
-            Download sample abundance:
-            <%= link_to "download abundance", download_ds_abd_user_dataset_path %>
+            Download sample infiltration:
+            <%= link_to "download infiltration", download_ds_inf_user_dataset_path %>
         </span>
     </p>
     <h2>Samples</h2>
 
-    <div id='hidden_helper'>
-        Click to view hidden columns: 
-        <br />
-        <% i=2 %>
-        <% @sample_attrs.each do |attr| %>
-        <% if attr != 'id'%>
-            <% if !@vis.include? attr%>
-                <button class="toggle-vis" data-column='<%=i.to_s%>'> 
-                    <%= attr%>
-                </button>
-            <% end %>
-            <%i += 1%>
-        <%end%>
-        <%end%>
-    </div>
+
+   
 
     <%= form_tag delete_sample_user_dataset_path, multipart: true do %>  
         <%= content_tag :table, role: :datatable, class: "display", id: "table_page", data: { url: user_dataset_path(format: :json)} do %>
@@ -50,8 +37,9 @@
                 <th>
                     <input type="checkbox" class="selectAll" name="selectAll" value="all">
                 </th>
-                <% @sample_attrs.each do |attr| %>
-                    
+                <% @table_headers.each do |attr| %>
+                    <% attr = attr.gsub(/^n_/, "") %>
+                    <% attr = attr.gsub(/^c_/, "") %>
                     <th> <%= attr %> </th>
                     
                 <% end %>
