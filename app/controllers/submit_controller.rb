@@ -13,6 +13,7 @@ class SubmitController < ApplicationController
     @analysis_category = AnalysisCategory.find_by name:params[:cname]
 
     gon.push cname: params[:cname]
+    gon.push dark: session[:dark]
 
     logger.error (params[:cname])
     
@@ -359,7 +360,7 @@ class SubmitController < ApplicationController
 
       app_inputs&.each do |input_id, uploaded_file|
         unless uploaded_file.nil? || uploaded_file == ""
-          uploaded_files_array = Array.warp(uploaded_file)
+          uploaded_files_array = Array(uploaded_file)
           uploaded_files_array.each do |up_file|
             uploader = JobInputUploader.new(giveFilePrefix())
             uploader.store!(up_file)

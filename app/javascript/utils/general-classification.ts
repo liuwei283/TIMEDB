@@ -43,17 +43,11 @@ export function CellProcessor(data, c16Classification) {
     // the data should not dsvHasHeader
     // rows are C16, cols are gene
     // matrix is Array<col>, process for each gene to get the col
-    console.log(data)
     let c16map = c16Classification.mapper;
     c16Classification = c16Classification.group;
     const result = {};
     const classifications = Object.keys(c16Classification).sort();
     let cellType = data[0].slice(2);
-    console.log("cellType!!!!!!!")
-    console.log(cellType)
-    console.log("last one!!!!!!!")
-    console.log(data.slice(-1)[0])
-    console.log(cellType.slice(-1)[0])
     Object.entries(c16Classification).forEach(([key, value]: [string, string[]]) => {
         result[key] = {};
         cellType.forEach(cell => result[key][cell] = []);
@@ -66,8 +60,6 @@ export function CellProcessor(data, c16Classification) {
             result[c16map[d[0]]][cellType[index]].push(parseFloat(cell))
         })
     });
-    console.log("result!!!!!!!")
-    console.log(result)
     Object.entries(c16Classification).forEach(([key, value]: [string, string[]]) => {
         cellType.forEach(cell => {
             let temp = [0,0,0,0,0,0];
@@ -76,7 +68,6 @@ export function CellProcessor(data, c16Classification) {
         });
     })
     const colorMap = Oviz.color.schemeCategory("light", classifications);
-    console.log({stat: result, classifications, colorMap, valueRange: [0, 1], ylabel: "Mean Fraction with Standard Error"})
     return {stat: result, classifications, colorMap, valueRange: [0, 1], ylabel: "Mean Fraction with Standard Error"};
 }
 
@@ -120,7 +111,7 @@ export function ClinicalProcessor(data, c16Classification ) {
         mapper[d[0].slice(0,12)] = d[1];
     });
     const widMap = {}
-    const idKey = data.columns[0];
+    const idKey = "sample_name";
     const osKey = "os";
     const pfsKey = "pfs";
     group.forEach(c => {

@@ -14,7 +14,7 @@ const ALERT_TIMEOUT = 5000;
 import JobSubmit from '../job-submit.vue';
 import JobQuery from '../job-query.vue';
 import JobSubmitPipeline from "../job-submit-pipeline.vue";
-//import editorTest from "../vapp-database.vue";
+import databaseOverview from "../vapp-database.vue";
 
 import VApp from "page/vapp.vue";
 
@@ -60,7 +60,7 @@ document.addEventListener('DOMContentLoaded', (event) =>  {
         ['#vapp-job-submit', JobSubmit],
         ['#vapp-job-query', JobQuery],
         ['#vapp-job-submit-pipeline', JobSubmitPipeline],
-        //['#vapp-database', editorTest],
+        ['#vapp-database', databaseOverview],
     ];
 
     $('[data-toggle="tooltip"]').tooltip({
@@ -113,6 +113,46 @@ document.addEventListener('DOMContentLoaded', (event) =>  {
         }, ALERT_TIMEOUT);
     });
 
+    if($('#dark').length){
+        //all
+        $('#topbar').toggleClass('dark bg-light navbar-light dark-head        ');
+        $('#state_now').toggleClass('fa-sun fa-moon');
+        $('.container').toggleClass('text-light');
+        $('#wrapper').css('background-color','#333');
+        $('section').toggleClass('dark text-light');
+        $(':header').css('color',"#86E5E9");
+        $(".col-md-2 h4 ").css('color',"#fff");
+        $('.footer.page-footer').css('background','#86E5E9');
+
+        //home
+        $('.heading').css("background-image","url('assets/welcomeBGImagedark.png')");
+        $('i.fa.fa-chevron-down').css('color',"#86E5E9");
+        $('span.em').css('color',"#86E5E9");
+        $('h5.text-left').css('color',"#86E5E9");
+        $('h5.text-right').css('color',"#cc4f78");
+        //work space
+        $('#dataset_list').css('background-color','#333');
+        $('#job-query').css('background-color','#333');
+        $('.query-card').css('background-color','#333');
+        // //Analysis visualization
+        $('#sidebar').css('background-color','#333');
+        $('#run-app').css('background-color','#333');
+
+        // //admin/analysis_categories
+        // $('.card').css('background-color','#343a40');
+        // $('.sortable-list > .list-group-item').css('background-color','#3b3b3b');
+        $('.ov-number').css('color',"#86E5E9");
+        $('#collapseButton').css('background-color',"#86E5E9");
+        $('#collapseButton').css("box-shadow","none");
+        $('.popup').css('background-color',"#333");
+
+        $('.card').css('background-color',"#343a40");
+        $('.list-group-item').css('background-color',"#6c757d");
+        $('#pj_table').toggleClass('dark-table');
+        $('#ct_table').toggleClass('dark-table');
+        $('#tk_table').toggleClass('dark-table');
+
+    };
     $('#cookies-eu-accept').on('click', () => {
         $('#cookies-eu-banner').css("display", "None")
     })

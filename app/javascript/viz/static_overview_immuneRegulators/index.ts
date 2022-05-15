@@ -3,15 +3,17 @@ import template from "./template.bvt";
 import { ComplexHeatMap } from "oviz-components/complex-heatmap";
 import { C16Classifier, RNAProcessor } from "utils/general-classification";
 import { nameMapper, CheckPoints } from "utils/general-classification";
+import { registerEditorConfig } from "utils/editor";
+import { editorConfig } from "./editor";
 
 const startColor = "white";
 const endColor = "red";
 const nendColor = "blue";
 
-export function init(id, subtypePath, RNAdataPath, config) {
+export function init(vid, subtypePath, RNAdataPath, eid) {
 
     const {visualizer} = Oviz.visualize({
-        el: id,
+        el: vid,
         template,
         components: { ComplexHeatMap },
         data: {
@@ -30,6 +32,25 @@ export function init(id, subtypePath, RNAdataPath, config) {
                 showRowad: false,
                 colorScheme: Oviz.color.schemeGradient(startColor, endColor),
                 negColorScheme: Oviz.color.schemeGradient("blue", startColor),
+            },
+            startX: 100, 
+            startY: 0, 
+            width: 1550, 
+            height: 500, 
+            titleSize: 11, 
+            labelSize: 11, 
+            title: "", 
+            ylabel: "", 
+            xlabel: "", 
+            plotRotation: 0, 
+            xRotation: 0, 
+            yRotation: 0,
+            groups: {
+                colors :{
+                    startColor,
+                    endColor,
+                    nendColor
+                }
             },
             nameMapper,
             checkPointColor: Oviz.color.schemeCategory("light", CheckPoints)
@@ -67,8 +88,9 @@ export function init(id, subtypePath, RNAdataPath, config) {
         setup() {
             this.defineGradient("bg", "vertical", [endColor, startColor]);
             this.defineGradient("ng", "vertical", [startColor, nendColor]);
-            this.size = {height: 400+Object.keys(this.data.colorMap).length, width: 1800}
+            this.size = {height: 400+Object.keys(this.data.colorMap).length, width: 1850}
             console.log(this)
+            registerEditorConfig(editorConfig(this, eid));
         },
     });
     return visualizer;

@@ -80,11 +80,6 @@ class ProjectsController < ApplicationController
             end
         end
 
-
-
-
-
-
         pname = @project.project_name
         sample_clinical_file_path = "#{Rails.root}/public/data/clinical/sample/Clinical_#{pname}.csv"
         samples_info = CSV.parse(File.read(sample_clinical_file_path), headers: TRUE)
