@@ -40,13 +40,13 @@
                 </div>
             </div>
             <div class="row vizBlock">
-                <div class="col" id = "barVis">
+                <div class="md-col-9" id = "barVis">
+                </div>
+                <div id="bar-editor" class = "md-col-3 v-editor">
+                    <OvizEditor :config = "conf" :editorWidth = "280"/>
                 </div>
             </div>
-            <div id="bar-editor" class = "md-col-3 v-editor">
-                <OvizEditor :config = "conf" :editorWidth = "280"/>
-            </div>
-
+            
         </div>
         <hr>
         <br>
@@ -104,7 +104,7 @@
         </div>
 
         <div class="row vizBlock">
-            <div class="col" id = "pieVis">
+            <div class="md-col-9" id = "pieVis">
             </div>
             <div id="pie-editor" class = "md-col-3 v-editor">
                 <OvizEditor :config = "conf" :editorWidth = "280"/>
@@ -142,7 +142,7 @@
                 </div>
             </div>
             <div class="row vizBlock">
-                <div class="col" id = "landscapeVis">
+                <div class="md-col-9" id = "landscapeVis">
                 </div>
 
                 <div id="landscape-editor" class = "md-col-3 v-editor">
@@ -196,12 +196,13 @@
             </div>
             </div>
             <div class="row vizBlock">
-                <div class="col" id = "regulatorVis">
+                <div class="md-col-9" id = "regulatorVis">
+                </div>
+                 <div id="regulator-editor" class = "md-col-3 v-editor">
+                    <OvizEditor :config = "conf" :editorWidth = "280"/>
                 </div>
             </div>
-            <div id="regulator-editor" class = "md-col-3 v-editor">
-                <OvizEditor :config = "conf" :editorWidth = "280"/>
-            </div>
+           
         </div>
     </div>
 </template>
@@ -381,11 +382,23 @@ export default {
     position: relative;
     box-shadow: 0 0 64px darken(#dee2e6, 5%)
 }
-.v-editor {
-    position: absolute;
+
+.vizBlock {
+    position: relative !important;
+}
+/* .v-editor {
+    position: fixed !important;
     top: 30px;
+    right: 50px;
     z-index:20;
     transition: all 0.3s;
-    right: 15px;
+} */
+
+.v-editor {
+    position: absolute;
+    top: 10px;
+    z-index:20;
+    transition: all 0.3s;
+    right: 10px;
 }
 </style>
