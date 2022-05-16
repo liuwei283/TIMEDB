@@ -40,9 +40,13 @@
                 </div>
             </div>
             <div class="row vizBlock">
-                <div class="col" id = "barVis">
+                <div class="md-col-9" id = "barVis">
+                </div>
+                <div id="bar-editor" class = "md-col-3 v-editor">
+                    <OvizEditor :config = "conf" :editorWidth = "280"/>
                 </div>
             </div>
+            
         </div>
         <hr>
         <br>
@@ -100,10 +104,13 @@
         </div>
 
         <div class="row vizBlock">
-            <div class="col" id = "pieVis">
+            <div class="md-col-9" id = "pieVis">
+            </div>
+            <div id="pie-editor" class = "md-col-3 v-editor">
+                <OvizEditor :config = "conf" :editorWidth = "280"/>
             </div>
         </div>
-    </div>
+</div>
 
     <hr>
     <br>
@@ -135,8 +142,13 @@
                 </div>
             </div>
             <div class="row vizBlock">
-                <div class="col" id = "landscapeVis">
+                <div class="md-col-9" id = "landscapeVis">
                 </div>
+
+                <div id="landscape-editor" class = "md-col-3 v-editor">
+                    <OvizEditor :config = "conf" :editorWidth = "280"/>
+                </div>
+                
             </div>
         </div>
 
@@ -184,9 +196,13 @@
             </div>
             </div>
             <div class="row vizBlock">
-                <div class="col" id = "regulatorVis">
+                <div class="md-col-9" id = "regulatorVis">
+                </div>
+                 <div id="regulator-editor" class = "md-col-3 v-editor">
+                    <OvizEditor :config = "conf" :editorWidth = "280"/>
                 </div>
             </div>
+           
         </div>
     </div>
 </template>
@@ -200,10 +216,10 @@ import {viz_mode} from "page/visualizers";
 
 import DropDownSelect from "page/builtin/dropdown-select.vue";
 
-    import {init as immunebar} from "./viz/static_overview_immuneBar";
-    import {init as immunepie} from "./viz/static_overview_immunePie";
-    import {init as immunelandscape} from "./viz/static_overview_immuneSubtypeLandscape";
-    import {init as immuneRegulator} from "./viz/static_overview_immuneRegulators";
+import {init as immunebar} from "./viz/static_overview_immuneBar";
+import {init as immunepie} from "./viz/static_overview_immunePie";
+import {init as immunelandscape} from "./viz/static_overview_immuneSubtypeLandscape";
+import {init as immuneRegulator} from "./viz/static_overview_immuneRegulators";
 
 Vue.use(OvizEditor);
 Vue.use(BootstrapVue);
@@ -258,21 +274,13 @@ export default {
         this.regulatorProjectSelected = this.regulatorProjects[0];
     },
     mounted() {
-        //event.rpcRegisterReceiver("getVue", () => this);
+        event.rpcRegisterReceiver("getVue", () => this);
         this.all_viz();
     },
     methods: {
         barViz() {
             // alert(this.bar_selected)
-            if( this.bar_selected == "project" ){
-
-            immunebar("#barVis", this.data_path + "/sample_num/" + this.bar_selected + "_samples.tsv");
-
-              }else{
-
-            immunebar("#barVis", this.data_path + "/sample_num/" + this.bar_selected + "_samples.tsv");
-
-             }
+            //immunebar("#barVis", this.data_path + "/sample_num/" + this.bar_selected + "_samples.tsv", "#bar-editor");
         },
         pieViz(){
             // alert(this.data_path + "/cell_data/" + this.pieMethodSelected+ "/" +this.pieProjectSelected+"_"+this.pieMethodSelected+".csv")
@@ -281,7 +289,7 @@ export default {
             //method name must be same as data storage folder
             var file_name = this.pieProjectSelected + "_" + this.pieMethodSelected + ".csv";
             var file_path = this.data_path + "/cell_data/" + this.pieMethodSelected + "/" + file_name;
-            immunepie("#pieVis", file_path);
+            immunepie("#pieVis", file_path, "#pie-editor");
         },
         landscapeViz(){
             //immunelandscape("#landscapeVis", this.data_path + "/sample_num/" + this.bar_selected + "_samples.tsv");
@@ -293,7 +301,7 @@ export default {
                 var file_name = this.landscape_selected + "_c1_c6.csv"
                 var file_path = this.data_path + "/subtype/c1_c6/cancer/" + file_name;
             }
-            immunelandscape("#landscapeVis", file_path);
+            immunelandscape("#landscapeVis", file_path, "#landscape-editor");
             
         },
         regulatorViz(){
@@ -303,13 +311,13 @@ export default {
                 var subtype_file_path = this.data_path + "/subtype/c1_c6/project/" + subtype_fname;
                 var rna_file_path = this.data_path + "/immuneregulator/" + rna_fname;
 
-                immuneRegulator("#regulatorVis", subtype_file_path, rna_file_path);
+                immuneRegulator("#regulatorVis", subtype_file_path, rna_file_path, "#regulator-editor");
         },
         all_viz() {
-            this.barViz();
+            //this.barViz();
             this.pieViz();
-            this.landscapeViz();
-            this.regulatorViz();
+            // this.landscapeViz();
+            // this.regulatorViz();
         },
         updateProjects() {
             this.pie_projects = this.projects[this.pieCancerSelected];
@@ -323,11 +331,7 @@ export default {
             this.regulatorProjectSelected = this.regulatorProjects[0];
         } ,
         download_bar(){
-
             window.location.href = this.data_path+"/sample_num/" + this.bar_selected + "_samples.tsv";
-
-
-            
         },
         download_pie(){
             window.location.href = this.data_path+"/sample_num/" + this.bar_selected + "_samples.tsv";
@@ -378,11 +382,23 @@ export default {
     position: relative;
     box-shadow: 0 0 64px darken(#dee2e6, 5%)
 }
-#v-editor {
-    position: absolute;
+
+.vizBlock {
+    position: relative !important;
+}
+/* .v-editor {
+    position: fixed !important;
     top: 30px;
+    right: 50px;
     z-index:20;
     transition: all 0.3s;
-    right: 15px;
+} */
+
+.v-editor {
+    position: absolute;
+    top: 10px;
+    transition: all 0.3s;
+    right: 10px;
+    z-index: 1 !important;
 }
 </style>

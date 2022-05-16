@@ -14,9 +14,13 @@ const ALERT_TIMEOUT = 5000;
 import JobSubmit from '../job-submit.vue';
 import JobQuery from '../job-query.vue';
 import JobSubmitPipeline from "../job-submit-pipeline.vue";
+<<<<<<< HEAD
 import editorTest from "../vapp-database.vue";
 import pj_subtype from "../pj-show-Subtype";
 import pj_fraction from "../pj-show-fraction"; 
+=======
+import databaseOverview from "../vapp-database.vue";
+>>>>>>> f4c0459a04da03aa1ecac2e6e53d6109aee8e7e9
 
 import VApp from "page/vapp.vue";
 
@@ -62,9 +66,7 @@ document.addEventListener('DOMContentLoaded', (event) =>  {
         ['#vapp-job-submit', JobSubmit],
         ['#vapp-job-query', JobQuery],
         ['#vapp-job-submit-pipeline', JobSubmitPipeline],
-        ['#vapp-database', editorTest],
-        ['#pj_subtype',pj_subtype],
-        ['#pj_fraction',pj_fraction],
+        ['#vapp-database', databaseOverview],
     ];
 
     $('[data-toggle="tooltip"]').tooltip({

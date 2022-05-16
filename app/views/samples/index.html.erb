@@ -88,7 +88,7 @@
     <select id="select_box" name="ds_selected">
       <option value="">--Please choose a dataset--</option>
       <% @datasets.each do |ds|%>
-        <option value=<%=ds.name%>> <%=ds.name%></option>
+        <option value = "<%=ds.name%>"> <%=ds.name%></option>
       <%end%>
     </select>
   <% end %>

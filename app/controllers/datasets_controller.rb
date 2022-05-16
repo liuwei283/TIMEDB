@@ -28,36 +28,40 @@ class DatasetsController < ApplicationController
                 projects[pname] = [sname]
             end
         end
-        
-        #merge all attributes
-        @table_headers = ['id']
-        projects.each_key do |pname|
-            sample_clinical_file_path = "#{Rails.root}/public/data/clinical/sample/Clinical_#{pname}.csv"
-            file_info = CSV.parse(File.read(sample_clinical_file_path), headers: TRUE)
-            @table_headers = @table_headers | file_info.headers
-        end
-        @samples_info = []
-        projects.each_key do |pname|
-            sample_clinical_file_path = "#{Rails.root}/public/data/clinical/sample/Clinical_#{pname}.csv"
-            file_info = CSV.parse(File.read(sample_clinical_file_path), headers: TRUE)
-            cur_headers = file_info.headers
-            snames = projects[pname]
-            file_info.each do |row|
-                if snames.include? row['sample_name']
-                    row_info = @table_headers.to_h { |attrb| [attrb, 'Nil'] }
-                    sid = Sample.find_by(sample_name: row['sample_name']).id
-                    row_info['id'] = sid
-                    cur_headers.each do |cur_header|
-                        row_info[cur_header] = row[cur_header]
+        if projects.length == 0 
+            @table_headers = @vis
+            @samples_info = []
+        else
+            #merge all attributes
+            @table_headers = ['id']
+            projects.each_key do |pname|
+                sample_clinical_file_path = "#{Rails.root}/public/data/clinical/sample/Clinical_#{pname}.csv"
+                file_info = CSV.parse(File.read(sample_clinical_file_path), headers: TRUE)
+                @table_headers = @table_headers | file_info.headers
+            end
+            @samples_info = []
+            projects.each_key do |pname|
+                sample_clinical_file_path = "#{Rails.root}/public/data/clinical/sample/Clinical_#{pname}.csv"
+                file_info = CSV.parse(File.read(sample_clinical_file_path), headers: TRUE)
+                cur_headers = file_info.headers
+                snames = projects[pname]
+                file_info.each do |row|
+                    if snames.include? row['sample_name']
+                        row_info = @table_headers.to_h { |attrb| [attrb, 'Nil'] }
+                        sid = Sample.find_by(sample_name: row['sample_name']).id
+                        row_info['id'] = sid
+                        cur_headers.each do |cur_header|
+                            row_info[cur_header] = row[cur_header]
+                        end
+                        @samples_info.push(row_info)
                     end
-                    @samples_info.push(row_info)
                 end
             end
-        end
 
-        @samples_info.each do |samp|
-            @table_headers.each do |th|
-                logger.error samp[th]
+            @samples_info.each do |samp|
+                @table_headers.each do |th|
+                    logger.error samp[th]
+                end
             end
         end
         # user_dir = File.join($user_stor_dir, id.to_s)
@@ -142,17 +146,20 @@ class DatasetsController < ApplicationController
     end
 
     def delete_sample
+        @user = User.find(session[:user_id])
         @dataset = @user.datasets.find(params[:id])
         @dataset.delete_samples(params[:selected_ids])
         redirect_to user_dataset_path
     end
 
     def download_ds_inf
+        @user = User.find(session[:user_id])
         @dataset = @user.datasets.find(params[:id])
         send_data @dataset.inf_file(), :filename => "#{@dataset.name}_inf.tsv"
     end
 
     def download_ds_metadata
+        @user = User.find(session[:user_id])
         @dataset = @user.datasets.find(params[:id])
         send_data @dataset.metadata_file(), :filename => "#{@dataset.name}_metadata.csv"
     end

@@ -18,6 +18,21 @@ class SubmitController < ApplicationController
     logger.error (params[:cname])
     
     @analyses = @analysis_category.analyses.all
+
+    uid = session[:user_id]
+    @user = User.find(uid)
+    # user_dir = File.join($user_stor_dir, uid.to_s)
+    @datasets = @user.datasets
+    data = {}
+    @datasets.each do |ds|
+      ds_name = ds.name
+      ps_num = ds.getProjectSources(ds_name).length
+      # ds_dir = File.join(user_dir, ds_name)
+      # file_list = Dir.entries(ds_dir)[2..-1]
+      data[ds_name] = ps_num
+    end
+    gon.push select_box_option: data
+
   end
 
   def pipelines
@@ -213,6 +228,7 @@ class SubmitController < ApplicationController
       code: false,
       data: ''
     }
+
     begin
       app_id = params[:app_id]
       app_inputs = params[:inputs]
@@ -271,60 +287,103 @@ class SubmitController < ApplicationController
       code: false,
       data: ''
     }
+
+
     begin
-      app_id = params[:app_id]
+      app_id = params[:mid]
       app_inputs = params[:inputs]
       app_params = params[:params]
       app_selected = params[:selected]
+      file_names = params[:file_names]
       is_pipeline = params[:is_pipeline]
+      is_single = params[:is_single]
       # @analysis = Analysis.find_by mid:params[:mid]
-      if !params[:mid].blank?
-        @analysis = Analysis.find_by mid:params[:mid]
+      if !params[:search_mid].blank?
+        @analysis = Analysis.find_by mid:params[:search_mid]
       else
         @pipeline = AnalysisPipeline.find_by pid:params[:pid]
       end
       inputs = Array.new
       params = Array.new
 
-      
       # store selected file to user's data folder
-      app_selected&.each do |k, v|
-        next unless !v.blank?
-        ds_name = v
-        @dataset = @user.datasets.find_by(name: v)
-        data = @dataset.inf_file()
-        # file_path = File.join(user_dir, ds_name, file_name)
-        # fix the source of file
-        # file = File.open file_path
-        
-        time = Time.now
-        time_str = time.strftime("%Y_%m_%d")       
-        time_str += ("_" + time.strftime("%k_%M")) 
-        time_str = time_str.gsub(' ','')
-        file_name = "#{ds_name}_inf.tsv"
-        file = File.new(file_name, 'w')
-        file.write(data)
-        uploader = JobInputUploader.new
-        uploader.store!(file)
-                
-        inputs.push({
-          k => '/data/' + file_name
-        })
-        file.close
-        
+
+      combine_inputs_array = {}
+
+      app_inputs.keys.each do |input_id|
+        combine_inputs_array[input_id] = []
       end
 
-      # store input file to user's data folder
-      app_inputs&.each do |k, v|
-        uploader = JobInputUploader.new
-        uploader.store!(v)
-        unless v.nil? || v == ""
-                inputs.push({
-                  k => '/data/' + v.original_filename,
-                })
+
+
+      if (app_selected != "")
+
+        ds_name = app_selected
+        @dataset = @user.datasets.find_by(name: ds_name)
+
+        Rails.logger.debug "Sucess here - 1"
+
+        merged_files = @dataset.mergeFile(ds_name)
+        Rails.logger.debug merged_files.keys
+
+        Rails.logger.debug "Sucess here - 2"
+       
+
+        app_inputs.keys.each do |input_id|
+          cur_file_paths = []
+          fname = file_names[input_id]
+          Rails.logger.debug fname
+          match_merged_files = merged_files[fname]
+          Rails.logger.debug match_merged_files.length
+          match_merged_files.each_with_index do |m_file, idx|
+            file_name = fname + "_" + idx.to_s + ".csv"
+            Rails.logger.debug file_name
+            file = File.new(file_name, 'w')
+            file.write(m_file)
+            Rails.logger.debug "make files"
+            uploader = JobInputUploader.new(giveFilePrefix())
+       
+            uploader.store!(file)
+            Rails.logger.debug "make files"
+
+            Rails.logger.debug "upload files" + uploader.filename
+
+            cur_file_paths.push('/data/' + uploader.filename)
+            file.close
+          end
+          combine_inputs_array[input_id] += cur_file_paths
+        end
+
+        Rails.logger.debug "Sucess here - 3"
+
+      end
+
+      app_inputs&.each do |input_id, uploaded_file|
+        unless uploaded_file.nil? || uploaded_file == ""
+          uploaded_files_array = Array(uploaded_file)
+          uploaded_files_array.each do |up_file|
+            uploader = JobInputUploader.new(giveFilePrefix())
+            uploader.store!(up_file)
+            combine_inputs_array[input_id].push('/data/' + uploader.filename)
+          end   
         end
       end
-      
+      Rails.logger.debug "Sucess here - 4"
+
+
+      if is_single
+        app_inputs.keys.each do |input_id|
+          combine_inputs_array[input_id] = combine_inputs_array[input_id][0, 1]
+        end
+      end
+
+      app_inputs.keys.each do |input_id|
+        inputs.push({
+          # k => '/data/' + v.original_filename,
+          input_id => combine_inputs_array[input_id].join(',')
+        })
+      end
+
       app_params&.each do |p|
         p.each do |k, v|
           params.push({
@@ -332,11 +391,15 @@ class SubmitController < ApplicationController
           })
         end
       end
-      
+
+      Rails.logger.debug "===========>"
+      Rails.logger.debug "===========>"
+
+      Rails.logger.info(inputs)
       
       # submit task
       client = LocalApi::Client.new
-      if is_pipeline 
+      if is_pipeline
         result = client.run_pipeline(UID, PROJECT_ID, app_id.to_i, inputs, params)
       else
         result = client.run_module(UID, PROJECT_ID, app_id.to_i, inputs, params)
@@ -509,6 +572,8 @@ class SubmitController < ApplicationController
     task_output.analysis = @analysis
     file_paths = {}
     files_to_do = mrs['outputs'][0]['files']
+    logger.debug "===========================>Find task output information!"
+    logger.info files_to_do
     
     @analysis.files_info.each do |dataType, info|
       @viz_data_source = VizDataSource.find_by(data_type:dataType)
@@ -517,7 +582,7 @@ class SubmitController < ApplicationController
           info['outputFileName'].each do |fName|
             if matchPattern(of1['name'], fName)
               file_paths[dataType] = [] if file_paths[dataType].blank?
-              file_paths[dataType] << {id: 0, 
+              file_paths[dataType] << {id: 0,
                                       url: File.join('/data/outputs', of1['path'], of1['name']), 
                                       is_demo: true}
               files_to_do.delete(of1)
@@ -527,7 +592,7 @@ class SubmitController < ApplicationController
       else
         files_to_do.each do |of1|
           if matchPattern(of1['name'], info['outputFileName'])
-            file_paths[dataType] = {id: 0, 
+            file_paths[dataType] = {id: 0,
                                     url: File.join('/data/outputs', of1['path'], of1['name']), 
                                     is_demo: true}
             files_to_do.delete(of1)
@@ -574,5 +639,16 @@ class SubmitController < ApplicationController
     else 
       return pattern == name
     end
+  end
+
+  private
+  def giveFilePrefix()
+    uid = session[:user_id]
+    time = Time.now
+    time_str = time.strftime("%Y_%m_%d")       
+    time_str += ("_" + time.strftime("%k_%M")) 
+    time_str = time_str.gsub(' ','')
+    file_prefix = "i_#{uid}_#{time_str}_"
+    return file_prefix
   end
 end

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_11_30_115435) do
+ActiveRecord::Schema.define(version: 2022_05_12_114944) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -32,6 +32,7 @@ ActiveRecord::Schema.define(version: 2021_11_30_115435) do
     t.text "rendered_about"
     t.integer "position"
     t.boolean "hidden", default: false
+    t.integer "multiple_mid", default: -1
     t.index ["analysis_category_id"], name: "index_analyses_on_analysis_category_id"
     t.index ["visualizer_id"], name: "index_analyses_on_visualizer_id"
   end

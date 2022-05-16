@@ -1,9 +1,13 @@
 svg {
-	width = 1200
+	width = 1500
 	height = 600
 	Component {
 		XYPlot {
-			height = plotSize[0]; width = plotSize[1]; padding = 80
+			x = startX
+			y = startY
+			height = height
+			width = width
+			padding = 80
 			data = result
 			discreteCategory = true
 			valueRange = valueRange
@@ -17,8 +21,8 @@ svg {
 				:children(d){
 					Rect.full{
 						cornerRadius = 6
-						stroke = colors[1]
-						fill = colors[0]
+						stroke = groups.colors[0]
+						fill = groups.colors[0]
 						x = 50%
 						anchor = @anchor("top","center")
 						behavior:tooltip {
@@ -33,7 +37,7 @@ svg {
 				anchor = @anchor("middle","center")
 				text = xlabel
 				fill = "#000"
-				fontSize = labelFontSize
+				fontSize = labelSize
 			}
 			// title
 			Text{
@@ -41,7 +45,7 @@ svg {
 				anchor = @anchor("middle","center")
 				text = "Total sample:" + sampleSize
 				fill = "#000"
-				fontSize = tickFontSize
+				fontSize = titleSize
 				style:font-weight = "bold"
 			}
 			// 纵坐标
@@ -52,7 +56,7 @@ svg {
 					text = ylabel
 					fill = "#000"
 					anchor = @anchor("middle","center")
-					fontSize = labelFontSize
+					fontSize = labelSize
 				}
 			}
 			// 横轴
@@ -63,7 +67,7 @@ svg {
 						y = 5
                         fontSize = 10
 						text = d.value
-                        rotation = @rotate(xAxisRotated)
+                        rotation = @rotate(xRotation)
                     }
                 }
             }

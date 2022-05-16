@@ -11,6 +11,11 @@
 #introduction
     padding-top: 10em
     margin-bottom: 5em
+
+    .row
+        display: flex
+        align-items: center
+        
     img
         width: 100%
         
@@ -82,6 +87,7 @@
             display: none
 
 
+
 #wrapper
     background-color: #f8f9fa
 
@@ -119,12 +125,6 @@ footer.page-footer
     padding: 20px 0
     background: $light_theme
     color: $white
-    .row 
-        align-items: unset;
-    .col-md-2
-        &:first-child
-            align-self: center;
-            padding-left: 5%;
     ul
         padding-left: 0
         list-style: none
@@ -133,8 +133,8 @@ footer.page-footer
     h4
         margin: 30px 0
     hr
-        // border-bottom: 1px solid darken($light_theme, 5%)
-        // border-top: 1px solid darken($light_theme, 5%)
+        border-bottom: 1px solid darken($light_theme, 5%)
+        border-top: 1px solid darken($light_theme, 5%)
     p, ul, h4
         color: $white
 
@@ -156,15 +156,15 @@ body.welcome
                 font-size: 4rem
                 font-weight: 300
                 line-height: 1.2
-                //color: $black
+                color: $black
                 .em
                     font-size: 5rem
                     color: #314893
                     font-weight: bold
             p
-                //color: $black
+                color: $black
             li
-               // color: $black
+                color: $black
 
             .index-bg
                 position: absolute
@@ -231,7 +231,7 @@ body.welcome
         &#function_card
             width: 100%
             height: auto
-            // background-color: #f8f9fa
+            background-color: #f8f9fa
             color: #000000
             padding: 2em
             .container
@@ -270,7 +270,7 @@ body.welcome
         &#platform_highlight 
             width: 100%
             height: auto
-            // background-color: #f8f9fa
+            background-color: #f8f9fa
             color: #000000
             padding: 2em
             .container
@@ -290,7 +290,7 @@ body.welcome
                         //padding-right: 15px
                         li
                             //display: inline-block
-                            background-color: #007bff
+                            background-color: $light_theme
                             //width: 4%
                             //height: 8px
                             margin-left: 3em
