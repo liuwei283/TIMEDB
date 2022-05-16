@@ -79,7 +79,7 @@ class ProjectsController < ApplicationController
                 @selector_attrs.push(s_attr.gsub("c_", ""))
             end
         end
-
+        gon.push selector_attrs:@selector_attrs
 
 
 

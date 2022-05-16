@@ -103,7 +103,7 @@
             <div class="col" id = "pieVis">
             </div>
         </div>
-</div>
+    </div>
 
     <hr>
     <br>
