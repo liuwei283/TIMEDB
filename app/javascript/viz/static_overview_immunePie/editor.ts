@@ -1,3 +1,4 @@
+import Oviz from "crux";
 import { EditorDef } from "utils/editor";
 import { copyObject } from "utils/object";
 
@@ -41,14 +42,15 @@ export const generateColorConfig = (v, eid): any => ({
             component: "color-picker",
             data: {
                 title: "groups colors",
-                scheme: v.data.pieData.map(d=>d.color),
+                scheme: v.data.groups.colors,
                 id: "pwcolor",
                 callback(colors) {
                     console.log(colors)
-                    colors.forEach((color, index) => {
-                        v.data.groups.pieData[index].color = color
-                    })
+                    // v.data.pieData.name
                     // v.data.groups.pieData.colors = {...colors};
+                    v.data.pieData.forEach(d=>{
+                        d.color = Oviz.color.Color.literal(colors[d.name])
+                    })
                     run(v);
                 },
             },

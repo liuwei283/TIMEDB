@@ -15,8 +15,6 @@ export function init(vid, path, eid) {
         components: { ComplexStackedBar },
         data: {
             xLabel, yLabel,
-            xRotation: 0,
-            labelSize: 14,
             tickprop : {
                 opt: {
                     line: {
@@ -27,7 +25,19 @@ export function init(vid, path, eid) {
                     }
                 }
             },
-            plotSize: [1100, 500]
+            plotSize: [1100, 500],
+            startX: 150, 
+            startY: 0, 
+            width: 1100, 
+            height: 500, 
+            titleSize: 11, 
+            labelSize: 11, 
+            title: "", 
+            ylabel: "", 
+            xlabel: "", 
+            plotRotation: 0, 
+            xRotation: 0, 
+            yRotation: 0,
         },
         loadData: {
             data: {
@@ -35,7 +45,8 @@ export function init(vid, path, eid) {
                 type: "csv" ,
                 dsvHasHeader: false,
                 loaded(data) {
-                    return staticDataProcessor(data)
+                    this.data.data = staticDataProcessor(data)
+                    this.data.width = 100*Object.keys(this.data.data.widMap).length
                 },
             },
         },

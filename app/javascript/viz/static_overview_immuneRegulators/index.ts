@@ -31,7 +31,10 @@ export function init(vid, subtypePath, RNAdataPath, eid) {
                 showCircle: false,
                 showRowad: false,
                 colorScheme: Oviz.color.schemeGradient(startColor, endColor),
-                negColorScheme: Oviz.color.schemeGradient("blue", startColor),
+                negColorScheme: Oviz.color.schemeGradient(nendColor, startColor),
+                startColor,
+                endColor,
+                nendColor
             },
             startX: 100, 
             startY: 0, 
