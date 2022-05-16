@@ -14,13 +14,7 @@ const ALERT_TIMEOUT = 5000;
 import JobSubmit from '../job-submit.vue';
 import JobQuery from '../job-query.vue';
 import JobSubmitPipeline from "../job-submit-pipeline.vue";
-<<<<<<< HEAD
-import editorTest from "../vapp-database.vue";
-import pj_subtype from "../pj-show-Subtype";
-import pj_fraction from "../pj-show-fraction"; 
-=======
 import databaseOverview from "../vapp-database.vue";
->>>>>>> f4c0459a04da03aa1ecac2e6e53d6109aee8e7e9
 
 import VApp from "page/vapp.vue";
 
