@@ -781,6 +781,10 @@
                             this.file_names['i-' + this.app.inputs[k].id]  = this.app.inputs[k].name;
                         }
 
+                        for (var k in this.single_parameters) {
+                            this.parameters['p-' + this.single_parameters[k].id] = this.single_parameters[k].default;
+                        }
+
                         this.single_params_desc = this.single_parameters[0].description;
                     
                     });
@@ -869,7 +873,7 @@
 
                 
                 console.log("All right is true here")
-                f
+                
                 if (allRight) {
                     let submitted_mid;
                     if (this.picked_single_multiple == 'multiple') {
