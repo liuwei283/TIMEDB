@@ -33,7 +33,12 @@ class DatabaseController < ApplicationController
             cancers_projects[cname] = cur_projects
         end
         @cancer_attrs = Cancer.column_names
-        gon.push cancers: cancers, projects: cancers_projects 
+        gon.push cancers: cancers, projects: cancers_projects
+
+        @cnum = Cancer.all.count
+        @pnum = Project.all.count
+        @snum = Sample.all.count
+        @dtnum = AnalysisCategory.find_by(name: "Deconvolution Analysis").analyses.count
 
              
     end

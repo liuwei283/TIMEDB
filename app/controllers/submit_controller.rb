@@ -443,7 +443,7 @@ class SubmitController < ApplicationController
 
   def query_app_task
     result_json = {
-      tid : null,
+      tid: null,
       code: false,
       data: ''
     }
