@@ -15,6 +15,7 @@ import JobSubmit from '../job-submit.vue';
 import JobQuery from '../job-query.vue';
 import JobSubmitPipeline from "../job-submit-pipeline.vue";
 import databaseOverview from "../vapp-database.vue";
+import tutorial from '../tutorial.vue';
 
 import VApp from "page/vapp.vue";
 
@@ -61,6 +62,7 @@ document.addEventListener('DOMContentLoaded', (event) =>  {
         ['#vapp-job-query', JobQuery],
         ['#vapp-job-submit-pipeline', JobSubmitPipeline],
         ['#vapp-database', databaseOverview],
+        ['#tutorial',tutorial],
     ];
 
     $('[data-toggle="tooltip"]').tooltip({
