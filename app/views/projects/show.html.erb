@@ -1,6 +1,4 @@
 <% content_for:head do%>
-
-  
   <script src="https://cdn.staticfile.org/jquery/1.10.2/jquery.min.js"></script>
   <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.22/js/jquery.dataTables.min.js"></script>
   <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/select/1.3.1/js/dataTables.select.min.js"></script>
@@ -181,182 +179,20 @@
 
       </div>
       <div class="tab-pane fade" id="subtype-overview" role="tabpanel" aria-labelledby="subtype-overview-tab">
-        <br>
-        <br>
-
-        <div id = "subtype-landscape" class = "container Block">
-            <div id="landscapeDescription" class="row description">
-              <h4>Some description for Immune Subtype Landscape in project overview</h4>
-            </div>
-
-            <div class="row vizBlock">
-                <div class="col vis" id = "subtype-landscapeVis">
-                </div>
-            </div>
-        </div>
-
-        <hr />
-
-        <div id = "subtype-boxplot" class = "container Block">
-
-            <div id="boxplotDescription" class="row description">
-              <h4>Some description for Immune Cell Data bar in project overview</h4>
-            </div>
-            
-            <div class="select-bar form-inline row">
-              <div class="sdiv col">
-                <div class="select-title">
-                    Please choose the cell division method:
-                </div>
-                <select class="form-select col" id = "subtype-boxplot-method-selector">
-                    <option selected="selected" value = "ABIS">ABIS</option>
-                    <option value = "CIBERSORTX">CIBERSORT</option>
-                    <option value = "CIBERSORTX">CIBERSORTX</option>
-                    <option value = "ConsensusTME">Consensus</option>
-                    <option value = "ConsensusTME">ConsensusTME</option>
-                    <option value="EPIC">EPIC</option>
-                    <option value="ImmuCellAI">ImmuCellAI</option>
-                    <option value="MCPcounter">MCPcounter</option>
-                    <option value="quanTIseq">quanTIseq</option>
-                    <option value="TIMER">TIMER</option>
-                    <option value="xCell">xCell</option>
-                </select>
-              </div>
-            </div>
-            <div class="row vizBlock">
-                <div class="col vis" id = "subtype-boxplotVis">
-                </div>
-            </div>
-        </div>
-
-        <hr />
-
-        <div id = "subtype-curve" class = "container Block">
-            <div id="curveDescription" class="row description">
-              <h4>Some description for KM Curve in project overview</h4>
-            </div>
-            <div class="row vizBlock">
-                <div class="col" id = "subtype-curveVis">
-                </div>
-            </div>
-        </div>
-
-        <hr />
-        <br />
-
-        <div id = "subtype-regulator" class = "container Block">
-            <div id="regulatorDescription" class="row description">
-              <h4>Some description for immune regulator in project overview</h4>
-            </div>
-            <div class="row vizBlock">
-                <div class="col vis" id = "subtype-regulatorVis">
-                </div>
-            </div>
+        <div id="pj_subtype">
         </div>
       
       </div>
 
       <div class="tab-pane fade" id="fraction-overview" role="tabpanel" aria-labelledby="fraction-overview-tab">
 
-        <div id = "fraction-pie" class = "container Block">
-            <div class="row description">
-              <h4>Some description for Project Clinical Feature Piechart in project fraction overview</h4>
-            </div>
-
-            <div class="select-bar form-inline row">
-              <div class="sdiv col">
-                <div class="select-title">
-                    Please choose the attribute:
-                </div>
-                <select class="form-select col" id = "fraction-pie-selector">
-                  <% @selector_attrs.each_with_index do |selector_items, i| %>
-                    <% if i == 0 %>
-                      <option selected="selected" value = <%= selector_items%> > <%= selector_items %> </option>
-                    <% else %>
-                      <option value = <%= selector_items%> > <%= selector_items %> </option>
-                    <% end %>
-                  <% end %>
-                </select>
-              </div>
-            </div>
-
-            <br>
-
-            <div class="row vizBlock">
-                <div class="col vis" id = "fraction-pieVis">
-                </div>
-            </div>
-        </div>
-
-
-        <div id = "fraction-boxplot" class = "container Block">
-            <div class="row description">
-              <h4>Some description for Cell Fraction Boxplot in project fraction overview</h4>
-            </div>
-
-            <div class="select-bar form-inline row">
-              <div class="sdiv col">
-                <div class="select-title">
-                    Please choose the method:
-                </div>
-                <select class="form-select col" id = "fraction-boxplot-selector">
-
-                    <option selected="selected" value = "Consensus">Consensus</option>
-                    <option disabled>──────────</option>
-                    <option value = "ABIS">ABIS</option>
-                    <option value = "CIBERSORTX">CIBERSORT</option>
-                    <option value = "CIBERSORTX">CIBERSORTX</option>
-                    <option value = "ConsensusTME">ConsensusTME</option>
-                    <option value="EPIC">EPIC</option>
-                    <option value="ImmuCellAI">ImmuCellAI</option>
-                    <option value="MCPcounter">MCPcounter</option>
-                    <option value="quanTIseq">quanTIseq</option>
-                    <option value="TIMER">TIMER</option>
-                    <option value="xCell">xCell</option>
-
-                </select>
-              </div>
-            </div>
-
-            <br>
-
-            <div class="row vizBlock">
-                <div class="col vis" id = "fraction-boxplotVis">
-                </div>
-            </div>
-        </div>
-
-        <div id = "fraction-landscape" class = "container Block">
-            <div class="row description">
-              <h4>Some description for Cell Fraction Landscape in project fraction overview</h4>
-            </div>
-
-            <div class="select-bar form-inline row">
-              <div class="sdiv col">
-                <div class="select-title">
-                    Please choose the visualization type:
-                </div>
-                <select class="form-select col" id = "fraction-landscape-selector">
-
-                    <option selected="selected" value = "pie">Pie Chart</option>
-                    <option value = "bar">Bar Plot</option>
-
-                </select>
-              </div>
-            </div>
-
-            <br>
-
-            <div class="row vizBlock">
-                <div class="col vis" id = "fraction-landscapeVis">
-                </div>
-            </div>
+        <div id="pj_fraction">
         </div>
 
    
 
       </div>
-      <%=javascript_pack_tag 'pj-overview-viz' %>
+
       
       
     </div>
