@@ -54,7 +54,7 @@ Rails.application.routes.draw do
   
   root 'welcome#index'
 
-  # get 'tutorial', to: 'welcome#tutorial', as: 'tutorial'
+  get 'tutorial', to: 'welcome#tutorial', as: 'tutorial'
   get 'contact', to: 'welcome#contact', as: 'contact'
   get 'docs', to: redirect('docs/index.html')
 

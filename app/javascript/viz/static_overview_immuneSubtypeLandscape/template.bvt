@@ -10,14 +10,15 @@ svg {
 			}
 		}
 		ComplexStackedBar {
-			x = 150
-			@let widBar = 100*Object.keys(data.widMap).length
-			plotSize = [widBar, 500]
+			x = startX
+			y = startY
+			// @let widBar = 100*Object.keys(data.widMap).length
+			plotSize = [width, height]
 			@props data
 			baseWidth = 40
 			generateTooltip = (d) => {
 				let total = data.widMap[d.data.pos]
-				return "cancer name: " + d.data.pos + "</br>" + "total sample: " + total + " samples</br>" + d.key + ": " + Math.round(d.data.value * total) + " samples"
+				return "Cancer name: " + d.data.pos + "</br>" + "Total sample: " + total + " samples</br>" + d.key + ": " + Math.round(d.data.value * total) + " samples"
 			}
             :xAxis {
                 Axis("top") {

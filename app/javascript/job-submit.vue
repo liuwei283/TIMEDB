@@ -7,9 +7,6 @@
             </li>
         </ul>
 
-        <h2> Do not report any bugs related this page now! Testing single/multiple upload!
-        </h2>
-
         <div class="prepare" v-if="!submitted">
             <div class="index-banner">
                 <div class="container">
@@ -27,10 +24,10 @@
                         Please choose to upload single or multical file(s)/dataset(s): 
                     </h2>
                     <br>
-                    <button type = "button" id = "single-button" class = "btn btn-dark btn-lg btn-select" @click="updateFilesType('single')">
+                    <button type = "button" id = "single-button" class = "btn btn-dark btn-lg btn-select" @click="updateMode('single')">
                     Single
                     </button>
-                    <button type = "button" id = "multiple-button" class = "btn btn-secondary btn-lg btn-select" @click="updateFilesType('multiple')">
+                    <button type = "button" id = "multiple-button" class = "btn btn-secondary btn-lg btn-select" @click="updateMode('multiple')">
                     Multiple
                     </button>
 
@@ -136,7 +133,9 @@
                             <br>
                             <div class = "container row justify-content-around">
                                 <div class = "col-md-6">
-                                    <h4 class = "text-center">File Submission</h4>
+                                    <h4 v-if="picked_single_multiple=='multiple'" class = "text-center">Batch effect config</h4>
+                                    <h4 v-else class = "text-center">File Submission</h4>
+
                                 </div>
                                 <div class = "col-md-6">
                                     <h4 class = "text-center">Set Parameters</h4>
@@ -160,76 +159,149 @@
                                     </div> -->
 
                                     <div class = "row submit-box justify-content-center">
-                                        <div v-if="displayedInputs.length>0">
+                                        <div v-if="picked_single_multiple=='single'">
                                             <div class = "row justify-content-around">
                                                 <div class="col-md-6 text-center" v-for="input in displayedInputs" :key="input.id">
                                                     <label :for="`i-${input.id}`">{{ input.name }}
                                                         <span v-if="input.required" class="required">*</span>
-                                                        <!-- <i class="fa fa-question-circle" b-tooltip.hover
-                                                        :title="input.description"></i> -->
                                                     </label>
-                                                    <div v-b-modal="'upload-' + input.id" class="uploadPng text-center justify-content-center container">
+                                                    <div v-b-modal="'single-upload-' + input.id" class="uploadPng text-center justify-content-center container">
                                                         <img v-bind:src="require('../assets/images/big_upload.png')" style="width:90%">
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div class="row justify-content-center">
-                                                <p v-if="picked_single_multiple=='single' && selected != ''">
-                                                    Small notice: please be noted that you have selected single type analysis.
+                                        </div>
+                                        <div v-else class = "parent-overflow row justify-content-center">
+                                            <div class = "text-center submit-container">
+                                                <label for="pairs_num_select">Please select maximum pairs of files you want to upload:
+                                                </label>
+                                                <div >
+                                                    <b-form-input id="pairs_num_select" value=1 max="6" type="number" step="1" name="selected_pairs_num" v-model="multiple_pairs_num" />
+                                                </div>
+                                            </div>
+
+                                            <div id = "multiple-upload-box" class = "row justify-content-center text-center" v-if="displayedPairsNum > 0">
+                                                <div v-for="input_idx in parseInt(displayedPairsNum)" :key="input_idx" class="text-center col-md-4">
+                                                    <div v-b-modal="`multiple-upload-${input_idx}`" class="uploadPng text-center justify-content-center container">
+                                                        <img v-bind:src="require('../assets/images/big_upload.png')" style="width:90%">
+                                                    </div>
+                                                    <div class = "text-center" v-if="updateUploadedStatus[input_idx - 1] == true">
+                                                        <i class="fa fa-check" aria-hidden="true" style="color:green"></i>
+                                                    </div>
+                                                    <div class = "text-center" v-else>
+                                                        <i class="fa fa-times" aria-hidden="true" style="color:red"></i>
+                                                    </div>
                                                     <br>
-                                                    you should guarantee that selected datasets are from single project source to submit tasks, 
-                                                    and you should not upload any file which will be ignored.
-                                                </p>
-                                                <label class="col-form-label select">
+                                                </div>
+                                            </div>
+                                            <br>
+                                        </div>
+
+
+                                        <div v-if="picked_single_multiple=='single'" class="row justify-content-center" style="margin-top:10px;">
+                                            <!-- <p v-if="picked_single_multiple=='single' && selected != ''">
+                                                Small notice: please be noted that you have selected single type analysis.
+                                                <br>
+                                                you should guarantee that selected datasets are from single project source to submit tasks, 
+                                                and you should not upload any file which will be ignored.
+                                            </p> -->
+                                            <label>
+                                                <span>
+                                                You can select a dataset to merge: </span>
+                                                <i class="fa fa-question-circle" v-b-tooltip.rightbottom.hover title="You may choose one dataset to upload merged files"></i>
+                                            </label>
+                                            <b-form-select class="col-md-8" 
+                                                name="selected-dataset"
+                                                v-model="ds_selected"
+                                            >
+                                                <option value="" key="default">--click to select your own dataset--</option>
+                                                <option v-for="(option, index) in select_box_option" :key="index" :value="option.value" :disabled="option.disabled">
+                                                    {{option.lable}}
+                                                </option>
+                                            </b-form-select>
+                                        </div>
+
+                                        <div v-else-if="ds_params!=null" class="row justify-content-center" style="vertical-align:bottom">
+                                            <!-- <p v-if="picked_single_multiple=='single' && selected != ''">
+                                                Small notice: please be noted that you have selected single type analysis.
+                                                <br>
+                                                you should guarantee that selected datasets are from single project source to submit tasks, 
+                                                and you should not upload any file which will be ignored.
+                                            </p> -->
+                                            <div class = "col-md-6 justify-content-center">
+
+                                                <label>
                                                     <span>
-                                                    Or Select a dataset to merge: </span>
+                                                    You can select a dataset to merge: </span>
                                                     <i class="fa fa-question-circle" v-b-tooltip.rightbottom.hover title="You may choose one dataset to upload merged files"></i>
                                                 </label>
-                                                <b-form-select class="form-control select  col-md-8" 
+                                                <b-form-select> 
                                                     name="selected-dataset"
-                                                    v-model="selected"
+                                                    v-model="ds_selected"
                                                 >
-                                                    <option value="" key="default">--Default No Dataset--</option>
+                                                    <option value="" key="default">--click to select your own dataset--</option>
                                                     <option v-for="(option, index) in select_box_option" :key="index" :value="option.value" :disabled="option.disabled">
                                                         {{option.lable}}
                                                     </option>
                                                 </b-form-select>
+
                                             </div>
+
+                                            <div class = "col-md-6 justify-content-center">
+
+                                                <label :for="`dp-${ds_params.id}`">{{ ds_params.name }} for selected dataset
+                                                    <span v-if="ds_params.required" class="required">*</span>
+                                                    <i class="fa fa-question-circle" b-tooltip.hover
+                                                    :title="ds_params.description"></i>
+                                                </label>
+                                                <div v-if="ds_params.param_type === 'enum'">
+                                                    <select :id="`dp-${ds_params.id}`" class="form-control custom-select"
+                                                            v-model="ds_param_selected" :required="ds_params.required" :name="ds_param_selected">
+                                                        <option v-for="option in ds_params.options" :value="option" :key="option"
+                                                                :selected="ds_params.default == option ? 'selected' : ''">
+                                                            {{ option }}
+                                                        </option>
+                                                    </select>
+                                                </div>
+                                                <div v-else>
+                                                    <b-form-input :id="`dp-${ds_params.id}`" :value="ds_params.default" :required="ds_params.required"
+                                                    v-model="ds_param_selected" :name="ds_param_selected" />
+                                                </div>
+                                            </div>
+                                            
                                         </div>
                                     </div>
-                                    
                                 </div>
-
 
                                 <div class="set-param-section col-md-6 h-100" style="word-wrap:break-word; padding-left:40px">
 
                                     <div class = "row submit-box">
-                                        <div v-if="displayedParams.length > 0" class = "col-md-6" style="height:300px;overflow:scroll; vertical-align:center">
+                                        <div v-if="displayedSingleParams.length > 0" class = "col-md-6" style="height:300px;overflow:scroll; vertical-align:center">
                                             <div class="row">
-                                                <div class="col-md-12" v-for="param in displayedParams" :key="param.id">
+                                                <div class="col-md-12" v-for="param in displayedSingleParams" :key="param.id">
                                                     <label :for="`p-${param.id}`">{{ param.name }}
                                                     </label>
                                                     <div v-if="param.param_type === 'string'">
                                                         <b-form-input @focus="provide_param_desc(param)" :id="`p-${param.id}`" :value="param.default" :required="param.required"
-                                                                    :name="`p-${param.id}`" :state="inputValid[`p-${param.id}`]" />
+                                                                    v-model="parameters[`p-${param.id}`]" :name="`p-${param.id}`" :state="inputValid[`p-${param.id}`]" />
                                                     </div>
                                                     <div v-else-if="param.param_type === 'int'">
                                                         <b-form-input @focus="provide_param_desc(param)" :id="`p-${param.id}`" :value="param.default" type="number" step="1"
-                                                                    :required="param.required" :name="`p-${param.id}`"
+                                                                    v-model="parameters[`p-${param.id}`]" :required="param.required" :name="`p-${param.id}`"
                                                                     :state="inputValid[`p-${param.id}`]"/>
                                                     </div>
                                                     <div v-else-if="param.param_type === 'float'">
                                                         <b-form-input @focus="provide_param_desc(param)" :id="`p-${param.id}`" :value="param.default" type="number"
-                                                                    step="0.01" :required="param.required"
+                                                                    v-model="parameters[`p-${param.id}`]" step="0.01" :required="param.required"
                                                                     :name="`p-${param.id}`" :state="inputValid[`p-${param.id}`]"/>
                                                     </div>
                                                     <div v-else-if="param.param_type === 'boolean'">
                                                         <b-form-select @focus="provide_param_desc(param)" :id="`p-${param.id}`" :options="boolSelectOpt" :required="param.required"
-                                                                    :name="`p-${param.id}`" :state="inputValid[`p-${param.id}`]"/>
+                                                                    v-model="parameters[`p-${param.id}`]" :name="`p-${param.id}`" :state="inputValid[`p-${param.id}`]"/>
                                                     </div>
                                                     <div v-else-if="param.param_type === 'enum'">
                                                         <select @focus="provide_param_desc(param)" :id="`p-${param.id}`" class="form-control custom-select" 
-                                                                :required="param.required" :name="`p-${param.id}`" 
+                                                                v-model="parameters[`p-${param.id}`]" :required="param.required" :name="`p-${param.id}`" 
                                                                 :state="inputValid[`p-${param.id}`]">
                                                             <option v-for="option in param.options" :value="option" :key="option"
                                                                     :selected="param.default == option ? 'selected' : ''">
@@ -239,7 +311,7 @@
                                                     </div>
                                                     <div v-else-if="param.param_type === 'splitchr'">
                                                         <b-form-select @focus="provide_param_desc(param)" :id="`p-${param.id}`" :options="boolSelectOpt" 
-                                                                    :required="param.required" :name="`p-${param.id}`" 
+                                                                    v-model="parameters[`p-${param.id}`]" :required="param.required" :name="`p-${param.id}`" 
                                                                     :state="inputValid[`p-${param.id}`]" />
                                                     </div>
                                                 </div>
@@ -247,19 +319,16 @@
                                         </div>
                                         <div class = "col-md-6">
                                             <h5>Parameters description</h5>
-                                            <p id = "params_desc">{{this.params_desc}}</p>
+                                            <p id = "params_desc">{{this.single_params_desc}}</p>
                                         </div>
                                     </div>
-                                    
-                                    <p v-if="displayedParams.length == 0">No Parameters.</p>
+                                    <p v-if="displayedSingleParams.length == 0">No Parameters.</p>
                                 </div>
                             </div>
                             <br>
                             <br>
                             <b-btn @click="submitTask" class="float-right mt-2"><i class="fa fa-location-arrow"></i> Submit</b-btn>
 
-                            
-                            
                         </div>
                         
                     </div>
@@ -284,67 +353,100 @@
             </div>
         </div>
 
-        <b-modal class= "file-submit-modal" :id="`upload-${input.id}`" size="lg" :title="`Submit input file - ${input.name}`" centered v-for="input in displayedInputs" :key="input.id">
-                <div class = "row justify-content-around">
-                    <div class = "col-md-5 text-center">
-                        <div class = "row text-center submit-container">
-                            <p> click to download demo file for this input: </p>
-                            <a :href="`/public/data/module_demo/${app.name}_demo_${input.name}.tsv`" :download=input.name >Demo {{ input.name}} </a>
-                        </div>
-                        <!-- <img v-bind:src="require('../assets/images/nav-upload.png')"> -->
-                        <!-- <h1 class="text-center">Upload</h1> -->
-                        <!-- <div class = "text-center">
-                            <i class="fa fa-upload fa-10x"></i>
-                        </div> -->
-                        <!-- <br>
-                        <br> -->
-                        <!-- <div id = "uploadDatasetSelect" v-if="picked_single_multiple=='single'">
-                            <div class="container">
-                                <h2 class="display-5">
-                                    Please select uploading files or use datasets to submit analysis tasks: 
-                                </h2>
-                                <input type="radio" id="upload" value="upload" v-model="picked_upload_dataset">
-                                <label for="upload">Upload files</label>
-                                <input type="radio" id="dataset" value="dataset" v-model="picked_upload_dataset">
-                                <label for="dataset">Use datasets</label>
-                            </div>
-                        </div> -->
-
+        <b-modal class= "file-submit-modal" :id="`single-upload-${input.id}`" size="md" :title="`Submit input file - ${input.name}`" centered v-for="input in displayedInputs" :key="input.id">
+                <div class = "row justify-content-center submit-container">
+                    <div class = "col-md-10 text-center">
                         <div class = "row submit-container">
-                            <p v-if="picked_single_multiple=='single' && selected != ''">
-                                Please be noted that you have selected single type analysis. 
-                                <br>
-                                Since you have selected datasets, you are not allowed to upload any file.
-                            </p>
                             <div>
                                 <b-form-file
                                     :id="`i-${input.id}`"
                                     v-model="files[`i-${input.id}`]"
                                     :state="inputValid[`i-${input.id}`]"
                                     placeholder="Choose a file or drop it here..."
-                                    drop-placeholder="Drop file here..."
+                                    drop-placeholder="Drop file here..." 
                                     :name="`i-${input.id}`"
                                     :required="input.required"
-                                    :disabled="picked_single_multiple=='single' && selected != ''"
-                                    :multiple="picked_single_multiple=='multiple'"
+                                    :disabled="picked_single_multiple=='single' && ds_selected != ''"
                                 >
                                 </b-form-file>
                             </div>
                         </div>
                     </div>
-
-                    <div class = "col-md-6" id = "description-card">
+                    <div class = "col-md-10" id = "description-card submit-container">
                         <div class = "row submit-container">
                             <p class = "text-left">
                             <span v-for="des_patch in input.description.split('.')" v-bind:key="des_patch">
-                                {{des_patch}} <br><br>
+                                {{des_patch}} <br>
                             </span>
                             </p>
                         </div>
                     </div>
                 </div>
         </b-modal>
-        
+
+        <b-modal class= "file-submit-modal" :id="`multiple-upload-${input_idx}`" size="lg" centered title="File Submission and configuration for batch effect" v-for="input_idx in parseInt(displayedPairsNum)" :key="input_idx">    
+                
+                <div class = "row justify-content-center">
+
+                    <div class = "col-md-10 text-center">
+                        <h4> File submission </h4>
+                        <div class = "row">
+
+                            <div id = "be-file-submit" class = "col-md-6 text-center" v-for="input in displayedInputs" :key="input.id">
+                                
+                                <div>
+                                    <label :for="`multiple-i-${input.id}-${input_idx}`">{{ input.name }}
+                                        <span v-if="input.required" class="required">*</span>
+                                        <i class="fa fa-question-circle" b-tooltip.hover
+                                        :title="input.description"></i>
+                                    </label>
+                                    <b-form-file
+                                        :id="`multiple-i-${input.id}-${input_idx}`"
+                                        v-model="files[`i-${input.id}-${input_idx}`]"
+                                        :placeholder="files[`i-${input.id}-${input_idx}`] ? files[`i-${input.id}-${input_idx}`].name : 'no file uploaded'"
+                                        drop-placeholder="Drop file here..." 
+                                        :name="`multiple-i-${input.id}-${input_idx}`"
+                                        :required="input.required"
+                                    >
+                                    </b-form-file>
+                                </div>
+                                <!-- <div><p>uploaded file name: {{files[`i-${input.id}-${input_idx}`] ? files[`i-${input.id}-${input_idx}`].name : "no file uploaded"}} </p></div> -->
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id = "be-config" class = "col-md-10 submit-container text-center">
+                        <h4> Parameter setting </h4>
+
+                        <div v-if="displayedSingleParams.length > 0">
+                            <div class="row">
+                                <div class="col-md-6" style="margin-bottom:10px" v-for="param in displayedBatchEffectParams" :key="param.id">
+                                    <label :for="`multiple-p-${param.id}-${input_idx}`">{{ param.name }}
+                                        <span v-if="param.required" class="required">*</span>
+                                        <i class="fa fa-question-circle" b-tooltip.hover
+                                        :title="param.description"></i>
+                                    </label>
+                                    <div v-if="param.param_type === 'enum'">
+                                        <select :id="`multiple-p-${param.id}-${input_idx}`" class="form-control custom-select"  :placeholder="parameters[`multiple-p-${param.id}-${input_idx}`]"
+                                                v-model="parameters[`multiple-p-${param.id}-${input_idx}`]" :required="param.required" :name="`multiple-p-${param.id}-${input_idx}`">
+                                            <option v-for="option in param.options" :value="option" :key="option"
+                                                    :selected="param.default == option ? 'selected' : ''">
+                                                {{ option }}
+                                            </option>
+                                        </select>
+                                    </div>
+                                    <div v-else>
+                                        <b-form-input :id="`multiple-p-${param.id}-${input_idx}`" :value="param.default" :required="param.required" :placeholder="parameters[`multiple-p-${param.id}-${input_idx}`]"
+                                        v-model="parameters[`multiple-p-${param.id}-${input_idx}`]" :name="`multiple-p-${param.id}-${input_idx}`" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+        </b-modal>
+
+
         <b-modal v-if="started" id = "submit-helper" size="xl" scrollable title="Submission Helper" centered>
             <br>
             <div class = "text-center submit-container">
@@ -388,10 +490,15 @@
                 },
                 files: {
                 },
+                parameters: {
+
+                },
                 file_names: {
 
                 },
-                selected: "",
+                ds_selected: "",
+                ds_param_selected: "",
+                ds_params: null,
                 boolSelectOpt: [
                     { value: true, text: 'Yes' },
                     { value: false, text: 'No' },
@@ -403,15 +510,20 @@
                 analyses: [],
                 demo: false,
                 started: false,
-                params_desc: null,
+                single_params_desc: null,
+
                 picked_single_multiple: "single",
-                picked_supervised: "supervised"
+                picked_supervised: "supervised",
+                single_parameters: [],
+                multiple_parameters: [],
+                multiple_pairs_num: 1,
+                multiple_completed: [],
             };
         },
         created() {
             this.ds_info = window.gon.select_box_option;
             if (this.analysis_category == "Deconvolution Analysis") {
-                this.isConv = true;
+                this.isConv = true; //deconvolution analysis category are different from others
             }
             this.updateApp(null, false);
             this.select_box_option = [];
@@ -427,15 +539,21 @@
             // for (var k in this.app.inputs){
             //     this.files['i-' + this.app.inputs[k].id]  = null;
             // }
+            this.multiple_completed = Array(10).fill(false)
         },
         computed: {
             displayedInputs() {
                 // eslint-disable-next-line
                 return _.sortBy(this.app.inputs.filter(x => !x._destroy), ['name']);
             },
-            displayedParams() {
+            displayedSingleParams() {
                 // eslint-disable-next-line
-                return _.sortBy(this.app.params.filter(x => !x._destroy), ['name']);
+                return _.sortBy(this.single_parameters.filter(x => !x._destroy), ['name']);
+            },
+
+            displayedBatchEffectParams() {
+                return _.sortBy(this.multiple_parameters.filter(x => !x._destroy), ['name']);
+                
             },
             displayedAnalyses() {
                 var filtered_analyses = this.analyses;
@@ -448,10 +566,56 @@
                     }
                 }
                 return filtered_analyses; 
-            }
+            },
+            displayedPairsNum() {
+                //always listen to changes of user required pairs number and update related vue parts
+                console.log(this.multiple_pairs_num)
+                return this.multiple_pairs_num;
+            },
+            updateUploadedStatus() {
+                console.log("here 1");
+                console.log(this.multiple_pairs_num)
+                console.log(typeof(this.multiple_pairs_num))
+
+                for (var input_idx = 1; input_idx <= this.multiple_pairs_num;  input_idx++ ) {
+                    this.multiple_completed[input_idx - 1] = true;
+                    console.log("here 2");
+                    console.log(input_idx);
+
+                    this.app.inputs.forEach((item) => {
+                        console.log(item);
+                        // console.log("priting files in updatedSattus")
+                        console.log(this.files['i-' + item.id + '-' + input_idx] == null)
+                        console.log(this.files['i-' + item.id + '-' + input_idx])
+
+                        // console.log(this.files['i-' + this.app.inputs[k].id + '-' + input_idx] == null)
+                        // console.log(this.files['i-' + this.app.inputs[k].id + '---' + input_idx] == null)
+
+                        if (this.files['i-' + item.id + '-' + input_idx] == null) {
+                            this.multiple_completed[input_idx - 1] = false;
+                            console.log("come here");
+                        }
+                    })
+
+                    document.querySelectorAll("multiple-upload-" + input_idx + " input[name^='multiple-p']").forEach((input) => {
+                        if(input.required) {
+                            console.log(input.value);
+                            const valid = !!input.value && !!_.trim(input.value);
+                            if (!valid) {
+                                console.log(input);
+                                console.log("Input parameters has problems")
+                                this.multiple_completed[input_idx - 1] = false;
+                            }
+                        }
+                    })
+                }
+                console.log(this.multiple_completed)
+                return this.multiple_completed;
+            },
+            
         },
         watch: {
-            selected:function(newValue) {
+            ds_selected:function(newValue) {
                 if (newValue != "" && this.picked_single_multiple == 'single') {
                     console.log(newValue);
                     for (var k in this.app.inputs) {
@@ -462,11 +626,19 @@
             files:function(newValue, oldValue) {
                 console.log(newValue.size);
                 console.log(oldValue.size);
-
+                console.log("file changes");
             },
             picked_supervised:function() {
                 this.started = false;
-            }
+                console.log(this.started);
+            },
+            multiple_pairs_num:function(newValue) {
+                console.log(newValue);
+                // this.multiple_completed = Array(newValue).fill(false);
+                // for (var k in this.app.inputs) {
+                //     this.files['i-' + this.app.inputs[k].id]  = Array(newValue).fill(null);
+                // }
+            },
         },
         methods: {
             setStatusColor(status) {
@@ -486,9 +658,56 @@
                 }
             },
             formatParams() {
-                return Array.from(document.querySelectorAll("input[name^='p-'], select[name^='p-']"))
-                            .filter(x => x.value)
-                            .map(({ name, value }) => ({ [name]: value}));
+                var formatted_params = []
+                for (var sp in this.single_parameters) {
+                    formatted_params.push({['p-' + this.single_parameters[sp].id]: this.parameters['p-' + this.single_parameters[sp].id]});
+                }
+
+                if (this.picked_single_multiple == 'multiple') {
+
+                    for (var mp in this.multiple_parameters) {
+                        var pvalue = ""
+                        var pvalue_arr = [];
+                        
+                        if (this.multiple_parameters[mp].name == 'Datasets name') {
+                            pvalue = this.ds_info[this.ds_selected][2];
+                        }
+                        else if (this.multiple_parameters[mp].name == 'Platforms') {
+                            pvalue = this.ds_info[this.ds_selected][1];
+                        }
+                        else {
+                            pvalue =  Array.new(3).fill([this.ds_param_selected]).flat();
+                        }
+                        for (var input_idx = 1; input_idx <= this.multiple_pairs_num;  input_idx++ ) {
+                            pvalue_arr.push(this.parameters['multiple-p-' + this.multiple_parameters[mp].id + '-' + input_idx]);
+                        }
+
+                        pvalue += ',' + pvalue_arr.join(',');
+                        formatted_multiple_params.push({ ['p-' + this.multiple_parameters[mp].id]: pvalue });
+                    }
+                    formatted_params = formatted_params.concat(formatted_multiple_params);
+                }
+
+                return formatted_params
+            },
+
+            formatFiles() {
+                if (this.picked_single_multiple == 'single') {
+                    return this.files;
+                }
+
+                else {
+
+                    var formatted_files = {};
+                    for (var k in this.app.inputs) {
+                        var input_arr = [];
+                        for (var input_idx = 1; input_idx <= this.multiple_pairs_num;  input_idx++ ) {
+                            input_arr.push(this.files['multiple-i-' + this.app.inputs[k].id + '-' + input_idx]);
+                        }
+                        formatted_files['i-' + this.app.inputs[k].id] = input_arr;
+                    }
+                    return formatted_files;
+                }
             },
 
             updateApp(s_ana, flag) {
@@ -525,18 +744,48 @@
                     this.params_desc = this.app.params[0].description;
                 }
                 else {
-                    var newid = s_ana.mid
+                    console.log("start update app");
                     this.selected_analysis = s_ana;
+                    var newid;
+                    if (this.picked_single_multiple == "single") newid = s_ana.mid;
+                    else newid = s_ana.multiple_mid;
+                        
                     axios.get(`https://deepomics.org/api/apps/${newid}/`).then((response) => {
                         this.app = response.data.app;
-                        for (var k in this.app.inputs) {
-                            console.log(k)
-                            this.files['i-' + this.app.inputs[k].id]  = null;
-                            this.file_names['i-' + this.app.inputs[k].id]  = this.app.inputs[k].name
-                            console.log("i" + this.app.inputs[k].id)
+                        console.log("====>")
+                        console.log(response.data.app.inputs);
+                        this.files = {};
+                        this.parameters = {};
+                        
+                        console.log(k)
+                        if (this.picked_single_multiple == "single") {
+                            this.single_parameters = this.app.params
+                            this.multiple_parameters = []
                         }
-                        this.params_desc = this.app.params[0].description;
+                        else {
+                            //this.files['i-' + this.app.inputs[k].id]  = Array(10).fill(null); //multiple mode, file inputs are in the format of array
+                            this.single_parameters = this.app.params.filter(x => !['Platforms', 'Datasets name', 'Protocol normalization'].includes(x['name']));
+                            this.multiple_parameters = this.app.params.filter(x => ['Platforms', 'Datasets name', 'Protocol normalization'].includes(x['name']));
+                            this.multiple_completed = Array(10).fill(false);
+
+                            // for (var para in this.app.params) {
+                            //     if (para.name == "Protocol normalization") {
+                                    
+                            //     }
+                            // }
+                            this.ds_params = this.app.params.find(x => x['name'] == 'Protocol normalization');
+                            console.log("printing dataset parameters");
+                            console.log(this.ds_params);
+                        }
+                        for (var k in this.app.inputs){
+                            this.file_names['i-' + this.app.inputs[k].id]  = this.app.inputs[k].name;
+                        }
+
+                        this.single_params_desc = this.single_parameters[0].description;
+                    
                     });
+                    console.log("end update app");
+
                 }
             },
 
@@ -544,51 +793,83 @@
                 // send selected file to files
 
                 //this.submitted = true;
+                //this.updateUploadedStatus();
 
                 const { alertCenter } = this.$refs;
                 let allRight = true;
                 let is_single = (this.picked_single_multiple == 'single')
+                let alertData;
+
             
-                document.querySelectorAll("input[name^='p-'], select[name^='p-']").forEach((input) => {
+                //valid checking, need imporvement for complete error reporting
+                document.querySelectorAll("select[name^='multiple-p-'], input[name^='multiple-p-'], input[name^='p-'], select[name^='p-']").forEach((input) => {
                     if(input.required) {
                         const valid = !!input.value && !!_.trim(input.value);
-                        Vue.set(this.inputValid, input.name, valid);
+                        //Vue.set(this.inputValid, input.name, valid);
                         if (!valid) {
                             console.log(input);
-                            console.log("Input files has problems")
+                            console.log("you missed some required parameters")
                             allRight = false;
+                            alertCenter.add('danger', "You missed some required parameters!");
                         }
                     }
                 })
 
                 //there will be double check later
-                if (this.selected != "" && is_single) {
-                    if (this.ds_info[this.selected] > 1) {
-                        console.log("Selected datasets has multiple project sources.")
+                if (this.ds_selected != "" && is_single) {
+                    if (this.ds_info[this.ds_selected][0] > 1) {
+                        console.log("Selected datasets has multiple project sources!")
                         allRight = false
+                        alertCenter.add('danger', "Selected dataset has multiple project sources, but you are under single mode!");
                     }
-                    for (var file_inputs in this.files) {
-                        if (this.files[file_inputs] != null) {
-                            console.log("You should not upload any files if you select datsets under single mode.")
-                            allRight = false;
-                        }
-                    }
+                    // for (var file_inputs in this.files) {
+                    //     if (this.files[file_inputs] != null) {
+                    //         console.log("You should not upload any files if you select datsets under single mode.")
+                    //         allRight = false;
+                    //     }
+                    // }
                 }
 
-                if (this.selected == "" && allRight == true) {
-                    var anyFile = false;
-
+                if (this.ds_selected == "") {
+                    var anyFile;
                     for (var file_inputs in this.files) {
-                        if (this.files[file_inputs] != null) {
-                            console.log(file_inputs)
+                        if (is_single) {
                             anyFile = true;
+                            if (this.files[file_inputs] == null) {
+                                console.log(file_inputs)
+                                anyFile = false;
+                                alertCenter.add('danger', "You are under single mode, but you have not uploaded any file input or selected any single source dataset!");
+                            }
+                        }
+                        else {
+                            anyFile = false;
+                            for (var be_num in this.multiple_pairs_num) {
+                                if (this.multiple_completed[be_num] != null) {
+                                    anyFile = true;
+                                }
+                            }
+                            if (anyFile == false) {
+                                alertCenter.add('danger', "You are under multiple mode, but there is no valid input pairs!");
+                            }
                         }
                     }
-
                     allRight = anyFile == true
+                    if (!allRight) {
+                        alertCenter.add('danger', "Please check your input files with parameters correctly!");
+                    }
                 }
 
-                console.log("Something wrong here")
+                if (this.ds_selected != '' && is_single == false && this.ds_param_selected == '') {
+                    alertCenter.add('danger', "You have not set your paraters for the selected dataset."); 
+                }
+
+                for (var key in this.files) {
+                    console.log(this.files[key]);
+                }
+
+                
+                console.log("All right is true here")
+                f
                 if (allRight) {
                     let submitted_mid;
                     if (this.picked_single_multiple == 'multiple') {
@@ -597,7 +878,6 @@
                     else {
                         submitted_mid = this.selected_analysis.mid;
                     }
-                    let alertData;
                     $("#disable-fill").fadeIn(10);
                     this.isLoading = true;
                     console.log(this.isLoading);
@@ -605,9 +885,9 @@
                         `/submit-app-task/`,
                         
                        objectToFormData({
-                            "inputs": this.files,
+                            "inputs": this.formatFiles(),
                             "params": this.formatParams(),
-                            "selected": this.selected,
+                            "selected": this.ds_selected,
                             "search_mid": this.selected_analysis.mid,
                             "mid": submitted_mid,
                             "is_single": this.picked_single_multiple=='single',
@@ -653,20 +933,22 @@
                     
                 }
             },
-            updateFilesType(type) {
+            updateMode(type) {
+                this.started = false;
                 if (type == 'single') {
                     this.picked_single_multiple = "single";
-                    
                 }
                 else {
                     this.picked_single_multiple = "multiple";
-                    
                 }
                 document.getElementById("single-button").classList.toggle("btn-secondary");
                 document.getElementById("single-button").classList.toggle("btn-dark");
                 document.getElementById("multiple-button").classList.toggle("btn-secondary");
                 document.getElementById("multiple-button").classList.toggle("btn-dark");
             },
+
+            
+            
             setSelectBox(){
                 var i = 0;
                 var s = "<option disabled vaule=''>Choose a file</option>";
@@ -675,45 +957,16 @@
                 for(i=0; i<list.length; i++){
                     s += "<option>" + list[i] + "</option>";
                 }
-
                 this.$refs.select_box = s
-
             },
             copyToClipboard(){
                 navigator.clipboard.writeText(this.jobID);
             },
-            clickDemo(){
-                this.demo=true;
-            },
-            closeDemo(){
-                this.demo=false;
-            },
-            // checkDemo(index){
-            //     if(index==0){
-            //         return "col-md-6";
-            //     }else if(index==1){
-            //         if(this.demo==true){
-            //             return "col-md-3";
-            //         }else{
-            //             return "col-md-4";
-            //         }                    
-            //     }
-            // },
-            check_class(block) {
-                if(block == 0){
-                    if(this.demo) return "col-md-3"
-                    else return "col-md-12"
-                }
-                else {
-                    if(this.demo) return "col-md-12"
-                    else return "col-md-6"
-
-                }
-            },
             provide_param_desc(param) {
                 $("#params_desc").text(param.description)
-
-            }
+            },
+            
+            
 
         },
         components: {
@@ -911,5 +1164,49 @@ input[type="radio"] {
     vertical-align: center;
 
 }
+
+.parent-overlow {
+    position: relative;
+}
+
+#multiple-upload-box {
+    display: block !important;
+    overflow-x: auto !important;
+    white-space: nowrap !important;
+    width : 90%;
+    //box-shadow: 0 0 64px darken(#dee2e6, 2%);
+    display: flex;
+    align-items: center;
+
+
+}
+
+#multiple-upload-box > .text-center {
+    display: inline-block !important;
+}
+
+#multiple-upload-box > .left-icon {
+    position: absolute;
+    top: 50%;
+    left: 5px;
+}
+#multiple-upload-box > .right-icon {
+    position: absolute;
+    top: 50%;
+    right: 30px;
+}
+
+@-webkit-keyframes greenPulse {
+  from { background-color: #1f201d; -webkit-box-shadow: 0 0 9px #333;}
+  50% { background-color: #8c8b91; -webkit-box-shadow: 0 0 18px #c4c2cd;}
+  to { background-color: #525452; -webkit-box-shadow: 0 0 9px rgb(136, 132, 135);}
+}
+
+#submit-modal-trigger .btn {
+  -webkit-animation-name: greenPulse;
+  -webkit-animation-duration: 2s;
+  -webkit-animation-iteration-count: infinite;
+}
+
 
 </style>

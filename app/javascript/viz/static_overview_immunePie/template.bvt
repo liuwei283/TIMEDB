@@ -10,11 +10,12 @@ svg {
 			anchor = @anchor("top","center")
 		}
 		PieChart {
+			rotation = @rotate(plotRotation)
 			anchor = @anchor("m","c")
-			x = 500
-			y = 300
-			height = 500
-			height = 500
+			x = startX
+			y = startY
+			height = width
+			height = height
 			data = pieData
 			pieProps = {
 				stroke: "white"

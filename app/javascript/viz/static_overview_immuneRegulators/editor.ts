@@ -1,3 +1,4 @@
+import Oviz from "crux";
 import { EditorDef } from "utils/editor";
 import { copyObject } from "utils/object";
 
@@ -10,8 +11,8 @@ export const editorRef = {} as any;
 const generalSetting = ["startX", "startY", "width", "height", "titleSize", "labelSize", "title", "ylabel", "xlabel", "plotRotation", "xRotation", "yRotation"]
 
 export const generateGeneralConfig = (v, eid): any => ({
-    id: eid,
-    title: "Color Setting",
+    id: eid + "General",
+    title: "General Setting",
     layout: "single-page",
     view: {
         type: "list",
@@ -45,6 +46,13 @@ export const generateColorConfig = (v, eid): any => ({
                 id: "pwcolor",
                 callback(colors) {
                     v.data.groups.colors = {...colors};
+                    v.defineGradient("bg", "vertical", [colors["endColor"], colors["startColor"]]);
+                    v.defineGradient("ng", "vertical", [colors["startColor"], colors["nendColor"]]);
+                    v.data.config.colorScheme = Oviz.color.schemeGradient(colors["startColor"], colors["endColor"]),
+                    v.data.config.negColorScheme = Oviz.color.schemeGradient(colors["nendColor"], colors["startColor"])
+                    v.data.config.endColor = colors["endColor"]
+                    v.data.config.startColor = colors["startColor"]
+                    v.data.config.nendColor = colors["nendColor"]
                     run(v);
                 },
             },

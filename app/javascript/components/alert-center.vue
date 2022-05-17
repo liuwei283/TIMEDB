@@ -29,7 +29,7 @@
 class Alert {
     constructor(opts) {
         Object.assign(this, opts);
-        this.dismissCountDown = 5;
+        this.dismissCountDown = 30;
         this.showDismissibleAlert = true;
     }
 

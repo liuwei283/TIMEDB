@@ -188,7 +188,7 @@ class AdminController < ApplicationController
 
             #number of genes
             file_name = project.project_name + ".csv"
-            file_path = "#{$data_dir}RNA/visualization/immuReg_" + file_name
+            file_path = "#{$data_dir}RNA/RNA_" + file_name
             if File.exists?(file_path)
                 num_gene = CSV.foreach(file_path, headers: true).count - 1
                 project.update_attribute(:num_of_observed_genes, num_gene)
