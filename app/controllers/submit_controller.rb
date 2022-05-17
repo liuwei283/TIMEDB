@@ -27,9 +27,10 @@ class SubmitController < ApplicationController
     @datasets.each do |ds|
       ds_name = ds.name
       ps_num = ds.getProjectSources(ds_name).length
+      platform_names, project_names = ds.getProjectsPlatforms(ds_name)
       # ds_dir = File.join(user_dir, ds_name)
       # file_list = Dir.entries(ds_dir)[2..-1]
-      data[ds_name] = ps_num
+      data[ds_name] = [ps_num, platform_names, project_names] 
     end
     gon.push select_box_option: data
 
@@ -442,6 +443,7 @@ class SubmitController < ApplicationController
 
   def query_app_task
     result_json = {
+      tid : null,
       code: false,
       data: ''
     }
@@ -452,6 +454,8 @@ class SubmitController < ApplicationController
       else 
         @task =Task.find_by! id:params[:job_id], user_id:session[:user_id]
       end
+
+      result_json[:tid] = @task.tid
       
       if TaskOutput.where(task_id:@task.id).exists?
         response_body = []
@@ -571,6 +575,13 @@ class SubmitController < ApplicationController
     task_output = @task.task_outputs.new
     task_output.analysis = @analysis
     file_paths = {}
+    files_to_do = [];
+
+    mrs['outputs'].each do |ofile|
+      ofile = ofile['files'][0]
+      files_to_do.push(ofile)
+    end
+
     files_to_do = mrs['outputs'][0]['files']
     logger.debug "===========================>Find task output information!"
     logger.info files_to_do

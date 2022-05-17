@@ -316,8 +316,8 @@ export default {
         all_viz() {
             //this.barViz();
             this.pieViz();
-            // this.landscapeViz();
-            // this.regulatorViz();
+            this.landscapeViz();
+            this.regulatorViz();
         },
         updateProjects() {
             this.pie_projects = this.projects[this.pieCancerSelected];
