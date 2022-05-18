@@ -813,6 +813,7 @@
                         if (!valid) {
                             console.log(input);
                             console.log("you missed some required parameters")
+                            console.log(input.name)
                             allRight = false;
                             alertCenter.add('danger', "You missed some required parameters!");
                         }
@@ -820,7 +821,7 @@
                 })
 
                 //there will be double check later
-                if (this.ds_selected != "" && is_single) {
+                if (allRight == true && this.ds_selected != "" && is_single) {
                     if (this.ds_info[this.ds_selected][0] > 1) {
                         console.log("Selected datasets has multiple project sources!")
                         allRight = false
@@ -834,7 +835,7 @@
                     // }
                 }
 
-                if (this.ds_selected == "") {
+                if (allRight == true && this.ds_selected == "") {
                     var anyFile;
                     for (var file_inputs in this.files) {
                         if (is_single) {
@@ -863,7 +864,7 @@
                     }
                 }
 
-                if (this.ds_selected != '' && is_single == false && this.ds_param_selected == '') {
+                if (allRight == true && this.ds_selected != '' && is_single == false && this.ds_param_selected == '') {
                     alertCenter.add('danger', "You have not set your paraters for the selected dataset."); 
                 }
 
@@ -871,7 +872,10 @@
                     console.log(this.files[key]);
                 }
 
-                
+                console.log("Here are input files aninput parameters");
+                console.log(this.formatFiles());
+                console.log(this.formatParams());
+
                 console.log("All right is true here")
                 
                 if (allRight) {
