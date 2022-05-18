@@ -395,8 +395,10 @@ class SubmitController < ApplicationController
 
       Rails.logger.debug "===========>"
       Rails.logger.debug "===========>"
+      Rails.logger.debug "This is the informtaion of final formatted and submitted files and parameters:"
 
       Rails.logger.info(inputs)
+      Rails.logger.info(params)
       
       # submit task
       client = LocalApi::Client.new
@@ -439,6 +441,15 @@ class SubmitController < ApplicationController
       result_json[:data] = e.message
     end
     render json: result_json
+  end
+
+  def query_deepomics
+    begin
+      client = LocalApi::Client.new
+      result = client.task_info(49, params[:id], params[:type])
+      render json: result
+      return
+    end
   end
 
   def query_app_task

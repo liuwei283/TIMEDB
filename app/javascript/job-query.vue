@@ -336,32 +336,82 @@ export default {
 
         const { alertCenter } = this.$refs;
 
-        // 实际代码
-        let taskInfo = axios.get(`https://deepomics.org/api/task_info/?task_id=${this.taskId}&task_type=app_task` );
-        let taskResourceUsage = axios.get(`https://deepomics.org/api/task_resource_usage/?task_id=${this.taskId}&task_type=app_task` );
-        let taskLog = axios.get(`https://deepomics.org/api/task_log/?task_id=${this.taskId}&task_type=app_task` );
+        // Test Pipeline
+        axios.post(
+            `/query-deepomics/`,
+            objectToFormData({'id': 528, 'type': 'pipeline'}),
+            {  
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest',
+                    'X-CSRF-Token': document.head.querySelector('meta[name="csrf-token"]').content,
+                    'Content-Type': 'multipart/form-data',
+                },
+            },
+        ).then((response) => {
+            console.log("Pipeline query result:", response);
+            
+                }).catch((error) => {
+                    const message = error.response && error.response.status === 404 ? "The task does not exist" : error;
+                    alertCenter.add('danger', `${message}`);
+                }).finally(() => {
+                    // setTimeout(() => { alertCenter.add('danger', ''); }, 2000);
+                });
+        
+        // Code
+        axios.post(
+            `/query-deepomics/`,
+            objectToFormData({'id': this.taskId, 'type': 'app'}),
+            {  
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest',
+                    'X-CSRF-Token': document.head.querySelector('meta[name="csrf-token"]').content,
+                    'Content-Type': 'multipart/form-data',
+                },
+            },
+        ).then((response) => {
+            console.log("Module query result:", response);
+            this.inputs = response.data.inputs;
+            this.outputs = response.data.outputs;
+            this.params = response.data.params;
+            
+                }).catch((error) => {
+                    const message = error.response && error.response.status === 404 ? "The task does not exist" : error;
+                    alertCenter.add('danger', `${message}`);
+                }).finally(() => {
+                    // setTimeout(() => { alertCenter.add('danger', ''); }, 2000);
+                });
 
-        axios.all([taskInfo, taskResourceUsage, taskLog]).then(axios.spread((info, res, log) => {
-            this.inputs = info.data.inputs;
-            this.params = info.data.params;
-            this.outputs = info.data.outputs;
+        // 实际代码!
 
-            if (res.data.code) {
-                this.resource_usage = res.data.data;
-                this.update_chart();
-            }else {
-                alertCenter.add('danger', log.data.data);
-            }
+        // client = LocalApi::Client.new
+        // result = client.task_info(45, this.taskId, 'app')
+        // console.log(result)
 
-            if (log.data.code) {
-                this.stderr = log.data.data.stderr;
-                this.stdout = log.data.data.stdout;
-            }else {
-                alertCenter.add('danger', log.data.data);
-            }
-        }));
+        // let taskInfo = axios.get(`https://deepomics.org/api/task_info/?task_id=${this.taskId}&task_type=app_task` );
+        // let taskResourceUsage = axios.get(`https://deepomics.org/api/task_resource_usage/?task_id=${this.taskId}&task_type=app_task` );
+        // let taskLog = axios.get(`https://deepomics.org/api/task_log/?task_id=${this.taskId}&task_type=app_task` );
 
-        console.log("Log:", taskInfo, this.stdout)
+        // axios.all([taskInfo, taskResourceUsage, taskLog]).then(axios.spread((info, res, log) => {
+        //     this.inputs = info.data.inputs;
+        //     this.params = info.data.params;
+        //     this.outputs = info.data.outputs;
+
+        //     if (res.data.code) {
+        //         this.resource_usage = res.data.data;
+        //         this.update_chart();
+        //     }else {
+        //         alertCenter.add('danger', log.data.data);
+        //     }
+
+        //     if (log.data.code) {
+        //         this.stderr = log.data.data.stderr;
+        //         this.stdout = log.data.data.stdout;
+        //     }else {
+        //         alertCenter.add('danger', log.data.data);
+        //     }
+        // }));
+
+        console.log("Log:", this.inputs, this.outputs)
 
 
         // test data
