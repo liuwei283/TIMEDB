@@ -446,7 +446,7 @@ class SubmitController < ApplicationController
   def query_deepomics
     begin
       client = LocalApi::Client.new
-      result = client.task_info(49, params[:id], params[:type])
+      result = client.task_info(49, params[:id].to_i, params[:type])
       render json: result
       return
     end
