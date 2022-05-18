@@ -235,7 +235,7 @@
                                                     You can select a dataset to merge: </span>
                                                     <i class="fa fa-question-circle" v-b-tooltip.rightbottom.hover title="You may choose one dataset to upload merged files"></i>
                                                 </label>
-                                                <b-form-select> 
+                                                <b-form-select
                                                     name="selected-dataset"
                                                     v-model="ds_selected"
                                                 >
@@ -402,8 +402,8 @@
                                     </label>
                                     <b-form-file
                                         :id="`multiple-i-${input.id}-${input_idx}`"
-                                        v-model="files[`i-${input.id}-${input_idx}`]"
-                                        :placeholder="files[`i-${input.id}-${input_idx}`] ? files[`i-${input.id}-${input_idx}`].name : 'no file uploaded'"
+                                        v-model="files[`multiple-i-${input.id}-${input_idx}`]"
+                                        :placeholder="files[`multiple-i-${input.id}-${input_idx}`] ? files[`multiple-i-${input.id}-${input_idx}`].name : 'no file uploaded'"
                                         drop-placeholder="Drop file here..." 
                                         :name="`multiple-i-${input.id}-${input_idx}`"
                                         :required="input.required"
@@ -585,29 +585,42 @@
                     this.app.inputs.forEach((item) => {
                         console.log(item);
                         // console.log("priting files in updatedSattus")
-                        console.log(this.files['i-' + item.id + '-' + input_idx] == null)
-                        console.log(this.files['i-' + item.id + '-' + input_idx])
+                        console.log(this.files['multiple-i-' + item.id + '-' + input_idx] == null)
+                        console.log(this.files['multiple-i-' + item.id + '-' + input_idx])
 
                         // console.log(this.files['i-' + this.app.inputs[k].id + '-' + input_idx] == null)
                         // console.log(this.files['i-' + this.app.inputs[k].id + '---' + input_idx] == null)
 
-                        if (this.files['i-' + item.id + '-' + input_idx] == null) {
+                        if (this.files['multiple-i-' + item.id + '-' + input_idx] == null) {
                             this.multiple_completed[input_idx - 1] = false;
                             console.log("come here");
                         }
                     })
 
-                    document.querySelectorAll("multiple-upload-" + input_idx + " input[name^='multiple-p']").forEach((input) => {
-                        if(input.required) {
-                            console.log(input.value);
-                            const valid = !!input.value && !!_.trim(input.value);
-                            if (!valid) {
-                                console.log(input);
-                                console.log("Input parameters has problems")
-                                this.multiple_completed[input_idx - 1] = false;
-                            }
+                    //check whetehr the parameters can fullfil the requirement
+                    for (var mp in this.multiple_parameters) {
+                        var cur_value = this.parameters["multiple-p-" + this.multiple_parameters[mp].id + "-" + input_idx];
+                        const valid = !!cur_value && !!_.trim(cur_value);
+                        if (!valid) {
+                            console.log(cur_value);
+                            console.log("Input parameters has problems")
+                            this.multiple_completed[input_idx - 1] = false;
                         }
-                    })
+
+                        
+                    }
+                    
+                    // document.querySelectorAll("#multiple-upload-" + input_idx + " input[name^='multiple-p']").forEach((input) => {
+                    //     if(input.required) {
+                    //         console.log(input.value);
+                    //         const valid = !!input.value && !!_.trim(input.value);
+                    //         if (!valid) {
+                    //             console.log(input);
+                    //             console.log("Input parameters has problems")
+                    //             this.multiple_completed[input_idx - 1] = false;
+                    //         }
+                    //     }
+                    // })
                 }
                 console.log(this.multiple_completed)
                 return this.multiple_completed;
@@ -664,25 +677,29 @@
                 }
 
                 if (this.picked_single_multiple == 'multiple') {
+                    var formatted_multiple_params = [];
 
                     for (var mp in this.multiple_parameters) {
                         var pvalue = ""
                         var pvalue_arr = [];
-                        
-                        if (this.multiple_parameters[mp].name == 'Datasets name') {
-                            pvalue = this.ds_info[this.ds_selected][2];
-                        }
-                        else if (this.multiple_parameters[mp].name == 'Platforms') {
-                            pvalue = this.ds_info[this.ds_selected][1];
-                        }
-                        else {
-                            pvalue =  Array.new(3).fill([this.ds_param_selected]).flat();
+
+                        if (this.ds_selected != "") {
+                            if (this.multiple_parameters[mp].name == 'Datasets name') {
+                                pvalue = this.ds_info[this.ds_selected][2];
+                            }
+                            else if (this.multiple_parameters[mp].name == 'Platforms') {
+                                pvalue = this.ds_info[this.ds_selected][1];
+                            }
+                            else {
+                                pvalue =  Array(this.ds_info[this.ds_selected][0]).fill([this.ds_param_selected]).join(',') + ',';
+                            }
                         }
                         for (var input_idx = 1; input_idx <= this.multiple_pairs_num;  input_idx++ ) {
+                            console.log("this is the current parameter:")
+                            console.log()
                             pvalue_arr.push(this.parameters['multiple-p-' + this.multiple_parameters[mp].id + '-' + input_idx]);
                         }
-
-                        pvalue += ',' + pvalue_arr.join(',');
+                        pvalue += pvalue_arr.join(',');
                         formatted_multiple_params.push({ ['p-' + this.multiple_parameters[mp].id]: pvalue });
                     }
                     formatted_params = formatted_params.concat(formatted_multiple_params);
@@ -872,7 +889,7 @@
                     console.log(this.files[key]);
                 }
 
-                console.log("Here are input files aninput parameters");
+                console.log("Here are input files and input parameters");
                 console.log(this.formatFiles());
                 console.log(this.formatParams());
 
