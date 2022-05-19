@@ -370,9 +370,9 @@ export default {
             },
         ).then((response) => {
             console.log("Module query result:", response);
-            this.inputs = response.data.inputs;
-            this.outputs = response.data.outputs;
-            this.params = response.data.params;
+            this.inputs = response.data.message.inputs;
+            this.outputs = response.data.message.outputs;
+            this.params = response.data.message.params;
             
                 }).catch((error) => {
                     const message = error.response && error.response.status === 404 ? "The task does not exist" : error;
@@ -411,7 +411,7 @@ export default {
         //     }
         // }));
 
-        console.log("Log:", this.inputs, this.outputs)
+        console.log("Log:", this.inputs, this.outputs, this.params)
 
 
         // test data
@@ -481,41 +481,44 @@ export default {
         //         ]
         //     }
         // ],
-        // this.resource_usage = {
-        //     "x_axis":[
-        //         "2022-04-27 15:09:53",
-        //         "2022-04-27 15:09:54",
-        //         "2022-04-27 15:10:27",
-        //         "2022-04-27 15:10:34",
-        //         "2022-04-27 15:10:35",
-        //         "2022-04-27 15:10:37"
-        //     ],
-        //     "memory":{
-        //         "min":0,
-        //         "max":174899200,
-        //         "data":[
-        //             0,
-        //             7307264,
-        //             174882816,
-        //             174899200,
-        //             174899200,
-        //             57958400
-        //         ]
-        //     },
-        //     "cpu":{
-        //         "min":0,
-        //         "max":44,
-        //         "data":[
-        //             0,
-        //             1,
-        //             34,
-        //             41,
-        //             42,
-        //             44
-        //         ]
-        //     }
-        // };
-        // this.update_chart();
+        this.resource_usage = {
+            "x_axis":[
+                "2022-04-27 15:09:53",
+                "2022-04-27 15:09:54",
+                "2022-04-27 15:10:27",
+                "2022-04-27 15:10:34",
+                "2022-04-27 15:10:35",
+                "2022-04-27 15:10:37"
+            ],
+            "memory":{
+                "min":0,
+                "max":174899200,
+                "data":[
+                    0,
+                    7307264,
+                    174882816,
+                    174899200,
+                    174899200,
+                    57958400
+                ]
+            },
+            "cpu":{
+                "min":0,
+                "max":44,
+                "data":[
+                    0,
+                    1,
+                    34,
+                    41,
+                    42,
+                    44
+                ]
+            }
+        };
+        this.update_chart();
+
+        this.stderr = "Testing...";
+        this.stdout = "Testing...";
 
         // this.stderr = new Date() + 'To execute GATK run: java -jar $EBROOTGATK/GenomeAnalysisTK.jar\nLmod has detected the following error: These module(s) or extension(s) exist\nbut cannot be loaded as requested: \"pelib/2021b\", \"python/3.7.10\",\n\"rust/1.56.1\", \"perl/5.30.2\", \"r/3.6.3\"\n   Try: \"module spider pelib/2021b python/3.7.10 rust/1.56.1 perl/5.30.2\nr/3.6.3\" to see how to load the module(s).\n\n\n\n';
         // this.stdout = 'meta_PCA task starts at: Wed Apr 27 23:09:53 HKT 2022\nfinishes at: Wed Apr 27 23:11:07 HKT 2022\n';
@@ -632,6 +635,8 @@ export default {
         },
         refreshStatus() {
             console.log("Now refresh task", this.taskId)
+            this.stdout = new Date() + " output test."
+            this.stderr = new Date() + " error test."
             // Production Code
             axios.post(
                 `/query-deepomics/`,
@@ -645,9 +650,9 @@ export default {
                 },
             ).then((response) => {
                 console.log("Module query result:", response);
-                this.inputs = response.data.inputs;
-                this.outputs = response.data.outputs;
-                this.params = response.data.params;
+                this.inputs = response.data.message.inputs;
+                this.outputs = response.data.message.outputs;
+                this.params = response.data.message.params;
                 
                     }).catch((error) => {
                         const message = error.response && error.response.status === 404 ? "The task does not exist" : error;
