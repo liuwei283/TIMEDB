@@ -25,7 +25,7 @@ const config = {
 let pfs = copyObject(config)
 let os = copyObject(config)
 
-export function init(id, subtypePath, clinicalDataPath, config) {
+export function init(id, subtypePath, clinicalDataPath, config, eid) {
 
     const {visualizer} = Oviz.visualize({
         el: id,
@@ -60,7 +60,7 @@ export function init(id, subtypePath, clinicalDataPath, config) {
             this.data.plotData.os.groups = this.data.ClinicalData.colorMap;
             this.data.plotData.pfs.groups = this.data.ClinicalData.colorMap;
             console.log(this)
-            registerEditorConfig(editorConfig(this));
+            registerEditorConfig(editorConfig(this, eid));
         }
     });
     return visualizer;

@@ -5,7 +5,7 @@ import { C16Classifier, CellProcessor } from "utils/general-classification";
 import { registerEditorConfig } from "utils/editor";
 import { editorConfig } from "./editor";
 
-export function init(id, subtypePath, CellDataPath, config) {
+export function init(id, subtypePath, CellDataPath, config, eid) {
 
     const {visualizer} = Oviz.visualize({
         el: id,
@@ -22,7 +22,7 @@ export function init(id, subtypePath, CellDataPath, config) {
             ylabel: "", 
             xlabel: "", 
             plotRotation: 0, 
-            xRotation: 0, 
+            xRotation: -20, 
             yRotation: 0,
             groups: {}
         },
@@ -48,7 +48,7 @@ export function init(id, subtypePath, CellDataPath, config) {
         },
         setup() {
             console.log(this)
-            registerEditorConfig(editorConfig(this));
+            registerEditorConfig(editorConfig(this, eid));
         }
     });
 
