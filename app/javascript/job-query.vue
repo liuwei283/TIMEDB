@@ -692,14 +692,15 @@ export default {
                         alertCenter.add('danger', `${response.data.data}`);
                     } else {
                         this.data.outputs = response.data;
-                        if (this.data.outputs[0].module_name === undefined)
+                        if (response.data[0].length > 0) {
                             this.updateGon(this.data.outputs[0]);
-                        this.taskOutputs = this.data.outputs.map((x, i) => ({value: i, text: x.name}));
+                            this.taskOutputs = this.data.outputs.map((x, i) => ({value: i, text: x.name}));
+                        }
                         this.chosenOutput = 0;
                         this.submitted = true;
 
                         //tid
-                        this.taskId = response.tid;
+                        this.taskId = response.data[0].tid;
                     }
                 }).catch((error) => {
                     const message = error.response && error.response.status === 404 ? "The task does not exist" : error;

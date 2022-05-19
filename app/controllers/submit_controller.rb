@@ -475,6 +475,7 @@ class SubmitController < ApplicationController
           @task_output = otp
           @analysis = otp.analysis
           parsed_output = processTaskOutput()
+          parsed_output.tid = result_json[:tid]
           response_body << parsed_output
         end
         render json: response_body
