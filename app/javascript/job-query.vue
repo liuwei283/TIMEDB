@@ -69,7 +69,7 @@
                                     v-if="data.item.status == 'finished'"
                                 >Finished</b-badge>
 
-                                <span v-else-if="data.item.status == 'failed'" v-b-tooltip.rightbottom.html :title="data.item.errorLog.replace('\n', '<br>')">
+                                <span v-else-if="data.item.status == 'failed'" v-b-tooltip.rightbottom.html title="Please check the format of your file!">
                                     <b-badge
                                         pill
                                         variant="danger"
@@ -94,9 +94,9 @@
                                     Result
                                 </b-button>
 
-                                <b-button variant="primary" size="sm" v-else disabled>
+                                <b-button variant="primary" size="sm" v-else @click="showAnalyses(data.item.jobId)">
                                     <i class="fas fa-search mr-1"></i>
-                                    Result
+                                    Check
                                 </b-button>
 
                                 <b-button  v-if="!isDemo"
@@ -632,29 +632,28 @@ export default {
         },
         refreshStatus() {
             // Production Code
-            let taskInfo = axios.get(`https://deepomics.org/api/task_info/?task_id=${this.taskId}&task_type=app_task` );
-            let taskResourceUsage = axios.get(`https://deepomics.org/api/task_resource_usage/?task_id=${this.taskId}&task_type=app_task` );
-            let taskLog = axios.get(`https://deepomics.org/api/task_log/?task_id=${this.taskId}&task_type=app_task` );
-
-            axios.all([taskInfo, taskResourceUsage, taskLog]).then(axios.spread((info, res, log) => {
-                this.inputs = info.data.inputs;
-                this.params = info.data.params;
-                this.outputs = info.data.outputs;
-
-                if (res.data.code) {
-                    this.resource_usage = res.data.data;
-                    this.update_chart();
-                }else {
-                    alertCenter.add('danger', log.data.data);
-                }
-
-                if (log.data.code) {
-                    this.stderr = log.data.data.stderr;
-                    this.stdout = log.data.data.stdout;
-                }else {
-                    alertCenter.add('danger', log.data.data);
-                }
-            }));
+            axios.post(
+                `/query-deepomics/`,
+                objectToFormData({'id': this.taskId, 'type': 'app'}),
+                {  
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest',
+                        'X-CSRF-Token': document.head.querySelector('meta[name="csrf-token"]').content,
+                        'Content-Type': 'multipart/form-data',
+                    },
+                },
+            ).then((response) => {
+                console.log("Module query result:", response);
+                this.inputs = response.data.inputs;
+                this.outputs = response.data.outputs;
+                this.params = response.data.params;
+                
+                    }).catch((error) => {
+                        const message = error.response && error.response.status === 404 ? "The task does not exist" : error;
+                        alertCenter.add('danger', `${message}`);
+                    }).finally(() => {
+                        // setTimeout(() => { alertCenter.add('danger', ''); }, 2000);
+                    });
 
             console.log("Refreshed. New log:", taskInfo, this.stdout)
 
@@ -697,7 +696,7 @@ export default {
                         this.submitted = true;
 
                         //tid
-                        this.tid = response.tid;
+                        this.taskId = response.tid;
                     }
                 }).catch((error) => {
                     const message = error.response && error.response.status === 404 ? "The task does not exist" : error;
