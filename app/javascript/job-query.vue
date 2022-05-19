@@ -692,7 +692,7 @@ export default {
                         alertCenter.add('danger', `${response.data.data}`);
                     } else {
                         this.data.outputs = response.data;
-                        if (response.data[0].length > 0) {
+                        if (response.data.length > 0) {
                             this.updateGon(this.data.outputs[0]);
                             this.taskOutputs = this.data.outputs.map((x, i) => ({value: i, text: x.name}));
                         }
