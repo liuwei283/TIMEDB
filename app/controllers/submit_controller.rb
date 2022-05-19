@@ -454,7 +454,7 @@ class SubmitController < ApplicationController
 
   def query_app_task
     result_json = {
-      tid: null,
+      tid: nil,
       code: false,
       data: ''
     }
