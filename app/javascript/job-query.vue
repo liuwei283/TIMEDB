@@ -631,6 +631,7 @@ export default {
             };
         },
         refreshStatus() {
+            console.log("Now refresh task", this.taskId)
             // Production Code
             axios.post(
                 `/query-deepomics/`,
@@ -655,7 +656,7 @@ export default {
                         // setTimeout(() => { alertCenter.add('danger', ''); }, 2000);
                     });
 
-            console.log("Refreshed. New log:", taskInfo, this.stdout)
+            console.log("Refreshed. New log:", this.stdout)
 
             
         },
@@ -685,12 +686,14 @@ export default {
                         },
                     },
                 ).then((response) => {
+                    console.log("searchJob() response:", response);
                     if (response.data.code === false) {
                         this.submitted = false;
                         alertCenter.add('danger', `${response.data.data}`);
                     } else {
                         this.data.outputs = response.data;
-                        this.updateGon(this.data.outputs[0]);
+                        if (this.data.outputs[0].module_name === undefined)
+                            this.updateGon(this.data.outputs[0]);
                         this.taskOutputs = this.data.outputs.map((x, i) => ({value: i, text: x.name}));
                         this.chosenOutput = 0;
                         this.submitted = true;
