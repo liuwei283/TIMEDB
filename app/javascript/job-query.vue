@@ -151,9 +151,13 @@
                             Task Monitor
                         </b-button>
 
-                        <b-button class="btn col-md-2" variant="info" @click="display=1" :class="{active:display==1}">
+                        <b-button class="btn col-md-2" variant="info" @click="display=1" :class="{active:display==1}" v-if="data.item.status == 'finished'">
                             Visualization
-                        </b-button><!--v-if="data.item.status == 'finished'-->
+                        </b-button><!---->
+
+                        <b-button class="btn col-md-2" variant="info" disabled v-else>
+                            Visualization
+                        </b-button><!---->
 
                         <b-button class="btn col-md-2 float-right" variant="success" @click="refreshStatus">
                             Refresh Status
@@ -379,6 +383,7 @@ export default {
                     alertCenter.add('danger', `${message}`);
                 }).finally(() => {
                     // setTimeout(() => { alertCenter.add('danger', ''); }, 2000);
+                    console.log("Log:", this.inputs, this.outputs, this.params)
                 });
 
         // 实际代码!
@@ -410,8 +415,6 @@ export default {
         //         alertCenter.add('danger', log.data.data);
         //     }
         // }));
-
-        console.log("Log:", this.inputs, this.outputs, this.params)
 
 
         // test data
@@ -659,9 +662,10 @@ export default {
                         alertCenter.add('danger', `${message}`);
                     }).finally(() => {
                         // setTimeout(() => { alertCenter.add('danger', ''); }, 2000);
+                        console.log("Log:", this.inputs, this.outputs, this.params)
                     });
 
-            console.log("Refreshed. New log:", this.stdout)
+            // console.log("Refreshed. New log:", this.stdout)
 
             
         },
