@@ -687,7 +687,7 @@ export default {
                     },
                 ).then((response) => {
                     console.log("searchJob() response:", response);
-                    console.log("searchJob() response data length:", response.data.body.length);
+                    console.log("searchJob() response data:", response.data);
                     if (response.data.code === false) {
                         this.submitted = false;
                         alertCenter.add('danger', `${response.data.data}`);
