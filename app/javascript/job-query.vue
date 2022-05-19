@@ -522,7 +522,7 @@ export default {
         
     },
     updated() {
-        if (this.submitted) {
+        if (this.submitted && this.data.outputs.length > 0) {
             event.emit("GMT:reset-query", this);
             this.updateGon(this.data.outputs[this.chosenOutput]);
             event.emit("GMT:query-finished", this);
@@ -701,6 +701,7 @@ export default {
 
                         //tid
                         this.taskId = response.data[0].tid;
+                        console.log("this.taskId:", this.taskId)
                     }
                 }).catch((error) => {
                     const message = error.response && error.response.status === 404 ? "The task does not exist" : error;
