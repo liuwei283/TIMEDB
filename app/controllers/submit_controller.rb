@@ -455,6 +455,7 @@ class SubmitController < ApplicationController
   def query_app_task
     result_json = {
       tid: nil,
+      body: nil,
       code: false,
       data: ''
     }
@@ -516,7 +517,7 @@ class SubmitController < ApplicationController
             end
           end
         end
-        render json: response_body
+        render json: {"body": response_body, "tid": result_json[:tid]}
         return
       else
         result_json[:data] = result['message']
