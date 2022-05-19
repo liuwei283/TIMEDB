@@ -1,6 +1,6 @@
 class ApplicationController < ActionController::Base
     before_action :validate_cookie
-
+    
     $user_stor_dir = "#{Rails.root}/data/user" 
 
     def change_dark

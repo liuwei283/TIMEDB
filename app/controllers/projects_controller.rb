@@ -79,6 +79,11 @@ class ProjectsController < ApplicationController
                 @selector_attrs.push(s_attr.gsub("c_", ""))
             end
         end
+        gon.push selector_attrs:@selector_attrs
+
+
+
+
 
         pname = @project.project_name
         sample_clinical_file_path = "#{Rails.root}/public/data/clinical/sample/Clinical_#{pname}.csv"

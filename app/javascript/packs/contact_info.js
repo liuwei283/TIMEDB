@@ -44,14 +44,14 @@ document.addEventListener("DOMContentLoaded", () => {
         }
         var memberIntroBlock = document.getElementById(target_id);
         console.log(target_id);
-        memberIntroBlock.style.display = "block";
+        memberIntroBlock.style.display = "flex";
         //memberIntroBlock.style.borderRadius = "50%";
         // $('#target_id').css('display'​​​​​​​​​​​​​​​​​​​​​​​​​​​,'block');​​​​​​
         // ​$('.memberIntro').css("display"​​​​​​​​​​​​​​​​​​​​​​​​​​​,"none");​​​​​​
         var moreInfoBackBlock = document.getElementById("moreInfoBack");
         moreInfoBackBlock.style.display = "none";
         var teamIntroBackBlock = document.getElementById("teamDetailsBack");
-        teamIntroBackBlock.style.display = "block";
+        teamIntroBackBlock.style.display = "flex";
         
     });
 });
