@@ -477,8 +477,7 @@ class SubmitController < ApplicationController
           parsed_output = processTaskOutput()
           response_body << parsed_output
         end
-        response_body[0]['tid'] = result_json[:tid]
-        render json: response_body
+        render json: {"body": response_body, "tid": result_json[:tid]}
         return
       end
       # query task

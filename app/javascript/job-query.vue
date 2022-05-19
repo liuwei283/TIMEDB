@@ -687,13 +687,13 @@ export default {
                     },
                 ).then((response) => {
                     console.log("searchJob() response:", response);
-                    console.log("searchJob() response data length:", response.data.length);
+                    console.log("searchJob() response data length:", response.data.body.length);
                     if (response.data.code === false) {
                         this.submitted = false;
                         alertCenter.add('danger', `${response.data.data}`);
                     } else {
-                        this.data.outputs = response.data;
-                        if (response.data.length > 0 && false) {
+                        this.data.outputs = response.data.body;
+                        if (response.data.body.length > 0 && false) {
                             this.updateGon(this.data.outputs[0]);
                             this.taskOutputs = this.data.outputs.map((x, i) => ({value: i, text: x.name}));
                         }
@@ -701,7 +701,7 @@ export default {
                         this.submitted = true;
 
                         //tid
-                        this.taskId = response.data[0].tid;
+                        this.taskId = response.data.tid;
                         console.log("this.taskId:", this.taskId)
                     }
                 }).catch((error) => {
