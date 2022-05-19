@@ -686,11 +686,12 @@ export default {
                         },
                     },
                 ).then((response) => {
-                    console.log("searchJob() response:", response);
-                    if (response.data.code === false) {
-                        this.submitted = false;
-                        alertCenter.add('danger', `${response.data.data}`);
-                    } else {
+                    console.log("searchJob() response:", response, response.data.length);
+                    // if (response.data.code === false) {
+                    //     this.submitted = false;
+                    //     alertCenter.add('danger', `${response.data.data}`);
+                    // } else 
+                    {
                         this.data.outputs = response.data;
                         if (response.data.length > 0) {
                             this.updateGon(this.data.outputs[0]);
