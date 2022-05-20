@@ -18,10 +18,12 @@ svg {
 			y = startY
 			baseWidth = 40
 			plotSize = [width, height]
+			rotation = @rotate(plotRotation)
+			yAxis.rotation = @rotate(yRotation)
 			@props ClinicalData
 			colorMap = groups
 			generateTooltip = (d) => {
-				return "category name: "+d.data.pos.split("__").join("</br>type: ").split("_").join(" ") +  "</br>total sample: "  + ClinicalData.widMap[d.data.pos] + " samples<br>" 
+				return "Category name: "+d.data.pos.split("__").join("</br>type: ").split("_").join(" ") +  "</br>Total sample: "  + ClinicalData.widMap[d.data.pos] + " samples<br>" 
 						+ d.key + " : " + (100 * d.data.value).toFixed(2) + "%"
 			}
 			:xAxis {
@@ -31,12 +33,13 @@ svg {
 					:label(tick) {
 						Component {
 							@let txt = tick.value.split("__")
+							rotation = @rotate(xRotation)
 							y = -10
 							Text {
 								y = 520
 								text = ClinicalData.widMap[tick.value]
 								anchor = @anchor("m", "c")
-								fontSize = 13
+								fontSize = labelSize
 							}
 							Text {
 								@let t1 = txt[0].split("_").map(d=>d.split(" ")).flat().map(d => d[0].toUpperCase()+".").join(" ")
@@ -44,7 +47,7 @@ svg {
 								y = -15
 								text = txt[0].length >= 10 ? t1: txt[0];
 								anchor = @anchor("m", "c")
-								fontSize = 13
+								fontSize = labelSize
 								behavior:tooltip {
 									content = txt[0].split("_").map(d => d[0].toUpperCase()+d.slice(1)).join(" ")
 								}
@@ -53,7 +56,7 @@ svg {
 								@let t1 = txt[1].split("_").map(d=>d.split(" ")).flat().map(d => d[0]).join(". ")
 								text = txt[1].length >= 10 ? t1: txt[1];
 								anchor = @anchor("m", "c")
-								fontSize = 13
+								fontSize = labelSize
 								behavior:tooltip {
 									content = txt[1]
 								}
@@ -63,35 +66,39 @@ svg {
                 }
 			}
 		}
-		Text {
-			x = -90
-			y = 200
-			text = "full name of acronyms"
-		}
-		Columns {
-			x = -90
-			y = 220
-			Rows {
-				@let rows = acronyms.slice(0, 60)
-				@for (acronym, index) in rows {
-					Container {
-						padding = 1
-						Text {
-							text = acronym
-							fontSize = 8
+		Container {
+			y = 500
+			anchor = @anchor("b", "l")
+			Text {
+				x = -90
+				y = 200
+				text = "Full name of acronyms"
+			}
+			Columns {
+				x = -90
+				y = 220
+				Rows {
+					@let rows = acronyms.slice(0, 60)
+					@for (acronym, index) in rows {
+						Container {
+							padding = 1
+							Text {
+								text = acronym
+								fontSize = 8
+							}
 						}
 					}
 				}
-			}
-			Rows {
-				x = 10
-				@let rows = acronyms.slice(60)
-				@for (acronym, index) in rows {
-					Container {
-						padding = 1
-						Text {
-							text = acronym
-							fontSize = 8
+				Rows {
+					x = 10
+					@let rows = acronyms.slice(60)
+					@for (acronym, index) in rows {
+						Container {
+							padding = 1
+							Text {
+								text = acronym
+								fontSize = 8
+							}
 						}
 					}
 				}

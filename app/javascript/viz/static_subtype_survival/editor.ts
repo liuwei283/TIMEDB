@@ -1,7 +1,7 @@
 import { EditorDef } from "utils/editor";
 import { copyObject } from "utils/object";
 
-function run(v) {
+function run(v, eid) {
     v.forceRedraw = true;
     v.run();
 }
@@ -26,7 +26,7 @@ export const generateCompositeGeneralConfig = (v, eid): any => ({
                     current: v.data.plotData[plot][item],
                     callback(d) {
                         v.data.plotData[plot][item] = parseInt(d);
-                        run(v);
+                        run(v, eid);
                     }
                 }
             }))
@@ -53,7 +53,7 @@ export const generateCompositeColorConfig = (v, eid): any => ({
                     id: "pwcolor",
                     callback(colors) {
                         v.data.plotData[plot].groups.colors = {...colors};
-                        run(v);
+                        run(v, eid);
                     },
                 },
             }],

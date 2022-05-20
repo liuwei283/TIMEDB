@@ -22,7 +22,7 @@ export function init(id, subtypePath, CellDataPath, eid, plot_name) {
             ylabel: "", 
             xlabel: "", 
             plotRotation: 0, 
-            xRotation: 0, 
+            xRotation: -20, 
             yRotation: 0,
             groups: {}
         },

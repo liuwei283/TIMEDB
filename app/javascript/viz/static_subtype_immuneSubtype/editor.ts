@@ -1,7 +1,7 @@
 import { EditorDef } from "utils/editor";
 import { copyObject } from "utils/object";
 
-function run(v) {
+function run(v, eid) {
     v.forceRedraw = true;
     v.run();
 }
@@ -22,7 +22,7 @@ export const generateGeneralConfig = (v, eid): any => ({
                 current: v.data[item],
                 callback(d) {
                     v.data[item] = parseInt(d);
-                    run(v);
+                    run(v, eid);
                 }
             }
         }))
@@ -45,7 +45,7 @@ export const generateColorConfig = (v, eid): any => ({
                 id: "pwcolor",
                 callback(colors) {
                     v.data.groups.colors = {...colors};
-                    run(v);
+                    run(v, eid);
                 },
             },
         }]
