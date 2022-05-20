@@ -10,7 +10,7 @@ const startColor = "white";
 const endColor = "red";
 const nendColor = "blue";
 
-export function init(vid, subtypePath, RNAdataPath, eid) {
+export function init(vid, subtypePath, RNAdataPath, eid, plot_name) {
 
     const {visualizer} = Oviz.visualize({
         el: vid,
@@ -93,7 +93,7 @@ export function init(vid, subtypePath, RNAdataPath, eid) {
             this.defineGradient("ng", "vertical", [startColor, nendColor]);
             this.size = {height: 400+Object.keys(this.data.colorMap).length, width: 1850}
             console.log(this)
-            registerEditorConfig(editorConfig(this, eid));
+            registerEditorConfig(editorConfig(this, eid), plot_name);
         },
     });
     return visualizer;

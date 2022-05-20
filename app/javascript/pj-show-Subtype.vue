@@ -8,6 +8,9 @@
                 <div class="row vizBlock">
                     <div class="col vis" id = "subtype-landscapeVis">
                     </div>
+                    <div id="subtype-landscape-editor" class = "md-col-3 v-editor">
+                        <OvizEditor :config="subtype_conf_landscape" :editorWidth = "280"/>
+                    </div>
                 </div>
         </div>
 
@@ -33,8 +36,11 @@
                 </div>
             </div>
             <div class="row vizBlock">
-                    <div class="col vis" id = "subtype-boxplotVis">
-                    </div>
+                <div class="col vis" id = "subtype-boxplotVis">
+                </div>
+                <div id="subtype-boxplot-editor" class = "md-col-3 v-editor">
+                    <OvizEditor :config="subtype_conf_boxplot" :editorWidth = "280"/>
+                </div>
             </div>
         </div>
 
@@ -45,8 +51,11 @@
                 <h4>Some description for KM Curve in project overview</h4>
             </div>
             <div class="row vizBlock">
-                    <div class="col" id = "subtype-curveVis">
-                    </div>
+                <div class="col" id = "subtype-curveVis">
+                </div>
+                <div id="subtype-curve-editor" class = "md-col-3 v-editor">
+                    <OvizEditor :config="subtype_conf_curve" :editorWidth = "280"/>
+                </div>
             </div>
         </div>
 
@@ -60,7 +69,9 @@
 
                 <div class="row vizBlock">
                     <div class="col vis" id = "subtype-regulatorVis">
-
+                    </div>
+                    <div id="subtype-regulator-editor" class = "md-col-3 v-editor">
+                        <OvizEditor :config="subtype_conf_regulator" :editorWidth = "280"/>
                     </div>
                 </div>
         </div>
@@ -92,7 +103,11 @@ export default {
         return {
             // cancers: window.gon.cancers,
             project_name: window.gon.project_name,
-            conf: {},
+            subtype_conf_landscape: {},
+            subtype_conf_boxplot: {},
+            subtype_conf_curve: {},
+            subtype_conf_regulator: {},
+
             data_path : "/public/data/",
             boxplot_selected : null,
             boxplot_selector : [
@@ -114,7 +129,7 @@ export default {
 
     },
     mounted() {
-        //event.rpcRegisterReceiver("getVue", () => this);
+        event.rpcRegisterReceiver("getVue", () => this);
         this.all_viz();
     },
     methods: {
@@ -122,25 +137,25 @@ export default {
             var clinical_file_path = this.data_path + "clinical/sample/Clinical_" + this.project_name + ".csv";
             var subtype_file_path = this.data_path + "subtype/c1_c6/project/" + this.project_name + "_c1_c6.csv";
 
-            subtypeLandscape("#subtype-landscapeVis", subtype_file_path, clinical_file_path);
+            subtypeLandscape("#subtype-landscapeVis", subtype_file_path, clinical_file_path, "#subtype-landscape-editor", "subtype_landscape_viz");
         },
         boxplotViz(){
 
             var subtype_file_path = this.data_path + "subtype/c1_c6/project/" + this.project_name + "_c1_c6.csv";
             var cellData_file_path = this.data_path + "cell_data/" + this.boxplot_selected + "/" + this.project_name + "_" + this.boxplot_selected + ".csv";
-            subtypeBoxplot("#subtype-boxplotVis", subtype_file_path, cellData_file_path);//remember to change to the right plot
+            subtypeBoxplot("#subtype-boxplotVis", subtype_file_path, cellData_file_path, "#subtype-boxplot-editor", "subtype_boxplot_viz");//remember to change to the right plot
         },
         curveViz(){
             
             var subtype_file_path = this.data_path + "subtype/c1_c6/project/" + this.project_name + "_c1_c6.csv";
             var clinical_file_path = this.data_path + "clinical/sample/Clinical_" + this.project_name + ".csv";
-            subtypeCurve("#subtype-curveVis", subtype_file_path, clinical_file_path);
+            subtypeCurve("#subtype-curveVis", subtype_file_path, clinical_file_path, "#subtype-curve-editor", "subtype_curve_viz");
 
         },
         regulatorViz(){
             var subtype_file_path = this.data_path + "subtype/c1_c6/project/" + this.project_name + "_c1_c6.csv";  
             var rna_file_path = this.data_path + "immuneregulator/immuReg_" + this.project_name + ".csv";
-            subtypeRegulator("#subtype-regulatorVis", subtype_file_path, rna_file_path);
+            subtypeRegulator("#subtype-regulatorVis", subtype_file_path, rna_file_path, "#subtype-regulator-editor", "subtype_regulator_viz");
 
         },
         all_viz() {
@@ -153,3 +168,30 @@ export default {
     }
 }
 </script>
+
+<style scoped lang = "scss">
+.viz {
+    padding: 50px;
+    position: relative;
+    box-shadow: 0 0 64px darken(#dee2e6, 5%)
+}
+
+.vizBlock {
+    position: relative !important;
+}
+/* .v-editor {
+    position: fixed !important;
+    top: 30px;
+    right: 50px;
+    z-index:20;
+    transition: all 0.3s;
+} */
+
+.v-editor {
+    position: absolute;
+    top: 10px;
+    transition: all 0.3s;
+    right: 10px;
+    z-index: 1 !important;
+}
+</style>

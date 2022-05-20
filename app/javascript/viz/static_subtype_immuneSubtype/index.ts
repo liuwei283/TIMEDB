@@ -5,7 +5,7 @@ import { C16Classifier, ClinicalProcessor } from "utils/general-classification";
 import { registerEditorConfig } from "utils/editor";
 import { editorConfig } from "./editor";
 
-export function init(id, subtypePath, clinicalDataPath, config) {
+export function init(id, subtypePath, clinicalDataPath, eid, plot_name) {
 
     const {visualizer} = Oviz.visualize({
         el: id,
@@ -59,8 +59,8 @@ export function init(id, subtypePath, clinicalDataPath, config) {
             })
             this.data.acronyms = Array.from(new Set(this.data.acronyms))
             console.log(this)
-            registerEditorConfig(editorConfig(this));
+            registerEditorConfig(editorConfig(this, eid), plot_name);
         }
     });
-    return visualizer;
+    //return editorConfig(this);
 }

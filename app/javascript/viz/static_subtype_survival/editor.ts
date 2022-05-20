@@ -10,8 +10,8 @@ export const editorRef = {} as any;
 
 const generalSetting = ["startX", "startY", "width", "height", "titleSize", "labelSize", "title", "ylabel", "xlabel", "plotRotation", "xRotation", "yRotation"]
 
-export const generateCompositeGeneralConfig = (v): any => ({
-    id: "general",
+export const generateCompositeGeneralConfig = (v, eid): any => ({
+    id: eid + "general",
     title: "General Setting",
     layout: "tabs",
     tabs: v.data.plots.map((plot) => ({
@@ -34,8 +34,8 @@ export const generateCompositeGeneralConfig = (v): any => ({
 	}))
 })
 
-export const generateCompositeColorConfig = (v): any => ({
-    id: "colot",
+export const generateCompositeColorConfig = (v, eid): any => ({
+    id: eid + "colot",
     title: "Color Setting",
     layout: "tabs",
     tabs: v.data.plots.map((plot) => ({
@@ -61,11 +61,11 @@ export const generateCompositeColorConfig = (v): any => ({
 	}))
 })
 
-export function editorConfig(v): EditorDef {
+export function editorConfig(v, eid): EditorDef {
     return {
         sections: [
-            generateCompositeGeneralConfig(v),
-            generateCompositeColorConfig(v),
+            generateCompositeGeneralConfig(v, eid),
+            generateCompositeColorConfig(v, eid),
         ],
     };
 }

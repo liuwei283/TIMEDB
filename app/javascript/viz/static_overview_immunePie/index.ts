@@ -35,7 +35,7 @@ function Dataprocessor(v, data) {
     return pieData
 }
 
-export function init(vid, path, eid) {
+export function init(vid, path, eid, plot_name) {
 
     const {visualizer} = Oviz.visualize({
         el: vid,
@@ -77,7 +77,7 @@ export function init(vid, path, eid) {
         setup() { 
             console.log("immunePie")
             console.log(this);
-            registerEditorConfig(editorConfig(this, eid));
+            registerEditorConfig(editorConfig(this, eid), plot_name);
         },
     });
 }

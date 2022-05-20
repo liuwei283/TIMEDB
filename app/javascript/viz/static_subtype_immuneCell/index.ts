@@ -5,7 +5,7 @@ import { C16Classifier, CellProcessor } from "utils/general-classification";
 import { registerEditorConfig } from "utils/editor";
 import { editorConfig } from "./editor";
 
-export function init(id, subtypePath, CellDataPath, config) {
+export function init(id, subtypePath, CellDataPath, eid, plot_name) {
 
     const {visualizer} = Oviz.visualize({
         el: id,
@@ -48,9 +48,7 @@ export function init(id, subtypePath, CellDataPath, config) {
         },
         setup() {
             console.log(this)
-            registerEditorConfig(editorConfig(this));
+            registerEditorConfig(editorConfig(this, eid), plot_name);
         }
     });
-
-    return visualizer;
 }

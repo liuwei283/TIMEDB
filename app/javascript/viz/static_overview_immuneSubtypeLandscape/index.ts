@@ -7,7 +7,7 @@ import { editorConfig } from "./editor";
 const xLabel = "project type";
 const yLabel = "expression";
 
-export function init(vid, path, eid) {
+export function init(vid, path, eid, plot_name) {
 
     const {visualizer} = Oviz.visualize({
         el: vid,
@@ -54,7 +54,7 @@ export function init(vid, path, eid) {
             console.log(this)
             this.data.groups = this.data.data.colorMap
             this.size = {height: 700, width: 200+100*Object.keys(this.data.data.widMap).length};
-            registerEditorConfig(editorConfig(this, eid));
+            registerEditorConfig(editorConfig(this, eid), plot_name);
 
         }
     });

@@ -23,7 +23,7 @@ const ylabel = "proportion";
 
 registerDefaultBioInfoComponents();
 
-export function init(id,path,config){
+export function init(id,path){
     Oviz.visualize({
         el:id,
         template,
