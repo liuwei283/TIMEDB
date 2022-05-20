@@ -446,7 +446,7 @@ class SubmitController < ApplicationController
   def query_deepomics
     begin
       client = LocalApi::Client.new
-      result = client.task_info(49, params[:id], params[:type])
+      result = client.task_info(49, params[:id].to_i, params[:type])
       render json: result
       return
     end
@@ -454,7 +454,8 @@ class SubmitController < ApplicationController
 
   def query_app_task
     result_json = {
-      tid: null,
+      tid: nil,
+      body: nil,
       code: false,
       data: ''
     }
@@ -477,7 +478,7 @@ class SubmitController < ApplicationController
           parsed_output = processTaskOutput()
           response_body << parsed_output
         end
-        render json: response_body
+        render json: {"body": response_body, "tid": result_json[:tid]}
         return
       end
       # query task
@@ -516,7 +517,7 @@ class SubmitController < ApplicationController
             end
           end
         end
-        render json: response_body
+        render json: {"body": response_body, "tid": result_json[:tid]}
         return
       else
         result_json[:data] = result['message']

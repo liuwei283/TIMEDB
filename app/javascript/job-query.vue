@@ -69,7 +69,7 @@
                                     v-if="data.item.status == 'finished'"
                                 >Finished</b-badge>
 
-                                <span v-else-if="data.item.status == 'failed'" v-b-tooltip.rightbottom.html :title="data.item.errorLog.replace('\n', '<br>')">
+                                <span v-else-if="data.item.status == 'failed'" v-b-tooltip.rightbottom.html title="Please check the format of your file!">
                                     <b-badge
                                         pill
                                         variant="danger"
@@ -94,9 +94,9 @@
                                     Result
                                 </b-button>
 
-                                <b-button variant="primary" size="sm" v-else disabled>
+                                <b-button variant="primary" size="sm" v-else @click="showAnalyses(data.item.jobId)">
                                     <i class="fas fa-search mr-1"></i>
-                                    Result
+                                    Check
                                 </b-button>
 
                                 <b-button  v-if="!isDemo"
@@ -151,9 +151,13 @@
                             Task Monitor
                         </b-button>
 
-                        <b-button class="btn col-md-2" variant="info" @click="display=1" :class="{active:display==1}">
+                        <b-button class="btn col-md-2" variant="info" @click="display=1" :class="{active:display==1}" v-if="data.item.status == 'finished'">
                             Visualization
-                        </b-button><!--v-if="data.item.status == 'finished'-->
+                        </b-button><!---->
+
+                        <b-button class="btn col-md-2" variant="info" disabled v-else>
+                            Visualization
+                        </b-button><!---->
 
                         <b-button class="btn col-md-2 float-right" variant="success" @click="refreshStatus">
                             Refresh Status
@@ -370,15 +374,16 @@ export default {
             },
         ).then((response) => {
             console.log("Module query result:", response);
-            this.inputs = response.data.inputs;
-            this.outputs = response.data.outputs;
-            this.params = response.data.params;
+            this.inputs = response.data.message.inputs;
+            this.outputs = response.data.message.outputs;
+            this.params = response.data.message.params;
             
                 }).catch((error) => {
                     const message = error.response && error.response.status === 404 ? "The task does not exist" : error;
                     alertCenter.add('danger', `${message}`);
                 }).finally(() => {
                     // setTimeout(() => { alertCenter.add('danger', ''); }, 2000);
+                    console.log("Log:", this.inputs, this.outputs, this.params)
                 });
 
         // 实际代码!
@@ -410,8 +415,6 @@ export default {
         //         alertCenter.add('danger', log.data.data);
         //     }
         // }));
-
-        console.log("Log:", this.inputs, this.outputs)
 
 
         // test data
@@ -481,48 +484,51 @@ export default {
         //         ]
         //     }
         // ],
-        // this.resource_usage = {
-        //     "x_axis":[
-        //         "2022-04-27 15:09:53",
-        //         "2022-04-27 15:09:54",
-        //         "2022-04-27 15:10:27",
-        //         "2022-04-27 15:10:34",
-        //         "2022-04-27 15:10:35",
-        //         "2022-04-27 15:10:37"
-        //     ],
-        //     "memory":{
-        //         "min":0,
-        //         "max":174899200,
-        //         "data":[
-        //             0,
-        //             7307264,
-        //             174882816,
-        //             174899200,
-        //             174899200,
-        //             57958400
-        //         ]
-        //     },
-        //     "cpu":{
-        //         "min":0,
-        //         "max":44,
-        //         "data":[
-        //             0,
-        //             1,
-        //             34,
-        //             41,
-        //             42,
-        //             44
-        //         ]
-        //     }
-        // };
-        // this.update_chart();
+        this.resource_usage = {
+            "x_axis":[
+                "2022-04-27 15:09:53",
+                "2022-04-27 15:09:54",
+                "2022-04-27 15:10:27",
+                "2022-04-27 15:10:34",
+                "2022-04-27 15:10:35",
+                "2022-04-27 15:10:37"
+            ],
+            "memory":{
+                "min":0,
+                "max":174899200,
+                "data":[
+                    0,
+                    7307264,
+                    174882816,
+                    174899200,
+                    174899200,
+                    57958400
+                ]
+            },
+            "cpu":{
+                "min":0,
+                "max":44,
+                "data":[
+                    0,
+                    1,
+                    34,
+                    41,
+                    42,
+                    44
+                ]
+            }
+        };
+        this.update_chart();
+
+        this.stderr = "Testing...";
+        this.stdout = "Testing...";
 
         // this.stderr = new Date() + 'To execute GATK run: java -jar $EBROOTGATK/GenomeAnalysisTK.jar\nLmod has detected the following error: These module(s) or extension(s) exist\nbut cannot be loaded as requested: \"pelib/2021b\", \"python/3.7.10\",\n\"rust/1.56.1\", \"perl/5.30.2\", \"r/3.6.3\"\n   Try: \"module spider pelib/2021b python/3.7.10 rust/1.56.1 perl/5.30.2\nr/3.6.3\" to see how to load the module(s).\n\n\n\n';
         // this.stdout = 'meta_PCA task starts at: Wed Apr 27 23:09:53 HKT 2022\nfinishes at: Wed Apr 27 23:11:07 HKT 2022\n';
         
     },
     updated() {
-        if (this.submitted) {
+        if (this.submitted && this.data.outputs.length > 0) {
             event.emit("GMT:reset-query", this);
             this.updateGon(this.data.outputs[this.chosenOutput]);
             event.emit("GMT:query-finished", this);
@@ -631,32 +637,35 @@ export default {
             };
         },
         refreshStatus() {
+            console.log("Now refresh task", this.taskId)
+            this.stdout = new Date() + " output test."
+            this.stderr = new Date() + " error test."
             // Production Code
-            let taskInfo = axios.get(`https://deepomics.org/api/task_info/?task_id=${this.taskId}&task_type=app_task` );
-            let taskResourceUsage = axios.get(`https://deepomics.org/api/task_resource_usage/?task_id=${this.taskId}&task_type=app_task` );
-            let taskLog = axios.get(`https://deepomics.org/api/task_log/?task_id=${this.taskId}&task_type=app_task` );
+            axios.post(
+                `/query-deepomics/`,
+                objectToFormData({'id': this.taskId, 'type': 'app'}),
+                {  
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest',
+                        'X-CSRF-Token': document.head.querySelector('meta[name="csrf-token"]').content,
+                        'Content-Type': 'multipart/form-data',
+                    },
+                },
+            ).then((response) => {
+                console.log("Module query result:", response);
+                this.inputs = response.data.message.inputs;
+                this.outputs = response.data.message.outputs;
+                this.params = response.data.message.params;
+                
+                    }).catch((error) => {
+                        const message = error.response && error.response.status === 404 ? "The task does not exist" : error;
+                        alertCenter.add('danger', `${message}`);
+                    }).finally(() => {
+                        // setTimeout(() => { alertCenter.add('danger', ''); }, 2000);
+                        console.log("Log:", this.inputs, this.outputs, this.params)
+                    });
 
-            axios.all([taskInfo, taskResourceUsage, taskLog]).then(axios.spread((info, res, log) => {
-                this.inputs = info.data.inputs;
-                this.params = info.data.params;
-                this.outputs = info.data.outputs;
-
-                if (res.data.code) {
-                    this.resource_usage = res.data.data;
-                    this.update_chart();
-                }else {
-                    alertCenter.add('danger', log.data.data);
-                }
-
-                if (log.data.code) {
-                    this.stderr = log.data.data.stderr;
-                    this.stdout = log.data.data.stdout;
-                }else {
-                    alertCenter.add('danger', log.data.data);
-                }
-            }));
-
-            console.log("Refreshed. New log:", taskInfo, this.stdout)
+            // console.log("Refreshed. New log:", this.stdout)
 
             
         },
@@ -686,18 +695,23 @@ export default {
                         },
                     },
                 ).then((response) => {
+                    console.log("searchJob() response:", response);
+                    console.log("searchJob() response data:", response.data);
                     if (response.data.code === false) {
                         this.submitted = false;
                         alertCenter.add('danger', `${response.data.data}`);
                     } else {
-                        this.data.outputs = response.data;
-                        this.updateGon(this.data.outputs[0]);
-                        this.taskOutputs = this.data.outputs.map((x, i) => ({value: i, text: x.name}));
+                        this.data.outputs = response.data.body;
+                        if (response.data.body.length > 0 && false) {
+                            this.updateGon(this.data.outputs[0]);
+                            this.taskOutputs = this.data.outputs.map((x, i) => ({value: i, text: x.name}));
+                        }
                         this.chosenOutput = 0;
                         this.submitted = true;
 
                         //tid
-                        this.tid = response.tid;
+                        this.taskId = response.data.tid;
+                        console.log("this.taskId:", this.taskId)
                     }
                 }).catch((error) => {
                     const message = error.response && error.response.status === 404 ? "The task does not exist" : error;
