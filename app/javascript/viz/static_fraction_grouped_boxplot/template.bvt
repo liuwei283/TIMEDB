@@ -11,14 +11,14 @@ svg {
 				label.fontSize = 10
 				:legend(d) {
 					Component {
-						Line {  x = 50%; y1 = 1; y2 = 12; stroke = d.fill;strokeWidth = 1.5 }
+						Line {  x = 50%; y1 = 1; y2 = 12; stroke = colorMap[d.method];strokeWidth = 1.5 } 
 						Rect {
 							x = 2.5;y = 2.5
 							stroke = d.fill; strokeWidth = 1.5
 							height = 8;width = 10
 							fill = "none"					
 						}
-						Line {  x1 = 3; x2 = 12; y = 6.5; stroke = d.fill;strokeWidth = 1.5 }
+						Line {  x1 = 3; x2 = 12; y = 6.5; stroke = colorMap[d.method];strokeWidth = 1.5 } //0515
 					}				
 				}
 			}
@@ -29,33 +29,50 @@ svg {
 				@props comparedBox
             	//xAxisRotated=true
 				//:bottomAxis{}
+				@expr console.log("comparedBox.data???????",comparedBox.data)
 				:content{
 					@for(item,index) in comparedBox.data{
+						@expr console.log("index:",index)
 						Boxes {
-							@let i = index[index.length-1]
-                        	x = i * (comparedBox.boxW + 2)
+							//@let i = index[index.length-1]
+							@let i = getIndex(methodData,index)
+                        	x = i * (comparedBox.boxW)
+							@expr console.log("i * (comparedBox.boxW + 4):",i * (comparedBox.boxW + 4))
 							key = index
 							data = index
 							showMean = true
                         	showNotch = false
 							:box (_d) {
                             	Rect {
-                                	strokeWidth = 2
-									stroke = item.color
+                                	strokeWidth = 1
+									stroke = colorMap[item.method]
                                 	width = comparedBox.boxW
                                 	height = 100%
-									fill = "none"
+									fill = colorMap[item.method]
+									//x = 4%
+									behavior:tooltip {
+							content = (`
+								method: ${methodData[i]}<br>
+								pos: ${_d.pos}<br>
+								
+                            	min: ${_d.data[0].toFixed(2)} <br>
+										
+								first quartile: ${_d.data[1].toFixed(2)} <br>
+										median: ${_d.data[2].toFixed(2)} <br>
+										third quartile: ${_d.data[3].toFixed(2)} <br>
+										max: ${_d.data[4].toFixed(2)} <br>`)
+                        }
                             	}
                         	}
 							:whiskle(d) {
-                            	Line { x = comparedBox.boxW / 2; y1 = 0; y2 = 100%;strokeWidth = 2;stroke=item.color}
+                            	Line { x = comparedBox.boxW / 2; y1 = 0; y2 = 100%;strokeWidth = 1;stroke=colorMap[item.method]}
                         	}
 							:outlier(d) {
                             	Component {
-							    	x = comparedBox.gridW * - (1-comparedBox.gapRatio)/2 + comparedBox.boxW/ 2
+							    	x = comparedBox.gridW * - (1-comparedBox.gapRatio)/2 + comparedBox.boxW/ 2 -12
 									Circle.centered {
 										r = 2; 
-										stroke = item.color
+										stroke = colorMap[item.method]
 										fill = "none"
 										on:mouseenter = setActive(d,i)
 									}
@@ -63,36 +80,61 @@ svg {
                         	}
 							:mean(means) {}
 							:median(d) {
-                            	Line { x2 = comparedBox.boxW; stroke = item.color; strokeWidth = 2}
+                            	Line { x2 = comparedBox.boxW; stroke = colorMap[item.method]; strokeWidth = 1}
                         	}
 						}
 					
 					}
-					@if AcitiveDots.index!="null" {
-						Component {
-							@let offset=AcitiveDots.rank-1
-							@let text = String(AcitiveDots.number)
-							Line {
-								x1 = 0; y1 =  @scaled-y(AcitiveDots.number); x2 = 100%; y2 = @scaled-y(AcitiveDots.number);
-								stroke="#666"
-								dashArray=[3,3]
-							}
-							Text{
-								x = 3;y = @scaled-y(AcitiveDots.number) 
-								anchor = @anchor("left","bottom")
-                            	text = "Value:"+text
-								fontSize = 10
-							}
-						}
-					}
+					// @if AcitiveDots.index!="null" {
+					// 	Component {
+					// 		@let offset=AcitiveDots.rank-1
+					// 		@let text = String(AcitiveDots.number)
+					// 		Line {
+					// 			x1 = 0; y1 =  @scaled-y(AcitiveDots.number); x2 = 100%; y2 = @scaled-y(AcitiveDots.number);
+					// 			stroke="#666"
+					// 			dashArray=[3,3]
+					// 		}
+					// 		Text{
+					// 			x = 3;y = @scaled-y(AcitiveDots.number) 
+					// 			anchor = @anchor("left","bottom")
+                    //         	text = "Value:"+text
+					// 			fontSize = 10
+					// 		}
+					// 	}
+					// }
 				}
+				// :bottomAxis{
+				// 	Axis("bottom"){
+                //         y = 100%
+                //         label.fontSize = xlabelFontsize
+				// 		:label(d){
+				// 			Text {
+				// 				text = d.value
+				// 				rotation = @rotate(30)
+				// 			}
+				// 		}
+                //     }
+				// }
+
 				:bottomAxis{
-					Axis("bottom"){
-                        y = 100%
-                        label.fontSize = xlabelFontsize
+					            Axis("bottom") {
+            y = 100%
+            :label(tick) {
+				@expr console.log("tick:",tick)
+            Text(tick.value) {
+            @let tickX = @scaled-x(tick.value)
+            @let tickY = 5
+            y = 10
+            anchor = @anchor("r", "m")
+            rotation = @rotate(-45)
+        	fontSize = 11
+            }
+                        }
                     }
+
 				}
-				
+
+
 			}
 		}
 	}
