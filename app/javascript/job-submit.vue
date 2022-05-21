@@ -127,7 +127,7 @@
                             <h2 class = "text-right"> JOB SUBMISSISON </h2>
                             <br>
                             <br>
-                            <b-btn @click="submitDemoTask()" class="float-right mt-2"><i class="fa fa-location-arrow"></i>Run demo task</b-btn>
+                            <b-btn @click="submitDemoTask()" class="float-right mt-2"><i class="fa fa-caret-right fa-lg"></i>Run demo task</b-btn>
                             <br>
                             <br>
                             <br>
