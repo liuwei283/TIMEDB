@@ -8,7 +8,7 @@ function run(v) {
 }
 export const editorRef = {} as any;
 
-const generalSetting = ["startX", "startY", "width", "height", "labelSize", "plotRotation", "xRotation", "yRotation"]
+const generalSetting = ["startX", "startY", "squareLength", "labelSize", "plotRotation", "xRotation", "yRotation"]
 
 export const generateGeneralConfig = (v, eid): any => ({
     id: eid + "General",

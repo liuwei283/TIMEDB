@@ -10,6 +10,7 @@ svg {
 				Rows {
 					Container {
 						padding = 4
+						x = -4
 						Text {
 							text = "Immune Checkpoint"
 							fontSize = 15
@@ -81,6 +82,7 @@ svg {
 						@props config
 						@props item
 						@props valueRange
+						squareLength = squareLength
 						:rowAxis(d) {
 							Component {
 								@if (groupKey == first) {

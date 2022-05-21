@@ -37,6 +37,7 @@ svg {
 		Legend {
 			rotation = @rotate(-plotRotation)
 			x = 50
+			y = startY - height/2
 			anchor = @anchor("t", "l")
 			bg.stroke = "none"
 			bg.fill = "none"

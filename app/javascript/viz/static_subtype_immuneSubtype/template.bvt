@@ -9,7 +9,7 @@ svg {
 			text = "Hover on the acronym to show the full name"
 		}
 		Legend {
-			x = -75; y = 30
+			x = -75; y = startY
 			data = ClinicalData.colorMap.legendData()
 		}
 		// @let widBar = 80*Object.keys(ClinicalData.widMap).length
@@ -33,15 +33,16 @@ svg {
 					:label(tick) {
 						Component {
 							@let txt = tick.value.split("__")
-							rotation = @rotate(xRotation)
 							y = -10
 							Text {
-								y = 520
+								rotation = @rotate(xRotation)
+								y = height + 20
 								text = ClinicalData.widMap[tick.value]
 								anchor = @anchor("m", "c")
 								fontSize = labelSize
 							}
 							Text {
+								rotation = @rotate(xRotation)
 								@let t1 = txt[0].split("_").map(d=>d.split(" ")).flat().map(d => d[0].toUpperCase()+".").join(" ")
 								// rotation = @rotate(txt[0].length>=10 || txt[1].length>=10 ? 15: 0)
 								y = -15
@@ -53,6 +54,7 @@ svg {
 								}
 							}
 							Text {
+								rotation = @rotate(xRotation)
 								@let t1 = txt[1].split("_").map(d=>d.split(" ")).flat().map(d => d[0]).join(". ")
 								text = txt[1].length >= 10 ? t1: txt[1];
 								anchor = @anchor("m", "c")
@@ -67,7 +69,7 @@ svg {
 			}
 		}
 		Container {
-			y = 500
+			y = startY + height
 			anchor = @anchor("b", "l")
 			Text {
 				x = -90

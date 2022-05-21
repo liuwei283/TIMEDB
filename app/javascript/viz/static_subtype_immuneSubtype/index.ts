@@ -13,7 +13,7 @@ export function init(id, subtypePath, clinicalDataPath, eid, plot_name) {
         components: { ComplexStackedBar },
         data: {
             startX: 100, 
-            startY: 0, 
+            startY: 50, 
             width: 300, 
             height: 500, 
             titleSize: 11, 

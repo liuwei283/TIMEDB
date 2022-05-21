@@ -11,7 +11,7 @@ const generalSetting = ["startX", "startY", "width", "height", "titleSize", "lab
 
 export const generateGeneralConfig = (v, eid): any => ({
     id: eid + "1",
-    title: "Color Setting",
+    title: "General Setting",
     layout: "single-page",
     view: {
         type: "list",

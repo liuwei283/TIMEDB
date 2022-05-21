@@ -6,7 +6,7 @@ svg {
         y = 50
         Container {
             Container {
-                x = -50; y = 30
+                x = -50; y = startY
                 Rows {
                     Container {
                         padding = 4
@@ -16,6 +16,7 @@ svg {
                         }
                     }
                     Container {
+                        x = 4
                         Legend {
                             data = CellData.colorMap.legendData()
                         }

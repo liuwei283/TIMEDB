@@ -8,7 +8,7 @@ import { editorConfig } from "./editor";
 
 const config = {
     startX: 100, 
-    startY: 100, 
+    startY: 150, 
     width: 300, 
     height: 300, 
     titleSize: 11, 
