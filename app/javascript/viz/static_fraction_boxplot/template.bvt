@@ -1,7 +1,7 @@
 svg {
-	width = 1100; height = 600
+	//width = 1100; height = 600
 	XYPlot {
-		height = 500;width = 1000
+		height = plotSize[1]; width = plotSize[0]
 		padding = padding
 		data = { boxData: boxdata}
 		valueRange = valueRange
@@ -23,20 +23,20 @@ svg {
 			:box (_d) {
 				Rect.full  {
                     fill = colors[0]
-					stroke = "orange"
+					stroke = colorMap.box
 					x = 33%
 					width = 33%
 				}
 			}
 			:median(d) {}
 			:mean(means) {
-				Line {x1 = 33%; x2 = 66%; stroke = "red"}
+				Line {x1 = 33%; x2 = 66%; stroke = colorMap.means}
 			}
 			:whiskle (d) {
 				@expr console.log("whiskle (d)",d)
-				Line { x1 = 41.25%; x2 = 57.75%; y1 = 0; y2 = 0; stroke = "#000" }
-				Line { x1 = 41.25%; x2 = 57.75%; y1 = 100%; y2 = 100%; stroke = "#000" }
-				Line { x1 = 50%; x2 = 50%; y1 = 0; y2 = 100%; stroke = "#0078d7"; dashArray = "3, 2" }
+				Line { x1 = 41.25%; x2 = 57.75%; y1 = 0; y2 = 0; stroke = colorMap.whiskle }
+				Line { x1 = 41.25%; x2 = 57.75%; y1 = 100%; y2 = 100%; stroke = colorMap.whiskle }
+				Line { x1 = 50%; x2 = 50%; y1 = 0; y2 = 100%; stroke = colorMap.whiskle; dashArray = "3, 2" }
 			}
 		}
 		@expr console.log(boxdata)
@@ -57,7 +57,7 @@ svg {
 			rotation = @rotate(-90)
 			Text(ylabel) { anchor = @anchor("bottom", "center") }
 		}
-		Text {text = title; anchor = @anchor("bottom", "center"); x = 50%; y = -5; fontSize = 15}
+		Text {text = title; anchor = @anchor("bottom", "center"); x = 50%; y = -7; fontSize = titleFontsize}
 		Text(xlabel) { x = 50%; y = @geo(100,120); anchor = @anchor("top", "center") }
 	}
 }

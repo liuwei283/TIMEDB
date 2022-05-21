@@ -23,6 +23,9 @@
             <div class="row vizBlock">
                 <div class="col vis" id = "fraction-pieVis">
                 </div>
+                <div id="fraction-pie-editor" class = "md-col-3 v-editor">
+                    <OvizEditor :config="fraction_conf_pie" :editorWidth = "280"/>
+                </div>
             </div>
         </div>
 
@@ -51,6 +54,38 @@
             <div class="row vizBlock">
                 <div class="col vis" id = "fraction-boxplotVis">
                 </div>
+                <div id="fraction-boxplot-editor" class = "md-col-3 v-editor">
+                    <OvizEditor :config="fraction_conf_boxplot" :editorWidth = "280"/>
+                </div>
+            </div>
+        </div>
+
+        <div id = "fraction-heatmap" class = "container Block">
+            <div class="row description">
+              <h4>Some description for Project Immunce Cell Fraction Heatmap</h4>
+            </div>
+
+            <div class="select-bar form-inline row">
+              <div class="sdiv col">
+                <div class="select-title">
+                    Please choose the method:
+                </div>
+                     <select @change='heatmapViz' class="form-select col" id="fraction-heatmap-selector" data-style="btn-secondary" data-live-search="true" v-model="heatmap_selected">
+                        <option v-for="(option, index) in boxplot_selector" :key="index" :value="option.value" :disabled="option.label=='──────────'">
+                            {{option.label}}
+                        </option>
+                    </select>
+              </div>
+            </div>
+
+            <br>
+
+            <div class="row vizBlock">
+                <div class="col vis" id = "fraction-heatmapVis">
+                </div>
+                <div id="fraction-heatmap-editor" class = "md-col-3 v-editor">
+                    <OvizEditor :config="fraction_conf_heatmap" :editorWidth = "280"/>
+                </div>
             </div>
         </div>
 
@@ -77,6 +112,9 @@
             <div class="row vizBlock">
                 <div class="col vis" id = "fraction-landscapeVis">
                 </div>
+                <div id="fraction-landscape-editor" class = "md-col-3 v-editor">
+                    <OvizEditor :config="fraction_conf_landscape" :editorWidth = "280"/>
+                </div>
             </div>
         </div>
 
@@ -92,9 +130,11 @@ import {viz_mode} from "page/visualizers";
 
 import DropDownSelect from "page/builtin/dropdown-select.vue";
 
-import {init as fractionBoxplot} from "viz/static_fraction_boxplot"
+import {init as fractionBoxplot} from "viz/static_fraction_boxplot" 
 import {init as fractionGroupBoxplot} from "viz/static_fraction_grouped_boxplot"
-import {init as fractionLandscape} from "viz/static_comparedPlot"
+import {init as fractionLandscape} from "viz/static_fraction_comparedPlot"
+import {init as fractionHeatmap} from "viz/static_fraction_heatmap"
+import {init as fractionPie} from "viz/static_fraction_Pie"
 
 Vue.use(OvizEditor);
 Vue.use(BootstrapVue);
@@ -106,11 +146,15 @@ export default {
         return {
             // cancers: window.gon.cancers,
             project_name: window.gon.project_name,
-            conf: {},
+            fraction_conf_pie: {},
+            fraction_conf_boxplot: {},
+            fraction_conf_heatmap: {},
+            fraction_conf_landscape: {},
             data_path : "/public/data/",
             pie_selector: window.gon.selector_attrs,
             pie_selected: null,
             boxplot_selected:null,
+            heatmap_selected: null,
             boxplot_selector:[
                     {value:"Consensus",label:"Consensus"},
                     {value:"Disable",label:"──────────"},
@@ -136,39 +180,74 @@ export default {
     created() {
         this.pie_selected = this.pie_selector[0];
         this.boxplot_selected="Consensus";
+        this.heatmap_selected="Consensus";
         this.landscape_selected="pie";
-
     },
     mounted() {
+        event.rpcRegisterReceiver("getVue", () => this);
         this.all_viz();
     },
     methods: {
         pieViz(){
-
+            var clinical_file_path = this.data_path + "clinical/sample/Clinical_" + this.project_name + ".csv";
+            fractionPie("#fraction-pieVis", clinical_file_path, this.pie_selected, "#fraction-pie-editor", "fraction_pie_viz");
         },
         boxplotViz(){
             var cellData_file_path = this.data_path + "cell_data/" + this.boxplot_selected + "/" + this.project_name + "_" + this.boxplot_selected + ".csv";
 
             if (this.boxplot_selected == "Consensus") {
-                fractionGroupBoxplot("#fraction-boxplotVis", cellData_file_path)
+                fractionGroupBoxplot("#fraction-boxplotVis", cellData_file_path, "#fraction-boxplot-editor", "fraction_boxplot_viz");
             }
             else {
-                fractionBoxplot("#fraction-boxplotVis", cellData_file_path);
+                fractionBoxplot("#fraction-boxplotVis", cellData_file_path, "#fraction-boxplot-editor", "fraction_boxplot_viz");
             }
         },
         landscapeViz(){
             var file_name = this.project_name + "_Consensus.csv";
             var file_path = this.data_path + "cell_data/Consensus/" + file_name;
-
-
-            
-            fractionLandscape("#fraction-landscapeVis", file_path, this.landscape_selected);
+            fractionLandscape("#fraction-landscapeVis", file_path, this.landscape_selected, "#fraction-landscape-editor", "fraction_landscape_viz");
         },
+
+        heatmapViz() {
+            var clinical_file_path = this.data_path + "clinical/sample/Clinical_" + this.project_name + ".csv";
+            var cellData_file_path = this.data_path + "cell_data/" + this.heatmap_selected + "/" + this.project_name + "_" + this.heatmap_selected + ".csv";
+            fractionHeatmap("#fraction-heatmapVis", clinical_file_path, cellData_file_path, "#fraction-heatmap-editor", "fraction_heatmap_viz");
+        },
+
         all_viz() {
             this.boxplotViz();
             this.landscapeViz();
+            this.pieViz();
+            this.heatmapViz();
         },
 
     }
 }
 </script>
+
+<style scoped lang = "scss">
+.viz {
+    padding: 50px;
+    position: relative;
+    box-shadow: 0 0 64px darken(#dee2e6, 5%)
+}
+
+.vizBlock {
+    position: relative !important;
+}
+/* .v-editor {
+    position: fixed !important;
+    top: 30px;
+    right: 50px;
+    z-index:20;
+    transition: all 0.3s;
+} */
+
+.v-editor {
+    position: absolute;
+    top: 10px;
+    transition: all 0.3s;
+    right: 10px;
+    z-index: 1 !important;
+}
+</style>

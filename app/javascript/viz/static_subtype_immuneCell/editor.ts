@@ -1,7 +1,7 @@
 import { EditorDef } from "utils/editor";
 import { copyObject } from "utils/object";
 
-function run(v) {
+function run(v, eid) {
     v.forceRedraw = true;
     v.run();
 }
@@ -9,9 +9,9 @@ export const editorRef = {} as any;
 
 const generalSetting = ["startX", "startY", "width", "height", "titleSize", "labelSize", "title", "ylabel", "xlabel", "plotRotation", "xRotation", "yRotation"]
 
-export const generateGeneralConfig = (v): any => ({
-    id: "color",
-    title: "Color Setting",
+export const generateGeneralConfig = (v, eid): any => ({
+    id: eid + "1",
+    title: "General Setting",
     layout: "single-page",
     view: {
         type: "list",
@@ -22,15 +22,15 @@ export const generateGeneralConfig = (v): any => ({
                 current: v.data[item],
                 callback(d) {
                     v.data[item] = parseInt(d);
-                    run(v);
+                    run(v, eid);
                 }
             }
         }))
     }
 })
 
-export const generateColorConfig = (v): any => ({
-    id: "color",
+export const generateColorConfig = (v, eid): any => ({
+    id: eid + "2",
     title: "Color Setting",
     layout: "single-page",
     view: {
@@ -45,18 +45,18 @@ export const generateColorConfig = (v): any => ({
                 id: "pwcolor",
                 callback(colors) {
                     v.data.groups.colors = {...colors};
-                    run(v);
+                    run(v, eid);
                 },
             },
         }]
     }
 })
 
-export function editorConfig(v): EditorDef {
+export function editorConfig(v, eid): EditorDef {
     return {
         sections: [
-            generateGeneralConfig(v),
-            generateColorConfig(v),
+            generateGeneralConfig(v, eid),
+            generateColorConfig(v, eid),
         ],
     };
 }

@@ -55,7 +55,7 @@ class AdminController < ApplicationController
         redirect_to '/admin', notice: "ALL immune infiltration data uploaded."
     end
 
-    def update_samples_num_table
+    def update_samples_num_table_and_reprocessedColumns
         #generate cancer type and their sample numbers
         @cancers = Cancer.order(:cancer_name)
         csf_path = "#{$data_dir}sample_num/cancer_samples.tsv"
@@ -70,18 +70,33 @@ class AdminController < ApplicationController
         csf.write(s)
         csf.close
         #generate project and their sample numbers
-        @projects = Project.order(:project_name)
-        psf_path = "#{$data_dir}sample_num/project_samples.tsv"
-        psf = File.open(psf_path, "w")
-        s = "project\tsample_number"
-        @projects.each do |project|
-            pn = project.project_name
-            sn = project.samples.count
-            s += "\n"
-            s += "#{pn}\t#{sn}"
+        @cancers.each do |cancer|
+            ct = cancer.cancer_name
+            cprojects = cancer.projects.order(:project_name)
+            psf_path = "#{$data_dir}sample_num/#{ct}_project_samples.tsv"
+            psf = File.open(psf_path, "w")
+            s = "project\tsample_number"
+            cprojects.each do |cp|
+                pn = cp.project_name
+                sn = cp.samples.count
+                s += "\n"
+                s += "#{pn}\t#{sn}"
+            end
+            psf.write(s)
+            psf.close
         end
-        psf.write(s)
-        psf.close
+        # @projects = Project.order(:project_name)
+        # psf_path = "#{$data_dir}sample_num/project_samples.tsv"
+        # psf = File.open(psf_path, "w")
+        # s = "project\tsample_number"
+        # @projects.each do |project|
+        #     pn = project.project_name
+        #     sn = project.samples.count
+        #     s += "\n"
+        #     s += "#{pn}\t#{sn}"
+        # end
+        # psf.write(s)
+        # psf.close
 
         redirect_to '/admin', notice: "ALL Projects/Cancer types with samples number files updated."
     end 

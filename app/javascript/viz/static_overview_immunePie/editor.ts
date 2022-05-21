@@ -8,7 +8,7 @@ function run(v) {
 }
 export const editorRef = {} as any;
 
-const generalSetting = ["startX", "startY", "width", "height", "titleSize", "labelSize", "title", "ylabel", "xlabel", "plotRotation", "xRotation", "yRotation"]
+const generalSetting = ["startX", "startY", "height", "titleSize", "title", "plotRotation"]
 
 export const generateGeneralConfig = (v, eid): any => ({
     id: eid + "1",
@@ -46,8 +46,6 @@ export const generateColorConfig = (v, eid): any => ({
                 id: "pwcolor",
                 callback(colors) {
                     console.log(colors)
-                    // v.data.pieData.name
-                    // v.data.groups.pieData.colors = {...colors};
                     v.data.pieData.forEach(d=>{
                         d.color = Oviz.color.Color.literal(colors[d.name])
                     })

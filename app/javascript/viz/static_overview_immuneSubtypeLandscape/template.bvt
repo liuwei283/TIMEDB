@@ -4,12 +4,14 @@ svg {
 	Component {
 		y = 100
 		Container {
-			x = 25; y = 30
+			x = 25; y = startY + 30
 			Legend {
 				data = data.colorMap.legendData()
 			}
 		}
 		ComplexStackedBar {
+			rotation = @rotate(plotRotation)
+			yAxis.rotation = @rotate(yRotation)
 			x = startX
 			y = startY
 			// @let widBar = 100*Object.keys(data.widMap).length
@@ -22,6 +24,7 @@ svg {
 			}
             :xAxis {
                 Axis("top") {
+					rotation = @rotate(xRotation)
                     line.stroke = "none"
                     tick.stroke = "none"
 					label.y = -5

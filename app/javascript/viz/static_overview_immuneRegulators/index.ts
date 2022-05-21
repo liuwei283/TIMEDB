@@ -10,7 +10,7 @@ const startColor = "white";
 const endColor = "red";
 const nendColor = "blue";
 
-export function init(vid, subtypePath, RNAdataPath, eid) {
+export function init(vid, subtypePath, RNAdataPath, eid, plot_name) {
 
     const {visualizer} = Oviz.visualize({
         el: vid,
@@ -37,7 +37,7 @@ export function init(vid, subtypePath, RNAdataPath, eid) {
                 nendColor
             },
             startX: 100, 
-            startY: 0, 
+            startY: 15, 
             width: 1550, 
             height: 500, 
             titleSize: 11, 
@@ -48,6 +48,7 @@ export function init(vid, subtypePath, RNAdataPath, eid) {
             plotRotation: 0, 
             xRotation: 0, 
             yRotation: 0,
+            squareLength: 20,
             groups: {
                 colors :{
                     startColor,
@@ -61,7 +62,6 @@ export function init(vid, subtypePath, RNAdataPath, eid) {
         loadData: {
             subtype: {
                 url: subtypePath,
-                // fileKey: "subtype",
                 type: "csv",
                 dsvHasHeader: false,
                 loaded(data) {
@@ -72,7 +72,6 @@ export function init(vid, subtypePath, RNAdataPath, eid) {
             },
             RNAdata: {
                 url: RNAdataPath,
-                // fileKey: "RNAdata",
                 type: "csv",
                 dependsOn: ["subtype"],
                 loaded(data) {
@@ -93,7 +92,7 @@ export function init(vid, subtypePath, RNAdataPath, eid) {
             this.defineGradient("ng", "vertical", [startColor, nendColor]);
             this.size = {height: 400+Object.keys(this.data.colorMap).length, width: 1850}
             console.log(this)
-            registerEditorConfig(editorConfig(this, eid));
+            registerEditorConfig(editorConfig(this, eid), plot_name);
         },
     });
     return visualizer;

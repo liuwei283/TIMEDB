@@ -5,7 +5,7 @@ import { C16Classifier, CellProcessor } from "utils/general-classification";
 import { registerEditorConfig } from "utils/editor";
 import { editorConfig } from "./editor";
 
-export function init(id, subtypePath, CellDataPath, config) {
+export function init(id, subtypePath, CellDataPath, eid, plot_name) {
 
     const {visualizer} = Oviz.visualize({
         el: id,
@@ -13,7 +13,7 @@ export function init(id, subtypePath, CellDataPath, config) {
         components: { ComplexGroupedBars },
         data: {
             startX: 100, 
-            startY: 0, 
+            startY: 70, 
             width: 1550, 
             height: 500, 
             titleSize: 11, 
@@ -22,7 +22,7 @@ export function init(id, subtypePath, CellDataPath, config) {
             ylabel: "", 
             xlabel: "", 
             plotRotation: 0, 
-            xRotation: 0, 
+            xRotation: -20, 
             yRotation: 0,
             groups: {}
         },
@@ -48,9 +48,7 @@ export function init(id, subtypePath, CellDataPath, config) {
         },
         setup() {
             console.log(this)
-            registerEditorConfig(editorConfig(this));
+            registerEditorConfig(editorConfig(this, eid), plot_name);
         }
     });
-
-    return visualizer;
 }
