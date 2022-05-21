@@ -127,6 +127,7 @@
                             <h2 class = "text-right"> JOB SUBMISSISON </h2>
                             <br>
                             <br>
+                            <b-btn @click="submitTask(true)" class="float-right mt-2"><i class="fa fa-location-arrow"></i>Run demo task</b-btn>
                             <br>
                             <br>
                             <br>
@@ -327,8 +328,7 @@
                             </div>
                             <br>
                             <br>
-                            <b-btn @click="submitTask" class="float-right mt-2"><i class="fa fa-location-arrow"></i> Submit</b-btn>
-
+                            <b-btn @click="checkInputValid" class="float-right mt-2"><i class="fa fa-location-arrow"></i> Submit</b-btn>
                         </div>
                         
                     </div>
@@ -810,16 +810,11 @@
                 }
             },
 
-            submitTask() {
-                // send selected file to files
-
-                //this.submitted = true;
-                //this.updateUploadedStatus();
+            checkInputValid() {
 
                 const { alertCenter } = this.$refs;
                 let allRight = true;
                 let is_single = (this.picked_single_multiple == 'single')
-                let alertData;
 
             
                 //valid checking, need imporvement for complete error reporting
@@ -894,61 +889,72 @@
                 console.log(this.formatParams());
 
                 console.log("All right is true here")
-                
-                if (allRight) {
-                    let submitted_mid;
-                    if (this.picked_single_multiple == 'multiple') {
-                        submitted_mid = this.selected_analysis.multiple_mid;
-                    }
-                    else {
-                        submitted_mid = this.selected_analysis.mid;
-                    }
-                    $("#disable-fill").fadeIn(10);
-                    this.isLoading = true;
-                    console.log(this.isLoading);
-                    axios.post(
-                        `/submit-app-task/`,
-                        
-                       objectToFormData({
-                            "inputs": this.formatFiles(),
-                            "params": this.formatParams(),
-                            "selected": this.ds_selected,
-                            "search_mid": this.selected_analysis.mid,
-                            "mid": submitted_mid,
-                            "is_single": this.picked_single_multiple=='single',
-                            "file_names": this.file_names,
-                        }),
-                        {
-                            headers: {
-                                'X-Requested-With': 'XMLHttpRequest',
-                                'X-CSRF-Token': document.head.querySelector('meta[name="csrf-token"]').content,
-                                'Content-Type': 'multipart/form-data',
-                            },
-                        },
-                    ).then((response) => {
-                        if (response.data.code) {
-                            this.jobID = response.data.data.task_id;
-                            this.submitted = true;
-                            
-                        } else {
-                            alertData = response.data.msg;
-                        }
-                    }).catch((reason) => {
-                        alertData = reason;
-                    }).finally(() => {
-                        setTimeout(() => {
-                            $("#disable-fill").fadeOut(10);
-                            this.isLoading = false;
-                            if (!!alertData) {
-                                alertCenter.add('danger', alertData);
-                            }
-                        }, 500);
-                    });
+
+                if (allRight) this.submitTask(false)
+                else alertCenter.add('danger', "Please recheck your inputs. Something error here!");
+
+            },
+
+            submitTask(isDemo) {
+                // send selected file to files
+
+                //this.submitted = true;
+                //this.updateUploadedStatus();
+
+                const { alertCenter } = this.$refs;
+                let alertData;
+       
+                let submitted_mid;
+                if (this.picked_single_multiple == 'multiple') {
+                    submitted_mid = this.selected_analysis.multiple_mid;
                 }
                 else {
-                    alertCenter.add('danger', "Please recheck your inputs. Something error here!");
+                    submitted_mid = this.selected_analysis.mid;
                 }
-
+                $("#disable-fill").fadeIn(10);
+                this.isLoading = true;
+                console.log(this.isLoading);
+                axios.post(
+                    `/submit-app-task/`,
+                    
+                    objectToFormData({
+                        "inputs": this.formatFiles(),
+                        "params": this.formatParams(),
+                        "selected": this.ds_selected,
+                        "search_mid": this.selected_analysis.mid,
+                        "mid": submitted_mid,
+                        "is_single": this.picked_single_multiple=='single',
+                        "file_names": this.file_names,
+                        "is_demo": isDemo,
+                        "demo_info": app_demo_info,
+                    }),
+                    {
+                        headers: {
+                            'X-Requested-With': 'XMLHttpRequest',
+                            'X-CSRF-Token': document.head.querySelector('meta[name="csrf-token"]').content,
+                            'Content-Type': 'multipart/form-data',
+                        },
+                    },
+                ).then((response) => {
+                    if (response.data.code) {
+                        this.jobID = response.data.data.task_id;
+                        this.submitted = true;
+                        
+                    } else {
+                        alertData = response.data.msg;
+                    }
+                }).catch((reason) => {
+                    alertData = reason;
+                }).finally(() => {
+                    setTimeout(() => {
+                        $("#disable-fill").fadeOut(10);
+                        this.isLoading = false;
+                        if (!!alertData) {
+                            alertCenter.add('danger', alertData);
+                        }
+                    }, 500);
+                });
+          
                 if (this.submitted == true) {
                     var delay = 10000; // time in milliseconds
 

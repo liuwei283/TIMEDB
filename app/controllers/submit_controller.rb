@@ -32,6 +32,7 @@ class SubmitController < ApplicationController
       # file_list = Dir.entries(ds_dir)[2..-1]
       data[ds_name] = [ps_num, platform_names, project_names] 
     end
+
     gon.push select_box_option: data
 
   end
