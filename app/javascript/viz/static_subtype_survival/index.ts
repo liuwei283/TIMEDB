@@ -11,7 +11,7 @@ const config = {
     startY: 150, 
     width: 300, 
     height: 300, 
-    titleSize: 11, 
+    titleSize: 17, 
     labelSize: 11, 
     title: "PFS", 
     ylabel: "Survival", 

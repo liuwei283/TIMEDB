@@ -115,7 +115,7 @@ class ProjectsController < ApplicationController
             # end
         end
 
-        if @pjReprocessed.length() > 0
+        if @table_info_exist && @pjReprocessed.length() > 0
             @table_info_exist = TRUE
         else
             @table_info_exist = FALSE
