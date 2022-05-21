@@ -100,5 +100,18 @@ class Dataset < ApplicationRecord
     return projects
   end
 
+  def getProjectsPlatforms(ds_name)
+    @dataset = Dataset.find_by name: ds_name
+    platforms = []
+    pnames = []
+    @dataset.getProjectSources(ds_name).keys.each do |key|
+      platforms.push(Project.find_by(project_name:key).platform)
+      pnames.push(key)
+    end
+
+    platforms = platforms.join(',')
+    pnames = pnames.join(',')
+    return platforms, pnames
+  end
 
 end

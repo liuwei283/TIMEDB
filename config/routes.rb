@@ -167,4 +167,6 @@ Rails.application.routes.draw do
   match 'public/data/sample_plot/*path', to: 'raw_files#viz_inf_file', via: :get
   get "/database/refreshSelector", to: 'database#refreshSelector'
 
+  post 'query-deepomics', to: 'submit#query_deepomics', format: 'json'
+
 end

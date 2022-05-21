@@ -70,18 +70,33 @@ class AdminController < ApplicationController
         csf.write(s)
         csf.close
         #generate project and their sample numbers
-        @projects = Project.order(:project_name)
-        psf_path = "#{$data_dir}sample_num/project_samples.tsv"
-        psf = File.open(psf_path, "w")
-        s = "project\tsample_number"
-        @projects.each do |project|
-            pn = project.project_name
-            sn = project.samples.count
-            s += "\n"
-            s += "#{pn}\t#{sn}"
+        @cancers.each do |cancer|
+            ct = cancer.cancer_name
+            cprojects = cancer.projects.order(:project_name)
+            psf_path = "#{$data_dir}sample_num/#{ct}_project_samples.tsv"
+            psf = File.open(psf_path, "w")
+            s = "project\tsample_number"
+            cprojects.each do |cp|
+                pn = cp.project_name
+                sn = cp.samples.count
+                s += "\n"
+                s += "#{pn}\t#{sn}"
+            end
+            psf.write(s)
+            psf.close
         end
-        psf.write(s)
-        psf.close
+        # @projects = Project.order(:project_name)
+        # psf_path = "#{$data_dir}sample_num/project_samples.tsv"
+        # psf = File.open(psf_path, "w")
+        # s = "project\tsample_number"
+        # @projects.each do |project|
+        #     pn = project.project_name
+        #     sn = project.samples.count
+        #     s += "\n"
+        #     s += "#{pn}\t#{sn}"
+        # end
+        # psf.write(s)
+        # psf.close
 
         redirect_to '/admin', notice: "ALL Projects/Cancer types with samples number files updated."
     end 
@@ -188,7 +203,7 @@ class AdminController < ApplicationController
 
             #number of genes
             file_name = project.project_name + ".csv"
-            file_path = "#{$data_dir}RNA/visualization/immuReg_" + file_name
+            file_path = "#{$data_dir}RNA/RNA_" + file_name
             if File.exists?(file_path)
                 num_gene = CSV.foreach(file_path, headers: true).count - 1
                 project.update_attribute(:num_of_observed_genes, num_gene)

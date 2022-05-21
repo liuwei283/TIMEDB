@@ -4,14 +4,12 @@ svg {
 	Component {
         x = 50
         y = 50
-        @expr console.log(CellData)
         Container {
             Container {
-                x = -25; y = 30
+                x = -50; y = 30
                 Rows {
                     Container {
                         padding = 4
-                        x = -25
                         Text {
                             text = "Classifications"
                             fontSize = 15
@@ -32,11 +30,12 @@ svg {
                 :background {}
                 :box {}
                 plotSize = [width, height]
-                xAxisRo = @rotate(45)
+                rotation = @rotate(plotRotation)
+                yAxis.rotation = @rotate(yRotation)
                 @props CellData
 			    @let labels = ["Min", "Q1", "Median", "Q3", "Max", "Mean"]
                 generateTooltip = (d) => {
-                    return "cell type: " + d.data.pos + "</br>" + "subtype" + ": " + d.key + "</br>" 
+                    return "Cell type: " + d.data.pos + "</br>" + "Subtype" + ": " + d.key + "</br>" 
                         + CellData.stat[d.key][d.data.pos].map((data, index) => labels[index] + ": " + (100 * data).toFixed(2) + "%").join("</br>")
                 }
                 Rect.full {
@@ -48,12 +47,10 @@ svg {
                         y = 100%
                         :label(tick) {
                             Text(tick.value) {
-                                @let tickX = @scaled-x(tick.value)
-                                @let tickY = 5
                                 y = 10
                                 anchor = @anchor("r", "m")
-                                rotation = @rotate(-20)
-                                fontSize = prop.tickFontSize
+                                rotation = @rotate(xRotation)
+                                fontSize = labelSize
                             }
                         }
                     }
