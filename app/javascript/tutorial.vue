@@ -16,7 +16,8 @@
 
                 <div class="col-md-4 offset-1">
                     <!-- <%= image_tag src="icons brightmode12.png", class: "d-block w-100"%> -->
-                    <img src="/assets/icons brightmode12.png" class="d-block w-100">
+                    <img v-bind:src="require('../assets/images/icons brightmode12.png')" class="d-block w-100">
+
                 </div>
             </div>
 
@@ -25,7 +26,8 @@
             <div class="row">
                 <div class="col-md-4 text-center">
                     <!-- <%=image_tag src="icons brightmode12.png" ,class:  "d-block w-100"%> -->
-                    <img src="/assets/icons brightmode12.png" class="d-block w-100">
+                    <img v-bind:src="require('../assets/images/icons brightmode12.png')" class="d-block w-100">
+
                 </div>
                 <div class="col-md-8 text-center">
                     <br><br>
@@ -103,7 +105,8 @@
                 </div>
 
                 <div class="col-md-4 text-center">
-                    <img src="/assets/icons brightmode42.png" class="d-block w-100">
+                    <img v-bind:src="require('../assets/images/icons brightmode42.png')" class="d-block w-100">
+
                 </div>
                 
             </div>
