@@ -8,7 +8,7 @@ import {register} from "page/visualizers";
 import { rankDict, sortByRankKey } from "utils/bio-info";
 import { registerEditorConfig } from "utils/editor";
 import { PieChart } from "crux/dist/element";
-import { chooseMethod } from "viz/comparedBar2";
+//import { chooseMethod } from "viz/comparedBar2";
 import { isThisTypeNode } from "typescript";
 
 
@@ -22,7 +22,7 @@ let rowdata = [];
 
 const title = "Proportion of Immune Cells for Each Sample";
 const xlabel = "";
-const ylabel = "proportion";
+const ylabel = "Proportion"; //0515
 
 export function plotDataloaded(_data){
     console.log("data:",_data)
@@ -46,6 +46,10 @@ export function plotDataloaded(_data){
     this.data.padding = padding;
     this.data.gridwidth = (plotwidth - 2 * padding) / this.data.columns.length;
     
+    this.data.titleFontsize = 14 //0515
+    this.data.plotSize = [1000,500] //0515
+    this.data.colorMap = {box:"orange",means:"red",whiskle:"#0078d7"} //0515
+
 }
 
 export function range(mapdata){

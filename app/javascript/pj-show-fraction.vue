@@ -133,8 +133,8 @@ import DropDownSelect from "page/builtin/dropdown-select.vue";
 import {init as fractionBoxplot} from "viz/static_fraction_boxplot" 
 import {init as fractionGroupBoxplot} from "viz/static_fraction_grouped_boxplot"
 import {init as fractionLandscape} from "viz/static_fraction_comparedPlot"
-import {init as fractionHeatmap} from "viz/static_fraction_boxplot"
-import {init as fractionPie} from "viz/static_fraction_boxplot"
+import {init as fractionHeatmap} from "viz/static_fraction_heatmap"
+import {init as fractionPie} from "viz/static_fraction_Pie"
 
 Vue.use(OvizEditor);
 Vue.use(BootstrapVue);
@@ -190,7 +190,7 @@ export default {
     methods: {
         pieViz(){
             var clinical_file_path = this.data_path + "clinical/sample/Clinical_" + this.project_name + ".csv";
-            fractionPie("#fraction-pieViz", clinical_file_path, this.pie_selected, "#fraction-pie-editor", "fraction_pie_viz");
+            fractionPie("#fraction-pieVis", clinical_file_path, this.pie_selected, "#fraction-pie-editor", "fraction_pie_viz");
         },
         boxplotViz(){
             var cellData_file_path = this.data_path + "cell_data/" + this.boxplot_selected + "/" + this.project_name + "_" + this.boxplot_selected + ".csv";

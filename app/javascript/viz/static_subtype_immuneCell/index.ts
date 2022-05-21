@@ -13,7 +13,7 @@ export function init(id, subtypePath, CellDataPath, eid, plot_name) {
         components: { ComplexGroupedBars },
         data: {
             startX: 100, 
-            startY: 0, 
+            startY: 70, 
             width: 1550, 
             height: 500, 
             titleSize: 11, 

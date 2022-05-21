@@ -127,6 +127,7 @@
                             <h2 class = "text-right"> JOB SUBMISSISON </h2>
                             <br>
                             <br>
+                            <b-btn @click="submitDemoTask()" class="float-right mt-2"><i class="fa fa-caret-right fa-lg"></i>Run demo task</b-btn>
                             <br>
                             <br>
                             <br>
@@ -327,8 +328,7 @@
                             </div>
                             <br>
                             <br>
-                            <b-btn @click="submitTask" class="float-right mt-2"><i class="fa fa-location-arrow"></i> Submit</b-btn>
-
+                            <b-btn @click="checkInputValid" class="float-right mt-2"><i class="fa fa-location-arrow"></i> Submit</b-btn>
                         </div>
                         
                     </div>
@@ -799,6 +799,12 @@
                         }
 
                         for (var k in this.single_parameters) {
+                            console.log("Dafult value for para" + this.single_parameters[k].id)
+                            // console.log(this.single_parameters[k].default == "")
+                            // console.log(this.single_parameters[k].default == null)
+                            // console.log(this.single_parameters[k].default)
+
+
                             this.parameters['p-' + this.single_parameters[k].id] = this.single_parameters[k].default;
                         }
 
@@ -810,16 +816,11 @@
                 }
             },
 
-            submitTask() {
-                // send selected file to files
-
-                //this.submitted = true;
-                //this.updateUploadedStatus();
+            checkInputValid() {
 
                 const { alertCenter } = this.$refs;
                 let allRight = true;
                 let is_single = (this.picked_single_multiple == 'single')
-                let alertData;
 
             
                 //valid checking, need imporvement for complete error reporting
@@ -894,68 +895,160 @@
                 console.log(this.formatParams());
 
                 console.log("All right is true here")
+
+                if (allRight) this.submitTask()
+                else alertCenter.add('danger', "Please recheck your inputs. Something error here!");
+
+            },
+
+            submitDemoTask() {
+
+                const { alertCenter } = this.$refs;
+                let alertData;
+       
                 
-                if (allRight) {
-                    let submitted_mid;
-                    if (this.picked_single_multiple == 'multiple') {
-                        submitted_mid = this.selected_analysis.multiple_mid;
+                let submitted_mid = this.selected_analysis.mid;
+                
+                $("#disable-fill").fadeIn(10);
+                this.isLoading = true;
+                console.log(this.isLoading);
+
+                //process demo info
+                var demo_files = {};
+                var demo_params = {};
+                for (var k in this.app.inputs){
+                    if (this.app.inputs[k].name == "Clinical data") {
+                        demo_files[`i-${this.app.inputs[k].id}`] = "/data/demo/demo_clinical";
                     }
-                    else {
-                        submitted_mid = this.selected_analysis.mid;
+                    if (this.app.inputs[k].name == "Gene expression data") {
+                        demo_files[`i-${this.app.inputs[k].id}`] = "/data/demo/demo_rna";
                     }
-                    $("#disable-fill").fadeIn(10);
-                    this.isLoading = true;
-                    console.log(this.isLoading);
-                    axios.post(
-                        `/submit-app-task/`,
-                        
-                       objectToFormData({
-                            "inputs": this.formatFiles(),
-                            "params": this.formatParams(),
-                            "selected": this.ds_selected,
-                            "search_mid": this.selected_analysis.mid,
-                            "mid": submitted_mid,
-                            "is_single": this.picked_single_multiple=='single',
-                            "file_names": this.file_names,
-                        }),
-                        {
-                            headers: {
-                                'X-Requested-With': 'XMLHttpRequest',
-                                'X-CSRF-Token': document.head.querySelector('meta[name="csrf-token"]').content,
-                                'Content-Type': 'multipart/form-data',
-                            },
-                        },
-                    ).then((response) => {
-                        if (response.data.code) {
-                            this.jobID = response.data.data.task_id;
-                            this.submitted = true;
-                            
-                        } else {
-                            alertData = response.data.msg;
-                        }
-                    }).catch((reason) => {
-                        alertData = reason;
-                    }).finally(() => {
-                        setTimeout(() => {
-                            $("#disable-fill").fadeOut(10);
-                            this.isLoading = false;
-                            if (!!alertData) {
-                                alertCenter.add('danger', alertData);
-                            }
-                        }, 500);
-                    });
-                }
-                else {
-                    alertCenter.add('danger', "Please recheck your inputs. Something error here!");
                 }
 
+                for (var k in this.single_parameters) {
+                    if (this.single_parameters[k].default == "") {
+                        demo_params[`p-${this.single_parameters[k].id}`] = "default";
+                    }
+                    else {
+                        demo_params[`p-${this.single_parameters[k].id}`] = this.single_parameters[k].default;
+                    }
+                }
+
+                console.log(demo_files);
+                console.log(demo_params);
+
+                axios.post(
+                    `/submit-app-task/`,
+                    
+                    objectToFormData({
+                        "search_mid": submitted_mid,
+                        "mid": submitted_mid,
+                        "is_demo": true,
+                        "inputs": demo_files,
+                        "params": demo_params,
+                    }),
+                    {
+                        headers: {
+                            'X-Requested-With': 'XMLHttpRequest',
+                            'X-CSRF-Token': document.head.querySelector('meta[name="csrf-token"]').content,
+                            'Content-Type': 'multipart/form-data',
+                        },
+                    },
+                ).then((response) => {
+                    if (response.data.code) {
+                        this.jobID = response.data.data.task_id;
+                        this.submitted = true;
+                        
+                    } else {
+                        alertData = response.data.msg;
+                    }
+                }).catch((reason) => {
+                    alertData = reason;
+                }).finally(() => {
+                    setTimeout(() => {
+                        $("#disable-fill").fadeOut(10);
+                        this.isLoading = false;
+                        if (!!alertData) {
+                            alertCenter.add('danger', alertData);
+                        }
+                    }, 500);
+                });
+          
                 if (this.submitted == true) {
                     var delay = 10000; // time in milliseconds
 
                     setTimeout(function(){
                         window.location.href = 'job-query'
                     },delay);
+                }
+
+            },
+
+            submitTask() {
+                // send selected file to files
+
+                //this.submitted = true;
+                //this.updateUploadedStatus();
+
+                const { alertCenter } = this.$refs;
+                let alertData;
+       
+                let submitted_mid;
+                if (this.picked_single_multiple == 'multiple') {
+                    submitted_mid = this.selected_analysis.multiple_mid;
+                }
+                else {
+                    submitted_mid = this.selected_analysis.mid;
+                }
+                $("#disable-fill").fadeIn(10);
+                this.isLoading = true;
+                console.log(this.isLoading);
+                axios.post(
+                    `/submit-app-task/`,
                     
+                    objectToFormData({
+                        "inputs": this.formatFiles(),
+                        "params": this.formatParams(),
+                        "selected": this.ds_selected,
+                        "search_mid": this.selected_analysis.mid,
+                        "mid": submitted_mid,
+                        "is_single": this.picked_single_multiple=='single',
+                        "file_names": this.file_names,
+                        "is_demo": false,
+                    }),
+                    {
+                        headers: {
+                            'X-Requested-With': 'XMLHttpRequest',
+                            'X-CSRF-Token': document.head.querySelector('meta[name="csrf-token"]').content,
+                            'Content-Type': 'multipart/form-data',
+                        },
+                    },
+                ).then((response) => {
+                    if (response.data.code) {
+                        this.jobID = response.data.data.task_id;
+                        this.submitted = true;
+                        
+                    } else {
+                        alertData = response.data.msg;
+                    }
+                }).catch((reason) => {
+                    alertData = reason;
+                }).finally(() => {
+                    setTimeout(() => {
+                        $("#disable-fill").fadeOut(10);
+                        this.isLoading = false;
+                        if (!!alertData) {
+                            alertCenter.add('danger', alertData);
+                        }
+                    }, 500);
+                });
+          
+                if (this.submitted == true) {
+                    var delay = 10000; // time in milliseconds
+
+                    setTimeout(function(){
+                        window.location.href = 'job-query'
+                    },delay);
                 }
             },
             updateMode(type) {

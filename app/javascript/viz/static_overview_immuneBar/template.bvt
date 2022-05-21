@@ -3,6 +3,7 @@ svg {
 	height = 600
 	Component {
 		XYPlot {
+			rotation = @rotate(plotRotation)
 			x = startX
 			y = startY
 			height = height

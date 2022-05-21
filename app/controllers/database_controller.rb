@@ -38,9 +38,8 @@ class DatabaseController < ApplicationController
         @cnum = Cancer.all.count
         @pnum = Project.all.count
         @snum = Sample.all.count
-        @dtnum = AnalysisCategory.find_by(name: "Deconvolution Analysis").analyses.count
 
-             
+        
     end
 
     def download_bar_file

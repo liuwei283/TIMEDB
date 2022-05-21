@@ -16,7 +16,7 @@ export const generateCompositeGeneralConfig = (v, eid): any => ({
     layout: "tabs",
     tabs: v.data.plots.map((plot) => ({
     	id: plot,
-    	title: plot,
+    	name: plot.toUpperCase(),
     	view: {
             type: "list",
             items: generalSetting.map((item) => ({
@@ -35,12 +35,12 @@ export const generateCompositeGeneralConfig = (v, eid): any => ({
 })
 
 export const generateCompositeColorConfig = (v, eid): any => ({
-    id: eid + "colot",
+    id: eid + "color",
     title: "Color Setting",
     layout: "tabs",
     tabs: v.data.plots.map((plot) => ({
     	id: plot,
-    	title: plot,
+    	name: plot.toUpperCase(),
     	view: {
             type: "list",
             items: [{
@@ -50,7 +50,7 @@ export const generateCompositeColorConfig = (v, eid): any => ({
                 data: {
                     title: "groups colors",
                     scheme: copyObject(v.data.plotData[plot].groups.colors),
-                    id: "pwcolor",
+                    id: "pwcolor" + plot,
                     callback(colors) {
                         v.data.plotData[plot].groups.colors = {...colors};
                         run(v, eid);

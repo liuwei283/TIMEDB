@@ -20,7 +20,7 @@ export function init(vid, path, eid, plot_name) {
             xlabel, 
             ylabel,
             startX: 0, 
-            startY: 0,
+            startY: 70,
             width: 1500,
             height: 500, 
             titleSize: 14, 

@@ -37,7 +37,7 @@ export function init(vid, subtypePath, RNAdataPath, eid, plot_name) {
                 nendColor
             },
             startX: 100, 
-            startY: 0, 
+            startY: 15, 
             width: 1550, 
             height: 500, 
             titleSize: 11, 
@@ -48,6 +48,7 @@ export function init(vid, subtypePath, RNAdataPath, eid, plot_name) {
             plotRotation: 0, 
             xRotation: 0, 
             yRotation: 0,
+            squareLength: 20,
             groups: {
                 colors :{
                     startColor,
@@ -61,7 +62,6 @@ export function init(vid, subtypePath, RNAdataPath, eid, plot_name) {
         loadData: {
             subtype: {
                 url: subtypePath,
-                // fileKey: "subtype",
                 type: "csv",
                 dsvHasHeader: false,
                 loaded(data) {
@@ -72,7 +72,6 @@ export function init(vid, subtypePath, RNAdataPath, eid, plot_name) {
             },
             RNAdata: {
                 url: RNAdataPath,
-                // fileKey: "RNAdata",
                 type: "csv",
                 dependsOn: ["subtype"],
                 loaded(data) {
