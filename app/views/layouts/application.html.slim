@@ -30,15 +30,15 @@ html
     #wrapper
       - if %w[analysis].include? controller_name or controller_name == 'submit' and action_name == 'analysesCategory'
         = render 'partials/side_bar'
-      #main
-        = yield
-      #disable-fill
-    - unless %w[analysis].include? controller_name
       - if session[:user_id].nil?
         #cookies-eu-banner
           .container
             | We use Cookies to offer a better browsing experience.
             button.btn.btn-sm.btn-outline-light#cookies-eu-accept
               = link_to "Accept", "welcome/require_cookie", method: :post
+      #main
+        = yield
+      #disable-fill
+    - unless %w[analysis].include? controller_name
       = render 'partials/footer'
     = yield :page_script
