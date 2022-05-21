@@ -299,6 +299,7 @@ class SubmitController < ApplicationController
       file_names = params[:file_names]
       is_pipeline = params[:is_pipeline]
       is_single = params[:is_single]
+      is_demo = params[:is_demo]
       # @analysis = Analysis.find_by mid:params[:mid]
       if !params[:search_mid].blank?
         @analysis = Analysis.find_by mid:params[:search_mid]
@@ -310,87 +311,98 @@ class SubmitController < ApplicationController
 
       # store selected file to user's data folder
 
-      combine_inputs_array = {}
+      if is_demo
+        app_inputs&.each do |k,v|
+          inputs.push({k => v})
+        end
 
-      app_inputs.keys.each do |input_id|
-        combine_inputs_array[input_id] = []
-      end
+        app_params&.each do |k,v|
+          params.push({k => v})
+        end
+      else
 
-
-
-      if (app_selected != "")
-
-        ds_name = app_selected
-        @dataset = @user.datasets.find_by(name: ds_name)
-
-        Rails.logger.debug "Sucess here - 1"
-
-        merged_files = @dataset.mergeFile(ds_name)
-        Rails.logger.debug merged_files.keys
-
-        Rails.logger.debug "Sucess here - 2"
-       
+        combine_inputs_array = {}
 
         app_inputs.keys.each do |input_id|
-          cur_file_paths = []
-          fname = file_names[input_id]
-          Rails.logger.debug fname
-          match_merged_files = merged_files[fname]
-          Rails.logger.debug match_merged_files.length
-          match_merged_files.each_with_index do |m_file, idx|
-            file_name = fname + "_" + idx.to_s + ".csv"
-            Rails.logger.debug file_name
-            file = File.new(file_name, 'w')
-            file.write(m_file)
-            Rails.logger.debug "make files"
-            uploader = JobInputUploader.new(giveFilePrefix())
+          combine_inputs_array[input_id] = []
+        end
+
+
+
+        if (app_selected != "")
+
+          ds_name = app_selected
+          @dataset = @user.datasets.find_by(name: ds_name)
+
+          Rails.logger.debug "Sucess here - 1"
+
+          merged_files = @dataset.mergeFile(ds_name)
+          Rails.logger.debug merged_files.keys
+
+          Rails.logger.debug "Sucess here - 2"
        
-            uploader.store!(file)
-            Rails.logger.debug "make files"
 
-            Rails.logger.debug "upload files" + uploader.filename
+          app_inputs.keys.each do |input_id|
+            cur_file_paths = []
+            fname = file_names[input_id]
+            Rails.logger.debug fname
+            match_merged_files = merged_files[fname]
+            Rails.logger.debug match_merged_files.length
+            match_merged_files.each_with_index do |m_file, idx|
+              file_name = fname + "_" + idx.to_s + ".csv"
+              Rails.logger.debug file_name
+              file = File.new(file_name, 'w')
+              file.write(m_file)
+              Rails.logger.debug "make files"
+              uploader = JobInputUploader.new(giveFilePrefix())
+        
+              uploader.store!(file)
+              Rails.logger.debug "make files"
 
-            cur_file_paths.push('/data/' + uploader.filename)
-            file.close
+              Rails.logger.debug "upload files" + uploader.filename
+
+              cur_file_paths.push('/data/' + uploader.filename)
+              file.close
+            end
+            combine_inputs_array[input_id] += cur_file_paths
           end
-          combine_inputs_array[input_id] += cur_file_paths
+
+          Rails.logger.debug "Sucess here - 3"
+
         end
 
-        Rails.logger.debug "Sucess here - 3"
-
-      end
-
-      app_inputs&.each do |input_id, uploaded_file|
-        unless uploaded_file.nil? || uploaded_file == ""
-          uploaded_files_array = Array(uploaded_file)
-          uploaded_files_array.each do |up_file|
-            uploader = JobInputUploader.new(giveFilePrefix())
-            uploader.store!(up_file)
-            combine_inputs_array[input_id].push('/data/' + uploader.filename)
-          end   
+        app_inputs&.each do |input_id, uploaded_file|
+          unless uploaded_file.nil? || uploaded_file == ""
+            uploaded_files_array = Array(uploaded_file)
+            uploaded_files_array.each do |up_file|
+              uploader = JobInputUploader.new(giveFilePrefix())
+              uploader.store!(up_file)
+              combine_inputs_array[input_id].push('/data/' + uploader.filename)
+            end   
+          end
         end
-      end
-      Rails.logger.debug "Sucess here - 4"
+        Rails.logger.debug "Sucess here - 4"
 
 
-      if is_single
+        if is_single
+          app_inputs.keys.each do |input_id|
+            combine_inputs_array[input_id] = combine_inputs_array[input_id][0, 1]
+          end
+        end
+
         app_inputs.keys.each do |input_id|
-          combine_inputs_array[input_id] = combine_inputs_array[input_id][0, 1]
-        end
-      end
-
-      app_inputs.keys.each do |input_id|
-        inputs.push({
-          # k => '/data/' + v.original_filename,
-          input_id => combine_inputs_array[input_id].join(',')
-        })
-      end
-
-      app_params&.each do |p|
-        p.each do |k, v|
-          params.push({
-            k => v,
+          inputs.push({
+            # k => '/data/' + v.original_filename,
+            input_id => combine_inputs_array[input_id].join(',')
           })
+        end
+
+        app_params&.each do |p|
+          p.each do |k, v|
+            params.push({
+              k => v,
+            })
+          end
         end
       end
 
