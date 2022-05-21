@@ -133,8 +133,8 @@ import DropDownSelect from "page/builtin/dropdown-select.vue";
 import {init as fractionBoxplot} from "viz/static_fraction_boxplot" 
 import {init as fractionGroupBoxplot} from "viz/static_fraction_grouped_boxplot"
 import {init as fractionLandscape} from "viz/static_fraction_comparedPlot"
-import {init as fractionHeatmap} from "viz/static_fraction_boxplot"
-import {init as fractionPie} from "viz/static_fraction_boxplot"
+import {init as fractionHeatmap} from "viz/static_fraction_heatmap"
+import {init as fractionPie} from "viz/static_fraction_Pie"
 
 Vue.use(OvizEditor);
 Vue.use(BootstrapVue);
