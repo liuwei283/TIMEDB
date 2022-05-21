@@ -53,25 +53,7 @@ class ProjectsController < ApplicationController
         @datasets = @user.datasets
 
 
-        #table data to be changed
-        table_file_path = $data_dir + "processedColumns/" + @pname + ".tsv"
-
-        @table_data = []
-
-        @table_info_exist = File.file?(table_file_path)
-
-        if(@table_info_exist)
-            File.readlines(table_file_path).each_with_index do |line, i|
-                #line = line.gsub(/"/, '' )
-                contents = line.chomp.split("\t")
-                if i == 0
-                    @table_header = contents
-                else 
-                    @table_data.push([contents])
-                end
-            end
-        end
-
+        
         # transfer columns names to project fraction oerview
         @selector_attrs = []
         @sample_attrs.each do |s_attr|
@@ -80,10 +62,6 @@ class ProjectsController < ApplicationController
             end
         end
         gon.push selector_attrs:@selector_attrs
-
-
-
-
 
         pname = @project.project_name
         sample_clinical_file_path = "#{Rails.root}/public/data/clinical/sample/Clinical_#{pname}.csv"
@@ -101,6 +79,57 @@ class ProjectsController < ApplicationController
             cur_sid = Sample.find_by(sample_name:cur_sname).id
             row_info['id'] = cur_sid
         end
+
+
+
+
+        #table data to be changed
+        table_file_path = $data_dir + "processedColumns/" + @ctype + ".csv"
+
+        @table_data = []
+
+        Rails.logger.info "=========>reprocessed"
+
+
+        @table_info_exist = File.file?(table_file_path)
+
+        if(@table_info_exist)
+            reprocessedInfo = CSV.parse(File.read(table_file_path), headers: TRUE)
+            @reprocessedHeaders = reprocessedInfo.headers
+            #reprocessedInfo = reprocessedInfo.map(&:to_a)
+            @pjReprocessed = []
+            reprocessedInfo.each do |row_info|
+                Rails.logger.info row_info
+                if row_info[0] == @pname
+                    @pjReprocessed.push(row_info)
+                end
+            end
+            # File.readlines(table_file_path).each_with_index do |line, i|
+            #     #line = line.gsub(/"/, '' )
+            #     contents = line.chomp.split("\t")
+            #     if i == 0
+            #         @table_header = contents
+            #     else 
+            #         @table_data.push([contents])
+            #     end
+            # end
+        end
+
+        if @pjReprocessed.length() > 0
+            @table_info_exist = TRUE
+        else
+            @table_info_exist = FALSE
+        end
+
+        #check related files existed or not
+        subtype_fpath = $data_dir + "subtype/c1_c6/project/" + @pname + "_c1_c6.csv"
+        @subtype_file_exist = File.file?(subtype_fpath)
+        
+        # clinical_fpath = $data_dir + "clinical/sample/" + "Clinical_" + @pname + ".csv"
+        # @clinical_file_exist = File.file?(clinical_fpath)
+
+        # cell_fpath = $data_dir + "cell_data/"
+
 
         respond_to do |format|
             format.html

@@ -55,7 +55,7 @@ class AdminController < ApplicationController
         redirect_to '/admin', notice: "ALL immune infiltration data uploaded."
     end
 
-    def update_samples_num_table
+    def update_samples_num_table_and_reprocessedColumns
         #generate cancer type and their sample numbers
         @cancers = Cancer.order(:cancer_name)
         csf_path = "#{$data_dir}sample_num/cancer_samples.tsv"

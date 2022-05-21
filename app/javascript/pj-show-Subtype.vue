@@ -126,6 +126,12 @@ export default {
     },
     created() {
         this.boxplot_selected = "ABIS";
+        // var method;
+        // for (var i = 0; i < 10; i ++ ) {
+        //     method = this.boxplot_selector[i]["value"];
+        //     console.log(method);
+        //     var cfpath = this.data_path + "cell_data/" + method + "/" + this.project_name + "_" + this.boxplot_selected + ".csv";
+        // }
 
     },
     mounted() {
