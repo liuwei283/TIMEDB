@@ -96,7 +96,7 @@
         <div class = "col-md-12" id = "submit-app-back" v-if="started && !submitted">
             <div class = "row">
                 <div class="col-md-2">
-                    <img v-bind:src="require('../assets/images/nav-up-blue.png')">
+                    <img v-bind:src="require('../assets/images/nav-up-blue.png')"><br>
                     <svg width="100px" height="600px" version="1.1" xmlns="http://www.w3.org/2000/svg">
                         <path d="M40 0 v 200 l -10 10 l 10 10 v 200 l 10 10 l -10 10 v 160" fill="transparent" stroke="#253959" stroke-width = "3px"></path> 
                     </svg>
@@ -110,6 +110,7 @@
 
                     
                     <!-- <img v-if="!submittted" v-bind:src="require('../assets/images/nav-submit-gray.png')"> -->
+                    <br>
                     <img v-if="submitted == true" v-bind:src="require('../assets/images/nav-submit-blue.png')">
                     <img v-else v-bind:src="require('../assets/images/nav-submit-gray.png')">
                     <br>                      
@@ -184,7 +185,7 @@
                                             <div id = "multiple-upload-box" class = "row justify-content-center text-center" v-if="displayedPairsNum > 0">
                                                 <div v-for="input_idx in parseInt(displayedPairsNum)" :key="input_idx" class="text-center col-md-4">
                                                     <div v-b-modal="`multiple-upload-${input_idx}`" class="uploadPng text-center justify-content-center container">
-                                                        <img v-bind:src="require('../assets/images/big_upload.png')" style="width:90%">
+                                                        <img v-bind:src="require('../assets/images/big_upload.png')" style="width:130%">
                                                     </div>
                                                     <div class = "text-center" v-if="updateUploadedStatus[input_idx - 1] == true">
                                                         <i class="fa fa-check" aria-hidden="true" style="color:green"></i>
@@ -1182,7 +1183,6 @@
     left: 0;
     z-index: 1000;
     width: 100%;
-    height: 100%;
 }
 
 .set-input-section img {
@@ -1250,6 +1250,10 @@ input[type="radio"] {
     border-radius: 20px;
     padding: 20px;
     width: 100%;
+    height: 100%;
+    display: flex;
+    flex-wrap: wrap;
+
 }
 .submit-box image {
     width: 100%;
