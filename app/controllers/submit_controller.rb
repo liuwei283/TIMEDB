@@ -295,7 +295,7 @@ class SubmitController < ApplicationController
       app_id = params[:mid]
       app_inputs = params[:inputs]
       app_params = params[:params]
-      app_selected = params[:selected]
+      datasets_selected = params[:datasets]
       file_names = params[:file_names]
       is_pipeline = params[:is_pipeline]
       is_single = params[:is_single]
@@ -313,10 +313,16 @@ class SubmitController < ApplicationController
 
       if is_demo
         app_inputs&.each do |k,v|
+          Rails.logger.debug "outputing demo files:"
+          Rails.logger.debug k
+          Rails.logger.debug v
           inputs.push({k => v})
         end
 
         app_params&.each do |k,v|
+          Rails.logger.debug "outputing demo parameters:"
+          Rails.logger.debug k
+          Rails.logger.debug v
           params.push({k => v})
         end
       else
@@ -327,14 +333,15 @@ class SubmitController < ApplicationController
           combine_inputs_array[input_id] = []
         end
 
+      ###processing datasets
 
+        datasets_selected.each do |ds_name|
 
-        if (app_selected != "")
-
-          ds_name = app_selected
+          
           @dataset = @user.datasets.find_by(name: ds_name)
 
           Rails.logger.debug "Sucess here - 1"
+          Rails.logger.debug ds_name
 
           merged_files = @dataset.mergeFile(ds_name)
           Rails.logger.debug merged_files.keys
