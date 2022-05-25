@@ -1435,14 +1435,14 @@ input[type="radio"] {
 }
 
 #file-upload-step {
-    border: solid 1px;
+    // border: solid 1px;
     margin-left: 10%;
     margin-top: 50px;
     height: 450px;
 }
 
 #parameter-setting-step {
-    border: solid 1px;
+    // border: solid 1px;
     margin-left: 10%;
     margin-top: 50px;
 }
