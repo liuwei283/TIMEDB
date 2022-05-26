@@ -53,39 +53,40 @@ class Dataset < ApplicationRecord
       Rails.logger.error snames
 
       #merge clinical files
-      file_info = CSV.parse(File.read(sample_clinical_file_path), headers: TRUE)
-      cur_headers = file_info.headers
-      file_for_selected_samples = CSV.generate(write_headers: true, headers: cur_headers) do |csv|
-        file_info.each do |row|
-          if snames.include? row['sample_name']
-            csv << row
+      if File.file?(sample_clinical_file_path)
+        file_info = CSV.parse(File.read(sample_clinical_file_path), headers: TRUE)
+        cur_headers = file_info.headers
+        file_for_selected_samples = CSV.generate(write_headers: true, headers: cur_headers) do |csv|
+          file_info.each do |row|
+            if snames.include? row['sample_name']
+              csv << row
+            end
           end
         end
+        @merged_files["Clinical data"].push(file_for_selected_samples)
+        Rails.logger.error "Coming here 3"
       end
-      @merged_files["Clinical data"].push(file_for_selected_samples)
-      Rails.logger.error "Coming here 3"
 
 
       #merge gene expression files
-      file_info = CSV.parse(File.read(sample_rna_file_path), headers: TRUE)
+      if File.file?(sample_rna_file_path)
+        file_info = CSV.parse(File.read(sample_rna_file_path), headers: TRUE)
 
-      remained_col = snames.push("GeneSymbol")
-      Rails.logger.error "Coming here 4"
-      Rails.logger.error remained_col
+        remained_col = snames.push("GeneSymbol")
+        Rails.logger.error "Coming here 4"
+        Rails.logger.error remained_col
 
 
 
-      
-      filtered_rna_info = file_info.by_col!.delete_if do |column_name,column_values|
-        !remained_col.include? column_name
-
+        
+        filtered_rna_info = file_info.by_col!.delete_if do |column_name,column_values|
+          !remained_col.include? column_name
+        end
+        
+        filtered_rna_file = filtered_rna_info.to_csv
+        @merged_files["Gene expression data"].push(filtered_rna_file)
+        Rails.logger.error "Coming here 5"
       end
-      
-      filtered_rna_file = filtered_rna_info.to_csv
-      @merged_files["Gene expression data"].push(filtered_rna_file)
-      Rails.logger.error "Coming here 5"
-
-
     end
 
     return @merged_files

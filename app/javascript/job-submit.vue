@@ -746,7 +746,7 @@
                         //     }
                         // }
                         for (var input_idx = 1; input_idx <= this.multiple_pairs_num;  input_idx++ ) {
-                            if(this.multiple_completed[input_idx] == true && this.ds_selected[input_idx - 1] != "") {
+                            if(this.multiple_completed[input_idx - 1] == true && this.ds_selected[input_idx - 1] != "") {
                                 var cur_pvalue = "";
 
                                 if (this.multiple_parameters[mp].name == 'Datasets name') {
@@ -771,7 +771,7 @@
                         }
 
                         for (var input_idx = 1; input_idx <= this.multiple_pairs_num;  input_idx++ ) {
-                            if(this.multiple_completed[input_idx] == true && this.ds_selected[input_idx - 1] == "") {
+                            if(this.multiple_completed[input_idx - 1] == true && this.ds_selected[input_idx - 1] == "") {
                                 if (pvalue == "") {
                                     pvalue = this.parameters['multiple-p-' + this.multiple_parameters[mp].id + '-' + input_idx];
                                 }
@@ -1045,10 +1045,10 @@
                 var demo_params = {};
                 for (var k in this.app.inputs){
                     if (this.app.inputs[k].name == "Clinical data") {
-                        demo_files[`i-${this.app.inputs[k].id}`] = "/data/demo/demo_clinical";
+                        demo_files[`i-${this.app.inputs[k].id}`] = "/data/demo/demo_clinical.csv";
                     }
                     if (this.app.inputs[k].name == "Gene expression data") {
-                        demo_files[`i-${this.app.inputs[k].id}`] = "/data/demo/demo_rna";
+                        demo_files[`i-${this.app.inputs[k].id}`] = "/data/demo/demo_rna.csv";
                     }
                 }
 

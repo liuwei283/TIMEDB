@@ -315,7 +315,7 @@ class SubmitController < ApplicationController
       
 
 
-      if is_demo == true
+      if is_demo == "true"
         app_inputs&.each do |k,v|
           Rails.logger.debug "outputing demo files:"
           Rails.logger.debug k
@@ -393,7 +393,10 @@ class SubmitController < ApplicationController
           end
         end
 
-        if !app.inputs.blank?
+        Rails.logger.debug "app is blank?: "
+        Rails.logger.debug datasets_selected.blank?
+
+        if !app_inputs.blank?
           app_inputs&.each do |input_id, uploaded_file|
             
         
