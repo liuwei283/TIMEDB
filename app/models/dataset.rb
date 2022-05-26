@@ -36,6 +36,8 @@ class Dataset < ApplicationRecord
   def mergeFile(ds_name)
     #get all projects with samples
     projects = getProjectSources(ds_name)
+
+    Rails.logger.error "Coming here 1"
   
 
 
@@ -46,6 +48,9 @@ class Dataset < ApplicationRecord
       sample_clinical_file_path = "#{Rails.root}/public/data/clinical/sample/Clinical_#{pname}.csv"
       sample_rna_file_path = "#{Rails.root}/public/data/RNA/RNA_#{pname}.csv"
       snames = projects[pname]
+
+      Rails.logger.error "Coming here 2"
+      Rails.logger.error snames
 
       #merge clinical files
       file_info = CSV.parse(File.read(sample_clinical_file_path), headers: TRUE)
@@ -58,12 +63,17 @@ class Dataset < ApplicationRecord
         end
       end
       @merged_files["Clinical data"].push(file_for_selected_samples)
+      Rails.logger.error "Coming here 3"
 
 
       #merge gene expression files
       file_info = CSV.parse(File.read(sample_rna_file_path), headers: TRUE)
 
       remained_col = snames.push("GeneSymbol")
+      Rails.logger.error "Coming here 4"
+      Rails.logger.error remained_col
+
+
 
       
       filtered_rna_info = file_info.by_col!.delete_if do |column_name,column_values|
@@ -73,6 +83,8 @@ class Dataset < ApplicationRecord
       
       filtered_rna_file = filtered_rna_info.to_csv
       @merged_files["Gene expression data"].push(filtered_rna_file)
+      Rails.logger.error "Coming here 5"
+
 
     end
 
@@ -87,13 +99,10 @@ class Dataset < ApplicationRecord
     samples.each do |sample|
         sname = sample.sample_name
         pname = sample.project_name
-        logger.error sname
         if projects.key?(pname)
             projects[pname].push(sname)
-
         else
             projects[pname] = [sname]
-
         end
     end
 

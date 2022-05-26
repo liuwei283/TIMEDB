@@ -291,7 +291,7 @@
                             </div>
                             <br>
                             <br>
-                            <b-btn @click="checkInputValid" class="float-right mt-2"><i class="fa fa-location-arrow"></i> Submit</b-btn>
+                            <b-btn @click="checkInputValid()" class="float-right mt-2"><i class="fa fa-location-arrow"></i> Submit</b-btn>
                         </div>
                         
                     </div>
@@ -352,11 +352,11 @@
                 
                 
                 <div class = "row justify-content-center">
-                    <div class = "col-md-2">
+                    <!-- <div class = "col-md-2">
                         <b-btn @click="resetMultipleUpload(input_idx)" class="float-right mt-2 btn-lg">Reset</b-btn>
                     </div>
                     <div class = "col-md-10">
-                    </div>
+                    </div> -->
                     
 
                     <div class = "col-md-10 text-center">
@@ -452,14 +452,18 @@
                                             :title="ds_params.description"></i>
                                         </label>
                                         <div v-if="ds_params.param_type === 'enum'">
-                                            <select @focus="provide_multiple_param_desc(ds_param)" :id="`dp-${input_idx}`" class="form-control custom-select"
-                                                    v-model="ds_param_selected[input_idx]" :required="ds_params.required" :name="`${ds_param.name}-${input_idx}`">
+                                            <select @focus="provide_multiple_param_desc(ds_params)" :id="`dp-${input_idx}`" class="form-control custom-select"
+                                                    v-model="ds_param_selected[input_idx - 1]" :required="ds_params.required" :name="`${ds_params.name}-${input_idx}`">
                                                 <option v-for="option in ds_params.options" :value="option" :key="option"
                                                         :selected="ds_params.default == option ? 'selected' : ''">
                                                     {{ option }}
                                                 </option>
                                             </select>
-                                        </div>  
+                                        </div>
+                                        <div v-else>
+                                            <b-form-input @focus="provide_multiple_param_desc(ds_params)" :id="`dp-${input_idx}`" :required="ds_params.required" :placeholder="ds_param_selected[input_idx - 1]"
+                                            v-model="ds_param_selected[input_idx - 1]" :name="`${ds_params.name}-${input_idx}`" />
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -802,6 +806,9 @@
                         }
                         formatted_files['i-' + this.app.inputs[k].id] = input_arr;
                     }
+                    console.log("formatted files:");
+                    console.log(formatted_files);
+
                     return formatted_files;
                 }
             },
@@ -889,8 +896,8 @@
 
                             
 
-                            // console.log("printing dataset parameters");
-                            // console.log(this.ds_params.name);
+                            console.log("printing dataset parameters");
+                            console.log(this.ds_params.name);
                             // console.log();
                         }
 
@@ -1013,8 +1020,12 @@
 
                 console.log("All right is true here")
 
-                if (allRight) this.submitTask()
-                else alertCenter.add('danger', "Please recheck your inputs. Something error here!");
+                if (allRight) {
+                    this.submitTask();
+                }
+                else {
+                    alertCenter.add('danger', "Please recheck your inputs. Something error here!");
+                }
 
             },
 
