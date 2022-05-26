@@ -418,7 +418,7 @@ class SubmitController < ApplicationController
         Rails.logger.debug "Sucess here - 4"
 
 
-        if is_single
+        if is_single == "true"
           app_inputs.keys.each do |input_id|
             combine_inputs_array[input_id] = combine_inputs_array[input_id][0, 1]
           end
