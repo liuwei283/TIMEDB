@@ -71,7 +71,7 @@
                     Please choose the method:
                 </div>
                      <select @change='heatmapViz' class="form-select col" id="fraction-heatmap-selector" data-style="btn-secondary" data-live-search="true" v-model="heatmap_selected">
-                        <option v-for="(option, index) in boxplot_selector" :key="index" :value="option.value" :disabled="option.label=='──────────'">
+                        <option v-for="(option, index) in heatmap_selector" :key="index" :value="option.value" :disabled="option.label=='──────────'">
                             {{option.label}}
                         </option>
                     </select>
@@ -169,19 +169,41 @@ export default {
                     {value:"TIMER",label:"TIMER"},
                     {value:"xCell",label:"xCell"},
             ],
+            heatmap_selector:[
+                    {value:"ABIS",label:"ABIS"},
+                    {value:"CIBERSORT",label:"CIBERSORT"},
+                    {value:"CIBERSORTX",label:"CIBERSORTX"},
+                    {value:"ConsensusTME",label:"ConsensusTME"},
+                    {value:"EPIC",label:"EPIC"},
+                    {value:"ImmuCellAI",label:"ImmuCellAI"},
+                    {value:"MCPcounter",label:"MCPcounter"},
+                    {value:"quanTIseq",label:"quanTIseq"},
+                    {value:"TIMER",label:"TIMER"},
+                    {value:"xCell",label:"xCell"},
+            ],
             landscape_selected: null,
             landscape_selector:[
                     {value:"pie",label:"Pie Chart"},
                     {value:"bar",label:"Bar Plot"},
 
             ],
-            }
+            clinical_file_path: "",
+
+            clinical_fexists: true,
+            landscape_cell_fexists: true,
+        }
     },
     created() {
         this.pie_selected = this.pie_selector[0];
         this.boxplot_selected="Consensus";
-        this.heatmap_selected="Consensus";
+        this.heatmap_selected="ABIS";
         this.landscape_selected="pie";
+
+        this.clinical_file_path = "/public/data/clinical/sample/Clinical_" + this.project_name + ".csv";
+
+        axios.get('/api/public_file/check_file_exists', { params: { fpath: this.clinical_file_path}  }).then(response => {
+            this.clinical_fexists = response.data["fexists"];
+        });
     },
     mounted() {
         event.rpcRegisterReceiver("getVue", () => this);
@@ -191,6 +213,8 @@ export default {
         pieViz(){
             var clinical_file_path = this.data_path + "clinical/sample/Clinical_" + this.project_name + ".csv";
             fractionPie("#fraction-pieVis", clinical_file_path, this.pie_selected, "#fraction-pie-editor", "fraction_pie_viz");
+
+            
         },
         boxplotViz(){
             var cellData_file_path = this.data_path + "cell_data/" + this.boxplot_selected + "/" + this.project_name + "_" + this.boxplot_selected + ".csv";
@@ -203,9 +227,19 @@ export default {
             }
         },
         landscapeViz(){
-            var file_name = this.project_name + "_Consensus.csv";
-            var file_path = this.data_path + "cell_data/Consensus/" + file_name;
-            fractionLandscape("#fraction-landscapeVis", file_path, this.landscape_selected, "#fraction-landscape-editor", "fraction_landscape_viz");
+            var cellData_file_path = this.data_path + "cell_data/Consensus/" + this.project_name + "_Consensus.csv";
+
+            axios.get('/api/public_file/check_file_exists', { params: { fpath: cellData_file_path}  }).then(response => {
+                this.landscape_cell_fexists = response.data["fexists"];
+               
+                if (this.landscape_cell_fexists == true) {
+                    document.getElementById("fraction-landscapeBlock").style.display = "block";
+                    fractionLandscape("#fraction-landscapeVis", cellData_file_path, this.landscape_selected, "#fraction-landscape-editor", "fraction_landscape_viz");
+                }
+                else {
+                    document.getElementById("fraction-landscapeBlock").style.display = "none";
+                }
+            });
         },
 
         heatmapViz() {

@@ -19,16 +19,11 @@ export function extractWord(word){
   return newword.match(/\b(\w)/g).join('.')
 }
 
-// var matches = word2.match(/\b(\w)/g);    // ['J','S','O','N'] 
-// var acronym = matches.join('.');     // JSON 
-// console.log(acronym)
 
 export function plotDataloaded(_data){
 
-  console.log("data:",_data); //79行样本数据
 
-  let cellList = _data.columns.slice(2) //免疫细胞种类
-  //判断并删除p值
+  let cellList = _data.columns.slice(2)
   if(cellList.indexOf("P-value") != -1){
     cellList.splice(cellList.indexOf("P-value"),1)
   }
@@ -38,17 +33,12 @@ export function plotDataloaded(_data){
     sampleList.push(_data[i][_data.columns[0]])
   }
 
-  //获取坐标 免疫细胞种类
   let columns = cellList; 
   this.data.cellList = cellList;
-  //获取样本名称
   const sampleNames = sampleList;
   this.data.sampleList = sampleList; 
   const changeNames = sampleList;
-  //console.log("changeNames:",changeNames); //去除了后缀的样本名 79*
-
-  //get changeData = {cell:[value,,,*79]}   23*79
-  const changeData = [] //全数组矩阵
+  const changeData = [] 
   columns.forEach((arr) =>{
     let temp1 = []
     _data.forEach((d) =>{
@@ -57,52 +47,43 @@ export function plotDataloaded(_data){
     });
     changeData.push(temp1)
   });
-  console.log("changeData:",changeData); //{cell:[value,,,*79]}   17*79 
 
-  
 
   let maxxx = MAXforArr(changeData)
-  this.data.maxxx = maxxx //中间heatmap的最大值
+  this.data.maxxx = maxxx 
 
-  //将data处理成可画图数据 for middle heatmap
   const useData = [] 
   for(let i = 0;i < changeData.length;i++){
     for(let j = 0;j < _data.length;j++){
       const elem = {name:null,data: 0,pValue:0,row: 0,col: 0}
-      elem.name = columns[i] //免疫细胞种类
-      elem.data = changeData[i][j] //对应的value
-      //elem.pValue = changeData[22][j] //Pvalue值
-      elem.row = i + 1 //坐标
-      elem.col = j + 1 //坐标
+      elem.name = columns[i] 
+      elem.data = changeData[i][j] 
+      elem.row = i + 1 
+      elem.col = j + 1
       useData.push(elem)
     }
   }
-  console.log("useData:",useData) //1343 = 17*79
+
   
-  //boxplot plot
-  //设置绘图大小
+
   this.data.plotSize = [250,500];
-  //设置字体大小
   this.data.labelFontSize = 12;
   this.data.tickFontSize = 14;
   
-  //把method摘出去
+
   let newArr = _data;
   newArr.map(function(arr){return delete arr.method})
-  //console.log("newArr:",newArr)
 
 
-  let newData =  dataHandler(newArr) //处理成box格式的数据
-  console.log("newArr:",newArr)
+
+  let newData =  dataHandler(newArr) 
+
   let testrange0 = MINforArr(newData.result)
   let testrange1 = MAXforArr(newData.result)
   
-  console.log("boxdata:",newData)
-  console.log("range:",testrange1)
-  console.log("range:",testrange0)
 
-  let cout1 = getfixed(testrange0) //<0 //需要保留的位数
-  let cout2 = getfixed(testrange1) //>0 //需要保留的位数
+  let cout1 = getfixed(testrange0)
+  let cout2 = getfixed(testrange1) 
 
   if(testrange0<0){
     let range0 = -(Math.abs(testrange0) + 5/(10 ** (cout1+1)))
@@ -120,23 +101,18 @@ export function plotDataloaded(_data){
 
 
 
-  const colors = ["#FCE4EC"]; //boxplot的颜色
-  let valueRange = [range0.toFixed(cout1),range1.toFixed(cout2)]; //boxplot value range
+  const colors = ["#FCE4EC"]; 
+  let valueRange = [range0.toFixed(cout1),range1.toFixed(cout2)];
 
-  this.data.columns = newData.columns; //cellList
-  this.data.colors = colors; //颜色
-  this.data.valueRange = valueRange; //boxplot value range
-  console.log("boxplot:",valueRange)
+  this.data.columns = newData.columns; 
+  this.data.colors = colors; 
+  this.data.valueRange = valueRange; 
 
 
-  //stackedbar change
-  // 获取横坐标的键
+
   const categoryKey = _data.columns[0]; //获取样本的列名
-  // 得到纵，作为分类
   const categories = sampleList
-  // 得到纵坐标作为图例
   const classifications = cellList
-  //配置颜色
   const result = {};
   let colorMap = {}
   classifications.forEach((item,i)=>{
@@ -156,7 +132,7 @@ export function plotDataloaded(_data){
   const sum = [];
   _data.forEach(row => {
     let count = 0,key,value;
-    for ([key, value] of Object.entries(row).slice(1)) { //这里的sclice和数据格式有关
+    for ([key, value] of Object.entries(row).slice(1)) { 
       value == "NA"? value = 0:null
       if(key != categoryKey) {
         count += Math.abs(parseFloat(value)); 
@@ -170,10 +146,10 @@ export function plotDataloaded(_data){
   _data.forEach(d => {
     classifications.forEach((classification,k) => {
       d[classification]=="NA"? d[classification]=0:null
-      result[classification].push([d[categoryKey], Math.abs(parseFloat(d[classification]))/sumMap[d[categoryKey]]]); //这里除以和
+      result[classification].push([d[categoryKey], Math.abs(parseFloat(d[classification]))/sumMap[d[categoryKey]]]); 
     });
   });
-  console.log("result:",result);
+
   this.data.gridPlotWidth = 10;
   this.data.gridPlotheight = 16;
   this.data.stackedWidth = sampleList.length*this.data.gridPlotWidth
@@ -184,44 +160,25 @@ export function plotDataloaded(_data){
 
 export function clinicalDataloaded(_data){
 
-  //sample names
-  //console.log("!!!",this.data.sampleList)
+
+
+
   const addNames = this.data.sampleList
-  console.log("names:",addNames) //sample names
+
   this.data.addNames = addNames
   
-  //展示的各项指标的名字
-  //这里需要改成和clinical data对应的  
-  //hardcode
-  console.log("clinical data:",_data)
+
 
   let tempResult = mapCNlist(_data[0])
+
   let c_indexList = tempResult["c_"]
   let n_indexList = tempResult["n_"]
   let clinicalIndexes = aryJoinAry(c_indexList, n_indexList) //混合之后的临床指标
 
-  console.log("after mixed index:",clinicalIndexes)
-  // let hardindex = ["c_ajcc_pathologic_t","n_cigarettes_per_day","c_tumor_grade",
-  // "n_years_smoked","c_ajcc_pathologic_n","n_alcohol_intensity","c_primary_diagnosis",
-  // "n_weight","c_synchronous_malignancy","n_height",
-  // "c_alcohol_history","n_bmi","c_race","n_age","c_gender","c_tumor_type"]
-
-  // clinicalIndexes = hardindex
-
-  
 
 
 
-  //console.log("??:",Math.min(...[c_indexList.length,n_indexList.length])) 得到数组的最小值
-
-  //console.log("itemAry数组==",test);// ["A", 1, "B", 2, "C", 3, "D", 4, 5, 6]
-  //console.log("itemAry数组==",itemArys);// ["A", 1, "B", 2, "C", 3, "D", 4, 5, 6]
-
-  //let addName = ["c_tumor_stage","c_ajcc_pathologic_t","c_ajcc_pathologic_n","c_gender","os_status","n_age"]
   let addName = clinicalIndexes
-  //加个判断的第一个c_
-
-  //let sortaddName = ["tumor stage","ajcc pathologic t","ajcc pathologic n","os status","gender","age"]
   let sortaddName = clinicalIndexes
   this.data.sortaddName = sortaddName
 
@@ -232,10 +189,8 @@ export function clinicalDataloaded(_data){
       ditem == item? (cindexes.push(dindex)):null
     });
   })
-  console.log("cindexes:",cindexes) //这个是按照指标排的顺序
 
-  //根据对应的指标生成对应的数据
-  //注意和顺序有关
+
   function mapClinicalIndex(arr,cindexes){
     let newArr = []
     arr.forEach((item,index)=>{
@@ -248,89 +203,57 @@ export function clinicalDataloaded(_data){
     return newArr
   }
 
-  //clinical samplelist
-  let clinicalSamples = _data.map(k=>k[0])
 
-  //筛选data2和data中的对应数据 
-  //根据样本名字匹配
+  let tg = _data[0].indexOf("sample_name")
+  let clinicalSamples = _data.map(k=>k[tg])
+
   let addData = []
   for(let i = 0;i < addNames.length;i++){
     let index = clinicalSamples.indexOf(addNames[i]) //对应sample name
-    if(index != -1){ //如果匹配上了
+    if(index != -1){ 
       addData.push(_data[index])
     }
   }
-  console.log("addData:",addData)
-
-  //在这里判断？？？？？？？奇怪的要求
-  let goaddName = clinicalIndexes
-  //加一个判断的 如果
-  let golegendType = {} //生成图例的种类
-  let gotempNum = {}
-  goaddName.forEach((item,index)=>{
-    golegendType[item] = []
-    gotempNum[item] = []
-    nMCatagory(addData.slice(0),golegendType[item],index) // 空数据集 addData的第几列 图例中的位置
-    golegendType[item] = golegendType[item].slice(0).sort()
-    golegendType[item].unshift("NA")
-    golegendType[item] = Array.from(new Set(golegendType[item]))
-  })
-  console.log(golegendType)
-  console.log(golegendType[clinicalIndexes[0]].length)
 
 
-
-  
-  // let sortaddName = mapClinicalIndex(_data,cindexes)[0]
-  // console.log("sortaddName:",sortaddName)
-
-  //根据对应的指标进行匹配 顺序也一致
   addData = mapClinicalIndex(addData,cindexes).slice(0)
-  console.log("addData:",addData)
 
-
-  
-  //
   var newArr = []
-  //直接通过 addData计算的格子
-  for(let i = 0;i < addData.length;i++){ //矩阵数据
-    for(let j = 0; j < addName.length;j++){ //hard code 想要展示的指标
+
+  for(let i = 0;i < addData.length;i++){ 
+    for(let j = 0; j < addName.length;j++){ 
       const elem = {data:null,row:0,col:0}
       elem.data = addData[i][j]
-      elem.row = 23 + j //23是 中间的heatmap的长度
+      elem.row = 23 + j 
       elem.col = i + 1
       newArr.push(elem)
     }
   }
-  console.log("计算格子的数据：",newArr) //1343个格子
-  //console.log("newArr:",newArr) //不同的指标计算 行和列的位置
-  
-  //生成临床指标的种类
-  let legendType = {} //生成图例的种类
+
+  let legendType = {} 
   let tempNum = {}
   addName.forEach((item,index)=>{
     legendType[item] = []
     tempNum[item] = []
-    nMCatagory(addData,legendType[item],index) // 空数据集 addData的第几列 图例中的位置
+    nMCatagory(addData,legendType[item],index) 
     legendType[item] = legendType[item].slice(0).sort()
     legendType[item].unshift("NA")
     legendType[item] = Array.from(new Set(legendType[item]))
   })
-  console.log("legendType:",legendType)
 
-  //得到n_的最大值
+
+
   addName.forEach((item,index)=>{
     item.substring(0,2)=="n_"? (tempNum[item] = tempNum[item].slice(1)[tempNum[item].length-1]):null
   });
-  console.log("!!",tempNum)
 
-  //生成画图的数据
+
+
   let heatmapLoc = {} 
   addName.forEach((item,index)=>{
   heatmapLoc[item] = []
     rowColumn(addData,heatmapLoc[item],index,index+23,item,legendType) // 空数据集 addData的第几列 heatmap中的位置
   })
-  console.log("heatmapLoc:",heatmapLoc)
   
   this.data.heatmapLoc = heatmapLoc
                   
@@ -340,40 +263,37 @@ export function clinicalDataloaded(_data){
     legendLoc[item] = []
     showLegend(legendType[item],legendLoc[item],index,item.substring(0,2),NAlen(addName,legendType))
   })
-  console.log("legendLoc:",legendLoc) 
 
   this.data.legendLoc = legendLoc
 
 
-  //配置颜色
-  //测量text的长度
+
   let x = TextSize.measuredTextSize("test", 8).width;
-  console.log(x)
-  //debugger;
 
 
-  //计算中间heatmap的左边的boxplot的legend范围
+
+
   
   let ppp = getfixed(this.data.maxxx)
-  console.log("pp:",ppp)
+
   let textmaxxx = this.data.maxxx + 5/(10 ** (ppp+1))
-  console.log("小数：",textmaxxx.toFixed(ppp))
+
   this.data.textmaxxx = textmaxxx.toFixed(ppp)
 
-  //age的颜色
+
   
   
   //"#FF003C" "#EFDAFF" "#EFDAFF" "#004DBE"
-  let bgendColor = "#00479a" //heatmap legend的颜色 <0
-  let bgstartColor =  "#dbdbdb"; //heatmap legend的颜色 中间的颜色
-  let gbstartColor = "#dbdbdb" // heatmap legend的颜色 中间的颜色
-  let gbendColor = "#FF0000"//heatmap legend的颜色 >0
+  let bgendColor = "#00479a" 
+  let bgstartColor = 	"#dbdbdb"; 
+  let gbstartColor = "#dbdbdb" 
+  let gbendColor = "#FF0000"
 
   let ageStartColor = "#ee807f";
   let ageEndColor = "#ee2422";
   
-  //fill = d.data<0? gbcolorScheme.get(d.data/-maxxx):colorScheme.get(d.data/maxxx)
-  let colorScheme =  Oviz.color.schemeGradient(bgendColor,bgstartColor)
+
+  let colorScheme =  Oviz.color.schemeGradient(bgstartColor,bgendColor)
   let gbcolorScheme =  Oviz.color.schemeGradient(gbstartColor,gbendColor)
   let ageColorScheme = Oviz.color.ColorSchemeGradient.create(ageStartColor, ageEndColor);
   
@@ -391,40 +311,72 @@ export function clinicalDataloaded(_data){
 
                     
 
-  //计算几张图的位置
 
   let NAlength = NAlen(addName,legendType)
   this.data.NAlength = NAlength
-  console.log("NAlength:",NAlength)
 
-  //计算最后一层的位置
+
+
   let thirdLen = this.data.cellList.length * this.data.gridPlotheight + this.data.cellList.length *15 + 150
   this.data.thirdLen = thirdLen
   
 
-  //计算age的legend的位置-行数
-  console.log("_data:",_data[0])
+
+
   let agestr = "n_age"
   let row = _data[0].indexOf(agestr)
-  console.log("row:",row)
+
   let ageData = []
   _data.forEach((item,index) => {
     index!=0? ageData.push(item[row]*1):null
   });
-  console.log("ageData:",ageData)
 
-  //计算age的最大值和最小值
+
+
   let ageMax = Math.max(...ageData)
   let ageMin = Math.min(...ageData)
-  console.log(ageMin)
+
 
   let ageRow = clinicalIndexes.indexOf(agestr)
-  console.log("ageRow:",ageRow)
+
 
   this.data.ageMax = ageMax;
   this.data.ageMin = ageMin;
   this.data.ageRow = ageRow;
 
+
+
+  let n_row = []
+  let n_data = {}
+  n_indexList.forEach((item,index)=>{
+    n_row.push(_data[0].indexOf(item))
+
+  })
+
+
+  n_row.forEach((item,index)=>{
+    n_data[n_indexList[index]] = []
+    _data.forEach((ditem,dindex) => {
+      dindex!=0? (isNaN(ditem[item]*1)? n_data[n_indexList[index]].push(0):n_data[n_indexList[index]].push(ditem[item]*1)):null
+    });
+  })
+
+
+
+  let n_crow = []
+  n_indexList.forEach((item,index)=>{
+    n_crow.push(clinicalIndexes.indexOf(item))
+  })
+
+  let n_legendData = []
+  n_indexList.forEach((item,index)=>{
+    let min = Math.min(...n_data[item]) + ""
+    let max = Math.max(...n_data[item]) + ""
+    min == max? (max=="0"? (min = "NA",max = "NA"):null):null
+    n_legendData.push({label:item,row:n_crow[index],min: min,max: max})
+  })
+
+  this.data.n_legendData = n_legendData
 
   return {sortaddName,newArr,addData,addName}
 
@@ -432,15 +384,13 @@ export function clinicalDataloaded(_data){
 
 export function getfixed(num){
   let textnum = num+""
-  console.log("",textnum)
-  console.log("",textnum.split(".")[0])
   let final
-  let rep=/[\.]/; //判断是否有小数点
+  let rep=/[\.]/;
   rep.test(textnum)? (final = textnum.split(".")[1].lastIndexOf("0")+2):final = 2
   return final
 }
 
-//寻找二维数组最大值
+
 export function MAXforArr(arr){
   let result = []
   let result2 = []
@@ -453,7 +403,7 @@ export function MAXforArr(arr){
   return final
 }
 
-//寻找二维数组最小值
+
 export function MINforArr(arr){
   let result2 = []
   arr.forEach((item,index)=>{
@@ -463,33 +413,25 @@ export function MINforArr(arr){
   return final
 }
 
-//配置heatmap的颜色
+
 export function heatmapColormap(item,cate,legendType,newColors = {}){
-  //item: c_ n_
-  //cate: 种类
+
   let elemcolor = []
-  //console.log("cate:",cate)
+
   newColors[item] = []
-  if(item.substring(0,2)=="c_"){ //这里只配置c_de颜色
-    //legendType[item]
+  if(item.substring(0,2)=="c_"){ 
+
     let colors = colorMap(legendType[item])
     legendType[item].forEach((d,n) => {
       newColors[item].push({type:d,color:colors[n]})
     });
-    //console.log(newColors)
+
     newColors[item].forEach((k,m) => {
-      //console.log("k:",k.type)
       if(cate == k.type){
         elemcolor.push(k.color)
-        //console.log(elemcolor)
       }
     });
   }
-  // else if(item.substring(0,2)=="n_"){
-  //   legendType[item].forEach((d,n) => {
-  //     d == "NA"? elemcolor.push("#C0C0C0"):null
-  //   })
-  // }
   return elemcolor
 
 }
@@ -497,13 +439,16 @@ export function heatmapColormap(item,cate,legendType,newColors = {}){
 export function colorMap(arr){
   let color1 = ["#C0C0C0"]
   let color2 = ["#C0C0C0","#7d9fee"]
-  //let color3 = ["#C0C0C0","#7d9fee","#ee7db5"] //yuanlai
   let color3 = ["#C0C0C0","#cc4f7b","#314893"]
-  //let color32 = ["#C0C0C0","#ee937d","#a67dee"]
   let color4 = ["#C0C0C0","#ee937d","#ee7db5","#7d9fee"]
   let color5 = ["#C0C0C0","#86e5e9","#ee7e7d","#cc4f7b","#314893"] //
   let color6 = ["#C0C0C0","#eed97d","#ee937d","#ee7db5","#a67dee","#7d9fee"]
   let color7 = ["#C0C0C0","#eed97d","#ee937d","#ee7db5","#a67dee","#7d9fee","#7deea4"]
+  let color8 = ["#C0C0C0","#eed97d","#ee937d","#ee7db5","#a67dee","#7d9fee","#C0C0C0","#eed97d"]
+  let color9 = ["#C0C0C0","#eed97d","#ee937d","#ee7db5","#a67dee","#7d9fee","#C0C0C0","#eed97d","#ee937d"]
+  let color10 = ["#C0C0C0","#eed97d","#ee937d","#ee7db5","#a67dee","#7d9fee","#C0C0C0","#eed97d","#ee937d","#ee7db5"]
+  let color11 = ["#C0C0C0","#eed97d","#ee937d","#ee7db5","#a67dee","#7d9fee","#C0C0C0","#eed97d","#ee937d","#ee7db5","#a67dee",]
+  let color12 = ["#C0C0C0","#eed97d","#ee937d","#ee7db5","#a67dee","#7d9fee","#C0C0C0","#eed97d","#ee937d","#ee7db5","#a67dee","#7d9fee"]
   let color13 = ["#C0C0C0","#eed97d","#ee937d","#ee7db5","#a67dee","#7d9fee","#C0C0C0","#eed97d","#ee937d","#ee7db5","#a67dee","#7d9fee","#7deea4"]
   arr.length>7? console.log("超出颜色配置范围!!",arr.length):null
   switch(arr.length){
@@ -514,6 +459,11 @@ export function colorMap(arr){
     case 5: return color5; break;
     case 6: return color6; break;
     case 7: return color7; break;
+    case 8: return color8; break;
+    case 9: return color9; break;
+    case 10: return color10; break;
+    case 11: return color11; break;
+    case 12: return color12; break;
     case 13: return color13; break;
   }
   
@@ -525,27 +475,22 @@ export function NAlen(addName,legendType){
   addName.forEach((item,index)=>{
     item.substring(0,2) == "c_"? len.push(legendType[item].length):null
   })
-  //console.log("",len)
   let length = 180 / Math.max(...len)
   return length
 }
 
-//生成图例的格子
+
 export function showLegend(arr1,arr2,n,sign,base){
-  //arr1是该指标的种类
-  //生成的用于画图的lengd数据
-  //n是在图例的多少行
-  //sign判断c_还是n_
   if(sign == "c_"){
     for(let i = 0;i < arr1.length;i++){
       const elem = {data:null,row:0,col:0,colors:null,num:0,x:0,textx:0}
       let colors = []
       let color
-      arr1.length > 20? color = "blue":(colors = colorMap(arr1),color = colors[i]) //这里在限制年龄
+      arr1.length > 20? color = "blue":(colors = colorMap(arr1),color = colors[i])
       elem.data = arr1[i]
       elem.row = n
       elem.col = i + 1
-      elem.colors = color //配置颜色
+      elem.colors = color 
       elem.num = arr1.length
       i == 0? elem.textx = base/2 :((arr1.length==2&&i == 1)? elem.textx = base + 1 + (180-base)/(arr1.length-1)*(i)*1/4:elem.textx=18)
       i == 0? elem.x = 0:elem.x = base + (180-base)/(arr1.length-1)*(i-1) +1
@@ -559,7 +504,7 @@ export function showLegend(arr1,arr2,n,sign,base){
       elem.data = tempArr[i]
       elem.row = n
       elem.col = i + 1
-      tempArr[i]== "NA"? elem.colors = "#C0C0C0":null //配置颜色
+      tempArr[i]== "NA"? elem.colors = "#C0C0C0":null 
       elem.num = tempArr.length
       i == 0? elem.textx = base/2 :elem.textx = base + 1 + (180-base)/(tempArr.length-1)*1/2*1/2
       i == 0? elem.x = 0:elem.x = base + (180-base)/(tempArr.length-1)*(i-1) + 1
@@ -570,26 +515,23 @@ export function showLegend(arr1,arr2,n,sign,base){
 }
 
 //
-export function rowColumn (addData,arr,n,r,item,legendType){ //算左边的图例
-  //addData的第几列 索引 r第几行
+export function rowColumn (addData,arr,n,r,item,legendType){ 
   let colorhp = []
   for(let i = 0; i < addData.length;i++){
     const elem = {data:null,row:0,col:0,color:null}
-    
     elem.data = addData[i][n]
     elem.row = r
     elem.col = i + 1
     elem.color = heatmapColormap(item,addData[i][n],legendType)[0]
-    //console.log(elem.color)
     arr.push(elem)
   }
 }
 
 
-//获得临床指标对应的数据对应的种类 主要和legend有关
+
 export function nMCatagory(addData,arr2,n){
     let arr1 = []
-    arr2.push("NA") //强制在数据列表内增加NA
+    arr2.push("NA") 
     for(let i = 0;i < addData.length;i++){
       arr1.push(addData[i][n])
       if(arr1[i] != "NA"){
@@ -598,33 +540,29 @@ export function nMCatagory(addData,arr2,n){
         }
       }
     }
-    arr2 = Array.from(new Set(arr2)) //去重+重排序
+    arr2 = Array.from(new Set(arr2))
 }
 
 
-//混合两个数组 c_ n_ c_ ^
 export function aryJoinAry(ary,ary2){
   let minLength;
   let itemAry=[];
   let itemArys=[];
-  //先拿到两个数组中长度较短的那个数组的长度
   if(ary.length>ary2.length){
     minLength=ary2.length;
   }
   else{
     minLength=ary.length;
   }
-  //将两个数组中较长的数组记录下来
+
   let longAry=arguments[0].length>arguments[1].length?arguments[0]:arguments[1];
-  //循环范围为较短的那个数组的长度
+
   for (let i = 0; i < minLength; i++) {
-    //将数组放入临时数组中
     itemAry.push(ary[i]);
     itemAry.push(ary2[i])
   }
   itemArys.push(itemAry.concat(longAry.slice(minLength)))
 
-  //itemAry和多余的新数组拼接起来并返回。
   return itemAry.concat(longAry.slice(minLength));
 }
 
@@ -984,49 +922,37 @@ export function mapColor(cell){
 }
 
 
-//选择方法
+
 export function chooseMethod(chosenMethod,data){
   let afterdata = []
-  console.log("chosenMethod:",chosenMethod);
-  console.log("Data.Bardata:",data);
   chosenMethod.forEach((item,index) => {
       if(item != ""){
           afterdata.push(data[index]);
-          // data.forEach((ditem,dindex) => {
-          //     //添加对应的方法
-          //     afterdata.push(ditem[index]);
-          // });
       }
 
   });
   return afterdata;
 }
 
-//store the top methods
+
 export function viewMethod(methoddata){
   let tmpMethod = []
   tmpMethod.push
 }
 
 export function dataHandler(data){
-  //获取横坐标
   let columns = data.columns.slice(2);
-  console.log("dataHandler columns:",columns)
   if(columns.indexOf("P-value") != -1){
     columns.splice(columns.indexOf("P-value"),1)
   }
 
-  //存放每个box中的所有特征值
   const result = [];
-  //存放所有中位数
   const means = [];
   columns.forEach((arr) => {
     const temp1 = [];
-    //获取每个column对应的所有值
     data.forEach((d) => {
       temp1.push(parseFloat(d[arr]));
     });
-    //通过内置函数得出每组值的下边缘、下四分位数、中位数、上四分位数、上边缘并存入result数组
     const stat = new Oviz.algo.Statistics(temp1);
     result.push([
       stat.min(),
@@ -1035,7 +961,6 @@ export function dataHandler(data){
       stat.Q3(),
       stat.max(),
     ]);
-    //中位数存入数组
     means.push(stat.mean());
   });
   return { result: result, means, columns: columns }
