@@ -31,29 +31,30 @@
   </div>
   <br />
 
-  <div class = "container">
-  <h3> Reprocessed columns</h3>
   <% if @table_info_exist %>
-    <table class = "table table-striped">
-      <thead>
-        <tr class = "row">
-          <% @reprocessedHeaders.each do |header|%>
-            <th class = "col-md-3"><%= header %></th>
-          <% end %>
-        </tr>
-      </thead>
-      <tbody>
-        <% @pjReprocessed.each do |row| %>
+    <div class = "container">
+      <h3> Reprocessed columns</h3>
+      <table class = "table table-striped">
+        <thead>
           <tr class = "row">
-            <% row.each do |cell|%>
-              <td class = "col-md-3"><%= cell[1] %> </td>
+            <% @reprocessedHeaders.each do |header|%>
+              <th class = "col-md-3"><%= header %></th>
             <% end %>
           </tr>
-        <% end %>
-      </tbody>
-    </table>
+        </thead>
+        <tbody>
+          <% @pjReprocessed.each do |row| %>
+            <tr class = "row">
+              <% row.each do |cell|%>
+                <td class = "col-md-3"><%= cell[1] %> </td>
+              <% end %>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
   <% end %>
-  </div>
+
   
 
   <div class = "container">
@@ -193,8 +194,8 @@
 
       <div class="tab-pane fade" id="fraction-overview" role="tabpanel" aria-labelledby="fraction-overview-tab">
 
-        <div id="pj_fraction">
-        </div>
+        <%# <div id="pj_fraction">
+        </div> %>
 
    
       </div>

@@ -39,8 +39,8 @@
                     <a class="dropdown-item viz_download" id = "bar" @click="down_graph($event)">Download bar chart</a>
                 </div>
             </div>
-            <div class="row vizBlock">
-                <div class="md-col-9" id = "barVis">
+            <div class="row veBlock">
+                <div class="md-col-9 vizBlock" id = "barVis">
                 </div>
                 <div id="bar-editor" class = "md-col-3 v-editor">
                     <OvizEditor :config="overview_conf_bar" :editorWidth = "280"/>
@@ -57,63 +57,68 @@
                 <h4>Some description for pie plot</h4>
             </div>
 
-        <div class="select-bar form-inline row">
+            <div class="select-bar form-inline row">
 
-            <div class="sdiv col">
-                <div class="select-title">
-                    Please choose the cell division method:
+                <div class="sdiv col">
+                    <div class="select-title">
+                        Please choose the cell division method:
+                    </div>
+                    <select @change='pieViz' class="form-select col selectpicker pie_react" data-style="btn-secondary" data-live-search="true" v-model="pieMethodSelected">
+                        <option v-for="(option, index) in pieMethodSelector" :key="index" :value="option.value" >
+                            {{option.label}}
+                        </option>
+                    </select>
                 </div>
-                <select @change='pieViz' class="form-select col selectpicker pie_react" data-style="btn-secondary" data-live-search="true" v-model="pieMethodSelected">
-                     <option v-for="(option, index) in pieMethodSelector" :key="index" :value="option.value" >
-                        {{option.label}}
-                    </option>
-                </select>
+
+                <div class="sdiv col">
+                    <div class="select-title">
+                        Please choose the cancer type:
+                    </div>
+                    <select @change='updateProjects(); pieViz()' class="form-select col selectpicker pie_react" data-style="btn-secondary" data-live-search="true" v-model="pieCancerSelected">
+                        <option v-for="(option, index) in cancers" :key="index" :value="option">
+                            {{option}}
+                        </option>
+                    </select>
             </div>
 
-            <div class="sdiv col">
-                <div class="select-title">
-                    Please choose the cancer type:
-                </div>
-                <select @change='updateProjects(); pieViz()' class="form-select col selectpicker pie_react" data-style="btn-secondary" data-live-search="true" v-model="pieCancerSelected">
-                    <option v-for="(option, index) in cancers" :key="index" :value="option">
-                        {{option}}
-                    </option>
-                </select>
-           </div>
+                <div class="sdiv col">
+                    <div class="select-title">
+                        Please choose the project:
+                    </div>
+                    <select @change='pieViz' class="form-select col selectpicker pie_react" data-style="btn-secondary" data-live-search="true" v-model="pieProjectSelected">
+                        <option v-for="(option, index) in pie_projects" :key="index" :value="option">
+                            {{option}}
+                        </option>
+                    </select>
 
-            <div class="sdiv col">
-                <div class="select-title">
-                    Please choose the project:
                 </div>
-                <select @change='pieViz' class="form-select col selectpicker pie_react" data-style="btn-secondary" data-live-search="true" v-model="pieProjectSelected">
-                    <option v-for="(option, index) in pie_projects" :key="index" :value="option">
-                        {{option}}
-                    </option>
-                </select>
+            </div>
+            <div id = "pieBlock">
+                <div class="dropdown">
+                    <button class="btn btn-secondary dropdown-toggle" type="button" id="pie_download_dropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Download
+                    </button>
+                    <div class="dropdown-menu" aria-labelledby="pie_download_dropdown">
+                        <a class="dropdown-item" id = "pie_download" @click="download_pie">Download cell data</a> 
+                        <a class="dropdown-item viz_download" id = "pie" @click="down_graph($event)">Download pie chart</a>
+                    </div>
+                </div>
 
+                <div class="row veBlock">
+                    <div class="md-col-9 vizBlock" id = "pieVis">
+                    </div>
+                    <div id="pie-editor" class = "md-col-3 v-editor">
+                        <OvizEditor :config="overview_conf_pie" :editorWidth = "280"/>
+                    </div>
+                </div>
+            </div>
+            <div v-if="!getPieFexists" class = "text-center row justify-content-center">
+                <h2>No data available</h2>
             </div>
         </div>
-        <div class="dropdown">
-            <button class="btn btn-secondary dropdown-toggle" type="button" id="pie_download_dropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                Download
-            </button>
-            <div class="dropdown-menu" aria-labelledby="pie_download_dropdown">
-                <a class="dropdown-item" id = "pie_download" @click="download_pie">Download cell data</a> 
-                <a class="dropdown-item viz_download" id = "pie" @click="down_graph($event)">Download pie chart</a>
-            </div>
-        </div>
 
-        <div class="row vizBlock">
-            <div class="md-col-9" id = "pieVis">
-            </div>
-            <div id="pie-editor" class = "md-col-3 v-editor">
-                <OvizEditor :config="overview_conf_pie" :editorWidth = "280"/>
-            </div>
-        </div>
-</div>
-
-    <hr>
-    <br>
+        <hr>
+        <br>
         <div id = "landscape" class = "container Block">
             <div id="landscapeDescription" class="row description">
                 <h4>Some description for Immune Subtype Landscape</h4>
@@ -132,23 +137,28 @@
 
                 </div>
             </div>
-            <div class="dropdown">
-                <button class="btn btn-secondary dropdown-toggle" type="button" id="landscape_download_dropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    Download
-                </button>
-                <div class="dropdown-menu" aria-labelledby="bar_download_dropdwon">
-                    <a class="dropdown-item" id = "landscape_download" @click="download_landscape" >Download sample number table</a> 
-                    <a class="dropdown-item viz_download" id = "landscape" @click="down_graph($event)">Download landscape chart </a>
+            <div id = "landscapeBlock">
+                <div class="dropdown">
+                    <button class="btn btn-secondary dropdown-toggle" type="button" id="landscape_download_dropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Download
+                    </button>
+                    <div class="dropdown-menu" aria-labelledby="bar_download_dropdwon">
+                        <a class="dropdown-item" id = "landscape_download" @click="download_landscape" >Download sample number table</a> 
+                        <a class="dropdown-item viz_download" id = "landscape" @click="down_graph($event)">Download landscape chart </a>
+                    </div>
+                </div>
+                <div class="row veBlock">
+                    <div class="md-col-9 vizBlock" id = "landscapeVis">
+                    </div>
+
+                    <div id="landscape-editor" class = "md-col-3 v-editor">
+                        <OvizEditor :config="overview_conf_landscape" :editorWidth = "280"/>
+                    </div>
+                    
                 </div>
             </div>
-            <div class="row vizBlock">
-                <div class="md-col-9" id = "landscapeVis">
-                </div>
-
-                <div id="landscape-editor" class = "md-col-3 v-editor">
-                    <OvizEditor :config="overview_conf_landscape" :editorWidth = "280"/>
-                </div>
-                
+            <div v-if="!getLandscapeFexists" class = "text-center row justify-content-center">
+                <h2>No data available</h2>
             </div>
         </div>
 
@@ -183,32 +193,42 @@
 
                 </div>
             </div>
-            <div class="dropdown">
-                <button class="btn btn-secondary dropdown-toggle" type="button" id="regulator_download" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                Dropdown regulator related data
-                </button>
-            <div class="dropdown-menu" aria-labelledby="regulator_download">
-                <a class="dropdown-item" id = "regulator_subtype" @click="download_regulator_subtype">Download subtype data</a> 
-                <a class="dropdown-item" id = "regulator_rna" @click="download_regulator_rna">Download RNA data</a>
-                <div class="dropdown-divider"></div>
-                <a class="dropdown-item viz_download" id = "regulator" @click="down_graph($event)">Download regulator chart</a>
+            <div id = "regulatorBlock">
+                <div class="dropdown">
+                    <button class="btn btn-secondary dropdown-toggle" type="button" id="regulator_download" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Dropdown regulator related data
+                    </button>
+                    <div class="dropdown-menu" aria-labelledby="regulator_download">
+                        <a class="dropdown-item" id = "regulator_subtype" @click="download_regulator_subtype">Download subtype data</a> 
+                        <a class="dropdown-item" id = "regulator_rna" @click="download_regulator_rna">Download RNA data</a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item viz_download" id = "regulator" @click="down_graph($event)">Download regulator chart</a>
 
-            </div>
-            </div>
-            <div class="row vizBlock">
-                <div class="md-col-9" id = "regulatorVis">
+                    </div>
                 </div>
-                 <div id="regulator-editor" class = "md-col-3 v-editor">
-                    <OvizEditor :config="overview_conf_regulator" :editorWidth = "280"/>
+                <div class="row veBlock">
+                    <div class="md-col-9 vizBlock" id = "regulatorVis">
+                    </div>
+                    <div id="regulator-editor" class = "md-col-3 v-editor">
+                        <OvizEditor :config="overview_conf_regulator" :editorWidth = "280"/>
+                    </div>
                 </div>
+            </div>
+            <div v-if="!getregulatorFexists" class = "text-center row justify-content-center">
+                <h2>No data available</h2>
             </div>
            
         </div>
+        <br>
+        <br>
+        <br>
+        <br>
     </div>
 </template>
 <script lang = 'ts'>
 import BootstrapVue from 'bootstrap-vue';
 import OvizEditor from "oviz-editor";
+
 
 import axios from "axios";
 import { event } from "crux/dist/utils";
@@ -237,6 +257,11 @@ export default {
             overview_conf_pie: {},
             overview_conf_landscape: {},
             overview_conf_regulator: {},
+
+            pie_fexists: true,
+            landscape_fexists: true,
+            regulator_rna_fexists: true,
+            regulator_subtype_fexists: true,
 
             data_path : "/public/data",
             bar_selector: [
@@ -281,6 +306,24 @@ export default {
     mounted() {
         this.all_viz();
     },
+    computed: {
+        getPieFexists() {
+            return this.pie_fexists;
+        },
+        getLandscapeFexists() {
+            return this.landscape_fexists;
+        },
+        getregulatorFexists() {
+            return this.regulator_rna_fexists && this.regulator_subtype_fexists;
+        },
+    },
+    watch: {
+        // pie_fexists:function(newValue) {
+        //     if (this.pie_fexists == true) {
+        //         immunepie("#pieVis", file_path, "#pie-editor", "overview_pie_viz");
+        //     }
+        // }
+    },
     methods: {
         barViz() {
             //alert(this.bar_selected)
@@ -298,19 +341,48 @@ export default {
             //method name must be same as data storage folder
             var file_name = this.pieProjectSelected + "_" + this.pieMethodSelected + ".csv";
             var file_path = this.data_path + "/cell_data/" + this.pieMethodSelected + "/" + file_name;
-            immunepie("#pieVis", file_path, "#pie-editor", "overview_pie_viz");
+
+            axios.get('/api/public_file/check_file_exists', { params: { fpath: file_path}  }).then(response => {
+                this.pie_fexists = response.data["fexists"];
+                console.log("===?" + this.pie_fexists);
+                console.log(typeof(this.pie_fexists));
+
+                if (this.pie_fexists == true) {
+                    document.getElementById("pieBlock").style.display = "block";
+
+                    immunepie("#pieVis", file_path, "#pie-editor", "overview_pie_viz");
+                }
+                else {
+                    document.getElementById("pieBlock").style.display = "none";
+                }
+            });
         },
         landscapeViz(){
             //immunelandscape("#landscapeVis", this.data_path + "/sample_num/" + this.bar_selected + "_samples.tsv");
+            var file_path;
             if (this.landscape_selected == "all") {
                 var file_name = "c1_c6_TCGA_all.csv"
-                var file_path =this.data_path+ "/subtype/c1_c6/" + "c1_c6_TCGA_all.csv"; 
+                file_path =this.data_path+ "/subtype/c1_c6/" + "c1_c6_TCGA_all.csv"; 
             }
             else {
                 var file_name = this.landscape_selected + "_c1_c6.csv"
-                var file_path = this.data_path + "/subtype/c1_c6/cancer/" + file_name;
+                file_path = this.data_path + "/subtype/c1_c6/cancer/" + file_name;
             }
-            immunelandscape("#landscapeVis", file_path, "#landscape-editor", "overview_landscape_viz");
+            axios.get('/api/public_file/check_file_exists', { params: { fpath: file_path}  }).then(response => {
+                this.landscape_fexists = response.data["fexists"];
+                console.log("===?" + this.landscape_fexists);
+                console.log(typeof(this.landscape_fexists));
+
+                if (this.landscape_fexists == true) {
+                    document.getElementById("landscapeBlock").style.display = "block";
+
+                    immunelandscape("#landscapeVis", file_path, "#landscape-editor", "overview_landscape_viz");
+                }
+                else {
+                    document.getElementById("landscapeBlock").style.display = "none";
+                }
+            });
+            // immunelandscape("#landscapeVis", file_path, "#landscape-editor", "overview_landscape_viz");
             
         },
         regulatorViz(){
@@ -320,7 +392,32 @@ export default {
                 var subtype_file_path = this.data_path + "/subtype/c1_c6/project/" + subtype_fname;
                 var rna_file_path = this.data_path + "/immuneregulator/" + rna_fname;
 
-                immuneRegulator("#regulatorVis", subtype_file_path, rna_file_path, "#regulator-editor", "overview_regulator_viz");
+                axios.get('/api/public_file/check_file_exists', { params: { fpath: rna_file_path, fpath2: subtype_file_path}  }).then(response => {
+                    this.regulator_rna_fexists = response.data["fexists"];
+                    this.regulator_subtype_fexists = response.data["fexists2"];
+                    //console.log(this.regulator_rna_fexists);
+
+                    if(this.regulator_rna_fexists == true && this.regulator_subtype_fexists == true) {
+                        document.getElementById("regulatorBlock").style.display = "block";
+                        immuneRegulator("#regulatorVis", subtype_file_path, rna_file_path, "#regulator-editor", "overview_regulator_viz");
+                    }
+                    else {
+                        document.getElementById("regulatorBlock").style.display = "none";
+                    }
+                });
+                // axios.get('/api/public_file/check_file_exists', { params: { fpath: subtype_file_path}  }).then(response => {
+                //     this.regulator_subtype_fexists = response.data["fexists"];
+                //     console.log(this.regulator_subtype_fexists);
+                // });
+
+                // if(this.regulator_rna_fexists == true && this.regulator_subtype_fexists == true) {
+                //     document.getElementById("regulatorBlock").style.display = "block";
+                //     immuneRegulator("#regulatorVis", subtype_file_path, rna_file_path, "#regulator-editor", "overview_regulator_viz");
+                // }
+                // else {
+                //     document.getElementById("regulatorBlock").style.display = "none";
+                // }
+
         },
         all_viz() {
             this.barViz();
@@ -338,6 +435,7 @@ export default {
             this.regulatorProjects=this.projects[this.regulatorCancerSelected];
             console.log(this.regulatorProjects);
             this.regulatorProjectSelected = this.regulatorProjects[0];
+            this.regulatorViz();
         } ,
         download_bar(){
             window.location.href = this.data_path+"/sample_num/" + this.bar_selected + "_samples.tsv";
@@ -386,13 +484,17 @@ export default {
 </script>
 
 <style scoped lang = "scss">
-.viz {
+/* .viz {
     padding: 50px;
     position: relative;
     box-shadow: 0 0 64px darken(#dee2e6, 5%)
-}
+} */
 
-.vizBlock {
+/* .vizBlock {
+    position: relative !important;
+} */
+
+.veBlock {
     position: relative !important;
 }
 /* .v-editor {
@@ -410,4 +512,5 @@ export default {
     right: 10px;
     z-index: 1 !important;
 }
+
 </style>

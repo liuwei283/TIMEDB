@@ -52,10 +52,8 @@ function init() {
           },
           replaceUpper(text,width){
             let x = TextSize.measuredTextSize(text, 8).width; //得到字的长度
-            console.log(x)
             let final
             x>width*2/3? (final = extractWord(text),this.tips.push(text)):final = text
-            console.log(this.tips)
             return final
           },
           join(tiplist){
@@ -63,7 +61,6 @@ function init() {
             tiplist.forEach((item,index)=>{
               str.push(" "+extractWord(item)+": "+item)
             })
-            console.log(str)
             return str
           }
         },
@@ -74,9 +71,7 @@ function init() {
                 dsvHasHeader: true, 
                 loaded:plotDataloaded
             },
-            //clinical data
             additional: {
-              //content:data2,
               fileKey: "immuneheatmapAdd",
               type: "csv",
               dsvHasHeader:false,
@@ -91,7 +86,7 @@ function init() {
           this.defineGradient("age", "horizontal", [this.data.ageStartColor, this.data.ageEndColor]);
           const padding = 60;
           this.data.padding = padding;
-          this.size.width = this.data.result.useData[this.data.sampleList.length-1].col*(this.data.gridPlotWidth-1) + 380
+          this.size.width = this.data.result.useData[this.data.sampleList.length-1].col*(this.data.gridPlotWidth-1) + 440
           this.size.height = this.data.cellList.length *15 + 170 + 
                             this.data.cellList.length*(this.data.gridPlotheight) + this.data.gridPlotheight/2
                             + (this.data.sortaddName.length-1) * this.data.gridPlotheight 
