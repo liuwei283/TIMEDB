@@ -8,7 +8,7 @@ import { editorConfig } from "./editor";
 
 const startColor = "white";
 const endColor = "red";
-const nendColor = "blue";
+const negativeEndColor = "blue";
 
 export function init(vid, subtypePath, RNAdataPath, eid, plot_name) {
 
@@ -31,10 +31,10 @@ export function init(vid, subtypePath, RNAdataPath, eid, plot_name) {
                 showCircle: false,
                 showRowad: false,
                 colorScheme: Oviz.color.schemeGradient(startColor, endColor),
-                negColorScheme: Oviz.color.schemeGradient(nendColor, startColor),
+                negColorScheme: Oviz.color.schemeGradient(negativeEndColor, startColor),
                 startColor,
                 endColor,
-                nendColor
+                nendColor: negativeEndColor
             },
             startX: 100, 
             startY: 15, 
@@ -53,7 +53,7 @@ export function init(vid, subtypePath, RNAdataPath, eid, plot_name) {
                 colors :{
                     startColor,
                     endColor,
-                    nendColor
+                    negativeEndColor: negativeEndColor
                 }
             },
             nameMapper,
@@ -89,7 +89,7 @@ export function init(vid, subtypePath, RNAdataPath, eid, plot_name) {
         },
         setup() {
             this.defineGradient("bg", "vertical", [endColor, startColor]);
-            this.defineGradient("ng", "vertical", [startColor, nendColor]);
+            this.defineGradient("ng", "vertical", [startColor, negativeEndColor]);
             this.size = {height: 400+Object.keys(this.data.colorMap).length, width: 1850}
             console.log(this)
             registerEditorConfig(editorConfig(this, eid), plot_name);

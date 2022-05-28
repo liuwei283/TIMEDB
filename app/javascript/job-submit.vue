@@ -73,7 +73,7 @@
 
                                 </div>
                             </div>
-                            <div class = "row">
+                            <div class = "row submit-container">
                                 <div class="col-lg-4 mb-4 justify-content-center text-center" v-for="a in displayedAnalyses" :key="a.id" @click="updateApp(a, true)">
                                     <div class="card">
                                         <img v-if="a.cover_image == null" v-bind:src="require('../assets/images/module.png')" class="card-img-top">
