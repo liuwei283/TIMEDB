@@ -8,104 +8,110 @@
                     <p>Welcome to TIMEBD Tutorial <br>
                     Search for in-depth articles on TIMEDB functions</p>
                     <br>
-                    <div class= "search  text-left">
-                        <i class="fa fa-search"></i>
-                        Type here to search
+                    <div class="test">
+                        <input type="text" class="search" placeholder="Type here to search" v-model="search_value">
+                        <button @click="search"><i class="fa fa-search"></i></button>
                     </div>
                 </div>
 
                 <div class="col-md-4 offset-1">
                     <!-- <%= image_tag src="icons brightmode12.png", class: "d-block w-100"%> -->
-                    <img src="/assets/icons brightmode12.png" class="d-block w-100">
+                    <img v-bind:src="require('../assets/images/icons brightmode12.png')" class="d-block w-100">
+
                 </div>
             </div>
+            <div v-if="this.found == false">
+                <i class="fa fa-chevron-down fa-3x"></i>
 
-            <i class="fa fa-chevron-down fa-3x"></i>
-
-            <div class="row">
-                <div class="col-md-4 text-center">
-                    <!-- <%=image_tag src="icons brightmode12.png" ,class:  "d-block w-100"%> -->
-                    <img src="/assets/icons brightmode12.png" class="d-block w-100">
-                </div>
-                <div class="col-md-8 text-center">
-                    <br><br>
-                    <div class="row">
-                        <div @click="showdetail($event)" class="col-md-5 tutorial-items text-center" id="intro">
-                               introduction
-                        </div>
-
-                        <div @click="showdetail($event)" class="col-md-5 tutorial-items text-center" id="1">
-                                How to view Database Information1
-                        </div>
-
+                <div class="row">
+                    <div class="col-md-4 text-center">
+                        <!-- <%=image_tag src="icons brightmode12.png" ,class:  "d-block w-100"%> -->
+                        <img v-bind:src="require('../assets/images/icons brightmode12.png')" class="d-block w-100">
 
                     </div>
-                    <div class="row">
-                        <div @click="showdetail($event)" class="col-md-5 tutorial-items text-center" id="2">
-                                How to view Database Information2
-                        </div>
-
-                        <div @click="showdetail($event)" class="col-md-5 tutorial-items text-center" id="3">
-                                How to view Database Information3
-                        </div>
-
-                    </div>
-                    <div class="row">
-                        <div @click="showdetail($event)" class="col-md-5 tutorial-items text-center" id="4">
-                                How to view Database Information4
-                        </div>
-
-                        <div @click="showdetail($event)" class="col-md-5 tutorial-items text-center" id="5">
-                                How to view Database Information5
-                        </div>
-
-                    </div>
-                </div>
-
-
-            </div>
-
-            <div class="row">
-                <div class="col-md-8 text-center">
-                    <br><br>
-                    <div class="row">
-                        <div class="col-md-5 tutorial-items-red text-center">
-                            introduction
-                        </div>
-
-                        <div class="col-md-5 tutorial-items-red text-center">
-                            How to view Database Information
-                        </div>
-
-                    </div>
-
-                    <div class="row">
-
-                        <div class="col-md-5 tutorial-items-red text-center">
-                            How to view Database Information
-                        </div>
-
-                        <div class="col-md-5 tutorial-items-red text-center">
-                            How to view Database Information
-                        </div>
-
-                        </div>
+                    <div class="col-md-8 text-center">
+                        <br><br>
                         <div class="row">
-                        <div class="col-md-5 tutorial-items-red text-center">
-                            How to view Database Information
+                            <div v-for="a in articles" :id="a.id" @click="showdetail($event)" class="col-md-5 tutorial-items text-center" :key="a.id">
+                            {{a.title}}
+                            
+                            </div>
+                            <!-- <div @click="showdetail($event)" class="col-md-5 tutorial-items text-center" id="intro">
+                                introduction
+                            </div>
+                            <div @click="showdetail($event)" class="col-md-5 tutorial-items text-center" id="1">
+                                    How to view Database Information1
+                            </div>
+                            <div @click="showdetail($event)" class="col-md-5 tutorial-items text-center" id="2">
+                                    How to view Database Information2
+                            </div>
+                            <div @click="showdetail($event)" class="col-md-5 tutorial-items text-center" id="3">
+                                    How to view Database Information3
+                            </div>
+                            <div @click="showdetail($event)" class="col-md-5 tutorial-items text-center" id="4">
+                                    How to view Database Information4
+                            </div>
+                            <div @click="showdetail($event)" class="col-md-5 tutorial-items text-center" id="5">
+                                    How to view Database Information5
+                            </div> -->
+                        </div>
+                    </div>
+
+
+                </div>
+
+                <div class="row">
+                    <div class="col-md-8 text-center">
+                        <br><br>
+                        <div class="row">
+                            <div class="col-md-5 tutorial-items-red text-center">
+                                introduction
+                            </div>
+
+                            <div class="col-md-5 tutorial-items-red text-center">
+                                How to view Database Information
+                            </div>
+
                         </div>
 
-                        <div class="col-md-5 tutorial-items-red text-center">
-                            How to view Database Information
+                        <div class="row">
+
+                            <div class="col-md-5 tutorial-items-red text-center">
+                                How to view Database Information
+                            </div>
+
+                            <div class="col-md-5 tutorial-items-red text-center">
+                                How to view Database Information
+                            </div>
+
+                            </div>
+                            <div class="row">
+                            <div class="col-md-5 tutorial-items-red text-center">
+                                How to view Database Information
+                            </div>
+
+                            <div class="col-md-5 tutorial-items-red text-center">
+                                How to view Database Information
+                            </div>
+
                         </div>
+                    </div>
+
+                    <div class="col-md-4 text-center">
+                        <img v-bind:src="require('../assets/images/icons brightmode42.png')" class="d-block w-100">
 
                     </div>
+                    
                 </div>
+            </div>
+            <div v-if="this.found == true">
+                <h1><i class="fa fa-caret-left" @click="backsearch"></i>There are the search results</h1>
 
-                <div class="col-md-4 text-center">
-                    <img src="/assets/icons brightmode42.png" class="d-block w-100">
+                <div class="row" style="margin-left:15%">
+                    <div v-for="a in results" :id="a.id" @click="showdetail($event)" class="col-md-5 tutorial-items text-center" :key="a.id">
+                        {{a.title}}
+                    </div>
                 </div>
-                
             </div>
         </div>
 
@@ -212,7 +218,18 @@ export default {
     data() {
         return {
                 details: false,
-                now: "intro"
+                now: "intro",
+                articles:[
+                    {title:"introduction", id:"intro",key:["intro","0"]},
+                    {title:"How to view Database Information1", id:"1",key:["database","1"]},
+                    {title:"How to view Database Information2", id:"2",key:["database","2"]},
+                    {title:"How to view Database Information3", id:"3",key:["database","3"]},
+                    {title:"How to view Database Information4", id:"4",key:["database","4"]},
+                    {title:"How to view Database Information5", id:"5",key:["database","5"]},
+                ],
+                results:[],
+                search_value: null,
+                found: false,
             }
     },
     created() {
@@ -227,7 +244,25 @@ export default {
         },
         back(){
             this.details = false;
-        }
+        },
+        search(){
+            this.found = false;
+            this.results = [];
+            console.log(this.search_value);
+            for (var i=0; i<this.articles.length;i++){
+                for(var j =0; j<this.articles[i].key.length;j++){
+                    var str = this.articles[i].key[j];
+                    if(str.indexOf(this.search_value) !=-1 && this.search_value!=''){
+                        this.results.push(this.articles[i]);
+                    }
+                }
+            }
+
+            this.found = true;
+        },
+        backsearch(){
+            this.found = false;
+        },
     }
 }
 </script>
@@ -246,17 +281,43 @@ h1{
     }
 }
 .tutorial{
+    .test{
+        position:relative;
+        background-color: #F8F9FA;
+        width: 70%;
+        margin-left: 30%;
+    }
+    .test input{
+        width:100%;
+        z-index: 999;
+    }
+    .test button{
+        position: absolute;
+        width: 18%;
+        height: 100%;
+        right: 0%;
+        border-color: #6c757d;
+        border-radius: 30px ;
+        outline:none;
+        background-color: #F8F9FA;
+    }
+
     .search{
         border: solid;
         border-color: #6c757d;
         border-radius: 30px ;
         padding: 2%;
+        width: 100%;
         color: #6c757d;
-        .fa {
-            color: #6c757d;
-        }
+        position: absoulte;
+        left:0;
     }
-
+    .fa-search{
+            color: #6c757d;
+            position: absolute;
+            right: 10%;
+            bottom: 25%;
+        }
         
     .fa-chevron-down{
         color: #314893;

@@ -24,10 +24,13 @@ body.database
             padding: 2em 1em 0 1em
         #cancerIcons
             padding: 2em
+            position: relative;
             &.collapse:not(.show) 
                 display: block
                 height: 49em
                 overflow: hidden
+                #test
+                    display: block;
                 //-moz-box-shadow: inset 0 -32px 32px -32px #000000
                 //-webkit-box-shadow: inset 0 -32px 32px -32px #000000
                 
@@ -50,16 +53,20 @@ body.database
         #collapseButton
             padding: .5em
             font-size: 1.5em
-            background: #d8dce0
-            box-shadow: 0 -40px 64px 16px #dee2e4
+            // background: #d8dce0
             //box-shadow: inset 0 -100px 64px -32px #000000
             //box-shadow: rgb(255, 255, 255) 0px -40px 64px 32px
+            // transition: box-shadow 0.3s ease-in-out 0s
+            width: 100%;
+            text-align: center;
+            border-radius: 4px;
 
-            transition: box-shadow 0.3s ease-in-out 0s
-            width: 100%
-            text-align: center
-            border-radius: 4px
 
+        #test
+            display: none;
+            position: absolute;
+            inset: 500px 0 0;
+            background: linear-gradient(rgba(255, 255, 255, 0), #f8f9fa);
 
         #collapseButton.collapsed:after 
             content: 'Show more cancers'

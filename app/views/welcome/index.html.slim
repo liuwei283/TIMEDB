@@ -6,17 +6,27 @@
 -use_dark = session[:dark]
 - content_for :title
   | Immune
+.home-nav
+  .nav-content
+    br
+    h3 Documentation 
+    p Welcome to TIMEDB Tutorial 
+    =link_to '/tutorial'
+
+      .tutorial 
+        | Let's start
+    i.fa.fa-arrow-down
+    =link_to '/tutorial'
+      =image_tag 'icons darkmode32.png', :class=> "d-block w-100"
+    =link_to '/tutorial'
+      =image_tag 'icons darkmode22.png', :class=> "d-block w-100"
+
 section#intro_text.heading 
-  / svg.index-bg width="100%" viewBox="0 0 1920 2820"
-  /   path d="M0,0 L0,2700 L400,2820 L1920,2620 L1920,0 Z" fill="#343a40"
   .container
     h1
-      //| Gut&nbsp;
       span.em IMAP
       br
       | Immune Analysis Platform
-    / p.index-lead
-    /   | With the Focus on Cancer Studies
     p
       | Gut microbiome analysis platform (GMAP) contains three major features:
       ul
@@ -26,7 +36,7 @@ section#intro_text.heading
           | analyze and visualize the results of your data
         li
           | co-analysis and visualizing user data with the samples in our databases
-      
+          
     p
       | We collected over 10,000 samples of whole-genome shotgun sequencing metagenomics data in the dataset,
       | curated process the data to taxonomy abundance and functional profiling abundance. 
@@ -84,7 +94,7 @@ section#function_card
             .icon_img
               =link_to '/database/overview'
                 =image_tag (use_dark ? 'icons darkmode12.png' : 'icons brightmode12.png'), :alt=>"Human Gut Metagenomics.png"
-      
+        
         .col-lg-4.mb-4.
           h5.text-left
             |Human Gut Metagenomics Database
@@ -123,55 +133,3 @@ section#function_card
             .icon_img
               =link_to "/submit/pipelines"
                 =image_tag (use_dark ? 'icons darkmode42.png' : 'icons brightmode42.png'), :alt=>"Analyze you data.png"
-
-
-
-
-
-  / #cards_wrapper.container
-  /   .card-deck
-  /     .card
-  /       .card_img
-  /         =link_to '/database/overview'
-  /           =image_tag "research.png", :alt=>"Human Gut Metagenomics.png"
-  /       .card_body
-  /         h5
-  /           |Human Gut Metagenomics Database
-  /         p.card-text
-  /           |curated database with over 10,000 
-  /           |metagenomics sequencing data
-  /     .card
-  /       .card_img
-  /         =link_to "/submit/analyses"
-  /           =image_tag "bioinformatics.png", :alt=>"Analyze you data.png"
-  /       .card_body
-  /         h5
-  /           |Analyze your data
-  /         p.card-text
-  /           |containing diversity analysis, differential testing, 
-            
-  /           |diseases classifier, PCA,
-            
-  /           |functional enrichments and so on
-  /     .card
-  /       .card_img
-  /         =link_to "/visualizer"
-  /           =image_tag "bacteria.png" , :alt=>"Visualize your results.png"
-  /       .card_body
-  /         h5
-  /           |Visualize your results 
-  /         p.card-text
-  /           |containing  corresponding visualization of analysis result and basic sample and
-  /           |basic sample information visualization and so on
-      
-
-
-        
-          / a.btn.btn-xlg.btn-doap.btn-outline-light.text-uppercase.font-weight-bold href='/docs/index.html'
-          /   | Learn More
-/section.contact
-/  .container
-/    .lead.w-100.text-center
-/      | DOAP's team works directly with researchers, developers and individual users.&nbsp;
-/      = link_to 'Speak with us to learn more.' ,'#'
-
