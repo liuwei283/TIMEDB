@@ -73,20 +73,22 @@
 
                                 </div>
                             </div>
-                            <div class="col-lg-4 mb-4 row submit-container justify-content-center text-center" v-for="a in displayedAnalyses" :key="a.id" @click="updateApp(a, true)">
-                                <div class="card">
-                                    <img v-if="a.cover_image == null" v-bind:src="require('../assets/images/module.png')" class="card-img-top">
-                                    <img v-else :src="a.cover_image" class="card-img-top">
-                                    <div class = "image_overlay image_overlay_blur">
-                                        <div class = "image_title">
-                                            {{a.name}}
-                                        </div>
-                                        <div class = "image_decscription">
-                                            {{a.description}}
+                            <div class = "row">
+                                <div class="col-lg-4 mb-4 justify-content-center text-center" v-for="a in displayedAnalyses" :key="a.id" @click="updateApp(a, true)">
+                                    <div class="card">
+                                        <img v-if="a.cover_image == null" v-bind:src="require('../assets/images/module.png')" class="card-img-top">
+                                        <img v-else :src="a.cover_image" class="card-img-top">
+                                        <div class = "image_overlay image_overlay_blur">
+                                            <div class = "image_title">
+                                                {{a.name}}
+                                            </div>
+                                            <div class = "image_decscription">
+                                                {{a.description}}
+                                            </div>
                                         </div>
                                     </div>
+                                    <h4 class = "text-center">{{a.name}}</h4>
                                 </div>
-                                <h4 class = "text-center">{{a.name}}</h4>
                             </div>
                         </div>
                     </div>
@@ -1530,6 +1532,10 @@ input[type="radio"] {
     opacity: 1.0 !important;
     background-color: rgb(165, 165, 165) !important;
 
+}
+
+#submit-helper img {
+    width: 100%;
 }
 
 
