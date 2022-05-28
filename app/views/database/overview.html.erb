@@ -124,8 +124,8 @@ up to here -->
                     </div>
                 <% end %>
                 
-                <div class = "col-lg-2 col-lg-offset-1 mb-4">
-                        <div type="button" class="fa fa-lightbulb-o fa-lg" title="Cancers List" data-toggle="popover" data-content= ' 
+                    <div class = "col-lg-2 col-lg-offset-1 mb-4">
+                        <div data-toggle="popover" data-html="true" title="Cancers List" data-content= ' 
                         <ul>
                         <% @kidneyCancers.each do |kc| %>
                             <li><%= link_to kc.cancer_name, kc %></li>
@@ -133,11 +133,14 @@ up to here -->
                         </ul>
                         '> 
                         <%= image_tag("kidney.png", class: "rounded-circle z-depth-2") %> 
+
                         </div>
                         <h4> Kidney</h4>
-                </div>
+                    </div>
+
+
                 <div class = "col-lg-2 col-lg-offset-1 mb-4">
-                        <div type="button" class="fa fa-lightbulb-o fa-lg" title="Cancers List" data-toggle="popover" title="" data-content= ' 
+                        <div  " title="Cancers List"  data-html="true" data-toggle="popover" title="" data-content= ' 
                         <ul>
                         <% @leukemiaCancers.each do |lc| %>
                             <li><%= link_to lc.cancer_name, lc %></li>

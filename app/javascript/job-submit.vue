@@ -448,7 +448,7 @@
         </b-modal>
 
 
-        <b-modal v-if="started" id = "submit-helper" size="xl" scrollable title="Submission Helper" centered>
+        <b-modal v-if="started" v-model="modalShow" id = "submit-helper" size="xl" scrollable title="Submission Helper" centered >
             <br>
             <div class = "text-center submit-container">
                 <img v-bind:src="require('../assets/images/' + selected_analysis.name + '_structure.jpg')" style= "width : 100%"> 
@@ -481,6 +481,7 @@
     export default {
         data() {
             return {
+                modalShow: true,
                 ds_info : {},
                 id : null,
                 selected_analysis : null,
@@ -813,7 +814,7 @@
                     
                     });
                     console.log("end update app");
-
+                    this.modalShow=true;
                 }
             },
 
@@ -1084,9 +1085,6 @@
             provide_param_desc(param) {
                 $("#params_desc").text(param.description)
             },
-            
-            
-
         },
         components: {
             VueTagsInput, AlertCenter, GlobalSaveButton
