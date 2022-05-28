@@ -6,7 +6,7 @@ import template from "./template.bvt";
 const xlabel = "";
 const ylabel = "sample sizes";
 const valueRange = [0,70];
-const colors = ["#66c", "#fcf"];
+const colors = {fill: "#66c", border: "#fcf"};
 
 const MODULE_NAME = "immuneBar";
 
@@ -21,13 +21,13 @@ export function init(vid, path, eid, plot_name) {
             ylabel,
             startX: 0, 
             startY: 70,
-            width: 1500,
+            width: 1000,
             height: 500, 
             titleSize: 14, 
             labelSize: 12, 
             title: "",
             plotRotation: 0, 
-            xRotation: 45, 
+            xRotation: -45, 
             yRotation: 0,
             groups: {
                 colors

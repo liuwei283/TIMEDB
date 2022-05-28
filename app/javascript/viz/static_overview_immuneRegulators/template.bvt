@@ -75,9 +75,9 @@ svg {
 			y = startY
 			@for (item, groupKey) in RNAdata {
 				Container {
-					// padding = config.squareLength+config.xPadding
-					width = (config.squareLength+config.xPadding) * (item.colNames.length+1)
-					height = (config.squareLength+config.yPadding) * item.rowNames.length
+					// padding = squareLength+config.xPadding
+					width = (squareLength+config.xPadding) * (item.colNames.length+1)
+					height = (squareLength+config.yPadding) * item.rowNames.length
 					ComplexHeatMap {
 						@props config
 						@props item
@@ -134,7 +134,7 @@ svg {
 								@if(d.key == Math.floor(d.prop.colNames.length/2)) {
 									Component {
 										x = 90
-										rotation = @rotate(d.prop.colNames.length>=5? -90: -75)
+										rotation = @rotate(d.prop.colNames.length>=5? -90: -105)
 										Text {
 											anchor = @anchor("t", "c")
 											text = groupKey
