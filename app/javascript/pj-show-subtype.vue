@@ -5,8 +5,8 @@
                     <h4>Some description for Immune Subtype Landscape in project overview</h4>
                 </div>
 
-                <div id = "subtype-landscapeBlock" class="row vizBlock">
-                    <div class="col vis" id = "subtype-landscapeVis">
+                <div id = "subtype-landscapeBlock" class="row veBlock">
+                    <div class="col vis vizBlock" id = "subtype-landscapeVis">
                     </div>
                     <div id="subtype-landscape-editor" class = "md-col-3 v-editor">
                         <OvizEditor :config="subtype_conf_landscape" :editorWidth = "280"/>
@@ -38,8 +38,8 @@
 
                 </div>
             </div>
-            <div id = "subtype-boxplotBlock" class="row vizBlock">
-                <div class="col vis" id = "subtype-boxplotVis">
+            <div id = "subtype-boxplotBlock" class="row veBlock">
+                <div class="col vis vizBlock" id = "subtype-boxplotVis">
                 </div>
                 <div id="subtype-boxplot-editor" class = "md-col-3 v-editor">
                     <OvizEditor :config="subtype_conf_boxplot" :editorWidth = "280"/>
@@ -56,8 +56,8 @@
             <div id="curveDescription" class="row description">
                 <h4>Some description for KM Curve in project overview</h4>
             </div>
-            <div id = "subtype-curveBlock" class="row vizBlock">
-                <div class="col" id = "subtype-curveVis">
+            <div id = "subtype-curveBlock" class="row veBlock">
+                <div class="col vizBlock" id = "subtype-curveVis">
                 </div>
                 <div id="subtype-curve-editor" class = "md-col-3 v-editor">
                     <OvizEditor :config="subtype_conf_curve" :editorWidth = "280"/>
@@ -76,8 +76,8 @@
                 <h4>Some description for immune regulator in project overview</h4>
                 </div>
 
-                <div id = "subtype-regulatorBlock" class="row vizBlock">
-                    <div class="col vis" id = "subtype-regulatorVis">
+                <div id = "subtype-regulatorBlock" class="row veBlock">
+                    <div class="col vis vizBlock" id = "subtype-regulatorVis">
                     </div>
                     <div id="subtype-regulator-editor" class = "md-col-3 v-editor">
                         <OvizEditor :config="subtype_conf_regulator" :editorWidth = "280"/>
@@ -248,15 +248,25 @@ export default {
 </script>
 
 <style scoped lang = "scss">
-.viz {
+/* .viz {
     padding: 50px;
     position: relative;
+    box-shadow: 0 0 64px darken(#dee2e6, 5%)
+} */
+
+.veBlock {
+    position: relative !important;
     box-shadow: 0 0 64px darken(#dee2e6, 5%)
 }
 
 .vizBlock {
-    position: relative !important;
+        overflow-y: scroll;
+        overflow-x: scroll;
+        //padding: 2em;
+        margin-top: 5%;
+        margin-bottom: 5%;
 }
+    
 /* .v-editor {
     position: fixed !important;
     top: 30px;

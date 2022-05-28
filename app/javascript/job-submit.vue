@@ -486,14 +486,12 @@
                                 <p id = "multiple_params_desc">{{multiple_params_desc}}</p>
                             </div>
                         </div>
-
-                        
                     </div>
                 </div>
         </b-modal>
 
 
-        <b-modal v-if="started" ref="submit-helper" id = "submit-helper" @load="$bvModal.show('submit-helper')" size="xl" scrollable title="Module Helper" centered>
+        <b-modal v-if="started" ref="submit-helper" v-model="showhelper" id = "submit-helper" size="xl" scrollable title="Module Helper" centered>
             <br>
             <div class = "text-center submit-container">
                 <img v-bind:src="require('../assets/images/' + selected_analysis.name + '_structure.jpg')" style= "width : 100%"> 
@@ -567,6 +565,7 @@
                 multiple_pairs_num: 1,
                 multiple_completed: [],
                 step: 1,
+                showhelper: false,
             };
         },
         created() {
@@ -929,6 +928,7 @@
                     
                     });
                     console.log("end update app");
+                    this.showhelper = true;
                 }
             },
 

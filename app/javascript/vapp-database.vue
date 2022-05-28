@@ -39,8 +39,8 @@
                     <a class="dropdown-item viz_download" id = "bar" @click="down_graph($event)">Download bar chart</a>
                 </div>
             </div>
-            <div class="row vizBlock">
-                <div class="md-col-9" id = "barVis">
+            <div class="row veBlock">
+                <div class="md-col-9 vizBlock" id = "barVis">
                 </div>
                 <div id="bar-editor" class = "md-col-3 v-editor">
                     <OvizEditor :config="overview_conf_bar" :editorWidth = "280"/>
@@ -104,8 +104,8 @@
                     </div>
                 </div>
 
-                <div class="row vizBlock">
-                    <div class="md-col-9" id = "pieVis">
+                <div class="row veBlock">
+                    <div class="md-col-9 vizBlock" id = "pieVis">
                     </div>
                     <div id="pie-editor" class = "md-col-3 v-editor">
                         <OvizEditor :config="overview_conf_pie" :editorWidth = "280"/>
@@ -147,8 +147,8 @@
                         <a class="dropdown-item viz_download" id = "landscape" @click="down_graph($event)">Download landscape chart </a>
                     </div>
                 </div>
-                <div class="row vizBlock">
-                    <div class="md-col-9" id = "landscapeVis">
+                <div class="row veBlock">
+                    <div class="md-col-9 vizBlock" id = "landscapeVis">
                     </div>
 
                     <div id="landscape-editor" class = "md-col-3 v-editor">
@@ -206,8 +206,8 @@
 
                     </div>
                 </div>
-                <div class="row vizBlock">
-                    <div class="md-col-9" id = "regulatorVis">
+                <div class="row veBlock">
+                    <div class="md-col-9 vizBlock" id = "regulatorVis">
                     </div>
                     <div id="regulator-editor" class = "md-col-3 v-editor">
                         <OvizEditor :config="overview_conf_regulator" :editorWidth = "280"/>
@@ -490,7 +490,11 @@ export default {
     box-shadow: 0 0 64px darken(#dee2e6, 5%)
 } */
 
-.vizBlock {
+/* .vizBlock {
+    position: relative !important;
+} */
+
+.veBlock {
     position: relative !important;
 }
 /* .v-editor {
