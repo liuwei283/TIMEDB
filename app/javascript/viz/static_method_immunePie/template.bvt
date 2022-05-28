@@ -1,15 +1,15 @@
 svg {
-	width = 1200;height = 870
+	width = 1100;height = 870
 	Component {
 		y = 20
-		Text {
-			x = @geo(50, -270)
+		Text.centered {
+			x = 550
 			text = title
 			fontSize = tickFontSize
-			anchor = @anchor("top","left")
 		}
-		PieChart {
-			height = @geo(100, -100); width  = @geo(100, -100); padding = 20 //设置在窗口的中间位置
+		PieChart.centered {
+			height = @geo(100, -100); width  = @geo(100, -100); padding = 20
+			x = 550;y = 400
 			data = piesData[methodList[buttonkey]]
 			pieProps = {
 				stroke: "white"
@@ -19,7 +19,7 @@ svg {
                     x1 = d.start; x2 = d.end; r2 = pieR
                     fill = d.data.raw.color
 					behavior:tooltip {
-					        content = "name: "+ d.data.name+ "</br>value: "+ d.data.value
+					        content = "Cell: "+ d.data.name+ "</br>Value: "+ d.data.value
 					}  
                 }
 			}
@@ -27,26 +27,23 @@ svg {
 		Legend{
 			@props legendPos
 			data = legendsData[methodList[buttonkey]]
-			//behavior:drag {
-				//onDrag = @bind(updateLegendPos)
-			//}
 			padding = 4
 			lineHeight = 13
 			legendWidth = 15
 			label.fontSize = 10
 		}
-		Container {
+		Container.centered {
 			anchor = @anchor("center","bottom")
 			@let len = methodList.length
-			x = 800-50*len; y = 800
+			x = 245;y = 800
 			@for(item,index) in methodList{
 				@if(index<len/2){
 					Component {
 						x = 120*(index+len/2); y = 20
 						@let disabled = buttonkey === index
         	        	width = 90; height = 30
-        	        	Rect.full {fill = disabled ? "red" : "#cbf"; cornerRadius = 6}
-        	        	Text.centered(item) { x = 50%; y = 50%; fill = "#fff" }
+        	        	Rect.full {fill = disabled ? "#727D91" : "#485570"; cornerRadius = 4}
+        	        	Text.centered(item) { x = 50%; y = 50%; fill = "#fff";fontSize = 10 }
         	        	cursor = disabled ? null:"pointer"
         	        	on:click = disabled ? null:buttonclick(index)
 					}
@@ -56,8 +53,8 @@ svg {
 						x = 120*(index); y = 70
 						@let disabled = buttonkey === index
         	        	width = 90; height = 30
-        	        	Rect.full {fill = disabled ? "red" : "#cbf"; cornerRadius = 6}
-        	        	Text.centered(item) { x = 50%; y = 50%; fill = "#fff" }
+        	        	Rect.full {fill = disabled ? "#727D91" : "#485570"; cornerRadius = 4}
+        	        	Text.centered(item) { x = 50%; y = 50%; fill = "#fff";fontSize = 10 }
         	        	cursor = disabled ? null:"pointer"
         	        	on:click = disabled ? null:buttonclick(index)
 					}

@@ -26,22 +26,15 @@ import FilterSamplesBind from "oviz-components/filter-samples-bind.vue";
 
 import ColorPicker from "page/builtin/color-picker.vue";
 import SectionFiles from "page/builtin/section-files.vue";
-import FilterSamples from "viz/fmt-overview/filter-samples.vue";
-import ReorderSpecies from "viz/fmt-overview/reorder-species.vue";
-import MetaInfo from "viz/meta-overview/meta-info.vue";
-import ReorderSample from "viz/meta-overview/reorder-sample.vue";
-import Reorder from "viz/meta-overview/reorder.vue";
+
+
+
 import { registerDefaultEditorConfig } from "utils/editor";
 
 
-Vue.component("reorder", Reorder);
-Vue.component("filter-samples", FilterSamples);
 Vue.component("filter-samples-bind", FilterSamplesBind);
-Vue.component("reorder-sample", ReorderSample);
 Vue.component("color-picker", ColorPicker);
 Vue.component("section-files", SectionFiles);
-Vue.component("reorder-species", ReorderSpecies);
-Vue.component("meta-info", MetaInfo);
 
 
 

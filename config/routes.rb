@@ -77,6 +77,7 @@ Rails.application.routes.draw do
       post 'create_files', to: 'viz_files#create_files', as: 'create_files'
       post 'batch_delete_files', to: 'viz_files#batch_delete_files', as: 'batch_delete_files'
     end
+    get "public_file/check_file_exists", to: 'public_file#check_file_exists', as: 'json'
     get 'tabix/:url_name', to: 'tabix_apis#show', as: 'tabix_api'
     get 'public/:url_name', to: 'public_file_apis#show', as: 'public_api'
   end
@@ -168,5 +169,6 @@ Rails.application.routes.draw do
   get "/database/refreshSelector", to: 'database#refreshSelector'
 
   post 'query-deepomics', to: 'submit#query_deepomics', format: 'json'
+
 
 end

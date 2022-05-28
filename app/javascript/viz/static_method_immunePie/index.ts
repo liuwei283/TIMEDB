@@ -22,7 +22,7 @@ export function init(id,path,config){
         el:id,
         template,
         renderer:"svg",
-        width:1200,
+        width:1000,
         height:870,
         theme: "light",
         data: {
@@ -32,7 +32,7 @@ export function init(id,path,config){
                 console.log("buttonkey:",this.buttonkey);
                 this.redraw();
             },
-            legendPos: {x: 900, y: 0},
+            legendPos: {x: 840, y: 20},
             updateLegendPos(ev, el, deltaPos) {
                 this.legendPos.x += deltaPos[0];
                 this.legendPos.y += deltaPos[1];
