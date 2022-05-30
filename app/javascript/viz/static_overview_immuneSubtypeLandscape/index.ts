@@ -27,7 +27,7 @@ export function init(vid, path, eid, plot_name) {
             },
             plotSize: [1100, 500],
             startX: 150, 
-            startY: 0, 
+            startY: 20, 
             width: 1100, 
             height: 500, 
             titleSize: 11, 
