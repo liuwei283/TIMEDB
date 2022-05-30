@@ -129,20 +129,14 @@
 
                             <div class="dropdown">
                               <button class="btn btn-secondary dropdown-toggle" type="button" id="projectSampleTableDropdownButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                Download
+                                Operation
                               </button>
                               <div class="dropdown-menu" aria-labelledby="projectSampleTableDropdownButton">
                                 <%= submit_tag "dowload selected samples metadata to file", :name => 'metadata', :class => "s_table_sub dropdown-item" %>
                                 <div class="dropdown-divider"></div>
                                 <%= submit_tag "download selected samples infiltration to file", :name => 'infiltration', :class => "s_table_sub dropdown-item"  %>
                                 <div class="dropdown-divider"></div>
-                                <%= submit_tag "dowload filtered samples metadata to file", :name => 'filter_metadata', :class => "s_table_sub dropdown-item" %>
-                                <div class="dropdown-divider"></div>
-                                <%= submit_tag "dowload filtered samples infiltration to file", :name => 'filter_inf', :class => "s_table_sub dropdown-item" %>
-                                <div class="dropdown-divider"></div>
                                 <%= submit_tag "export selected samples to", :name => 'seleted2ds', :class => "s_table_sub dropdown-item"  %>
-                                <div class="dropdown-divider"></div>
-                                <%= submit_tag "export filtered samples to", :name => 'filter2ds', :class => "s_table_sub dropdown-item"  %>
                               </div>
                             </div>
 
