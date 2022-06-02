@@ -151,7 +151,7 @@
                             Task Monitor
                         </b-button>
 
-                        <b-button class="btn col-md-2" variant="info" @click="display=1" :class="{active:display==1}" v-if="data.item.status == 'finished'">
+                        <b-button class="btn col-md-2" variant="info" @click="display=1" :class="{active:display==1}" v-if="true">
                             Visualization
                         </b-button><!---->
 
