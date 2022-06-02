@@ -19,11 +19,12 @@ class ProjectSampleDatatable < ApplicationDatatable
   end
 
   def count
-    samples.length()
+    @obj.length()
   end
 
   def total_entries
-    @obj.length()
+    fetch_filtered.length()
+    
     # will_paginate
     # users.total_entries
   end
@@ -32,7 +33,7 @@ class ProjectSampleDatatable < ApplicationDatatable
       fetch_samples
   end
 
-  def fetch_samples
+  def fetch_filtered
     search_string = []
     @config.each do |attr|
       # if Sample.columns_hash[attr].type != :string
@@ -51,16 +52,15 @@ class ProjectSampleDatatable < ApplicationDatatable
     # will_paginate
     # users = User.page(page).per_page(per_page)
     # samples = @obj.samples.order("#{sort_column} #{sort_direction}")
-    obj_start = (page-1) * per_page
-    obj_end = obj_start + per_page
+
     # @obj = @obj.slice(0, 5)
     # puts sort_column
     # puts sort_direction
     # puts @obj[0][sort_column]
     if sort_direction == "asc"
-      @obj = @obj.sort_by { |s_record| s_record[sort_column] }
+      reorder_obj = @obj.sort_by { |s_record| s_record[sort_column] }
     else
-      @obj = @obj.sort_by { |s_record| s_record[sort_column] }.reverse!
+      reorder_obj = @obj.sort_by { |s_record| s_record[sort_column] }.reverse!
 
     end
     #samples = @obj.slice(obj_start, per_page)
@@ -68,19 +68,28 @@ class ProjectSampleDatatable < ApplicationDatatable
       search_values = params[:search][:value]
       # @obj.each do |s_record|
       samples = []
-      @obj.each do |s_record|
+      reorder_obj.each do |s_record|
         @config.each do |attr|
           if s_record[attr].to_s.include? search_values.to_s
             samples.push(s_record)
+            break
           end
         end
       end
-      samples = samples.slice(obj_start, per_page)
-      
     else
-      samples = @obj.slice(obj_start, per_page)
+      samples = reorder_obj
     end
+    return samples
     #samples = samples.where(search_string.join(' or '), search: "%#{params[:search][:value]}%")
+  end
+
+  def fetch_samples
+    obj_start = (page-1) * per_page
+    obj_end = obj_start + per_page
+    samples = fetch_filtered
+    samples = samples.slice(obj_start, per_page)
+    #samples = samples.where(search_string.join(' or '), search: "%#{params[:search][:value]}%")
+    return samples
   end
 
   def columns

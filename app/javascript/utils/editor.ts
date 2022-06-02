@@ -49,8 +49,8 @@ export function registerDefaultEditorConfig() {
     }
 }
 
-export function registerEditorConfig(editorConf, plot_name?, editorRef?) {
-    const vue = event.rpc("getVue");
+export function registerEditorConfig(editorConf, vue_name, plot_name?, editorRef?) {
+    const vue = event.rpc(vue_name);
     if (vue) {
         if (window.gon.viz_mode === viz_mode.ANALYSIS)
             editorConf.sections = [fileConf, ...editorConf.sections];

@@ -22,7 +22,7 @@ const legendLap = 20;
 
 const title = "Clinical Data"
 
-export function init(id,clinical_file_path,cellData_file_path,eid,plot_name){
+export function init(id,clinical_file_path,cellData_file_path,eid,plot_name, vue_name){
     //path1:cell Data
     //path2:Clinical Data
     Oviz.visualize({
@@ -59,14 +59,19 @@ export function init(id,clinical_file_path,cellData_file_path,eid,plot_name){
             let final
             x>width*2/3? (final = extractWord(text),this.tips.push(text)):final = text
             //console.log(this.tips)
+            final = Array.from(final)
+            this.tips = Array.from(this.tips)
             return final
           },
           join(tiplist){
             let str = []
+            tiplist = Array.from(tiplist)
+            tiplist = Array.from(new Set(tiplist))
             tiplist.forEach((item,index)=>{
               str.push(" "+extractWord(item)+": "+item)
             })
             //console.log(str)
+            str = Array.from(str)
             return str
           }
         },
@@ -87,27 +92,23 @@ export function init(id,clinical_file_path,cellData_file_path,eid,plot_name){
         },
         setup() { 
             console.log("this.data:",this["_data"]);
-            this.defineGradient("bg", "vertical", [this.data.bgstartColor, this.data.bgendColor]);
+
+            
+            console.log("this.defineGradient_bg:",this.data.bgstartColor, this.data.bgendColor)
+            
             this.defineGradient("gb", "vertical", [this.data.gbendColor, this.data.gbstartColor]);
+            this.defineGradient("kg", "vertical", ["#dbdbdb", "blue"]);
             this.defineGradient("age", "horizontal", [this.data.ageStartColor, this.data.ageEndColor]);
-            const padding = 60;
+            const padding = 60; 
             this.data.padding = padding;
-            this.size.width = this.data.result.useData[this.data.sampleList.length-1].col*(this.data.gridPlotWidth-1) + 380
+            this.size.width = this.data.result.useData[this.data.sampleList.length-1].col*(this.data.gridPlotWidth-1) + 450
             this.size.height = this.data.cellList.length *15 + 170 + 
                               this.data.cellList.length*(this.data.gridPlotheight) + this.data.gridPlotheight/2
                               + (this.data.sortaddName.length-1) * this.data.gridPlotheight 
                               + 50
             //registerEditorConfig(editorConfig(this), editorRef);
 
-            if(this.data.dismethodlist.length>1){
-              this.data.stackdis = this.data.result.useData[this.data.sampleList.length-1].col*(this.data.gridPlotWidth-1.6) - 5 -115
-              this.data.middleTextdis = this.data.result.useData[this.data.sampleList.length-1].col*(this.data.gridPlotWidth-1.6) - 5 + 35
-            }else{
-              this.data.stackdis = this.data.result.useData[this.data.sampleList.length-1].col*(this.data.gridPlotWidth)
-              this.data.middleTextdis = this.data.result.useData[this.data.sampleList.length-1].col*(this.data.gridPlotWidth)
-            }
-
-            registerEditorConfig(editorConfig(this,eid), plot_name);
+            registerEditorConfig(editorConfig(this,eid), vue_name, plot_name);
         },
     })
 }

@@ -18,13 +18,21 @@
               </div>
             </div>
 
-            <br>
-
-            <div class="row vizBlock">
-                <div class="col vis" id = "fraction-pieVis">
+            <div id = "fraction_pieBlock">
+                <div class="dropdown mb-5 mt-5">
+                    <button class="btn btn-secondary dropdown-toggle" type="button" id="fraction_pie_download_dropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Download
+                    </button>
+                    <div class="dropdown-menu" aria-labelledby="fraction_pie_download_dropdwon">
+                        <a class="dropdown-item viz_download" id = "fraction-pie_viz_download" @click="down_graph($event)">Download fraction pie chart</a>
+                    </div>
                 </div>
-                <div id="fraction-pie-editor" class = "md-col-3 v-editor">
-                    <OvizEditor :config="fraction_conf_pie" :editorWidth = "280"/>
+                <div class="row veBlock">
+                    <div class="md-col-9 vis vizBlock" id = "fraction-pieVis">
+                    </div>
+                    <div id="fraction-pie-editor" class = "md-col-3 v-editor">
+                        <OvizEditor :config="fraction_conf_pie" :editorWidth = "280"/>
+                    </div>
                 </div>
             </div>
         </div>
@@ -49,13 +57,21 @@
               </div>
             </div>
 
-            <br>
-
-            <div class="row vizBlock">
-                <div class="col vis" id = "fraction-boxplotVis">
+            <div id = "fraction_boxplotBlock">
+                <div class="dropdown mb-5 mt-5">
+                    <button class="btn btn-secondary dropdown-toggle" type="button" id="fraction_boxplot_download_dropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Download
+                    </button>
+                    <div class="dropdown-menu" aria-labelledby="fraction_boxplot_download_dropdwon">
+                        <a class="dropdown-item viz_download" id = "fraction-boxplot_viz_download" @click="down_graph($event)">Download fraction boxplot chart</a>
+                    </div>
                 </div>
-                <div id="fraction-boxplot-editor" class = "md-col-3 v-editor">
-                    <OvizEditor :config="fraction_conf_boxplot" :editorWidth = "280"/>
+                <div class="row veBlock">
+                    <div class="md-col-9 vis vizBlock" id = "fraction-boxplotVis">
+                    </div>
+                    <div id="fraction-boxplot-editor" class = "md-col-3 v-editor">
+                        <OvizEditor :config="fraction_conf_boxplot" :editorWidth = "280"/>
+                    </div>
                 </div>
             </div>
         </div>
@@ -78,13 +94,21 @@
               </div>
             </div>
 
-            <br>
-
-            <div class="row vizBlock">
-                <div class="col vis" id = "fraction-heatmapVis">
+            <div id = "fraction_heatmapBlock">
+                <div class="dropdown mb-5 mt-5">
+                    <button class="btn btn-secondary dropdown-toggle" type="button" id="fraction_heatmap_download_dropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Download
+                    </button>
+                    <div class="dropdown-menu" aria-labelledby="fraction_heatmap_download_dropdwon">
+                        <a class="dropdown-item viz_download" id = "fraction-heatmap_viz_download" @click="down_graph($event)">Download fraction heatmap chart</a>
+                    </div>
                 </div>
-                <div id="fraction-heatmap-editor" class = "md-col-3 v-editor">
-                    <OvizEditor :config="fraction_conf_heatmap" :editorWidth = "280"/>
+                <div class="row veBlock">
+                    <div class="md-col-9 vis vizBlock" id = "fraction-heatmapVis">
+                    </div>
+                    <div id="fraction-heatmap-editor" class = "md-col-3 v-editor">
+                        <OvizEditor :config="fraction_conf_heatmap" :editorWidth = "280"/>
+                    </div>
                 </div>
             </div>
         </div>
@@ -107,13 +131,24 @@
               </div>
             </div>
 
-            <br>
-
-            <div class="row vizBlock">
-                <div class="col vis" id = "fraction-landscapeVis">
+            <div id = "fraction_landscapeBlock">
+                <div class="dropdown mb-5 mt-5">
+                    <button class="btn btn-secondary dropdown-toggle" type="button" id="fraction_landscape_download_dropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Download
+                    </button>
+                    <div class="dropdown-menu" aria-labelledby="fraction_landscape_download_dropdwon">
+                        <a class="dropdown-item viz_download" id = "fraction-landscape_viz_download" @click="down_graph($event)">Download fraction landscape chart</a>
+                    </div>
                 </div>
-                <div id="fraction-landscape-editor" class = "md-col-3 v-editor">
-                    <OvizEditor :config="fraction_conf_landscape" :editorWidth = "280"/>
+                <div class="row veBlock">
+                    <div class="md-col-9 vis vizBlock" id = "fraction-landscapeVis">
+                    </div>
+                    <div id="fraction-landscape-editor" class = "md-col-3 v-editor">
+                        <OvizEditor :config="fraction_conf_landscape" :editorWidth = "280"/>
+                    </div>
+                </div>
+                <div id="fraction_landscape_loading" style="display:none;">
+                    <img v-bind:src="require('../assets/images/loading_icon.gif')" alt="Loading..." style="width:90%;" />
                 </div>
             </div>
         </div>
@@ -133,6 +168,7 @@ import DropDownSelect from "page/builtin/dropdown-select.vue";
 import {init as fractionBoxplot} from "viz/static_fraction_boxplot" 
 import {init as fractionGroupBoxplot} from "viz/static_fraction_grouped_boxplot"
 import {init as fractionLandscape} from "viz/static_fraction_comparedPlot"
+import {init as fractionLandscape2} from "viz/static_fraction_comparedPlot2"
 import {init as fractionHeatmap} from "viz/static_fraction_heatmap"
 import {init as fractionPie} from "viz/static_fraction_Pie"
 
@@ -141,6 +177,7 @@ Vue.use(BootstrapVue);
 
 Vue.component("dropdown-select", DropDownSelect)
 import Vue from 'vue';
+// selector 展示出来的数据
 export default {
     data() {
         return {
@@ -155,6 +192,7 @@ export default {
             pie_selected: null,
             boxplot_selected:null,
             heatmap_selected: null,
+            vue_name: "fraction_vue",
             boxplot_selector:[
                     {value:"Consensus",label:"Consensus"},
                     {value:"Disable",label:"──────────"},
@@ -187,65 +225,60 @@ export default {
                     {value:"bar",label:"Bar Plot"},
 
             ],
-            clinical_file_path: "",
 
-            clinical_fexists: true,
-            landscape_cell_fexists: true,
-        }
+            }
     },
+    //设置默认值
     created() {
         this.pie_selected = this.pie_selector[0];
         this.boxplot_selected="Consensus";
         this.heatmap_selected="ABIS";
         this.landscape_selected="pie";
-
-        this.clinical_file_path = "/public/data/clinical/sample/Clinical_" + this.project_name + ".csv";
-
-        axios.get('/api/public_file/check_file_exists', { params: { fpath: this.clinical_file_path}  }).then(response => {
-            this.clinical_fexists = response.data["fexists"];
-        });
     },
     mounted() {
-        event.rpcRegisterReceiver("getVue", () => this);
+        event.rpcRegisterReceiver(this.vue_name, () => this);
         this.all_viz();
     },
     methods: {
         pieViz(){
             var clinical_file_path = this.data_path + "clinical/sample/Clinical_" + this.project_name + ".csv";
-            fractionPie("#fraction-pieVis", clinical_file_path, this.pie_selected, "#fraction-pie-editor", "fraction_pie_viz");
-
-            
+            fractionPie("#fraction-pieVis", clinical_file_path, this.pie_selected, "#fraction-pie-editor", "fraction_pie_viz", this.vue_name);
         },
         boxplotViz(){
             var cellData_file_path = this.data_path + "cell_data/" + this.boxplot_selected + "/" + this.project_name + "_" + this.boxplot_selected + ".csv";
 
             if (this.boxplot_selected == "Consensus") {
-                fractionGroupBoxplot("#fraction-boxplotVis", cellData_file_path, "#fraction-boxplot-editor", "fraction_boxplot_viz");
+                fractionGroupBoxplot("#fraction-boxplotVis", cellData_file_path, "#fraction-boxplot-editor", "fraction_boxplot_viz", this.vue_name);
             }
             else {
-                fractionBoxplot("#fraction-boxplotVis", cellData_file_path, "#fraction-boxplot-editor", "fraction_boxplot_viz");
+                fractionBoxplot("#fraction-boxplotVis", cellData_file_path, "#fraction-boxplot-editor", "fraction_boxplot_viz", this.vue_name);
             }
         },
         landscapeViz(){
-            var cellData_file_path = this.data_path + "cell_data/Consensus/" + this.project_name + "_Consensus.csv";
+            
+            //document.getElementById("fraction_landscape_loading").style.display = "block";
+            
+            var file_name = this.project_name + "_Consensus.csv";
+            var file_path = this.data_path + "cell_data/Consensus/" + file_name;
+            if(this.landscape_selected == "pie"){
+                fractionLandscape("#fraction-landscapeVis", file_path, "pie", "#fraction-landscape-editor", "fraction_landscape_viz", this.vue_name);
+            }else{
+                fractionLandscape2("#fraction-landscapeVis", file_path, "bar", "#fraction-landscape-editor", "fraction_landscape_viz", this.vue_name);
+            }
 
-            axios.get('/api/public_file/check_file_exists', { params: { fpath: cellData_file_path}  }).then(response => {
-                this.landscape_cell_fexists = response.data["fexists"];
-               
-                if (this.landscape_cell_fexists == true) {
-                    document.getElementById("fraction-landscapeBlock").style.display = "block";
-                    fractionLandscape("#fraction-landscapeVis", cellData_file_path, this.landscape_selected, "#fraction-landscape-editor", "fraction_landscape_viz");
-                }
-                else {
-                    document.getElementById("fraction-landscapeBlock").style.display = "none";
-                }
-            });
+            // setTimeout(function () {
+            //     document.getElementById("fraction_landscape_loading").style.display = "none";
+            // }, 3000);
+            
         },
 
         heatmapViz() {
             var clinical_file_path = this.data_path + "clinical/sample/Clinical_" + this.project_name + ".csv";
             var cellData_file_path = this.data_path + "cell_data/" + this.heatmap_selected + "/" + this.project_name + "_" + this.heatmap_selected + ".csv";
-            fractionHeatmap("#fraction-heatmapVis", clinical_file_path, cellData_file_path, "#fraction-heatmap-editor", "fraction_heatmap_viz");
+            if(this.heatmap_selected != "Consensus"){
+                fractionHeatmap("#fraction-heatmapVis", clinical_file_path, cellData_file_path, "#fraction-heatmap-editor", "fraction_heatmap_viz", this.vue_name);
+            }
+            // fractionHeatmap("#fraction-heatmapVis", clinical_file_path, cellData_file_path, "#fraction-heatmap-editor", "fraction_heatmap_viz");
         },
 
         all_viz() {
@@ -255,20 +288,44 @@ export default {
             this.heatmapViz();
         },
 
+        down_graph(e){
+            var clicked_id = e.target.id.replace("_viz_download", "");
+            console.log(clicked_id);
+            const svgContainerClone = document.getElementById(clicked_id + "Vis").cloneNode(true);
+            const svgBlob = new Blob([svgContainerClone.innerHTML], { type: "image/svg+xml;charset=utf-8" });
+            const svgUrl = URL.createObjectURL(svgBlob);
+            const downloadLink = document.createElement("a");
+            downloadLink.href = svgUrl;
+            downloadLink.download = clicked_id + ".svg";
+            document.body.appendChild(downloadLink);
+            downloadLink.click();
+            document.body.removeChild(downloadLink);
+        }
+
     }
 }
 </script>
 
 <style scoped lang = "scss">
-.viz {
+/* .viz {
     padding: 50px;
     position: relative;
+    box-shadow: 0 0 64px darken(#dee2e6, 5%)
+} */
+
+.veBlock {
+    position: relative !important;
     box-shadow: 0 0 64px darken(#dee2e6, 5%)
 }
 
 .vizBlock {
-    position: relative !important;
+        overflow-y: scroll;
+        overflow-x: scroll;
+        //padding: 2em;
+        margin-top: 5%;
+        margin-bottom: 5%;
 }
+    
 /* .v-editor {
     position: fixed !important;
     top: 30px;

@@ -10,7 +10,7 @@ const startColor = "white";
 const endColor = "red";
 const negativeEndColor = "blue";
 
-export function init(vid, subtypePath, RNAdataPath, eid, plot_name) {
+export function init(vid, subtypePath, RNAdataPath, eid, plot_name, vue_name) {
 
     const {visualizer} = Oviz.visualize({
         el: vid,
@@ -92,7 +92,7 @@ export function init(vid, subtypePath, RNAdataPath, eid, plot_name) {
             this.defineGradient("ng", "vertical", [startColor, negativeEndColor]);
             this.size = {height: 400+Object.keys(this.data.colorMap).length, width: 1850}
             console.log(this)
-            registerEditorConfig(editorConfig(this, eid), plot_name);
+            registerEditorConfig(editorConfig(this, eid), vue_name, plot_name);
         },
     });
     return visualizer;

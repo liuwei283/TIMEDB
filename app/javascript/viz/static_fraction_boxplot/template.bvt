@@ -5,12 +5,12 @@ svg {
 		padding = padding
 		data = { boxData: boxdata}
 		valueRange = valueRange
-		AxisBackground { dashArray = "1, 2"}
-		AxisBackground {
-			orientation = "vertical"
-			includeEndTicks = true
-			dashArray = "1, 2"
-		}
+		// AxisBackground { dashArray = "1, 2"}
+		// AxisBackground {
+		// 	orientation = "vertical"
+		// 	includeEndTicks = true
+		// 	dashArray = "1, 2"
+		// }
 		Rect{
 			width = 100%
 			height = 100%
@@ -40,17 +40,17 @@ svg {
 			}
 		}
 		@expr console.log(boxdata)
-        @for (d,i) in boxdata.categories{
-			Component {
-				rotation = @rotate(45)
-                y = @geo(100,5); // x = (i+0.5)*gridwidth
-				x = @scaled-x(i)
-				Text{
-					key = i
-                    text = d
-		        }
-            }
-        } 
+        // @for (d,i) in boxdata.categories{
+		// 	Component {
+		// 		rotation = @rotate(45)
+        //         y = @geo(100,5); // x = (i+0.5)*gridwidth
+		// 		x = @scaled-x(i)
+		// 		Text{
+		// 			key = i
+        //             text = d
+		//         }
+        //     }
+        // } 
 		Axis("left");
 		Component {
 			x = -25; y = 50%
@@ -59,5 +59,22 @@ svg {
 		}
 		Text {text = title; anchor = @anchor("bottom", "center"); x = 50%; y = -7; fontSize = titleFontsize}
 		Text(xlabel) { x = 50%; y = @geo(100,120); anchor = @anchor("top", "center") }
+
+		
+					            Axis("bottom") {
+            y = 100%
+            :label(tick) {
+				@expr console.log("tick:",tick)
+            Text(tick.value) {
+            @let tickX = @scaled-x(tick.value)
+            @let tickY = 5
+            y = 10
+            anchor = @anchor("r", "m")
+            rotation = @rotate(-45)
+        	fontSize = 11
+            }
+                        }
+                    }
+
 	}
 }

@@ -48,7 +48,7 @@ export function init(vid, path, eid, plot_name) {
         },
         setup() { 
             console.log(this);
-            registerEditorConfig(editorConfig(this, eid), plot_name);
+            registerEditorConfig(editorConfig(this, eid), "getVue", plot_name);
         },
     });
 }

@@ -1,0 +1,432 @@
+svg{
+    Component {
+        x = config.gridwidth;y = config.gridheight
+        @if(plotType == "bar"){
+            Container {
+                padding = config.padding
+                    x = -40
+                    Legend{
+                        title = "sample"
+                        @let now=barlegenddata[buttonkey-1]
+                        @let nowlegendata = Object.values(now)
+                        data = nowlegendata[0]
+                        padding = 10
+                        lineHeight = 13
+                        legendWidth = 15
+                        label.fontSize = 10
+                        :legend(d) { 
+                            Component {
+                                Rect {
+                                    x = 2.5;y = 2.5
+                                    stroke = "#666" ; strokeWidth = 0.8
+                                    height = 8;width = 10
+                                    fill = d.fill
+                                }
+                            }				
+                        }
+                    }          
+                }
+
+            Container{
+                x = 140
+                Columns{
+                    y = -config.gridheight/2
+                    @for(item,i) in chosenMethod{
+                        Container {
+                            padding = config.padding
+                            Rect {
+                                height = config.gridheight/2
+                                width = config.gridwidth-config.padding*2
+                                stroke = "#000"
+                                fill = "none"
+                            }
+                            Text.centered{
+                                text = item
+                                x = config.gridwidth/2-3
+                                y = config.gridheight/4
+                                anchor = @anchor("middle", "center")
+                                fontSize = methodFontsize //0515
+                            }
+                        }
+                    }
+                }                
+            }
+            Container{
+                x = 140
+                Rows{
+                    x = -38-(config.gridwidth-94)/2
+                    @for (citem,cindex) in celldata{
+                        Container{
+                            padding = config.padding
+                            Rect {
+                                width = config.gridwidth/2 - config.padding - 4.5
+                                height = config.gridheight - 2*config.padding 
+                                stroke = "#000"
+                                fill = "none"
+                            }
+                            Text.centered {
+                                text = citem
+                                x = config.gridwidth/4-7
+                                y = config.gridheight/2 + config.padding
+                                anchor = @anchor("middle", "center")
+                                rotation= @rotate(-90)
+                                fontSize = cellFontsize //0515
+                            }
+                        }
+                    }
+                }
+            }
+            Columns {
+                x = 140
+                Columns{
+                    @for (item,index) in BarData{
+                        @let ditem = item[buttonkey-1]
+                        @let pitem = Object.values(ditem)[0] 
+                        @if index != (methoddata.length-1){
+                            Container{
+                                Rows {
+                                    @for (i,index) in pitem{
+                                        XYPlot {
+                                            padding = config.padding
+                                            height =config.gridheight; width = config.gridwidth;
+                                            @let data = Object.values(i)[0]
+                                            data = data
+                                            flip = false
+                                            discreteCategory = true
+                                            valueRange = valuerange
+                                            //valueRange = [0,3]
+                                            dataHandler = {
+                                                default: {
+                                                    value: d => d[1],
+                                                    pos: d => d[0],
+                                                }
+                                            }
+                                            Rect{
+                                                width = 100%
+                                                height = 100%
+                                                stroke = "#000"
+                                                fill = "none"
+                                            }
+                                            Bars{
+                                                :children(d){
+                                                    Rect.full {
+                                                        @let cat = d.pos
+                                                        fill = barcolors[cat]
+                                                        behavior:tooltip {
+                                                            content = `Sample name: ${d.data[0]}<br>Values: ${d.data[1]}<br>`
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            
+                            }
+                        }
+                        @if index == (methoddata.length-1) {
+                            Container{
+                                Rows {
+                                    @for i in pitem{
+                                        XYPlot {
+                                            padding = config.padding
+                                            height = config.gridheight ;width = config.gridwidth;
+                                            @let data= Object.values(i)[0]
+                                            data = data
+                                            discreteCategory = true 
+                                            valueRange = valuerange
+                                            //valueRange = [0,3]
+                                            dataHandler = {
+                                                default: {
+                                                    value: d => d[1],
+                                                    pos: d => d[0],
+                                                }
+                                            }
+			                                Axis("right") {x=100%;includeEndTicks = true}
+                                            Rect{
+                                                width = 100%
+                                                height = 100%
+                                                stroke = "#000"
+                                                fill = "none"
+                                            } 
+                                            Bars{
+                                                :children(d){
+                                                    Rect.full {
+                                                        @let cat = d.pos
+                                                        fill = barcolors[cat]
+                                                        behavior:tooltip {
+                                                            content = `sample ID: ${d.data[0]}<br>values: ${d.data[1].toFixed(3)}<br>`
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                                
+                            }  
+                        }
+                    }
+                }
+                // Container {
+                //     padding = config.padding
+                //     x = 40
+                //     Legend{
+                //         title = "sample"
+                //         @let now=barlegenddata[buttonkey-1]
+                //         @let nowlegendata = Object.values(now)
+                //         data = nowlegendata[0]
+                //         padding = 10
+                //         lineHeight = 13
+                //         legendWidth = 15
+                //         label.fontSize = 10
+                //         :legend(d) { 
+                //             Component {
+                //                 Rect {
+                //                     x = 2.5;y = 2.5
+                //                     stroke = "#666" ; strokeWidth = 0.8
+                //                     height = 8;width = 10
+                //                     fill = d.fill
+                //                 }
+                //             }				
+                //         }
+                //     }          
+                // }
+            }
+            Columns{
+                anchor = @anchor("center","top")
+                x = (methoddata.length*(config.gridwidth))/2 + 140
+                y = celldata.length*(config.gridheight)+50
+                Component {
+                    @let disabled = buttonkey === 1
+                    width = 80; height = 30
+                    Rect.full {fill = disabled ? "#555862" : "#777980"}
+                    Text.centered("Prev") { x = 50%; y = 50%; fill = "#fff" }
+                    cursor = disabled ? null : "pointer"
+                    on:click = disabled ? null:buttonclick(-1)
+                }
+                Component {
+                    width = 60; height = 30; x = 20
+                    Text.centered {
+                        x = 50%; y = 50%; fontSize = 14
+                        text = buttonkey+ "/" + cellpageindex[1]
+                    }
+                }
+                Component {
+                    @let disabled = buttonkey === cellpageindex[1]
+                    width = 80; height = 30; x = 20
+                    Rect.full { fill = disabled ? "#555862" : "#777980" }
+                    Text.centered("Next") { x = 50%; y = 50%; fill = "#fff" }
+                    cursor = disabled ? null : "pointer"
+                    on:click = disabled ? null:buttonclick(1)
+                }
+            }
+        }
+
+        //Pie
+        @elsif(plotType=="pie"){
+            //legend的位置
+            Container {
+                padding = 4
+                x = -40
+                Legend{
+                    title = "cell"
+                        @let now=pielegenddata[buttonkey-1] 
+                        @let nowlegendata = Object.values(now)
+                        data = nowlegendata[0]
+                        padding = 10
+                        lineHeight = 13
+                        legendWidth = 15
+                        label.fontSize = 10
+                        :legend(d) {
+                            Component {
+                                Line {  x = 50%; y1 = 1; y2 = 12; stroke = "#666" }
+                                Rect {
+                                    x = 2.5;y = 2.5
+                                    stroke = lineColor; strokeWidth = 0.8
+                                    height = 8; width = 10
+                                    fill = d.fill
+                                }
+                                Line {  x1 = 3; x2 = 12; y = 6.5; stroke = "#666" }
+                            }				
+                        }
+                    }          
+            }
+            Container{
+                x = 150
+                Columns{
+                    y = -config.gridheight/2
+                    @for(item,i) in chosenMethod{
+                        Container {
+                            padding = config.padding
+                            Rect {
+                                height = config.gridheight/2
+                                width = config.gridwidth-config.padding*2
+                                stroke = "#000"
+                                fill = "none"
+                            }
+                            Text.centered{
+                                text = item
+                                x = config.gridwidth/2 - config.padding
+                                y = config.gridheight/4
+                                anchor = @anchor("middle", "center")
+                                fontSize = methodFontsize //0515
+                            }
+                        }
+                    }
+                }                
+            }
+            Container{
+                x = 150
+                Rows{
+                    x=-50
+                    @let nowSample = eachSamplename[buttonkey-1]
+                    @let nowSampledata = Object.values(nowSample)
+                    @for (citem,cindex) in nowSample.i{
+                        Container{
+                            padding = config.padding
+                            Rect {
+                                x = 11.5;y = -0.0428*cindex
+                                //width = 50;height = gridSize[0]- 8
+                                height = config.gridheight - 7.85; width = 38;
+                                stroke = "#000"
+                                fill = "none"
+                            }
+                            Text.centered {
+                                text = nowSample.i[cindex]
+                                x = 60/2
+                                y = (config.gridheight + 9)/2
+                                anchor = @anchor("middle", "center")
+                                rotation= @rotate(-90)
+                                fontSize = sampleFontsize //0515
+                            }
+                        }
+                    }
+                }
+            }
+            Columns {
+                x = 150
+                Columns{
+                    @for (item,index) in PieData{
+                        //item 单个方法 
+                        @let ditem = item[buttonkey-1] 
+                        //得到单个方法下的页数
+                        @let pitem = Object.values(ditem)[0] 
+                        //得到样本下的数值矩阵 10个样本
+                        Container{
+                            Rows {
+                                @for i in pitem{
+                                    //单个样本进行循环
+                                    XYPlot {
+                                        padding = config.padding
+                                        //height = gridSize[0];width = gridSize[1];
+                                        height =config.gridheight; width = config.gridwidth;
+                                        @let data = Object.values(i)[0]
+                                        //@expr console.log("tempalte pie data:",Object.values(i)[0])
+                                        data = data
+                                        flip = false
+                                        discreteCategory = true 
+                                        valueRange = [0,0.6]
+                                        dataHandler = {
+                                            default: {
+                                                value: d => d[1],
+                                                pos: d => d[0],
+                                            }
+                                        }
+                                        Rect{
+                                            width = 100%;height = 100%
+                                            stroke = "#000"
+                                            fill = "none"
+                                        }
+                                        @let plot = findNA(Object.values(i)[0])
+                                        //@expr console.log("???",plot)
+                                        @if(plot){
+                                            PieChart {
+                                            data = data
+											pieProps = {
+												stroke: "white"
+											}
+                                            :children(d) {
+                                                Arc {
+                                                    x1 = d.start; x2 = d.end
+                                                    r2 = 90%
+                                                    fill = d.data.raw.color
+                                                    behavior:tooltip {
+					        							content = "Category: "+ d.data.name+ "</br>Value: "+ d.data.value.toFixed(3)
+													}  
+                								}
+											}
+										}
+                                        }
+										
+                                    }
+                                }
+                            } 
+                        } 
+                        @expr console.log("methoddata.length",methoddata.length)
+                    }
+                }
+        
+                // //legend的位置
+                // Container {
+                //     padding = 4
+                //     x = 100
+                //     Legend{
+                //         title = "cell"
+                //         @let now=pielegenddata[buttonkey-1] 
+                //         @let nowlegendata = Object.values(now)
+                //         data = nowlegendata[0]
+                //         padding = 10
+                //         lineHeight = 13
+                //         legendWidth = 15
+                //         label.fontSize = 10
+                //         :legend(d) {
+                //             Component {
+                //                 Line {  x = 50%; y1 = 1; y2 = 12; stroke = "#666" }
+                //                 Rect {
+                //                     x = 2.5;y = 2.5
+                //                     stroke = lineColor; strokeWidth = 0.8
+                //                     height = 8; width = 10
+                //                     fill = d.fill
+                //                 }
+                //                 Line {  x1 = 3; x2 = 12; y = 6.5; stroke = "#666" }
+                //             }				
+                //         }
+                //     }          
+                // }
+            }
+            //三个按键
+            Columns{
+                anchor = @anchor("center","top")
+                //这里调整计算位置
+                x = (methoddata.length*config.gridwidth-50)/2 + 150;
+                y = config.gridheight*11
+
+                Component {
+                    @let disabled = buttonkey === 1
+                    width = 80; height = 30
+                    Rect.full {fill = disabled ? "#555862" : "#777980"}
+                    Text.centered("Prev") { x = 50%; y = 50%; fill = "#fff" }
+                    cursor = disabled ? null : "pointer"
+                    on:click = disabled ? null:buttonclick(-1)
+                }
+                Component {
+                    width = 60; height = 30; x = 20
+                    Text.centered {
+                        x = 50%; y = 50%; fontSize = 14
+                        text = buttonkey+ "/" + cellpageindex[1]
+                    }
+                }
+                Component {
+                    @let disabled = buttonkey === cellpageindex[1]
+                    width = 80; height = 30; x = 20
+                    Rect.full { fill = disabled ? "#555862" : "#777980" }
+                    Text.centered("Next") { x = 50%; y = 50%; fill = "#fff" }
+                    cursor = disabled ? null : "pointer"
+                    on:click = disabled ? null:buttonclick(1)
+                }
+            }
+        }
+
+    }
+}

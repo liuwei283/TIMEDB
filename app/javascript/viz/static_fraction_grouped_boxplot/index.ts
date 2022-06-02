@@ -12,7 +12,7 @@ import { editorConfig, editorRef } from "./editor";
 
 registerDefaultBioInfoComponents();
 
-export function init(id, path, eid, plot_name){
+export function init(id,path,eid,plot_name, vue_name){
     Oviz.visualize({
         el:id,
         template,
@@ -53,7 +53,7 @@ export function init(id, path, eid, plot_name){
         setup() { 
             processconfigData(this)
             console.log("this.data:",this["_data"]);
-            registerEditorConfig(editorConfig(this,eid), plot_name);
+            registerEditorConfig(editorConfig(this,eid),vue_name, plot_name);
         },
     })
 }

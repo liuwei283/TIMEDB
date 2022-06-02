@@ -152,6 +152,7 @@ $(function () {
             return value[1];
         });
         ids = modify_set(1, ids, selected_ids);
+        disableFuncButtons();
     });
 
     table.on("deselect", function(e) {
@@ -161,6 +162,7 @@ $(function () {
         });
         ids = modify_set(-1, ids, deselected_ids);
         //console.log(ids);
+        disableFuncButtons();
     });
 
     table.on("draw", function(e) {
@@ -188,6 +190,46 @@ $(function () {
         
     });
 
+    function disableFuncButtons() { // check button able for download/export
+        let downloadSelect = false;
+        let downloadSearch = false;
+        const words = table.search();
+        const searchedRows = table.rows( {search: words} ).count();
+
+        const urlStrs = window.location.href.split("/");
+        if (urlStrs[urlStrs.length -2] === "datasets") {
+            if (ids.size > 0) { // has selected records
+                downloadSelect = true;
+            }
+            $(".btn-search").attr('disabled', !downloadSelect);
+            return;
+        }
+        
+        if (ids.size > 0 && ids.size <= 1500) { // has selected records
+            downloadSelect = true;
+        }
+        if (searchedRows > 0 && searchedRows <= 1500) {
+            downloadSearch = true;
+        }
+        if (hasEport2DB) {
+            let exportSelect = false;
+            let exportSearch = false;
+            const selectedDataset = document.getElementById("select_box").value;
+            if (!!selectedDataset && selectedDataset !== "") {
+                exportSelect = downloadSelect && true;
+                exportSearch = downloadSearch && true;
+            }
+            $(".export-db.btn-select").attr('disabled', !exportSelect);
+            $(".export-db.btn-search").attr('disabled', !exportSearch);
+        }
+        $(".download.btn-select").attr('disabled', !downloadSelect);
+        $(".download.btn-search").attr('disabled', !downloadSearch);
+        console.log(!downloadSelect);
+        console.log(!downloadSearch);
+
+
+    }
+
 
     $('.s_table_sub').on("click", function(e){
         var form = this;
@@ -211,14 +253,21 @@ $(function () {
         //console.log('submitting');
     });
 
-    $('input.toggle-vis').on( 'click', function (e) {
-      //e.preventDefault();
-      $(this).toggleClass('clicked');
-      // Get the column API object
-      var column = table.column( $(this).attr('data-column') );
-      // Toggle the visibility
-      column.visible( ! column.visible() );
+    $('button.toggle-vis').on( 'click', function (e) {
+        e.preventDefault();
+        $(this).toggleClass('btn-outline-secondary');
+        $(this).toggleClass('btn-secondary');
+        // Get the column API object
+        var column = table.column( $(this).attr('data-column') );
+        // Toggle the visibility
+        column.visible( ! column.visible() );
     } );
+    hasEport2DB = !!document.getElementById("select_box");
+    if (hasEport2DB) $("#select_box").change(disableFuncButtons);
+    table.on( 'search.dt', function () {
+        disableFuncButtons();
+    } );
+  
 
 } );
 

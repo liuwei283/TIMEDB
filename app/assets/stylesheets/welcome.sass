@@ -7,32 +7,7 @@
 
 @import "partials/variables"
 
-.home-nav
-    margin-left: 5%;
-    width: 5vw;
-    height: 5%;
-    // float: left;
-    position: fixed;
-    text-align: center;
-    display: flex;
-    z-index: 1;
-    justify-content: center;
-    h3
-        color: #314893
-    p 
-        margin-bottom: 0;
-    .fa-arrow-down
-	    font-size: 2rem !important;
-    .fa-arrow-down
-        margin: 0;
-    .tutorial 
-        background: #314893
-        border: solid
-        border-radius: 40px;
-        color: #fff;
-        padding: 5%;
-        margin-left: 20%;
-        margin-right: 20%;
+
 
 
 .nav-content
@@ -119,6 +94,11 @@
 #wrapper
     background-color: #f8f9fa
 
+.cancer-link
+    fill: $light-theme !important
+.ds-link
+    fill: #1cb0b6 !important
+
 
 .doap-account-card
     margin: 6rem auto
@@ -168,10 +148,60 @@ footer.page-footer
         color: $white
 
 body.welcome
+    #wrapper
+        width: 100%
     .navbar
         z-index: 1
     .navbar.navbar-light
         //border-bottom: 1px solid #aaa
+    #main-content
+        border-left: 1px solid $gray-300
+        max-width: calc(100% - 250px)
+
+
+    .side
+        min-width: 200px
+        position: sticky !important
+        //left: 10px
+        top: 90px
+        //margin-top: 10px
+        z-index: 20
+
+        .home-nav
+            //height: 5%
+            width: 100%
+            text-align: center
+            display: flex
+            justify-content: center
+            h3
+                color: #314893
+            p 
+                margin-bottom: 0
+            .fa-arrow-down
+                font-size: 2rem !important
+            .fa-arrow-down
+                margin: 0
+            .tutorial
+                background: #314893
+                border: solid
+                border-radius: 40px
+                color: #fff
+                padding: 5%
+                margin-left: 20%
+                margin-right: 20%
+            .sidebarIconBlock
+                margin-top: 3em
+                margin-bottom: 2em
+                img 
+                    //margin-top: 3em
+                    width: 80% !important
+                    margin: auto
+
+
+
+
+
+
     section
         &.heading
             background-image: url("welcomeBGImage.png")
