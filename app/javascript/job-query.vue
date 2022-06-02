@@ -218,9 +218,9 @@
                     <section id="test-log" class="float-right">
                         <h4>Test Log</h4>
                         <p class="font-italic">Console Output</p>
-                        <pre id="stdout" class="light">(test msg)<br/>{{stdout}}</pre>
+                        <pre id="stdout" class="light">{{stdout}}</pre>
                         <p class="font-italic">Error Message</p>
-                        <pre id="stderr">(test msg)<br/>{{stderr}}</pre>
+                        <pre id="stderr">{{stderr}}</pre>
                     </section>
 
                     <section id="outputs" class="mt-4 mb-4">
@@ -639,7 +639,7 @@ export default {
         refreshStatus() {
             console.log("Now refresh task", this.taskId)
             this.stdout = new Date() + " output test."
-            this.stderr = new Date() + " error test."
+            // this.stderr = new Date() + " error test."
             // Production Code
             axios.post(
                 `/query-deepomics/`,
@@ -656,6 +656,7 @@ export default {
                 this.inputs = response.data.message.inputs;
                 this.outputs = response.data.message.outputs;
                 this.params = response.data.message.params;
+                this.stderr = response.data.message.error_message;
                 
                     }).catch((error) => {
                         const message = error.response && error.response.status === 404 ? "The task does not exist" : error;
@@ -718,6 +719,9 @@ export default {
                     alertCenter.add('danger', `${message}`);
                 }).finally(() => {
                     // setTimeout(() => { alertCenter.add('danger', ''); }, 2000);
+                    if (this.submitted) {
+                        this.refreshStatus();
+                    }
                 });
             }
         },
