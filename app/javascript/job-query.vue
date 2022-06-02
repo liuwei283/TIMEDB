@@ -151,7 +151,7 @@
                             Task Monitor
                         </b-button>
 
-                        <b-button class="btn col-md-2" variant="info" @click="display=1" :class="{active:display==1}" v-if="true">
+                        <b-button class="btn col-md-2" variant="info" @click="display=1" :class="{active:display==1}" v-if="job_status == 'finished'">
                             Visualization
                         </b-button><!---->
 
@@ -311,7 +311,8 @@ export default {
                 stdout: '',
                 error: ''
             },
-            chartOptions: {},            
+            chartOptions: {},
+            job_status: "",            
         };
     },
     created() {
@@ -528,7 +529,7 @@ export default {
         
     },
     updated() {
-        if (this.submitted && this.data.outputs.length > 0) {
+        if (this.submitted) {
             event.emit("GMT:reset-query", this);
             this.updateGon(this.data.outputs[this.chosenOutput]);
             event.emit("GMT:query-finished", this);
@@ -657,6 +658,7 @@ export default {
                 this.outputs = response.data.message.outputs;
                 this.params = response.data.message.params;
                 this.stderr = response.data.message.error_message;
+                this.job_status = response.data.message.status;
                 
                     }).catch((error) => {
                         const message = error.response && error.response.status === 404 ? "The task does not exist" : error;
@@ -703,7 +705,8 @@ export default {
                         alertCenter.add('danger', `${response.data.data}`);
                     } else {
                         this.data.outputs = response.data.body;
-                        if (response.data.body.length > 0 && false) {
+
+                        if (response.data.body.length > 0) {
                             this.updateGon(this.data.outputs[0]);
                             this.taskOutputs = this.data.outputs.map((x, i) => ({value: i, text: x.name}));
                         }
