@@ -529,7 +529,7 @@ export default {
         
     },
     updated() {
-        if (this.submitted) {
+        if (this.submitted && this.job_status == "finished") {
             event.emit("GMT:reset-query", this);
             this.updateGon(this.data.outputs[this.chosenOutput]);
             event.emit("GMT:query-finished", this);
