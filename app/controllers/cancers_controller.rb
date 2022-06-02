@@ -26,6 +26,7 @@ class CancersController < ApplicationController
     
     def show
         @vis = ['id', 'project_name', 'cancer_name', 'num_of_samples', 'preprocessed', 'database', "original_description", "major_related_publications"]
+        @short_attrs = [['cancer_name', 'cancer_type', 'data_source', 'number_of_related_projects'], ['number_of_samples', 'sub_cancer', 'primary_site']]
 
         @user = User.find(session[:user_id])
         @cancer = Cancer.find(params[:id])

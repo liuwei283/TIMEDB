@@ -3,6 +3,12 @@
 //script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"
 //link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous"
 
+script src='https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js'
+//script src="http://nkunited.de/jquery/plugins/svg3dtagcloudV2/js/jquery.svg3dtagcloud.min.js"
+link rel='stylesheet' href="https://fonts.googleapis.com/css?family=Oswald&subset=latin,latin-ext"
+
+
+
 -use_dark = session[:dark]
 - content_for :title
   | Immune
@@ -95,11 +101,11 @@
                 =image_tag "analysis.png", :alt=>"Human Gut Metagenomics.png", class: "d-block w-100"
 
             = link_to "#immuHighlight", class: "carousel-control-prev", 'data-slide' =>  'prev', role: "button"
-              span.carousel-control-prev-icon aria-hidden="true"
+              i.fa.fa-arrow-left style="font-size: 60px" 
               span.sr-only
                 | Previous
             = link_to "#immuHighlight", class: "carousel-control-next", 'data-slide' =>  'next', role: "button"
-              span.carousel-control-next-icon aria-hidden="true"
+              i.fa.fa-arrow-right style="font-size: 60px" 
               span.sr-only
                 | Next
 
@@ -159,3 +165,6 @@
                 .icon_img
                   =link_to "/submit/pipelines"
                     =image_tag (use_dark ? 'icons darkmode42.png' : 'icons brightmode42.png'), :alt=>"Analyze you data.png"
+
+    #word-cloud.text-center
+    =javascript_pack_tag 'word_cloud'

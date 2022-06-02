@@ -13,23 +13,41 @@
 <% content_for :title, @dataset.name %>
 
 <div class="container">
-    <h1>
-        <%= @dataset.name %>
+
+
+    <h1 class = "mt-4">
+        <%= "samples of #{@dataset.name}" %>
     </h1>
-    <p>
-        <span class="download_span">
-            Download sample information:
-            <%= link_to "download metadata", download_ds_metadata_user_dataset_path %>
-        </span>
-        <span class="download_span">
-            Download sample infiltration:
-            <%= link_to "download infiltration", download_ds_inf_user_dataset_path %>
-        </span>
-    </p>
-    <h2>Samples</h2>
 
-
-   
+    <div id="db-toolbar" class = "mt-4 mb-4">
+        <div class="db-tool-nav">
+            <div class="btn btn-outline-dark" data-toggle="collapse" data-target="#edit_box" aria-expanded="true" aria-controls="download_box">
+                Edit Dataset <i class="fas fa-caret-down"></i>
+            </div>
+            <%= link_to download_ds_metadata_user_dataset_path, :class => "s_table_sub btn btn-outline-dark" do %>
+                Download dataset <i class='fas fa-download'></i> 
+            <%end%>
+        </div>
+        <div id="edit_box" class="db-toolbox collapse" data-parent="#db-toolbar">
+            <div class="p-2">
+                <%= button_tag :name => 'delete_sample', :class => "s_table_sub btn btn-primary" do %> 
+                <i class='fas fa-minus-circle'></i> Remove selected samples
+                <%end%>
+                <%= link_to edit_user_dataset_path(@dataset.user, @dataset.id),
+                :class => "s_table_sub btn btn-secondary" do %> 
+                <i class='fas fa-edit'></i> Edit dataset name
+                <%end%>
+                <%= link_to user_dataset_path(@dataset.user, @dataset), method: :delete,
+                    :class => "s_table_sub btn btn-danger",
+                    data: { comfirm: 'Are you sure to delete this dataset?'} do %>
+                    <i class="fas fa-trash-alt"></i> Delete dataset
+                <%end%>
+                <%= link_to  samples_path, :class => "s_table_sub btn btn-info" do %>
+                <i class='fas fa-plus-square'></i> Go add samples
+                <%end%>
+            </div>
+        </div>
+    </div>
 
     <%= form_tag delete_sample_user_dataset_path, multipart: true do %>  
         <%= content_tag :table, role: :datatable, class: "display", id: "table_page", data: { url: user_dataset_path(format: :json)} do %>
@@ -48,20 +66,12 @@
             <tbody>
             </tbody>
         <% end %>
-
-    <%= submit_tag "delete selected samples from dataset", :name => 'delete_sample', :class => "s_table_sub" %>
     <%end%>
 
-    <p>
-        <%#= form_tag upload_file_user_dataset_path, :multipart =>true do %>
-            <%#= file_field_tag :file %>
-            <%#= submit_tag "upload new file" %>
-        <%# end %> 
-        <%= link_to 'Delete dataset', [@dataset.user, @dataset], method: :delete,
-        data: { comfirm: 'Are you sure to delete this dataset?'} %>
-        <br />
-        <%= link_to 'Change dataset name', edit_user_dataset_path(@dataset.user, @dataset.id) %> 
-        <br />
-        <%= link_to 'Go to add data', samples_path %> 
-    </p>
+    
+   
+       
+    
+
+   
 </div>

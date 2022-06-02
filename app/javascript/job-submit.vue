@@ -135,7 +135,7 @@
                                     <!-- <div class = "col-md-3">
                                         <h4><i class="fa fa-caret-right fa-lg"></i>Run demo task</h4>
                                     </div> -->
-                                    <div @click="submitDemoTask()" class = "col-md-2">
+                                    <div @click="submitDemoTask()" class = "col-md-2" b-tooltip.hover :title="`Click here to run demo job for ${app.name}`">
                                         <img id = "demoPng" v-bind:src="require('../assets/images/runDemo.png')" style="width:100%;">
                                     </div>
                                     <div class = "col-md-4">
@@ -350,16 +350,22 @@
                             </div>
                         </div>
                     </div>
-                    <div class = "col-md-10" id = "description-card submit-container">
+                    <!-- <div class = "col-md-10" id = "description-card submit-container">
                         <div class = "row submit-container">
-                            <p class = "text-left">
-                            <span v-for="des_patch in input.description.split('.')" v-bind:key="des_patch">
-                                {{des_patch}} <br>
-                            </span>
-                            <!-- 这里试一下直接在deepomics上改-->
-                            </p>
+                            <div class = "text-left" v-for="des_patch in input.description.split('/n')" v-bind:key="des_patch">
+                                <div v-if="des_patch.has('/ub')">
+                                    <ul>
+                                        <li v-for="list_item in des_patch.split('/ub')" v-bind:key="list_item">
+                                         {{list_item}}
+                                        </li> 
+                                    </ul>
+                                </div>
+                                <div v-else>
+                                    <p>{{des_patch}}</p>
+                                </div>
+                            </div>
                         </div>
-                    </div>
+                    </div> -->
                 </div>
         </b-modal>
 
@@ -485,7 +491,23 @@
 
                             <div class = "col-md-6">
                                 <h5>Parameters description</h5>
-                                <p id = "multiple_params_desc">{{multiple_params_desc}}</p>
+                                <!-- <div class = "row submit-container">
+                                    <div class = "text-left" v-for="des_patch in multiple_params_desc.split('/n')" v-bind:key="des_patch">
+                                        <div v-if="des_patch.has('/ub')">
+                                            <ul>
+                                                <li v-for="list_item in des_patch.split('/ub')" v-bind:key="list_item">
+                                                {{list_item}}
+                                                </li> 
+                                            </ul>
+                                        </div>
+                                        <div v-else>
+                                            <p>{{des_patch}}</p>
+                                        </div>
+                                    </div>
+                                </div> -->
+
+                                <!-- 在deepomics那里直接写成html的格式-->
+                                <div id = "multiple_params_desc">{{multiple_params_desc}}</div>
                             </div>
                         </div>
                     </div>
@@ -1231,11 +1253,13 @@
                 navigator.clipboard.writeText(this.jobID);
             },
             provide_param_desc(param) {
-                $("#params_desc").text(param.description);
+                this.single_params_desc = param.description
+                // $("#params_desc").text(param.description);
                 this.step = 2;
             },
             provide_multiple_param_desc(param) {
-                $("#multiple_params_desc").text(param.description)
+                this.multiple_params_desc = param.description;
+                // $("#multiple_params_desc").text(param.description)
             },
             updateStepToFile() {
                 this.step = 1;

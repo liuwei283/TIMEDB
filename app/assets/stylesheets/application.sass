@@ -14,6 +14,7 @@
     
 html, body
     font-size: 14px
+    background-color: #f8f9fa !important
 
 .fa, .fas, .far, .fab
     margin-right: 0.5em
@@ -115,6 +116,9 @@ a.no-link:hover
 .btn-xlg
     padding: 1rem 1.75rem
     font-size: .85rem
+.btn-secondary, .btn-primary
+    a
+        color:  #f8f9fa !important
 
 .btn-vivid-shadow
     &.btn-primary
@@ -162,12 +166,83 @@ $nav-height: 70px
         .fa, .fas
             margin: 0 0 0 .25rem
 
+#db-toolbar
+    position: relative
+.db-toolbox
+    border: 1px solid $gray-400
+    border-radius: 2px
+    position: absolute !important
+    top: 2.5em
+    z-index: 100
+    background-color: rgba(255,255,255,0.95)
+    p
+        color: $gray-700
+        font-style: italic
+        text-indent: 1em
+    .form-group
+        margin-bottom: 0.5em
+        text-align: left
+        flex-wrap: wrap
+        width: 100%
+        position: relatvie
+        label
+            font-weight: bold
+        select
+            width: 16.5em
+            text-align: center 
+        .s_table_sub
+            width: 12em
+            text-align: left
+        // .btn-primary
+        //     @include button-variant($all, darken($all, 7.5%), darken($all, 10%), lighten($all,5%), lighten($all, 10%), darken($all,30%))
+        // .btn-select
+        //     color: #fff !important
+        //     @include button-variant($select, darken($select, 7.5%), darken($select, 10%), lighten($select,5%), lighten($select, 10%), darken($select,30%))
+        // .btn-search
+        //     color: #fff !important
+        //     @include button-variant($search, darken($search, 7.5%), darken($search, 10%), lighten($search,5%), lighten($search, 10%), darken($search,30%))
+
+/* for datatable */
+th
+    border-top: 1px solid #ddd
+    border-right: 1px solid #ddd
+.DTFC_LeftHeadWrapper table thead th.select-checkbox
+    border-left: 1px solid #ddd
+.DTFC_RightHeadWrapper table thead th
+    border-right: 1px solid #ddd
+td
+    //border-left: 1px solid #ddd
+    border-right: 1px solid #ddd
+
+#table_page
+    border-left: 1px solid #ddd
+    border-right: 1px solid #ddd
+
+
+
+
+    
+
+/* for sample/project details*/
+table.detail-table
+  &.table
+      margin-bottom: 0
+  td
+    text-indent: 0.5em
+  .label
+    font-weight: bold
+    width: 220px
+
 .popover
     width: 600px
     margin: auto
 
+.carousel-control-next, .carousel-control-prev
+    filter: invert(100%)
+    color: red
 
-
+.carousel-control-next-icon, .carousel-control-prev-icon
+    size: 10px
 
 
 @import "./*"

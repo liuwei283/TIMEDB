@@ -65,6 +65,8 @@ class SamplesController < ApplicationController
         @sample_row = samples_info.find {|row| row['sample_name'] == sname}
         @sample_info = @sample_row.to_h
 
+        @short_attrs = @vis = [['sample_name', 'project_name', 'c_tumor_stage', 'c_tumor_grade', 'c_sample_histology', 'c_race', 'c_gender', 'n_age'], ['pfs', 'os', 'pfs_status', 'os_status', 'c_tumor_type', 'c_tumor_subtype', 'c_source_name', 'c_treatment']]
+
 
         #inf_name = "ACC_ALL.csv"
         #inf_url = File.join("/public/data/sample_plot/", inf_name)
@@ -118,23 +120,17 @@ class SamplesController < ApplicationController
     end
 
     def make_selected_file
-        if params[:metadata]
-            download_selected_metadata_file
-        elsif params[:infiltration]
-            download_selected_inf_file
-        elsif params[:filter_inf]
-            download_filter_inf
-        elsif params[:filter_metadata]
-            download_filter_metadata
+        if params[:download_select]
+            download_selected_samples
+        elsif params[:download_filter]
+            download_filtered_samples
         elsif params[:seqence]
             "nothing"
         elsif params[:seleted2ds]
             export_selected2dataset
         elsif params[:filter2ds]
-            export_filtered2dataset
-            
+            export_filtered2dataset 
         end
-
     end
 
     def export_filtered2dataset
@@ -179,7 +175,7 @@ class SamplesController < ApplicationController
         
     end
 
-    def download_filter_metadata
+    def download_filtered_samples
         time = Time.now
         time_str = time.strftime("%Y_%m_%d")       
         time_str += ("_" + time.strftime("%k_%M")) 
@@ -194,7 +190,7 @@ class SamplesController < ApplicationController
         end
     end
 
-    def download_selected_metadata_file
+    def download_selected_samples
         time = Time.now
         time_str = time.strftime("%Y_%m_%d")       
         time_str += ("_" + time.strftime("%k_%M")) 
