@@ -103,7 +103,6 @@ export class ComplexGroupedBars extends Component<ComplexGroupedBarplotOption> {
                 Axis("bottom") {
                     y = 100%
                     @props prop.opt.xAxis
-                    tick.rotation = prop.opt.xAxisRo || 0
                 }
             }
             @yield yAxis default {

@@ -7,7 +7,7 @@ function run(v) {
 }
 export const editorRef = {} as any;
 
-const generalSetting = ["startX", "startY", "width", "height", "titleSize", "labelSize", "title", "ylabel", "xlabel", "plotRotation", "xRotation", "yRotation"]
+const generalSetting = ["startX", "startY", "width", "height", "titleSize", "labelSize", "plotRotation", "xRotation", "yRotation"]
 
 export const generateGeneralConfig = (v, eid): any => ({
     id: eid + "#landscape-editor",

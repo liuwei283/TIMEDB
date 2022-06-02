@@ -35,7 +35,7 @@ function Dataprocessor(v, data) {
     return pieData
 }
 
-export function init(vid, path, eid) {
+export function init(vid, path, eid, plot_name) {
 
     const {visualizer} = Oviz.visualize({
         el: vid,
@@ -45,7 +45,7 @@ export function init(vid, path, eid) {
             startY: 300, 
             width: 500, 
             height: 500, 
-            titleSize: 11, 
+            titleSize: 20, 
             labelSize: 11,
             title: "Proportion",
             ylabel: "", 
@@ -71,13 +71,14 @@ export function init(vid, path, eid) {
                         this.data.groups.colors[d.name] = d.color.string
                     })
                     console.log(this.data.groups)
+                    Object.entries(this.data.groups.colors).map(d => { return {"title": d[0], "fill": d[1]}})
                 },
             },
         },
         setup() { 
             console.log("immunePie")
             console.log(this);
-            registerEditorConfig(editorConfig(this, eid));
+            registerEditorConfig(editorConfig(this, eid), plot_name);
         },
     });
 }

@@ -6,11 +6,11 @@ import template from "./template.bvt";
 const xlabel = "";
 const ylabel = "sample sizes";
 const valueRange = [0,70];
-const colors = ["#66c", "#fcf"];
+const colors = {fill: "#66c", border: "#fcf"};
 
 const MODULE_NAME = "immuneBar";
 
-export function init(vid, path, eid) {
+export function init(vid, path, eid, plot_name) {
     // if (!window.gon || window.gon.module_name !== MODULE_NAME) return;
 
     const {visualizer} = Oviz.visualize({
@@ -20,18 +20,18 @@ export function init(vid, path, eid) {
             xlabel, 
             ylabel,
             startX: 0, 
-            startY: 0,
-            width: 1500,
+            startY: 70,
+            width: 1000,
             height: 500, 
             titleSize: 14, 
             labelSize: 12, 
             title: "",
             plotRotation: 0, 
-            xRotation: 45, 
+            xRotation: -45, 
             yRotation: 0,
             groups: {
                 colors
-            }
+            },
         },
         loadData: {
             data: {
@@ -48,7 +48,7 @@ export function init(vid, path, eid) {
         },
         setup() { 
             console.log(this);
-            registerEditorConfig(editorConfig(this, eid));
+            registerEditorConfig(editorConfig(this, eid), plot_name);
         },
     });
 }

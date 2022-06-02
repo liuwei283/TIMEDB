@@ -1,22 +1,22 @@
 import { EditorDef } from "utils/editor";
 import { copyObject } from "utils/object";
 
-function run(v) {
+function run(v, eid) {
     v.forceRedraw = true;
     v.run();
 }
 
 export const editorRef = {} as any;
 
-const generalSetting = ["startX", "startY", "width", "height", "titleSize", "labelSize", "title", "ylabel", "xlabel", "plotRotation", "xRotation", "yRotation"]
+const generalSetting = ["startX", "startY", "width", "height", "titleSize", "labelSize", "title", "ylabel", "xlabel", "xRotation"]
 
-export const generateCompositeGeneralConfig = (v): any => ({
-    id: "general",
+export const generateCompositeGeneralConfig = (v, eid): any => ({
+    id: eid + "general",
     title: "General Setting",
     layout: "tabs",
     tabs: v.data.plots.map((plot) => ({
     	id: plot,
-    	title: plot,
+    	name: plot.toUpperCase(),
     	view: {
             type: "list",
             items: generalSetting.map((item) => ({
@@ -26,7 +26,7 @@ export const generateCompositeGeneralConfig = (v): any => ({
                     current: v.data.plotData[plot][item],
                     callback(d) {
                         v.data.plotData[plot][item] = parseInt(d);
-                        run(v);
+                        run(v, eid);
                     }
                 }
             }))
@@ -34,13 +34,13 @@ export const generateCompositeGeneralConfig = (v): any => ({
 	}))
 })
 
-export const generateCompositeColorConfig = (v): any => ({
-    id: "colot",
+export const generateCompositeColorConfig = (v, eid): any => ({
+    id: eid + "color",
     title: "Color Setting",
     layout: "tabs",
     tabs: v.data.plots.map((plot) => ({
     	id: plot,
-    	title: plot,
+    	name: plot.toUpperCase(),
     	view: {
             type: "list",
             items: [{
@@ -50,10 +50,10 @@ export const generateCompositeColorConfig = (v): any => ({
                 data: {
                     title: "groups colors",
                     scheme: copyObject(v.data.plotData[plot].groups.colors),
-                    id: "pwcolor",
+                    id: "pwcolor" + plot,
                     callback(colors) {
                         v.data.plotData[plot].groups.colors = {...colors};
-                        run(v);
+                        run(v, eid);
                     },
                 },
             }],
@@ -61,11 +61,11 @@ export const generateCompositeColorConfig = (v): any => ({
 	}))
 })
 
-export function editorConfig(v): EditorDef {
+export function editorConfig(v, eid): EditorDef {
     return {
         sections: [
-            generateCompositeGeneralConfig(v),
-            generateCompositeColorConfig(v),
+            generateCompositeGeneralConfig(v, eid),
+            generateCompositeColorConfig(v, eid),
         ],
     };
 }

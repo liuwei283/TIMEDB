@@ -6,7 +6,7 @@ svg {
 			x = 500
 			y = 50
 			text = title
-			fontSize = 20
+			fontSize = titleSize
 			anchor = @anchor("top","center")
 		}
 		PieChart {
@@ -32,15 +32,16 @@ svg {
                 }
 			}
 			// 图例
-			:legend(d) {
-				Legend {
-					x = 800
-					anchor = @anchor("t", "l")
-					bg.stroke = "none"
-					bg.fill = "none"
-					data = d
-				}
-			}
+			:legend(d) {}
+		}
+		Legend {
+			rotation = @rotate(-plotRotation)
+			x = 50
+			y = startY - height/2
+			anchor = @anchor("t", "l")
+			bg.stroke = "none"
+			bg.fill = "none"
+			data = Object.entries(groups.colors).map(d => { return {"label": d[0], "fill": d[1]}})
 		}
 	}
 }

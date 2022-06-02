@@ -71,6 +71,7 @@ export class SurvivalLine extends Component<SurvivalLineOption> {
                         anchor = @anchor("middle", "center"); y = 10
                         fontSize = 10
 						text = d.value
+                        @props prop.opt.xAxis
                     }
                     @yield tableNAR with { d, prop } default {
                         @if prop.NARshow {
@@ -153,26 +154,29 @@ export class SurvivalLine extends Component<SurvivalLineOption> {
                     @props prop.opt.polyLine
                 }
             }
-            Text{
-                x = 50%; y = @geo(100,20)
+            Text {
+                x = 50%; y = @geo(100,25)
                 anchor = @anchor("middle","center")
                 text = prop.xlabel
+                @props prop.opt.xlabel
             }
-            Text{
+            Text {
                 x = 50%; y = -20
                 anchor = @anchor("middle","center")
                 text = prop.title
                 fill = "#000"
                 fontSize = 17
+                @props prop.opt.title
             }
             Component{
-                x = -30; y = 50%
+                x = -35; y = 50%
                 rotation = @rotate(-90)
-                Text{
+                Text {
                     text = prop.ylabel
                     fill = "#000"
                     anchor = @anchor("center","right")
                     fontSize = 14
+                    @props prop.opt.ylabel
                 }
             }
         }

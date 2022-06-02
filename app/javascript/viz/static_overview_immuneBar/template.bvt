@@ -3,6 +3,7 @@ svg {
 	height = 600
 	Component {
 		XYPlot {
+			rotation = @rotate(plotRotation)
 			x = startX
 			y = startY
 			height = height
@@ -21,8 +22,9 @@ svg {
 				:children(d){
 					Rect.full{
 						cornerRadius = 6
-						stroke = groups.colors[0]
-						fill = groups.colors[0]
+						stroke = groups.colors["border"]
+						fill = groups.colors["fill"]
+						width = 25
 						x = 50%
 						anchor = @anchor("top","center")
 						behavior:tooltip {

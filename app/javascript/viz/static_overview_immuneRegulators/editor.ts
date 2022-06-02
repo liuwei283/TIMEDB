@@ -8,7 +8,7 @@ function run(v) {
 }
 export const editorRef = {} as any;
 
-const generalSetting = ["startX", "startY", "width", "height", "titleSize", "labelSize", "title", "ylabel", "xlabel", "plotRotation", "xRotation", "yRotation"]
+const generalSetting = ["startX", "startY", "squareLength", "labelSize", "plotRotation", "xRotation", "yRotation"]
 
 export const generateGeneralConfig = (v, eid): any => ({
     id: eid + "General",
@@ -47,12 +47,12 @@ export const generateColorConfig = (v, eid): any => ({
                 callback(colors) {
                     v.data.groups.colors = {...colors};
                     v.defineGradient("bg", "vertical", [colors["endColor"], colors["startColor"]]);
-                    v.defineGradient("ng", "vertical", [colors["startColor"], colors["nendColor"]]);
+                    v.defineGradient("ng", "vertical", [colors["startColor"], colors["negativeEndColor"]]);
                     v.data.config.colorScheme = Oviz.color.schemeGradient(colors["startColor"], colors["endColor"]),
-                    v.data.config.negColorScheme = Oviz.color.schemeGradient(colors["nendColor"], colors["startColor"])
+                    v.data.config.negColorScheme = Oviz.color.schemeGradient(colors["negativeEndColor"], colors["startColor"])
                     v.data.config.endColor = colors["endColor"]
                     v.data.config.startColor = colors["startColor"]
-                    v.data.config.nendColor = colors["nendColor"]
+                    v.data.config.nendColor = colors["negativeEndColor"]
                     run(v);
                 },
             },

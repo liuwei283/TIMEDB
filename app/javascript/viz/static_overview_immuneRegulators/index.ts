@@ -8,9 +8,9 @@ import { editorConfig } from "./editor";
 
 const startColor = "white";
 const endColor = "red";
-const nendColor = "blue";
+const negativeEndColor = "blue";
 
-export function init(vid, subtypePath, RNAdataPath, eid) {
+export function init(vid, subtypePath, RNAdataPath, eid, plot_name) {
 
     const {visualizer} = Oviz.visualize({
         el: vid,
@@ -31,13 +31,13 @@ export function init(vid, subtypePath, RNAdataPath, eid) {
                 showCircle: false,
                 showRowad: false,
                 colorScheme: Oviz.color.schemeGradient(startColor, endColor),
-                negColorScheme: Oviz.color.schemeGradient(nendColor, startColor),
+                negColorScheme: Oviz.color.schemeGradient(negativeEndColor, startColor),
                 startColor,
                 endColor,
-                nendColor
+                nendColor: negativeEndColor
             },
             startX: 100, 
-            startY: 0, 
+            startY: 15, 
             width: 1550, 
             height: 500, 
             titleSize: 11, 
@@ -48,11 +48,12 @@ export function init(vid, subtypePath, RNAdataPath, eid) {
             plotRotation: 0, 
             xRotation: 0, 
             yRotation: 0,
+            squareLength: 20,
             groups: {
                 colors :{
                     startColor,
                     endColor,
-                    nendColor
+                    negativeEndColor: negativeEndColor
                 }
             },
             nameMapper,
@@ -61,7 +62,6 @@ export function init(vid, subtypePath, RNAdataPath, eid) {
         loadData: {
             subtype: {
                 url: subtypePath,
-                // fileKey: "subtype",
                 type: "csv",
                 dsvHasHeader: false,
                 loaded(data) {
@@ -72,7 +72,6 @@ export function init(vid, subtypePath, RNAdataPath, eid) {
             },
             RNAdata: {
                 url: RNAdataPath,
-                // fileKey: "RNAdata",
                 type: "csv",
                 dependsOn: ["subtype"],
                 loaded(data) {
@@ -90,10 +89,10 @@ export function init(vid, subtypePath, RNAdataPath, eid) {
         },
         setup() {
             this.defineGradient("bg", "vertical", [endColor, startColor]);
-            this.defineGradient("ng", "vertical", [startColor, nendColor]);
+            this.defineGradient("ng", "vertical", [startColor, negativeEndColor]);
             this.size = {height: 400+Object.keys(this.data.colorMap).length, width: 1850}
             console.log(this)
-            registerEditorConfig(editorConfig(this, eid));
+            registerEditorConfig(editorConfig(this, eid), plot_name);
         },
     });
     return visualizer;

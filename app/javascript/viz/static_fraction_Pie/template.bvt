@@ -1,0 +1,41 @@
+svg {
+	width = 900;height = 600
+	Component {
+		y = 20
+		Text.centered {
+			x = 530;y = 40
+			fontSize = 14
+			text = "current column:" + "  "+ generText(chosenColumn) + "  " 
+			//text = "Current Column:" + "  "+ "tumor grade" + "  "
+		}
+		PieChart.centered {
+			height = @geo(100, -100); width  = @geo(100, -100); padding = 20 
+			x = 530;y = 300
+			data = plot["c_"+chosenColumn]
+			@expr console.log("plot[chosenColumn]:",plot["c_"+chosenColumn])
+			//data = plot["c_tumor_grade"]
+			pieProps = {
+				stroke: "white"
+			}
+			:children(d) {
+				Arc {
+                    x1 = d.start; x2 = d.end; r2 = 120
+                    fill = d.data.raw.color
+					@expr console.log("d:",d)
+					behavior:tooltip {
+						content = "Category: "+ d.data.name + "</br>Sample size: "+ d.data.value + "</br>Proportion: "+ d.data.raw.proportion +"%"
+					}
+                }
+			}
+		}
+		Legend{
+			@props legendPos
+			data = legend["c_"+chosenColumn]
+			@expr console.log("legend data:",legend["c_"+chosenColumn])
+			padding = 4
+			lineHeight = 13
+			legendWidth = 15
+			label.fontSize = 10
+		}
+	}
+}
