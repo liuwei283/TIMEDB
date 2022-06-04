@@ -106,7 +106,7 @@ svg{
             }
             Rect{
                 x = 190;y = result.useData[0].row*gridPlotheight + cellList.length*gridPlotheight/2 //蓝色
-                fill = @gradient("bg")
+                fill = @gradient("kg")
                 weidth = 50
                 height = cellList.length*gridPlotheight/2
             }
