@@ -57,6 +57,7 @@ Rails.application.routes.draw do
   get 'tutorial', to: 'welcome#tutorial', as: 'tutorial'
   get 'contact', to: 'welcome#contact', as: 'contact'
   get 'docs', to: redirect('docs/index.html')
+  get 'terms', to: 'welcome#terms', as: 'terms'
 
   # read local csv file 
   # get 'data/:name', to: 'raw_files#index'

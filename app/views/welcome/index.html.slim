@@ -3,29 +3,56 @@
 //script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"
 //link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous"
 
+script src='https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js'
+//script src="http://nkunited.de/jquery/plugins/svg3dtagcloudV2/js/jquery.svg3dtagcloud.min.js"
+link rel='stylesheet' href="https://fonts.googleapis.com/css?family=Oswald&subset=latin,latin-ext"
+
+
+
 -use_dark = session[:dark]
 - content_for :title
   | Immune
 
-.row 
-  .col-md-2
-    .col-md-10.side
-      .home-nav
-        .nav-content
-          br
-          h3 Documentation 
-          p Welcome to TIMEDB Tutorial 
-          =link_to '/tutorial'
+.row
+  .col-md-2.container 
+      .side
+        .home-nav#home-sidebar
+          .nav-content
+            br
+            h3 Documentation 
+            br
+            br
+            
+            p Welcome to 
+            p TIMEDB Tutorial 
+            
+            br
+            br
+            =link_to '/tutorial'
 
-            .tutorial 
-              | Let's start
-          i.fa.fa-arrow-down
-          =link_to '/tutorial'
-            =image_tag 'database1.png', :class=> "d-block w-100"
-          br
-          =link_to '/tutorial'
-            =image_tag 'analyses1.png', :class=> "d-block w-100"
-  .col-md-8
+              .tutorial
+                | Let's start
+
+            br/
+            br/
+
+            i.fa.fa-arrow-down
+            br/
+            br/
+            .row.justify-content-center.text-center
+              //.col-md-2
+              .col-md-8.sidebarIconBlock
+                h4 Database
+                =link_to 'database/overview'
+                  =image_tag 'sidebar_database.png', :class=> "d-block w-100"
+              / .col-md-2
+              / .col-md-2
+              .col-md-8.sidebarIconBlock
+                h4 Analysis
+                =link_to '/submit/analyses'
+                  =image_tag 'sidebar_analysis.png', :class=> "d-block w-100"
+            //.col-md-2
+  .col-md-10#main-content.container 
     section#intro_text.heading 
       .container
         h1
@@ -74,11 +101,11 @@
                 =image_tag "analysis.png", :alt=>"Human Gut Metagenomics.png", class: "d-block w-100"
 
             = link_to "#immuHighlight", class: "carousel-control-prev", 'data-slide' =>  'prev', role: "button"
-              span.carousel-control-prev-icon aria-hidden="true"
+              i.fa.fa-arrow-left style="font-size: 60px" 
               span.sr-only
                 | Previous
             = link_to "#immuHighlight", class: "carousel-control-next", 'data-slide' =>  'next', role: "button"
-              span.carousel-control-next-icon aria-hidden="true"
+              i.fa.fa-arrow-right style="font-size: 60px" 
               span.sr-only
                 | Next
 
@@ -138,5 +165,6 @@
                 .icon_img
                   =link_to "/submit/pipelines"
                     =image_tag (use_dark ? 'icons darkmode42.png' : 'icons brightmode42.png'), :alt=>"Analyze you data.png"
-br/
-br/
+
+    #word-cloud.text-center
+    =javascript_pack_tag 'word_cloud'

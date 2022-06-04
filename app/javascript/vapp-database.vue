@@ -30,7 +30,7 @@
                     </div>
 
             </div>
-            <div class="dropdown">
+            <div class="dropdown mt-3 mb-5">
                 <button class="btn btn-secondary dropdown-toggle" type="button" id="bar_download_dropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     Download
                 </button>
@@ -39,8 +39,8 @@
                     <a class="dropdown-item viz_download" id = "bar" @click="down_graph($event)">Download bar chart</a>
                 </div>
             </div>
-            <div class="row vizBlock">
-                <div class="md-col-9" id = "barVis">
+            <div class="row veBlock">
+                <div class="md-col-9 vizBlock" id = "barVis">
                 </div>
                 <div id="bar-editor" class = "md-col-3 v-editor">
                     <OvizEditor :config="overview_conf_bar" :editorWidth = "280"/>
@@ -94,7 +94,7 @@
                 </div>
             </div>
             <div id = "pieBlock">
-                <div class="dropdown">
+                <div class="dropdown mt-3 mb-5">
                     <button class="btn btn-secondary dropdown-toggle" type="button" id="pie_download_dropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         Download
                     </button>
@@ -104,8 +104,8 @@
                     </div>
                 </div>
 
-                <div class="row vizBlock">
-                    <div class="md-col-9" id = "pieVis">
+                <div class="row veBlock">
+                    <div class="md-col-9 vizBlock" id = "pieVis">
                     </div>
                     <div id="pie-editor" class = "md-col-3 v-editor">
                         <OvizEditor :config="overview_conf_pie" :editorWidth = "280"/>
@@ -138,7 +138,7 @@
                 </div>
             </div>
             <div id = "landscapeBlock">
-                <div class="dropdown">
+                <div class="dropdown mt-3 mb-5">
                     <button class="btn btn-secondary dropdown-toggle" type="button" id="landscape_download_dropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         Download
                     </button>
@@ -147,8 +147,8 @@
                         <a class="dropdown-item viz_download" id = "landscape" @click="down_graph($event)">Download landscape chart </a>
                     </div>
                 </div>
-                <div class="row vizBlock">
-                    <div class="md-col-9" id = "landscapeVis">
+                <div class="row veBlock">
+                    <div class="md-col-9 vizBlock" id = "landscapeVis">
                     </div>
 
                     <div id="landscape-editor" class = "md-col-3 v-editor">
@@ -194,7 +194,7 @@
                 </div>
             </div>
             <div id = "regulatorBlock">
-                <div class="dropdown">
+                <div class="dropdown mt-3 mb-5">
                     <button class="btn btn-secondary dropdown-toggle" type="button" id="regulator_download" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     Dropdown regulator related data
                     </button>
@@ -206,8 +206,8 @@
 
                     </div>
                 </div>
-                <div class="row vizBlock">
-                    <div class="md-col-9" id = "regulatorVis">
+                <div class="row veBlock">
+                    <div class="md-col-9 vizBlock" id = "regulatorVis">
                     </div>
                     <div id="regulator-editor" class = "md-col-3 v-editor">
                         <OvizEditor :config="overview_conf_regulator" :editorWidth = "280"/>
@@ -292,7 +292,7 @@ export default {
             }
     },
     created() {
-        alert(this.files)
+
         event.rpcRegisterReceiver("getVue", () => this);
         this.bar_selected = "project";
         this.pieMethodSelected = "ABIS";
@@ -474,7 +474,11 @@ export default {
     box-shadow: 0 0 64px darken(#dee2e6, 5%)
 } */
 
-.vizBlock {
+/* .vizBlock {
+    position: relative !important;
+} */
+
+.veBlock {
     position: relative !important;
 }
 /* .v-editor {

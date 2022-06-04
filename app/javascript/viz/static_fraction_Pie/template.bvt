@@ -1,10 +1,10 @@
 svg {
-	width = 900;height = 600
+	//width = 900;height = 600
 	Component {
 		y = 20
 		Text.centered {
 			x = 530;y = 40
-			fontSize = 14
+			fontSize = tickFontSize
 			text = "current column:" + "  "+ generText(chosenColumn) + "  " 
 			//text = "Current Column:" + "  "+ "tumor grade" + "  "
 		}
@@ -19,8 +19,9 @@ svg {
 			}
 			:children(d) {
 				Arc {
-                    x1 = d.start; x2 = d.end; r2 = 120
-                    fill = d.data.raw.color
+                    x1 = d.start; x2 = d.end; r2 = pieR
+                    //fill = d.data.raw.color
+					fill = colorMap["c_"+ chosenColumn][d.data.raw.name]
 					@expr console.log("d:",d)
 					behavior:tooltip {
 						content = "Category: "+ d.data.name + "</br>Sample size: "+ d.data.value + "</br>Proportion: "+ d.data.raw.proportion +"%"

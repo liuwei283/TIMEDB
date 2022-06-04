@@ -14,44 +14,77 @@
 <%end%>
 <% content_for :title, 'Samples' %>
 <div class="container">
-  <h1>
+  <h1  class = "mt-3">
     Samples Information
   </h1>
   <br/>
 
-  <p>
-    <span class="download_span">
-      Download all samples information:
-      <%= link_to "CSV", samples_path(format: "csv") %>
-    </span>
-  </p>
 
-  <div id='hidden_helper'>
-    <div class="dropdown">
-      <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownAttributes" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-        Click to view hidden columns:
-      </button>
-      <div class="dropdown-menu" aria-labelledby="dropdownAttributes">
-        <% i=2 %>
-        <% @sample_attrs.each do |attr| %>
-          <% if attr != 'id' %>
-            <% if !@vis.include? attr %>
-              <% attr = attr.gsub(/^n_/, "") %>
-              <% attr = attr.gsub(/^c_/, "") %>
-              <div class = "dropdown-item">
-                <input id = <%= attr %> type= "checkbox" class="toggle-vis" data-column='<%=i.to_s%>'>  
-                <label for= <%= attr %> > <%= attr %></label>
-              </div>
-            <% end %>
-            <%i += 1%>
-          <% end %>
-        <%end%>
-      </div>
-    </div>
-  </div>
-  <br />
 
-  <%= form_tag make_selected_file_samples_path,class:(session[:dark] ? "dark-table":""), multipart: true do %>
+                                            <div id="db-toolbar" class="mb-5">
+                                              <div class="db-tool-nav">
+
+                                                <div class="btn btn-outline-dark" data-toggle="collapse" data-target="#download_box" aria-expanded="true" aria-controls="download_box">
+                                                  Download Table Data <i class="fas fa-caret-down"></i>
+                                                </div>
+                                                <div class="btn btn-outline-dark" data-toggle="collapse" data-target="#export_box" aria-expanded="true" aria-controls="export_box">
+                                                  Export samples to Dataset <i class="fas fa-caret-down"></i>
+                                                </div>
+                                              </div>
+
+                                              <%= form_tag make_selected_file_samples_path, multipart: true do %>
+                                                
+                                                <div id="download_box" class="db-toolbox collapse" data-parent="#db-toolbar">
+                                                  <div class="form-group p-2">
+                                                    <%= button_tag :name => 'download_select', disabled: true, 
+                                                      :class => "s_table_sub btn btn-secondary btn-select download" do %>
+                                                      <i class='fas fa-check-circle'></i> Selected samples
+                                                    <%end%>
+                                                    <%= button_tag :name => 'download_filter',
+                                                      :class => "s_table_sub btn btn-theme btn-info download", disabled: true do %>
+                                                      <i class='fas fa-filter'></i> Searched samples
+                                                    <%end%>
+                                                    <%= button_tag :class => "s_table_sub btn btn-pink" do %>
+                                                      <%= link_to samples_path(format: "csv") do %>
+                                                        <i class='fas fa-download'></i> All samples
+                                                      <% end %>
+                                                    <%end%>
+                                                  </div>
+                                                  <p> With over 1,500 samples, please directly download all samples.</p>
+                                                </div>
+                                                <div id="export_box" class="db-toolbox collapse"  data-parent="#db-toolbar">
+                                                  <div class="form-group p-2">
+                                                    <%= button_tag :name => 'seleted2ds', disabled: true, 
+                                                      :class => "s_table_sub btn btn-select btn-theme export-db" do %>
+                                                      <i class='fas fa-check-circle'></i> Selected samples
+                                                    <%end%>
+                                                    <%= button_tag :name => 'filter2ds', disabled: true, 
+                                                        :class => "s_table_sub btn btn-search btn-pink export-db" do %>
+                                                      <i class='fas fa-filter'></i> Searched samples
+                                                    <%end%>
+                                                    <span class="btn ml-3">to your dataset:</span>
+                                                    <select id="select_box" class="btn btn-outline-secondary" name="ds_selected">
+                                                      <option value="">--Please choose a dataset--</option>
+                                                      <% @datasets.each do |ds|%>
+                                                        <option value=<%=ds.name%>> <%=ds.name%></option>
+                                                      <%end%>
+                                                    </select>
+                                                  </div>
+                                                  <p>
+                                                    If you do NOT have any dataset yet, please create one here: 
+                                                    <%=link_to 'Create new dataset', new_user_dataset_path(:user_id=>@user.id)%>
+                                                  </p>
+                                                </div>
+                                              <%end%>
+                                            </div>
+
+
+
+
+
+
+
+  <%= form_tag make_selected_file_samples_path,class:(session[:dark] ? "dark-table mb-4": "mb-4"), multipart: true do %>
     <%= content_tag :table, role: :datatable, class: "display", id: "table_page", data: { url: samples_path(format: :json)} do %>
       <p>Click <span style= "color: #006fff;">sample name</span> to view the original link of project。
         Click <span style= "color: #006fff;">details</span> to view the data table, subtype visulization and fraction visulization.
@@ -70,40 +103,9 @@
       <tbody></tbody>
     <% end %>
 
-    <div class="dropdown">
-      <button class="btn btn-secondary dropdown-toggle" type="button" id="sampleTableDropdownButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-        Download
-      </button>
-      <div class="dropdown-menu" aria-labelledby="sampleTableDropdownButton">
-        <%= submit_tag "dowload selected samples metadata to file", :name => 'metadata', :class => "s_table_sub dropdown-item" %>
-        <div class="dropdown-divider"></div>
-        <%= submit_tag "download selected samples infiltration to file", :name => 'infiltration', :class => "s_table_sub dropdown-item"  %>
-        <div class="dropdown-divider"></div>
-        <%= submit_tag "dowload filtered samples metadata to file", :name => 'filter_metadata', :class => "s_table_sub dropdown-item" %>
-        <div class="dropdown-divider"></div>
-        <%= submit_tag "dowload filtered samples infiltration to file", :name => 'filter_inf', :class => "s_table_sub dropdown-item" %>
-        <div class="dropdown-divider"></div>
-        <%= submit_tag "export selected samples to", :name => 'seleted2ds', :class => "s_table_sub dropdown-item"  %>
-        <div class="dropdown-divider"></div>
-        <%= submit_tag "export filtered samples to", :name => 'filter2ds', :class => "s_table_sub dropdown-item"  %>
-      </div>
-    </div>
-    <select id="select_box" name="ds_selected">
-      <option value="">--Please choose a dataset--</option>
-      <% @datasets.each do |ds|%>
-        <option value = "<%=ds.name%>"> <%=ds.name%></option>
-      <%end%>
-    </select>
+    
+    
   <% end %>
-  <br />
-  <p>
-    If you do NOT have any dataset, create one here: 
-    <%=link_to 'Create new dataset', new_user_dataset_path(:user_id=>@user.id)%>
-  </p>
-
-  <p>
-    *To avoid frenquent download, please refresh the page to enable download again.
-  </p>
 
 
 </div>

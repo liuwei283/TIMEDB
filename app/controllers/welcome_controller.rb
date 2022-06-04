@@ -12,6 +12,9 @@ class WelcomeController < ApplicationController
   def contact
   end
 
+  def terms
+  end
+
   def test
     @analysis_user_datum = AnalysisUserDatum.find 180
     @analysis = @analysis_user_datum.analysis

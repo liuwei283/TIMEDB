@@ -54,7 +54,7 @@ export function init(vid, path, eid, plot_name) {
             console.log(this)
             this.data.groups = this.data.data.colorMap
             this.size = {height: 700, width: 200+100*Object.keys(this.data.data.widMap).length};
-            registerEditorConfig(editorConfig(this, eid), plot_name);
+            registerEditorConfig(editorConfig(this, eid), "getVue", plot_name);
 
         }
     });

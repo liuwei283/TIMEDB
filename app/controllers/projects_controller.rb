@@ -33,11 +33,16 @@ class ProjectsController < ApplicationController
 
         @vis = ['id', 'sample_name', 'project_name', 'c_tumor_stage', 'c_tumor_grade', 'c_sample_histology', 'c_race', 'c_gender', 'n_age', 'pfs', 'os', 'pfs_status', 'os_status', 'c_tumor_type', 'c_tumor_subtype', 'c_source_name', 'c_treatment']
 
+        
         @user = User.find(session[:user_id])
        
         @cancer = Cancer.find(@project.cancer_id)
         @ctype = @cancer.cancer_name
         @attrs = Project.column_names
+        @long_attrs = ["original_description", "major_related_publications"]
+        @link_attrs = ["original_link", "publications_link"]
+        @short_attrs = [["project_name", "cancer_name", "num_of_samples", "data_type", "preprocessed", "TIMEDB_processing", ],
+        ["platform", "submisson_date", "last_update_date", "database", "num_of_observed_genes"]]
         @sample_attrs = Sample.column_names
         @samples = @project.samples
         @invis = []

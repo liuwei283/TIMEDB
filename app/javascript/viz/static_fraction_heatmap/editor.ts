@@ -222,57 +222,57 @@ export function editorConfig(v,eid): EditorDef {
                                         },
                                     },
                                 },
-                                {
-                                    title: "Grid height",
-                                    type: "input",
-                                    format: "int",
-                                    value: {
-                                        current: v.data.gridPlotheight,
-                                        callback(x) {
-                                            v.data.gridPlotheight = parseFloat(x);
-                                            v.data._sizeUpdated = true;
-                                            update(v,eid);
-                                        },
-                                    },
-                                },
+                                // {
+                                //     title: "Grid height",
+                                //     type: "input",
+                                //     format: "int",
+                                //     value: {
+                                //         current: v.data.gridPlotheight,
+                                //         callback(x) {
+                                //             v.data.gridPlotheight = parseFloat(x);
+                                //             v.data._sizeUpdated = true;
+                                //             update(v,eid);
+                                //         },
+                                //     },
+                                // },
                             ],
                         },
                     },
-                    {
-                        id: "p-common",
-                        name: "Sample",
-                        view: {
-                            type: "list",
-                            items: [
-                                {
-                                    title: "Grid width",
-                                    type: "input",
-                                    format: "int",
-                                    value: {
-                                        current: v.data.rectWidth,
-                                        callback(x) {
-                                            v.data.rectWidth = parseFloat(x);
-                                            v.data._sizeUpdated = true;
-                                            update(v,eid);
-                                        },
-                                    },
-                                },
-                                {
-                                    title: "Grid height",
-                                    type: "input",
-                                    format: "int",
-                                    value: {
-                                        current: v.data.rectHeight,
-                                        callback(x) {
-                                            v.data.rectHeight = parseFloat(x); 
-                                            v.data._sizeUpdated = true;
-                                            update(v,eid);
-                                        },
-                                    },
-                                },
-                            ],
-                        },
-                    },
+                    // {
+                    //     id: "p-common",
+                    //     name: "Sample",
+                    //     view: {
+                    //         type: "list",
+                    //         items: [
+                    //             {
+                    //                 title: "Grid width",
+                    //                 type: "input",
+                    //                 format: "int",
+                    //                 value: {
+                    //                     current: v.data.rectWidth,
+                    //                     callback(x) {
+                    //                         v.data.rectWidth = parseFloat(x);
+                    //                         v.data._sizeUpdated = true;
+                    //                         update(v,eid);
+                    //                     },
+                    //                 },
+                    //             },
+                    //             {
+                    //                 title: "Grid height",
+                    //                 type: "input",
+                    //                 format: "int",
+                    //                 value: {
+                    //                     current: v.data.rectHeight,
+                    //                     callback(x) {
+                    //                         v.data.rectHeight = parseFloat(x); 
+                    //                         v.data._sizeUpdated = true;
+                    //                         update(v,eid);
+                    //                     },
+                    //                 },
+                    //             },
+                    //         ],
+                    //     },
+                    // },
                     //继续添加
                 ],
             },

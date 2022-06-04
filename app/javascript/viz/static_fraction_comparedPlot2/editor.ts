@@ -191,7 +191,7 @@ export const generateCusConfig = (v,eid):any =>  ({
             },
         },
         {
-            id:eid+"csty-common",
+            id:"csty-common",
             name:"choose pie or bar",
             view:{
                 type:"list",

@@ -164,6 +164,8 @@ class DatasetsController < ApplicationController
         send_data @dataset.metadata_file(), :filename => "#{@dataset.name}_metadata.csv"
     end
 
+    
+
     private
 
     def dataset_params

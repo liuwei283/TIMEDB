@@ -1,53 +1,69 @@
 <% content_for :title, 'Sample ' + @sample.sample_name %>
 <div class="container">
-    
-    <div class="Block">
-        <div class="row">
-            <% @table_headers.each do |attr| %>
-                <%# if attr != 'id' && attr != 'created_at' && attr != 'updated_at' && @sample[attr]%>
-                <div class="col-md-6">
-                    <strong><%=attr %>: </strong>
-                    <% if attr == 'project_name' %>
-                        <%= link_to @sample_info[attr], @project %>
-                    <% else %>
-                        <%= @sample_info[attr] %>
-                    <% end %>
-                </div>
-                <%# end %>
-            <% end %>
-        </div>        
-    </div>
-    
-    <%#= form_tag upload_seq_project_sample_path, :multipart =>true do %>   
-        <%#= file_field_tag :seq_file %>
-        <%#= submit_tag "upload fasta file" %>
-    <%# end %> 
 
-    <%#= form_tag upload_inf_project_sample_path, :multipart =>true do %>
-        <%#= file_field_tag :inf_file %>
-        <%#= submit_tag "upload infiltration file" %>
-    <%# end %> 
+    <h2 class = "mt-3">
+    Sample Information
+    </h2>
 
+    <br>
     
-
-    
-
-    
-    <%if @inf_exist %>
-        <p>
-            <%#= link_to 'Download sequencing data', download_seq_project_sample_path %>
-            <%= link_to 'Download infiltration data', download_inf_project_sample_path %><br/>
-            <%#= link_to 'Edit', edit_project_sample_path(@sample.project, @sample.id) %> 
-            <%#= link_to 'Delete', [@sample.project, @sample],
-            method: :delete,
-            data: { confirm: 'Are you sure to delete ' + @sample.sample_name + '?'} %>
-        </p>
-        <div id="viz_sample_inf" class="col">
+    <div id="detail_box">
+        <div class="d-flex">
+        <% @short_attrs.each do |attrs| %>
+            <div class="w-50">
+            <table class="detail-table table table-bordered table-sm">
+                <% attrs.each do |attr| %>
+                <tr>
+                    <% dis_attr = attr %>
+                    <% dis_attr = dis_attr.gsub(/^n_/, "") %> 
+                    <% dis_attr = dis_attr.gsub(/^c_/, "") %> 
+                    <td class="label"><%= dis_attr %></td>
+                    <td>
+                    <%= @sample[attr] %>
+                    </td>
+                </tr>
+                <% end %>
+            </table>
+            </div>
+        <% end %>
         </div>
-        <%= javascript_pack_tag "static_inf" %>
-    <% else %>
-        <p> *infiltration data does NOT exist for this sample. </p>
-    <%end%>
+    </div>
+    <br />
+
+    <div class = "container ">
+
+
+
+        <%if @inf_exist %>
+            <div id="db-toolbar" class="mb-5">
+                <div class="db-tool-nav">
+
+                    <div class="btn btn-outline-dark" data-toggle="collapse" data-target="#download_box" aria-expanded="true" aria-controls="download_box">
+                        Download <i class="fas fa-caret-down"></i>
+                    </div>
+                    <div id="download_box" class="db-toolbox collapse" data-parent="#db-toolbar">
+                            <div class="form-group p-2">
+                                <%= button_tag :class => "s_table_sub btn btn-pink" do %>
+                                    <%= link_to download_inf_project_sample_path do %>
+                                        <i class='fas fa-download'></i>deconvolution result
+                                    <% end %>
+                                <%end%>
+                                <%= button_tag :name => 'download_filter', :id => "download_chart",
+                                    :class => "s_table_sub btn btn-search btn-theme download"  do %>
+                                    <i class='fas fa-filter'></i> download chart
+                                    <%end%>
+                            </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="viz_sample_inf" class = "">
+            </div>
+            <%= javascript_pack_tag "static_inf" %>
+        <% else %>
+            <h2> * Deconvolution result does NOT exist for this sample. </h2>
+        <%end%>
+    </div>
     
 </div>
     

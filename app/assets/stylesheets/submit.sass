@@ -22,8 +22,12 @@ $sidebar-width: 250px
 //     margin-left: 5em
 //     width: 100%
 
+// html, body
+//     //height: 100%
+
 .submit #wrapper
     display: flex
+    //height: 100%
     //background-color: #f8f9fa
 
 .submit #main
@@ -32,28 +36,29 @@ $sidebar-width: 250px
     overflow-y: scroll
     overflow-x: hidden
     width: 100vw
+    border-left: 1px solid $gray-300
 
 $sidebar-background-color: desaturate(lighten($orange, 45%), 80%)
 
 #sidebar
     background-color: #f8f9fa
-    //background: $white
     min-width: 250px
     max-width: 250px
     // max-height: 1000px
     //margin-left: -250px
     //margin-top: 1px
-    position: relative
+    position: sticky !important
+    //display: flex
+    //float: left
+    top: 70px !important
+    height: 500px
+    //float: left
     overflow: hiden
     margin-left: 0
-    // z-index: 10
-    // height: 60%
-    // overflow: scroll;
-    // border-bottom: solid 1px $gray-300;
-    // &.active
-    //     margin-left: 0
-    //     & + #main
-    //         max-width: calc(100% - 200px)
+    &.active
+        margin-left: 0
+        & + #main
+            max-width: calc(100% - 250px)
     // &.has-toolbar
     //     .sidebar-content
     //         bottom: 3rem
@@ -68,7 +73,7 @@ $sidebar-background-color: desaturate(lighten($orange, 45%), 80%)
         // right: 0
         overflow: auto
         border-top: 1px solid $gray-300
-        border-right: 1px solid $gray-300
+        //border-right: 1px solid $gray-300
         ul
             margin: 0
             // border-bottom: 1px solid $gray-300
@@ -145,4 +150,3 @@ $sidebar-background-color: desaturate(lighten($orange, 45%), 80%)
             font-size: big
             a
                 color:#000000
-

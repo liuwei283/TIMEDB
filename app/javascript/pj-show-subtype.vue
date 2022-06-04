@@ -1,20 +1,32 @@
 <template>
     <div>
         <div id = "subtype-landscape" class = "container Block">
-                <div id="landscapeDescription" class="row description">
-                    <h4>Some description for Immune Subtype Landscape in project overview</h4>
+            <div id="landscapeDescription" class="row description">
+                <h4>Some description for Immune Subtype Landscape in project overview</h4>
+            </div>
+            <div id = "subtype-landscapeBlock">
+                <div class="dropdown mb-5 mt-5">
+                    <button class="btn btn-secondary dropdown-toggle" type="button" id="subtype_landscape_download_dropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Download
+                    </button>
+                    <div class="dropdown-menu" aria-labelledby="subtype_landscape_download_dropdwon">
+                        <a class="dropdown-item" :href="clinical_file_path"  id = "subtype_landscape_clincial_download">Download clinical file</a>
+                        <a class="dropdown-item" :href="rna_file_path" id = "subtype_landscape_rna_download">Download RNA file</a>
+                        <a class="dropdown-item viz_download" id = "subtype-landscape_viz_download" @click="down_graph($event)">Download subtype landscape chart</a>
+                    </div>
                 </div>
-
-                <div id = "subtype-landscapeBlock" class="row vizBlock">
-                    <div class="col vis" id = "subtype-landscapeVis">
+                <div class="row veBlock">
+                    <div class="md-col-9 vis vizBlock" id = "subtype-landscapeVis">
                     </div>
                     <div id="subtype-landscape-editor" class = "md-col-3 v-editor">
                         <OvizEditor :config="subtype_conf_landscape" :editorWidth = "280"/>
                     </div>
                 </div>
-                <div v-if="!getlandscapeFexists" class = "text-center row justify-content-center">
-                    <h2>No data available</h2>
-                </div>
+            </div>
+
+            <div v-if="!getlandscapeFexists" class = "text-center row justify-content-center">
+                <h2>No data available</h2>
+            </div>
         </div>
 
         <hr />
@@ -38,16 +50,29 @@
 
                 </div>
             </div>
-            <div id = "subtype-boxplotBlock" class="row vizBlock">
-                <div class="col vis" id = "subtype-boxplotVis">
+            <div id = "subtype-boxplotBlock">
+                <div class="dropdown mb-5 mt-3">
+                    <button class="btn btn-secondary dropdown-toggle" type="button" id="subtype_boxplot_download_dropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Download
+                    </button>
+                    <div class="dropdown-menu" aria-labelledby="subtype_boxplot_download_dropdwon">
+                        <a class="dropdown-item" :href="subtype_file_path"  id = "subtype_boxplot_subtype_download">Download subtype file</a>
+                        <a class="dropdown-item" @click="download_subtype_boxplot_cellData" id = "subtype_landscape_rna_download">Download cell data file</a>
+                        <a class="dropdown-item viz_download" id = "subtype-boxplot_viz_download" @click="down_graph($event)">Download subtype boxplot chart</a>
+                    </div>
                 </div>
-                <div id="subtype-boxplot-editor" class = "md-col-3 v-editor">
-                    <OvizEditor :config="subtype_conf_boxplot" :editorWidth = "280"/>
+                <div  class="row veBlock">
+                    <div class="md-col-9 vis vizBlock" id = "subtype-boxplotVis">
+                    </div>
+                    <div id="subtype-boxplot-editor" class = "md-col-3 v-editor">
+                        <OvizEditor :config="subtype_conf_boxplot" :editorWidth = "280"/>
+                    </div>
                 </div>
             </div>
             <div v-if="!getboxplotFexists" class = "text-center row justify-content-center">
                 <h2>No data available</h2>
             </div>
+            
         </div>
 
         <hr />
@@ -56,13 +81,26 @@
             <div id="curveDescription" class="row description">
                 <h4>Some description for KM Curve in project overview</h4>
             </div>
-            <div id = "subtype-curveBlock" class="row vizBlock">
-                <div class="col" id = "subtype-curveVis">
+            <div id = "subtype-curveBlock" >
+                <div class="dropdown mb-5 mt-3">
+                    <button class="btn btn-secondary dropdown-toggle" type="button" id="subtype_curve_download_dropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Download
+                    </button>
+                    <div class="dropdown-menu" aria-labelledby="subtype_curve_download_dropdwon">
+                        <a class="dropdown-item" :href="clinical_file_path"  id = "subtype_landscape_clincial_download">Download clinical file</a>
+                        <a class="dropdown-item" :href="subtype_file_path" id = "subtype_landscape_subtype_download">Download subtype file</a>
+                        <a class="dropdown-item viz_download" id = "subtype-curve_viz_download" @click="down_graph($event)">Download subtype curve chart</a>
+                    </div>
                 </div>
-                <div id="subtype-curve-editor" class = "md-col-3 v-editor">
-                    <OvizEditor :config="subtype_conf_curve" :editorWidth = "280"/>
+                <div class="row veBlock">
+                    <div class="md-col-9 vizBlock" id = "subtype-curveVis">
+                    </div>
+                    <div id="subtype-curve-editor" class = "md-col-3 v-editor">
+                        <OvizEditor :config="subtype_conf_curve" :editorWidth = "280"/>
+                    </div>
                 </div>
             </div>
+
             <div v-if="!getcurveFexists" class = "text-center row justify-content-center">
                 <h2>No data available</h2>
             </div>
@@ -72,20 +110,33 @@
         <br />
 
         <div id = "subtype-regulator" class = "container Block">
-                <div id="regulatorDescription" class="row description">
-                <h4>Some description for immune regulator in project overview</h4>
-                </div>
+            <div id="regulatorDescription" class="row description">
+            <h4>Some description for immune regulator in project overview</h4>
+            </div>
 
-                <div id = "subtype-regulatorBlock" class="row vizBlock">
-                    <div class="col vis" id = "subtype-regulatorVis">
+            <div id = "subtype-regulatorBlock" >
+                <div class="dropdown mb-5 mt-3">
+                    <button class="btn btn-secondary dropdown-toggle" type="button" id="subtype_regulator_download_dropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Download
+                    </button>
+                    <div class="dropdown-menu" aria-labelledby="subtype_regulator_download_dropdwon">
+                        <a class="dropdown-item" :href="clinical_file_path"  id = "subtype_regulator_clincial_download">Download clinical file</a>
+                        <a class="dropdown-item" :href="rna_file_path" id = "subtype_regulator_rna_download">Download RNA file</a>
+                        <a class="dropdown-item viz_download" id = "subtype-regulator_viz_download" @click="down_graph($event)">Download subtype regulator chart</a>
+                    </div>
+                </div>
+                <div class="row veBlock">
+                    <div class="md-col-9 vis vizBlock" id = "subtype-regulatorVis">
                     </div>
                     <div id="subtype-regulator-editor" class = "md-col-3 v-editor">
                         <OvizEditor :config="subtype_conf_regulator" :editorWidth = "280"/>
                     </div>
                 </div>
-                <div v-if="!getregulatorFexists" class = "text-center row justify-content-center">
-                    <h2>No data available</h2>
-                </div>
+            </div>
+        </div>
+
+        <div v-if="!getregulatorFexists" class = "text-center row justify-content-center">
+            <h2>No data available</h2>
         </div>
     </div>
 </template>
@@ -135,6 +186,7 @@ export default {
                 {value:"TIMER",label:"TIMER"},
                 {value:"xCell",label:"xCell"},
             ],
+            vue_name: "subtype_vue",
             clinical_file_path: "",
             subtype_file_path: "",
             rna_file_path: "",
@@ -159,10 +211,9 @@ export default {
         this.clinical_fexists = this.file_exist['clinical']
         this.subtype_fexists = this.file_exist['subtype']
         this.rna_fexists = this.file_exist['rna']
-        // alert(this.file_exist[this.project_name]['clinical'])
     },
     mounted() {
-        event.rpcRegisterReceiver("getVue", () => this);
+        event.rpcRegisterReceiver(this.vue_name, () => this);
         this.all_viz();
     },
     computed: {
@@ -185,6 +236,7 @@ export default {
             // var subtype_file_path = this.data_path + "subtype/c1_c6/project/" + this.project_name + "_c1_c6.csv";
 
             if(this.clinical_fexists == 'true' && this.subtype_fexists == 'true' ) {
+                document.getElementById("subtype-landscapeBlock").style.display = "block";
                 subtypeLandscape("#subtype-landscapeVis", this.subtype_file_path, this.clinical_file_path, "#subtype-landscape-editor", "subtype_landscape_viz");
             }
             else {
@@ -230,20 +282,47 @@ export default {
             this.regulatorViz();
         },
 
+        download_subtype_boxplot_cellData() {
+            window.location.href = this.data_path + "cell_data/" + this.boxplot_selected + "/" + this.project_name + "_" + this.boxplot_selected + ".csv";
+        },
+        down_graph(e){
+            var clicked_id = e.target.id.replace("_viz_download", "");
+            console.log(clicked_id);
+            const svgContainerClone = document.getElementById(clicked_id + "Vis").cloneNode(true);
+            const svgBlob = new Blob([svgContainerClone.innerHTML], { type: "image/svg+xml;charset=utf-8" });
+            const svgUrl = URL.createObjectURL(svgBlob);
+            const downloadLink = document.createElement("a");
+            downloadLink.href = svgUrl;
+            downloadLink.download = clicked_id + ".svg";
+            document.body.appendChild(downloadLink);
+            downloadLink.click();
+            document.body.removeChild(downloadLink);
+        }
+
     }
 }
 </script>
 
 <style scoped lang = "scss">
-.viz {
+/* .viz {
     padding: 50px;
     position: relative;
+    box-shadow: 0 0 64px darken(#dee2e6, 5%)
+} */
+
+.veBlock {
+    position: relative !important;
     box-shadow: 0 0 64px darken(#dee2e6, 5%)
 }
 
 .vizBlock {
-    position: relative !important;
+        overflow-y: scroll;
+        overflow-x: scroll;
+        //padding: 2em;
+        margin-top: 5%;
+        margin-bottom: 5%;
 }
+    
 /* .v-editor {
     position: fixed !important;
     top: 30px;

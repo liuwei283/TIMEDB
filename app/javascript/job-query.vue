@@ -151,7 +151,7 @@
                             Task Monitor
                         </b-button>
 
-                        <b-button class="btn col-md-2" variant="info" @click="display=1" :class="{active:display==1}" v-if="data.item.status == 'finished'">
+                        <b-button class="btn col-md-2" variant="info" @click="display=1" :class="{active:display==1}" v-if="job_status == 'finished'">
                             Visualization
                         </b-button><!---->
 
@@ -218,9 +218,9 @@
                     <section id="test-log" class="float-right">
                         <h4>Test Log</h4>
                         <p class="font-italic">Console Output</p>
-                        <pre id="stdout" class="light">(test msg)<br/>{{stdout}}</pre>
+                        <pre id="stdout" class="light">{{stdout}}</pre>
                         <p class="font-italic">Error Message</p>
-                        <pre id="stderr">(test msg)<br/>{{stderr}}</pre>
+                        <pre id="stderr">{{stderr}}</pre>
                     </section>
 
                     <section id="outputs" class="mt-4 mb-4">
@@ -311,7 +311,8 @@ export default {
                 stdout: '',
                 error: ''
             },
-            chartOptions: {},            
+            chartOptions: {},
+            job_status: "",            
         };
     },
     created() {
@@ -528,7 +529,7 @@ export default {
         
     },
     updated() {
-        if (this.submitted && this.data.outputs.length > 0) {
+        if (this.submitted && this.job_status == "finished") {
             event.emit("GMT:reset-query", this);
             this.updateGon(this.data.outputs[this.chosenOutput]);
             event.emit("GMT:query-finished", this);
@@ -639,7 +640,7 @@ export default {
         refreshStatus() {
             console.log("Now refresh task", this.taskId)
             this.stdout = new Date() + " output test."
-            this.stderr = new Date() + " error test."
+            // this.stderr = new Date() + " error test."
             // Production Code
             axios.post(
                 `/query-deepomics/`,
@@ -656,6 +657,8 @@ export default {
                 this.inputs = response.data.message.inputs;
                 this.outputs = response.data.message.outputs;
                 this.params = response.data.message.params;
+                this.stderr = response.data.message.error_message;
+                this.job_status = response.data.message.status;
                 
                     }).catch((error) => {
                         const message = error.response && error.response.status === 404 ? "The task does not exist" : error;
@@ -702,7 +705,8 @@ export default {
                         alertCenter.add('danger', `${response.data.data}`);
                     } else {
                         this.data.outputs = response.data.body;
-                        if (response.data.body.length > 0 && false) {
+
+                        if (response.data.body.length > 0) {
                             this.updateGon(this.data.outputs[0]);
                             this.taskOutputs = this.data.outputs.map((x, i) => ({value: i, text: x.name}));
                         }
@@ -718,6 +722,9 @@ export default {
                     alertCenter.add('danger', `${message}`);
                 }).finally(() => {
                     // setTimeout(() => { alertCenter.add('danger', ''); }, 2000);
+                    if (this.submitted) {
+                        this.refreshStatus();
+                    }
                 });
             }
         },

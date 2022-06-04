@@ -5,11 +5,12 @@ import{ plotDataloaded } from "./data"
 import { EditText } from "oviz-components/edit-text";
 import { GridPlot } from "oviz-components/grid-plot";
 import { registerDefaultBioInfoComponents } from "crux/dist/element/global";
-
+import { editorConfig, editorRef } from "./editor";
+import { registerEditorConfig } from "utils/editor";
 
 registerDefaultBioInfoComponents();
 
-export function init(id,path,config,eid,plot_name){
+export function init(id,path,config,eid,plot_name,vue_name){
     console.log("config:",config)
     Oviz.visualize({
         el:id,
@@ -36,6 +37,9 @@ export function init(id,path,config,eid,plot_name){
         },
         setup() { 
             console.log("this.data:",this["_data"]);
+            registerEditorConfig(editorConfig(this,eid), vue_name, plot_name);
+            this.size.height = 600
+            this.size.width = 900 + this.data.maxLegend + 5
         },
     })
 }
