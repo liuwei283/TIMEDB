@@ -133,7 +133,7 @@
                             right
                             v-model="chosenOutput"
                             :options="taskOutputs"
-                            class="tool-bar-el btn px-0"/><!--v-if="data.outputs.length > 1"-->
+                            class="tool-bar-el btn px-0 m-0"/><!--v-if="data.outputs.length > 1"-->
                     
                     <!-- <b-button v-else variant="dark" class="btn col-md-4" disabled >{{data.outputs[0].name}}
                     </b-button> -->
