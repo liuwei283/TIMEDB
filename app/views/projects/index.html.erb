@@ -51,7 +51,7 @@
 
 
 
-  <%= form_tag export_selected_projects_path(format: "csv"),class:(session[:dark] ? "dark-table":""), multipart: true do %> 
+  <%= form_tag export_selected_projects_path(format: "csv"),class:(session[:dark] ? "dark-table mb-5": "mb-5"), multipart: true do %> 
     <%= content_tag :table, role: :datatable, class: "display", id: "table_page", data: { url: projects_path(format: :json)} do %>
       <p>Click <span style= "color: #006fff;">project name</span> to view the original link of project.
         Click <span style= "color: #006fff;">details</span> to view the data table, subtype visulization and fraction visulization.
