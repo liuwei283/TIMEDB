@@ -286,7 +286,7 @@
                                             </div>
                                             <div class = "col-md-6">
                                                 <h5>Parameters description</h5>
-                                                <p id = "params_desc">{{this.single_params_desc}}</p>
+                                                <div id = "multiple_params_desc" v-html="test_description"></div>
                                             </div>
                                         </div>
                                         <p v-if="displayedSingleParams.length == 0">No Parameters.</p>
@@ -507,7 +507,7 @@
                                 </div> -->
 
                                 <!-- 在deepomics那里直接写成html的格式-->
-                                <div id = "multiple_params_desc">{{multiple_params_desc}}</div>
+                                <div id = "multiple_params_desc" v-html="test_description"></div>
                             </div>
                         </div>
                     </div>
@@ -590,6 +590,8 @@
                 multiple_completed: [],
                 step: 1,
                 showhelper: false,
+
+                test_description: "<h3>There are something testing description</h3><ul><li>The first row is for something.</li><li>The first column is for something. It should be something.</li><li>Please be noted that the uploader is for something and somethind should be...</li></ul><p>This is the end of this line.</p>"
             };
         },
         created() {

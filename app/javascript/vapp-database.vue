@@ -30,7 +30,7 @@
                     </div>
 
             </div>
-            <div class="dropdown">
+            <div class="dropdown mt-3 mb-5">
                 <button class="btn btn-secondary dropdown-toggle" type="button" id="bar_download_dropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     Download
                 </button>
@@ -94,7 +94,7 @@
                 </div>
             </div>
             <div id = "pieBlock">
-                <div class="dropdown">
+                <div class="dropdown mt-3 mb-5">
                     <button class="btn btn-secondary dropdown-toggle" type="button" id="pie_download_dropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         Download
                     </button>
@@ -138,7 +138,7 @@
                 </div>
             </div>
             <div id = "landscapeBlock">
-                <div class="dropdown">
+                <div class="dropdown mt-3 mb-5">
                     <button class="btn btn-secondary dropdown-toggle" type="button" id="landscape_download_dropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         Download
                     </button>
@@ -194,7 +194,7 @@
                 </div>
             </div>
             <div id = "regulatorBlock">
-                <div class="dropdown">
+                <div class="dropdown mt-3 mb-5">
                     <button class="btn btn-secondary dropdown-toggle" type="button" id="regulator_download" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     Dropdown regulator related data
                     </button>
