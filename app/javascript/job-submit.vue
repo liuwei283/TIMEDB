@@ -179,7 +179,7 @@
                                         <div class = "row submit-box justify-content-center">
                                             <div v-if="picked_single_multiple=='single'" class = "row justify-content-center">
                                                 <div class = "row justify-content-center">
-                                                    <div class="col-md-6 text-center" v-for="input in displayedInputs" :key="input.id">
+                                                    <div class="text-center" v-for="input in displayedInputs" :key="input.id">
                                                         <label :for="`i-${input.id}`">{{ input.name }}
                                                             <span v-if="input.required" class="required">*</span>
                                                         </label>
@@ -187,6 +187,7 @@
                                                             <img v-bind:src="require('../assets/images/big_upload.png')" style="width:90%">
                                                         </div>
                                                     </div>
+                                                    
                                                 </div>
 
                                                 <div class = "row justify-content-center">
@@ -286,7 +287,7 @@
                                             </div>
                                             <div class = "col-md-6">
                                                 <h2>Parameters description</h2>
-                                                <div id = "multiple_params_desc" v-html="single_params_desc"></div>
+                                                <div id = "single_params_desc" v-html="single_params_desc"></div>
                                             </div>
                                         </div>
                                         <p v-if="displayedSingleParams.length == 0">No Parameters.</p>
@@ -333,6 +334,13 @@
 
         <b-modal class= "file-submit-modal" :id="`single-upload-${input.id}`" size="md" :title="`Submit input file - ${input.name}`" centered v-for="input in displayedInputs" :key="input.id">
                 <div class = "row justify-content-center submit-container">
+                    <div class = "col-md-1">
+                    </div>
+                    <button class = "col-md-4 btn btn-secondary">
+                        <a :href="`/public/data/module_demo/${input.name}_demo.csv`" :download="input.name">Download demo file</a>
+                    </button>
+                    <div class = "col-md-7">
+                    </div>
                     
                     <div class = "col-md-12 text-center">
                         <div class = "submit-container">
@@ -350,15 +358,6 @@
                                 </b-form-file>
                             </div>
                         </div>
-                    </div>
-                    <div class = "col-md-4">
-                    </div>
-                    <div class = "col-md-4">
-                        <button class = "btn btn-secondary">
-                            <a :href="`/public/data/module_demo/${input.name}_demo.csv`" :download="input.name">Download demo file</a>
-                        </button>
-                    </div>
-                    <div class = "col-md-4">
                     </div>
                     <div class = "col-md-10" id = "description-card submit-container">
                         <div class = "row submit-container">
@@ -380,15 +379,21 @@
                     </div> -->
 
                     <div class = "col-md-10 text-center">
-                        <h4> File submission </h4>
+                        <h4 class = "mb-4"> File submission </h4>
                         <div class = "row">
                             <div id = "be-file-submit" class = "col-md-6 text-center" v-for="input in displayedInputs" :key="input.id">
                                 
                                 <div>
-                                    <label :for="`multiple-i-${input.id}-${input_idx}`">{{ input.name }}
-                                        <span v-if="input.required" class="required" style="color:red;">*</span>
-                                        <i class="fa fa-question-circle" b-tooltip.hover
-                                        ></i>
+                                    <label :for="`multiple-i-${input.id}-${input_idx}`" class = "row justify-content-around">
+                                        <div class = "col-md-6 text-left" style="margin:auto;">
+                                            {{ input.name }}
+                                            <span v-if="input.required" class="required" style="color:red;">*</span>
+                                        </div>
+                                        <div class = "col-md-6 text-right">
+                                            <button class = "btn btn-secondary">
+                                                <a :href="`/public/data/module_demo/${input.name}_demo.csv`" :download="input.name">Download demo file</a>
+                                            </button>
+                                        </div>
                                     </label>
                                     <b-form-file
                                         :id="`multiple-i-${input.id}-${input_idx}`"
@@ -399,6 +404,11 @@
                                         :required="input.required"
                                     >
                                     </b-form-file>
+                                    <div class = "submit-container">
+                                        <div v-html="input.description">
+                                        </div>
+                                    </div>
+                                    
                                 </div>
                                 <!-- <div><p>uploaded file name: {{files[`i-${input.id}-${input_idx}`] ? files[`i-${input.id}-${input_idx}`].name : "no file uploaded"}} </p></div> -->
                             </div>
@@ -439,8 +449,6 @@
 
                                         <label :for="`multiple-p-${param.id}-${input_idx}`">{{ param.name }}
                                             <span v-if="param.required" class="required" style="color:red;">*</span>
-                                            <i class="fa fa-question-circle" b-tooltip.hover
-                                            ></i>
                                         </label>
                                         <div v-if="param.param_type === 'enum'">
                                             <select @focus="provide_multiple_param_desc(param)" :id="`multiple-p-${param.id}-${input_idx}`" class="form-control custom-select"  :placeholder="parameters[`multiple-p-${param.id}-${input_idx}`]"
@@ -468,8 +476,6 @@
 
                                         <label :for="`dp-${input_idx}`">{{ ds_params.name }} for selected dataset
                                             <span v-if="ds_params.required" class="required"  style="color:red;">*</span>
-                                            <i class="fa fa-question-circle" b-tooltip.hover
-                                            ></i>
                                         </label>
                                         <div v-if="ds_params.param_type === 'enum'">
                                             <select @focus="provide_multiple_param_desc(ds_params)" :id="`dp-${input_idx}`" class="form-control custom-select"
@@ -489,24 +495,8 @@
                             </div>
 
                             <div class = "col-md-6">
-                                <h5>Parameters description</h5>
-                                <!-- <div class = "row submit-container">
-                                    <div class = "text-left" v-for="des_patch in multiple_params_desc.split('/n')" v-bind:key="des_patch">
-                                        <div v-if="des_patch.has('/ub')">
-                                            <ul>
-                                                <li v-for="list_item in des_patch.split('/ub')" v-bind:key="list_item">
-                                                {{list_item}}
-                                                </li> 
-                                            </ul>
-                                        </div>
-                                        <div v-else>
-                                            <p>{{des_patch}}</p>
-                                        </div>
-                                    </div>
-                                </div> -->
-
-                                <!-- 在deepomics那里直接写成html的格式-->
-                                
+                                <h2>Parameters description</h2>
+                                <div id = "multiple_params_desc" v-html="multiple_params_desc"></div>
                             </div>
                         </div>
                     </div>
@@ -516,9 +506,9 @@
 
         <b-modal v-if="started" ref="submit-helper" v-model="showhelper" id = "submit-helper" size="xl" scrollable title="Module Helper" centered>
             <br>
-            <div class = "text-center submit-container">
-                <img v-bind:src="require('../assets/images/' + selected_analysis.name + '_structure.jpg')" style= "width : 100%"> 
-                <div v-html="selected_analysis.rendered_doc" class = "text-left submit-container">
+            <div class = "row justify-content-center container">
+                <img v-bind:src="require('../assets/images/' + selected_analysis.name + '_structure.jpg')" style= "width : 100%">
+                <div v-html="selected_analysis.rendered_doc" class = "text-left container" style="margin: 50px;">
                 </div>
             </div>
         </b-modal>
