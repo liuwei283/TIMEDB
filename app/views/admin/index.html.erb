@@ -286,6 +286,13 @@
       <%= submit_tag 'Update'%>
     <% end %>
 
+
+    <%= form_tag({action: :update_files}, multipart: true) do %>
+    <p>
+        Update files 
+    </p>
+    <%= submit_tag 'Update'%>
+    <% end %>
     </section>
 
   <hr>

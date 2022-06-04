@@ -39,6 +39,17 @@ class DatabaseController < ApplicationController
         @pnum = Project.all.count
         @snum = Sample.all.count
 
+        csf_path = "#{Rails.root}/public/project_files.csv"
+        csv_text = File.read(csf_path) 
+        @csv_test = {}
+
+        csv_text = CSV.parse(csv_text, :headers => true)
+        csv_text.each do |row|
+
+            @csv_test[row.to_hash['project_name']] =row.to_hash
+
+        end
+        gon.push files: @csv_test
         
     end
 

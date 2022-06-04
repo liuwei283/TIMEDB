@@ -52,8 +52,15 @@ class ProjectsController < ApplicationController
         @user = User.find(id)
         @datasets = @user.datasets
 
-
-        
+        csf_path = "#{Rails.root}/public/project_files.csv"
+        csv_text = File.read(csf_path) 
+        csv_text = CSV.parse(csv_text, :headers => true)
+        csv_text.each do |row|
+            if row.to_hash['project_name'] == @pname
+                @rows = row.to_hash
+            end
+        end
+        gon.push files:@rows
         # transfer columns names to project fraction oerview
         @selector_attrs = []
         @sample_attrs.each do |s_attr|

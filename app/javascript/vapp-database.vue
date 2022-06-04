@@ -251,6 +251,7 @@ export default {
         return {
             cancers: window.gon.cancers,
             projects: window.gon.projects,
+            files: window.gon.files,
             pie_projects : null,
             regulatorProjects: null,
             overview_conf_bar: {},
@@ -291,6 +292,7 @@ export default {
             }
     },
     created() {
+        alert(this.files)
         event.rpcRegisterReceiver("getVue", () => this);
         this.bar_selected = "project";
         this.pieMethodSelected = "ABIS";
@@ -308,13 +310,13 @@ export default {
     },
     computed: {
         getPieFexists() {
-            return this.pie_fexists;
+            return this.pie_fexists == 'true';
         },
         getLandscapeFexists() {
             return this.landscape_fexists;
         },
         getregulatorFexists() {
-            return this.regulator_rna_fexists && this.regulator_subtype_fexists;
+            return this.regulator_rna_fexists =='true' && this.regulator_subtype_fexists =='true';
         },
     },
     watch: {
@@ -341,21 +343,15 @@ export default {
             //method name must be same as data storage folder
             var file_name = this.pieProjectSelected + "_" + this.pieMethodSelected + ".csv";
             var file_path = this.data_path + "/cell_data/" + this.pieMethodSelected + "/" + file_name;
+            this.pie_fexists = this.files[this.pieProjectSelected][this.pieMethodSelected];
+            if (this.pie_fexists == 'true') {
+                document.getElementById("pieBlock").style.display = "block";
 
-            axios.get('/api/public_file/check_file_exists', { params: { fpath: file_path}  }).then(response => {
-                this.pie_fexists = response.data["fexists"];
-                console.log("===?" + this.pie_fexists);
-                console.log(typeof(this.pie_fexists));
-
-                if (this.pie_fexists == true) {
-                    document.getElementById("pieBlock").style.display = "block";
-
-                    immunepie("#pieVis", file_path, "#pie-editor", "overview_pie_viz");
-                }
-                else {
-                    document.getElementById("pieBlock").style.display = "none";
-                }
-            });
+                immunepie("#pieVis", file_path, "#pie-editor", "overview_pie_viz");
+            }
+            else {
+                document.getElementById("pieBlock").style.display = "none";
+            }
         },
         landscapeViz(){
             //immunelandscape("#landscapeVis", this.data_path + "/sample_num/" + this.bar_selected + "_samples.tsv");
@@ -363,6 +359,7 @@ export default {
             if (this.landscape_selected == "all") {
                 var file_name = "c1_c6_TCGA_all.csv"
                 file_path =this.data_path+ "/subtype/c1_c6/" + "c1_c6_TCGA_all.csv"; 
+                this.landscape_fexists = 'true'
             }
             else {
                 var file_name = this.landscape_selected + "_c1_c6.csv"
@@ -391,32 +388,19 @@ export default {
                 
                 var subtype_file_path = this.data_path + "/subtype/c1_c6/project/" + subtype_fname;
                 var rna_file_path = this.data_path + "/immuneregulator/" + rna_fname;
+                
+                this.regulator_rna_fexists = this.files[this.regulatorProjectSelected]['rna'];
+                this.regulator_subtype_fexists = this.files[this.regulatorProjectSelected]['subtype'];
 
-                axios.get('/api/public_file/check_file_exists', { params: { fpath: rna_file_path, fpath2: subtype_file_path}  }).then(response => {
-                    this.regulator_rna_fexists = response.data["fexists"];
-                    this.regulator_subtype_fexists = response.data["fexists2"];
-                    //console.log(this.regulator_rna_fexists);
 
-                    if(this.regulator_rna_fexists == true && this.regulator_subtype_fexists == true) {
-                        document.getElementById("regulatorBlock").style.display = "block";
-                        immuneRegulator("#regulatorVis", subtype_file_path, rna_file_path, "#regulator-editor", "overview_regulator_viz");
-                    }
-                    else {
-                        document.getElementById("regulatorBlock").style.display = "none";
-                    }
-                });
-                // axios.get('/api/public_file/check_file_exists', { params: { fpath: subtype_file_path}  }).then(response => {
-                //     this.regulator_subtype_fexists = response.data["fexists"];
-                //     console.log(this.regulator_subtype_fexists);
-                // });
+                if(this.regulator_rna_fexists == 'true' && this.regulator_subtype_fexists == 'true') {
+                    document.getElementById("regulatorBlock").style.display = "block";
+                    immuneRegulator("#regulatorVis", subtype_file_path, rna_file_path, "#regulator-editor", "overview_regulator_viz");
+                }
+                else {
+                    document.getElementById("regulatorBlock").style.display = "none";
+                }
 
-                // if(this.regulator_rna_fexists == true && this.regulator_subtype_fexists == true) {
-                //     document.getElementById("regulatorBlock").style.display = "block";
-                //     immuneRegulator("#regulatorVis", subtype_file_path, rna_file_path, "#regulator-editor", "overview_regulator_viz");
-                // }
-                // else {
-                //     document.getElementById("regulatorBlock").style.display = "none";
-                // }
 
         },
         all_viz() {

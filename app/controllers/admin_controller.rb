@@ -55,6 +55,54 @@ class AdminController < ApplicationController
         redirect_to '/admin', notice: "ALL immune infiltration data uploaded."
     end
 
+    def update_files
+        file_path = "#{Rails.root}/public/project_files.csv"
+        file = File.open(file_path,"w")
+        s = "project_name,clinical,subtype,rna"
+        boxplot_selector= ["Consensus","ABIS","CIBERSORTX","CIBERSORT","ConsensusTME","EPIC","ImmuCellAI","MCPcounter","quanTIseq","TIMER", "xCell"]
+
+        boxplot_selector.each do |boxplot_selected|
+            s += ",#{boxplot_selected}"
+        end
+        @projects = Project.order(:id)
+        @projects.each do |project|
+            name = project.project_name
+            clinical_file_path = $data_dir+"/clinical/sample/Clinical_" + name + ".csv";
+            subtype_file_path = $data_dir+"/subtype/c1_c6/project/" + name + "_c1_c6.csv";
+            rna_file_path = $data_dir+"/immuneregulator/immuReg_" + name + ".csv";
+            s+="\n"
+            s+="#{name}"
+
+            if File.exists?(clinical_file_path)
+                s+= ",true"
+            else
+                s+=',false'
+            end
+            if File.exists?(subtype_file_path)
+                s+= ",true"
+            else
+                s+=',false'
+            end            
+            if File.exists?(rna_file_path)
+                s+= ",true"
+            else
+                s+=',false'
+            end
+            boxplot_selector.each do |boxplot_selected|
+                cellData_file_path = $data_dir + "cell_data/" + boxplot_selected + "/" + name + "_" + boxplot_selected + ".csv";
+                if File.exists?(cellData_file_path)
+                    s+= ",true"
+                else
+                    s+=',false'
+                end
+            end
+            
+        end
+        file.write(s)
+        file.close
+        redirect_to '/admin', notice: "ALL files updated."
+    end
+
     def update_samples_num_table_and_reprocessedColumns
         #generate cancer type and their sample numbers
         @cancers = Cancer.order(:cancer_name)
