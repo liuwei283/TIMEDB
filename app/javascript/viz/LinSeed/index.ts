@@ -47,7 +47,7 @@ function init() {
             }
         },
         setup() {
-            registerEditorConfig(editorConfig(this));
+            registerEditorConfig(editorConfig(this), "getVue");
         }
     });
 

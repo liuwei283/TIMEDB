@@ -121,11 +121,11 @@
         <div class="viz-result mb-1" v-else> <!---->
             <b-card no-body>
                 <b-card-header v-b-modal.modalBox class="border-1 py-2">
-                    <b-button class="btn col-md-2 btn-theme" @click="returnQuery">
+                    <b-button class="btn col-md-2" variant = "primary" @click="returnQuery">
                         <i class="fas fa-arrow-left"></i> Back to query
                     </b-button>
 
-                    <b-button class="btn btn-secondary col-md-3" disabled >
+                    <b-button variant="secondary" class="btn col-md-3" disabled >
                         {{`${jobName} (No.${job_id})`}}
                     </b-button>
 
@@ -133,23 +133,24 @@
                             right
                             v-model="chosenOutput"
                             :options="taskOutputs"
-                            class="tool-bar-el btn"/><!--v-if="data.outputs.length > 1"-->
+                            class="tool-bar-el btn px-0"/><!--v-if="data.outputs.length > 1"-->
                     
                     <!-- <b-button v-else variant="dark" class="btn col-md-4" disabled >{{data.outputs[0].name}}
                     </b-button> -->
 
 
 
+
                     <div class="tabBtn">
-                        <b-button class="btn col-md-2 btn-pink" @click="display=0" :class="{active:display==0}">
+                        <b-button class="btn col-md-2" variant="info" @click="display=0" :class="{active:display==0}">
                             Task Monitor
                         </b-button>
 
-                        <b-button class="btn col-md-2 btn-pink" @click="display=1" :class="{active:display==1}" v-if="job_status == 'finished'">
+                        <b-button class="btn col-md-2" variant="info" @click="display=1" :class="{active:display==1}" v-if="job_status == 'finished'">
                             Visualization
                         </b-button><!---->
 
-                        <b-button class="btn col-md-2 btn-pink" disabled v-else>
+                        <b-button class="btn col-md-2" variant="info" disabled v-else>
                             Visualization
                         </b-button><!---->
 

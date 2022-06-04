@@ -278,7 +278,7 @@ export default {
 
             if(this.clinical_fexists == 'true'){
                 document.getElementById("fraction_pieBlock").style.display = "block";
-                fractionPie("#fraction-pieVis", this.clinical_file_path, this.pie_selected, "#fraction-pie-editor", "fraction_pie_viz");
+                fractionPie("#fraction-pieVis", this.clinical_file_path, this.pie_selected, "#fraction-pie-editor", "fraction_pie_viz", this.vue_name);
 
             }else{
                 document.getElementById("fraction_pieBlock").style.display = "none";
@@ -293,10 +293,10 @@ export default {
                 document.getElementById("fraction_boxplotBlock").style.display = "block";
 
                 if (this.boxplot_selected == "Consensus") {
-                    fractionGroupBoxplot("#fraction-boxplotVis", cellData_file_path, "#fraction-boxplot-editor", "fraction_boxplot_viz");
+                    fractionGroupBoxplot("#fraction-boxplotVis", cellData_file_path, "#fraction-boxplot-editor", "fraction_boxplot_viz", this.vue_name);
                 }
                 else {
-                    fractionBoxplot("#fraction-boxplotVis", cellData_file_path, "#fraction-boxplot-editor", "fraction_boxplot_viz");
+                    fractionBoxplot("#fraction-boxplotVis", cellData_file_path, "#fraction-boxplot-editor", "fraction_boxplot_viz", this.vue_name);
                 }
             }else{
                 document.getElementById("fraction_boxplotBlock").style.display = "none";
@@ -309,7 +309,7 @@ export default {
             
             if (this.landscape_cell_fexists == 'true') {
                 document.getElementById("fraction_landscapeBlock").style.display = "block";
-                fractionLandscape("#fraction-landscapeVis", cellData_file_path, this.landscape_selected, "#fraction-landscape-editor", "fraction_landscape_viz");
+                fractionLandscape("#fraction-landscapeVis", cellData_file_path, this.landscape_selected, "#fraction-landscape-editor", "fraction_landscape_viz", this.vue_name);
             }
             else {
                 document.getElementById("fraction_landscapeBlock").style.display = "none";
@@ -321,7 +321,7 @@ export default {
             this.heatmap_fexists = this.file_exist[this.heatmap_selected];
             if(this.clinical_fexists=="true" && this.heatmap_fexists=='true'){
                 document.getElementById("fraction_heatmapBlock").style.display = "block";
-                fractionHeatmap("#fraction-heatmapVis", clinical_file_path, cellData_file_path, "#fraction-heatmap-editor", "fraction_heatmap_viz");
+                fractionHeatmap("#fraction-heatmapVis", clinical_file_path, cellData_file_path, "#fraction-heatmap-editor", "fraction_heatmap_viz", this.vue_name);
             }else{
                 document.getElementById("fraction_heatmapBlock").style.display = "none";
 
@@ -345,6 +345,19 @@ export default {
             window.location.href = this.data_path + "cell_data/" + this.heatmap_selected + "/" + this.project_name + "_" + this.heatmap_selected + ".csv";
 
         },
+        down_graph(e){
+            var clicked_id = e.target.id.replace("_viz_download", "");
+            console.log(clicked_id);
+            const svgContainerClone = document.getElementById(clicked_id + "Vis").cloneNode(true);
+            const svgBlob = new Blob([svgContainerClone.innerHTML], { type: "image/svg+xml;charset=utf-8" });
+            const svgUrl = URL.createObjectURL(svgBlob);
+            const downloadLink = document.createElement("a");
+            downloadLink.href = svgUrl;
+            downloadLink.download = clicked_id + ".svg";
+            document.body.appendChild(downloadLink);
+            downloadLink.click();
+            document.body.removeChild(downloadLink);
+        }
     },
     computed:{
         getpieFexists() {
@@ -359,20 +372,7 @@ export default {
         getheatmapFexists() {
             return this.clinical_fexists=="true" && this.heatmap_fexists=='true'
         },
-        down_graph(e){
-            var clicked_id = e.target.id.replace("_viz_download", "");
-            console.log(clicked_id);
-            const svgContainerClone = document.getElementById(clicked_id + "Vis").cloneNode(true);
-            const svgBlob = new Blob([svgContainerClone.innerHTML], { type: "image/svg+xml;charset=utf-8" });
-            const svgUrl = URL.createObjectURL(svgBlob);
-            const downloadLink = document.createElement("a");
-            downloadLink.href = svgUrl;
-            downloadLink.download = clicked_id + ".svg";
-            document.body.appendChild(downloadLink);
-            downloadLink.click();
-            document.body.removeChild(downloadLink);
-        }
-
+        
     }
 }
 </script>
