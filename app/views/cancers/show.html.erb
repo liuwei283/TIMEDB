@@ -75,10 +75,10 @@
     <%= form_tag export_selected_projects_path(format: "csv"), multipart: true do %> 
       <div id="download_box" class="db-toolbox collapse" data-parent="#db-toolbar">
         <div class="form-group p-2">
-          <%= button_tag :class => "s_table_sub btn btn-info" do %>
+          <%= button_tag :class => "s_table_sub btn btn-theme" do %>
             <i class='fas fa-check-circle'></i> Selected projects
           <%end%>
-          <%= link_to cancer_path(format: "csv"), disabled: true, :class => "s_table_sub btn btn-primary float-right" do %>
+          <%= link_to cancer_path(format: "csv"), disabled: true, :class => "s_table_sub btn btn-pink float-right" do %>
             <i class='fas fa-download'></i> All projects
           <%end%>
         </div>

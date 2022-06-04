@@ -1,7 +1,7 @@
 require 'zip'
 
 class WelcomeController < ApplicationController
-  skip_before_action :validate_cookie, only: [:index, :contact, :require_cookie]
+  skip_before_action :validate_cookie, only: [:index, :contact, :terms, :require_cookie]
   def index
     #@user = User.find(session[:user_id])
   end
@@ -76,7 +76,7 @@ class WelcomeController < ApplicationController
     # unless File.directory?(user_dir)
     #     Dir.mkdir(user_dir)
     # end
-    redirect_to root_path, notice: 'Happy to use our website!'
+    redirect_to root_path, notice: 'Welcome to use our website!'
 
   end
 end

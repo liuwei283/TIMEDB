@@ -33,9 +33,15 @@ html
       - if session[:user_id].nil?
         #cookies-eu-banner
           .container
-            | We use Cookies to offer a better browsing experience.
+            | We use Cookies to offer a better browsing experience. 
+            = link_to "Terms and conditions", "/terms", method: :get
             button.btn.btn-sm.btn-outline-light#cookies-eu-accept
               = link_to "Accept", "welcome/require_cookie", method: :post
+            
+              
+            
+
+
       #main
         = yield
       #disable-fill

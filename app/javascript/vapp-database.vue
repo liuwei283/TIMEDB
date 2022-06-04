@@ -349,7 +349,6 @@ export default {
 
                 if (this.pie_fexists == true) {
                     document.getElementById("pieBlock").style.display = "block";
-
                     immunepie("#pieVis", file_path, "#pie-editor", "overview_pie_viz");
                 }
                 else {

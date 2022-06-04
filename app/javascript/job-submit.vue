@@ -14,8 +14,8 @@
                         <h2 class="display-2">
                             Start Analysis
                         </h2>
-                        <p class="lead mt-4">
-                            GutMeta provides common applied methods of metagenomics sequence analysis. Official tutorial is available at Tutorial. You may try submit the tasks with our demo input files, and view the ideal results on the demo jobs page.
+                        <p style="font-size:1.2em;">
+                            TIMEDB provides common applied methods of metagenomics sequence analysis. Official tutorial is available at Tutorial. You may try submit the tasks with our demo input files, and view the ideal results on the demo jobs page.
                         </p>
                     </div>
                 </div>
@@ -179,7 +179,7 @@
                                         <div class = "row submit-box justify-content-center">
                                             <div v-if="picked_single_multiple=='single'" class = "row justify-content-center">
                                                 <div class = "row justify-content-center">
-                                                    <div class="col-md-6 text-center" v-for="input in displayedInputs" :key="input.id">
+                                                    <div class="text-center" v-for="input in displayedInputs" :key="input.id">
                                                         <label :for="`i-${input.id}`">{{ input.name }}
                                                             <span v-if="input.required" class="required">*</span>
                                                         </label>
@@ -187,6 +187,7 @@
                                                             <img v-bind:src="require('../assets/images/big_upload.png')" style="width:90%">
                                                         </div>
                                                     </div>
+                                                    
                                                 </div>
 
                                                 <div class = "row justify-content-center">
@@ -285,8 +286,8 @@
                                                 </div>
                                             </div>
                                             <div class = "col-md-6">
-                                                <h5>Parameters description</h5>
-                                                <div id = "multiple_params_desc" v-html="test_description"></div>
+                                                <h2>Parameters description</h2>
+                                                <div id = "multiple_params_desc" v-html="single_params_desc"></div>
                                             </div>
                                         </div>
                                         <p v-if="displayedSingleParams.length == 0">No Parameters.</p>
@@ -333,8 +334,9 @@
 
         <b-modal class= "file-submit-modal" :id="`single-upload-${input.id}`" size="md" :title="`Submit input file - ${input.name}`" centered v-for="input in displayedInputs" :key="input.id">
                 <div class = "row justify-content-center submit-container">
-                    <div class = "col-md-10 text-center">
-                        <div class = "row submit-container">
+                    
+                    <div class = "col-md-12 text-center">
+                        <div class = "submit-container">
                             <div>
                                 <b-form-file
                                     :id="`i-${input.id}`"
@@ -350,22 +352,20 @@
                             </div>
                         </div>
                     </div>
-                    <!-- <div class = "col-md-10" id = "description-card submit-container">
+                    <div class = "col-md-4">
+                    </div>
+                    <div class = "col-md-4">
+                        <button class = "btn btn-secondary">
+                            <a :href="`/public/data/module_demo/${input.name}_demo.csv`" :download="input.name">Download demo file</a>
+                        </button>
+                    </div>
+                    <div class = "col-md-4">
+                    </div>
+                    <div class = "col-md-10" id = "description-card submit-container">
                         <div class = "row submit-container">
-                            <div class = "text-left" v-for="des_patch in input.description.split('/n')" v-bind:key="des_patch">
-                                <div v-if="des_patch.has('/ub')">
-                                    <ul>
-                                        <li v-for="list_item in des_patch.split('/ub')" v-bind:key="list_item">
-                                         {{list_item}}
-                                        </li> 
-                                    </ul>
-                                </div>
-                                <div v-else>
-                                    <p>{{des_patch}}</p>
-                                </div>
-                            </div>
+                            <div v-html="input.description"></div>
                         </div>
-                    </div> -->
+                    </div>
                 </div>
         </b-modal>
 
@@ -373,12 +373,12 @@
                 
                 
                 <div class = "row justify-content-center">
+
                     <!-- <div class = "col-md-2">
                         <b-btn @click="resetMultipleUpload(input_idx)" class="float-right mt-2 btn-lg">Reset</b-btn>
                     </div>
                     <div class = "col-md-10">
                     </div> -->
-                    
 
                     <div class = "col-md-10 text-center">
                         <h4> File submission </h4>
@@ -389,7 +389,7 @@
                                     <label :for="`multiple-i-${input.id}-${input_idx}`">{{ input.name }}
                                         <span v-if="input.required" class="required" style="color:red;">*</span>
                                         <i class="fa fa-question-circle" b-tooltip.hover
-                                        :title="input.description"></i>
+                                        ></i>
                                     </label>
                                     <b-form-file
                                         :id="`multiple-i-${input.id}-${input_idx}`"
@@ -441,7 +441,7 @@
                                         <label :for="`multiple-p-${param.id}-${input_idx}`">{{ param.name }}
                                             <span v-if="param.required" class="required" style="color:red;">*</span>
                                             <i class="fa fa-question-circle" b-tooltip.hover
-                                            :title="param.description"></i>
+                                            ></i>
                                         </label>
                                         <div v-if="param.param_type === 'enum'">
                                             <select @focus="provide_multiple_param_desc(param)" :id="`multiple-p-${param.id}-${input_idx}`" class="form-control custom-select"  :placeholder="parameters[`multiple-p-${param.id}-${input_idx}`]"
@@ -470,7 +470,7 @@
                                         <label :for="`dp-${input_idx}`">{{ ds_params.name }} for selected dataset
                                             <span v-if="ds_params.required" class="required"  style="color:red;">*</span>
                                             <i class="fa fa-question-circle" b-tooltip.hover
-                                            :title="ds_params.description"></i>
+                                            ></i>
                                         </label>
                                         <div v-if="ds_params.param_type === 'enum'">
                                             <select @focus="provide_multiple_param_desc(ds_params)" :id="`dp-${input_idx}`" class="form-control custom-select"
@@ -507,7 +507,7 @@
                                 </div> -->
 
                                 <!-- 在deepomics那里直接写成html的格式-->
-                                <div id = "multiple_params_desc" v-html="test_description"></div>
+                                
                             </div>
                         </div>
                     </div>
@@ -517,9 +517,9 @@
 
         <b-modal v-if="started" ref="submit-helper" v-model="showhelper" id = "submit-helper" size="xl" scrollable title="Module Helper" centered>
             <br>
-            <div class = "text-center submit-container">
-                <img v-bind:src="require('../assets/images/' + selected_analysis.name + '_structure.jpg')" style= "width : 100%"> 
-                <div v-html="selected_analysis.rendered_doc" class = "text-left submit-container">
+            <div class = "row justify-content-center container">
+                <img v-bind:src="require('../assets/images/' + selected_analysis.name + '_structure.jpg')" style= "width : 100%">
+                <div v-html="selected_analysis.rendered_doc" class = "text-left container" style="margin: 50px;">
                 </div>
             </div>
         </b-modal>
@@ -591,7 +591,7 @@
                 step: 1,
                 showhelper: false,
 
-                test_description: "<h3>There are something testing description</h3><ul><li>The first row is for something.</li><li>The first column is for something. It should be something.</li><li>Please be noted that the uploader is for something and somethind should be...</li></ul><p>This is the end of this line.</p>"
+                test_description: "<h5>There are something testing description</h5><ul><li>The first row is for something.</li><li>The first column is for something. It should be something.</li><li>Please be noted that the uploader is for something and somethind should be...</li></ul><p>This is the end of this line.</p>"
             };
         },
         created() {

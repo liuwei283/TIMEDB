@@ -37,14 +37,14 @@
                                                 <div id="download_box" class="db-toolbox collapse" data-parent="#db-toolbar">
                                                   <div class="form-group p-2">
                                                     <%= button_tag :name => 'download_select', disabled: true, 
-                                                      :class => "s_table_sub btn btn-success btn-select download" do %>
+                                                      :class => "s_table_sub btn btn-secondary btn-select download" do %>
                                                       <i class='fas fa-check-circle'></i> Selected samples
                                                     <%end%>
                                                     <%= button_tag :name => 'download_filter',
-                                                      :class => "s_table_sub btn btn-search btn-info download", disabled: true do %>
+                                                      :class => "s_table_sub btn btn-theme btn-info download", disabled: true do %>
                                                       <i class='fas fa-filter'></i> Searched samples
                                                     <%end%>
-                                                    <%= button_tag :class => "s_table_sub btn btn-primary" do %>
+                                                    <%= button_tag :class => "s_table_sub btn btn-pink" do %>
                                                       <%= link_to samples_path(format: "csv") do %>
                                                         <i class='fas fa-download'></i> All samples
                                                       <% end %>
@@ -55,11 +55,11 @@
                                                 <div id="export_box" class="db-toolbox collapse"  data-parent="#db-toolbar">
                                                   <div class="form-group p-2">
                                                     <%= button_tag :name => 'seleted2ds', disabled: true, 
-                                                      :class => "s_table_sub btn btn-select btn-success export-db" do %>
+                                                      :class => "s_table_sub btn btn-select btn-theme export-db" do %>
                                                       <i class='fas fa-check-circle'></i> Selected samples
                                                     <%end%>
                                                     <%= button_tag :name => 'filter2ds', disabled: true, 
-                                                        :class => "s_table_sub btn btn-search btn-info export-db" do %>
+                                                        :class => "s_table_sub btn btn-search btn-pink export-db" do %>
                                                       <i class='fas fa-filter'></i> Searched samples
                                                     <%end%>
                                                     <span class="btn ml-3">to your dataset:</span>
