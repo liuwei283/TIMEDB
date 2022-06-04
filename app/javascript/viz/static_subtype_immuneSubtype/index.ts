@@ -58,6 +58,10 @@ export function init(id, subtypePath, clinicalDataPath, eid, plot_name, vue_name
                 })
             })
             this.data.acronyms = Array.from(new Set(this.data.acronyms))
+            this.data.acronyms = this.data.acronyms.map(c => {
+                if(c.length > 30) return [c.slice(0, 30), c.slice(30, 60), c.slice(60, 90), c.slice(90, 120), c.slice(120, 150), c.slice(150)]
+                return c
+            }).flat().filter(d=>d.length>0)
             console.log(this)
             registerEditorConfig(editorConfig(this, eid), vue_name, plot_name);
         }
