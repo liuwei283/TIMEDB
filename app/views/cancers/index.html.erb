@@ -15,7 +15,7 @@
 
 
   <button class = "btn btn-secondary">
-    <%= link_to "Dwonload cancers list", cancers_path(format: "csv") %>
+    <%= link_to "Download cancers list", cancers_path(format: "csv") %>
   </button>
 
   <%= form_tag export_selected_cancers_path(format: "csv"), class:(session[:dark] ? "dark-table mb-4 mt-4" : "mb-4 mt-4"),multipart: true do %> 
