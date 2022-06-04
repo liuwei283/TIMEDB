@@ -68,9 +68,9 @@
                         <OvizEditor :config="subtype_conf_boxplot" :editorWidth = "280"/>
                     </div>
                 </div>
-                <div v-if="!getboxplotFexists" class = "text-center row justify-content-center">
-                    <h2>No data available</h2>
-                </div>
+            </div>
+            <div v-if="!getboxplotFexists" class = "text-center row justify-content-center">
+                <h2>No data available</h2>
             </div>
             
         </div>
@@ -133,9 +133,10 @@
                     </div>
                 </div>
             </div>
-            <div v-if="!getregulatorFexists" class = "text-center row justify-content-center">
-                <h2>No data available</h2>
-            </div>
+        </div>
+
+        <div v-if="!getregulatorFexists" class = "text-center row justify-content-center">
+            <h2>No data available</h2>
         </div>
     </div>
 </template>
@@ -165,6 +166,7 @@ export default {
         return {
             // cancers: window.gon.cancers,
             project_name: window.gon.project_name,
+            file_exist: window.gon.files,
             subtype_conf_landscape: {},
             subtype_conf_boxplot: {},
             subtype_conf_curve: {},
@@ -206,18 +208,9 @@ export default {
         this.clinical_file_path = "/public/data/clinical/sample/Clinical_" + this.project_name + ".csv";
         this.subtype_file_path = "/public/data/subtype/c1_c6/project/" + this.project_name + "_c1_c6.csv";
         this.rna_file_path = "/public/data/immuneregulator/immuReg_" + this.project_name + ".csv";
-
-        axios.get('/api/public_file/check_file_exists', { params: { fpath: this.clinical_file_path}  }).then(response => {
-            this.clinical_fexists = response.data["fexists"];
-        });
-
-        axios.get('/api/public_file/check_file_exists', { params: { fpath: this.subtype_file_path}  }).then(response => {
-            this.subtype_fexists = response.data["fexists"];
-        });
-        axios.get('/api/public_file/check_file_exists', { params: { fpath: this.rna_file_path}  }).then(response => {
-            this.rna_fexists = response.data["fexists"];
-        });
-
+        this.clinical_fexists = this.file_exist['clinical']
+        this.subtype_fexists = this.file_exist['subtype']
+        this.rna_fexists = this.file_exist['rna']
     },
     mounted() {
         event.rpcRegisterReceiver(this.vue_name, () => this);
@@ -225,17 +218,16 @@ export default {
     },
     computed: {
         getlandscapeFexists() {
-            return this.subtype_fexists == true && this.clinical_fexists == true;
+            return this.subtype_fexists == 'true' && this.clinical_fexists == 'true';
         },
         getcurveFexists() {
-            return this.subtype_fexists == true && this.clinical_fexists == true;
+            return this.subtype_fexists == 'true' && this.clinical_fexists == 'true';
         },
         getregulatorFexists() {
-            return this.subtype_fexists == true && this.rna_fexists == true;
-
+            return this.subtype_fexists == 'true' && this.rna_fexists == 'true';
         },
         getboxplotFexists() {
-            return this.subtype_fexists && this.cell_fexists;
+            return this.subtype_fexists == 'true' && this.cell_fexists =='true';
         }
     },
     methods: {
@@ -243,8 +235,9 @@ export default {
             // var clinical_file_path = this.data_path + "clinical/sample/Clinical_" + this.project_name + ".csv";
             // var subtype_file_path = this.data_path + "subtype/c1_c6/project/" + this.project_name + "_c1_c6.csv";
 
-            if(this.clinical_fexists == true && this.subtype_fexists == true) {
-                subtypeLandscape("#subtype-landscapeVis", this.subtype_file_path, this.clinical_file_path, "#subtype-landscape-editor", "subtype_landscape_viz", this.vue_name);
+            if(this.clinical_fexists == 'true' && this.subtype_fexists == 'true' ) {
+                document.getElementById("subtype-landscapeBlock").style.display = "block";
+                subtypeLandscape("#subtype-landscapeVis", this.subtype_file_path, this.clinical_file_path, "#subtype-landscape-editor", "subtype_landscape_viz");
             }
             else {
                 document.getElementById("subtype-landscapeBlock").style.display = "none";
@@ -253,24 +246,19 @@ export default {
         },
         boxplotViz(){
             var cellData_file_path = this.data_path + "cell_data/" + this.boxplot_selected + "/" + this.project_name + "_" + this.boxplot_selected + ".csv";
-
-            axios.get('/api/public_file/check_file_exists', { params: { fpath: cellData_file_path}  }).then(response => {
-                this.cell_fexists = response.data["fexists"];
-               
-                if (this.cell_fexists == true && this.subtype_fexists == true) {
+            this.cell_fexists = this.file_exist[this.boxplot_selected];
+            if (this.cell_fexists == 'true' && this.subtype_fexists == 'true') {
                     document.getElementById("subtype-boxplotBlock").style.display = "block";
-                    subtypeBoxplot("#subtype-boxplotVis", this.subtype_file_path, cellData_file_path, "#subtype-boxplot-editor", "subtype_boxplot_viz", this.vue_name);//remember to change to the right plot
-                }
-                else {
-                    document.getElementById("subtype-boxplotBlock").style.display = "none";
-                }
-            });
-            
+                    subtypeBoxplot("#subtype-boxplotVis", this.subtype_file_path, cellData_file_path, "#subtype-boxplot-editor", "subtype_boxplot_viz");//remember to change to the right plot
+            }
+            else {
+                document.getElementById("subtype-boxplotBlock").style.display = "none";
+            }
         },
         curveViz(){
             
-            if(this.clinical_fexists == true && this.subtype_fexists == true) {
-                subtypeCurve("#subtype-curveVis", this.subtype_file_path, this.clinical_file_path, "#subtype-curve-editor", "subtype_curve_viz", this.vue_name);
+            if(this.clinical_fexists == 'true' && this.subtype_fexists == 'true') {
+                subtypeCurve("#subtype-curveVis", this.subtype_file_path, this.clinical_file_path, "#subtype-curve-editor", "subtype_curve_viz");
             }
             else {
                 document.getElementById("subtype-curveBlock").style.display = "none";
@@ -279,8 +267,8 @@ export default {
         },
         regulatorViz(){
 
-            if(this.rna_fexists == true && this.subtype_fexists == true) {
-                subtypeRegulator("#subtype-regulatorVis", this.subtype_file_path, this.rna_file_path, "#subtype-regulator-editor", "subtype_regulator_viz", this.vue_name);
+            if(this.rna_fexists == 'true' && this.subtype_fexists == 'true') {
+                subtypeRegulator("#subtype-regulatorVis", this.subtype_file_path, this.rna_file_path, "#subtype-regulator-editor", "subtype_regulator_viz");
             }
             else {
                 document.getElementById("subtype-regulatorBlock").style.display = "none";

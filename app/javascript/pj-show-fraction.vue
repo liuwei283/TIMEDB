@@ -24,6 +24,7 @@
                         Download
                     </button>
                     <div class="dropdown-menu" aria-labelledby="fraction_pie_download_dropdwon">
+                        <a class="dropdown-item" :href="clinical_file_path"  id = "fraction_pie_clincial_download">Download clinical file</a>
                         <a class="dropdown-item viz_download" id = "fraction-pie_viz_download" @click="down_graph($event)">Download fraction pie chart</a>
                     </div>
                 </div>
@@ -35,6 +36,11 @@
                     </div>
                 </div>
             </div>
+
+            <div v-if="!getpieFexists" class = "text-center row justify-content-center">
+                <h2>No data available</h2>
+            </div>
+
         </div>
 
 
@@ -63,6 +69,7 @@
                         Download
                     </button>
                     <div class="dropdown-menu" aria-labelledby="fraction_boxplot_download_dropdwon">
+                        <a class="dropdown-item" @click="download_fraction_boxplot_cellData" id = "fraction_boxplot_rna_download">Download cell data file</a>
                         <a class="dropdown-item viz_download" id = "fraction-boxplot_viz_download" @click="down_graph($event)">Download fraction boxplot chart</a>
                     </div>
                 </div>
@@ -74,6 +81,11 @@
                     </div>
                 </div>
             </div>
+
+            <div v-if="!getboxplotFexists" class = "text-center row justify-content-center">
+                <h2>No data available</h2>
+            </div>
+
         </div>
 
         <div id = "fraction-heatmap" class = "container Block">
@@ -100,6 +112,10 @@
                         Download
                     </button>
                     <div class="dropdown-menu" aria-labelledby="fraction_heatmap_download_dropdwon">
+                        <a class="dropdown-item" :href="clinical_file_path"  id = "fraction_pie_clincial_download">Download clinical file</a>
+
+                        <a class="dropdown-item" @click="download_fraction_heatmap_cellData" id = "fraction_heatmap_rna_download">Download cell data file</a>
+
                         <a class="dropdown-item viz_download" id = "fraction-heatmap_viz_download" @click="down_graph($event)">Download fraction heatmap chart</a>
                     </div>
                 </div>
@@ -110,6 +126,10 @@
                         <OvizEditor :config="fraction_conf_heatmap" :editorWidth = "280"/>
                     </div>
                 </div>
+            </div>
+
+            <div v-if="!getheatmapFexists" class = "text-center row justify-content-center">
+                <h2>No data available</h2>
             </div>
         </div>
 
@@ -137,6 +157,8 @@
                         Download
                     </button>
                     <div class="dropdown-menu" aria-labelledby="fraction_landscape_download_dropdwon">
+                        <a class="dropdown-item" @click="download_fraction_landscape_cellData" id = "fraction_landscape_rna_download">Download cell data file</a>
+
                         <a class="dropdown-item viz_download" id = "fraction-landscape_viz_download" @click="down_graph($event)">Download fraction landscape chart</a>
                     </div>
                 </div>
@@ -150,6 +172,10 @@
                 <div id="fraction_landscape_loading" style="display:none;">
                     <img v-bind:src="require('../assets/images/loading_icon.gif')" alt="Loading..." style="width:90%;" />
                 </div>
+            </div>
+
+            <div v-if="!getlandscapeFexists" class = "text-center row justify-content-center">
+                <h2>No data available</h2>
             </div>
         </div>
 
@@ -183,6 +209,7 @@ export default {
         return {
             // cancers: window.gon.cancers,
             project_name: window.gon.project_name,
+            file_exist: window.gon.files,
             fraction_conf_pie: {},
             fraction_conf_boxplot: {},
             fraction_conf_heatmap: {},
@@ -225,8 +252,12 @@ export default {
                     {value:"bar",label:"Bar Plot"},
 
             ],
-
-            }
+            boxplot_fexiests: null,
+            clinical_fexists: true,
+            landscape_cell_fexists: true,
+            heatmap_fexists: null,
+            clinical_file_path: "",
+        }
     },
     //设置默认值
     created() {
@@ -234,6 +265,8 @@ export default {
         this.boxplot_selected="Consensus";
         this.heatmap_selected="ABIS";
         this.landscape_selected="pie";
+        this.clinical_fexists = this.file_exist['clinical'];
+
     },
     mounted() {
         event.rpcRegisterReceiver(this.vue_name, () => this);
@@ -241,44 +274,58 @@ export default {
     },
     methods: {
         pieViz(){
-            var clinical_file_path = this.data_path + "clinical/sample/Clinical_" + this.project_name + ".csv";
-            fractionPie("#fraction-pieVis", clinical_file_path, this.pie_selected, "#fraction-pie-editor", "fraction_pie_viz", this.vue_name);
+            this.clinical_file_path = this.data_path + "clinical/sample/Clinical_" + this.project_name + ".csv";
+
+            if(this.clinical_fexists == 'true'){
+                document.getElementById("fraction_pieBlock").style.display = "block";
+                fractionPie("#fraction-pieVis", this.clinical_file_path, this.pie_selected, "#fraction-pie-editor", "fraction_pie_viz");
+
+            }else{
+                document.getElementById("fraction_pieBlock").style.display = "none";
+            }
+
+            
         },
         boxplotViz(){
             var cellData_file_path = this.data_path + "cell_data/" + this.boxplot_selected + "/" + this.project_name + "_" + this.boxplot_selected + ".csv";
+            this.boxplot_fexiests = this.file_exist[this.boxplot_selected];
+            if(this.boxplot_fexiests == 'true'){
+                document.getElementById("fraction_boxplotBlock").style.display = "block";
 
-            if (this.boxplot_selected == "Consensus") {
-                fractionGroupBoxplot("#fraction-boxplotVis", cellData_file_path, "#fraction-boxplot-editor", "fraction_boxplot_viz", this.vue_name);
+                if (this.boxplot_selected == "Consensus") {
+                    fractionGroupBoxplot("#fraction-boxplotVis", cellData_file_path, "#fraction-boxplot-editor", "fraction_boxplot_viz");
+                }
+                else {
+                    fractionBoxplot("#fraction-boxplotVis", cellData_file_path, "#fraction-boxplot-editor", "fraction_boxplot_viz");
+                }
+            }else{
+                document.getElementById("fraction_boxplotBlock").style.display = "none";
             }
-            else {
-                fractionBoxplot("#fraction-boxplotVis", cellData_file_path, "#fraction-boxplot-editor", "fraction_boxplot_viz", this.vue_name);
-            }
+
         },
         landscapeViz(){
+            var cellData_file_path = this.data_path + "cell_data/Consensus/" + this.project_name + "_Consensus.csv";
+            this.landscape_cell_fexists = this.file_exist['Consensus'];
             
-            //document.getElementById("fraction_landscape_loading").style.display = "block";
-            
-            var file_name = this.project_name + "_Consensus.csv";
-            var file_path = this.data_path + "cell_data/Consensus/" + file_name;
-            if(this.landscape_selected == "pie"){
-                fractionLandscape("#fraction-landscapeVis", file_path, "pie", "#fraction-landscape-editor", "fraction_landscape_viz", this.vue_name);
-            }else{
-                fractionLandscape2("#fraction-landscapeVis", file_path, "bar", "#fraction-landscape-editor", "fraction_landscape_viz", this.vue_name);
+            if (this.landscape_cell_fexists == 'true') {
+                document.getElementById("fraction_landscapeBlock").style.display = "block";
+                fractionLandscape("#fraction-landscapeVis", cellData_file_path, this.landscape_selected, "#fraction-landscape-editor", "fraction_landscape_viz");
             }
-
-            // setTimeout(function () {
-            //     document.getElementById("fraction_landscape_loading").style.display = "none";
-            // }, 3000);
-            
+            else {
+                document.getElementById("fraction_landscapeBlock").style.display = "none";
+            }
         },
 
         heatmapViz() {
-            var clinical_file_path = this.data_path + "clinical/sample/Clinical_" + this.project_name + ".csv";
             var cellData_file_path = this.data_path + "cell_data/" + this.heatmap_selected + "/" + this.project_name + "_" + this.heatmap_selected + ".csv";
-            if(this.heatmap_selected != "Consensus"){
-                fractionHeatmap("#fraction-heatmapVis", clinical_file_path, cellData_file_path, "#fraction-heatmap-editor", "fraction_heatmap_viz", this.vue_name);
+            this.heatmap_fexists = this.file_exist[this.heatmap_selected];
+            if(this.clinical_fexists=="true" && this.heatmap_fexists=='true'){
+                document.getElementById("fraction_heatmapBlock").style.display = "block";
+                fractionHeatmap("#fraction-heatmapVis", clinical_file_path, cellData_file_path, "#fraction-heatmap-editor", "fraction_heatmap_viz");
+            }else{
+                document.getElementById("fraction_heatmapBlock").style.display = "none";
+
             }
-            // fractionHeatmap("#fraction-heatmapVis", clinical_file_path, cellData_file_path, "#fraction-heatmap-editor", "fraction_heatmap_viz");
         },
 
         all_viz() {
@@ -287,7 +334,31 @@ export default {
             this.pieViz();
             this.heatmapViz();
         },
+        download_fraction_boxplot_cellData(){
+            window.location.href = this.data_path + "cell_data/" + this.boxplot_selected + "/" + this.project_name + "_" + this.boxplot_selected + ".csv";
+        },
+        download_fraction_landscape_cellData(){
+            window.location.href = this.data_path + "cell_data/Consensus/" + this.project_name + "_Consensus.csv";
 
+        },
+        download_fraction_heatmap_cellData(){
+            window.location.href = this.data_path + "cell_data/" + this.heatmap_selected + "/" + this.project_name + "_" + this.heatmap_selected + ".csv";
+
+        },
+    },
+    computed:{
+        getpieFexists() {
+            return this.clinical_fexists == 'true'
+        },
+        getboxplotFexists() {
+            return this.boxplot_fexiests == 'true';
+        },
+        getlandscapeFexists() {
+            return this.landscape_cell_fexists == 'true';
+        },
+        getheatmapFexists() {
+            return this.clinical_fexists=="true" && this.heatmap_fexists=='true'
+        },
         down_graph(e){
             var clicked_id = e.target.id.replace("_viz_download", "");
             console.log(clicked_id);
