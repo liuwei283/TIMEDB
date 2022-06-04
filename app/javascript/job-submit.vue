@@ -439,8 +439,6 @@
 
                     <div class = "col-md-10 submit-container text-center">
                         <h4> Parameter setting </h4>
-                        
-
 
                         <div class = "row justify-content-center">
                             <div v-if="ds_selected[input_idx - 1] == '' && displayedBatchEffectParams.length > 0" class = "col-md-6" style="vertical-align:center">

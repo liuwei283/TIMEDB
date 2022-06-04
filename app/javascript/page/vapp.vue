@@ -13,10 +13,10 @@
                 <b-button @click="downloadDemoFiles" class="tool-bar-el"><i class="far fa-file-archive"></i>Download Data</b-button>
                 <b-button id="editor-conf" @click="toggleEditor">Editor</b-button>
             </div>
-            <div v-else id = "chart-download-box">
-                <b-button @click="downloadSVG" class="tool-bar-el btn-secondary"><i class="fa fa-download"/>Download Chart</b-button>
-                <b-button @click="downloadDemoFiles" class="tool-bar-el btn-secondary"><i class="far fa-file-archive"></i>Download Data</b-button>
-                <b-button class = "btn btn-secondary" id="editor-conf" @click="toggleEditor">Editor</b-button>
+            <div v-else>
+                <b-button @click="downloadSVG" class="tool-bar-el"><i class="fa fa-download"/>Download Chart</b-button>
+                <b-button @click="downloadDemoFiles" class="tool-bar-el"><i class="far fa-file-archive"></i>Download Data</b-button>
+                <b-button id="editor-conf" @click="toggleEditor">Editor</b-button>
             </div>
         </div>
         <div id="viz-container">
@@ -240,7 +240,6 @@
         z-index:20;
         transition: all 0.3s;
         right: 10px;
-        
     }
     .need-upload {
         margin: 0 1px;
