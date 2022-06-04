@@ -179,7 +179,7 @@
                                         <div class = "row submit-box justify-content-center">
                                             <div v-if="picked_single_multiple=='single'" class = "row justify-content-center">
                                                 <div class = "row justify-content-center">
-                                                    <div class="col-md-6 text-center" v-for="input in displayedInputs" :key="input.id">
+                                                    <div class="text-center" v-for="input in displayedInputs" :key="input.id">
                                                         <label :for="`i-${input.id}`">{{ input.name }}
                                                             <span v-if="input.required" class="required">*</span>
                                                         </label>
@@ -187,6 +187,7 @@
                                                             <img v-bind:src="require('../assets/images/big_upload.png')" style="width:90%">
                                                         </div>
                                                     </div>
+                                                    
                                                 </div>
 
                                                 <div class = "row justify-content-center">
@@ -516,9 +517,9 @@
 
         <b-modal v-if="started" ref="submit-helper" v-model="showhelper" id = "submit-helper" size="xl" scrollable title="Module Helper" centered>
             <br>
-            <div class = "text-center submit-container">
-                <img v-bind:src="require('../assets/images/' + selected_analysis.name + '_structure.jpg')" style= "width : 100%"> 
-                <div v-html="selected_analysis.rendered_doc" class = "text-left submit-container">
+            <div class = "row justify-content-center container">
+                <img v-bind:src="require('../assets/images/' + selected_analysis.name + '_structure.jpg')" style= "width : 100%">
+                <div v-html="selected_analysis.rendered_doc" class = "text-left container" style="margin: 50px;">
                 </div>
             </div>
         </b-modal>
