@@ -169,11 +169,7 @@
                         <OvizEditor :config="fraction_conf_landscape" :editorWidth = "280"/>
                     </div>
                 </div>
-                <div id="fraction_landscape_loading" style="display:none;">
-                    <img v-bind:src="require('../assets/images/loading_icon.gif')" alt="Loading..." style="width:90%;" />
-                </div>
             </div>
-
             <div v-if="!getlandscapeFexists" class = "text-center row justify-content-center">
                 <h2>No data available</h2>
             </div>
@@ -321,7 +317,7 @@ export default {
             this.heatmap_fexists = this.file_exist[this.heatmap_selected];
             if(this.clinical_fexists=="true" && this.heatmap_fexists=='true'){
                 document.getElementById("fraction_heatmapBlock").style.display = "block";
-                fractionHeatmap("#fraction-heatmapVis", clinical_file_path, cellData_file_path, "#fraction-heatmap-editor", "fraction_heatmap_viz", this.vue_name);
+                fractionHeatmap("#fraction-heatmapVis", this.clinical_file_path, cellData_file_path, "#fraction-heatmap-editor", "fraction_heatmap_viz", this.vue_name);
             }else{
                 document.getElementById("fraction_heatmapBlock").style.display = "none";
 

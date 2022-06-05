@@ -672,8 +672,6 @@
                         var cur_ds_param = this.ds_param_selected[input_idx - 1]
                         if (cur_ds_param == "") this.multiple_completed[input_idx - 1] = false;
                     }
-                    
-
                     // document.querySelectorAll("#multiple-upload-" + input_idx + " input[name^='multiple-p']").forEach((input) => {
                     //     if(input.required) {
                     //         console.log(input.value);
