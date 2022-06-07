@@ -1135,51 +1135,50 @@
                     console.log(demo_files);
                     console.log("Outputing demo inputs parameters:");
                     console.log(demo_params);
-                    this.demo_inputs = demo_files;
-                    this.demo_parameters = demo_params;
-                });
 
-                axios.post(
-                    `/submit-app-task/`,
-                    objectToFormData({
-                        "search_mid": this.selected_analysis.mid,
-                        "mid": submitted_mid,
-                        "is_demo": true,
-                        "inputs": this.demo_inputs,
-                        "params": this.demo_parameters,
-                    }),
-                    {
-                        headers: {
-                            'X-Requested-With': 'XMLHttpRequest',
-                            'X-CSRF-Token': document.head.querySelector('meta[name="csrf-token"]').content,
-                            'Content-Type': 'multipart/form-data',
+
+                    axios.post(
+                        `/submit-app-task/`,
+                        objectToFormData({
+                            "search_mid": this.selected_analysis.mid,
+                            "mid": submitted_mid,
+                            "is_demo": true,
+                            "inputs": demo_files,
+                            "params": demo_params,
+                        }),
+                        {
+                            headers: {
+                                'X-Requested-With': 'XMLHttpRequest',
+                                'X-CSRF-Token': document.head.querySelector('meta[name="csrf-token"]').content,
+                                'Content-Type': 'multipart/form-data',
+                            },
                         },
-                    },
-                ).then((response) => {
-                    if (response.data.code) {
-                        this.jobID = response.data.data.task_id;
-                        this.submitted = true;
-                        
-                    } else {
-                        alertData = response.data.msg;
-                    }
-                }).catch((reason) => {
-                    alertData = reason;
-                }).finally(() => {
-                    console.log("submitted");
-                    console.log(demo_files);
+                    ).then((response) => {
+                        if (response.data.code) {
+                            this.jobID = response.data.data.task_id;
+                            this.submitted = true;
+                            
+                        } else {
+                            alertData = response.data.msg;
+                        }
+                    }).catch((reason) => {
+                        alertData = reason;
+                    }).finally(() => {
+                        console.log("submitted");
+                        console.log(demo_files);
 
 
-                    $("#disable-fill").fadeOut(10);
-                    this.isLoading = false;
-                    if (!!alertData) {
-                        this.$refs.alertCenter.add('danger', alertData);
-                    }
-                    // if (this.submitted) {
-                    //     setTimeout(() => {
-                    //         location.replace(`/submit/job-query`)
-                    //     }, 1000);
-                    // }
+                        $("#disable-fill").fadeOut(10);
+                        this.isLoading = false;
+                        if (!!alertData) {
+                            this.$refs.alertCenter.add('danger', alertData);
+                        }
+                        // if (this.submitted) {
+                        //     setTimeout(() => {
+                        //         location.replace(`/submit/job-query`)
+                        //     }, 1000);
+                        // }
+                    });
                 });
             },
 
