@@ -1135,7 +1135,8 @@
                     console.log(demo_files);
                     console.log("Outputing demo inputs parameters:");
                     console.log(demo_params);
-                    
+                    this.demo_inputs = demo_files;
+                    this.demo_parameters = demo_params;
                 });
 
                 axios.post(
@@ -1144,8 +1145,8 @@
                         "search_mid": this.selected_analysis.mid,
                         "mid": submitted_mid,
                         "is_demo": true,
-                        "inputs": demo_files,
-                        "params": demo_params,
+                        "inputs": this.demo_inputs,
+                        "params": this.demo_parameters,
                     }),
                     {
                         headers: {
@@ -1165,6 +1166,9 @@
                 }).catch((reason) => {
                     alertData = reason;
                 }).finally(() => {
+                    console.log("submitted");
+                    console.log(demo_files);
+
 
                     $("#disable-fill").fadeOut(10);
                     this.isLoading = false;
