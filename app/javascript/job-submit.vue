@@ -142,7 +142,7 @@
                                         <img class = "demoPng" id = "runDemoImage" v-bind:src="require('../assets/images/runDemo.png')" style="width:100%;">
                                     </div>
                                     <div @click="checkDemoTask()" class = "col-md-2" b-tooltip.hover :title="`Click here to check demo task for ${app.name}`">
-                                        <img class = "demoPng" id = "checkDemoImage" v-bind:src="require('../assets/images/runDemo.png')" style="width:100%;">
+                                        <img class = "demoPng" id = "checkDemoImage" v-bind:src="require('../assets/images/checkDemo.png')" style="width:100%;">
                                     </div>
                                     <div class = "col-md-2">
                                     </div>
