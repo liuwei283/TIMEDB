@@ -3,9 +3,14 @@
   = f.association :analysis_category
 = f.input :name
 = f.input :url, hint: "This name will be embeded in URLs. Hence it must be URL-safe."
-= f.association :visualizer
+= f.association :visualizer, as: :check_boxes
 = f.input :mid
 = f.input :multiple_mid
+= f.input :single_demo_id
+= f.input :multiple_demo_id
+= f.input :single_result_id
+= f.input :multiple_result_id
+
 = f.input :hidden
 hr
 = f.input :files_info, as: :text, input_html: {value: f.object.files_info_json, data: {'ace': true, 'ace-mode': 'json'}}

@@ -57,7 +57,7 @@ class ProjectsController < ApplicationController
         @user = User.find(id)
         @datasets = @user.datasets
 
-        csf_path = "#{Rails.root}/public/project_files.csv"
+        csf_path = "#{Rails.root}/public/data/project_files.csv"
         csv_text = File.read(csf_path) 
         csv_text = CSV.parse(csv_text, :headers => true)
         csv_text.each do |row|

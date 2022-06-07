@@ -80,7 +80,6 @@ class SubmitController < ApplicationController
   end
 
   def query
-    id = params[:id]
     uid = session[:user_id]
     @user = User.find(uid)
     @dataset_list = @user.datasets
@@ -94,6 +93,13 @@ class SubmitController < ApplicationController
     gon.push tasks: @task_list
 
     @tasks = @user.tasks
+  end
+
+  def query_demo
+    demo_result_id = params[:demo_id]
+    @jobName = params[:jobName]
+    gon.push demo_result_id: demo_result_id
+    gon.push job_name: @jobName
 
   end
 
@@ -682,8 +688,18 @@ class SubmitController < ApplicationController
     @analysis_user_datum.task_output = @task_output
     @analysis_user_datum.use_demo_file = false
     @analysis_user_datum.save!
+    @matched_visualizers = @analysis.visualizers
+    @matched_jsnames = []
+
+    @matched_visualizers.each do |mvis|
+      @matched_jsnames.push(mvis.js_module_name)
+    end
+
+    Rails.logger.debug("check visualizers of this analysis:")
+    Rails.logger.debug @matched_jsnames
+
     parsed_output = {}
-    parsed_output['module_name'] = @analysis.visualizer.js_module_name
+    parsed_output['module_names'] = @analysis.visualizer.js_module_name
     parsed_output['name'] = @analysis.name
     parsed_output['analysis_id'] = @analysis.id
     parsed_output['required_data'] = @analysis.files_info.keys

@@ -258,11 +258,7 @@
                         <OvizEditor :config="fraction_conf_landscape" :editorWidth = "280"/>
                     </div>
                 </div>
-                <div id="fraction_landscape_loading" style="display:none;">
-                    <img v-bind:src="require('../assets/images/loading_icon.gif')" alt="Loading..." style="width:90%;" />
-                </div>
             </div>
-
             <div v-if="!getlandscapeFexists" class = "text-center row justify-content-center">
                 <h2>No data available</h2>
             </div>
@@ -534,10 +530,16 @@ export default {
 .vizBlock {
         overflow-y: scroll;
         overflow-x: scroll;
-        //padding: 2em;
+        
+        padding: 2em;
         margin-top: 5%;
         margin-bottom: 5%;
 }
+
+#fraction-heatmapVis {
+    height: 1000px;
+}
+
     
 /* .v-editor {
     position: fixed !important;

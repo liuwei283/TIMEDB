@@ -56,7 +56,7 @@ class AdminController < ApplicationController
     end
 
     def update_files
-        file_path = "#{Rails.root}/public/project_files.csv"
+        file_path = "#{Rails.root}/public/data/project_files.csv"
         file = File.open(file_path,"w")
         s = "project_name,clinical,subtype,rna"
         boxplot_selector= ["Consensus","ABIS","CIBERSORTX","CIBERSORT","ConsensusTME","EPIC","ImmuCellAI","MCPcounter","quanTIseq","TIMER", "xCell"]

@@ -189,8 +189,9 @@ svg{
                                 Component {
                                     x = d.x; 
                                     y = (d.row-1)*gridPlotheight
-                                    @if(d.data!="NA"){
+                                    @if(d.data!="NA" && legendType[item].length!=1){
                                         Rect{
+                                            x = -1
                                             height = gridPlotheight
                                             width = (180-NAlength) / (d.num-1)
                                             stroke = "white"
@@ -199,12 +200,12 @@ svg{
                                         Text.centered{
                                             text = replaceUpper(d.data,(180-NAlength) / (d.num-1))
                                             fontSize = 8
-                                            x = (180-NAlength)/(d.num-1) * 0.5
+                                            x = (180-NAlength)/(d.num-1) * 0.5 - 0.5
                                             y = gridPlotheight/2
                                             anchor = @anchor("middle", "center") 
                                         }
                                     }
-                                    @elsif(d.data=="NA"){
+                                    @elsif(d.data=="NA" && legendType[item].length!=1){
                                         Rect{
                                             height = gridPlotheight
                                             width = NAlength
@@ -215,6 +216,20 @@ svg{
                                             text = d.data
                                             fontSize = 8
                                             x = NAlength/2;y = 8
+                                            anchor = @anchor("middle", "center") 
+                                        }
+                                    }
+                                    @elsif(d.data=="NA" && legendType[item].length==1){
+                                        Rect{
+                                            height = gridPlotheight
+                                            width = 180
+                                            stroke = "white"
+                                            fill = d.colors     
+                                        }
+                                        Text.centered{
+                                            text = d.data
+                                            fontSize = 8
+                                            x = 90;y = 8
                                             anchor = @anchor("middle", "center") 
                                         }
                                     }
