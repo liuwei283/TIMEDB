@@ -1108,7 +1108,7 @@
                     alertCenter.add('danger', `${message}`);
                 }).finally(() => {
                     // setTimeout(() => { alertCenter.add('danger', ''); }, 2000);
-                    console.log("Log:", this.inputs, this.outputs, this.params)
+                    console.log("Log:", this.demo_inputs, this.demo_params)
                 });
 
 
@@ -1134,7 +1134,6 @@
                 console.log("Outputing demo inputs json:");
                 console.log(demo_files);
                 console.log("Outputing demo inputs parameters:");
-
                 console.log(demo_params);
 
 
@@ -1239,11 +1238,11 @@
                     if (!!alertData) {
                         this.$refs.alertCenter.add('danger', alertData);
                     }
-                    if (this.submitted) {
-                        setTimeout(() => {
-                            location.replace(`/submit/job-query`)
-                        }, 1000);
-                    }
+                    // if (this.submitted) {
+                    //     setTimeout(() => {
+                    //         location.replace(`/submit/job-query`)
+                    //     }, 1000);
+                    // }
                 });
             },
             updateMode(type) {
