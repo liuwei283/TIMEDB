@@ -1,5 +1,5 @@
 class Visualizer < ApplicationRecord
-    has_many :analyses, through: :analyses_visualizers
+  has_and_belongs_to_many :analyses
     has_many :viz_data_sources
     accepts_nested_attributes_for :viz_data_sources, allow_destroy: true
 
