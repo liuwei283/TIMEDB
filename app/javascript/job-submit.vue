@@ -1074,6 +1074,8 @@
             submitDemoTask() {
                 const { alertCenter } = this.$refs;
                 let alertData;
+                var demo_files = {};
+                var demo_params = {};
 
                 let submitted_mid;
                 if (this.picked_single_multiple == 'multiple') {
@@ -1108,35 +1110,33 @@
                     alertCenter.add('danger', `${message}`);
                 }).finally(() => {
                     // setTimeout(() => { alertCenter.add('danger', ''); }, 2000);
-                    console.log("Log:", this.demo_inputs, this.demo_params)
-                });
+                    console.log("Log:", this.demo_inputs, this.demo_parameters)
 
-
-                //process demo info
-                var demo_files = {};
-                var demo_params = {};
-                for (var k in this.demo_inputs){
-                    let input = this.demo_inputs[k];
-                    let f_arr = [];
-                    for (var t in input.files) {
-                        let file = input.files[t];
-                        let f_path = file.path + "/" + file.name;
-                        f_arr.push(f_path);
+                    //process demo info
+                    
+                    for (var k in this.demo_inputs){
+                        let input = this.demo_inputs[k];
+                        console.log(input, k);
+                        let f_arr = [];
+                        for (var t in input.files) {
+                            let file = input.files[t];
+                            let f_path = file.path + "/" + file.name;
+                            f_arr.push(f_path);
+                        }
+                        demo_files[`i-${input.id}`] = f_arr.join(","); 
                     }
-                    demo_files[`i-${input.id}`] = f_arr.join(","); 
-                }
 
-                for (var k in this.demo_parameters) {
-                    let params = this.demo_parameters[k];
-                    demo_params[`p-${params.id}`] = params.value;
-                }
+                    for (var k in this.demo_parameters) {
+                        let params = this.demo_parameters[k];
+                        demo_params[`p-${params.id}`] = params.value;
+                    }
 
-                console.log("Outputing demo inputs json:");
-                console.log(demo_files);
-                console.log("Outputing demo inputs parameters:");
-                console.log(demo_params);
-
-
+                    console.log("Outputing demo inputs json:");
+                    console.log(demo_files);
+                    console.log("Outputing demo inputs parameters:");
+                    console.log(demo_params);
+                    
+                });
 
                 axios.post(
                     `/submit-app-task/`,
