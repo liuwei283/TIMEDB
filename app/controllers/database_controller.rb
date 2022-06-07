@@ -39,7 +39,7 @@ class DatabaseController < ApplicationController
         @pnum = Project.all.count
         @snum = Sample.all.count
 
-        csf_path = "#{Rails.root}/public/project_files.csv"
+        csf_path = "#{Rails.root}/public/data/project_files.csv"
         csv_text = File.read(csf_path) 
         @csv_test = {}
 

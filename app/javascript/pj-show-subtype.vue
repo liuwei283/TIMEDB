@@ -1,18 +1,52 @@
 <template>
     <div>
+        <div class="db-tool-nav">
+
+        <button class="btn btn-outline-dark" @click="downall()">Download all charts</button>
+        </div><br>
+
         <div id = "subtype-landscape" class = "container Block">
             <div id="landscapeDescription" class="row description">
                 <h4>Some description for Immune Subtype Landscape in project overview</h4>
             </div>
             <div id = "subtype-landscapeBlock">
                 <div class="dropdown mb-5 mt-5">
-                    <button class="btn btn-secondary dropdown-toggle" type="button" id="subtype_landscape_download_dropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <!-- <button class="btn btn-secondary dropdown-toggle" type="button" id="subtype_landscape_download_dropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         Download
                     </button>
                     <div class="dropdown-menu" aria-labelledby="subtype_landscape_download_dropdwon">
                         <a class="dropdown-item" :href="clinical_file_path"  id = "subtype_landscape_clincial_download">Download clinical file</a>
                         <a class="dropdown-item" :href="rna_file_path" id = "subtype_landscape_rna_download">Download RNA file</a>
                         <a class="dropdown-item viz_download" id = "subtype-landscape_viz_download" @click="down_graph($event)">Download subtype landscape chart</a>
+                    </div> -->
+
+                    <div id="db-toolbar-landscape" class="mb-5">
+                        <div class="db-tool-nav">
+                            <div class="btn btn-outline-dark" data-toggle="collapse" data-target="#download_box-landscape" aria-expanded="true" aria-controls="download_box-landscape">
+                                Download<i class="fas fa-caret-down"></i>
+                            </div>
+                        </div>
+
+                        <div id="download_box-landscape" class="db-toolbox collapse" data-parent="#db-toolbar-landscape">
+                                <div class="form-group p-2">
+                                    <a :href="clinical_file_path">
+                                        <button class = "d-btn btn btn-secondary download" >
+                                            <i class='fas fa-download'></i> Download clinical file
+                                        </button>
+                                    </a>
+
+                                    <a :href="rna_file_path">
+                                        <button class = "d-btn btn btn-theme download" >
+                                            <i class='fas fa-download'></i> Download RNA file
+                                        </button>
+                                    </a>
+
+                                    <button class = "d-btn btn btn-pink download" id = "subtype-landscape_viz_download" @click="down_graph($event)">
+                                        <i class='fas fa-download'></i> Download subtype landscape chart
+                                    </button>
+                                    
+                                </div>
+                        </div>
                     </div>
                 </div>
                 <div class="row veBlock">
@@ -52,13 +86,39 @@
             </div>
             <div id = "subtype-boxplotBlock">
                 <div class="dropdown mb-5 mt-3">
-                    <button class="btn btn-secondary dropdown-toggle" type="button" id="subtype_boxplot_download_dropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <!-- <button class="btn btn-secondary dropdown-toggle" type="button" id="subtype_boxplot_download_dropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         Download
                     </button>
                     <div class="dropdown-menu" aria-labelledby="subtype_boxplot_download_dropdwon">
                         <a class="dropdown-item" :href="subtype_file_path"  id = "subtype_boxplot_subtype_download">Download subtype file</a>
                         <a class="dropdown-item" @click="download_subtype_boxplot_cellData" id = "subtype_landscape_rna_download">Download cell data file</a>
                         <a class="dropdown-item viz_download" id = "subtype-boxplot_viz_download" @click="down_graph($event)">Download subtype boxplot chart</a>
+                    </div> -->
+
+                    <div id="db-toolbar-boxplot" class="mb-5">
+                        <div class="db-tool-nav">
+                            <div class="btn btn-outline-dark" data-toggle="collapse" data-target="#download_box-boxplot" aria-expanded="true" aria-controls="download_box-boxplot">
+                                Download<i class="fas fa-caret-down"></i>
+                            </div>
+                        </div>
+
+                        <div id="download_box-boxplot" class="db-toolbox collapse" data-parent="#db-toolbar-boxplot">
+                                <div class="form-group p-2">
+                                    <a :href="subtype_file_path">
+                                        <button class = "d-btn btn btn-secondary download" >
+                                            <i class='fas fa-download'></i> Download subtype file
+                                        </button>
+                                    </a>
+
+                                    <button class = "d-btn btn btn-theme download" @click="download_subtype_boxplot_cellData" >
+                                        <i class='fas fa-download'></i> Download cell data file
+                                    </button>
+
+                                    <button class = "d-btn btn btn-pink download" id = "subtype-boxplot_viz_download" @click="down_graph($event)">
+                                        <i class='fas fa-download'></i> Download subtype boxplot chart
+                                    </button>
+                                </div>
+                        </div>
                     </div>
                 </div>
                 <div  class="row veBlock">
@@ -83,13 +143,40 @@
             </div>
             <div id = "subtype-curveBlock" >
                 <div class="dropdown mb-5 mt-3">
-                    <button class="btn btn-secondary dropdown-toggle" type="button" id="subtype_curve_download_dropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <!-- <button class="btn btn-secondary dropdown-toggle" type="button" id="subtype_curve_download_dropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         Download
                     </button>
                     <div class="dropdown-menu" aria-labelledby="subtype_curve_download_dropdwon">
                         <a class="dropdown-item" :href="clinical_file_path"  id = "subtype_landscape_clincial_download">Download clinical file</a>
                         <a class="dropdown-item" :href="subtype_file_path" id = "subtype_landscape_subtype_download">Download subtype file</a>
                         <a class="dropdown-item viz_download" id = "subtype-curve_viz_download" @click="down_graph($event)">Download subtype curve chart</a>
+                    </div> -->
+                    <div id="db-toolbar-curve" class="mb-5">
+                        <div class="db-tool-nav">
+                            <div class="btn btn-outline-dark" data-toggle="collapse" data-target="#download_box-curve" aria-expanded="true" aria-controls="download_box-curve">
+                                Download<i class="fas fa-caret-down"></i>
+                            </div>
+                        </div>
+
+                        <div id="download_box-curve" class="db-toolbox collapse" data-parent="#db-toolbar-curve">
+                                <div class="form-group p-2">
+                                    <a :href="clinical_file_path">
+                                        <button class = "d-btn btn btn-secondary download" >
+                                            <i class='fas fa-download'></i> Download clinical file
+                                        </button>
+                                    </a>
+
+                                    <a :href="subtype_file_path">
+                                        <button class = "d-btn btn btn-theme download">
+                                            <i class='fas fa-download'></i> Download subtype file
+                                        </button>
+                                    </a>
+
+                                    <button class = "d-btn btn btn-pink download" id = "subtype-curve_viz_download" @click="down_graph($event)">
+                                        <i class='fas fa-download'></i> Download subtype curve chart
+                                    </button>
+                                </div>
+                        </div>
                     </div>
                 </div>
                 <div class="row veBlock">
@@ -116,13 +203,40 @@
 
             <div id = "subtype-regulatorBlock" >
                 <div class="dropdown mb-5 mt-3">
-                    <button class="btn btn-secondary dropdown-toggle" type="button" id="subtype_regulator_download_dropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <!-- <button class="btn btn-secondary dropdown-toggle" type="button" id="subtype_regulator_download_dropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         Download
                     </button>
                     <div class="dropdown-menu" aria-labelledby="subtype_regulator_download_dropdwon">
                         <a class="dropdown-item" :href="clinical_file_path"  id = "subtype_regulator_clincial_download">Download clinical file</a>
                         <a class="dropdown-item" :href="rna_file_path" id = "subtype_regulator_rna_download">Download RNA file</a>
                         <a class="dropdown-item viz_download" id = "subtype-regulator_viz_download" @click="down_graph($event)">Download subtype regulator chart</a>
+                    </div> -->
+                    <div id="db-toolbar-regulator" class="mb-5">
+                        <div class="db-tool-nav">
+                            <div class="btn btn-outline-dark" data-toggle="collapse" data-target="#download_box-regulator" aria-expanded="true" aria-controls="download_box-regulator">
+                                Download<i class="fas fa-caret-down"></i>
+                            </div>
+                        </div>
+
+                        <div id="download_box-regulator" class="db-toolbox collapse" data-parent="#db-toolbar-regulator">
+                                <div class="form-group p-2">
+                                    <a :href="clinical_file_path">
+                                        <button class = "d-btn btn btn-secondary download" >
+                                            <i class='fas fa-download'></i> Download clinical file
+                                        </button>
+                                    </a>
+                                    
+                                    <a :href="rna_file_path">
+                                        <button class = "d-btn btn btn-theme download">
+                                            <i class='fas fa-download'></i> Download RNA file
+                                        </button>
+                                    </a>
+
+                                    <button class = "d-btn btn btn-pink download" id = "subtype-regulator_viz_download" @click="down_graph($event)">
+                                        <i class='fas fa-download'></i> Download subtype regulator chart
+                                    </button>
+                                </div>
+                        </div>
                     </div>
                 </div>
                 <div class="row veBlock">
@@ -144,6 +258,8 @@
 <script lang = 'ts'>
 import BootstrapVue from 'bootstrap-vue';
 import OvizEditor from "oviz-editor";
+import JSZip from 'jszip'
+import FileSaver from 'file-saver'
 
 import axios from "axios";
 import { event } from "crux/dist/utils";
@@ -231,6 +347,56 @@ export default {
         }
     },
     methods: {
+        downall(){
+            let zip = new JSZip();
+            if(this.getlandscapeFexists){
+                const svgContainerClone = document.getElementById('subtype-landscapeVis').cloneNode(true);
+                const svgBlob = new Blob([svgContainerClone.innerHTML], { type: "image/svg+xml;charset=utf-8" });
+                zip.file("subtype-landscapeVis.svg",svgBlob);
+
+            }
+            if(this.getcurveFexists){
+                const svgContainerClone = document.getElementById('subtype-curveVis').cloneNode(true);
+                const svgBlob = new Blob([svgContainerClone.innerHTML], { type: "image/svg+xml;charset=utf-8" });
+                zip.file("subtype-curveVis.svg",svgBlob);
+
+            }
+            if(this.getregulatorFexists){
+                const svgContainerClone = document.getElementById('subtype-regulatorVis').cloneNode(true);
+                const svgBlob = new Blob([svgContainerClone.innerHTML], { type: "image/svg+xml;charset=utf-8" });
+                zip.file("subtype-regulatorVis.svg",svgBlob);
+
+            }
+            if(this.getboxplotFexists){
+                const svgContainerClone = document.getElementById('subtype-boxplotVis').cloneNode(true);
+                const svgBlob = new Blob([svgContainerClone.innerHTML], { type: "image/svg+xml;charset=utf-8" });
+                zip.file("subtype-boxplotVis.svg",svgBlob);
+
+            }            
+
+            zip.generateAsync({
+                type: 'blob',// 压缩类型
+                compression: "DEFLATE", // STORE：默认不压缩 DEFLATE：需要压缩
+                compressionOptions: {
+                    level: 9
+                }
+            }).then(function(content) {
+                // 下载的文件名
+                var filename = 'charts.zip';
+                // 创建隐藏的可下载链接
+                var eleLink = document.createElement('a');
+                eleLink.download = filename;
+                eleLink.style.display = 'none';
+                // 下载内容转变成blob地址
+                eleLink.href = URL.createObjectURL(content);
+                // 触发点击
+                document.body.appendChild(eleLink);
+                eleLink.click();
+                // 然后移除
+                document.body.removeChild(eleLink);
+            });
+        },    
+        
         landscapeViz(){
             // var clinical_file_path = this.data_path + "clinical/sample/Clinical_" + this.project_name + ".csv";
             // var subtype_file_path = this.data_path + "subtype/c1_c6/project/" + this.project_name + "_c1_c6.csv";
@@ -309,7 +475,9 @@ export default {
     position: relative;
     box-shadow: 0 0 64px darken(#dee2e6, 5%)
 } */
-
+.d-btn{
+    width: 20em;
+}
 .veBlock {
     position: relative !important;
     box-shadow: 0 0 64px darken(#dee2e6, 5%)
@@ -337,5 +505,8 @@ export default {
     transition: all 0.3s;
     right: 10px;
     z-index: 1 !important;
+}
+.dropdown-menu{
+    width: auto;
 }
 </style>

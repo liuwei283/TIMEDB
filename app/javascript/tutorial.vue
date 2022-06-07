@@ -26,7 +26,7 @@
                 <div class="row">
                     <div class="col-md-4 text-center">
                         <!-- <%=image_tag src="icons brightmode12.png" ,class:  "d-block w-100"%> -->
-                        <img v-bind:src="require('../assets/images/icons brightmode12.png')" class="d-block w-100">
+                        <img v-bind:src="require('../assets/images/database1.png')" class="d-block w-100">
 
                     </div>
                     <div class="col-md-8 text-center">
@@ -36,24 +36,6 @@
                             {{a.title}}
                             
                             </div>
-                            <!-- <div @click="showdetail($event)" class="col-md-5 tutorial-items text-center" id="intro">
-                                introduction
-                            </div>
-                            <div @click="showdetail($event)" class="col-md-5 tutorial-items text-center" id="1">
-                                    How to view Database Information1
-                            </div>
-                            <div @click="showdetail($event)" class="col-md-5 tutorial-items text-center" id="2">
-                                    How to view Database Information2
-                            </div>
-                            <div @click="showdetail($event)" class="col-md-5 tutorial-items text-center" id="3">
-                                    How to view Database Information3
-                            </div>
-                            <div @click="showdetail($event)" class="col-md-5 tutorial-items text-center" id="4">
-                                    How to view Database Information4
-                            </div>
-                            <div @click="showdetail($event)" class="col-md-5 tutorial-items text-center" id="5">
-                                    How to view Database Information5
-                            </div> -->
                         </div>
                     </div>
 
@@ -98,7 +80,7 @@
                     </div>
 
                     <div class="col-md-4 text-center">
-                        <img v-bind:src="require('../assets/images/icons brightmode42.png')" class="d-block w-100">
+                        <img v-bind:src="require('../assets/images/analyses1.png')" class="d-block w-100">
 
                     </div>
                     
@@ -116,94 +98,220 @@
         </div>
 
         <div v-if="this.details == true">
-        <br><br>
+            <br><br>
             <div class="row">
-                
-                <div class="col-md-1 sidebar">
+                <div class="sidebar">
+                        <ul class="nav flex-column ">
+                            <li class="nav-item" @click="showdetail($event)" id ="intro">
+                                <p class="nav-link" >introduction</p>
+                            </li>
+                            <br>
+                            <li class="nav-item" @click="showdetail($event)" id="1">
+                                <p class="nav-link ">How to View Database Information</p>
+                            </li>
+                            <br>
 
-                    <ul class="nav flex-column ">
-                        <li class="nav-item" @click="showdetail($event)" id ="intro">
-                            <p class="nav-link" >introduction</p>
-                        </li>
-                        <br>
-                        <li class="nav-item" @click="showdetail($event)" id="1">
-                            <p class="nav-link ">1</p>
-                        </li>
-                        <br>
+                            <li class="nav-item" @click="showdetail($event)" id="2">
+                                <p class="nav-link" >How to add TIMEDB database data to your workspace</p>
+                            </li>
+                            <br>
 
-                        <li class="nav-item" @click="showdetail($event)" id="2">
-                            <p class="nav-link" >2</p>
-                        </li>
+                            <li class="nav-item" @click="showdetail($event)" id="3">
+                                <p class="nav-link" href="#"> How to Download Database Data</p>
+                            </li>
+                            <br>
+                            <li class="nav-item" @click="showdetail($event)" id="4">
+                                <p class="nav-link" >How to view the  visualization plots of project and sample</p>
+                            </li>
+                            <br>
+                            <li class="nav-item" @click="showdetail($event)" id="5">
+                                <p class="nav-link" > How to download the visualization plots</p>
+                            </li>
+                        </ul>
                         <br>
-
-                        <li class="nav-item" @click="showdetail($event)" id="3">
-                            <p class="nav-link" href="#">3</p>
-                        </li>
-                        <br>
-                        <li class="nav-item" @click="showdetail($event)" id="4">
-                            <p class="nav-link" >4</p>
-                        </li>
-                        <br>
-                        <li class="nav-item" @click="showdetail($event)" id="5">
-                            <p class="nav-link" >5</p>
-                        </li>
-                    </ul>
                 </div>
-            
+
                 <div class="col-md-8 offset-1">
-                    <h1>
-                        <i class="fa fa-caret-left" @click="back"></i>This is the title for {{this.now}}
-                    </h1>
-                    {{this.now}}
 
                     <div v-if="this.now == 'intro'">
-                    this is the content for introduction <br>
-                    wihadiygwduaiwdghauwdguwadgauwd auwgdyiwgdiuawdgaiwugdaywigdawidgad
-                    auwidgawydgwygdbqwjdqodywgyiudhqdi  wihadiygwduaiwdghauwdguwadgauwd auwgdyiwgdiuawdgaiwugdaywigdawidgad
-                    auwidgawydgwygdbqwjdqodywgyiudhqdi <br>
-                    wihadiygwduaiwdghauwdguwadgauwd auwgdyiwgdiuawdgaiwugdaywigdawidgad
-                    auwidgawydgwygdbqwjdqodywgyiudhqdi  wihadiygwduaiwdghauwdguwadgauwd auwgdyiwgdiuawdgaiwugdaywigdawidgad
-                    auwidgawydgwygdbqwjdqodywgyiudhqdi 
+
+                        <h1 class ="title">
+                            <i class="fa fa-caret-left" @click="back"></i> Database Introduction
+                        </h1><br>
+                        <div class="page">
+                            <div>
+                                <div class="overhead">
+                                    <h1>this is header 1</h1>
+                                    <h2>many datas</h2>
+                                </div>
+                                <br><br>
+                                <img v-bind:src="require('../assets/images/1ppt.png')" class="page-image">
+                            </div>
+                            <br><br>
+                            <div>
+                                <div class="overhead">
+                                    <h1>this is header 2</h1>
+                                    <h2>many graphs</h2>
+                                </div>
+                                <br>
+                                <img v-bind:src="require('../assets/images/2ppt.png')" class="page-image">
+                            </div>
+                            <br><br>
+                            <div>
+                                <div class="overhead">
+                                    <h1>this is header 3</h1>
+                                    <h2>projects</h2>
+                                </div>
+                                <br>
+                                <img v-bind:src="require('../assets/images/3ppt.png')" class="page-image">
+                            </div>
+                            <br><br>                           
+                            <div>
+                                <div class="overhead">
+                                    <h1>this is header 4</h1>
+                                    <h2>sample</h2>
+                                </div>
+                                <br>
+                                <img v-bind:src="require('../assets/images/4ppt.png')" class="page-image">
+                            </div>
+                            <br><br>
+
+                        </div>
+
+
+
+
+
                     </div><div v-else-if="this.now =='1'">
-                    this is the content for 1 <br>
-                    wihadiygwduaiwdghauwdguwadgauwd auwgdyiwgdiuawdgaiwugdaywigdawidgad
-                    auwidgawydgwygdbqwjdqodywgyiudhqdi  wihadiygwduaiwdghauwdguwadgauwd auwgdyiwgdiuawdgaiwugdaywigdawidgad
-                    auwidgawydgwygdbqwjdqodywgyiudhqdi <br>
-                    wihadiygwduaiwdghauwdguwadgauwd auwgdyiwgdiuawdgaiwugdaywigdawidgad
-                    auwidgawydgwygdbqwjdqodywgyiudhqdi  wihadiygwduaiwdghauwdguwadgauwd auwgdyiwgdiuawdgaiwugdaywigdawidgad
-                    auwidgawydgwygdbqwjdqodywgyiudhqdi 
+                        <h1 class="title">
+                            <i class="fa fa-caret-left" @click="back"></i> How to View Database Information
+                        </h1><br>
+                        <div class="page">
+                            <div>
+                                <div class="overhead">
+                                    <h1>this is header 1</h1>
+                                    <h2>ababababa</h2>
+                                </div>
+                                <br><br>
+                                <img v-bind:src="require('../assets/images/2-1ppt.png')" class="page-image">
+                            </div>
+                            <br><br>
+                            <div>
+                                <div class="overhead">
+                                    <h1>this is header 2</h1>
+                                    <h2>ababababa</h2>
+                                </div>
+                                <br><br><br>
+                                <img v-bind:src="require('../assets/images/2-2ppt.png')" class="page-image">
+                            </div>
+                            <br><br>
+
+                        </div>
                     </div><div v-else-if="this.now =='2'">
-                    this is the content for 2 <br>
-                    wihadiygwduaiwdghauwdguwadgauwd auwgdyiwgdiuawdgaiwugdaywigdawidgad
-                    auwidgawydgwygdbqwjdqodywgyiudhqdi  wihadiygwduaiwdghauwdguwadgauwd auwgdyiwgdiuawdgaiwugdaywigdawidgad
-                    auwidgawydgwygdbqwjdqodywgyiudhqdi <br>
-                    wihadiygwduaiwdghauwdguwadgauwd auwgdyiwgdiuawdgaiwugdaywigdawidgad
-                    auwidgawydgwygdbqwjdqodywgyiudhqdi  wihadiygwduaiwdghauwdguwadgauwd auwgdyiwgdiuawdgaiwugdaywigdawidgad
-                    auwidgawydgwygdbqwjdqodywgyiudhqdi 
+                        <h1 class="title">
+                            <i class="fa fa-caret-left" @click="back"></i> How to add TIMEDB database data to your workspace
+                        </h1><br>
+                        <div class="page">
+                            <div>
+                                <div class="overhead">
+                                    <h1>this is header 1</h1>
+                                    <h2>ababababa</h2>
+                                </div>
+                                <br><br>
+                                <img v-bind:src="require('../assets/images/3-1ppt.png')" class="page-image">
+                            </div>
+                            <br><br>
+                            <div>
+                                <div class="overhead">
+                                    <h1>this is header 2</h1>
+                                    <h2>ababababa</h2>
+                                </div>
+                                <br><br><br>
+                                <img v-bind:src="require('../assets/images/3-2ppt.png')" class="page-image">
+                            </div>
+                            <br><br>
+                            <div>
+                                <div class="overhead">
+                                    <h1>this is header 3</h1>
+                                    <h2>ababababa</h2>
+                                </div>
+                                <br><br><br>
+                                <img v-bind:src="require('../assets/images/3-3ppt.png')" class="page-image">
+                            </div>
+                            <br><br>
+
+                        </div>
                     </div><div v-else-if="this.now =='3'">
-                    this is the content for 3 <br>
-                    wihadiygwduaiwdghauwdguwadgauwd auwgdyiwgdiuawdgaiwugdaywigdawidgad
-                    auwidgawydgwygdbqwjdqodywgyiudhqdi  wihadiygwduaiwdghauwdguwadgauwd auwgdyiwgdiuawdgaiwugdaywigdawidgad
-                    auwidgawydgwygdbqwjdqodywgyiudhqdi <br>
-                    wihadiygwduaiwdghauwdguwadgauwd auwgdyiwgdiuawdgaiwugdaywigdawidgad
-                    auwidgawydgwygdbqwjdqodywgyiudhqdi  wihadiygwduaiwdghauwdguwadgauwd auwgdyiwgdiuawdgaiwugdaywigdawidgad
-                    auwidgawydgwygdbqwjdqodywgyiudhqdi 
+                        <h1 class="title">
+                            <i class="fa fa-caret-left" @click="back"></i> How to Download Database Data
+                        </h1><br>
+                        <div class="page">
+                            <div>
+                                <div class="overhead">
+                                    <h1>this is header 1</h1>
+                                    <h2>ababababa</h2>
+                                </div>
+                                <br><br>
+                                <img v-bind:src="require('../assets/images/4-1ppt.png')" class="page-image">
+                            </div>
+                            <br><br>
+
+                            <div>
+                                <div class="overhead">
+                                    <h1>this is header 1</h1>
+                                    <h2>ababababa</h2>
+                                </div>
+                                <br><br>
+                                <img v-bind:src="require('../assets/images/8.png')" class="page-image">
+                            </div>
+                            <br><br>
+                            <div>
+                                <div class="overhead">
+                                    <h1>this is header 1</h1>
+                                    <h2>ababababa</h2>
+                                </div>
+                                <br><br>
+                                <img v-bind:src="require('../assets/images/9.png')" class="page-image">
+                            </div>
+                            <br><br>
+
+                    </div>      
                     </div><div v-else-if="this.now =='4'">
-                    this is the content for 4 <br>
-                    wihadiygwduaiwdghauwdguwadgauwd auwgdyiwgdiuawdgaiwugdaywigdawidgad
-                    auwidgawydgwygdbqwjdqodywgyiudhqdi  wihadiygwduaiwdghauwdguwadgauwd auwgdyiwgdiuawdgaiwugdaywigdawidgad
-                    auwidgawydgwygdbqwjdqodywgyiudhqdi <br>
-                    wihadiygwduaiwdghauwdguwadgauwd auwgdyiwgdiuawdgaiwugdaywigdawidgad
-                    auwidgawydgwygdbqwjdqodywgyiudhqdi  wihadiygwduaiwdghauwdguwadgauwd auwgdyiwgdiuawdgaiwugdaywigdawidgad
-                    auwidgawydgwygdbqwjdqodywgyiudhqdi 
+                        <h1 class="title">
+                            <i class="fa fa-caret-left" @click="back"></i> How to view the  visualization plots of project and sample
+                        </h1><br>
+                        <div class="page">
+                            <div>
+                                <div class="overhead">
+                                    <h1>this is header 1</h1>
+                                    <h2>ababababa</h2>
+                                </div>
+                                <br><br>
+                                <img v-bind:src="require('../assets/images/5-1ppt.png')" class="page-image">
+                                <img v-bind:src="require('../assets/images/5-2ppt.png')" class="page-image">
+
+                            </div>
+                            <br><br>                           
+                            <div>
+                                <div class="overhead">
+                                    <h1>this is header 1</h1>
+                                    <h2>ababababa</h2>
+                                </div>
+                                <br><br>
+                                <img v-bind:src="require('../assets/images/5-3ppt.png')" class="page-image">
+                                <img v-bind:src="require('../assets/images/5-4ppt.png')" class="page-image">
+
+                            </div>
+                            <br><br>
+                        </div> 
                     </div><div v-else-if="this.now =='5'">
-                    this is the content for 5 <br>
-                    wihadiygwduaiwdghauwdguwadgauwd auwgdyiwgdiuawdgaiwugdaywigdawidgad
-                    auwidgawydgwygdbqwjdqodywgyiudhqdi  wihadiygwduaiwdghauwdguwadgauwd auwgdyiwgdiuawdgaiwugdaywigdawidgad
-                    auwidgawydgwygdbqwjdqodywgyiudhqdi <br>
-                    wihadiygwduaiwdghauwdguwadgauwd auwgdyiwgdiuawdgaiwugdaywigdawidgad
-                    auwidgawydgwygdbqwjdqodywgyiudhqdi  wihadiygwduaiwdghauwdguwadgauwd auwgdyiwgdiuawdgaiwugdaywigdawidgad
-                    auwidgawydgwygdbqwjdqodywgyiudhqdi 
+                        <h1>
+                            <i class="fa fa-caret-left" @click="back"></i> How to download the visualization plots
+                        </h1><br>
+                        <div class="page">
+
+
+                        </div> 
                     </div>
                 </div>
             </div>
@@ -221,11 +329,11 @@ export default {
                 now: "intro",
                 articles:[
                     {title:"introduction", id:"intro",key:["intro","0"]},
-                    {title:"How to view Database Information1", id:"1",key:["database","1"]},
-                    {title:"How to view Database Information2", id:"2",key:["database","2"]},
-                    {title:"How to view Database Information3", id:"3",key:["database","3"]},
-                    {title:"How to view Database Information4", id:"4",key:["database","4"]},
-                    {title:"How to view Database Information5", id:"5",key:["database","5"]},
+                    {title:"How to View Database Information", id:"1",key:["database","1"]},
+                    {title:"How to add TIMEDB database data to your workspace", id:"2",key:["database","2"]},
+                    {title:"How to Download Database Data", id:"3",key:["database","3"]},
+                    {title:"How to view the  visualization plots of project and sample", id:"4",key:["database","4"]},
+                    {title:"How to download the visualization plots", id:"5",key:["database","5"]},
                 ],
                 results:[],
                 search_value: null,
@@ -241,6 +349,7 @@ export default {
         showdetail(a){
             this.details = true;
             this.now= a.currentTarget.id;
+            this.gotop();
         },
         back(){
             this.details = false;
@@ -263,13 +372,16 @@ export default {
         backsearch(){
             this.found = false;
         },
+        gotop(){
+            $('html,body').animate({scrollTop:'0px'},'fast');
+        }
     }
 }
 </script>
 
 <style scoped lang = "scss">
 
-h1{
+.title{
     font-size: 5rem;
     color: #314893;
     font-weight: bold;
@@ -329,8 +441,12 @@ h1{
         border-color: #314893;
         border-radius: 30px ;
         margin: 10px;
+        // height:5%;
         padding-top: 2.5%;
         padding-bottom: 2.5%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
         color: #333;
         &:hover{
             background-color: #314893;
@@ -354,10 +470,24 @@ h1{
     }
 
 }
+.page{
+    display: flex;
+    // align-items: center;
+    flex-direction: column;
+}
+.page-image{
+    width: 70%;
+
+}
 .sidebar{
     text-align: center;
     padding-left: 0;
+    position: sticky;
+    width: 16.67%;
+    height: 20%;
+    top: 15%;
     li{
+
         background-color: #314893;
         color:#fff;
         padding-top:2.5%;
@@ -370,6 +500,15 @@ h1{
         p{
             margin: 0;   
         }
+        height: 70px;
+        justify-content: center;
+        display: flex;
+        align-items: center;
     }
+}
+.overhead{
+    position: absolute ;
+    color:#cc4f78;
+    z-index: 9;
 }
 </style>
