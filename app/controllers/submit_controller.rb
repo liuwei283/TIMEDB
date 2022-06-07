@@ -689,7 +689,7 @@ class SubmitController < ApplicationController
     @analysis_user_datum.task_output = @task_output
     @analysis_user_datum.use_demo_file = false
     @analysis_user_datum.save!
-    @matched_vis_app = @analysis.visualizers
+    @matched_visualizers = @analysis.visualizers
     @matched_jsnames = []
 
     @matched_visualizers.each do |mvis|

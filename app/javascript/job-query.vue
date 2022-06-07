@@ -534,11 +534,16 @@ export default {
         // this.stdout = 'meta_PCA task starts at: Wed Apr 27 23:09:53 HKT 2022\nfinishes at: Wed Apr 27 23:11:07 HKT 2022\n';
         
     },
-    updated() {
-        if (this.submitted && this.job_status == "finished") {
-            event.emit("GMT:reset-query", this);
-            this.updateGon(this.data.outputs[this.chosenOutput]);
-            event.emit("GMT:query-finished", this);
+    watch: {
+        chosenOutput:function() {
+            if (this.submitted && this.job_status == "finished") {
+                event.emit("GMT:reset-query", this);
+                this.updateGon(this.data.outputs[this.chosenOutput]);
+                event.emit("GMT:query-finished", this);
+            }
+        },
+        chosenModule:function() {
+            this.updateVis();
         }
     },
     methods: {
@@ -712,11 +717,11 @@ export default {
                     } else {
                         this.data.outputs = response.data.body;
 
+                        this.chosenOutput = 0;
                         if (response.data.body.length > 0) {
                             this.updateGon(this.data.outputs[0]);
                             this.taskOutputs = this.data.outputs.map((x, i) => ({value: i, text: x.name}));
                         }
-                        this.chosenOutput = 0;
                         this.submitted = true;
 
                         //tid
@@ -739,7 +744,7 @@ export default {
             this.searchJob();
         },
         updateGon(output) {
-            this.module_names = this.data.outputs[0].module_names.map((x, i) => ({value: i, text: x}));
+            this.module_names = output.module_names.map((x, i) => ({value: i, text: x}));
             this.chosenModule = 0;
             window.gon.module_name = output.module_names[this.chosenModule];
             
@@ -747,7 +752,11 @@ export default {
             if (!window.gon.urls) window.gon.urls = {};
             window.gon.urls.chosen_file_paths = `/api/analysis/${output.analysis_id}/chosen_file_paths`;
             window.gon.urls.download_demo_file = `/api/analysis/${output.analysis_id}/download_demo_file`;
-            registerViz(output.module_name);
+            registerViz(output.module_names[this.chosenModule]);
+        },
+        updateVis() {
+            window.gon.module_name = this.data.outputs[this.chosenOutput].module_names[this.chosenModule];
+            registerViz(this.data.outputs[this.chosenOutput].module_names[this.chosenModule]);
         },
         refreshJobs() {
             this.refreshEnd = false;
