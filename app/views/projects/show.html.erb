@@ -108,103 +108,106 @@
 
   <div class = "container pt-3">
     <ul class="nav nav-tabs" id="project-datils-tab" role="tablist">
-    <li class="nav-item">
-      <a class="nav-link active" id="sample-table-tab" data-toggle="tab" href="#sample-details" role="tab" aria-controls="sample-details" aria-selected="true">Samples</a>
-    </li>
-    <% if @subtype_file_exist %>
       <li class="nav-item">
-        <a class="nav-link" id="subtype-overview-tab" data-toggle="tab" href="#subtype-overview" role="tab" aria-controls="subtype-overview" aria-selected="false">Subtype Overview</a>
+        <a class="nav-link active" id="sample-table-tab" data-toggle="tab" href="#sample-details" role="tab" aria-controls="sample-details" aria-selected="true">Samples</a>
       </li>
-    <% end %>
-    <li class="nav-item">
-      <a class="nav-link" id="fraction-overview-tab" data-toggle="tab" href="#fraction-overview" role="tab" aria-controls="fraction-overview" aria-selected="false">Fraction Overview</a>
-    </li>
+      <% if @subtype_file_exist %>
+        <li class="nav-item">
+          <a class="nav-link" id="subtype-overview-tab" data-toggle="tab" href="#subtype-overview" role="tab" aria-controls="subtype-overview" aria-selected="false">Subtype Overview</a>
+        </li>
+      <% end %>
+      <li class="nav-item">
+        <a class="nav-link" id="fraction-overview-tab" data-toggle="tab" href="#fraction-overview" role="tab" aria-controls="fraction-overview" aria-selected="false">Fraction Overview</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" id="download-tab" data-toggle="tab" href="#download-page" role="tab" aria-controls="download-page" aria-selected="false">Download</a>
+      </li>
     </ul>
     <div class="tab-content" id="projectDeailsTabContent">
       <div class="tab-pane fade show active" id="sample-details" role="tabpanel" aria-labelledby="sample-table-tab">
 
 
-                                            <div id="db-toolbar" class="mb-5">
-                                              <div class="db-tool-nav">
+        <div id="db-toolbar" class="mb-5">
+          <div class="db-tool-nav">
 
-                                                <div class="btn btn-outline-dark" data-toggle="collapse" data-target="#download_box" aria-expanded="true" aria-controls="download_box">
-                                                  Download Table Data <i class="fas fa-caret-down"></i>
-                                                </div>
-                                                <div class="btn btn-outline-dark" data-toggle="collapse" data-target="#export_box" aria-expanded="true" aria-controls="export_box">
-                                                  Export samples to Dataset <i class="fas fa-caret-down"></i>
-                                                </div>
-                                              </div>
+            <div class="btn btn-outline-dark" data-toggle="collapse" data-target="#download_box" aria-expanded="true" aria-controls="download_box">
+              Download Table Data <i class="fas fa-caret-down"></i>
+            </div>
+            <div class="btn btn-outline-dark" data-toggle="collapse" data-target="#export_box" aria-expanded="true" aria-controls="export_box">
+              Export samples to Dataset <i class="fas fa-caret-down"></i>
+            </div>
+          </div>
 
-                                              <%= form_tag make_selected_file_samples_path, multipart: true do %>
-                                                <%= hidden_field_tag 'project_id', @project.id %>
-                                                <div id="download_box" class="db-toolbox collapse" data-parent="#db-toolbar">
-                                                  <div class="form-group p-2">
-                                                    <%= button_tag :name => 'download_select', disabled: true, 
-                                                      :class => "s_table_sub btn btn-theme btn-select download" do %>
-                                                      <i class='fas fa-check-circle'></i> Selected samples
-                                                    <%end%>
-                                                    <%= button_tag :name => 'download_filter',
-                                                      :class => "s_table_sub btn btn-search btn-pink download", disabled: true do %>
-                                                      <i class='fas fa-filter'></i> Searched samples
-                                                    <%end%>
-                                                    <%= button_tag :class => "s_table_sub btn btn-secondary" do %>
-                                                      <%= link_to "/public/data/clinical/sample/Clinical_#{@project.project_name}.csv" do %>
-                                                        <i class='fas fa-download'></i> All samples
-                                                      <% end %>
-                                                    <%end%>
-                                                  </div>
-                                                  <p> With over 1,500 samples, please directly download all samples.</p>
-                                                </div>
-                                                <div id="export_box" class="db-toolbox collapse"  data-parent="#db-toolbar">
-                                                  <div class="form-group p-2">
-                                                    <%= button_tag :name => 'seleted2ds', disabled: true,
-                                                      :class => "s_table_sub btn btn-select btn-theme export-db" do %>
-                                                      <i class='fas fa-check-circle'></i> Selected samples
-                                                    <%end%>
-                                                    <%= button_tag :name => 'filter2ds', disabled: true, 
-                                                        :class => "s_table_sub btn btn-search btn-pink export-db" do %>
-                                                      <i class='fas fa-filter'></i> Searched samples
-                                                    <%end%>
-                                                    <span class="btn ml-3">to your dataset:</span>
-                                                    <select id="select_box" class="btn btn-outline-secondary" name="ds_selected">
-                                                      <option value="">--Please choose a dataset--</option>
-                                                      <% @datasets.each do |ds|%>
-                                                        <option value=<%=ds.name%>> <%=ds.name%></option>
-                                                      <%end%>
-                                                    </select>
-                                                  </div>
-                                                  <p>
-                                                    If you do NOT have any dataset yet, please create one here: 
-                                                    <%=link_to 'Create new dataset', new_user_dataset_path(:user_id=>@user.id)%>
-                                                  </p>
-                                                </div>
-                                              <%end%>
-                                            </div>
-
-                          
+          <%= form_tag make_selected_file_samples_path, multipart: true do %>
+            <%= hidden_field_tag 'project_id', @project.id %>
+              <div id="download_box" class="db-toolbox collapse" data-parent="#db-toolbar">
+                    <div class="form-group p-2">
+                      <%= button_tag :name => 'download_select', disabled: true, 
+                        :class => "s_table_sub btn btn-theme btn-select download" do %>
+                        <i class='fas fa-check-circle'></i> Selected samples
+                      <%end%>
+                      <%= button_tag :name => 'download_filter',
+                        :class => "s_table_sub btn btn-search btn-pink download", disabled: true do %>
+                        <i class='fas fa-filter'></i> Searched samples
+                      <%end%>
+                      <%= button_tag :class => "s_table_sub btn btn-secondary" do %>
+                        <%= link_to "/public/data/clinical/sample/Clinical_#{@project.project_name}.csv" do %>
+                          <i class='fas fa-download'></i> All samples
+                        <% end %>
+                      <%end%>
+                    </div>
+                  <p> With over 1,500 samples, please directly download all samples.</p>
+                </div>
+            <div id="export_box" class="db-toolbox collapse"  data-parent="#db-toolbar">
+                <div class="form-group p-2">
+                  <%= button_tag :name => 'seleted2ds', disabled: true,
+                      :class => "s_table_sub btn btn-select btn-theme export-db" do %>
+                    <i class='fas fa-check-circle'></i> Selected samples
+                  <%end%>
+                  <%= button_tag :name => 'filter2ds', disabled: true, 
+                      :class => "s_table_sub btn btn-search btn-pink export-db" do %>
+                    <i class='fas fa-filter'></i> Searched samples
+                  <%end%>
+                  <span class="btn ml-3">to your dataset:</span>
+                  <select id="select_box" class="btn btn-outline-secondary" name="ds_selected">
+                    <option value="">--Please choose a dataset--</option>
+                    <% @datasets.each do |ds|%>
+                      <option value=<%=ds.name%>> <%=ds.name%></option>
+                    <%end%>
+                  </select>
+                </div>
+                <p>
+                  If you do NOT have any dataset yet, please create one here: 
+                  <%=link_to 'Create new dataset', new_user_dataset_path(:user_id=>@user.id)%>
+                </p>
+              </div>
+          <%end%>
+        </div>
 
                           
-                          <%= form_tag make_selected_file_samples_path, class: "mb-5", multipart: true do %>  
-                            <%= content_tag :table, role: :datatable, class: "display", id: "table_page", data: { url: project_path(format: :json)} do %> 
-                              <thead>
-                                    <th>
-                                      <input type="checkbox" class="selectAll" name="selectAll" value="all">
-                                    </th>
-                                    <% @table_headers.each do |attr| %>
-                                      <% attr = attr.gsub(/^n_/, "") %> 
-                                      <% attr = attr.gsub(/^c_/, "") %>
+
                           
-                                      <th> <%= attr %> </th>
+        <%= form_tag make_selected_file_samples_path, class: "mb-5", multipart: true do %>  
+          <%= content_tag :table, role: :datatable, class: "display", id: "table_page", data: { url: project_path(format: :json)} do %> 
+            <thead>
+              <th>
+                <input type="checkbox" class="selectAll" name="selectAll" value="all">
+              </th>
+              <% @table_headers.each do |attr| %>
+                <% attr = attr.gsub(/^n_/, "") %> 
+                <% attr = attr.gsub(/^c_/, "") %>
+                          
+                <th> <%= attr %> </th>
                                       
-                                    <% end %>
-                                    <th>details</th>
+              <% end %>
+              <th>details</th>
                                     
-                              </thead>
-                              <tbody>
-                              </tbody>
-                            <% end %>
-                            <%=image_tag "loading_icon.gif", id: "loadingSpinner", class: "row", style: "margin: auto;"%>
-                          <% end %>
+            </thead>
+            <tbody>
+            </tbody>
+          <% end %>
+          <%=image_tag "loading_icon.gif", id: "loadingSpinner", class: "row", style: "margin: auto;"%>
+        <% end %>
 
 
       </div>
@@ -223,10 +226,15 @@
         </div>
    
       </div>
-
+      <div id="download-page" class="tab-pane fade" aria-labelledby="download-tab">
+      <div>
+      111
+      </div>
+      </div>
     </div>
     
-  <div>
+  </div>
+
   <br>
   <br>
   <br>

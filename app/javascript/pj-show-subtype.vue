@@ -11,13 +11,42 @@
             </div>
             <div id = "subtype-landscapeBlock">
                 <div class="dropdown mb-5 mt-5">
-                    <button class="btn btn-secondary dropdown-toggle" type="button" id="subtype_landscape_download_dropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <!-- <button class="btn btn-secondary dropdown-toggle" type="button" id="subtype_landscape_download_dropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         Download
                     </button>
                     <div class="dropdown-menu" aria-labelledby="subtype_landscape_download_dropdwon">
                         <a class="dropdown-item" :href="clinical_file_path"  id = "subtype_landscape_clincial_download">Download clinical file</a>
                         <a class="dropdown-item" :href="rna_file_path" id = "subtype_landscape_rna_download">Download RNA file</a>
                         <a class="dropdown-item viz_download" id = "subtype-landscape_viz_download" @click="down_graph($event)">Download subtype landscape chart</a>
+                    </div> -->
+
+                    <div id="db-toolbar-landscape" class="mb-5">
+                        <div class="db-tool-nav">
+                            <div class="btn btn-outline-dark" data-toggle="collapse" data-target="#download_box-landscape" aria-expanded="true" aria-controls="download_box-landscape">
+                                Download<i class="fas fa-caret-down"></i>
+                            </div>
+                        </div>
+
+                        <div id="download_box-landscape" class="db-toolbox collapse" data-parent="#db-toolbar-landscape">
+                                <div class="form-group p-2">
+                                    <a :href="clinical_file_path">
+                                        <button class = "d-btn btn btn-secondary download" >
+                                            <i class='fas fa-download'></i> Download clinical file
+                                        </button>
+                                    </a>
+
+                                    <a :href="rna_file_path">
+                                        <button class = "d-btn btn btn-theme download" >
+                                            <i class='fas fa-download'></i> Download RNA file
+                                        </button>
+                                    </a>
+
+                                    <button class = "d-btn btn btn-pink download" id = "subtype-landscape_viz_download" @click="down_graph($event)">
+                                        <i class='fas fa-download'></i> Download subtype landscape chart
+                                    </button>
+                                    
+                                </div>
+                        </div>
                     </div>
                 </div>
                 <div class="row veBlock">
@@ -57,13 +86,39 @@
             </div>
             <div id = "subtype-boxplotBlock">
                 <div class="dropdown mb-5 mt-3">
-                    <button class="btn btn-secondary dropdown-toggle" type="button" id="subtype_boxplot_download_dropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <!-- <button class="btn btn-secondary dropdown-toggle" type="button" id="subtype_boxplot_download_dropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         Download
                     </button>
                     <div class="dropdown-menu" aria-labelledby="subtype_boxplot_download_dropdwon">
                         <a class="dropdown-item" :href="subtype_file_path"  id = "subtype_boxplot_subtype_download">Download subtype file</a>
                         <a class="dropdown-item" @click="download_subtype_boxplot_cellData" id = "subtype_landscape_rna_download">Download cell data file</a>
                         <a class="dropdown-item viz_download" id = "subtype-boxplot_viz_download" @click="down_graph($event)">Download subtype boxplot chart</a>
+                    </div> -->
+
+                    <div id="db-toolbar-boxplot" class="mb-5">
+                        <div class="db-tool-nav">
+                            <div class="btn btn-outline-dark" data-toggle="collapse" data-target="#download_box-boxplot" aria-expanded="true" aria-controls="download_box-boxplot">
+                                Download<i class="fas fa-caret-down"></i>
+                            </div>
+                        </div>
+
+                        <div id="download_box-boxplot" class="db-toolbox collapse" data-parent="#db-toolbar-boxplot">
+                                <div class="form-group p-2">
+                                    <a :href="subtype_file_path">
+                                        <button class = "d-btn btn btn-secondary download" >
+                                            <i class='fas fa-download'></i> Download subtype file
+                                        </button>
+                                    </a>
+
+                                    <button class = "d-btn btn btn-theme download" @click="download_subtype_boxplot_cellData" >
+                                        <i class='fas fa-download'></i> Download cell data file
+                                    </button>
+
+                                    <button class = "d-btn btn btn-pink download" id = "subtype-boxplot_viz_download" @click="down_graph($event)">
+                                        <i class='fas fa-download'></i> Download subtype boxplot chart
+                                    </button>
+                                </div>
+                        </div>
                     </div>
                 </div>
                 <div  class="row veBlock">
@@ -88,13 +143,40 @@
             </div>
             <div id = "subtype-curveBlock" >
                 <div class="dropdown mb-5 mt-3">
-                    <button class="btn btn-secondary dropdown-toggle" type="button" id="subtype_curve_download_dropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <!-- <button class="btn btn-secondary dropdown-toggle" type="button" id="subtype_curve_download_dropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         Download
                     </button>
                     <div class="dropdown-menu" aria-labelledby="subtype_curve_download_dropdwon">
                         <a class="dropdown-item" :href="clinical_file_path"  id = "subtype_landscape_clincial_download">Download clinical file</a>
                         <a class="dropdown-item" :href="subtype_file_path" id = "subtype_landscape_subtype_download">Download subtype file</a>
                         <a class="dropdown-item viz_download" id = "subtype-curve_viz_download" @click="down_graph($event)">Download subtype curve chart</a>
+                    </div> -->
+                    <div id="db-toolbar-curve" class="mb-5">
+                        <div class="db-tool-nav">
+                            <div class="btn btn-outline-dark" data-toggle="collapse" data-target="#download_box-curve" aria-expanded="true" aria-controls="download_box-curve">
+                                Download<i class="fas fa-caret-down"></i>
+                            </div>
+                        </div>
+
+                        <div id="download_box-curve" class="db-toolbox collapse" data-parent="#db-toolbar-curve">
+                                <div class="form-group p-2">
+                                    <a :href="clinical_file_path">
+                                        <button class = "d-btn btn btn-secondary download" >
+                                            <i class='fas fa-download'></i> Download clinical file
+                                        </button>
+                                    </a>
+
+                                    <a :href="subtype_file_path">
+                                        <button class = "d-btn btn btn-theme download">
+                                            <i class='fas fa-download'></i> Download subtype file
+                                        </button>
+                                    </a>
+
+                                    <button class = "d-btn btn btn-pink download" id = "subtype-curve_viz_download" @click="down_graph($event)">
+                                        <i class='fas fa-download'></i> Download subtype curve chart
+                                    </button>
+                                </div>
+                        </div>
                     </div>
                 </div>
                 <div class="row veBlock">
@@ -121,13 +203,40 @@
 
             <div id = "subtype-regulatorBlock" >
                 <div class="dropdown mb-5 mt-3">
-                    <button class="btn btn-secondary dropdown-toggle" type="button" id="subtype_regulator_download_dropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <!-- <button class="btn btn-secondary dropdown-toggle" type="button" id="subtype_regulator_download_dropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         Download
                     </button>
                     <div class="dropdown-menu" aria-labelledby="subtype_regulator_download_dropdwon">
                         <a class="dropdown-item" :href="clinical_file_path"  id = "subtype_regulator_clincial_download">Download clinical file</a>
                         <a class="dropdown-item" :href="rna_file_path" id = "subtype_regulator_rna_download">Download RNA file</a>
                         <a class="dropdown-item viz_download" id = "subtype-regulator_viz_download" @click="down_graph($event)">Download subtype regulator chart</a>
+                    </div> -->
+                    <div id="db-toolbar-regulator" class="mb-5">
+                        <div class="db-tool-nav">
+                            <div class="btn btn-outline-dark" data-toggle="collapse" data-target="#download_box-regulator" aria-expanded="true" aria-controls="download_box-regulator">
+                                Download<i class="fas fa-caret-down"></i>
+                            </div>
+                        </div>
+
+                        <div id="download_box-regulator" class="db-toolbox collapse" data-parent="#db-toolbar-regulator">
+                                <div class="form-group p-2">
+                                    <a :href="clinical_file_path">
+                                        <button class = "d-btn btn btn-secondary download" >
+                                            <i class='fas fa-download'></i> Download clinical file
+                                        </button>
+                                    </a>
+                                    
+                                    <a :href="rna_file_path">
+                                        <button class = "d-btn btn btn-theme download">
+                                            <i class='fas fa-download'></i> Download RNA file
+                                        </button>
+                                    </a>
+
+                                    <button class = "d-btn btn btn-pink download" id = "subtype-regulator_viz_download" @click="down_graph($event)">
+                                        <i class='fas fa-download'></i> Download subtype regulator chart
+                                    </button>
+                                </div>
+                        </div>
                     </div>
                 </div>
                 <div class="row veBlock">
@@ -366,7 +475,9 @@ export default {
     position: relative;
     box-shadow: 0 0 64px darken(#dee2e6, 5%)
 } */
-
+.d-btn{
+    width: 20em;
+}
 .veBlock {
     position: relative !important;
     box-shadow: 0 0 64px darken(#dee2e6, 5%)
@@ -394,5 +505,8 @@ export default {
     transition: all 0.3s;
     right: 10px;
     z-index: 1 !important;
+}
+.dropdown-menu{
+    width: auto;
 }
 </style>

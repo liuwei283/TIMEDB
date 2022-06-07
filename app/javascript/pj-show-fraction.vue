@@ -25,12 +25,33 @@
 
             <div id = "fraction_pieBlock">
                 <div class="dropdown mb-5 mt-5">
-                    <button class="btn btn-secondary dropdown-toggle" type="button" id="fraction_pie_download_dropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <!-- <button class="btn btn-secondary dropdown-toggle" type="button" id="fraction_pie_download_dropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         Download
                     </button>
                     <div class="dropdown-menu" aria-labelledby="fraction_pie_download_dropdwon">
                         <a class="dropdown-item" :href="clinical_file_path"  id = "fraction_pie_clincial_download">Download clinical file</a>
                         <a class="dropdown-item viz_download" id = "fraction-pie_viz_download" @click="down_graph($event)">Download fraction pie chart</a>
+                    </div> -->
+                    <div id="db-toolbar-pie" class="mb-5">
+                        <div class="db-tool-nav">
+                            <div class="btn btn-outline-dark" data-toggle="collapse" data-target="#download_box-pie" aria-expanded="true" aria-controls="download_box-pie">
+                                Download<i class="fas fa-caret-down"></i>
+                            </div>
+                        </div>
+
+                        <div id="download_box-pie" class="db-toolbox collapse" data-parent="#db-toolbar-pie">
+                                <div class="form-group p-2">
+                                    <a :href="clinical_file_path">
+                                        <button class = "d-btn btn btn-secondary download" >
+                                            <i class='fas fa-download'></i> Download clinical file
+                                        </button>
+                                    </a>
+
+                                    <button class = "d-btn btn btn-pink download" id = "fraction-pie_viz_download" @click="down_graph($event)">
+                                        <i class='fas fa-download'></i> Download fraction pie chart
+                                    </button>
+                                </div>
+                        </div>
                     </div>
                 </div>
                 <div class="row veBlock">
@@ -70,12 +91,31 @@
 
             <div id = "fraction_boxplotBlock">
                 <div class="dropdown mb-5 mt-5">
-                    <button class="btn btn-secondary dropdown-toggle" type="button" id="fraction_boxplot_download_dropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <!-- <button class="btn btn-secondary dropdown-toggle" type="button" id="fraction_boxplot_download_dropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         Download
                     </button>
                     <div class="dropdown-menu" aria-labelledby="fraction_boxplot_download_dropdwon">
                         <a class="dropdown-item" @click="download_fraction_boxplot_cellData" id = "fraction_boxplot_rna_download">Download cell data file</a>
                         <a class="dropdown-item viz_download" id = "fraction-boxplot_viz_download" @click="down_graph($event)">Download fraction boxplot chart</a>
+                    </div> -->
+                    <div id="db-toolbar-boxplot" class="mb-5">
+                        <div class="db-tool-nav">
+                            <div class="btn btn-outline-dark" data-toggle="collapse" data-target="#download_box-boxplot" aria-expanded="true" aria-controls="download_box-boxplot">
+                                Download<i class="fas fa-caret-down"></i>
+                            </div>
+                        </div>
+
+                        <div id="download_box-boxplot" class="db-toolbox collapse" data-parent="#db-toolbar-boxplot">
+                                <div class="form-group p-2">
+                                    <button class = "d-btn btn btn-secondary download" @click="download_fraction_boxplot_cellData">
+                                        <i class='fas fa-download'></i> Download cell data file
+                                    </button>
+
+                                    <button class = "d-btn btn btn-pink download" id = "fraction-boxplot_viz_download" @click="down_graph($event)">
+                                        <i class='fas fa-download'></i> Download fraction boxplot chart
+                                    </button>
+                                </div>
+                        </div>
                     </div>
                 </div>
                 <div class="row veBlock">
@@ -113,7 +153,7 @@
 
             <div id = "fraction_heatmapBlock">
                 <div class="dropdown mb-5 mt-5">
-                    <button class="btn btn-secondary dropdown-toggle" type="button" id="fraction_heatmap_download_dropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <!-- <button class="btn btn-secondary dropdown-toggle" type="button" id="fraction_heatmap_download_dropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         Download
                     </button>
                     <div class="dropdown-menu" aria-labelledby="fraction_heatmap_download_dropdwon">
@@ -122,6 +162,31 @@
                         <a class="dropdown-item" @click="download_fraction_heatmap_cellData" id = "fraction_heatmap_rna_download">Download cell data file</a>
 
                         <a class="dropdown-item viz_download" id = "fraction-heatmap_viz_download" @click="down_graph($event)">Download fraction heatmap chart</a>
+                    </div> -->
+                    <div id="db-toolbar-heatmap" class="mb-5">
+                        <div class="db-tool-nav">
+                            <div class="btn btn-outline-dark" data-toggle="collapse" data-target="#download_box-heatmap" aria-expanded="true" aria-controls="download_box-heatmap">
+                                Download<i class="fas fa-caret-down"></i>
+                            </div>
+                        </div>
+
+                        <div id="download_box-heatmap" class="db-toolbox collapse" data-parent="#db-toolbar-heatmap">
+                                <div class="form-group p-2">
+                                    <button class = "d-btn btn btn-secondary download" @click="download_fraction_heatmap_cellData">
+                                        <i class='fas fa-download'></i> Download cell data file
+                                    </button>
+
+                                    <a :href="clinical_file_path">
+                                        <button class = "d-btn btn btn-theme download">
+                                            <i class='fas fa-download'></i> Download clinical file
+                                        </button>
+                                    </a>
+
+                                    <button class = "d-btn btn btn-pink download" id = "fraction-heatmap_viz_download" @click="down_graph($event)">
+                                        <i class='fas fa-download'></i> Download fraction heatmap chart
+                                    </button>
+                                </div>
+                        </div>
                     </div>
                 </div>
                 <div class="row veBlock">
@@ -158,13 +223,32 @@
 
             <div id = "fraction_landscapeBlock">
                 <div class="dropdown mb-5 mt-5">
-                    <button class="btn btn-secondary dropdown-toggle" type="button" id="fraction_landscape_download_dropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <!-- <button class="btn btn-secondary dropdown-toggle" type="button" id="fraction_landscape_download_dropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         Download
                     </button>
                     <div class="dropdown-menu" aria-labelledby="fraction_landscape_download_dropdwon">
                         <a class="dropdown-item" @click="download_fraction_landscape_cellData" id = "fraction_landscape_rna_download">Download cell data file</a>
 
                         <a class="dropdown-item viz_download" id = "fraction-landscape_viz_download" @click="down_graph($event)">Download fraction landscape chart</a>
+                    </div> -->
+                    <div id="db-toolbar-landscape" class="mb-5">
+                        <div class="db-tool-nav">
+                            <div class="btn btn-outline-dark" data-toggle="collapse" data-target="#download_box-landscape" aria-expanded="true" aria-controls="download_box-landscape">
+                                Download<i class="fas fa-caret-down"></i>
+                            </div>
+                        </div>
+
+                        <div id="download_box-landscape" class="db-toolbox collapse" data-parent="#db-toolbar-landscape">
+                                <div class="form-group p-2">
+                                    <button class = "d-btn btn btn-secondary download" @click="download_fraction_landscape_cellData">
+                                        <i class='fas fa-download'></i> Download cell data file
+                                    </button>
+                                    
+                                    <button class = "d-btn btn btn-pink download" id = "fraction-landscape_viz_download" @click="down_graph($event)">
+                                        <i class='fas fa-download'></i> Download fraction landscape chart
+                                    </button>
+                                </div>
+                        </div>
                     </div>
                 </div>
                 <div class="row veBlock">
@@ -439,7 +523,9 @@ export default {
     position: relative;
     box-shadow: 0 0 64px darken(#dee2e6, 5%)
 } */
-
+.d-btn{
+    width: 20em;
+}
 .veBlock {
     position: relative !important;
     box-shadow: 0 0 64px darken(#dee2e6, 5%)

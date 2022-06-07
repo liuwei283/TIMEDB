@@ -35,13 +35,31 @@
 
             </div>
             <div class="dropdown mt-3 mb-5">
-                <button class="btn btn-secondary dropdown-toggle" type="button" id="bar_download_dropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <!-- <button class="btn btn-secondary dropdown-toggle" type="button" id="bar_download_dropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     Download
                 </button>
                 <div class="dropdown-menu" aria-labelledby="bar_download_dropdwon">
                     <a class="dropdown-item" @click="download_bar" id = "bar_download">Download sample number table</a> 
                     <a class="dropdown-item viz_download" id = "bar" @click="down_graph($event)">Download bar chart</a>
-                </div>
+                </div> -->
+                    <div id="db-toolbar-bar" class="mb-5">
+                        <div class="db-tool-nav">
+                            <div class="btn btn-outline-dark" data-toggle="collapse" data-target="#download_box-bar" aria-expanded="true" aria-controls="download_box-bar">
+                                Download<i class="fas fa-caret-down"></i>
+                            </div>
+                        </div>
+
+                        <div id="download_box-bar" class="db-toolbox collapse" data-parent="#db-toolbar-bar">
+                                <div class="form-group p-2">
+                                    <button class = "d-btn btn btn-secondary download" @click="download_bar">
+                                        <i class='fas fa-download'></i> Download sample number table
+                                    </button>
+                                    <button class = "d-btn btn btn-pink download" id = "bar" @click="down_graph($event)">
+                                        <i class='fas fa-download'></i> Download bar chart
+                                    </button>
+                                </div>
+                        </div>
+                    </div>
             </div>
             <div class="row veBlock">
                 <div class="md-col-9 vizBlock" id = "barVis">
@@ -99,12 +117,30 @@
             </div>
             <div id = "pieBlock">
                 <div class="dropdown mt-3 mb-5">
-                    <button class="btn btn-secondary dropdown-toggle" type="button" id="pie_download_dropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <!-- <button class="btn btn-secondary dropdown-toggle" type="button" id="pie_download_dropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         Download
                     </button>
                     <div class="dropdown-menu" aria-labelledby="pie_download_dropdown">
                         <a class="dropdown-item" id = "pie_download" @click="download_pie">Download cell data</a> 
                         <a class="dropdown-item viz_download" id = "pie" @click="down_graph($event)">Download pie chart</a>
+                    </div> -->
+                    <div id="db-toolbar-pie" class="mb-5">
+                        <div class="db-tool-nav">
+                            <div class="btn btn-outline-dark" data-toggle="collapse" data-target="#download_box-pie" aria-expanded="true" aria-controls="download_box-pie">
+                                Download<i class="fas fa-caret-down"></i>
+                            </div>
+                        </div>
+
+                        <div id="download_box-pie" class="db-toolbox collapse" data-parent="#db-toolbar-pie">
+                                <div class="form-group p-2">
+                                    <button class = "d-btn btn btn-secondary download" @click="download_pie">
+                                        <i class='fas fa-download'></i> Download cell data
+                                    </button>
+                                    <button class = "d-btn btn btn-pink download" id = "pie" @click="down_graph($event)">
+                                        <i class='fas fa-download'></i> Download pie chart
+                                    </button>
+                                </div>
+                        </div>
                     </div>
                 </div>
 
@@ -143,12 +179,30 @@
             </div>
             <div id = "landscapeBlock">
                 <div class="dropdown mt-3 mb-5">
-                    <button class="btn btn-secondary dropdown-toggle" type="button" id="landscape_download_dropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <!-- <button class="btn btn-secondary dropdown-toggle" type="button" id="landscape_download_dropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         Download
                     </button>
                     <div class="dropdown-menu" aria-labelledby="bar_download_dropdwon">
                         <a class="dropdown-item" id = "landscape_download" @click="download_landscape" >Download sample number table</a> 
                         <a class="dropdown-item viz_download" id = "landscape" @click="down_graph($event)">Download landscape chart </a>
+                    </div> -->
+                    <div id="db-toolbar-landscape" class="mb-5">
+                        <div class="db-tool-nav">
+                            <div class="btn btn-outline-dark" data-toggle="collapse" data-target="#download_box-landscape" aria-expanded="true" aria-controls="download_box-landscape">
+                                Download<i class="fas fa-caret-down"></i>
+                            </div>
+                        </div>
+
+                        <div id="download_box-landscape" class="db-toolbox collapse" data-parent="#db-toolbar-landscape">
+                                <div class="form-group p-2">
+                                    <button class = "d-btn btn btn-secondary download" @click="download_landscape">
+                                        <i class='fas fa-download'></i> Download sample number table
+                                    </button>
+                                    <button class = "d-btn btn btn-pink download" id = "landscape" @click="down_graph($event)">
+                                        <i class='fas fa-download'></i> Download landscape chart
+                                    </button>
+                                </div>
+                        </div>
                     </div>
                 </div>
                 <div class="row veBlock">
@@ -199,7 +253,7 @@
             </div>
             <div id = "regulatorBlock">
                 <div class="dropdown mt-3 mb-5">
-                    <button class="btn btn-secondary dropdown-toggle" type="button" id="regulator_download" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <!-- <button class="btn btn-secondary dropdown-toggle" type="button" id="regulator_download" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     Dropdown regulator related data
                     </button>
                     <div class="dropdown-menu" aria-labelledby="regulator_download">
@@ -208,6 +262,27 @@
                         <div class="dropdown-divider"></div>
                         <a class="dropdown-item viz_download" id = "regulator" @click="down_graph($event)">Download regulator chart</a>
 
+                    </div> -->
+                    <div id="db-toolbar-regulator" class="mb-5">
+                        <div class="db-tool-nav">
+                            <div class="btn btn-outline-dark" data-toggle="collapse" data-target="#download_box-regulator" aria-expanded="true" aria-controls="download_box-regulator">
+                                Download<i class="fas fa-caret-down"></i>
+                            </div>
+                        </div>
+
+                        <div id="download_box-regulator" class="db-toolbox collapse" data-parent="#db-toolbar-regulator">
+                                <div class="form-group p-2">
+                                    <button class = "d-btn btn btn-secondary download" @click="download_regulator_subtype">
+                                        <i class='fas fa-download'></i> Download subtype data
+                                    </button>
+                                    <button class = "d-btn btn btn-theme download" @click="download_regulator_rna">
+                                        <i class='fas fa-download'></i> Download RNA data
+                                    </button>
+                                    <button class = "d-btn btn btn-pink download" id = "regulator" @click="down_graph($event)">
+                                        <i class='fas fa-download'></i> Download regulator chart
+                                    </button>
+                                </div>
+                        </div>
                     </div>
                 </div>
                 <div class="row veBlock">
@@ -540,7 +615,9 @@ export default {
     z-index:20;
     transition: all 0.3s;
 } */
-
+.d-btn {
+    width: 20em
+}
 .v-editor {
     position: absolute;
     top: 10px;
