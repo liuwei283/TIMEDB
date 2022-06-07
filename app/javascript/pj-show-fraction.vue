@@ -1,5 +1,10 @@
 <template>
     <div>
+        <div class="db-tool-nav">
+
+        <button class="btn btn-outline-dark" @click="downall()">Download all charts</button>
+        </div><br>
+
         <div id = "fraction-pie" class = "container Block">
             <div class="row description">
               <h4>Some description for Project Clinical Feature Piechart in project fraction overview</h4>
@@ -188,6 +193,8 @@ import OvizEditor from "oviz-editor";
 import axios from "axios";
 import { event } from "crux/dist/utils";
 import {viz_mode} from "page/visualizers";
+import JSZip from 'jszip'
+import FileSaver from 'file-saver'
 
 import DropDownSelect from "page/builtin/dropdown-select.vue";
 
@@ -278,7 +285,7 @@ export default {
 
             if(this.clinical_fexists == 'true'){
                 document.getElementById("fraction_pieBlock").style.display = "block";
-                fractionPie("#fraction-pieVis", this.clinical_file_path, this.pie_selected, "#fraction-pie-editor", "fraction_pie_viz");
+                fractionPie("#fraction-pieVis", this.clinical_file_path, this.pie_selected, "#fraction-pie-editor", "fraction_pie_viz", this.vue_name);
 
             }else{
                 document.getElementById("fraction_pieBlock").style.display = "none";
@@ -293,10 +300,10 @@ export default {
                 document.getElementById("fraction_boxplotBlock").style.display = "block";
 
                 if (this.boxplot_selected == "Consensus") {
-                    fractionGroupBoxplot("#fraction-boxplotVis", cellData_file_path, "#fraction-boxplot-editor", "fraction_boxplot_viz");
+                    fractionGroupBoxplot("#fraction-boxplotVis", cellData_file_path, "#fraction-boxplot-editor", "fraction_boxplot_viz", this.vue_name);
                 }
                 else {
-                    fractionBoxplot("#fraction-boxplotVis", cellData_file_path, "#fraction-boxplot-editor", "fraction_boxplot_viz");
+                    fractionBoxplot("#fraction-boxplotVis", cellData_file_path, "#fraction-boxplot-editor", "fraction_boxplot_viz", this.vue_name);
                 }
             }else{
                 document.getElementById("fraction_boxplotBlock").style.display = "none";
@@ -309,7 +316,7 @@ export default {
             
             if (this.landscape_cell_fexists == 'true') {
                 document.getElementById("fraction_landscapeBlock").style.display = "block";
-                fractionLandscape("#fraction-landscapeVis", cellData_file_path, this.landscape_selected, "#fraction-landscape-editor", "fraction_landscape_viz");
+                fractionLandscape("#fraction-landscapeVis", cellData_file_path, this.landscape_selected, "#fraction-landscape-editor", "fraction_landscape_viz", this.vue_name);
             }
             else {
                 document.getElementById("fraction_landscapeBlock").style.display = "none";
@@ -321,7 +328,7 @@ export default {
             this.heatmap_fexists = this.file_exist[this.heatmap_selected];
             if(this.clinical_fexists=="true" && this.heatmap_fexists=='true'){
                 document.getElementById("fraction_heatmapBlock").style.display = "block";
-                fractionHeatmap("#fraction-heatmapVis", clinical_file_path, cellData_file_path, "#fraction-heatmap-editor", "fraction_heatmap_viz");
+                fractionHeatmap("#fraction-heatmapVis", this.clinical_file_path, cellData_file_path, "#fraction-heatmap-editor", "fraction_heatmap_viz", this.vue_name);
             }else{
                 document.getElementById("fraction_heatmapBlock").style.display = "none";
 
@@ -345,6 +352,69 @@ export default {
             window.location.href = this.data_path + "cell_data/" + this.heatmap_selected + "/" + this.project_name + "_" + this.heatmap_selected + ".csv";
 
         },
+        down_graph(e){
+            var clicked_id = e.target.id.replace("_viz_download", "");
+            console.log(clicked_id);
+            const svgContainerClone = document.getElementById(clicked_id + "Vis").cloneNode(true);
+            const svgBlob = new Blob([svgContainerClone.innerHTML], { type: "image/svg+xml;charset=utf-8" });
+            const svgUrl = URL.createObjectURL(svgBlob);
+            alert(svgUrl);
+            const downloadLink = document.createElement("a");
+            downloadLink.href = svgUrl;
+            downloadLink.download = clicked_id + ".svg";
+            document.body.appendChild(downloadLink);
+            downloadLink.click();
+            document.body.removeChild(downloadLink);
+        },
+        downall(){
+            let zip = new JSZip();
+            if(this.getpieFexists){
+                const svgContainerClone = document.getElementById('fraction-pieVis').cloneNode(true);
+                const svgBlob = new Blob([svgContainerClone.innerHTML], { type: "image/svg+xml;charset=utf-8" });
+                zip.file("fraction-pieVis.svg",svgBlob);
+
+            }
+            if(this.getheatmapFexists){
+                const svgContainerClone = document.getElementById('fraction-heatmapVis').cloneNode(true);
+                const svgBlob = new Blob([svgContainerClone.innerHTML], { type: "image/svg+xml;charset=utf-8" });
+                zip.file("fraction-heatmapVis.svg",svgBlob);
+
+            }
+            if(this.getboxplotFexists){
+                const svgContainerClone = document.getElementById('fraction-boxplotVis').cloneNode(true);
+                const svgBlob = new Blob([svgContainerClone.innerHTML], { type: "image/svg+xml;charset=utf-8" });
+                zip.file("fraction-boxplotVis.svg",svgBlob);
+
+            }
+            if(this.getlandscapeFexists){
+                const svgContainerClone = document.getElementById('fraction-landscapeVis').cloneNode(true);
+                const svgBlob = new Blob([svgContainerClone.innerHTML], { type: "image/svg+xml;charset=utf-8" });
+                zip.file("fraction-landscapeVis.svg",svgBlob);
+
+            }            
+
+            zip.generateAsync({
+                type: 'blob',// 压缩类型
+                compression: "DEFLATE", // STORE：默认不压缩 DEFLATE：需要压缩
+                compressionOptions: {
+                    level: 9
+                }
+            }).then(function(content) {
+                // 下载的文件名
+                var filename = 'charts.zip';
+                // 创建隐藏的可下载链接
+                var eleLink = document.createElement('a');
+                eleLink.download = filename;
+                eleLink.style.display = 'none';
+                // 下载内容转变成blob地址
+                eleLink.href = URL.createObjectURL(content);
+                // 触发点击
+                document.body.appendChild(eleLink);
+                eleLink.click();
+                // 然后移除
+                document.body.removeChild(eleLink);
+            });
+        }
     },
     computed:{
         getpieFexists() {
@@ -359,20 +429,7 @@ export default {
         getheatmapFexists() {
             return this.clinical_fexists=="true" && this.heatmap_fexists=='true'
         },
-        down_graph(e){
-            var clicked_id = e.target.id.replace("_viz_download", "");
-            console.log(clicked_id);
-            const svgContainerClone = document.getElementById(clicked_id + "Vis").cloneNode(true);
-            const svgBlob = new Blob([svgContainerClone.innerHTML], { type: "image/svg+xml;charset=utf-8" });
-            const svgUrl = URL.createObjectURL(svgBlob);
-            const downloadLink = document.createElement("a");
-            downloadLink.href = svgUrl;
-            downloadLink.download = clicked_id + ".svg";
-            document.body.appendChild(downloadLink);
-            downloadLink.click();
-            document.body.removeChild(downloadLink);
-        }
-
+        
     }
 }
 </script>

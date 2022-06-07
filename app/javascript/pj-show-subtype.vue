@@ -1,5 +1,10 @@
 <template>
     <div>
+        <div class="db-tool-nav">
+
+        <button class="btn btn-outline-dark" @click="downall()">Download all charts</button>
+        </div><br>
+
         <div id = "subtype-landscape" class = "container Block">
             <div id="landscapeDescription" class="row description">
                 <h4>Some description for Immune Subtype Landscape in project overview</h4>
@@ -144,6 +149,8 @@
 <script lang = 'ts'>
 import BootstrapVue from 'bootstrap-vue';
 import OvizEditor from "oviz-editor";
+import JSZip from 'jszip'
+import FileSaver from 'file-saver'
 
 import axios from "axios";
 import { event } from "crux/dist/utils";
@@ -231,6 +238,56 @@ export default {
         }
     },
     methods: {
+        downall(){
+            let zip = new JSZip();
+            if(this.getlandscapeFexists){
+                const svgContainerClone = document.getElementById('subtype-landscapeVis').cloneNode(true);
+                const svgBlob = new Blob([svgContainerClone.innerHTML], { type: "image/svg+xml;charset=utf-8" });
+                zip.file("subtype-landscapeVis.svg",svgBlob);
+
+            }
+            if(this.getcurveFexists){
+                const svgContainerClone = document.getElementById('subtype-curveVis').cloneNode(true);
+                const svgBlob = new Blob([svgContainerClone.innerHTML], { type: "image/svg+xml;charset=utf-8" });
+                zip.file("subtype-curveVis.svg",svgBlob);
+
+            }
+            if(this.getregulatorFexists){
+                const svgContainerClone = document.getElementById('subtype-regulatorVis').cloneNode(true);
+                const svgBlob = new Blob([svgContainerClone.innerHTML], { type: "image/svg+xml;charset=utf-8" });
+                zip.file("subtype-regulatorVis.svg",svgBlob);
+
+            }
+            if(this.getboxplotFexists){
+                const svgContainerClone = document.getElementById('subtype-boxplotVis').cloneNode(true);
+                const svgBlob = new Blob([svgContainerClone.innerHTML], { type: "image/svg+xml;charset=utf-8" });
+                zip.file("subtype-boxplotVis.svg",svgBlob);
+
+            }            
+
+            zip.generateAsync({
+                type: 'blob',// 压缩类型
+                compression: "DEFLATE", // STORE：默认不压缩 DEFLATE：需要压缩
+                compressionOptions: {
+                    level: 9
+                }
+            }).then(function(content) {
+                // 下载的文件名
+                var filename = 'charts.zip';
+                // 创建隐藏的可下载链接
+                var eleLink = document.createElement('a');
+                eleLink.download = filename;
+                eleLink.style.display = 'none';
+                // 下载内容转变成blob地址
+                eleLink.href = URL.createObjectURL(content);
+                // 触发点击
+                document.body.appendChild(eleLink);
+                eleLink.click();
+                // 然后移除
+                document.body.removeChild(eleLink);
+            });
+        },    
+        
         landscapeViz(){
             // var clinical_file_path = this.data_path + "clinical/sample/Clinical_" + this.project_name + ".csv";
             // var subtype_file_path = this.data_path + "subtype/c1_c6/project/" + this.project_name + "_c1_c6.csv";
