@@ -3,133 +3,14 @@
 <div id="job-query">
     <alert-center ref="alertCenter" />
     <div>
-        <div v-if="!submitted"> <!---->
-            <b-card class="text-center query-card">
-
-                <div class="img-icon">
-                    <i class="fas fa-tasks"></i>
-                </div>
-
-                <p>Find your submitted task by Task ID</p>
-
-                <div class="row justify-content-center">
-                    <b-input-group class="justify-content-center">
-
-                        <b-form-input
-                            v-model="job_id"
-                            size="lg"
-                            :state="valid_name"
-                            placeholder="Enter your task ID"
-                            class="col-md-4 text-center"
-                        ></b-form-input>
-
-                        <b-input-group-append>
-                            <b-button variant="secondary" size="lg" @click="searchJob"
-                            ><i class="fas fa-search"></i> Search</b-button
-                            >
-                        </b-input-group-append>
-
-                    </b-input-group>
-                </div>
-
-                <div class="local-jobs .container">
-                    <div class = "container row pb-2">
-                            <div class= "col-7"> 
-                                <h3 class="font-weight-bold float-right">Submitted Tasks</h3>
-                            </div>
-
-                            <b-button v-if="this.isDemo"
-                                variant="info"
-                                class=" col-2" @click="downloadInput()">demo input files
-                            </b-button>
-
-                            <b-button v-else
-                                variant="success" 
-                                class="btn-sm col-1" @click="refreshJobs()">Refresh
-                            </b-button>
-                            <div class="col-1"><i v-if="!refreshEnd" class="fas fa-spinner fa-spin" style="font-size:24px"> </i> </div>
-                    </div>
-
-                    <div id="table-container">
-                        <b-table
-                            class="jobs-table"
-                            hover
-                            :items="all_jobs"
-                            :fields="fields"
-                            v-if="showTable"
-                            show-empty
-                        >
-                            <template #cell(index)="data">
-                                {{ data.index + 1 }}
-                            </template>
-                            
-                            <template #cell(status)="data">
-                                <b-badge
-                                    pill
-                                    variant="success"
-                                    v-if="data.item.status == 'finished'"
-                                >Finished</b-badge>
-
-                                <span v-else-if="data.item.status == 'failed'" v-b-tooltip.rightbottom.html title="Please check the format of your file!">
-                                    <b-badge
-                                        pill
-                                        variant="danger"
-                                    >
-                                        Failed
-                                        <i class="fas fa-exclamation-circle small"></i>
-                                    </b-badge>
-                                </span>
-
-                                <b-badge pill variant="info" v-else>Running</b-badge>
-                            </template>
-
-                            <template #cell(operation)="data">
-
-                                <b-button
-                                    variant="primary"
-                                    size="sm"
-                                    v-if="data.item.status == 'finished'"
-                                    @click="showAnalyses(data.item.jobId)"
-                                >
-                                    <i class="fas fa-search mr-1"></i>
-                                    Result
-                                </b-button>
-
-                                <b-button variant="primary" size="sm" v-else @click="showAnalyses(data.item.jobId)">
-                                    <i class="fas fa-search mr-1"></i>
-                                    Check
-                                </b-button>
-
-                                <b-button  v-if="!isDemo"
-                                    variant="danger"
-                                    size="sm"
-                                    class="ml-4"
-                                    @click="deleteJob(data.item.jobId)"
-                                    :disabled="data.item.isDemo"
-                                >
-                                    <i class="fas fa-trash-alt mr-1"></i>
-                                    Delete
-                                </b-button>
-
-                            </template>
-                            <template #empty>
-                                <h4 class="text-center">No task... <a href="/submit/analyses">Submit your task now</a> </h4>
-                            </template>
-                        
-                        </b-table>
-                    </div>
-                </div>
-            </b-card>
-        </div>
-
-        <div class="viz-result mb-1" v-else> <!---->
+        <div class="viz-result mb-1"> <!---->
             <b-card no-body>
                 <b-card-header v-b-modal.modalBox class="border-1 py-2">
-                    <b-button class="btn col-md-2" variant = "primary" @click="returnQuery">
-                        <i class="fas fa-arrow-left"></i> Back to query
+                    <b-button class="btn" variant = "primary" @click="returnSubmission">
+                        <i class="fas fa-arrow-left"></i> Back to task submission
                     </b-button>
 
-                    <b-button variant="secondary" class="btn col-md-3" disabled >
+                    <b-button variant="secondary" class="btn" disabled >
                         {{`${jobName} (No.${job_id})`}}
                     </b-button>
 
@@ -146,9 +27,6 @@
                     
                     <!-- <b-button v-else variant="dark" class="btn col-md-4" disabled >{{data.outputs[0].name}}
                     </b-button> -->
-
-
-
 
                     <div class="tabBtn">
                         <b-button class="btn col-md-2" variant="info" @click="display=0" :class="{active:display==0}">
@@ -290,20 +168,22 @@ export default {
     data() {
         return {
             job_id: null,
-            jobName: '',
+            jobName: window.gon.job_name,
             all_jobs: [],
             fields: ["index", "jobName", "jobId", "created", "status", "operation"],
             showTable:  true,
             valid_name: null,
-            submitted: false,
+            submitted: true,
             code: false,
             data: {outputs: []},
             chosenOutput: null,
             chosenModule: 0,
             module_names: [{value: 0, text: "fake module name 1"}, {value: 0, text: "fake module name 2"}],
             taskOutputs: [{value: 0, text: "Demo Files", secondaryText: ""}],
+            taskVisualizers: [{value: 0, text: "Demo Files", secondaryText: ""}],
+
             refreshEnd: true,
-            isDemo: false,
+            isDemo: true,
 
             taskId: 5212,
             display:0,
@@ -322,24 +202,11 @@ export default {
         };
     },
     created() {
-        if (window.gon.isJobDemoPage) {
-            this.refreshEnd = true;
-            this.isDemo = true;
-            this.getDemoJobs();
-        } else {
-            this.refreshJobs();
-        }
-    },
-    beforeMount() {
-        const getJobId = () => {
-            const urls = window.location.href.split('?');
-            if (urls.length <2) return;
-            else {
-                const params = urls[1].split("&").map(x => x.split("="));
-                return params.find(x => x[0]==="job_id")[1];
-            }
-        }
-        if (!this.job_id) this.job_id = getJobId();
+        this.refreshEnd = true;
+        this.isDemo = true;
+        let demo_result_id = window.gon.demo_result_id;
+        this.job_id = demo_result_id
+        this.searchJob();
     },
     mounted(){
         window.gon.viz_mode = "task-output";
@@ -351,7 +218,7 @@ export default {
         axios.post(
             `/query-deepomics/`,
             objectToFormData({'id': 528, 'type': 'pipeline'}),
-            {  
+            {
                 headers: {
                     'X-Requested-With': 'XMLHttpRequest',
                     'X-CSRF-Token': document.head.querySelector('meta[name="csrf-token"]').content,
@@ -385,112 +252,14 @@ export default {
             this.outputs = response.data.message.outputs;
             this.params = response.data.message.params;
             
-                }).catch((error) => {
-                    const message = error.response && error.response.status === 404 ? "The task does not exist" : error;
-                    alertCenter.add('danger', `${message}`);
-                }).finally(() => {
-                    // setTimeout(() => { alertCenter.add('danger', ''); }, 2000);
-                    console.log("Log:", this.inputs, this.outputs, this.params)
-                });
+        }).catch((error) => {
+            const message = error.response && error.response.status === 404 ? "The task does not exist" : error;
+            alertCenter.add('danger', `${message}`);
+        }).finally(() => {
+            // setTimeout(() => { alertCenter.add('danger', ''); }, 2000);
+            console.log("Log:", this.inputs, this.outputs, this.params)
+        });
 
-        // 实际代码!
-
-        // client = LocalApi::Client.new
-        // result = client.task_info(45, this.taskId, 'app')
-        // console.log(result)
-
-        // let taskInfo = axios.get(`https://deepomics.org/api/task_info/?task_id=${this.taskId}&task_type=app_task` );
-        // let taskResourceUsage = axios.get(`https://deepomics.org/api/task_resource_usage/?task_id=${this.taskId}&task_type=app_task` );
-        // let taskLog = axios.get(`https://deepomics.org/api/task_log/?task_id=${this.taskId}&task_type=app_task` );
-
-        // axios.all([taskInfo, taskResourceUsage, taskLog]).then(axios.spread((info, res, log) => {
-        //     this.inputs = info.data.inputs;
-        //     this.params = info.data.params;
-        //     this.outputs = info.data.outputs;
-
-        //     if (res.data.code) {
-        //         this.resource_usage = res.data.data;
-        //         this.update_chart();
-        //     }else {
-        //         alertCenter.add('danger', log.data.data);
-        //     }
-
-        //     if (log.data.code) {
-        //         this.stderr = log.data.data.stderr;
-        //         this.stdout = log.data.data.stdout;
-        //     }else {
-        //         alertCenter.add('danger', log.data.data);
-        //     }
-        // }));
-
-
-        // test data
-        // this.inputs = [
-        //     {
-        //         "id":1625,
-        //         "name":"user_abd",
-        //         "desc":"test demo",
-        //         "files":[
-        //             {
-        //             "name":"i_2734_2022_03_23_16_48_abundance.tsv",
-        //             "path":"/data"
-        //             }
-        //         ]
-        //     },
-        //     {
-        //         "id":1627,
-        //         "name":"group_info",
-        //         "desc":"test demo",
-        //         "files":[
-        //             {
-        //             "name":"i_2734_2022_03_23_16_48_group_info.tsv",
-        //             "path":"/data"
-        //             }
-        //         ]
-        //     }
-        // ],
-        // this.params = [
-        //     {
-        //         "name": "testName",
-        //         "desc": "testDesc",
-        //         "prefix": "testPrefix",
-        //         "default": "testDefault",
-        //         "value": "testValue"
-        //     }
-        // ],
-        // this.outputs = [
-        //     {
-        //         "id":1215,
-        //         "name":"output",
-        //         "desc":"test demo",
-        //         "files":[
-        //             {
-        //             "name":"annof.tsv",
-        //             "path":"/home/platform/omics_rails/releases/20220504130039/media/user/meta_platform/project/platform_task_test/task_20220323164855"
-        //             },
-        //             {
-        //             "name":"file1.tsv",
-        //             "path":"/home/platform/omics_rails/releases/20220504130039/media/user/meta_platform/project/platform_task_test/task_20220323164855"
-        //             },
-        //             {
-        //             "name":"merged_df.tsv",
-        //             "path":"/home/platform/omics_rails/releases/20220504130039/media/user/meta_platform/project/platform_task_test/task_20220323164855"
-        //             },
-        //             {
-        //             "name":"wilcox.test.tsv",
-        //             "path":"/home/platform/omics_rails/releases/20220504130039/media/user/meta_platform/project/platform_task_test/task_20220323164855"
-        //             },
-        //             {
-        //             "name":"group_info.tsv",
-        //             "path":"/home/platform/omics_rails/releases/20220504130039/media/user/meta_platform/project/platform_task_test/task_20220323164855"
-        //             },
-        //             {
-        //             "name":"abundance.tsv",
-        //             "path":"/home/platform/omics_rails/releases/20220504130039/media/user/meta_platform/project/platform_task_test/task_20220323164855"
-        //             }
-        //         ]
-        //     }
-        // ],
         this.resource_usage = {
             "x_axis":[
                 "2022-04-27 15:09:53",
@@ -530,9 +299,6 @@ export default {
         this.stderr = "Testing...";
         this.stdout = "Testing...";
 
-        // this.stderr = new Date() + 'To execute GATK run: java -jar $EBROOTGATK/GenomeAnalysisTK.jar\nLmod has detected the following error: These module(s) or extension(s) exist\nbut cannot be loaded as requested: \"pelib/2021b\", \"python/3.7.10\",\n\"rust/1.56.1\", \"perl/5.30.2\", \"r/3.6.3\"\n   Try: \"module spider pelib/2021b python/3.7.10 rust/1.56.1 perl/5.30.2\nr/3.6.3\" to see how to load the module(s).\n\n\n\n';
-        // this.stdout = 'meta_PCA task starts at: Wed Apr 27 23:09:53 HKT 2022\nfinishes at: Wed Apr 27 23:11:07 HKT 2022\n';
-        
     },
     updated() {
         if (this.submitted && this.job_status == "finished") {
@@ -651,7 +417,7 @@ export default {
             axios.post(
                 `/query-deepomics/`,
                 objectToFormData({'id': this.taskId, 'type': 'app'}),
-                {  
+                {
                     headers: {
                         'X-Requested-With': 'XMLHttpRequest',
                         'X-CSRF-Token': document.head.querySelector('meta[name="csrf-token"]').content,
@@ -675,8 +441,6 @@ export default {
                     });
 
             // console.log("Refreshed. New log:", this.stdout)
-
-            
         },
 
 
@@ -689,10 +453,6 @@ export default {
             if (this.job_id.length <= 0){
                 this.valid_name = false;
             }else {
-                this.all_jobs.forEach(j => {
-                    if (j.jobId === parseInt(this.job_id))
-                        this.jobName = j.jobName;
-                })
                 axios.post(
                     `/query-app-task/`,
                     objectToFormData({'job_id': this.job_id, 'is_demo': this.isDemo}),
@@ -734,11 +494,9 @@ export default {
                 });
             }
         },
-        showAnalyses(jobId) {
-            this.job_id = jobId;
-            this.searchJob();
-        },
+
         updateGon(output) {
+
             this.module_names = this.data.outputs[0].module_names.map((x, i) => ({value: i, text: x}));
             this.chosenModule = 0;
             window.gon.module_name = output.module_names[this.chosenModule];
@@ -747,7 +505,7 @@ export default {
             if (!window.gon.urls) window.gon.urls = {};
             window.gon.urls.chosen_file_paths = `/api/analysis/${output.analysis_id}/chosen_file_paths`;
             window.gon.urls.download_demo_file = `/api/analysis/${output.analysis_id}/download_demo_file`;
-            registerViz(output.module_name);
+            registerViz(output.module_names[this.chosenModule]);
         },
         refreshJobs() {
             this.refreshEnd = false;
@@ -772,50 +530,8 @@ export default {
                     }, 1000);
             });
         },
-        getDemoJobs() {
-            axios.post(
-                `/query-demo-tasks/`,
-                null,
-            {  
-                headers: {
-                    'X-Requested-With': 'XMLHttpRequest',
-                    'X-CSRF-Token': document.head.querySelector('meta[name="csrf-token"]').content,
-                    'Content-Type': 'multipart/form-data',
-                },
-            })
-            .then(r => {
-                this.all_jobs = r.data.map((d, index) => {
-                    return  {index, ...d}
-                });
-            }).finally(() => {
-                // // wait 1 sec
-                //  setTimeout(() => {
-                //     this.refreshEnd = true;
-                //     }, 1000);
-            });
-        },
-        deleteJob(jobId){
-            const { alertCenter } = this.$refs;
-            axios.post(
-                `/remove-task/`,
-                objectToFormData({'job_id': jobId}),
-                {  
-                    headers: {
-                        'X-Requested-With': 'XMLHttpRequest',
-                        'X-CSRF-Token': document.head.querySelector('meta[name="csrf-token"]').content,
-                        'Content-Type': 'multipart/form-data',
-                    },
-                })
-                .then(r => {
-                    this.refreshJobs();
-                })
-                .catch(error => {
-                    alertCenter.add('danger', error);
-                });
-        },
-        returnQuery(){
-            event.emit("GMT:reset-query", this);
-            this.submitted = false;
+        returnSubmission(){
+            window.location.href = '/submit/analyses';
         },
         token_search(token){
             this.job_id = token;

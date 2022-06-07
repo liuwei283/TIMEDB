@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_05_12_114944) do
+ActiveRecord::Schema.define(version: 2022_06_07_062347) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -33,8 +33,21 @@ ActiveRecord::Schema.define(version: 2022_05_12_114944) do
     t.integer "position"
     t.boolean "hidden", default: false
     t.integer "multiple_mid", default: -1
+    t.integer "single_demo_id", default: -1
+    t.integer "multiple_demo_id", default: -1
+    t.integer "single_result_id", default: -1
+    t.integer "multiple_result_id", default: -1
     t.index ["analysis_category_id"], name: "index_analyses_on_analysis_category_id"
     t.index ["visualizer_id"], name: "index_analyses_on_visualizer_id"
+  end
+
+  create_table "analyses_visualizers", force: :cascade do |t|
+    t.bigint "analysis_id", null: false
+    t.bigint "visualizer_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["analysis_id"], name: "index_analyses_visualizers_on_analysis_id"
+    t.index ["visualizer_id"], name: "index_analyses_visualizers_on_visualizer_id"
   end
 
   create_table "analysis_categories", force: :cascade do |t|
@@ -52,6 +65,10 @@ ActiveRecord::Schema.define(version: 2022_05_12_114944) do
     t.datetime "updated_at", precision: 6, null: false
     t.text "cover_image"
     t.string "url", null: false
+    t.integer "single_demo_id", default: -1
+    t.integer "multiple_demo_id", default: -1
+    t.integer "single_result_id", default: -1
+    t.integer "multiple_result_id", default: -1
   end
 
   create_table "analysis_user_data", force: :cascade do |t|
@@ -79,8 +96,6 @@ ActiveRecord::Schema.define(version: 2022_05_12_114944) do
 
   create_table "datasets", force: :cascade do |t|
     t.string "name"
-    t.string "description"
-    t.string "tag"
     t.bigint "user_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
@@ -136,7 +151,6 @@ ActiveRecord::Schema.define(version: 2022_05_12_114944) do
 
   create_table "samples", force: :cascade do |t|
     t.string "sample_name"
-    t.string "cancer_name"
     t.string "project_name"
     t.string "c_tumor_stage"
     t.string "c_tumor_grade"
@@ -216,6 +230,8 @@ ActiveRecord::Schema.define(version: 2022_05_12_114944) do
     t.index ["viz_data_source_id"], name: "index_viz_file_objects_on_viz_data_source_id"
   end
 
+  add_foreign_key "analyses_visualizers", "analyses"
+  add_foreign_key "analyses_visualizers", "visualizers"
   add_foreign_key "datasets", "users"
   add_foreign_key "projects", "cancers"
   add_foreign_key "samples", "projects"

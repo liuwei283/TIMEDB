@@ -15,7 +15,7 @@
                             Start Analysis
                         </h2>
                         <p style="font-size:1.2em;">
-                            TIMEDB provides common applied methods of metagenomics sequence analysis. Official tutorial is available at Tutorial. You may try submit the tasks with our demo input files, and view the ideal results on the demo jobs page.
+                            TIMEDB provides state-of-the-arts tools of immune micro-enviroment deconvolution analysis. Official tutorial is available at Tutorial (link). You may try submit the tasks with our demo input files, or view the ideal demo results.
                         </p>
                     </div>
                 </div>
@@ -135,14 +135,17 @@
                                     <!-- <div class = "col-md-3">
                                         <h4><i class="fa fa-caret-right fa-lg"></i>Run demo task</h4>
                                     </div> -->
-                                    <div @click="submitDemoTask()" class = "col-md-2" b-tooltip.hover :title="`Click here to run demo job for ${app.name}`">
-                                        <img id = "demoPng" v-bind:src="require('../assets/images/runDemo.png')" style="width:100%;">
+                                    <div @click="submitDemoTask()" class = "col-md-2" b-tooltip.hover :title="`Click here to run demo task for ${app.name}`">
+                                        <img class = "demoPng" id = "runDemoImage" v-bind:src="require('../assets/images/runDemo.png')" style="width:100%;">
                                     </div>
-                                    <div class = "col-md-4">
+                                    <div @click="checkDemoTask()" class = "col-md-2" b-tooltip.hover :title="`Click here to check demo task for ${app.name}`">
+                                        <img class = "demoPng" id = "checkDemoImage" v-bind:src="require('../assets/images/runDemo.png')" style="width:100%;">
+                                    </div>
+                                    <div class = "col-md-2">
                                     </div>
                                     <div class = "col-md-6">
                                         <h6 class="text-right">{{ app.name }}</h6>
-                                        <h2 class = "text-right"> JOB SUBMISSISON </h2>
+                                        <h2 class = "text-right"> TASK SUBMISSISON </h2>
                                     </div>
                                 </div>
                                     
@@ -296,6 +299,8 @@
                                 <br>
                                 <br>
                                 <b-btn @click="checkInputValid()" class="float-right mt-2"><i class="fa fa-location-arrow"></i> Submit</b-btn>
+                                <b-btn @click="checkDemoTask()" class="float-right mt-2"><i class="fa fa-location-arrow"></i> Debug</b-btn>
+
                             </div>
                             
                         </div>
@@ -309,7 +314,7 @@
                 <div class="text-center job-info">
                     <h1>Successfully</h1>
                     <h1>Submitted</h1>
-                    <p>We are preparing your visualization,you can copy the code and check the status of your work in the <a ref = "goTo" :href = "`/submit/job-query?job_id = ${jobID}`" id = "redirection-link">[workspace]</a>.</p>
+                    <p>We are preparing your visualization,you can copy the code and check the status of your work in the <a ref = "goTo" :href = "`/submit/job-query`" id = "redirection-link">[workspace]</a>.</p>
                     <div class = "row">
                         
                         <div class = "col-md-2">
@@ -505,13 +510,11 @@
         <b-modal v-if="started" ref="submit-helper" v-model="showhelper" id = "submit-helper" size="xl" scrollable title="Module Helper" centered>
             <br>
             <div class = "row justify-content-center container">
-                <img v-bind:src="require('../assets/images/' + selected_analysis.name + '_structure.jpg')" style= "width : 100%">
                 <div v-html="selected_analysis.rendered_doc" class = "text-left container" style="margin: 50px;">
                 </div>
             </div>
         </b-modal>
 
-        
     </div>
 </template>
 
@@ -552,6 +555,11 @@
                 file_names: {
 
                 },
+                demo_id: 0,
+                result_demo_id: 0,
+                demo: false,
+                demo_inputs: {},
+                demo_parameters: {},
                 ds_selected: [],
                 ds_param_selected: [],
                 ds_params: {},
@@ -564,7 +572,6 @@
                 jobID: '',
                 isLoading: false,
                 analyses: [],
-                demo: false,
                 started: false,
                 single_params_desc: "",
                 multiple_params_desc: "",
@@ -583,7 +590,7 @@
         },
         created() {
             this.ds_info = window.gon.select_box_option;
-            if (this.analysis_category == "Deconvolution Analysis") {
+            if (this.analysis_category == "TIME Estimation") {
                 this.isConv = true; //deconvolution analysis category are different from others
             }
             this.updateApp(null, false);
@@ -884,9 +891,20 @@
                 else {
                     console.log("start update app");
                     this.selected_analysis = s_ana;
+                    
                     var newid;
-                    if (this.picked_single_multiple == "single") newid = s_ana.mid;
-                    else newid = s_ana.multiple_mid;
+                    if (this.picked_single_multiple == "single") {
+                        newid = s_ana.mid;
+                        this.demo_id = s_ana.single_demo_id;
+                        this.result_demo_id = s_ana.single_result_id;
+
+                    }
+                    else {
+                        newid = s_ana.multiple_mid;
+                        this.demo_id = s_ana.multiple_demo_id;
+                        this.result_demo_id = s_ana.multiple_result_id;
+
+                    }
                         
                     axios.get(`https://deepomics.org/api/apps/${newid}/`).then((response) => {
                         this.app = response.data.app;
@@ -1053,43 +1071,75 @@
             submitDemoTask() {
                 const { alertCenter } = this.$refs;
                 let alertData;
-       
-                
-                let submitted_mid = this.selected_analysis.mid;
+
+                let submitted_mid;
+                if (this.picked_single_multiple == 'multiple') {
+                    submitted_mid = this.selected_analysis.multiple_mid;
+                }
+                else {
+                    submitted_mid = this.selected_analysis.mid;
+                }
                 
                 $("#disable-fill").fadeIn(10);
                 this.isLoading = true;
                 console.log("loading: " + this.isLoading);
 
+
+                axios.post(
+                    `/query-deepomics/`,
+                    objectToFormData({'id': this.demo_id, 'type': 'app'}),
+                    {  
+                        headers: {
+                            'X-Requested-With': 'XMLHttpRequest',
+                            'X-CSRF-Token': document.head.querySelector('meta[name="csrf-token"]').content,
+                            'Content-Type': 'multipart/form-data',
+                        },
+                    },
+                ).then((response) => {
+                    console.log("Module query result:", response);
+                    this.demo_inputs = response.data.message.inputs;
+                    this.demo_parameters = response.data.message.params;
+                    
+                }).catch((error) => {
+                    const message = error.response && error.response.status === 404 ? "The task does not exist" : error;
+                    alertCenter.add('danger', `${message}`);
+                }).finally(() => {
+                    // setTimeout(() => { alertCenter.add('danger', ''); }, 2000);
+                    console.log("Log:", this.inputs, this.outputs, this.params)
+                });
+
+
                 //process demo info
                 var demo_files = {};
                 var demo_params = {};
-                for (var k in this.app.inputs){
-                    if (this.app.inputs[k].name == "Clinical data") {
-                        demo_files[`i-${this.app.inputs[k].id}`] = "/data/demo/demo_clinical.csv";
+                for (var k in this.demo_inputs){
+                    let input = this.demo_inputs[k];
+                    let f_arr = [];
+                    for (var t in input.files) {
+                        let file = input.files[t];
+                        let f_path = file.path + "/" + file.name;
+                        f_arr.push(f_path);
                     }
-                    if (this.app.inputs[k].name == "Gene expression data") {
-                        demo_files[`i-${this.app.inputs[k].id}`] = "/data/demo/demo_rna.csv";
-                    }
+                    demo_files[`i-${input.id}`] = f_arr.join(","); 
                 }
 
-                for (var k in this.single_parameters) {
-                    if (this.single_parameters[k].default == "") {
-                        demo_params[`p-${this.single_parameters[k].id}`] = "default";
-                    }
-                    else {
-                        demo_params[`p-${this.single_parameters[k].id}`] = this.single_parameters[k].default;
-                    }
+                for (var k in this.demo_parameters) {
+                    let params = this.demo_parameters[k];
+                    demo_params[`p-${params.id}`] = params.value;
                 }
 
+                console.log("Outputing demo inputs json:");
                 console.log(demo_files);
+                console.log("Outputing demo inputs parameters:");
+
                 console.log(demo_params);
+
+
 
                 axios.post(
                     `/submit-app-task/`,
-                    
                     objectToFormData({
-                        "search_mid": submitted_mid,
+                        "search_mid": this.selected_analysis.mid,
                         "mid": submitted_mid,
                         "is_demo": true,
                         "inputs": demo_files,
@@ -1113,25 +1163,24 @@
                 }).catch((reason) => {
                     alertData = reason;
                 }).finally(() => {
-                    setTimeout(() => {
-                        $("#disable-fill").fadeOut(10);
-                        this.isLoading = false;
-                        if (!!alertData) {
-                            alertCenter.add('danger', alertData);
-                        }
-                    }, 500);
+
+                    $("#disable-fill").fadeOut(10);
+                    this.isLoading = false;
+                    if (!!alertData) {
+                        this.$refs.alertCenter.add('danger', alertData);
+                    }
+                    if (this.submitted) {
+                        setTimeout(() => {
+                            location.replace(`/submit/job-query`)
+                        }, 1000);
+                    }
                 });
-          
-                if (this.submitted == true) {
-                    var delay = 10000; // time in milliseconds
-
-                    setTimeout(function(){
-                        window.location.href = 'job-query'
-                    },delay);
-                }
-
             },
 
+            checkDemoTask() {
+                window.location.href = '/submit/job-query-demo?demo_id=' + this.result_demo_id + "&jobName=" + this.app.name; 
+            },
+            
             submitTask() {
                 // send selected file to files
 
@@ -1182,22 +1231,17 @@
                 }).catch((reason) => {
                     alertData = reason;
                 }).finally(() => {
-                    setTimeout(() => {
-                        $("#disable-fill").fadeOut(10);
-                        this.isLoading = false;
-                        if (!!alertData) {
-                            alertCenter.add('danger', alertData);
-                        }
-                    }, 500);
+                    $("#disable-fill").fadeOut(10);
+                    this.isLoading = false;
+                    if (!!alertData) {
+                        this.$refs.alertCenter.add('danger', alertData);
+                    }
+                    if (this.submitted) {
+                        setTimeout(() => {
+                            location.replace(`/submit/job-query`)
+                        }, 1000);
+                    }
                 });
-          
-                if (this.submitted == true) {
-                    var delay = 10000; // time in milliseconds
-
-                    setTimeout(function(){
-                        window.location.href = 'job-query'
-                    },delay);
-                }
             },
             updateMode(type) {
                 this.started = false;
@@ -1390,13 +1434,13 @@
     transform: scale(0.9);
 }
 
-#demoPng {
+.demoPng {
     cursor: pointer;
     transform: scale(1.0);
     transition: all 0.5s;
 }
 
-#demoPng:hover {
+.demoPng:hover {
     transform: scale(1.2);
 }
 
@@ -1547,6 +1591,10 @@ input[type="radio"] {
 
 #submit-helper img {
     width: 100%;
+}
+
+.btn-light {
+    color: black;
 }
 
 

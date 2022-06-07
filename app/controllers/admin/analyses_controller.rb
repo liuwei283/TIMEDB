@@ -36,9 +36,32 @@ class Admin::AnalysesController < ApplicationController
       flash[:error] = 'Please enter a valid JSON string.'
       return render 'edit'
     end
+
+    Rails.logger.debug "[[Debug here]]"
     Rails.logger.debug(p)
+    @ana = params[:id]
+    @viz = p[:visualizer_ids]
+    Rails.logger.debug @viz
+    @tmp = 1
+
+    for e in p[:visualizer_ids]
+      if e != ""
+        Rails.logger.debug e
+        @tmp = e
+        if AnalysesVisualizers.where(analysis_id: @ana, visualizer_id: e).length == 0
+          @relation = AnalysesVisualizers.new(analysis_id: @ana, visualizer_id: e)
+          @relation.save!
+        end
+      end
+    end
+    p[:visualizer_id] = @tmp
+    Rails.logger.debug p
     if @analysis.update(p)
       flash[:success] = "Analysis updated."
+      # Rails.logger.debug(p[:visualizer_id])
+      # Rails.logger.debug(params[:id])
+      # @relation = AnalysesVisualizers.new(analysis_id: @ana, visualizer_id: @viz)
+      # @relation.save!
       redirect_to admin_analyses_path
     else
       flash[:error] = @analysis.errors.full_messages
@@ -61,14 +84,15 @@ class Admin::AnalysesController < ApplicationController
   private
 
   def analysis_params
-    p = params.require(:analysis).permit(:name, :url, :visualizer_id,
-              :files_info, :documentation, :about, :references, :description,
-              :mid, :multiple_mid, :analysis_category_id, :hidden)
+    p = params.require(:analysis).permit(:name, :url,
+              :files_info, :documentation, :about, :references,
+              :mid, :analysis_category_id, :hidden, :visualizer_ids => [])
     if !params[:analysis][:image_file].blank?
         p[:cover_image] = "data:image/png;base64," + Base64.strict_encode64(params[:analysis][:image_file].read)
     end
     return p
   end
+
 
   def set_analyses_category
     @analysis_category = AnalysisCategory.unscoped.find(params[:analysis_category_id])

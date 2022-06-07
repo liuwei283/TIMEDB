@@ -13,6 +13,8 @@ const ALERT_TIMEOUT = 5000;
 
 import JobSubmit from '../job-submit.vue';
 import JobQuery from '../job-query.vue';
+import DemoQuery from '../demo-query.vue';
+
 import JobSubmitPipeline from "../job-submit-pipeline.vue";
 import databaseOverview from "../vapp-database.vue";
 import projectFraction from "../pj-show-fraction";
@@ -60,6 +62,9 @@ document.addEventListener('DOMContentLoaded', (event) =>  {
         ['#pj_subtype', projectSubtype],
         ['#pj_fraction', projectFraction],
         ['#tutorial',tutorial],
+        ['#vapp-demo-query', DemoQuery],
+
+        
 
     ];
 

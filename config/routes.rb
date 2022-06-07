@@ -102,7 +102,9 @@ Rails.application.routes.draw do
   get "submit/analyses", to: "submit#analyses"
   get "submit/analysesCategory", to: "submit#analysesCategory"
   get "submit/pipelines", to: "submit#pipelines"
-  get 'submit/job-query', to: 'submit#query', as: 'query'
+  get 'submit/job-query/', to: 'submit#query', as: 'query'
+  get 'submit/job-query-demo', to: 'submit#query_demo', as: 'query-demo'
+
   get "submit/job-demo", to: "submit#demo"
   get 'submit/analysis/:id', to: 'submit#index', as: 'submit_analysis'
   get 'submit/pipeline/:id', to: 'submit#pipeline', as: 'submit_pipeline'

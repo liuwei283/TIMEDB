@@ -388,10 +388,16 @@ export default {
 .vizBlock {
         overflow-y: scroll;
         overflow-x: scroll;
-        //padding: 2em;
+        
+        padding: 2em;
         margin-top: 5%;
         margin-bottom: 5%;
 }
+
+#fraction-heatmapVis {
+    height: 1000px;
+}
+
     
 /* .v-editor {
     position: fixed !important;
