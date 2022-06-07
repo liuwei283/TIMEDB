@@ -38,7 +38,7 @@ class Api::VizFilesController < ApplicationController
     def all_files
         data = []
         files_info = @analysis.files_info
-        @viz_data_sources = @analysis.visualizer.viz_data_sources
+        @viz_data_sources = @analysis.visualizers[0].viz_data_sources
         files_info.each do |dataType, info|
             vds = @viz_data_sources.find_by(data_type:dataType)
             files = vds.viz_file_objects.where analysis:@analysis, user:@user
@@ -68,7 +68,7 @@ class Api::VizFilesController < ApplicationController
     def chosen_file_paths
         
         files_info = @analysis.files_info
-        all_viz_data = @analysis.visualizer.viz_data_sources.map{|d| d.data_type}
+        all_viz_data = @analysis.visualizers[0].viz_data_sources.map{|d| d.data_type}
         
         if @analysis_user_datum.use_demo_file
             render json: {}.tap { |x|
@@ -103,7 +103,7 @@ class Api::VizFilesController < ApplicationController
             }
             return
         end
-        all_viz_data = @analysis.visualizer.viz_data_sources
+        all_viz_data = @analysis.visualizers[0].viz_data_sources
         render json: {}.tap { |x|
             all_viz_data.each do |viz_data|
                 dataType = viz_data.data_type

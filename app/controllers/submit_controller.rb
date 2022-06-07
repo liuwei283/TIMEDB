@@ -602,7 +602,8 @@ class SubmitController < ApplicationController
 
   def remove_task
     @task = Task.find params[:job_id]
-    @analysis_user_datum = AnalysisUserDatum.find_by task_output: @task.task_outputs[0]
+    
+    @analysis_user_datum = AnalysisUserDatum.find_by analysis_id: @task.analysis.id, user_id: session[:user_id]
     @analysis_user_datum.task_output = nil
     @analysis_user_datum.use_demo_file = true
     @analysis_user_datum.save!
@@ -688,7 +689,7 @@ class SubmitController < ApplicationController
     @analysis_user_datum.task_output = @task_output
     @analysis_user_datum.use_demo_file = false
     @analysis_user_datum.save!
-    @matched_visualizers = @analysis.visualizers
+    @matched_vis_app = @analysis.visualizers
     @matched_jsnames = []
 
     @matched_visualizers.each do |mvis|
@@ -699,7 +700,7 @@ class SubmitController < ApplicationController
     Rails.logger.debug @matched_jsnames
 
     parsed_output = {}
-    parsed_output['module_names'] = @analysis.visualizer.js_module_name
+    parsed_output['module_names'] = @matched_jsnames
     parsed_output['name'] = @analysis.name
     parsed_output['analysis_id'] = @analysis.id
     parsed_output['required_data'] = @analysis.files_info.keys
