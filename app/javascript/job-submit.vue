@@ -1172,11 +1172,11 @@
                     if (!!alertData) {
                         this.$refs.alertCenter.add('danger', alertData);
                     }
-                    if (this.submitted) {
-                        setTimeout(() => {
-                            location.replace(`/submit/job-query`)
-                        }, 1000);
-                    }
+                    // if (this.submitted) {
+                    //     setTimeout(() => {
+                    //         location.replace(`/submit/job-query`)
+                    //     }, 1000);
+                    // }
                 });
             },
 
