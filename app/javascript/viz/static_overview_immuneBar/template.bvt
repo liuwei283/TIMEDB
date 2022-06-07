@@ -70,6 +70,7 @@ svg {
                         fontSize = 10
 						text = d.value
                         rotation = @rotate(xRotation)
+						anchor = xRotation > 0? @anchor("t", "l"): @anchor("t", "r")
                     }
                 }
             }

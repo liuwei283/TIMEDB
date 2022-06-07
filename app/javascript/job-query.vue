@@ -141,11 +141,6 @@
 
 
 
-                    <!--留个位置-->
-                    <b-button class="btn col-md-2 float-right" variant="primary">
-                        <i class="fas fa-arrow-right"></i>To Visualization Page
-                    </b-button>
-
                     <div class="tabBtn">
                         <b-button class="btn col-md-2" variant="info" @click="display=0" :class="{active:display==0}">
                             Task Monitor

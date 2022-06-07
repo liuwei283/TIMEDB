@@ -140,14 +140,14 @@
                                                 <div id="download_box" class="db-toolbox collapse" data-parent="#db-toolbar">
                                                   <div class="form-group p-2">
                                                     <%= button_tag :name => 'download_select', disabled: true, 
-                                                      :class => "s_table_sub btn btn-secondary download" do %>
+                                                      :class => "s_table_sub btn btn-theme btn-select download" do %>
                                                       <i class='fas fa-check-circle'></i> Selected samples
                                                     <%end%>
                                                     <%= button_tag :name => 'download_filter',
-                                                      :class => "s_table_sub btn btn-search btn-theme download", disabled: true do %>
+                                                      :class => "s_table_sub btn btn-search btn-pink download", disabled: true do %>
                                                       <i class='fas fa-filter'></i> Searched samples
                                                     <%end%>
-                                                    <%= button_tag :class => "s_table_sub btn btn-pink" do %>
+                                                    <%= button_tag :class => "s_table_sub btn btn-secondary" do %>
                                                       <%= link_to "/public/data/clinical/sample/Clinical_#{@project.project_name}.csv" do %>
                                                         <i class='fas fa-download'></i> All samples
                                                       <% end %>
@@ -157,7 +157,7 @@
                                                 </div>
                                                 <div id="export_box" class="db-toolbox collapse"  data-parent="#db-toolbar">
                                                   <div class="form-group p-2">
-                                                    <%= button_tag :name => 'seleted2ds', disabled: true, 
+                                                    <%= button_tag :name => 'seleted2ds', disabled: true,
                                                       :class => "s_table_sub btn btn-select btn-theme export-db" do %>
                                                       <i class='fas fa-check-circle'></i> Selected samples
                                                     <%end%>

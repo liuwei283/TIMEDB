@@ -102,7 +102,8 @@ export function plotDataloaded(_data){
 
 
   const colors = ["#FCE4EC"]; 
-  let valueRange = [range0.toFixed(cout1),range1.toFixed(cout2)];
+  //let valueRange = [range0.toFixed(cout1),range1.toFixed(cout2)];
+  let valueRange = [range0.toFixed(1),range1.toFixed(1)];
 
   this.data.columns = newData.columns; 
   this.data.colors = colors; 
@@ -278,7 +279,7 @@ export function clinicalDataloaded(_data){
 
   let textmaxxx = this.data.maxxx + 5/(10 ** (ppp+1))
 
-  this.data.textmaxxx = textmaxxx.toFixed(ppp)
+  this.data.textmaxxx = textmaxxx.toFixed(1)
 
 
   

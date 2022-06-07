@@ -116,6 +116,9 @@ svg {
 									stroke = "white"
 									strokeWidth = 2
 									fill = checkPointColor.colors[nameMapper[d.item].CheckPoint]
+									behavior:tooltip {
+                                        content = nameMapper[d.item].CheckPoint
+                                    }
 								}
 								Rect.centered {
 									x = 80

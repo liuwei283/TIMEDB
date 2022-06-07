@@ -294,7 +294,7 @@ export default {
 
             if(this.clinical_fexists == 'true' && this.subtype_fexists == 'true' ) {
                 document.getElementById("subtype-landscapeBlock").style.display = "block";
-                subtypeLandscape("#subtype-landscapeVis", this.subtype_file_path, this.clinical_file_path, "#subtype-landscape-editor", "subtype_landscape_viz");
+                subtypeLandscape("#subtype-landscapeVis", this.subtype_file_path, this.clinical_file_path, "#subtype-landscape-editor", "subtype_landscape_viz", this.vue_name);
             }
             else {
                 document.getElementById("subtype-landscapeBlock").style.display = "none";
@@ -306,7 +306,7 @@ export default {
             this.cell_fexists = this.file_exist[this.boxplot_selected];
             if (this.cell_fexists == 'true' && this.subtype_fexists == 'true') {
                     document.getElementById("subtype-boxplotBlock").style.display = "block";
-                    subtypeBoxplot("#subtype-boxplotVis", this.subtype_file_path, cellData_file_path, "#subtype-boxplot-editor", "subtype_boxplot_viz");//remember to change to the right plot
+                    subtypeBoxplot("#subtype-boxplotVis", this.subtype_file_path, cellData_file_path, "#subtype-boxplot-editor", "subtype_boxplot_viz", this.vue_name);//remember to change to the right plot
             }
             else {
                 document.getElementById("subtype-boxplotBlock").style.display = "none";
@@ -315,7 +315,7 @@ export default {
         curveViz(){
             
             if(this.clinical_fexists == 'true' && this.subtype_fexists == 'true') {
-                subtypeCurve("#subtype-curveVis", this.subtype_file_path, this.clinical_file_path, "#subtype-curve-editor", "subtype_curve_viz");
+                subtypeCurve("#subtype-curveVis", this.subtype_file_path, this.clinical_file_path, "#subtype-curve-editor", "subtype_curve_viz", this.vue_name);
             }
             else {
                 document.getElementById("subtype-curveBlock").style.display = "none";
@@ -325,7 +325,7 @@ export default {
         regulatorViz(){
 
             if(this.rna_fexists == 'true' && this.subtype_fexists == 'true') {
-                subtypeRegulator("#subtype-regulatorVis", this.subtype_file_path, this.rna_file_path, "#subtype-regulator-editor", "subtype_regulator_viz");
+                subtypeRegulator("#subtype-regulatorVis", this.subtype_file_path, this.rna_file_path, "#subtype-regulator-editor", "subtype_regulator_viz", this.vue_name);
             }
             else {
                 document.getElementById("subtype-regulatorBlock").style.display = "none";

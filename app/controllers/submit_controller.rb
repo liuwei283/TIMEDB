@@ -641,7 +641,7 @@ class SubmitController < ApplicationController
       files_to_do.push(ofile)
     end
 
-    files_to_do = mrs['outputs'][0]['files']
+    # files_to_do = mrs['outputs'][0]['files']
     logger.debug "===========================>Find task output information!"
     logger.info files_to_do
     

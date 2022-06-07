@@ -358,7 +358,6 @@ export default {
             const svgContainerClone = document.getElementById(clicked_id + "Vis").cloneNode(true);
             const svgBlob = new Blob([svgContainerClone.innerHTML], { type: "image/svg+xml;charset=utf-8" });
             const svgUrl = URL.createObjectURL(svgBlob);
-            alert(svgUrl);
             const downloadLink = document.createElement("a");
             downloadLink.href = svgUrl;
             downloadLink.download = clicked_id + ".svg";
