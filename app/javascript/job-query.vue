@@ -129,7 +129,7 @@
                         <i class="fas fa-arrow-left"></i> Back to query
                     </b-button>
 
-                    <b-button variant="secondary" class="btn col-md-3" disabled >
+                    <b-button variant="secondary" class="btn" disabled >
                         {{`${jobName} (No.${job_id})`}}
                     </b-button>
 
@@ -341,6 +341,13 @@ export default {
         }
         if (!this.job_id) this.job_id = getJobId();
     },
+    updated() {
+        if(this.submitted && this.job_status == "finished") {
+            event.emit("GMT:reset-query", this);
+            this.updateGon(this.data.outputs[this.chosenOutput]);
+            event.emit("GMT:query-finished", this);
+        }
+    },
     mounted(){
         window.gon.viz_mode = "task-output";
 
@@ -535,13 +542,13 @@ export default {
         
     },
     watch: {
-        chosenOutput:function() {
-            if (this.submitted && this.job_status == "finished") {
-                event.emit("GMT:reset-query", this);
-                this.updateGon(this.data.outputs[this.chosenOutput]);
-                event.emit("GMT:query-finished", this);
-            }
-        },
+        // chosenOutput:function() {
+        //     if (this.submitted && this.job_status == "finished") {
+        //         event.emit("GMT:reset-query", this);
+        //         this.updateGon(this.data.outputs[this.chosenOutput]);
+        //         event.emit("GMT:query-finished", this);
+        //     }
+        // },
         chosenModule:function() {
             this.updateVis();
         }
