@@ -752,6 +752,9 @@ export default {
             if (!window.gon.urls) window.gon.urls = {};
             window.gon.urls.chosen_file_paths = `/api/analysis/${output.analysis_id}/chosen_file_paths`;
             window.gon.urls.download_demo_file = `/api/analysis/${output.analysis_id}/download_demo_file`;
+            console.log("outputing to be visualized plot:")
+            console.log(output.module_names[this.chosenModule]);
+
             registerViz(output.module_names[this.chosenModule]);
         },
         updateVis() {

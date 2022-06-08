@@ -22,6 +22,7 @@ const MODULE_NAME = "Landscape_heatmap";
 
 function init() {
     if (!window.gon || window.gon.module_name !== MODULE_NAME) return;
+    console.log(window.gon.module_name);
 
     const {visualizer} = Oviz.visualize({
         el: "#canvas",
@@ -75,7 +76,7 @@ function init() {
             result: {
                 fileKey: "immuneheatmapMain", 
                 type: "csv", 
-                dsvHasHeader: true, 
+                dsvHasHeader: true,
                 loaded:plotDataloaded
             },
             additional: {
