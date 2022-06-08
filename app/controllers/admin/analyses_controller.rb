@@ -54,7 +54,6 @@ class Admin::AnalysesController < ApplicationController
         end
       end
     end
-    p[:visualizer_id] = @tmp
     Rails.logger.debug p
     if @analysis.update(p)
       flash[:success] = "Analysis updated."

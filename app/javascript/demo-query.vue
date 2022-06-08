@@ -300,11 +300,18 @@ export default {
         this.stdout = "Testing...";
 
     },
-    updated() {
-        if (this.submitted && this.job_status == "finished") {
-            event.emit("GMT:reset-query", this);
-            this.updateGon(this.data.outputs[this.chosenOutput]);
-            event.emit("GMT:query-finished", this);
+    watch: {
+        chosenOutput:function() {
+            if (this.submitted && this.job_status == "finished") {
+                
+                this.updateGon(this.data.outputs[this.chosenOutput]);
+                event.emit("GMT:query-finished", this);
+            }
+        },
+        chosenModule:function() {
+            if (this.submitted && this.job_status == "finished") {
+                this.updateVis();
+            }
         }
     },
     methods: {
@@ -496,16 +503,23 @@ export default {
         },
 
         updateGon(output) {
-
-            this.module_names = this.data.outputs[0].module_names.map((x, i) => ({value: i, text: x}));
+            event.emit("GMT:reset-query", this);
+            this.module_names = output.module_names.map((x, i) => ({value: i, text: x}));
             this.chosenModule = 0;
             window.gon.module_name = output.module_names[this.chosenModule];
             
             window.gon.required_data = output.required_data;
             if (!window.gon.urls) window.gon.urls = {};
-            window.gon.urls.chosen_file_paths = `/api/analysis/${output.analysis_id}/chosen_file_paths`;
-            window.gon.urls.download_demo_file = `/api/analysis/${output.analysis_id}/download_demo_file`;
+            window.gon.urls.chosen_file_paths = `/api/analysis/${output.analysis_id}/chosen_file_paths?visualizer=${this.chosenModule}`;
+            window.gon.urls.download_demo_file = `/api/analysis/${output.analysis_id}/download_demo_file?visualizer=${this.chosenModule}`;
+            console.log("outputing to be visualized plot:")
+            console.log(output.module_names[this.chosenModule]);
             registerViz(output.module_names[this.chosenModule]);
+            event.emit("GMT:query-finished", this);
+        },
+        updateVis() {
+            window.gon.module_name = this.data.outputs[this.chosenOutput].module_names[this.chosenModule];
+            registerViz(this.data.outputs[this.chosenOutput].module_names[this.chosenModule]);
         },
         refreshJobs() {
             this.refreshEnd = false;

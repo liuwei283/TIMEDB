@@ -372,7 +372,7 @@ export default {
         axios.post(
             `/query-deepomics/`,
             objectToFormData({'id': this.taskId, 'type': 'app'}),
-            {  
+            {
                 headers: {
                     'X-Requested-With': 'XMLHttpRequest',
                     'X-CSRF-Token': document.head.querySelector('meta[name="csrf-token"]').content,
@@ -392,105 +392,6 @@ export default {
                     // setTimeout(() => { alertCenter.add('danger', ''); }, 2000);
                     console.log("Log:", this.inputs, this.outputs, this.params)
                 });
-
-        // 实际代码!
-
-        // client = LocalApi::Client.new
-        // result = client.task_info(45, this.taskId, 'app')
-        // console.log(result)
-
-        // let taskInfo = axios.get(`https://deepomics.org/api/task_info/?task_id=${this.taskId}&task_type=app_task` );
-        // let taskResourceUsage = axios.get(`https://deepomics.org/api/task_resource_usage/?task_id=${this.taskId}&task_type=app_task` );
-        // let taskLog = axios.get(`https://deepomics.org/api/task_log/?task_id=${this.taskId}&task_type=app_task` );
-
-        // axios.all([taskInfo, taskResourceUsage, taskLog]).then(axios.spread((info, res, log) => {
-        //     this.inputs = info.data.inputs;
-        //     this.params = info.data.params;
-        //     this.outputs = info.data.outputs;
-
-        //     if (res.data.code) {
-        //         this.resource_usage = res.data.data;
-        //         this.update_chart();
-        //     }else {
-        //         alertCenter.add('danger', log.data.data);
-        //     }
-
-        //     if (log.data.code) {
-        //         this.stderr = log.data.data.stderr;
-        //         this.stdout = log.data.data.stdout;
-        //     }else {
-        //         alertCenter.add('danger', log.data.data);
-        //     }
-        // }));
-
-
-        // test data
-        // this.inputs = [
-        //     {
-        //         "id":1625,
-        //         "name":"user_abd",
-        //         "desc":"test demo",
-        //         "files":[
-        //             {
-        //             "name":"i_2734_2022_03_23_16_48_abundance.tsv",
-        //             "path":"/data"
-        //             }
-        //         ]
-        //     },
-        //     {
-        //         "id":1627,
-        //         "name":"group_info",
-        //         "desc":"test demo",
-        //         "files":[
-        //             {
-        //             "name":"i_2734_2022_03_23_16_48_group_info.tsv",
-        //             "path":"/data"
-        //             }
-        //         ]
-        //     }
-        // ],
-        // this.params = [
-        //     {
-        //         "name": "testName",
-        //         "desc": "testDesc",
-        //         "prefix": "testPrefix",
-        //         "default": "testDefault",
-        //         "value": "testValue"
-        //     }
-        // ],
-        // this.outputs = [
-        //     {
-        //         "id":1215,
-        //         "name":"output",
-        //         "desc":"test demo",
-        //         "files":[
-        //             {
-        //             "name":"annof.tsv",
-        //             "path":"/home/platform/omics_rails/releases/20220504130039/media/user/meta_platform/project/platform_task_test/task_20220323164855"
-        //             },
-        //             {
-        //             "name":"file1.tsv",
-        //             "path":"/home/platform/omics_rails/releases/20220504130039/media/user/meta_platform/project/platform_task_test/task_20220323164855"
-        //             },
-        //             {
-        //             "name":"merged_df.tsv",
-        //             "path":"/home/platform/omics_rails/releases/20220504130039/media/user/meta_platform/project/platform_task_test/task_20220323164855"
-        //             },
-        //             {
-        //             "name":"wilcox.test.tsv",
-        //             "path":"/home/platform/omics_rails/releases/20220504130039/media/user/meta_platform/project/platform_task_test/task_20220323164855"
-        //             },
-        //             {
-        //             "name":"group_info.tsv",
-        //             "path":"/home/platform/omics_rails/releases/20220504130039/media/user/meta_platform/project/platform_task_test/task_20220323164855"
-        //             },
-        //             {
-        //             "name":"abundance.tsv",
-        //             "path":"/home/platform/omics_rails/releases/20220504130039/media/user/meta_platform/project/platform_task_test/task_20220323164855"
-        //             }
-        //         ]
-        //     }
-        // ],
         this.resource_usage = {
             "x_axis":[
                 "2022-04-27 15:09:53",
@@ -529,10 +430,6 @@ export default {
 
         this.stderr = "Testing...";
         this.stdout = "Testing...";
-
-        // this.stderr = new Date() + 'To execute GATK run: java -jar $EBROOTGATK/GenomeAnalysisTK.jar\nLmod has detected the following error: These module(s) or extension(s) exist\nbut cannot be loaded as requested: \"pelib/2021b\", \"python/3.7.10\",\n\"rust/1.56.1\", \"perl/5.30.2\", \"r/3.6.3\"\n   Try: \"module spider pelib/2021b python/3.7.10 rust/1.56.1 perl/5.30.2\nr/3.6.3\" to see how to load the module(s).\n\n\n\n';
-        // this.stdout = 'meta_PCA task starts at: Wed Apr 27 23:09:53 HKT 2022\nfinishes at: Wed Apr 27 23:11:07 HKT 2022\n';
-        
     },
     watch: {
         chosenOutput:function() {
@@ -751,8 +648,8 @@ export default {
             
             window.gon.required_data = output.required_data;
             if (!window.gon.urls) window.gon.urls = {};
-            window.gon.urls.chosen_file_paths = `/api/analysis/${output.analysis_id}/chosen_file_paths`;
-            window.gon.urls.download_demo_file = `/api/analysis/${output.analysis_id}/download_demo_file`;
+            window.gon.urls.chosen_file_paths = `/api/analysis/${output.analysis_id}/chosen_file_paths?visualizer=${this.chosenModule}`;
+            window.gon.urls.download_demo_file = `/api/analysis/${output.analysis_id}/download_demo_file?visualizer=${this.chosenModule}`;
             console.log("outputing to be visualized plot:")
             console.log(output.module_names[this.chosenModule]);
             registerViz(output.module_names[this.chosenModule]);

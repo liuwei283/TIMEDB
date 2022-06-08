@@ -66,9 +66,11 @@ class Api::VizFilesController < ApplicationController
     end
 
     def chosen_file_paths
+
+        visualizer_num = params[:visualizer]
         
         files_info = @analysis.files_info
-        all_viz_data = @analysis.visualizers[0].viz_data_sources.map{|d| d.data_type}
+        all_viz_data = @analysis.visualizers[visualizer_num].viz_data_sources.map{|d| d.data_type}
         
         if @analysis_user_datum.use_demo_file
             render json: {}.tap { |x|
@@ -103,7 +105,7 @@ class Api::VizFilesController < ApplicationController
             }
             return
         end
-        all_viz_data = @analysis.visualizers[0].viz_data_sources
+        all_viz_data = @analysis.visualizers[visualizer_num].viz_data_sources
         render json: {}.tap { |x|
             all_viz_data.each do |viz_data|
                 dataType = viz_data.data_type
@@ -123,7 +125,7 @@ class Api::VizFilesController < ApplicationController
                 else
                     fileId = @analysis_user_datum.chosen[dataType]
                     x[dataType] = { id: fileId,
-                        url: VizFileObject.find(fileId).file.url 
+                        url: VizFileObject.find(fileId).file.url
                     }
                 end
             end
