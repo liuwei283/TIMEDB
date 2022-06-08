@@ -510,7 +510,7 @@
         </b-modal>
 
 
-        <b-modal v-if="started" ref="submit-helper" v-model="showhelper" id = "submit-helper" size="xl" scrollable title="Module Helper" centered>
+        <b-modal v-if="started" ref="submit-helper" v-model="showhelper" id = "submit-helper" size="xl" scrollable title="Module Helper" centered @ok="jumpToUpload">
             <br>
             <div class = "row justify-content-center container">
                 <div v-html="selected_analysis.rendered_doc" class = "text-left container" style="margin: 50px;">
@@ -1287,6 +1287,10 @@
             },
             copyToClipboard(){
                 navigator.clipboard.writeText(this.jobID);
+            },
+            jumpToUpload() {
+                var el = document.getElementById('run-app');
+                el.scrollIntoView({behavior: "smooth"});
             },
             provide_param_desc(param) {
                 this.single_params_desc = param.description

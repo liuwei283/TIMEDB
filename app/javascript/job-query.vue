@@ -24,7 +24,7 @@
                         ></b-form-input>
 
                         <b-input-group-append>
-                            <b-button variant="secondary" size="lg" @click="searchJob"
+                            <b-button class = "btn btn-1" size="lg" @click="searchJob"
                             ><i class="fas fa-search"></i> Search</b-button
                             >
                         </b-input-group-append>
@@ -45,7 +45,7 @@
 
                             <b-button v-else
                                 variant="success" 
-                                class="btn-sm col-1" @click="refreshJobs()">Refresh
+                                class="btn-sm btn-4 col-1" @click="refreshJobs()">Refresh
                             </b-button>
                             <div class="col-1"><i v-if="!refreshEnd" class="fas fa-spinner fa-spin" style="font-size:24px"> </i> </div>
                     </div>
@@ -86,7 +86,7 @@
                             <template #cell(operation)="data">
 
                                 <b-button
-                                    variant="primary"
+                                    class = "btn btn-1"
                                     size="sm"
                                     v-if="data.item.status == 'finished'"
                                     @click="showAnalyses(data.item.jobId)"
@@ -95,15 +95,14 @@
                                     Result
                                 </b-button>
 
-                                <b-button variant="primary" size="sm" v-else @click="showAnalyses(data.item.jobId)">
+                                <b-button class = "btn btn-2" size="sm" v-else @click="showAnalyses(data.item.jobId)">
                                     <i class="fas fa-search mr-1"></i>
                                     Check
                                 </b-button>
 
                                 <b-button  v-if="!isDemo"
-                                    variant="danger"
                                     size="sm"
-                                    class="ml-4"
+                                    class="ml-4 btn-5"
                                     @click="deleteJob(data.item.jobId)"
                                     :disabled="data.item.isDemo"
                                 >
@@ -125,11 +124,11 @@
         <div class="viz-result mb-1" v-else> <!---->
             <b-card no-body>
                 <b-card-header v-b-modal.modalBox class="border-1 py-2">
-                    <b-button class="btn col-md-2" variant = "primary" @click="returnQuery">
+                    <b-button class="btn btn-1" @click="returnQuery">
                         <i class="fas fa-arrow-left"></i> Back to query
                     </b-button>
 
-                    <b-button variant="secondary" class="btn" disabled >
+                    <b-button class="btn btn-2" disabled >
                         {{`${jobName} (No.${job_id})`}}
                     </b-button>
 
@@ -151,19 +150,19 @@
 
 
                     <div class="tabBtn">
-                        <b-button class="btn col-md-2" variant="info" @click="display=0" :class="{active:display==0}">
+                        <b-button class="btn btn-3" @click="display=0" :class="{active:display==0}">
                             Task Monitor
                         </b-button>
 
-                        <b-button class="btn col-md-2" variant="info" @click="display=1" :class="{active:display==1}" v-if="job_status == 'finished'">
+                        <b-button class="btn btn-3" @click="display=1" :class="{active:display==1}" v-if="job_status == 'finished'">
                             Visualization
                         </b-button><!---->
 
-                        <b-button class="btn col-md-2" variant="info" disabled v-else>
+                        <b-button class="btn btn-3" disabled v-else>
                             Visualization
                         </b-button><!---->
 
-                        <b-button class="btn col-md-2 float-right" variant="success" @click="refreshStatus">
+                        <b-button class="btn btn-4 float-right" @click="refreshStatus">
                             Refresh Status
                         </b-button>
                     </div>
@@ -656,8 +655,17 @@ export default {
             event.emit("GMT:query-finished", this);
         },
         updateVis() {
+            event.emit("GMT:reset-query", this);
             window.gon.module_name = this.data.outputs[this.chosenOutput].module_names[this.chosenModule];
+
+            window.gon.required_data = this.data.outputs[this.chosenOutput].required_data;
+            if (!window.gon.urls) window.gon.urls = {};
+            window.gon.urls.chosen_file_paths = `/api/analysis/${this.data.outputs[this.chosenOutput].analysis_id}/chosen_file_paths?visualizer=${this.chosenModule}`;
+            window.gon.urls.download_demo_file = `/api/analysis/${this.data.outputs[this.chosenOutput].analysis_id}/download_demo_file?visualizer=${this.chosenModule}`;
+            
             registerViz(this.data.outputs[this.chosenOutput].module_names[this.chosenModule]);
+            event.emit("GMT:query-finished", this);
+
         },
         refreshJobs() {
             this.refreshEnd = false;
@@ -849,4 +857,5 @@ export default {
     padding: 0;
     width: 40%;
 }
+
 </style>

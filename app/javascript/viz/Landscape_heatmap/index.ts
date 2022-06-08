@@ -131,8 +131,7 @@ function init() {
                             this.data.cellList.length*(this.data.gridPlotheight) + this.data.gridPlotheight/2
                             + (this.data.sortaddName.length-1) * this.data.gridPlotheight 
                             + 50
-          registerEditorConfig(editorConfig(this), editorRef);
-      
+          registerEditorConfig(editorConfig(this), "getVue", "#task-output", editorRef);
 
         },
     });

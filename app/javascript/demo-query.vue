@@ -10,7 +10,7 @@
                         <i class="fas fa-arrow-left"></i> Back to task submission
                     </b-button>
 
-                    <b-button variant="secondary" class="btn" disabled >
+                    <b-button class="btn btn-2" disabled >
                         {{`${jobName} (No.${job_id})`}}
                     </b-button>
 
@@ -28,20 +28,22 @@
                     <!-- <b-button v-else variant="dark" class="btn col-md-4" disabled >{{data.outputs[0].name}}
                     </b-button> -->
 
+
+
                     <div class="tabBtn">
-                        <b-button class="btn col-md-2" variant="info" @click="display=0" :class="{active:display==0}">
+                        <b-button class="btn btn-3" @click="display=0" :class="{active:display==0}">
                             Task Monitor
                         </b-button>
 
-                        <b-button class="btn col-md-2" variant="info" @click="display=1" :class="{active:display==1}" v-if="job_status == 'finished'">
+                        <b-button class="btn btn-3" @click="display=1" :class="{active:display==1}" v-if="job_status == 'finished'">
                             Visualization
                         </b-button><!---->
 
-                        <b-button class="btn col-md-2" variant="info" disabled v-else>
+                        <b-button class="btn btn-3" disabled v-else>
                             Visualization
                         </b-button><!---->
 
-                        <b-button class="btn col-md-2 float-right" variant="success" @click="refreshStatus">
+                        <b-button class="btn btn-4 float-right" @click="refreshStatus">
                             Refresh Status
                         </b-button>
                     </div>
@@ -518,8 +520,17 @@ export default {
             event.emit("GMT:query-finished", this);
         },
         updateVis() {
+            event.emit("GMT:reset-query", this);
             window.gon.module_name = this.data.outputs[this.chosenOutput].module_names[this.chosenModule];
+
+            window.gon.required_data = this.data.outputs[this.chosenOutput].required_data;
+            if (!window.gon.urls) window.gon.urls = {};
+            window.gon.urls.chosen_file_paths = `/api/analysis/${this.data.outputs[this.chosenOutput].analysis_id}/chosen_file_paths?visualizer=${this.chosenModule}`;
+            window.gon.urls.download_demo_file = `/api/analysis/${this.data.outputs[this.chosenOutput].analysis_id}/download_demo_file?visualizer=${this.chosenModule}`;
+            
             registerViz(this.data.outputs[this.chosenOutput].module_names[this.chosenModule]);
+            event.emit("GMT:query-finished", this);
+
         },
         refreshJobs() {
             this.refreshEnd = false;
