@@ -21,8 +21,13 @@ const title = "Clinical Data"
 const MODULE_NAME = "Landscape_heatmap";
 
 function init() {
+    console.log ("checking whether the module name is matching: ");
     if (!window.gon || window.gon.module_name !== MODULE_NAME) return;
+    console.log ("checking whether the module name is matching: matched");
+
     console.log(window.gon.module_name);
+
+
 
     const {visualizer} = Oviz.visualize({
         el: "#canvas",
