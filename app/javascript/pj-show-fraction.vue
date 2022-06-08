@@ -243,7 +243,7 @@
                                     <button class = "d-btn btn btn-secondary download" @click="download_fraction_landscape_cellData">
                                         <i class='fas fa-download'></i> Download cell data file
                                     </button>
-                                    
+
                                     <button class = "d-btn btn btn-pink download" id = "fraction-landscape_viz_download" @click="down_graph($event)">
                                         <i class='fas fa-download'></i> Download fraction landscape chart
                                     </button>
@@ -533,7 +533,8 @@ export default {
         
         padding: 2em;
         margin-top: 5%;
-        margin-bottom: 5%;
+        margin-bottom: 0px !important;
+        padding-bottom: 0px;
 }
 
 #fraction-heatmapVis {

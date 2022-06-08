@@ -225,7 +225,7 @@
                                             <i class='fas fa-download'></i> Download clinical file
                                         </button>
                                     </a>
-                                    
+
                                     <a :href="rna_file_path">
                                         <button class = "d-btn btn btn-theme download">
                                             <i class='fas fa-download'></i> Download RNA file
@@ -326,7 +326,7 @@ export default {
         this.rna_file_path = "/public/data/immuneregulator/immuReg_" + this.project_name + ".csv";
         this.clinical_fexists = this.file_exist['clinical']
         this.subtype_fexists = this.file_exist['subtype']
-        this.rna_fexists = this.file_exist['rna']
+        this.rna_fexists = this.file_exist['rna_immu']
     },
     mounted() {
         event.rpcRegisterReceiver(this.vue_name, () => this);
@@ -480,7 +480,7 @@ export default {
 }
 .veBlock {
     position: relative !important;
-    box-shadow: 0 0 64px darken(#dee2e6, 5%)
+    box-shadow: 0 0 64px darken(#dee2e6, 5%);
 }
 
 .vizBlock {
@@ -488,7 +488,7 @@ export default {
         overflow-x: scroll;
         //padding: 2em;
         margin-top: 5%;
-        margin-bottom: 5%;
+        margin-bottom: 0px !important;
 }
     
 /* .v-editor {

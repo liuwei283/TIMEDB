@@ -516,7 +516,7 @@ export default {
                 var subtype_file_path = this.data_path + "/subtype/c1_c6/project/" + subtype_fname;
                 var rna_file_path = this.data_path + "/immuneregulator/" + rna_fname;
                 
-                this.regulator_rna_fexists = this.files[this.regulatorProjectSelected]['rna'];
+                this.regulator_rna_fexists = this.files[this.regulatorProjectSelected]['rna_immu'];
                 this.regulator_subtype_fexists = this.files[this.regulatorProjectSelected]['subtype'];
 
 
@@ -601,9 +601,9 @@ export default {
     box-shadow: 0 0 64px darken(#dee2e6, 5%)
 } */
 
-/* .vizBlock {
-    position: relative !important;
-} */
+.vizBlock {
+    margin-bottom: 0px !important;
+} 
 
 .veBlock {
     position: relative !important;

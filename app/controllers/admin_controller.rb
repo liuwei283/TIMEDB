@@ -58,7 +58,7 @@ class AdminController < ApplicationController
     def update_files
         file_path = "#{Rails.root}/public/data/project_files.csv"
         file = File.open(file_path,"w")
-        s = "project_name,clinical,subtype,rna"
+        s = "project_name,clinical,subtype,rna_immu,RNA"
         boxplot_selector= ["Consensus","ABIS","CIBERSORTX","CIBERSORT","ConsensusTME","EPIC","ImmuCellAI","MCPcounter","quanTIseq","TIMER", "xCell"]
 
         boxplot_selector.each do |boxplot_selected|
@@ -69,7 +69,8 @@ class AdminController < ApplicationController
             name = project.project_name
             clinical_file_path = $data_dir+"/clinical/sample/Clinical_" + name + ".csv";
             subtype_file_path = $data_dir+"/subtype/c1_c6/project/" + name + "_c1_c6.csv";
-            rna_file_path = $data_dir+"/immuneregulator/immuReg_" + name + ".csv";
+            rna_immu_file_path = $data_dir+"/immuneregulator/immuReg_" + name + ".csv";
+            rna_file_path = $data_dir+"/RNA/"+ name + ".csv";
             s+="\n"
             s+="#{name}"
 
@@ -83,6 +84,11 @@ class AdminController < ApplicationController
             else
                 s+=',false'
             end            
+            if File.exists?(rna_immu_file_path)
+                s+= ",true"
+            else
+                s+=',false'
+            end
             if File.exists?(rna_file_path)
                 s+= ",true"
             else
