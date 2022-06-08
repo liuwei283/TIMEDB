@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_06_07_062347) do
+ActiveRecord::Schema.define(version: 2022_06_07_161134) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -21,7 +21,6 @@ ActiveRecord::Schema.define(version: 2022_06_07_062347) do
     t.integer "mid"
     t.text "description"
     t.bigint "analysis_category_id"
-    t.bigint "visualizer_id"
     t.text "cover_image"
     t.string "url", null: false
     t.text "documentation"
@@ -38,7 +37,6 @@ ActiveRecord::Schema.define(version: 2022_06_07_062347) do
     t.integer "single_result_id", default: -1
     t.integer "multiple_result_id", default: -1
     t.index ["analysis_category_id"], name: "index_analyses_on_analysis_category_id"
-    t.index ["visualizer_id"], name: "index_analyses_on_visualizer_id"
   end
 
   create_table "analyses_visualizers", force: :cascade do |t|

@@ -24,7 +24,7 @@
                         ></b-form-input>
 
                         <b-input-group-append>
-                            <b-button variant="secondary" size="lg" @click="searchJob"
+                            <b-button class = "btn btn-1" size="lg" @click="searchJob"
                             ><i class="fas fa-search"></i> Search</b-button
                             >
                         </b-input-group-append>
@@ -45,7 +45,7 @@
 
                             <b-button v-else
                                 variant="success" 
-                                class="btn-sm col-1" @click="refreshJobs()">Refresh
+                                class="btn-sm btn-4 col-1" @click="refreshJobs()">Refresh
                             </b-button>
                             <div class="col-1"><i v-if="!refreshEnd" class="fas fa-spinner fa-spin" style="font-size:24px"> </i> </div>
                     </div>
@@ -86,7 +86,7 @@
                             <template #cell(operation)="data">
 
                                 <b-button
-                                    variant="primary"
+                                    class = "btn btn-1"
                                     size="sm"
                                     v-if="data.item.status == 'finished'"
                                     @click="showAnalyses(data.item.jobId)"
@@ -95,15 +95,14 @@
                                     Result
                                 </b-button>
 
-                                <b-button variant="primary" size="sm" v-else @click="showAnalyses(data.item.jobId)">
+                                <b-button class = "btn btn-2" size="sm" v-else @click="showAnalyses(data.item.jobId)">
                                     <i class="fas fa-search mr-1"></i>
                                     Check
                                 </b-button>
 
                                 <b-button  v-if="!isDemo"
-                                    variant="danger"
                                     size="sm"
-                                    class="ml-4"
+                                    class="ml-4 btn-5"
                                     @click="deleteJob(data.item.jobId)"
                                     :disabled="data.item.isDemo"
                                 >
@@ -125,11 +124,11 @@
         <div class="viz-result mb-1" v-else> <!---->
             <b-card no-body>
                 <b-card-header v-b-modal.modalBox class="border-1 py-2">
-                    <b-button class="btn col-md-2" variant = "primary" @click="returnQuery">
+                    <b-button class="btn btn-1" @click="returnQuery">
                         <i class="fas fa-arrow-left"></i> Back to query
                     </b-button>
 
-                    <b-button variant="secondary" class="btn col-md-3" disabled >
+                    <b-button class="btn btn-2" disabled >
                         {{`${jobName} (No.${job_id})`}}
                     </b-button>
 
@@ -151,19 +150,19 @@
 
 
                     <div class="tabBtn">
-                        <b-button class="btn col-md-2" variant="info" @click="display=0" :class="{active:display==0}">
+                        <b-button class="btn btn-3" @click="display=0" :class="{active:display==0}">
                             Task Monitor
                         </b-button>
 
-                        <b-button class="btn col-md-2" variant="info" @click="display=1" :class="{active:display==1}" v-if="job_status == 'finished'">
+                        <b-button class="btn btn-3" @click="display=1" :class="{active:display==1}" v-if="job_status == 'finished'">
                             Visualization
                         </b-button><!---->
 
-                        <b-button class="btn col-md-2" variant="info" disabled v-else>
+                        <b-button class="btn btn-3" disabled v-else>
                             Visualization
                         </b-button><!---->
 
-                        <b-button class="btn col-md-2 float-right" variant="success" @click="refreshStatus">
+                        <b-button class="btn btn-4 float-right" @click="refreshStatus">
                             Refresh Status
                         </b-button>
                     </div>
@@ -372,7 +371,7 @@ export default {
         axios.post(
             `/query-deepomics/`,
             objectToFormData({'id': this.taskId, 'type': 'app'}),
-            {  
+            {
                 headers: {
                     'X-Requested-With': 'XMLHttpRequest',
                     'X-CSRF-Token': document.head.querySelector('meta[name="csrf-token"]').content,
@@ -392,105 +391,6 @@ export default {
                     // setTimeout(() => { alertCenter.add('danger', ''); }, 2000);
                     console.log("Log:", this.inputs, this.outputs, this.params)
                 });
-
-        // 实际代码!
-
-        // client = LocalApi::Client.new
-        // result = client.task_info(45, this.taskId, 'app')
-        // console.log(result)
-
-        // let taskInfo = axios.get(`https://deepomics.org/api/task_info/?task_id=${this.taskId}&task_type=app_task` );
-        // let taskResourceUsage = axios.get(`https://deepomics.org/api/task_resource_usage/?task_id=${this.taskId}&task_type=app_task` );
-        // let taskLog = axios.get(`https://deepomics.org/api/task_log/?task_id=${this.taskId}&task_type=app_task` );
-
-        // axios.all([taskInfo, taskResourceUsage, taskLog]).then(axios.spread((info, res, log) => {
-        //     this.inputs = info.data.inputs;
-        //     this.params = info.data.params;
-        //     this.outputs = info.data.outputs;
-
-        //     if (res.data.code) {
-        //         this.resource_usage = res.data.data;
-        //         this.update_chart();
-        //     }else {
-        //         alertCenter.add('danger', log.data.data);
-        //     }
-
-        //     if (log.data.code) {
-        //         this.stderr = log.data.data.stderr;
-        //         this.stdout = log.data.data.stdout;
-        //     }else {
-        //         alertCenter.add('danger', log.data.data);
-        //     }
-        // }));
-
-
-        // test data
-        // this.inputs = [
-        //     {
-        //         "id":1625,
-        //         "name":"user_abd",
-        //         "desc":"test demo",
-        //         "files":[
-        //             {
-        //             "name":"i_2734_2022_03_23_16_48_abundance.tsv",
-        //             "path":"/data"
-        //             }
-        //         ]
-        //     },
-        //     {
-        //         "id":1627,
-        //         "name":"group_info",
-        //         "desc":"test demo",
-        //         "files":[
-        //             {
-        //             "name":"i_2734_2022_03_23_16_48_group_info.tsv",
-        //             "path":"/data"
-        //             }
-        //         ]
-        //     }
-        // ],
-        // this.params = [
-        //     {
-        //         "name": "testName",
-        //         "desc": "testDesc",
-        //         "prefix": "testPrefix",
-        //         "default": "testDefault",
-        //         "value": "testValue"
-        //     }
-        // ],
-        // this.outputs = [
-        //     {
-        //         "id":1215,
-        //         "name":"output",
-        //         "desc":"test demo",
-        //         "files":[
-        //             {
-        //             "name":"annof.tsv",
-        //             "path":"/home/platform/omics_rails/releases/20220504130039/media/user/meta_platform/project/platform_task_test/task_20220323164855"
-        //             },
-        //             {
-        //             "name":"file1.tsv",
-        //             "path":"/home/platform/omics_rails/releases/20220504130039/media/user/meta_platform/project/platform_task_test/task_20220323164855"
-        //             },
-        //             {
-        //             "name":"merged_df.tsv",
-        //             "path":"/home/platform/omics_rails/releases/20220504130039/media/user/meta_platform/project/platform_task_test/task_20220323164855"
-        //             },
-        //             {
-        //             "name":"wilcox.test.tsv",
-        //             "path":"/home/platform/omics_rails/releases/20220504130039/media/user/meta_platform/project/platform_task_test/task_20220323164855"
-        //             },
-        //             {
-        //             "name":"group_info.tsv",
-        //             "path":"/home/platform/omics_rails/releases/20220504130039/media/user/meta_platform/project/platform_task_test/task_20220323164855"
-        //             },
-        //             {
-        //             "name":"abundance.tsv",
-        //             "path":"/home/platform/omics_rails/releases/20220504130039/media/user/meta_platform/project/platform_task_test/task_20220323164855"
-        //             }
-        //         ]
-        //     }
-        // ],
         this.resource_usage = {
             "x_axis":[
                 "2022-04-27 15:09:53",
@@ -529,16 +429,17 @@ export default {
 
         this.stderr = "Testing...";
         this.stdout = "Testing...";
-
-        // this.stderr = new Date() + 'To execute GATK run: java -jar $EBROOTGATK/GenomeAnalysisTK.jar\nLmod has detected the following error: These module(s) or extension(s) exist\nbut cannot be loaded as requested: \"pelib/2021b\", \"python/3.7.10\",\n\"rust/1.56.1\", \"perl/5.30.2\", \"r/3.6.3\"\n   Try: \"module spider pelib/2021b python/3.7.10 rust/1.56.1 perl/5.30.2\nr/3.6.3\" to see how to load the module(s).\n\n\n\n';
-        // this.stdout = 'meta_PCA task starts at: Wed Apr 27 23:09:53 HKT 2022\nfinishes at: Wed Apr 27 23:11:07 HKT 2022\n';
-        
     },
-    updated() {
-        if (this.submitted && this.job_status == "finished") {
-            event.emit("GMT:reset-query", this);
-            this.updateGon(this.data.outputs[this.chosenOutput]);
-            event.emit("GMT:query-finished", this);
+    watch: {
+        chosenOutput:function() {
+            if (this.submitted && this.job_status == "finished") {
+                
+                this.updateGon(this.data.outputs[this.chosenOutput]);
+                event.emit("GMT:query-finished", this);
+            }
+        },
+        chosenModule:function() {
+            this.updateVis();
         }
     },
     methods: {
@@ -712,11 +613,11 @@ export default {
                     } else {
                         this.data.outputs = response.data.body;
 
+                        this.chosenOutput = 0;
                         if (response.data.body.length > 0) {
                             this.updateGon(this.data.outputs[0]);
                             this.taskOutputs = this.data.outputs.map((x, i) => ({value: i, text: x.name}));
                         }
-                        this.chosenOutput = 0;
                         this.submitted = true;
 
                         //tid
@@ -739,15 +640,32 @@ export default {
             this.searchJob();
         },
         updateGon(output) {
-            this.module_names = this.data.outputs[0].module_names.map((x, i) => ({value: i, text: x}));
+            event.emit("GMT:reset-query", this);
+            this.module_names = output.module_names.map((x, i) => ({value: i, text: x}));
             this.chosenModule = 0;
             window.gon.module_name = output.module_names[this.chosenModule];
             
             window.gon.required_data = output.required_data;
             if (!window.gon.urls) window.gon.urls = {};
-            window.gon.urls.chosen_file_paths = `/api/analysis/${output.analysis_id}/chosen_file_paths`;
-            window.gon.urls.download_demo_file = `/api/analysis/${output.analysis_id}/download_demo_file`;
-            registerViz(output.module_name);
+            window.gon.urls.chosen_file_paths = `/api/analysis/${output.analysis_id}/chosen_file_paths?visualizer=${this.chosenModule}`;
+            window.gon.urls.download_demo_file = `/api/analysis/${output.analysis_id}/download_demo_file?visualizer=${this.chosenModule}`;
+            console.log("outputing to be visualized plot:")
+            console.log(output.module_names[this.chosenModule]);
+            registerViz(output.module_names[this.chosenModule]);
+            event.emit("GMT:query-finished", this);
+        },
+        updateVis() {
+            event.emit("GMT:reset-query", this);
+            window.gon.module_name = this.data.outputs[this.chosenOutput].module_names[this.chosenModule];
+
+            window.gon.required_data = this.data.outputs[this.chosenOutput].required_data;
+            if (!window.gon.urls) window.gon.urls = {};
+            window.gon.urls.chosen_file_paths = `/api/analysis/${this.data.outputs[this.chosenOutput].analysis_id}/chosen_file_paths?visualizer=${this.chosenModule}`;
+            window.gon.urls.download_demo_file = `/api/analysis/${this.data.outputs[this.chosenOutput].analysis_id}/download_demo_file?visualizer=${this.chosenModule}`;
+            
+            registerViz(this.data.outputs[this.chosenOutput].module_names[this.chosenModule]);
+            event.emit("GMT:query-finished", this);
+
         },
         refreshJobs() {
             this.refreshEnd = false;
@@ -939,4 +857,5 @@ export default {
     padding: 0;
     width: 40%;
 }
+
 </style>

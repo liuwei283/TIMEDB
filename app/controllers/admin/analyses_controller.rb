@@ -54,7 +54,6 @@ class Admin::AnalysesController < ApplicationController
         end
       end
     end
-    p[:visualizer_id] = @tmp
     Rails.logger.debug p
     if @analysis.update(p)
       flash[:success] = "Analysis updated."
@@ -85,7 +84,7 @@ class Admin::AnalysesController < ApplicationController
 
   def analysis_params
     p = params.require(:analysis).permit(:name, :url,
-              :files_info, :documentation, :about, :references,
+              :files_info, :documentation, :about, :references, :multiple_mid, :single_demo_id, :multiple_demo_id, :single_result_id, :multiple_result_id,
               :mid, :analysis_category_id, :hidden, :visualizer_ids => [])
     if !params[:analysis][:image_file].blank?
         p[:cover_image] = "data:image/png;base64," + Base64.strict_encode64(params[:analysis][:image_file].read)

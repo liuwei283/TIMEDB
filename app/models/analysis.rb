@@ -7,7 +7,7 @@ class Analysis < ApplicationRecord
     has_many :analysis_user_data
     has_many :task_outputs
     belongs_to :analysis_category
-    has_and_belongs_to_many :visualizer
+    has_and_belongs_to_many :visualizers
     has_many :analysis_pipelines, through: :module_requirements
 
     def self.import(file)

@@ -1,7 +1,6 @@
 import { generateGridPlotConfig } from "oviz-components/grid-plot";
 import { EditorDef } from "utils/editor";
 import { copyObject } from "utils/object";
-import { chooseMethod } from "./index";
 
 function run(v) {
     v.forceRedraw = true;

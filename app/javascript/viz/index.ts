@@ -15,6 +15,8 @@ declare global {
     }
 }
 export function registerViz(moduleName) {
+    console.log("Now s registering module: ");
+    console.log(moduleName);
     switch (moduleName) {
         case "LinSeed":
             registerLinSeed();

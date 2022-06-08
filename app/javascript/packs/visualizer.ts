@@ -18,6 +18,9 @@ function checkResource() {
     }
     if (packLoaded && canvasMounted && !vizLoaded) {
         try {
+            console.log ("viz mode is");
+            console.log (window.gon.viz_mode);
+
             if (window.gon.viz_mode === viz_mode.TASK_OUTPUT && !outputsLoaded) return;
             vizLoaded = true;
             const v = call(moduleName);

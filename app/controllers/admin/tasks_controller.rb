@@ -192,7 +192,7 @@ class Admin::TasksController < ApplicationController
     @analysis_user_datum.use_demo_file = false
     @analysis_user_datum.save!
     parsed_output = {}
-    parsed_output['module_name'] = @analysis.visualizer.js_module_name
+    parsed_output['module_name'] = @analysis.visualizers[0].js_module_name
     parsed_output['name'] = @analysis.name
     parsed_output['analysis_id'] = @analysis.id
     parsed_output['required_data'] = @analysis.files_info.keys

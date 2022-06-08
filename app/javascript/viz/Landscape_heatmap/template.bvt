@@ -1,36 +1,61 @@
 svg{
+    //width = 1400; height = 1000
     Component{
+        //stackPlot
         Container {
             x = 40;y = 30
-
+            //图例
             Container{
                 Rect {
                     x = 20;y = 30
-                    width = 180;height = cellList.length *15 + 10
+                    width = 180;height = cellList.length *12 + 10
+                    //@expr console.log("height:",result.classifications.length *15 + 10)
                     stroke = "black"
                     fill = "none"
                 }      
                 @for (item, index) in cellList {
                     Rect {
                         key = index
-                        x = 30;y = (cellList.length - index) * 15 -2.5 + 30
+                        x = 30;y = (cellList.length - index) * 12 -2.5 + 30
                         height = 5;width = 12
                         fill = result.stackescolors[index]
                     }
                     Text {
                         key = index
-                        x = 50;y = (cellList.length - index) * 15 - 5 + 30
+                        x = 50;y = (cellList.length - index) * 12 - 5 + 30
                         text = item
                         fill = "#000"
                         fontSize = 10
                     }
                 }
             }
+            //button
+            Container {
+                @if(oricelllist.length > 22){
+                    Container {
+                        x = 200;y = 20
+                        @let disabled = buttonkey === "1"
+        	            width = 20; height = 10
+        	            Rect.full {
+                            fill = disabled ? "#485570" : "#727D91";
+                            behavior:tooltip{
+                                content = "You can switch between showing all cells or the first 22 cells by clicking on this button!"
+                            }
+                        }
+        	            Text.centered("...") { x = 50%; y = 30%; fill = "#fff";fontSize = 10 }
+        	            cursor = disabled ? null:"pointer"
+        	            on:click = disabled ? null:buttonclick(1)
+                    }
+			        
+                }
+                
+            }
+            //stackBar
             Container {
                 x = 260; y = 30
                 XYPlot {
-                    height = cellList.length *15 + 10;
-                    width = result.useData[sampleList.length-1].col*(gridPlotWidth-2)
+                    height = cellList.length *12 + 10;
+                    width = result.useData[sampleList.length-1].col*(gridPlotWidth-2) //sampleList.length*(gridPlotWidth-1)
                     discreteCategory = true
                     valueRange = [0,1]
                     hasPadding = true
@@ -49,6 +74,7 @@ svg{
                             Rect.full{
                                 fill = result.colorMap[d.key]
                                 stroke = "white"
+                                strokeWidth = 0.5
                                 behavior:tooltip{
                                     content = `Sample Name: ${d.data.data[0]} <br> Cell:${d.key} <br> Values: ${d.data.data[1]}<br>`
                                 }
@@ -59,10 +85,14 @@ svg{
                 }
             }
         }
+        
 
+        // // 中间的heatmap
         Container{
-            x = 40;y = cellList.length *15 + 90
+            x = 40;y = cellList.length *12 + 90
+            //右中文字
             Container {
+                //x = result.useData[sampleList.length-1].col*(gridPlotWidth-1.6)-5 + 140; //y = cellList.length *20
                 x = 280 + result.useData[sampleList.length-1].col*(gridPlotWidth-2)
                 @for(d,i) in result.columns{
                     @if(d != "P-value"){
@@ -76,16 +106,19 @@ svg{
                 }
             }
             Container {
-                x = 252; 
+                x = 252; //y = cellList.length *20
                 @for(d,i) in result.useData{
                     Component {
+                        //@expr console.log("result.useData:",result.useData)
                         key = i
                         x = d.col * (gridPlotWidth-2)
+                        //@expr console.log("gridPlotWidth:",gridPlotWidth)
                         y = d.row * gridPlotheight
                         Rect.full{
                             height = gridPlotheight
                             width = gridPlotWidth -1
                             fill = d.data>=0? gbcolorScheme.get(d.data/maxxx):colorScheme.get(d.data/-maxxx)
+                            //添加边框
                             stroke = "white"
                             behavior:tooltip{
                                 content = "Sample Name:" + addNames[d.col-1] + "<br>" + "Cell: "+d.name +"<br>" + "Value:"+d.data + "<br>" //+ "pValue: " + d.pValue
@@ -96,40 +129,48 @@ svg{
             }
             
         }
+        //heatmap 的legend
         Container {
-            x = 40;y = cellList.length *15 + 90
+            x = 40;y = cellList.length *12 + 90
+            //
             Rect{
                 x = 190;y = result.useData[0].row*gridPlotheight //红色
                 fill = @gradient("gb")
+                //rotation = @rotate(180)
                 weidth = 50
                 height = cellList.length*gridPlotheight/2
             }
+            //
             Rect{
                 x = 190;y = result.useData[0].row*gridPlotheight + cellList.length*gridPlotheight/2 //蓝色
                 fill = @gradient("kg")
                 weidth = 50
                 height = cellList.length*gridPlotheight/2
             }
+            //负数的
             Axis{
                 x = 210;y = result.useData[0].row*gridPlotheight
                 yScale = @scale-linear(0,textmaxxx, cellList.length*gridPlotheight/2, 0)
                 orientation = "right"
             }
+            //正数的
             Axis{
                 x = 210;y = result.useData[0].row*gridPlotheight + cellList.length*gridPlotheight/2
                 yScale = @scale-linear(0, -textmaxxx, 0, cellList.length*gridPlotheight/2)
                 orientation = "right"
             }
         }
+        //中间左边的box
         Container {
             XYPlot {
-                x = 260; y = cellList.length *15 + 50
+                x = 260; y = cellList.length *12 + 50
                 rotation = @rotate(90)
 		        height = plotSize[0] + 10
 		        width = result.useData[0].row*gridPlotheight + cellList.length*gridPlotheight + 100
 		        padding = padding
 		        data = { boxData: result.boxdata}
 		        valueRange = valueRange
+                @expr console.log("valueRange?",valueRange)
 		        //AxisBackground { dashArray = "1, 2"}
 		        AxisBackground {
                     orientation = "vertical"
@@ -147,6 +188,7 @@ svg{
 			        data = "boxData"
 			        :box (_d) {
                         Rect.full  {
+                            //在这里改之前的颜色
                             fill = colors[0]
 					        stroke = "#003366"
 					        x = 33%
@@ -170,6 +212,7 @@ svg{
                 }
 	        }   
         }
+        // //legend
         Container {
             x = 20;
             Container {
@@ -177,7 +220,7 @@ svg{
                     Component{
                         width = 180
                         height = (sortaddName.length-1) * gridPlotheight
-                        x = 40;y = thirdLen + 15
+                        x = 40;y = cellList.length * gridPlotheight + cellList.length *12 + 150 + 15
                         Rect {
                             width = 100%
                             height = 100%
@@ -188,7 +231,8 @@ svg{
                             @for(d,i) in legendLoc[item]{
                                 Component {
                                     x = d.x; 
-                                    y = (d.row-1)*gridPlotheight
+                                    //y = (d.row-1)*gridPlotheight
+                                    y = (index-1)*gridPlotheight
                                     @if(d.data!="NA" && legendType[item].length!=1){
                                         Rect{
                                             x = -1
@@ -200,9 +244,9 @@ svg{
                                         Text.centered{
                                             text = replaceUpper(d.data,(180-NAlength) / (d.num-1))
                                             fontSize = 8
-                                            x = (180-NAlength)/(d.num-1) * 0.5 - 0.5
+                                            x = (180-NAlength)/(d.num-1) * 0.5
                                             y = gridPlotheight/2
-                                            anchor = @anchor("middle", "center") 
+                                            //anchor = @anchor("middle", "center") 
                                         }
                                     }
                                     @elsif(d.data=="NA" && legendType[item].length!=1){
@@ -215,7 +259,7 @@ svg{
                                         Text.centered{
                                             text = d.data
                                             fontSize = 8
-                                            x = NAlength/2;y = 8
+                                            x = NAlength/2;y = gridPlotheight/2
                                             anchor = @anchor("middle", "center") 
                                         }
                                     }
@@ -229,13 +273,14 @@ svg{
                                         Text.centered{
                                             text = d.data
                                             fontSize = 8
-                                            x = 90;y = 8
+                                            x = 90;y = gridPlotheight/2
                                             anchor = @anchor("middle", "center") 
                                         }
                                     }
                                 }
                             }
                         }
+                        //显示n_label
                         @for(item,index) in n_legendData{
                             Text.centered {
                                 x = NAlength+10;y = (item.row-0.5)*gridPlotheight
@@ -253,14 +298,17 @@ svg{
                 }
             }
             Container {
+                //clinical标题
                 Text.centered{
                     text = title;fontSize = 14;
                     x = sampleList.length*gridPlotWidth/2 + 200; 
-                    y = thirdLen-14;
+                    y = cellList.length * gridPlotheight + cellList.length *12 + 150 -14;
                 }
             }
             Container {
-                x = 40;y = thirdLen
+                x = 40;y = cellList.length * gridPlotheight + cellList.length *12 + 150
+                //clinical rownames
+                //clinical indexes
                 Container {
                     x = 260 + result.useData[sampleList.length-1].col*(gridPlotWidth-2)
                     @for(d,i) in additional.sortaddName {
@@ -268,23 +316,32 @@ svg{
                             text = d.slice(2).replace(/_/g," ")
                             y = i * gridPlotheight + gridPlotheight/2
                             anchor = @anchor("left", "middle")
-                            fontSize = 11
+                            fontSize = 10
                         }
                     }
                 }
+                //heatmap
                 Container {
                     x = 232;
                     @for(item,index) in additional.sortaddName{
                         @for(d,dindex) in heatmapLoc[item]{
                         Component {
+                            //x = (d.col + 19) * (rectWidth-0.67) + 86
                             x = d.col * (gridPlotWidth-2)
-                            y = (d.row-23) * gridPlotheight 
+                            y = (d.row-23) * gridPlotheight //+ (cellList * gridPlotheight + cellList.length *15 + 90)
                             Rect{
                                 height = gridPlotheight
                                 width = gridPlotWidth-1
                                 fill = item.substring(0,2)=="c_"? d.color:(d.data=="NA"? "#C0C0C0":(item == "n_age"? ageColorScheme.get((d.data-ageMin)/ageMax):ageColorScheme.get(d.data)))
                                 stroke = "white"
                             }
+                            // @if(d.data == "NA"){
+                            //     Line {
+                            //         x1 = (gridPlotWidth-2);y1 = 1
+                            //         x2 = 1;y2 = gridPlotheight-1
+                            //         fill = "red"
+                            //     }
+                            // }
                             behavior:tooltip{
                                 content = "Sample Name:" + addNames[d.col-1] + "<br>" +"Clinical Indicators: " + item + "<br>"  + "Value: " + d.data + "<br>" //+ "pValue: " + d.pValue
                             }

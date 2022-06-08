@@ -522,7 +522,7 @@ export default {
 
                 if(this.regulator_rna_fexists == 'true' && this.regulator_subtype_fexists == 'true') {
                     document.getElementById("regulatorBlock").style.display = "block";
-                    immuneRegulator("#regulatorVis", subtype_file_path, rna_file_path, "#regulator-editor", "overview_regulator_viz");
+                    immuneRegulator("#regulatorVis", subtype_file_path, rna_file_path, "#regulator-editor", "overview_regulator_viz", "getVue");
                 }
                 else {
                     document.getElementById("regulatorBlock").style.display = "none";

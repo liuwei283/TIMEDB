@@ -142,7 +142,7 @@
                                         <img class = "demoPng" id = "runDemoImage" v-bind:src="require('../assets/images/runDemo.png')" style="width:100%;">
                                     </div>
                                     <div @click="checkDemoTask()" class = "col-md-2" b-tooltip.hover :title="`Click here to check demo task for ${app.name}`">
-                                        <img class = "demoPng" id = "checkDemoImage" v-bind:src="require('../assets/images/runDemo.png')" style="width:100%;">
+                                        <img class = "demoPng" id = "checkDemoImage" v-bind:src="require('../assets/images/checkDemo.png')" style="width:100%;">
                                     </div>
                                     <div class = "col-md-2">
                                     </div>
@@ -510,7 +510,7 @@
         </b-modal>
 
 
-        <b-modal v-if="started" ref="submit-helper" v-model="showhelper" id = "submit-helper" size="xl" scrollable title="Module Helper" centered>
+        <b-modal v-if="started" ref="submit-helper" v-model="showhelper" id = "submit-helper" size="xl" scrollable title="Module Helper" centered @ok="jumpToUpload">
             <br>
             <div class = "row justify-content-center container">
                 <div v-html="selected_analysis.rendered_doc" class = "text-left container" style="margin: 50px;">
@@ -1074,6 +1074,8 @@
             submitDemoTask() {
                 const { alertCenter } = this.$refs;
                 let alertData;
+                var demo_files = {};
+                var demo_params = {};
 
                 let submitted_mid;
                 if (this.picked_single_multiple == 'multiple') {
@@ -1108,75 +1110,75 @@
                     alertCenter.add('danger', `${message}`);
                 }).finally(() => {
                     // setTimeout(() => { alertCenter.add('danger', ''); }, 2000);
-                    console.log("Log:", this.inputs, this.outputs, this.params)
-                });
+                    console.log("Log:", this.demo_inputs, this.demo_parameters)
 
-
-                //process demo info
-                var demo_files = {};
-                var demo_params = {};
-                for (var k in this.demo_inputs){
-                    let input = this.demo_inputs[k];
-                    let f_arr = [];
-                    for (var t in input.files) {
-                        let file = input.files[t];
-                        let f_path = file.path + "/" + file.name;
-                        f_arr.push(f_path);
+                    //process demo info
+                    
+                    for (var k in this.demo_inputs){
+                        let input = this.demo_inputs[k];
+                        console.log(input, k);
+                        let f_arr = [];
+                        for (var t in input.files) {
+                            let file = input.files[t];
+                            let f_path = file.path + "/" + file.name;
+                            f_arr.push(f_path);
+                        }
+                        demo_files[`i-${input.id}`] = f_arr.join(","); 
                     }
-                    demo_files[`i-${input.id}`] = f_arr.join(","); 
-                }
 
-                for (var k in this.demo_parameters) {
-                    let params = this.demo_parameters[k];
-                    demo_params[`p-${params.id}`] = params.value;
-                }
+                    for (var k in this.demo_parameters) {
+                        let params = this.demo_parameters[k];
+                        demo_params[`p-${params.id}`] = params.value;
+                    }
 
-                console.log("Outputing demo inputs json:");
-                console.log(demo_files);
-                console.log("Outputing demo inputs parameters:");
-
-                console.log(demo_params);
+                    console.log("Outputing demo inputs json:");
+                    console.log(demo_files);
+                    console.log("Outputing demo inputs parameters:");
+                    console.log(demo_params);
 
 
-
-                axios.post(
-                    `/submit-app-task/`,
-                    objectToFormData({
-                        "search_mid": this.selected_analysis.mid,
-                        "mid": submitted_mid,
-                        "is_demo": true,
-                        "inputs": demo_files,
-                        "params": demo_params,
-                    }),
-                    {
-                        headers: {
-                            'X-Requested-With': 'XMLHttpRequest',
-                            'X-CSRF-Token': document.head.querySelector('meta[name="csrf-token"]').content,
-                            'Content-Type': 'multipart/form-data',
+                    axios.post(
+                        `/submit-app-task/`,
+                        objectToFormData({
+                            "search_mid": this.selected_analysis.mid,
+                            "mid": submitted_mid,
+                            "is_demo": true,
+                            "inputs": demo_files,
+                            "params": demo_params,
+                        }),
+                        {
+                            headers: {
+                                'X-Requested-With': 'XMLHttpRequest',
+                                'X-CSRF-Token': document.head.querySelector('meta[name="csrf-token"]').content,
+                                'Content-Type': 'multipart/form-data',
+                            },
                         },
-                    },
-                ).then((response) => {
-                    if (response.data.code) {
-                        this.jobID = response.data.data.task_id;
-                        this.submitted = true;
-                        
-                    } else {
-                        alertData = response.data.msg;
-                    }
-                }).catch((reason) => {
-                    alertData = reason;
-                }).finally(() => {
+                    ).then((response) => {
+                        if (response.data.code) {
+                            this.jobID = response.data.data.task_id;
+                            this.submitted = true;
+                            
+                        } else {
+                            alertData = response.data.msg;
+                        }
+                    }).catch((reason) => {
+                        alertData = reason;
+                    }).finally(() => {
+                        console.log("submitted");
+                        console.log(demo_files);
 
-                    $("#disable-fill").fadeOut(10);
-                    this.isLoading = false;
-                    if (!!alertData) {
-                        this.$refs.alertCenter.add('danger', alertData);
-                    }
-                    if (this.submitted) {
-                        setTimeout(() => {
-                            location.replace(`/submit/job-query`)
-                        }, 1000);
-                    }
+
+                        $("#disable-fill").fadeOut(10);
+                        this.isLoading = false;
+                        if (!!alertData) {
+                            this.$refs.alertCenter.add('danger', alertData);
+                        }
+                        // if (this.submitted) {
+                        //     setTimeout(() => {
+                        //         location.replace(`/submit/job-query`)
+                        //     }, 1000);
+                        // }
+                    });
                 });
             },
 
@@ -1239,11 +1241,11 @@
                     if (!!alertData) {
                         this.$refs.alertCenter.add('danger', alertData);
                     }
-                    if (this.submitted) {
-                        setTimeout(() => {
-                            location.replace(`/submit/job-query`)
-                        }, 1000);
-                    }
+                    // if (this.submitted) {
+                    //     setTimeout(() => {
+                    //         location.replace(`/submit/job-query`)
+                    //     }, 1000);
+                    // }
                 });
             },
             updateMode(type) {
@@ -1285,6 +1287,10 @@
             },
             copyToClipboard(){
                 navigator.clipboard.writeText(this.jobID);
+            },
+            jumpToUpload() {
+                var el = document.getElementById('run-app');
+                el.scrollIntoView({behavior: "smooth"});
             },
             provide_param_desc(param) {
                 this.single_params_desc = param.description

@@ -141,7 +141,7 @@ class SubmitController < ApplicationController
   end
 
   def query_all # query all tasks by user
-    @tasks = Task.where("user_id = ?", session[:user_id])
+    @tasks = Task.where("user_id = ?", session[:user_id]).order(:id)
     parsed_jobs = []
     result = nil
     @tasks.each do |t|
@@ -602,7 +602,8 @@ class SubmitController < ApplicationController
 
   def remove_task
     @task = Task.find params[:job_id]
-    @analysis_user_datum = AnalysisUserDatum.find_by task_output: @task.task_outputs[0]
+    
+    @analysis_user_datum = AnalysisUserDatum.find_by analysis_id: @task.analysis.id, user_id: session[:user_id]
     @analysis_user_datum.task_output = nil
     @analysis_user_datum.use_demo_file = true
     @analysis_user_datum.save!
@@ -699,7 +700,7 @@ class SubmitController < ApplicationController
     Rails.logger.debug @matched_jsnames
 
     parsed_output = {}
-    parsed_output['module_names'] = @analysis.visualizer.js_module_name
+    parsed_output['module_names'] = @matched_jsnames
     parsed_output['name'] = @analysis.name
     parsed_output['analysis_id'] = @analysis.id
     parsed_output['required_data'] = @analysis.files_info.keys
