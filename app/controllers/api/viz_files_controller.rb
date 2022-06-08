@@ -67,7 +67,8 @@ class Api::VizFilesController < ApplicationController
 
     def chosen_file_paths
 
-        visualizer_num = params[:visualizer]
+        visualizer_num = params[:visualizer].to_i
+
         
         files_info = @analysis.files_info
         all_viz_data = @analysis.visualizers[visualizer_num].viz_data_sources.map{|d| d.data_type}

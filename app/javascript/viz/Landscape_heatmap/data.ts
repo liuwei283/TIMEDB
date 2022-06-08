@@ -20,10 +20,15 @@ export function extractWord(word){
 }
 
 
+
 export function plotDataloaded(_data){
+  
+  this.data.oridata = _data
 
+  let cellList = _data.columns.slice(2) 
+  this.data.oricelllist = _data.columns.slice(2)
+  cellList = cellList.slice(0,22) 
 
-  let cellList = _data.columns.slice(2)
   if(cellList.indexOf("P-value") != -1){
     cellList.splice(cellList.indexOf("P-value"),1)
   }
@@ -33,12 +38,17 @@ export function plotDataloaded(_data){
     sampleList.push(_data[i][_data.columns[0]])
   }
 
+
   let columns = cellList; 
   this.data.cellList = cellList;
+
   const sampleNames = sampleList;
   this.data.sampleList = sampleList; 
   const changeNames = sampleList;
-  const changeData = [] 
+
+
+
+  const changeData = []
   columns.forEach((arr) =>{
     let temp1 = []
     _data.forEach((d) =>{
@@ -52,6 +62,7 @@ export function plotDataloaded(_data){
   let maxxx = MAXforArr(changeData)
   this.data.maxxx = maxxx 
 
+
   const useData = [] 
   for(let i = 0;i < changeData.length;i++){
     for(let j = 0;j < _data.length;j++){
@@ -59,11 +70,10 @@ export function plotDataloaded(_data){
       elem.name = columns[i] 
       elem.data = changeData[i][j] 
       elem.row = i + 1 
-      elem.col = j + 1
+      elem.col = j + 1 
       useData.push(elem)
     }
   }
-
   
 
   this.data.plotSize = [250,500];
@@ -72,18 +82,21 @@ export function plotDataloaded(_data){
   
 
   let newArr = _data;
+
   newArr.map(function(arr){return delete arr.method})
-
-
-
-  let newData =  dataHandler(newArr) 
-
-  let testrange0 = MINforArr(newData.result)
-  let testrange1 = MAXforArr(newData.result)
   
 
-  let cout1 = getfixed(testrange0)
-  let cout2 = getfixed(testrange1) 
+  let newData =  dataHandler(newArr) 
+  let testrange0 = MINforArr(newData.result)
+  let testrange1 = MAXforArr(newData.result)
+
+
+  newData.columns = newData.columns.slice(0,22)
+  newData.result = newData.result.slice(0,22)
+  newData.means = newData.means.slice(0,22)
+
+  let cout1 = getfixed(testrange0) //<0 
+  let cout2 = getfixed(testrange1) //>0 
 
   if(testrange0<0){
     let range0 = -(Math.abs(testrange0) + 5/(10 ** (cout1+1)))
@@ -102,8 +115,8 @@ export function plotDataloaded(_data){
 
 
   const colors = ["#FCE4EC"]; 
-  //let valueRange = [range0.toFixed(cout1),range1.toFixed(cout2)];
-  let valueRange = [range0.toFixed(1),range1.toFixed(1)];
+  let valueRange = [range0.toFixed(1),(range1+0.1).toFixed(1)]; 
+
 
   this.data.columns = newData.columns; 
   this.data.colors = colors; 
@@ -111,9 +124,154 @@ export function plotDataloaded(_data){
 
 
 
-  const categoryKey = _data.columns[0]; //获取样本的列名
+
+  const categoryKey = _data.columns[0]; 
+
+  const categories = sampleList
+
+  const classifications = cellList
+
+  const result = {};
+  let colorMap = {}
+  classifications.forEach((item,i)=>{
+    colorMap[item] = []
+  })
+  classifications.forEach((item,i)=>{
+    colorMap[item] = mapColor(item)
+  })
+                    
+
+  const stackescolors = Object.values(colorMap);
+  classifications.forEach((classification, i) => {
+    result[classification] = [];
+  });
+  
+  let sumMap = new Map()
+  const sum = [];
+  _data.forEach(row => {
+    let count = 0,key,value;
+    for ([key, value] of Object.entries(row).slice(1)) {
+      value == "NA"? value = 0:null
+      if(key != categoryKey) {
+        count += Math.abs(parseFloat(value)); 
+      }
+    }
+    sumMap[row[categoryKey]] = count;
+    sum.push(count)
+  });
+
+
+  _data.forEach(d => {
+    classifications.forEach((classification,k) => {
+      d[classification]=="NA"? d[classification]=0:null
+      result[classification].push([d[categoryKey], Math.abs(parseFloat(d[classification]))/sumMap[d[categoryKey]]]); 
+    });
+  });
+
+  this.data.gridPlotWidth = 10;
+  this.data.gridPlotheight = 12;
+  this.data.stackedWidth = sampleList.length*this.data.gridPlotWidth
+  return {_data,sampleNames,columns,useData,changeNames,boxdata:{ values: newData.result,means: newData.means,outliers:[], categories: newData.columns },result, categories, classifications, colorMap, stackescolors}
+
+}
+
+export function showAll(_data,key){
+  let newConfig = {}
+  let cellList = []
+  if(key==-1){
+    cellList = _data.columns.slice(2)
+  }else if(key==1){
+    cellList = _data.columns.slice(2,22)
+  }
+  if(cellList.indexOf("P-value") != -1){
+    cellList.splice(cellList.indexOf("P-value"),1)
+  }
+
+
+  let sampleList = []
+  for(let i = 0;i < _data.length;i++){
+    sampleList.push(_data[i][_data.columns[0]])
+  }
+
+  let columns = cellList; 
+  newConfig["cellList"] = cellList;
+  const sampleNames = sampleList;
+  newConfig["sampleList"] = sampleList
+  const changeNames = sampleList;
+  const changeData = []
+  columns.forEach((arr) =>{
+    let temp1 = []
+    _data.forEach((d) =>{
+      d[arr]+"" == "NA"? d[arr]=0:null
+      temp1.push(parseFloat(d[arr]))
+    });
+    changeData.push(temp1)
+  });
+
+  let maxxx = MAXforArr(changeData)
+  newConfig["maxxx"] =  maxxx
+
+  const useData = [] 
+  for(let i = 0;i < changeData.length;i++){
+    for(let j = 0;j < _data.length;j++){
+      const elem = {name:null,data: 0,pValue:0,row: 0,col: 0}
+      elem.name = columns[i]
+      elem.data = changeData[i][j]
+      elem.row = i + 1 
+      elem.col = j + 1 
+      useData.push(elem)
+    }
+  }
+  
+
+  let plotSize = [250,500];
+  newConfig["plotSize"] = plotSize
+  newConfig["labelFontSize"] = 12
+  newConfig["tickFontSize"] = 14
+  let newArr = _data;
+  newArr.map(function(arr){return delete arr.method})
+  let newData =  dataHandler(newArr)
+  if(key==1){
+    newData.columns = newData.columns.slice(0,22)
+    newData.result = newData.result.slice(0,22)
+    newData.means = newData.means.slice(0,22)
+  }
+  
+  let testrange0 = MINforArr(newData.result)
+  let testrange1 = MAXforArr(newData.result)
+
+  let cout1 = getfixed(testrange0) //<0 
+  let cout2 = getfixed(testrange1) //>0 
+
+  if(testrange0<0){
+    let range0 = -(Math.abs(testrange0) + 5/(10 ** (cout1+1)))
+    if(testrange1<0){
+      let range1 = -(Math.abs(testrange1) + 5/(10 ** (cout2+1)))
+    }
+  }
+  
+  let range0 = testrange0 - 5/(10 ** (cout1+1))
+  testrange0 == 0? range0 = 0:null
+  let range1 = testrange1 + 5/(10 ** (cout2+1))
+  testrange0<0 ? (range0 = -(Math.abs(testrange0) + 5/(10 ** (cout1+1)))):null
+  testrange1<0 ? (range1 = -(Math.abs(testrange1) + 15/(10 ** (cout2+1)))):null
+
+
+
+
+  const colors = ["#FCE4EC"]; 
+  let valueRange = [range0.toFixed(1),(range1+0.1).toFixed(1)]; 
+
+  newConfig["columns"] = newData.columns
+  newConfig["colors"] = colors
+  newConfig["valueRange"] = valueRange 
+
+
+
+  const categoryKey = _data.columns[0]; 
   const categories = sampleList
   const classifications = cellList
+
   const result = {};
   let colorMap = {}
   classifications.forEach((item,i)=>{
@@ -147,16 +305,30 @@ export function plotDataloaded(_data){
   _data.forEach(d => {
     classifications.forEach((classification,k) => {
       d[classification]=="NA"? d[classification]=0:null
-      result[classification].push([d[categoryKey], Math.abs(parseFloat(d[classification]))/sumMap[d[categoryKey]]]); 
+      result[classification].push([d[categoryKey], Math.abs(parseFloat(d[classification]))/sumMap[d[categoryKey]]]); //这里除以和
     });
   });
 
-  this.data.gridPlotWidth = 10;
-  this.data.gridPlotheight = 16;
-  this.data.stackedWidth = sampleList.length*this.data.gridPlotWidth
-  return {_data,sampleNames,columns,useData,changeNames,boxdata:{ values: newData.result,means: newData.means,outliers:[], categories: newData.columns },result, categories, classifications, colorMap, stackescolors}
+  newConfig["gridPlotWidth"] = 10
+  newConfig["gridPlotheight"] = 12
+  newConfig["stackedWidth"] = sampleList.length*newConfig["gridPlotheight"]
+  newConfig["_data"] = _data
+  newConfig["result"] = {}
+  newConfig["result"]["sampleNames"] = sampleNames
+  newConfig["result"]["columns"] = columns
+  newConfig["result"]["useData"] = useData
+  newConfig["result"]["changeNames"] = changeNames
+  newConfig["result"]["boxdata"] = {values: newData.result,means: newData.means,outliers:[], categories: newData.columns }
+  newConfig["result"]["result"] = result
+  newConfig["result"]["categories"] = categories
+  newConfig["result"]["classifications"] = classifications
+  newConfig["result"]["colorMap"] = colorMap
+  newConfig["result"]["stackescolors"] = stackescolors
+
+  return newConfig
 
 }
+
 
 
 export function clinicalDataloaded(_data){
@@ -171,15 +343,13 @@ export function clinicalDataloaded(_data){
 
 
   let tempResult = mapCNlist(_data[0])
-
   let c_indexList = tempResult["c_"]
   let n_indexList = tempResult["n_"]
-  let clinicalIndexes = aryJoinAry(c_indexList, n_indexList) //混合之后的临床指标
-
-
-
+  let clinicalIndexes = aryJoinAry(c_indexList, n_indexList) 
 
   let addName = clinicalIndexes
+
+
   let sortaddName = clinicalIndexes
   this.data.sortaddName = sortaddName
 
@@ -190,6 +360,7 @@ export function clinicalDataloaded(_data){
       ditem == item? (cindexes.push(dindex)):null
     });
   })
+
 
 
   function mapClinicalIndex(arr,cindexes){
@@ -204,14 +375,15 @@ export function clinicalDataloaded(_data){
     return newArr
   }
 
-
+  //clinical samplelist
   let tg = _data[0].indexOf("sample_name")
   let clinicalSamples = _data.map(k=>k[tg])
 
+
   let addData = []
   for(let i = 0;i < addNames.length;i++){
-    let index = clinicalSamples.indexOf(addNames[i]) //对应sample name
-    if(index != -1){ 
+    let index = clinicalSamples.indexOf(addNames[i]) 
+    if(index != -1){
       addData.push(_data[index])
     }
   }
@@ -219,6 +391,8 @@ export function clinicalDataloaded(_data){
 
   addData = mapClinicalIndex(addData,cindexes).slice(0)
 
+
+  //
   var newArr = []
 
   for(let i = 0;i < addData.length;i++){ 
@@ -231,6 +405,8 @@ export function clinicalDataloaded(_data){
     }
   }
 
+  
+
   let legendType = {} 
   let tempNum = {}
   addName.forEach((item,index)=>{
@@ -242,19 +418,19 @@ export function clinicalDataloaded(_data){
     legendType[item] = Array.from(new Set(legendType[item]))
   })
 
-
+  this.data.legendType = legendType
 
   addName.forEach((item,index)=>{
     item.substring(0,2)=="n_"? (tempNum[item] = tempNum[item].slice(1)[tempNum[item].length-1]):null
   });
 
 
-
   let heatmapLoc = {} 
   addName.forEach((item,index)=>{
   heatmapLoc[item] = []
-    rowColumn(addData,heatmapLoc[item],index,index+23,item,legendType) // 空数据集 addData的第几列 heatmap中的位置
+    rowColumn(addData,heatmapLoc[item],index,index+23,item,legendType) 
   })
+
   
   this.data.heatmapLoc = heatmapLoc
                   
@@ -265,15 +441,10 @@ export function clinicalDataloaded(_data){
     showLegend(legendType[item],legendLoc[item],index,item.substring(0,2),NAlen(addName,legendType))
   })
 
+
   this.data.legendLoc = legendLoc
 
-
-
   let x = TextSize.measuredTextSize("test", 8).width;
-
-
-
-
   
   let ppp = getfixed(this.data.maxxx)
 
@@ -282,18 +453,14 @@ export function clinicalDataloaded(_data){
   this.data.textmaxxx = textmaxxx.toFixed(1)
 
 
-  
-  
-  //"#FF003C" "#EFDAFF" "#EFDAFF" "#004DBE"
-  let bgendColor = "#00479a" 
-  let bgstartColor = 	"#dbdbdb"; 
-  let gbstartColor = "#dbdbdb" 
-  let gbendColor = "#FF0000"
+  let bgendColor = "#00479a" //heatmap legend的颜色 <0
+  let bgstartColor = 	"#dbdbdb"; //heatmap legend的颜色 中间的颜色
+  let gbstartColor = "#dbdbdb" // heatmap legend的颜色 中间的颜色
+  let gbendColor = "#FF0000"//heatmap legend的颜色 >0
 
   let ageStartColor = "#ee807f";
   let ageEndColor = "#ee2422";
   
-
   let colorScheme =  Oviz.color.schemeGradient(bgstartColor,bgendColor)
   let gbcolorScheme =  Oviz.color.schemeGradient(gbstartColor,gbendColor)
   let ageColorScheme = Oviz.color.ColorSchemeGradient.create(ageStartColor, ageEndColor);
@@ -310,19 +477,12 @@ export function clinicalDataloaded(_data){
   this.data.colorScheme = colorScheme
   this.data.ageColorScheme = ageColorScheme
 
-                    
-
 
   let NAlength = NAlen(addName,legendType)
   this.data.NAlength = NAlength
 
-
-
   let thirdLen = this.data.cellList.length * this.data.gridPlotheight + this.data.cellList.length *15 + 150
   this.data.thirdLen = thirdLen
-  
-
-
 
   let agestr = "n_age"
   let row = _data[0].indexOf(agestr)
@@ -346,12 +506,13 @@ export function clinicalDataloaded(_data){
   this.data.ageRow = ageRow;
 
 
+  n_indexList
 
   let n_row = []
   let n_data = {}
   n_indexList.forEach((item,index)=>{
     n_row.push(_data[0].indexOf(item))
-
+    //n_data[item] = []
   })
 
 
@@ -363,7 +524,6 @@ export function clinicalDataloaded(_data){
   })
 
 
-
   let n_crow = []
   n_indexList.forEach((item,index)=>{
     n_crow.push(clinicalIndexes.indexOf(item))
@@ -373,7 +533,7 @@ export function clinicalDataloaded(_data){
   n_indexList.forEach((item,index)=>{
     let min = Math.min(...n_data[item]) + ""
     let max = Math.max(...n_data[item]) + ""
-    min == max? (max=="0"? (min = "NA",max = "NA"):null):null
+    min == max? (max=="0"? (min = " ",max = " "):null):null
     n_legendData.push({label:item,row:n_crow[index],min: min,max: max})
   })
 
@@ -383,10 +543,12 @@ export function clinicalDataloaded(_data){
 
 }
 
+
+
 export function getfixed(num){
   let textnum = num+""
   let final
-  let rep=/[\.]/;
+  let rep=/[\.]/; //判断是否有小数点
   rep.test(textnum)? (final = textnum.split(".")[1].lastIndexOf("0")+2):final = 2
   return final
 }
@@ -436,11 +598,13 @@ export function heatmapColormap(item,cate,legendType,newColors = {}){
   return elemcolor
 
 }
-//配置legend颜色
+
 export function colorMap(arr){
   let color1 = ["#C0C0C0"]
   let color2 = ["#C0C0C0","#7d9fee"]
+  //let color3 = ["#C0C0C0","#7d9fee","#ee7db5"] //yuanlai
   let color3 = ["#C0C0C0","#cc4f7b","#314893"]
+  //let color32 = ["#C0C0C0","#ee937d","#a67dee"]
   let color4 = ["#C0C0C0","#ee937d","#ee7db5","#7d9fee"]
   let color5 = ["#C0C0C0","#86e5e9","#ee7e7d","#cc4f7b","#314893"] //
   let color6 = ["#C0C0C0","#eed97d","#ee937d","#ee7db5","#a67dee","#7d9fee"]
@@ -476,22 +640,24 @@ export function NAlen(addName,legendType){
   addName.forEach((item,index)=>{
     item.substring(0,2) == "c_"? len.push(legendType[item].length):null
   })
+
   let length = 180 / Math.max(...len)
   return length
 }
 
 
 export function showLegend(arr1,arr2,n,sign,base){
+
   if(sign == "c_"){
     for(let i = 0;i < arr1.length;i++){
       const elem = {data:null,row:0,col:0,colors:null,num:0,x:0,textx:0}
       let colors = []
       let color
-      arr1.length > 20? color = "blue":(colors = colorMap(arr1),color = colors[i])
+      arr1.length > 20? color = "blue":(colors = colorMap(arr1),color = colors[i]) //这里在限制年龄
       elem.data = arr1[i]
       elem.row = n
       elem.col = i + 1
-      elem.colors = color 
+      elem.colors = color //配置颜色
       elem.num = arr1.length
       i == 0? elem.textx = base/2 :((arr1.length==2&&i == 1)? elem.textx = base + 1 + (180-base)/(arr1.length-1)*(i)*1/4:elem.textx=18)
       i == 0? elem.x = 0:elem.x = base + (180-base)/(arr1.length-1)*(i-1) +1
@@ -505,7 +671,7 @@ export function showLegend(arr1,arr2,n,sign,base){
       elem.data = tempArr[i]
       elem.row = n
       elem.col = i + 1
-      tempArr[i]== "NA"? elem.colors = "#C0C0C0":null 
+      tempArr[i]== "NA"? elem.colors = "#C0C0C0":null //配置颜色
       elem.num = tempArr.length
       i == 0? elem.textx = base/2 :elem.textx = base + 1 + (180-base)/(tempArr.length-1)*1/2*1/2
       i == 0? elem.x = 0:elem.x = base + (180-base)/(tempArr.length-1)*(i-1) + 1
@@ -520,10 +686,12 @@ export function rowColumn (addData,arr,n,r,item,legendType){
   let colorhp = []
   for(let i = 0; i < addData.length;i++){
     const elem = {data:null,row:0,col:0,color:null}
+    
     elem.data = addData[i][n]
     elem.row = r
     elem.col = i + 1
     elem.color = heatmapColormap(item,addData[i][n],legendType)[0]
+
     arr.push(elem)
   }
 }
@@ -541,8 +709,9 @@ export function nMCatagory(addData,arr2,n){
         }
       }
     }
-    arr2 = Array.from(new Set(arr2))
+    arr2 = Array.from(new Set(arr2)) 
 }
+
 
 
 export function aryJoinAry(ary,ary2){
@@ -555,9 +724,7 @@ export function aryJoinAry(ary,ary2){
   else{
     minLength=ary.length;
   }
-
   let longAry=arguments[0].length>arguments[1].length?arguments[0]:arguments[1];
-
   for (let i = 0; i < minLength; i++) {
     itemAry.push(ary[i]);
     itemAry.push(ary2[i])
@@ -924,29 +1091,17 @@ export function mapColor(cell){
 
 
 
-export function chooseMethod(chosenMethod,data){
-  let afterdata = []
-  chosenMethod.forEach((item,index) => {
-      if(item != ""){
-          afterdata.push(data[index]);
-      }
-
-  });
-  return afterdata;
-}
-
-
 export function viewMethod(methoddata){
   let tmpMethod = []
   tmpMethod.push
 }
 
 export function dataHandler(data){
+
   let columns = data.columns.slice(2);
   if(columns.indexOf("P-value") != -1){
     columns.splice(columns.indexOf("P-value"),1)
   }
-
   const result = [];
   const means = [];
   columns.forEach((arr) => {
