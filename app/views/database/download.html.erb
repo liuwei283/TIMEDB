@@ -1,0 +1,196 @@
+<% content_for :head do %>
+  <script src="https://cdn.staticfile.org/jquery/1.10.2/jquery.min.js"></script>
+  <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.22/js/jquery.dataTables.min.js"></script>
+  <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/select/1.3.1/js/dataTables.select.min.js"></script>
+  <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/fixedcolumns/3.3.2/js/dataTables.fixedColumns.min.js"></script>
+  <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.22/css/jquery.dataTables.css">
+  <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/select/1.3.1/css/select.dataTables.min.css">
+  <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/fixedcolumns/3.3.2/css/fixedColumns.dataTables.min.css">
+  <%= javascript_pack_tag "datatable" %>
+<% end %>
+<% content_for :title, 'Download' %>
+<div class="container">
+    <h2> Gene expression data and meta data </h2>
+
+  <table id="table1" class='table table-striped table-sm'>
+    <thead>
+        <th></th>
+            <% @attrs1.each do |attr| %>
+              
+              <th> <%= attr %> </th>
+              
+            <% end %>
+    </thead>
+    <tbody>
+        <% @projects.each do |p| %>
+        <tr>
+            <td></td>
+            <td> <%=p.id%></td>
+            <td> <%=link_to("#{p.project_name}", p.original_link)%></td>
+
+            <td> 
+            <%if @csv_test[p.project_name]['RNA']=='true'%>
+            <%= link_to("#{p.project_name}_RNA.csv","/public/data/RNA/#{p.project_name}.csv")%>
+            <% else %>No data<% end %>
+            </td>
+
+            <td> 
+            <%if @csv_test[p.project_name]['clinical']=='true'%>
+            <%= link_to("#{p.project_name}_clinical.csv","/public/data/clinical/sample/Clinical_#{p.project_name}.csv")%>
+            <% else %>No data<% end %>
+            </td>
+
+            <td> 
+            <%if @csv_test[p.project_name]['rna_immu']=='true'%>
+            <%= link_to("immuReg_#{p.project_name}.csv","/public/data/immuneRegulator/immuReg_#{p.project_name}.csv")%>
+            <% else %>No data<% end %>
+            </td>
+        </tr>
+        <% end %>
+    </tbody>
+  </table>
+
+    <h2> Single Method Deconvolution Results </h2>
+        <table id="table2" class='table table-striped table-sm'>
+            <thead>
+                <th></th>
+                    <% @attrs2.each do |attr| %>
+                    <th> <%= attr %> </th>
+                    
+                    <% end %>
+            </thead>
+            <tbody>
+                <% @projects.each do |p| %>
+                    <tr>
+                        <td></td>
+                        <td> <%=p.id%></td>
+                        <td> <%=link_to("#{p.project_name}", p.original_link)%></td>
+                        <% @attrs2.each do |attr| %>
+                        <% if attr != 'id' and attr !='project_name'%>  
+                        <td>     
+                            <%if @csv_test[p.project_name][attr]=='true'%>
+                            <%= link_to("#{p.project_name}_#{attr}.csv","/public/data/cell_data/#{attr}/#{p.project_name}_#{attr}.csv")%>
+                            <% else %>No data<% end %>
+                            <% end %>
+                        </td>
+                        <% end %>
+                    </tr>
+                <% end %>
+            </tbody>
+        </table>
+    <h2>Comparing Deconvolution Results</h2>
+    <table id="table3" class='table table-striped table-sm'>
+        <thead>
+            <th></th>
+                <% @attrs3.each do |attr| %>
+                <th> <%= attr %> </th>
+                    
+                <% end %>
+        </thead>
+        <tbody>
+            <% @projects.each do |p| %>
+                <tr>
+                    <td></td>
+                    <td> <%=p.id%></td>
+                    <td> <%=link_to("#{p.project_name}", p.original_link)%></td>
+
+                    <td> 
+                        bu zhi dao shi na ge wen jia nie
+                    </td>
+                    <td> 
+                        <%if @csv_test[p.project_name]['Consensus']=='true'%>
+                        <%= link_to("#{p.project_name}_consensus.csv","/public/data/cell_data/#{p.project_name}_Consensus.csv")%>
+                        <% else %>No data<% end %>
+                    </td>
+                </tr>
+            <% end %>
+        </tbody>
+    </table>   
+    <h2>C1-C6 Subtype</h2>
+    <table id="table4" class='table table-striped table-sm'>
+        <thead>
+            <th></th>
+                <% @attrs4.each do |attr| %>
+                <th> <%= attr %> </th>
+                    
+                <% end %>
+        </thead>
+        <tbody>
+            <% @projects.each do |p| %>
+                <tr>
+                    <td></td>
+                    <td> <%=p.id%></td>
+                    <td> <%=link_to("#{p.project_name}", p.original_link)%></td>
+
+                    <td> 
+                        <%if @csv_test[p.project_name]['subtype']=='true'%>
+                        <%= link_to("#{p.project_name}_c1_c6.csv","/public/data/subtype/project/#{p.project_name}_c1_c6.csv")%>
+                        <% else %>No data<% end %>
+                    </td>
+                </tr>
+            <% end %>
+        </tbody>
+    </table>
+
+</div>
+
+<script type="text/javascript" src="//gyrocode.github.io/jquery-datatables-checkboxes/1.2.12/js/dataTables.checkboxes.min.js"></script>
+
+<script>
+$(document).ready(function() {
+    var oTable1 = $("#table1").DataTable({
+      columnDefs: [
+        {
+          targets: 0,
+          checkboxes: {
+            selectRow: true,
+          }
+        }
+      ],
+      select: {
+        style: 'multi'
+      },
+    });
+    var oTable2 = $("#table2").DataTable({
+      columnDefs: [
+        {
+          targets: 0,
+          checkboxes: {
+            selectRow: true,
+          }
+        }
+      ],
+      select: {
+        style: 'multi'
+      },
+      scrollX: true,
+    });
+    var oTable1 = $("#table3").DataTable({
+      columnDefs: [
+        {
+          targets: 0,
+          checkboxes: {
+            selectRow: true,
+          }
+        }
+      ],
+      select: {
+        style: 'multi'
+      },
+    });
+    var oTable1 = $("#table4").DataTable({
+      columnDefs: [
+        {
+          targets: 0,
+          checkboxes: {
+            selectRow: true,
+          }
+        }
+      ],
+      select: {
+        style: 'multi'
+      },
+    });
+});
+
+</script>

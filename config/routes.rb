@@ -85,6 +85,8 @@ Rails.application.routes.draw do
 
   # database pages
   get 'database/overview', to: 'database#overview'
+  get 'database/download', to: 'database#download'
+
   get 'user/show', to: 'users#show'
   # get 'demo', to: 'demo#show'
   #post 'welcome/accept_cookies', to: 'welcome#require_cookie'

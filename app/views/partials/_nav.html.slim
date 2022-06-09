@@ -33,6 +33,9 @@
             = link_to samples_path, class: 'dropdown-item' do
               / = icon 'fas', 'network-wired'
               | Samples Detail
+            = link_to '/database/download/', class: 'dropdown-item' do
+              / = icon 'fas', 'network-wired'
+              | Download 
 
         li.nav-item.dropdown
           = link_to '#', class: 'nav-link dropdown-toggle', data: { toggle: 'dropdown' } do 
