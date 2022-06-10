@@ -374,6 +374,7 @@ class SubmitController < ApplicationController
               fname = file_names[input_id]
               Rails.logger.debug fname
               match_merged_files = merged_files[fname]
+              Rails.logger.info 
               Rails.logger.debug match_merged_files.length
               match_merged_files.each_with_index do |m_file, idx|
                 file_name = fname + "_" + idx.to_s + ".csv"

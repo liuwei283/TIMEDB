@@ -188,7 +188,7 @@ export default {
             isDemo: true,
 
             taskId: 5212,
-            display:0,
+            display:1,
             inputs: [], 
             outputs: [],
             params: [],

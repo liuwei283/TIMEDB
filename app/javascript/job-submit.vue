@@ -248,9 +248,11 @@
                                         <h3 class = "text-center">Parameter setting</h3>
                                         <br>
 
-                                        <div class = "row submit-box justify-content-center">
-                                            <div v-if="displayedSingleParams.length > 0" class = "col-md-6" style="height:350px; overflow:scroll; vertical-align:center">
-                                                <div class="row">
+                                        <div class = "row submit-box justify-content-center;">
+                                            <div v-if="displayedSingleParams.length > 0" class = "col-md-6">
+
+                                                <div class="row" style="height:350px; overflow-y:scroll; display:flex; flex-direction: row; justify-content: center; align-items:center;">
+
                                                     <div class="col-md-10" v-for="param in displayedSingleParams" :key="param.id">
                                                         <label :for="`p-${param.id}`">{{ param.name }}
                                                             <span v-if="param.required" class="required">*</span>
@@ -291,7 +293,7 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div class = "col-md-6">
+                                            <div class = "col-md-6" style="height:350px; overflow:scroll; display:flex; flex-direction: column; justify-content: center;">
                                                 <h2>Parameters description</h2>
                                                 <div id = "single_params_desc" v-html="single_params_desc"></div>
                                             </div>
@@ -587,6 +589,7 @@
                 multiple_completed: [],
                 step: 1,
                 showhelper: false,
+                parameters_input: [],
 
                 test_description: "<h5>There are something testing description</h5><ul><li>The first row is for something.</li><li>The first column is for something. It should be something.</li><li>Please be noted that the uploader is for something and somethind should be...</li></ul><p>This is the end of this line.</p>"
             };
@@ -894,6 +897,10 @@
                 else {
                     console.log("start update app");
                     this.selected_analysis = s_ana;
+
+                    if (s_ana.name = "TIMEDB Batch Effect") {
+                        this.picked_single_multiple = 'multiple';
+                    }
                     
                     var newid;
                     if (this.picked_single_multiple == "single") {
@@ -945,6 +952,7 @@
 
 
                         for (var k in this.app.inputs){
+                            if (this.app.inputs[k].id) = 
                             this.file_names['i-' + this.app.inputs[k].id]  = this.app.inputs[k].name; //for later dataset merging - file matching
                         }
 
@@ -1568,6 +1576,10 @@ input[type="radio"] {
     align-items: center;
 
 
+}
+
+#parameter-setting-step .row {
+    vertical-align: center;
 }
 
 #multiple-upload-box > .text-center {

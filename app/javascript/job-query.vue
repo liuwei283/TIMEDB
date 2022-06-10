@@ -174,6 +174,8 @@
 
                     <section id="inputs" class="mt-2 mb-4">
                         <h4 class="pb-1">Inputs</h4>
+                        <p> You can click refresh button to refresh task status.</p>
+                        <p> If the job is finished, visualization is avaliable through clicking the button above</p>
                         <b-list-group>
                             <b-list-group-item v-for="input in inputs" href="javascript:void(0)" v-b-toggle="`i-${input.id}`" :key="`i-${input.id}`">
                                 <i class="fa fa-file"></i> {{ input.name }}
