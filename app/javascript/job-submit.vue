@@ -952,7 +952,6 @@
 
 
                         for (var k in this.app.inputs){
-                            if (this.app.inputs[k].id) = 
                             this.file_names['i-' + this.app.inputs[k].id]  = this.app.inputs[k].name; //for later dataset merging - file matching
                         }
 
