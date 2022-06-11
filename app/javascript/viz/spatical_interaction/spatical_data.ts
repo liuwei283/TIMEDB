@@ -57,6 +57,7 @@ export function processGraph(v) {
 
     v.graphLabel = newlabel
 
+    let matrix = []
     matrix = matrixSum[v.selectedFeature][v.selectedGroup]
     v.graphMatrix = matrix  
 

@@ -63,7 +63,7 @@ function init() {
         setup() {
             console.log(this)
             this.size = {height: 200+200*this.data.le, width: 200+900*Object.keys(this.data.color).length}
-            registerEditorConfig(editorConfig(this), "getVue", "#task-output", editorRef);
+            registerEditorConfig(editorConfig(this), "getVue", "#task-output");
         }
     });
 

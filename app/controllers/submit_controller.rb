@@ -612,10 +612,12 @@ class SubmitController < ApplicationController
   def remove_task
     @task = Task.find params[:job_id]
     
-    @analysis_user_datum = AnalysisUserDatum.find_by analysis_id: @task.analysis.id, user_id: session[:user_id]
-    @analysis_user_datum.task_output = nil
-    @analysis_user_datum.use_demo_file = true
-    @analysis_user_datum.save!
+    if !@analysis_user_datum.blank?
+      @analysis_user_datum = AnalysisUserDatum.find_by analysis_id: @task.analysis.id, user_id: session[:user_id]
+      @analysis_user_datum.task_output = nil
+      @analysis_user_datum.use_demo_file = true
+      @analysis_user_datum.save!
+    end
     @task.destroy!
     render json:{code:true}
   end
