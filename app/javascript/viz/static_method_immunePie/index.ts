@@ -17,7 +17,7 @@ import { registerDefaultBioInfoComponents } from "crux/dist/element/global";
 
 registerDefaultBioInfoComponents();
 
-export function init(id,path,config){
+export function init(id,path,config,eid,plot_name){
     Oviz.visualize({
         el:id,
         template,
@@ -51,6 +51,7 @@ export function init(id,path,config){
         setup() { 
             console.log("this.data:",this["_data"]);
             //registerEditorConfig(editorConfig(this), editorRef);
+            //registerEditorConfig(editorConfig(this,eid), plot_name);
         },
     })
 }
