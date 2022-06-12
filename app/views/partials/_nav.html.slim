@@ -33,9 +33,7 @@
             = link_to samples_path, class: 'dropdown-item' do
               / = icon 'fas', 'network-wired'
               | Samples Detail
-            = link_to '/database/download/', class: 'dropdown-item' do
-              / = icon 'fas', 'network-wired'
-              | Download 
+
 
         li.nav-item.dropdown
           = link_to '#', class: 'nav-link dropdown-toggle', data: { toggle: 'dropdown' } do 
@@ -62,6 +60,10 @@
             = link_to '/submit/job-query', class: 'nav-link' do
               = icon 'fa', 'tasks'
               | Workspace
+        li.nav-item
+            = link_to '/download', class: 'nav-link' do
+                = icon 'fas', 'download'
+                | Download 
         li.nav-item
             = link_to '/tutorial', class: 'nav-link' do
               = icon 'fa', 'file-alt'
