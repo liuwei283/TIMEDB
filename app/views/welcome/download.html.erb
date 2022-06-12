@@ -6,7 +6,7 @@
   <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.22/css/jquery.dataTables.css">
   <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/select/1.3.1/css/select.dataTables.min.css">
   <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/fixedcolumns/3.3.2/css/fixedColumns.dataTables.min.css">
-  <%= javascript_pack_tag "datatable" %>
+  <%= javascript_pack_tag "download" %>
 <% end %>
 <% content_for :title, 'Download' %>
 <div class="container">
@@ -14,7 +14,6 @@
 
   <table id="table1" class='table table-striped table-sm'>
     <thead>
-        <th></th>
             <% @attrs1.each do |attr| %>
               
               <th> <%= attr %> </th>
@@ -24,13 +23,13 @@
     <tbody>
         <% @projects.each do |p| %>
         <tr>
-            <td></td>
             <td> <%=p.id%></td>
+
             <td> <%=link_to("#{p.project_name}", p.original_link)%></td>
 
             <td> 
             <%if @csv_test[p.project_name]['RNA']=='true'%>
-            <%= link_to("#{p.project_name}_RNA.csv","/public/data/RNA/#{p.project_name}.csv")%>
+            <%= link_to("#{p.project_name}_RNA.csv","/public/data/RNA/RNA_#{p.project_name}.csv")%>
             <% else %>No data<% end %>
             </td>
 
@@ -49,11 +48,10 @@
         <% end %>
     </tbody>
   </table>
-
+    <button class="btn btn-primary" id="djj1" >submit</button>
     <h2> Single Method Deconvolution Results </h2>
         <table id="table2" class='table table-striped table-sm'>
             <thead>
-                <th></th>
                     <% @attrs2.each do |attr| %>
                     <th> <%= attr %> </th>
                     
@@ -62,7 +60,6 @@
             <tbody>
                 <% @projects.each do |p| %>
                     <tr>
-                        <td></td>
                         <td> <%=p.id%></td>
                         <td> <%=link_to("#{p.project_name}", p.original_link)%></td>
                         <% @attrs2.each do |attr| %>
@@ -81,7 +78,7 @@
     <h2>Comparing Deconvolution Results</h2>
     <table id="table3" class='table table-striped table-sm'>
         <thead>
-            <th></th>
+            
                 <% @attrs3.each do |attr| %>
                 <th> <%= attr %> </th>
                     
@@ -90,12 +87,13 @@
         <tbody>
             <% @projects.each do |p| %>
                 <tr>
-                    <td></td>
                     <td> <%=p.id%></td>
                     <td> <%=link_to("#{p.project_name}", p.original_link)%></td>
 
                     <td> 
-                        bu zhi dao shi na ge wen jia nie
+                        <%if @csv_test[p.project_name]['all']=='true'%>
+                        <%= link_to("#{p.project_name}_all.tsv","/public/data/all_method/#{p.project_name}_all.tsv")%>
+                        <% else %>No data<% end %>
                     </td>
                     <td> 
                         <%if @csv_test[p.project_name]['Consensus']=='true'%>
@@ -109,7 +107,6 @@
     <h2>C1-C6 Subtype</h2>
     <table id="table4" class='table table-striped table-sm'>
         <thead>
-            <th></th>
                 <% @attrs4.each do |attr| %>
                 <th> <%= attr %> </th>
                     
@@ -118,7 +115,6 @@
         <tbody>
             <% @projects.each do |p| %>
                 <tr>
-                    <td></td>
                     <td> <%=p.id%></td>
                     <td> <%=link_to("#{p.project_name}", p.original_link)%></td>
 
@@ -133,64 +129,3 @@
     </table>
 
 </div>
-
-<script type="text/javascript" src="//gyrocode.github.io/jquery-datatables-checkboxes/1.2.12/js/dataTables.checkboxes.min.js"></script>
-
-<script>
-$(document).ready(function() {
-    var oTable1 = $("#table1").DataTable({
-      columnDefs: [
-        {
-          targets: 0,
-          checkboxes: {
-            selectRow: true,
-          }
-        }
-      ],
-      select: {
-        style: 'multi'
-      },
-    });
-    var oTable2 = $("#table2").DataTable({
-      columnDefs: [
-        {
-          targets: 0,
-          checkboxes: {
-            selectRow: true,
-          }
-        }
-      ],
-      select: {
-        style: 'multi'
-      },
-      scrollX: true,
-    });
-    var oTable1 = $("#table3").DataTable({
-      columnDefs: [
-        {
-          targets: 0,
-          checkboxes: {
-            selectRow: true,
-          }
-        }
-      ],
-      select: {
-        style: 'multi'
-      },
-    });
-    var oTable1 = $("#table4").DataTable({
-      columnDefs: [
-        {
-          targets: 0,
-          checkboxes: {
-            selectRow: true,
-          }
-        }
-      ],
-      select: {
-        style: 'multi'
-      },
-    });
-});
-
-</script>
