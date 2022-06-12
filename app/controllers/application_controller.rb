@@ -44,7 +44,7 @@ class ApplicationController < ActionController::Base
         # logger.error session[:user_id]
         # check if guest user has not already accepted the toc from session
         logger.error session[:user_id]
-        if session[:user_id].nil?
+        if session[:user_id].nil? || !User.exists?(session[:user_id])
             redirect_to root_path, alert: 'Please accept cookie to continue.'
             logger.error params[:user_id]
             logger.error "----------------------------------"
