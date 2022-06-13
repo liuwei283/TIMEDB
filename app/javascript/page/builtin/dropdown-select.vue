@@ -1,5 +1,5 @@
 <template>
-     <b-dropdown right="right" :size="size" class="sl-dropdown" toggle-class="btn-block dropdown-toggle" boundary="window">
+     <b-dropdown right="right" :size="size" class="sl-dropdown" toggle-class="btn-block btn btn-2 dropdown-toggle" boundary="window">
         <template slot="button-content">
             <div class="d-flex justify-content-between">
                 <div class="sl-label"><slot name="label" v-bind:opt="chosenOption">{{title}}</slot></div>

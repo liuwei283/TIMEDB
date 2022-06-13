@@ -63,7 +63,7 @@
                         <!-- </div> -->
                         <div class="cols-xs-space cols-sm-space cols-md-space container">
 
-                            <div class = "row" id = "supervisedSelect" v-if="isConv==true">
+                            <!-- <div class = "row" id = "supervisedSelect" v-if="isConv==true">
                                 <div>
                                     <h2 class="display-5">
                                         Submit tasks to supervised or unsupervised analyses:
@@ -75,7 +75,7 @@
                                     <label for="unsupervised" class = "btn btn-outline-secondary">Unsupervised Deconvolution</label>
 
                                 </div>
-                            </div>
+                            </div> -->
                             <div class = "row submit-container">
                                 <div class="col-lg-4 mb-4 justify-content-center text-center" v-for="a in displayedAnalyses" :key="a.id" @click="updateApp(a, true)">
                                     <div class="card">
@@ -248,9 +248,11 @@
                                         <h3 class = "text-center">Parameter setting</h3>
                                         <br>
 
-                                        <div class = "row submit-box justify-content-center">
-                                            <div v-if="displayedSingleParams.length > 0" class = "col-md-6" style="height:350px; overflow:scroll; vertical-align:center">
-                                                <div class="row">
+                                        <div class = "row submit-box justify-content-center;">
+                                            <div v-if="displayedSingleParams.length > 0" class = "col-md-6">
+
+                                                <div class="row" style="height:350px; overflow-y:scroll; display:flex; flex-direction: row; justify-content: center; align-items:center;">
+
                                                     <div class="col-md-10" v-for="param in displayedSingleParams" :key="param.id">
                                                         <label :for="`p-${param.id}`">{{ param.name }}
                                                             <span v-if="param.required" class="required">*</span>
@@ -289,9 +291,28 @@
                                                                         :state="inputValid[`p-${param.id}`]" />
                                                         </div>
                                                     </div>
+                                                    <h5 class = "submit-container" v-if="parameters_input.length > 0"> Some self statements here, Some self statements here, Some self statements here.</h5>
+                                                    <div class="col-md-10" v-for="param_input in parameters_input" :key="param_input.id">
+                                                        <label :for="`p-${param_input.id}`">{{ param_input.name }}
+                                                            <span v-if="param_input.required" class="required">*</span>
+                                                        </label>
+                                                        <div>
+                                                            <b-form-file
+                                                                :id="`i-${param_input.id}`"
+                                                                v-model="files[`i-${param_input.id}`]"
+                                                                :state="inputValid[`i-${param_input.id}`]"
+                                                                placeholder="Choose a file or drop it here..."
+                                                                drop-placeholder="Drop file here..." 
+                                                                :name="`i-${param_input.id}`"
+                                                                :required="param_input.required"
+                                                            >
+                                                            </b-form-file>  
+                                                        </div>
+                                                    </div>
+                                                    
                                                 </div>
                                             </div>
-                                            <div class = "col-md-6">
+                                            <div class = "col-md-6" style="height:350px; overflow:scroll; display:flex; flex-direction: column; justify-content: center;">
                                                 <h2>Parameters description</h2>
                                                 <div id = "single_params_desc" v-html="single_params_desc"></div>
                                             </div>
@@ -587,13 +608,15 @@
                 multiple_completed: [],
                 step: 1,
                 showhelper: false,
+                parameters_input: [],
+                local_analysis_name: "",
 
                 test_description: "<h5>There are something testing description</h5><ul><li>The first row is for something.</li><li>The first column is for something. It should be something.</li><li>Please be noted that the uploader is for something and somethind should be...</li></ul><p>This is the end of this line.</p>"
             };
         },
         created() {
             this.ds_info = window.gon.select_box_option;
-            if (this.analysis_category == "TIME Estimation") {
+            if ( ['Regression Tools', 'Enrichment Tools', 'Consensus Tools', 'Unsupervised'].includes( this.analysis_category) ) {
                 this.isConv = true; //deconvolution analysis category are different from others
             }
             this.updateApp(null, false);
@@ -615,7 +638,7 @@
         computed: {
             displayedInputs() {
                 // eslint-disable-next-line
-                return _.sortBy(this.app.inputs.filter(x => !x._destroy), ['name']);
+                return _.sortBy(this.app.inputs.filter(x => (!x._destroy && x.name != 'CIBERSORT.R' && x.name != 'Signature file')), ['name']);
             },
             displayedSingleParams() {
                 // eslint-disable-next-line
@@ -626,14 +649,14 @@
             },
             displayedAnalyses() {
                 var filtered_analyses = this.analyses;
-                if (this.isConv == true) {
-                    if (this.picked_supervised == "supervised") {
-                        filtered_analyses = filtered_analyses.filter(item => !(item.name == "TIMEDB Deconv LinSeed"));
-                    }
-                    else {
-                        filtered_analyses = filtered_analyses.filter(item => (item.name == "TIMEDB Deconv LinSeed"));
-                    }
-                }
+                // if (this.isConv == true) {
+                //     if (this.picked_supervised == "supervised") {
+                //         filtered_analyses = filtered_analyses.filter(item => !(item.name == "TIMEDB Deconv LinSeed"));
+                //     }
+                //     else {
+                //         filtered_analyses = filtered_analyses.filter(item => (item.name == "TIMEDB Deconv LinSeed"));
+                //     }
+                // }
                 return filtered_analyses; 
             },
             displayedPairsNum() {
@@ -828,17 +851,22 @@
 
                     var formatted_files = {};
                     for (var k in this.app.inputs) {
-                        var input_arr = [];
-                        for (var input_idx = 1; input_idx <= this.multiple_pairs_num;  input_idx++ ) {
-                            if (this.multiple_completed[input_idx - 1] == true && this.ds_selected[input_idx - 1] == "") {
-                                input_arr.push(this.files['multiple-i-' + this.app.inputs[k].id + '-' + input_idx]);
+                        if (this.app.inputs[k].name != "CIBERSORT.R" && this.app.inputs[k].name != "Signature file") {
+                            var input_arr = [];
+                            for (var input_idx = 1; input_idx <= this.multiple_pairs_num;  input_idx++ ) {
+                                if (this.multiple_completed[input_idx - 1] == true && this.ds_selected[input_idx - 1] == "") {
+                                    input_arr.push(this.files['multiple-i-' + this.app.inputs[k].id + '-' + input_idx]);
+                                }
                             }
+                            formatted_files['i-' + this.app.inputs[k].id] = input_arr;
                         }
-                        formatted_files['i-' + this.app.inputs[k].id] = input_arr;
+                    }
+
+                    for (var k in this.parameters_input) {
+                        formatted_files['i-' + this.parameters_input[k].id] = this.files['i-' + this.parameters_input[k].id];
                     }
                     console.log("formatted files:");
                     console.log(formatted_files);
-
                     return formatted_files;
                 }
             },
@@ -894,13 +922,17 @@
                 else {
                     console.log("start update app");
                     this.selected_analysis = s_ana;
+                    this.local_analysis_name = s_ana.name;
+
+                    if (s_ana.name == "TIMEDB Batch Effect") {
+                        this.picked_single_multiple = 'multiple';
+                    }
                     
                     var newid;
                     if (this.picked_single_multiple == "single") {
                         newid = s_ana.mid;
                         this.demo_id = s_ana.single_demo_id;
                         this.result_demo_id = s_ana.single_result_id;
-
                     }
                     else {
                         newid = s_ana.multiple_mid;
@@ -935,14 +967,9 @@
                             this.multiple_params_desc = this.multiple_parameters[0].description;
                             this.ds_params = this.app.params.find(x => x['name'] == 'Protocol normalization');//for dataset parameters
 
-                            
-
                             console.log("printing dataset parameters");
                             console.log(this.ds_params.name);
-                            // console.log();
                         }
-
-
 
                         for (var k in this.app.inputs){
                             this.file_names['i-' + this.app.inputs[k].id]  = this.app.inputs[k].name; //for later dataset merging - file matching
@@ -957,7 +984,13 @@
 
                         this.single_params_desc = this.single_parameters[0].description;
 
-                    
+                        if (this.local_analysis_name == "TIMEDB Deconv CIBERSORT") {
+                            for (var k in this.app.inputs) {
+                                if (this.app.inputs[k].name == "CIBERSORT.R" || this.app.inputs[k].name == "Signature file") {
+                                    this.parameters_input.push(this.app.inputs[k]);
+                                }
+                            }
+                        }
                     });
                     console.log("end update app");
                     this.showhelper = true;
@@ -1537,6 +1570,7 @@ input[type="radio"] {
     margin-left: 10%;
     margin-top: 50px;
     height: 450px;
+    // overflow: scroll;
 }
 
 #parameter-setting-step {
@@ -1568,6 +1602,10 @@ input[type="radio"] {
     align-items: center;
 
 
+}
+
+#parameter-setting-step .row {
+    vertical-align: center;
 }
 
 #multiple-upload-box > .text-center {

@@ -1,0 +1,151 @@
+svg{
+	width = 1300; 
+	//height = 600
+	Component {
+		Container {
+			XYPlot {
+				x = data.maxtextcell+200;y = 100
+				width = 200;
+				//height = 320;
+				height = cell.length*15
+				padding = 20
+				valueRange = [-1,cell.length]
+				discreteCategory = true
+				data = {eachbar}
+				@expr console.log("eachbar!!!!",eachbar)
+				@expr console.log("maxtextcell:",data.maxtextcell)
+				//rotation = @rotate(90)
+				yScale = @scaleLinear(-1,6)
+				fill = "none"
+				dataHandler = {
+					eachbar: {
+						pos: d => d[2],
+						//min: d => d[1],
+						value: d => d[0],
+					},
+				}
+				//line 有问题
+				// @for(d,i) in eachbar{
+				// 	@if(i<cell.length){
+				// 		Component {
+				// 			discreteCategory = true
+				// 			Line {
+				// 				fill = "black"
+				// 				x1 = d[6]*25; y1 = @scaled-y(i)+3 
+				// 				x2 = d[7]*25; y2 = @scaled-y(i)+3
+				// 			}
+				// 		}
+				// 	}
+					
+				// }
+				//rect
+				@for (d, i) in eachbar {
+					Component {
+						key = i + "comp"
+						discreteCategory = true
+						//x = @scaled-x(d[2]); 
+						y = @scaled-y(d[0])
+						x = d[2]*25;
+						// @let tempx = @scaled-x(d[2])
+						// @expr console.log("tempx:",tempx)
+						
+						Rect {
+							fill = d[3]; width = 6;height = 6
+							behavior:tooltip {
+								content = `values: ${d[2]}<br>`
+                            }
+						}
+					}
+				}
+				Line {
+					fill = "black"
+					x1 = 28; y1 = 10
+					x2 = 28; y2 = 100%
+				}
+				Line {
+					fill = "black"
+					x1 = -28; y1 = 100%
+					x2 = 84; y2 = 100%
+				}
+				//subtype
+				@for(d,i) in cell{
+					Component {
+						discreteCategory = true
+						y = @scaled-y(i)
+						x = -data.maxtextcell-50
+						Text {
+							text = d
+							fontSize = 12
+						}
+						
+					}
+				}
+				Text{
+					x = -data.maxtextcell/2 - 60;
+					y = -10;
+					text = "Subtype"
+					style:font-weight="bold"
+					fontSize = 14
+				}
+				//HR
+				@for(d,i) in eachbar{
+					@if(i<cell.length){
+						Component {
+							discreteCategory = true
+							y = @scaled-y(d[0])
+							x = 150
+							Text {
+								text = d[4]
+								fontSize = 12
+							}
+						}
+					}
+					
+				}
+				//P-value
+				@for(d,i) in eachbar{
+					@if(i<cell.length){
+						Component {
+							discreteCategory = true
+							y = @scaled-y(d[0])
+							x = data.maxtextPRC + 150 + 50
+							Text {
+								text = d[5]
+								fontSize = 12
+							}
+						}
+					}
+					
+				}
+				
+				Text{
+					x = 160;
+					y = -10;
+					text = "HR(0.95CI)"
+					style:font-weight="bold"
+					fontSize = 14
+				}
+				Text{
+					x = data.maxtextPRC + 150 + 60;
+					y = -10
+					text = "P value"
+					style:font-weight="bold"
+					fontSize = 14
+				}
+				Text{
+					x = 15; y = 100%+5
+					text = "1.0"
+					fontSize = 15
+				}
+				Text{
+					x = -20; y = 100%+20
+					text = title
+					style:font-weight="bold"
+					fontSize = 15
+				}
+			}
+		}	
+
+	}
+
+}

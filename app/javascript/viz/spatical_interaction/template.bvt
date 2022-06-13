@@ -1,0 +1,117 @@
+Component {
+    Container {
+        x = 50;y = 50
+        Text {
+            text = "Selected Feature:"+selectedFeature + "    Selected Group:"+selectedGroup
+            fontSize = 14
+        }
+    }
+
+    Component{
+        x = 750 + (graphRadius - 150)*3; y = 300 + graphRadius - 150
+        width = 200; height = 200
+        Component{
+            coord = 'polar'
+			//除网络外的所有
+			
+            @for (label, i) in graphLabel{     
+				//@expr console.log("template graphLabel:",graphLabel)          
+                Circle.centered{
+                    x = graphNode[label].circleAngle
+                    y = graphRadius
+                    r = nodeRadius
+					//r = nodeR[i]
+					//@expr console.log("r：",nodeRadius)
+                    //fill=graphNode[label].color || 'grey'
+                    fill = colorMap[label] || "grey"
+                    behavior:tooltip{
+                        content = `${label}`
+                    }
+                }
+                Text.centered{
+                    text = label
+                    x = graphNode[label].circleAngle
+                    y = graphRadius + 10 + getR(label)
+                }
+            }
+			//网络
+            @for (source, i) in graphLabel{
+                @for (target, j) in graphLabel{
+                    @if(parseFloat(graphMatrix[i][j]) != 0){ //去除了节点和节点本身的可能
+						//根据数值画线
+                        Path{
+                            d = getRibbonPathForNode(graphNode[source], graphNode[target], graphRadius) //
+                            fill = graphMatrixScheme.get(parseFloat(graphMatrix[i][j])) //"#69b3a2"
+                            stroke = graphMatrixScheme.get(parseFloat(graphMatrix[i][j])) // '#69b3a2'
+                            behavior:tooltip{
+                                content = `Source: ${graphLabel[graphNode[source].index]}<br>Target: ${graphLabel[graphNode[target].index]}<br>Interaction: ${graphMatrix[i][j]}`
+                            }  
+                        } 
+                    }
+                }
+            }
+        }    
+    }
+    
+    Component{
+        x = 250 + (graphRadius - 150)*1; y = 300 + graphRadius - 150
+        width = 200; height = 200
+
+        Component{
+            // text圆形分布
+            coord = 'polar'
+            //桑基图的线
+            @for (pair, i) in graphCord{
+                //@expr console.log(i)
+                //@expr console.log("pair:",pair)
+                Path{
+                    d = getRibbonPath(pair, graphRadius - nodeRadius)
+                    fill= graphMatrixScheme.get(pair.source.value)
+                    // pathOptions = {
+                    //     fillOpacity: 0.1
+                    // }
+                    behavior:tooltip{
+                        content = `Source: ${graphLabel[pair.source.index]}<br>Target: ${graphLabel[pair.target.index]}<br>Interaction: ${pair.source.value}`
+                    }            
+                }
+            } 
+            @for (x, i) in graphNode{
+                //x: 8*{startAngle,endAngle}
+                //@expr console.log("x:",x)
+                //最外层的圈
+                Path {
+                    //stroke = "black"
+                    //strokeWidth = 30
+                    d = getArcPath(x)
+                    //@expr console.log("d:",getArcPath(x)) //转换成SVG的path路径
+                    fill=colorMap[x.label] || 'grey'
+                    behavior:tooltip{
+                        content = `${x.label}`
+                    }
+                    
+                }
+                //文字标签
+                @if (x.startAngle != x.endAngle){
+                    // @if((x.startAngle + x.endAngle)/2/Math.PI * 180>180){
+                    //     Text{
+                    //         text = x.label
+                    //         x = (x.startAngle + x.endAngle)/2/Math.PI * 180
+                    //         @expr console.log("angle:",x.label,(x.startAngle + x.endAngle)/2/Math.PI * 180)
+                    //         y = graphRadius + getR(x.label)
+                    //     }
+                    // }
+                    // @else{
+                        Text.centered{
+                            text = x.label
+                            x = (x.startAngle + x.endAngle)/2/Math.PI * 180
+                            //@expr console.log("angle:",x.label,(x.startAngle + x.endAngle)/2/Math.PI * 180)
+                            y = graphRadius + 10 + getR(x.label)
+                        }
+                    // }
+                }
+            }
+            
+        }    
+    }
+   
+}

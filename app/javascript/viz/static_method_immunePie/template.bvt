@@ -1,15 +1,15 @@
 svg {
-	width = 1100;height = 870
+	width = 1200;height = 800
 	Component {
 		y = 20
 		Text.centered {
-			x = 550
-			text = title
+			x = 500
+			text = "TIME cell fraction of " + samplenme
 			fontSize = tickFontSize
 		}
 		PieChart.centered {
-			height = @geo(100, -100); width  = @geo(100, -100); padding = 20
-			x = 550;y = 400
+			//height = @geo(100, -100); width  = @geo(100, -100); padding = 20
+			x = 500;y = 250
 			data = piesData[methodList[buttonkey]]
 			pieProps = {
 				stroke: "white"
@@ -24,26 +24,98 @@ svg {
                 }
 			}
 		}
-		Legend{
-			@props legendPos
-			data = legendsData[methodList[buttonkey]]
-			padding = 4
-			lineHeight = 13
-			legendWidth = 15
-			label.fontSize = 10
-		}
+		// Legend{
+		// 	@props legendPos //legendPos: {x: 840, y: 20},
+		// 	data = legendsData[methodList[buttonkey]]
+		// 	@expr console.log("???:",legendsData[methodList[buttonkey]])
+		// 	padding = 4
+		// 	lineHeight = 13
+		// 	legendWidth = 15
+		// 	label.fontSize = 10
+		// }
+		Container{
+			x = -80 
+			@if(legendsData[methodList[buttonkey]].length>20){
+				Rect {
+					x = 840; y = 30
+                	width = 320;height = legendsData[methodList[buttonkey]].length/2 *15 + 10 + 15
+                	stroke = "black"
+                	fill = "none"
+            	} 
+			}
+			@else{
+				Rect {
+					x = 840; y = 30
+                	width = 180;height = legendsData[methodList[buttonkey]].length *15 + 10
+                	stroke = "black"
+                	fill = "none"
+            	}   
+			}
+			   
+			@for (item, index) in legendsData[methodList[buttonkey]] {
+				@if(legendsData[methodList[buttonkey]].length>20){
+					@if(index < legendsData[methodList[buttonkey]].length/2 + 1){
+						Rect {
+							key = index
+                    		x = 845;y = (legendsData[methodList[buttonkey]].length - index - legendsData[methodList[buttonkey]].length/2 +1) * 15 -2.5 + 30
+                    		height = 5;width = 12
+                    		fill = item.fill
+                		}
+						Text {
+							key = index
+                    		x = 865;y = (legendsData[methodList[buttonkey]].length - index - legendsData[methodList[buttonkey]].length/2 +1) * 15 - 5 + 30
+                    		text = item.label
+                    		fill = "#000"
+                    		fontSize = 10
+                		}
+					}
+					@else{
+						Rect {
+							key = index
+                    		x = 1025;y = (legendsData[methodList[buttonkey]].length - index) * 15 -2.5 + 30
+                    		height = 5;width = 12
+                    		fill = item.fill
+                		}
+						Text {
+							key = index
+                    		x = 1045;y = (legendsData[methodList[buttonkey]].length - index) * 15 - 5 + 30
+                    		text = item.label
+                    		fill = "#000"
+                    		fontSize = 10
+                		}
+					}
+				}
+				@else{
+					Rect {
+						key = index
+                    	x = 845;y = (legendsData[methodList[buttonkey]].length - index) * 15 -2.5 + 30
+                    	height = 5;width = 12
+                    	fill = item.fill
+                	}
+					Text {
+						key = index
+                    	x = 865;y = (legendsData[methodList[buttonkey]].length - index) * 15 - 5 + 30
+                    	text = item.label
+                    	fill = "#000"
+                    	fontSize = 10
+                	}
+				}
+                
+            }
+        }
+		
 		Container.centered {
 			anchor = @anchor("center","bottom")
 			@let len = methodList.length
-			x = 245;y = 800
+			x = 195;y = 550
 			@for(item,index) in methodList{
 				@if(index<len/2){
 					Component {
 						x = 120*(index+len/2); y = 20
 						@let disabled = buttonkey === index
-        	        	width = 90; height = 30
-        	        	Rect.full {fill = disabled ? "#727D91" : "#485570"; cornerRadius = 4}
-        	        	Text.centered(item) { x = 50%; y = 50%; fill = "#fff";fontSize = 10 }
+        	        	width = 80; height = 25
+        	        	Rect.full {fill = disabled ?  "#485570" : "#727D91"; cornerRadius = 4}
+        	        	Text.centered(item) { x = 50%; y = 50%; fill = "#fff";fontSize = 9 }
         	        	cursor = disabled ? null:"pointer"
         	        	on:click = disabled ? null:buttonclick(index)
 					}
@@ -52,9 +124,9 @@ svg {
 					Component {
 						x = 120*(index); y = 70
 						@let disabled = buttonkey === index
-        	        	width = 90; height = 30
-        	        	Rect.full {fill = disabled ? "#727D91" : "#485570"; cornerRadius = 4}
-        	        	Text.centered(item) { x = 50%; y = 50%; fill = "#fff";fontSize = 10 }
+        	        	width = 80; height = 25
+        	        	Rect.full {fill = disabled ? "#485570" : "#727D91"; cornerRadius = 4}
+        	        	Text.centered(item) { x = 50%; y = 50%; fill = "#fff";fontSize = 9 }
         	        	cursor = disabled ? null:"pointer"
         	        	on:click = disabled ? null:buttonclick(index)
 					}

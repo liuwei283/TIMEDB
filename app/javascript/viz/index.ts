@@ -3,6 +3,9 @@
 // }
 import { registerLinSeed } from "./LinSeed";
 import { registerLandscapeHeatmap} from "./Landscape_heatmap";
+import { registerHRORMountain} from "./HRORMountain";
+import { registerHRORTable } from "./HRORTable";
+import { registerSpaticalInteraction } from "./spatical_interaction";
 
 declare global {
     interface GonInfo {
@@ -23,6 +26,15 @@ export function registerViz(moduleName) {
             break;
         case "Landscape_heatmap":
             registerLandscapeHeatmap();
+            break;
+        case "HRORMountain":
+            registerHRORMountain();
+            break;
+        case "HRORTable":
+            registerHRORTable();
+            break;
+        case "spatical_Interaction":
+            registerSpaticalInteraction();
             break;
     }
 }

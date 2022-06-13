@@ -344,6 +344,7 @@ class SubmitController < ApplicationController
         combine_inputs_array = {}
 
         Rails.logger.error app_inputs.class
+        Rails.logger.error file_names
 
         file_names.keys.each do |input_id|
           combine_inputs_array[input_id] = []
@@ -374,24 +375,33 @@ class SubmitController < ApplicationController
               fname = file_names[input_id]
               Rails.logger.debug fname
               match_merged_files = merged_files[fname]
-              Rails.logger.debug match_merged_files.length
-              match_merged_files.each_with_index do |m_file, idx|
-                file_name = fname + "_" + idx.to_s + ".csv"
-                Rails.logger.debug file_name
-                file = File.new(file_name, 'w')
-                file.write(m_file)
-                Rails.logger.debug "make files"
-                uploader = JobInputUploader.new(giveFilePrefix())
-          
-                uploader.store!(file)
-                Rails.logger.debug "make files success"
+              Rails.logger.info "Outputing not existed database merged files: =======>"
+              Rails.logger.info match_merged_files.class
+              Rails.logger.info match_merged_files.blank?
 
-                Rails.logger.debug "upload files" + uploader.filename
+              Rails.logger.info "Outputing the number of not existed database merged files: =======>"
+              if !match_merged_files.blank?
+                Rails.logger.debug match_merged_files.length
 
-                cur_file_paths.push('/data/' + uploader.filename)
-                file.close
+                Rails.logger.info !match_merged_files.blank?
+                match_merged_files.each_with_index do |m_file, idx|
+                  file_name = fname + "_" + idx.to_s + ".csv"
+                  Rails.logger.debug file_name
+                  file = File.new(file_name, 'w')
+                  file.write(m_file)
+                  Rails.logger.debug "make files"
+                  uploader = JobInputUploader.new(giveFilePrefix())
+            
+                  uploader.store!(file)
+                  Rails.logger.debug "make files success"
+
+                  Rails.logger.debug "upload files" + uploader.filename
+
+                  cur_file_paths.push('/data/' + uploader.filename)
+                  file.close
+                end
+                combine_inputs_array[input_id] += cur_file_paths
               end
-              combine_inputs_array[input_id] += cur_file_paths
             end
 
             Rails.logger.debug "Sucess here - 3"
@@ -549,7 +559,6 @@ class SubmitController < ApplicationController
         @task.save!
       end
 
-
       if result['status'] == 'success'
         response_body = []
         @task_output = {}
@@ -603,10 +612,12 @@ class SubmitController < ApplicationController
   def remove_task
     @task = Task.find params[:job_id]
     
-    @analysis_user_datum = AnalysisUserDatum.find_by analysis_id: @task.analysis.id, user_id: session[:user_id]
-    @analysis_user_datum.task_output = nil
-    @analysis_user_datum.use_demo_file = true
-    @analysis_user_datum.save!
+    if !@analysis_user_datum.blank?
+      @analysis_user_datum = AnalysisUserDatum.find_by analysis_id: @task.analysis.id, user_id: session[:user_id]
+      @analysis_user_datum.task_output = nil
+      @analysis_user_datum.use_demo_file = true
+      @analysis_user_datum.save!
+    end
     @task.destroy!
     render json:{code:true}
   end
@@ -662,7 +673,7 @@ class SubmitController < ApplicationController
               file_paths[dataType] << {id: 0,
                                       url: File.join('/data/outputs', of1['path'], of1['name']), 
                                       is_demo: true}
-              files_to_do.delete(of1)
+              # files_to_do.delete(of1)
             end
           end
         end
@@ -672,7 +683,7 @@ class SubmitController < ApplicationController
             file_paths[dataType] = {id: 0,
                                     url: File.join('/data/outputs', of1['path'], of1['name']), 
                                     is_demo: true}
-            files_to_do.delete(of1)
+            # files_to_do.delete(of1)
           end
         end
       end

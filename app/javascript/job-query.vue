@@ -95,14 +95,14 @@
                                     Result
                                 </b-button>
 
-                                <b-button class = "btn btn-2" size="sm" v-else @click="showAnalyses(data.item.jobId)">
+                                <b-button class = "btn btn-1" size="sm" v-else @click="showAnalyses(data.item.jobId)">
                                     <i class="fas fa-search mr-1"></i>
                                     Check
                                 </b-button>
 
                                 <b-button  v-if="!isDemo"
                                     size="sm"
-                                    class="ml-4 btn-5"
+                                    class="ml-4 btn-3"
                                     @click="deleteJob(data.item.jobId)"
                                     :disabled="data.item.isDemo"
                                 >
@@ -128,7 +128,7 @@
                         <i class="fas fa-arrow-left"></i> Back to query
                     </b-button>
 
-                    <b-button class="btn btn-2" disabled >
+                    <b-button class="btn btn-1" disabled >
                         {{`${jobName} (No.${job_id})`}}
                     </b-button>
 
@@ -150,19 +150,19 @@
 
 
                     <div class="tabBtn">
-                        <b-button class="btn btn-3" @click="display=0" :class="{active:display==0}">
+                        <b-button class="btn btn-1" @click="display=0" :class="{active:display==0}">
                             Task Monitor
                         </b-button>
 
-                        <b-button class="btn btn-3" @click="display=1" :class="{active:display==1}" v-if="job_status == 'finished'">
+                        <b-button class="btn btn-1" @click="display=1" :class="{active:display==1}" v-if="job_status == 'finished'">
                             Visualization
                         </b-button><!---->
 
-                        <b-button class="btn btn-3" disabled v-else>
+                        <b-button class="btn btn-1" disabled v-else>
                             Visualization
                         </b-button><!---->
 
-                        <b-button class="btn btn-4 float-right" @click="refreshStatus">
+                        <b-button class="btn btn-3 float-right" @click="refreshStatus">
                             Refresh Status
                         </b-button>
                     </div>
@@ -174,6 +174,8 @@
 
                     <section id="inputs" class="mt-2 mb-4">
                         <h4 class="pb-1">Inputs</h4>
+                        <p> You can click refresh button to refresh task status.</p>
+                        <p> If the job is finished, visualization is avaliable through clicking the button above</p>
                         <b-list-group>
                             <b-list-group-item v-for="input in inputs" href="javascript:void(0)" v-b-toggle="`i-${input.id}`" :key="`i-${input.id}`">
                                 <i class="fa fa-file"></i> {{ input.name }}

@@ -2,9 +2,9 @@ import { generateGridPlotConfig } from "oviz-components/grid-plot";
 import { EditorDef } from "utils/editor";
 import { copyObject } from "utils/object";
 import { filter } from "vue/types/umd";
-import { filterMethod,filteredSample } from "./index";
+//import { filterMethod,filteredSample } from "./index";
 
-function run(v) {
+function run(v,eid) {
     v.forceRedraw = true;
     v.run();
 }
@@ -37,8 +37,8 @@ export const editorRef = {} as any;
 //     },
 // });
 
-export const generateGridConfig = (v):any =>  ({
-    id: "plot-st",
+export const generateGridConfig = (v,eid):any =>  ({
+    id: eid+"1",
     title: "Plot Settings",
     layout: "single-page",
     view: {
@@ -52,7 +52,7 @@ export const generateGridConfig = (v):any =>  ({
                     callback(d){
                         v.data.pieR = parseFloat(d);
                         v.forceRedraw = true;
-                        v.run();
+                        run(v,eid);
                     }
 
                 }
@@ -65,7 +65,7 @@ export const generateGridConfig = (v):any =>  ({
                     callback(d) {
                         v.data.tickFontSize = parseFloat(d);
                         v.forceRedraw = true;
-                        v.run();
+                        run(v,eid);
                     },
                 },
             },
@@ -74,69 +74,11 @@ export const generateGridConfig = (v):any =>  ({
 });
 
 
-export function editorConfig(v): EditorDef {
+export function editorConfig(v,eid): EditorDef {
     return {
         sections: [
-            {
-                id: "general",
-                title: "Choose Sample & Method",
-                layout: "single-page",
-                view: {
-                    type:"list",
-                    items:[
-                        {
-                            type:"vue",
-                            component: "filter-samples",
-                            title:null,
-                            ref:"highlightSpecies",
-                            data:{
-                                get samples() {
-                                    return Array.from(v.data.sampleList);
-                                },
-                                get defaultValue() {
-                                    return false;
-                                },
-                                get title() {
-                                    return "Choose Samples";
-                                },
-                                callback(choosesample) {
-                                    v.data.chosenSample = new Set(choosesample);
-                                    console.log("v.data.choosesample:",v.data.chosenSample)
-                                    filteredSample(v);
-                                    v.root._sizeUpdated = true;
-                                    run(v);
-                                },
-                            }
-
-                        },
-                        {
-                            type:"vue",
-                            component:"filter-samples",
-                            title:null,
-                            ref:"filterSample",
-                            data:{
-                                get samples(){
-                                    return Array.from(v.data.methodList);
-                                },
-                                get defaultValue(){
-                                    return false;
-                                },
-                                get title(){
-                                    return "Choose Method";
-                                },
-                                callback(chooseMethod){
-                                    v.data.chosenMethod = new Set(chooseMethod);
-                                    console.log("v.data.choosemethod",v.data.chosenMethod)
-                                    filterMethod(v);
-                                    v.root._sizeUpdated = true;
-                                    run(v);
-                                }
-                            }
-                        }
-                    ]    
-                }
-            },
-            generateGridConfig(v),
+            
+            generateGridConfig(v,eid)
             //generateImmuneConfig(v),
         ],
     };

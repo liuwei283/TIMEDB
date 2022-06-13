@@ -16,17 +16,17 @@ function init() {
         template,
         components: { DraggableContainer },
         data: {
-            plotSize   : [600, 200],
+            plotSize   : [800, 200],
             nameHeight : 20,
             rowPadding : 20,
             yLabel: "proportions",
             labelSize: 10,
             showDots: true,
-            labelRotation: 0,
-            color: {
-                lineColor: "red",
-                dotColor: "red"
-            }
+            labelRotation: 90,
+            // color: {
+            //     // lineColor: "red",
+            //     // dotColor: "red"
+            // }
         },
         loadData: {
             LinSeedData: {
@@ -36,18 +36,34 @@ function init() {
                 loaded(data) {
                     const LinSeedData = {};
                     const classification = data[0].slice(1);
+                    const project: string[] = Array.from(new Set(classification.map(d=>d.split("_")[0])))
+                    const projectData = {}
+                    this.data.color = Oviz.color.schemeCategory("dark", project).colors
+                    project.forEach((p: string) => {
+                        projectData[p] = {}
+                    })
                     data.slice(1).forEach(d => {
+                        project.forEach((p: string) => {
+                            projectData[p][d[0]] = []
+                        })
                         LinSeedData[d[0]] = []
                         d.slice(1).forEach((col, index) => {
                             LinSeedData[d[0]].push([classification[index], parseFloat(col)]);
+                            let sit = classification[index].split("_")
+                            projectData[sit[0]][d[0]].push([sit[1], parseFloat(col)])
                         })
                     });
+                    console.log(project)
+                    this.data.projectData = projectData
+                    this.data.le = data.length-1
                     return LinSeedData;
                 }
             }
         },
         setup() {
-            registerEditorConfig(editorConfig(this), "getVue");
+            console.log(this)
+            this.size = {height: 200+200*this.data.le, width: 200+900*Object.keys(this.data.color).length}
+            registerEditorConfig(editorConfig(this), "getVue", "#task-output");
         }
     });
 

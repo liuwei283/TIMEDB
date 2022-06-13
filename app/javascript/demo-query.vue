@@ -6,11 +6,11 @@
         <div class="viz-result mb-1"> <!---->
             <b-card no-body>
                 <b-card-header v-b-modal.modalBox class="border-1 py-2">
-                    <b-button class="btn" variant = "primary" @click="returnSubmission">
+                    <b-button class="btn btn-1" @click="returnSubmission">
                         <i class="fas fa-arrow-left"></i> Back to task submission
                     </b-button>
 
-                    <b-button class="btn btn-2" disabled >
+                    <b-button class="btn btn-1" disabled >
                         {{`${jobName} (No.${job_id})`}}
                     </b-button>
 
@@ -31,19 +31,19 @@
 
 
                     <div class="tabBtn">
-                        <b-button class="btn btn-3" @click="display=0" :class="{active:display==0}">
+                        <b-button class="btn btn-1" @click="display=0" :class="{active:display==0}">
                             Task Monitor
                         </b-button>
 
-                        <b-button class="btn btn-3" @click="display=1" :class="{active:display==1}" v-if="job_status == 'finished'">
+                        <b-button class="btn btn-1" @click="display=1" :class="{active:display==1}" v-if="job_status == 'finished'">
                             Visualization
                         </b-button><!---->
 
-                        <b-button class="btn btn-3" disabled v-else>
+                        <b-button class="btn btn-1" disabled v-else>
                             Visualization
                         </b-button><!---->
 
-                        <b-button class="btn btn-4 float-right" @click="refreshStatus">
+                        <b-button class="btn btn-3 float-right" @click="refreshStatus">
                             Refresh Status
                         </b-button>
                     </div>
@@ -188,7 +188,7 @@ export default {
             isDemo: true,
 
             taskId: 5212,
-            display:0,
+            display:1,
             inputs: [], 
             outputs: [],
             params: [],

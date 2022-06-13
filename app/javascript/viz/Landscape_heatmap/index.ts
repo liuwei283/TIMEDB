@@ -132,7 +132,6 @@ function init() {
                             + (this.data.sortaddName.length-1) * this.data.gridPlotheight 
                             + 50
           registerEditorConfig(editorConfig(this), "getVue", "#task-output", editorRef);
-
         },
     });
 

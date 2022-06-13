@@ -1,0 +1,109 @@
+svg{
+	width = 2000;
+	//height = 1400
+	Component {
+		Container {
+			XYPlot {
+				x = 300;y = 60
+				width = 480;height = cell.length*30;padding = 20
+				valueRange = [-1,cell.length]
+				discreteCategory = true
+				data = {dots}
+				//@expr console.log("data",{dots})
+				dataHandler = {
+					dots: {
+						pos: d => d[0],
+						//min: d => 0,
+						value: d => d[1],
+					},
+				}
+				Rect { 
+					fill = "none";
+					stroke = "black" 
+				}
+				//AxisBackground {stroke = "#fff"}
+				// AxisBackground {
+				// 	//discreteCategory = true
+				// 	orientation = "vertical"; stroke = "#fff"
+				// 	xScale = @scaleLinear(-1,3)
+				// }
+				// Dots {
+				// 	data = "dots"
+				// 	xScale = @scaleLinear(-1,3)
+				// 	Circle.centered { r = 3; fill ="black" }
+				// }
+
+				@for (d, i) in dots {
+					Container {
+						key = i + "comp"
+						discreteCategory = true
+						xScale = @scaleLinear(-1,2)
+						x = @scaled-x(d[0]); y = @scaled-y(d[1])
+						Circle.centered {
+							fill = d[4]; r = d[2]
+							behavior:tooltip {
+								content = `values: ${d[3]}<br>`
+                            }
+						}
+					}
+					Container {
+						x = 450
+						y = @scaled-y(d[1])-10
+						Text {
+							text = cell[d[1]]
+							fontSize = 12
+						}
+					}
+				}
+
+				Axis("bottom") { 
+					y = 100%; includeEndTicks = true
+					xScale = @scaleLinear(-1,2)
+					:label(d){
+						@expr console.log("d1:",d)
+						Text.centered {
+							y = 10
+							text = stage[d.value]
+						}
+					}
+				}
+
+			}
+
+		}
+		//legend
+		Container {
+            padding = 20
+            x = 160;y = 30
+			Text { text = "Hazard Ratio"; fontSize = 14 }
+			Circle { x = 19; y = 18; r = 6; fill = "red"}
+			Text { y = 18; x = 40; text = ">=1" ; fontSize = 12 }
+			Circle { x = 19; y = 36; r = 6; fill = "blue" }
+			Text { y = 36; x = 40; text = "<1" ;fontSize = 12}          
+        }
+		Container {
+			padding = 20
+            x = 20;y = 30
+			Text { x = 50;text = "P value"; fontSize = 14 }
+			Container{
+				y = 19
+				Rect {x = 50;width = 20; height = 20; fill = "none"; stroke = "white"}
+				Rect {y = 22;x = 50;width = 20; height = 20; fill = "none"; stroke = "white"}
+				Rect {y = 44;x = 50;width = 20; height = 20; fill = "none"; stroke = "white"}
+				Rect {y = 66;x = 50;width = 20; height = 20; fill = "none"; stroke = "white"}
+				Circle { y = 6; x = 56; r = 4; fill = "black"}
+				Circle { y = 27; x = 55; r = 5; fill = "black" }
+				Circle { y = 48; x = 54; r = 6; fill = "black" }
+				Circle { y = 69; x = 53; r = 7; fill = "black" }
+				Text { y = 5; x = 73; text = "0.04" ; fontSize = 12 }
+				Text { y = 27; x = 73; text = "0.03" ; fontSize = 12 }
+				Text { y = 49; x = 73; text = "0.02" ; fontSize = 12 }
+				Text { y = 71; x = 73; text = "0.01" ;fontSize = 12}      
+			}
+			       
+        }
+			
+
+	}
+
+}

@@ -539,11 +539,290 @@ export function clinicalDataloaded(_data){
 
   this.data.n_legendData = n_legendData
 
+  this.data.oriClidata = _data
+  this.data.clinicalSamples = clinicalSamples
+
+
   return {sortaddName,newArr,addData,addName}
 
 }
 
+export function switchStyle(v){
 
+  if(v.data.legendStyle){
+    let newsortaddName = []
+    let add =-1
+    v.data.sortaddName.forEach((item,index)=>{
+      add = add + 1
+      v.data.legendLoc[item].forEach((ditem,dindex) => {
+        v.data.legendType[item].length==1? add = add -1:(ditem["newrow"] = add,newsortaddName.push(item))
+      });
+    })
+  
+
+    newsortaddName = Array.from(new Set(newsortaddName))
+
+  
+    let newcindexes = []
+  
+    newsortaddName.forEach((item,index)=>{
+      v.data.oriClidata[0].forEach((ditem,dindex) => {
+        ditem == item? (newcindexes.push(dindex)):null
+      });
+    })
+
+  
+    function mapClinicalIndex(arr,cindexes){
+      let newArr = []
+      arr.forEach((item,index)=>{
+        let newitem = []
+          cindexes.forEach(k => {
+            newitem.push(item[k])
+          });
+        newArr.push(newitem)
+      })
+      return newArr
+    }
+
+    let newaddData = []
+    for(let i = 0;i < v.data.sampleList.length;i++){
+      let index = v.data.clinicalSamples.indexOf(v.data.sampleList[i]) //对应sample name
+      if(index != -1){ //如果匹配上了
+        newaddData.push(v.data.oriClidata[index])
+      }
+    }
+
+  
+    newaddData = mapClinicalIndex(newaddData,newcindexes).slice(0)
+
+  
+    var newnewArr = []
+
+    for(let i = 0;i < newaddData.length;i++){ 
+      for(let j = 0; j < newsortaddName.length;j++){ 
+        const elem = {data:null,row:0,col:0}
+        elem.data = newaddData[i][j]
+        elem.row = 23 + j 
+        elem.col = i + 1
+        newnewArr.push(elem)
+      }
+    }
+
+  
+  
+
+    let newlegendType = {} 
+    let newtempNum = {}
+    newsortaddName.forEach((item,index)=>{
+      newlegendType[item] = []
+      newtempNum[item] = []
+      nMCatagory(newaddData,newlegendType[item],index)
+      newlegendType[item] = newlegendType[item].slice(0).sort()
+      newlegendType[item].unshift("NA")
+      newlegendType[item] = Array.from(new Set(newlegendType[item]))
+    })
+
+
+  
+    newsortaddName.forEach((item,index)=>{
+      item.substring(0,2)=="n_"? (newtempNum[item] = newtempNum[item].slice(1)[newtempNum[item].length-1]):null
+    });
+
+  
+    let newheatmapLoc = {} 
+    newsortaddName.forEach((item,index)=>{
+    newheatmapLoc[item] = []
+        rowColumn(newaddData,newheatmapLoc[item],index,index+23,item,newlegendType) // 空数据集 addData的第几列 heatmap中的位置
+    })
+
+  
+    let newlegendLoc = {}
+    newsortaddName.forEach((item,index)=>{
+      newlegendLoc[item] = []
+      showLegend(newlegendType[item],newlegendLoc[item],index,item.substring(0,2),NAlen(newsortaddName,newlegendType))
+    })
+
+  
+    let newNAlength = NAlen(newsortaddName,newlegendType)
+
+  
+    let newtempResult = mapCNlist(newsortaddName)
+
+    let newc_indexList = newtempResult["c_"]
+    let newn_indexList = newtempResult["n_"]
+  
+
+    let newn_row = []
+    let newn_data = {}
+    newn_indexList.forEach((item,index)=>{
+      newn_row.push(v.data.oriClidata[0].indexOf(item))
+      //n_data[item] = []
+    })
+
+  
+    newn_row.forEach((item,index)=>{
+      newn_data[newn_indexList[index]] = []
+      v.data.oriClidata.forEach((ditem,dindex) => {
+        dindex!=0? (isNaN(ditem[item]*1)? newn_data[newn_indexList[index]].push(0):newn_data[newn_indexList[index]].push(ditem[item]*1)):null
+      });
+    })
+  
+
+  
+    let newn_crow = []
+    newn_indexList.forEach((item,index)=>{
+      newn_crow.push(newsortaddName.indexOf(item))
+    })
+  
+    let newn_legendData = []
+    newn_indexList.forEach((item,index)=>{
+      let min = Math.min(...newn_data[item]) + ""
+      let max = Math.max(...newn_data[item]) + ""
+      min == max? (max=="0"? (min = " ",max = " "):null):null
+      newn_legendData.push({label:item,row:newn_crow[index],min: min,max: max})
+    })
+
+    v.data.legendLoc = newlegendLoc
+    v.data.legendType = newlegendType
+    v.data.n_legendData = newn_legendData
+    v.data["additional"]["sortaddName"] = newsortaddName
+    v.data.heatmapLoc = newheatmapLoc
+
+  
+  }
+  else{
+    let newsortaddName = []
+    newsortaddName = v.data.sortaddName
+    newsortaddName = Array.from(new Set(newsortaddName))
+
+  
+    let newcindexes = []
+  
+    newsortaddName.forEach((item,index)=>{
+      v.data.oriClidata[0].forEach((ditem,dindex) => {
+        ditem == item? (newcindexes.push(dindex)):null
+      });
+    })
+
+  
+    function mapClinicalIndex(arr,cindexes){
+      let newArr = []
+      arr.forEach((item,index)=>{
+        let newitem = []
+          cindexes.forEach(k => {
+            newitem.push(item[k])
+          });
+        newArr.push(newitem)
+      })
+      return newArr
+    }
+
+    let newaddData = []
+    for(let i = 0;i < v.data.sampleList.length;i++){
+      let index = v.data.clinicalSamples.indexOf(v.data.sampleList[i]) 
+      if(index != -1){ 
+        newaddData.push(v.data.oriClidata[index])
+      }
+    }
+
+  
+    newaddData = mapClinicalIndex(newaddData,newcindexes).slice(0)
+
+  
+    var newnewArr = []
+
+    for(let i = 0;i < newaddData.length;i++){ 
+      for(let j = 0; j < newsortaddName.length;j++){ 
+        const elem = {data:null,row:0,col:0}
+        elem.data = newaddData[i][j]
+        elem.row = 23 + j 
+        elem.col = i + 1
+        newnewArr.push(elem)
+      }
+    }
+
+  
+  
+
+    let newlegendType = {} 
+    let newtempNum = {}
+    newsortaddName.forEach((item,index)=>{
+      newlegendType[item] = []
+      newtempNum[item] = []
+      nMCatagory(newaddData,newlegendType[item],index) 
+      newlegendType[item] = newlegendType[item].slice(0).sort()
+      newlegendType[item].unshift("NA")
+      newlegendType[item] = Array.from(new Set(newlegendType[item]))
+    })
+
+
+    newsortaddName.forEach((item,index)=>{
+      item.substring(0,2)=="n_"? (newtempNum[item] = newtempNum[item].slice(1)[newtempNum[item].length-1]):null
+    });
+
+  
+    let newheatmapLoc = {} 
+    newsortaddName.forEach((item,index)=>{
+    newheatmapLoc[item] = []
+        rowColumn(newaddData,newheatmapLoc[item],index,index+23,item,newlegendType) // 空数据集 addData的第几列 heatmap中的位置
+    })
+
+  
+    let newlegendLoc = {}
+    newsortaddName.forEach((item,index)=>{
+      newlegendLoc[item] = []
+      showLegend(newlegendType[item],newlegendLoc[item],index,item.substring(0,2),NAlen(newsortaddName,newlegendType))
+    })
+
+  
+    let newNAlength = NAlen(newsortaddName,newlegendType)
+
+  
+    let newtempResult = mapCNlist(newsortaddName)
+
+    let newc_indexList = newtempResult["c_"]
+    let newn_indexList = newtempResult["n_"]
+  
+  
+
+    let newn_row = []
+    let newn_data = {}
+    newn_indexList.forEach((item,index)=>{
+      newn_row.push(v.data.oriClidata[0].indexOf(item))
+      //n_data[item] = []
+    })
+
+  
+    newn_row.forEach((item,index)=>{
+      newn_data[newn_indexList[index]] = []
+      v.data.oriClidata.forEach((ditem,dindex) => {
+        dindex!=0? (isNaN(ditem[item]*1)? newn_data[newn_indexList[index]].push(0):newn_data[newn_indexList[index]].push(ditem[item]*1)):null
+      });
+    })
+  
+
+  
+    let newn_crow = []
+    newn_indexList.forEach((item,index)=>{
+      newn_crow.push(newsortaddName.indexOf(item))
+    })
+  
+    let newn_legendData = []
+    newn_indexList.forEach((item,index)=>{
+      let min = Math.min(...newn_data[item]) + ""
+      let max = Math.max(...newn_data[item]) + ""
+      min == max? (max=="0"? (min = " ",max = " "):null):null
+      newn_legendData.push({label:item,row:newn_crow[index],min: min,max: max})
+    })
+
+    v.data.legendLoc = newlegendLoc
+    v.data.legendType = newlegendType
+    v.data.n_legendData = newn_legendData
+    v.data["additional"]["sortaddName"] = newsortaddName
+    v.data.heatmapLoc = newheatmapLoc
+  }
+
+}
 
 export function getfixed(num){
   let textnum = num+""
