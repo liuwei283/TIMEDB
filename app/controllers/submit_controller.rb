@@ -330,7 +330,7 @@ class SubmitController < ApplicationController
       if !params[:search_mid].blank?
         @analysis = Analysis.find_by mid:params[:search_mid]
       else
-        @pipeline = AnalysisPipeline.find_by pid:params[:pid]
+        @pipeline = AnalysisPipeline.find_by pid:params[:search_pid]
       end
       inputs = Array.new
       params = Array.new

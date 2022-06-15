@@ -1251,12 +1251,12 @@
                     axios.post(
                         `/submit-app-task/`,
                         objectToFormData({
-                            "search_mid": this.selected_analysis.mid,
-                            "mid": submitted_mid,
+                            "search_pid": this.selected_analysis.pid,
+                            "mid": submitted_pid,
                             "is_demo": true,
                             "inputs": demo_files,
                             "params": demo_params,
-                            "pipelines":
+                            "pipelines": true,
                         }),
                         {
                             headers: {
