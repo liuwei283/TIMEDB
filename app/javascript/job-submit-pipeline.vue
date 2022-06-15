@@ -258,42 +258,66 @@
                                                                 <b-collapse visible :id="`m-${value.id}`" class="mb-4 p-4 border">
                                                                     
                                                                     <div class="col-md-10" v-for="param in value.params" :key="param.id">
-                                                                        <label :for="`p-${param.id}`">{{ param.name }}
-                                                                            <span v-if="param.required" class="required">*</span>
-                                                                        </label>
-                                                                        <div v-if="param.param_type === 'string'">
-                                                                            <b-form-input @focus="provide_param_desc(param)" :id="`p-${param.id}`" :value="param.default" :required="param.required"
-                                                                                        v-model="parameters[`p-${param.id}`]" :name="`p-${param.id}`" :state="inputValid[`p-${param.id}`]" />
+                                                                        <div v-if="sync_params_names.indexOf(param.name) !== -1">
+                                                                            <label :for="`p-${param.id}`">{{ param.name }}
+                                                                                <span v-if="param.required" class="required">*</span>
+                                                                            </label>
+                                                                            
+                                                                            <div v-if="param.param_type === 'string'">
+                                                                                <b-form-input @focus="provide_param_desc(param)" :id="`p-${param.id}`" :value="param.default" :required="param.required"
+                                                                                            v-model="parameters[`p-${sync_params[param.name][0].id}`]" :name="`p-${param.id}`" :state="inputValid[`p-${param.id}`]" />
+                                                                            </div>
+                                                                            <div v-else-if="param.param_type === 'enum'">
+                                                                                <select @focus="provide_param_desc(param)" :id="`p-${param.id}`" class="form-control custom-select" 
+                                                                                        v-model="parameters[`p-${sync_params[param.name][0].id}`]" :required="param.required" :name="`p-${param.id}`" 
+                                                                                        :state="inputValid[`p-${param.id}`]">
+                                                                                    <option v-for="option in param.options" :value="option" :key="option"
+                                                                                            :selected="param.default == option ? 'selected' : ''">
+                                                                                        {{ option }}
+                                                                                    </option>
+                                                                                </select>
+                                                                            </div>
                                                                         </div>
-                                                                        <div v-else-if="param.param_type === 'int'">
-                                                                            <b-form-input @focus="provide_param_desc(param)" :id="`p-${param.id}`" :value="param.default" type="number" step="1"
-                                                                                        v-model="parameters[`p-${param.id}`]" :required="param.required" :name="`p-${param.id}`"
-                                                                                        :state="inputValid[`p-${param.id}`]"/>
-                                                                        </div>
-                                                                        <div v-else-if="param.param_type === 'float'">
-                                                                            <b-form-input @focus="provide_param_desc(param)" :id="`p-${param.id}`" :value="param.default" type="number"
-                                                                                        v-model="parameters[`p-${param.id}`]" step="0.01" :required="param.required"
-                                                                                        :name="`p-${param.id}`" :state="inputValid[`p-${param.id}`]"/>
-                                                                        </div>
-                                                                        <div v-else-if="param.param_type === 'boolean'">
-                                                                            <b-form-select @focus="provide_param_desc(param)" :id="`p-${param.id}`" :options="boolSelectOpt" :required="param.required"
-                                                                                        v-model="parameters[`p-${param.id}`]" :name="`p-${param.id}`" :state="inputValid[`p-${param.id}`]"/>
-                                                                        </div>
-                                                                        <div v-else-if="param.param_type === 'enum'">
-                                                                            <select @focus="provide_param_desc(param)" :id="`p-${param.id}`" class="form-control custom-select" 
-                                                                                    v-model="parameters[`p-${param.id}`]" :required="param.required" :name="`p-${param.id}`" 
-                                                                                    :state="inputValid[`p-${param.id}`]">
-                                                                                <option v-for="option in param.options" :value="option" :key="option"
-                                                                                        :selected="param.default == option ? 'selected' : ''">
-                                                                                    {{ option }}
-                                                                                </option>
-                                                                            </select>
-                                                                        </div>
-                                                                        <div v-else-if="param.param_type === 'splitchr'">
-                                                                            <b-form-select @focus="provide_param_desc(param)" :id="`p-${param.id}`" :options="boolSelectOpt" 
+                                                                        <div v-else>
+                                                                            <label :for="`p-${param.id}`">{{ param.name }}
+                                                                                <span v-if="param.required" class="required">*</span>
+                                                                            </label>
+                                                                        
+                                                                            <div v-if="param.param_type === 'string'">
+                                                                                <b-form-input @focus="provide_param_desc(param)" :id="`p-${param.id}`" :value="param.default" :required="param.required"
+                                                                                            v-model="parameters[`p-${param.id}`]" :name="`p-${param.id}`" :state="inputValid[`p-${param.id}`]" />
+                                                                            </div>
+                                                                            <div v-else-if="param.param_type === 'int'">
+                                                                                <b-form-input @focus="provide_param_desc(param)" :id="`p-${param.id}`" :value="param.default" type="number" step="1"
+                                                                                            v-model="parameters[`p-${param.id}`]" :required="param.required" :name="`p-${param.id}`"
+                                                                                            :state="inputValid[`p-${param.id}`]"/>
+                                                                            </div>
+                                                                            <div v-else-if="param.param_type === 'float'">
+                                                                                <b-form-input @focus="provide_param_desc(param)" :id="`p-${param.id}`" :value="param.default" type="number"
+                                                                                            v-model="parameters[`p-${param.id}`]" step="0.01" :required="param.required"
+                                                                                            :name="`p-${param.id}`" :state="inputValid[`p-${param.id}`]"/>
+                                                                            </div>
+                                                                            <div v-else-if="param.param_type === 'boolean'">
+                                                                                <b-form-select @focus="provide_param_desc(param)" :id="`p-${param.id}`" :options="boolSelectOpt" :required="param.required"
+                                                                                            v-model="parameters[`p-${param.id}`]" :name="`p-${param.id}`" :state="inputValid[`p-${param.id}`]"/>
+                                                                            </div>
+                                                                            <div v-else-if="param.param_type === 'enum'">
+                                                                                <select @focus="provide_param_desc(param)" :id="`p-${param.id}`" class="form-control custom-select" 
                                                                                         v-model="parameters[`p-${param.id}`]" :required="param.required" :name="`p-${param.id}`" 
-                                                                                        :state="inputValid[`p-${param.id}`]" />
+                                                                                        :state="inputValid[`p-${param.id}`]">
+                                                                                    <option v-for="option in param.options" :value="option" :key="option"
+                                                                                            :selected="param.default == option ? 'selected' : ''">
+                                                                                        {{ option }}
+                                                                                    </option>
+                                                                                </select>
+                                                                            </div>
+                                                                            <div v-else-if="param.param_type === 'splitchr'">
+                                                                                <b-form-select @focus="provide_param_desc(param)" :id="`p-${param.id}`" :options="boolSelectOpt" 
+                                                                                            v-model="parameters[`p-${param.id}`]" :required="param.required" :name="`p-${param.id}`" 
+                                                                                            :state="inputValid[`p-${param.id}`]" />
+                                                                            </div>
                                                                         </div>
+                                                            
                                                                     </div>
                                                                     
                                                                 </b-collapse>
@@ -614,6 +638,8 @@
                 showhelper: false,
                 parameters_input: [],
                 pipeline_json: {},
+                sync_params: {},
+                sync_params_names: ["Project name"],
 
                 test_description: "<h5>There are something testing description</h5><ul><li>The first row is for something.</li><li>The first column is for something. It should be something.</li><li>Please be noted that the uploader is for something and somethind should be...</li></ul><p>This is the end of this line.</p>"
             };
@@ -776,12 +802,26 @@
             },
             formatParams() {
                 var formatted_params = []
-                for (var sp in this.single_parameters) {
-                    //since we need to automatic fill the project name and protocol normalization method, we need to rocess here
-                    formatted_params.push({['p-' + this.single_parameters[sp].id]: this.parameters['p-' + this.single_parameters[sp].id]});
+                // for (var sp in this.single_parameters) {
+                //     //since we need to automatic fill the project name and protocol normalization method, we need to rocess here
+                //     formatted_params.push({['p-' + this.single_parameters[sp].id]: this.parameters['p-' + this.single_parameters[sp].id]});
+                // }
+                
+
+                
+            
+                //for single parameters
+                for (let k in this.single_parameters) {
+                    for (let t in this.single_parameters[k].params) {
+                        if(this.sync_params_names.includes(this.single_parameters[k].params[t].name)) {
+                            formatted_params.push({['p-' + this.single_parameters[k].params[t].id]: this.parameters['p-' + this.sync_params[this.single_parameters[k].params[t].name][0].id]});
+                        }
+                        else {
+                            formatted_params.push({['p-' + this.single_parameters[k].params[t].id]: this.parameters['p-' + this.single_parameters[k].params[t].id]});
+                        }
+                    }
                 }
-
-
+                
                 //for multiple pipelines, needs to think about the structure
 
                 if (this.picked_single_multiple == 'multiple') {
@@ -924,6 +964,8 @@
                 }
                 else {
                     console.log("start update app");
+                    this.showhelper = true;
+
                     this.selected_analysis = s_ana;
 
                     if (s_ana.name == "TIMEDB Multiple Datasets Immune Comparison") {
@@ -1010,10 +1052,23 @@
                                     this.parameters_input.push(this.app.inputs[k]);
                                 }
                             }
-                            
-                            console.log("end update app");
-                            this.showhelper = true;
 
+                            
+                            for (let m in this.sync_params_names) {
+                                let pname = this.sync_params_names[m];
+                                this.sync_params[pname] = [];
+                                for (let k in this.single_parameters) {
+                                    for (let t in this.single_parameters[k].params) {
+                                        if(this.single_parameters[k].params[t].name == pname) {
+                                            this.sync_params[pname].push(this.single_parameters[k].params[t]);
+                                        }
+                                    }
+                                }
+                            }
+                            console.log(this.sync_params_names);
+                            console.log(this.sync_params);
+
+                            console.log("end update app");
                         });
                     });
                     
@@ -1158,7 +1213,7 @@
                         },
                     },
                 ).then((response) => {
-                    console.log("Module query result for pipelines:", response);
+                    console.log("Module query result for testing pipelines:", response);
                     this.demo_inputs = response.data.message.inputs;
                     this.demo_parameters = response.data.message.params;
                     
@@ -1201,6 +1256,7 @@
                             "is_demo": true,
                             "inputs": demo_files,
                             "params": demo_params,
+                            "pipelines":
                         }),
                         {
                             headers: {

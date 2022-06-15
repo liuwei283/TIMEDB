@@ -362,10 +362,10 @@
                 <div class = "row justify-content-center submit-container">
                     <div class = "col-md-1">
                     </div>
-                    <button class = "col-md-4 btn btn-secondary">
+                    <button class = "col-md-6 btn btn-secondary">
                         <a :href="`/public/data/module_demo/${input.name}_demo.csv`" :download="input.name">Download demo file</a>
                     </button>
-                    <div class = "col-md-7">
+                    <div class = "col-md-5">
                     </div>
                     
                     <div class = "col-md-12 text-center">
@@ -1349,7 +1349,7 @@
 @import '../assets/stylesheets/partials/variables';
 
 .submit-container {
-    margin: 2em;
+    margin: 1.5em;
 }
 
 .submit-container-lg {
