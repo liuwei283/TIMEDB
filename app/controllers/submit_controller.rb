@@ -9,7 +9,7 @@ class SubmitController < ApplicationController
   end
 
   def analysesCategory
-    @orders = ['Regression Tools','Enrichment Tools','Consensus Tools','Unsupervised','Patient Subtyping','Survival Analysis','Correlation Analysis','Differential Expression','Comparison Analysis']
+    @orders = ['Comparison Analysis', 'Regression Tools','Enrichment Tools','Consensus Tools','Unsupervised Deconvolution','Patient Subtyping','Survival Analysis','Correlation Analysis','Differential Expression',]
     @analysis_categories = AnalysisCategory.order(:name)
     @analysis_category = AnalysisCategory.find_by name:params[:cname]
 

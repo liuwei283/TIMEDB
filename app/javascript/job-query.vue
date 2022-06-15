@@ -133,11 +133,13 @@
                     </b-button>
 
                     <dropdown-select
+                            v-if="job_status == 'finished'"
                             right
                             v-model="chosenOutput"
                             :options="taskOutputs"
                             class="tool-bar-el btn px-0 m-0"/><!--v-if="data.outputs.length > 1"-->
                     <dropdown-select
+                            v-if="job_status == 'finished'"
                             right
                             v-model="chosenModule"
                             :options="module_names"
@@ -162,6 +164,16 @@
                             Visualization
                         </b-button><!---->
 
+                        <b-button class="btn float-right" variant="danger" v-if="job_status=='failed'">
+                            Failed
+                        </b-button>
+                        <b-button class="btn float-right" variant="success" v-else-if="job_status=='finished'">
+                            Finished
+                        </b-button>
+                        <b-button class="btn float-right" variant="info" v-else>
+                            Running
+                        </b-button>
+                        
                         <b-button class="btn btn-3 float-right" @click="refreshStatus">
                             Refresh Status
                         </b-button>

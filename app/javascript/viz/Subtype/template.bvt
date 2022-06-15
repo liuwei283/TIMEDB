@@ -1,0 +1,61 @@
+svg {
+	width = 1800
+	height = 700
+	Component {
+        x = 50
+        y = 50
+        @expr console.log(SubtypeData)
+        Container {
+            Container {
+                x = -25; y = 30
+                Rows {
+                    Container {
+                        padding = 4
+                        x = -25
+                        Text {
+                            text = "Classifications"
+                            fontSize = 15
+                        }
+                    }
+                    Container {
+                        Legend {
+                            data = SubtypeData.colorMap.legendData()
+                        }
+                    }
+                }
+            }
+        }
+        Container {
+            x = 100
+            ComplexGroupedBars {
+                :background {}
+                :box {}
+                plotSize = [1550, 500]
+				ylabel = yLabel
+                @props SubtypeData
+                generateTooltip = (d) => {
+                    return "Cell type: " + d.data.pos + "</br>" + "Subtype" + ": " + d.key + "</br>" + "Sample Size: " + d.data.value
+                }
+                Rect.full {
+                    fill = "none"
+                    stroke = "black"
+                }
+                :xAxis {
+                    Axis("bottom") {
+                        y = 100%
+                        :label(tick) {
+                            Text(tick.value) {
+                                @let tickX = @scaled-x(tick.value)
+                                @let tickY = 5
+                                y = 10
+                                anchor = @anchor("r", "m")
+                                rotation = @rotate(-20)
+                                fontSize = prop.tickFontSize
+                            }
+                        }
+                    }
+                }
+            }
+        }
+	}
+}

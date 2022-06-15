@@ -1329,7 +1329,7 @@
                 navigator.clipboard.writeText(this.jobID);
             },
             jumpToUpload() {
-                var el = document.getElementById('run-app');
+                var el = document.getElementById('submit-app-back');
                 el.scrollIntoView({behavior: "smooth"});
             },
             provide_param_desc(param) {
