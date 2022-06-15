@@ -4,7 +4,7 @@
             <br>
             <div class="row">
                 <div class="col-md-6 text-right">
-                    <h1>Documentation</h1>
+                    <h1 class="title">Documentation</h1>
                     <p>Welcome to TIMEBD Tutorial <br>
                     Search for in-depth articles on TIMEDB functions</p>
                     <br>
@@ -43,7 +43,7 @@
                 </div>
 
                 <div class="row">
-                    <div class="col-md-8 text-center">
+                    <!-- <div class="col-md-8 text-center">
                         <br><br>
                         <div class="row">
                             <div class="col-md-5 tutorial-items-red text-center">
@@ -77,8 +77,16 @@
                             </div>
 
                         </div>
+                    </div> -->
+                    <div class="col-md-8 text-center">
+                        <br><br>
+                        <div class="row">
+                            <div v-for="a in articles2" :id="a.id" @click="showdetail2($event)" class="col-md-5 tutorial-items-red text-center" :key="a.id">
+                            {{a.title}}
+                            
+                            </div>
+                        </div>
                     </div>
-
                     <div class="col-md-4 text-center">
                         <img v-bind:src="require('../assets/images/analyses1.png')" class="d-block w-100">
 
@@ -87,23 +95,29 @@
                 </div>
             </div>
             <div v-if="this.found == true">
-                <h1><i class="fa fa-caret-left" @click="backsearch"></i>There are the search results</h1>
+                <h1 class="title"><i class="fa fa-caret-left" @click="backsearch"></i>There are the search results</h1>
 
                 <div class="row" style="margin-left:15%">
                     <div v-for="a in results" :id="a.id" @click="showdetail($event)" class="col-md-5 tutorial-items text-center" :key="a.id">
                         {{a.title}}
                     </div>
+                    <div v-for="a in results2" :id="a.id" @click="showdetail2($event)" class="col-md-5 tutorial-items-red text-center" :key="a.id">
+                        {{a.title}}
+                    </div>
+                </div>
+                <div class="row" style="margin-left:15%">
+
                 </div>
             </div>
         </div>
 
-        <div v-if="this.details == true">
+        <div v-if="this.details == 1">
             <br><br>
             <div class="row">
                 <div class="sidebar">
                         <ul class="nav flex-column ">
                             <li class="nav-item" @click="showdetail($event)" id ="intro">
-                                <p class="nav-link" >introduction</p>
+                                <p class="nav-link" >Introduction</p>
                             </li>
                             <br>
                             <li class="nav-item" @click="showdetail($event)" id="1">
@@ -112,7 +126,7 @@
                             <br>
 
                             <li class="nav-item" @click="showdetail($event)" id="2">
-                                <p class="nav-link" >How to add TIMEDB database data to your workspace</p>
+                                <p class="nav-link" >How to add data to your workspace</p>
                             </li>
                             <br>
 
@@ -121,7 +135,7 @@
                             </li>
                             <br>
                             <li class="nav-item" @click="showdetail($event)" id="4">
-                                <p class="nav-link" >How to view the  visualization plots of project and sample</p>
+                                <p class="nav-link" >How to view the  visualization plots</p>
                             </li>
                             <br>
                             <li class="nav-item" @click="showdetail($event)" id="5">
@@ -316,7 +330,171 @@
                 </div>
             </div>
         </div>
+        <div v-if="this.details == 2">
+            <br><br>
+            <div class="row">
+                <div class="sidebar">
+                        <ul class="nav flex-column ">
+                            <li class="nav-item" @click="showdetail2($event)" id ="intro">
+                                <p class="nav-link" >Introduction</p>
+                            </li>
+                            <br>
+                            <li class="nav-item" @click="showdetail2($event)" id="1">
+                                <p class="nav-link ">How to start an analysis</p>
+                            </li>
+                            <br>
 
+                            <li class="nav-item" @click="showdetail2($event)" id="2">
+                                <p class="nav-link" >How to view Analysis Results</p>
+                            </li>
+                            <br>
+
+                            <li class="nav-item" @click="showdetail2($event)" id="3">
+                                <p class="nav-link" href="#">How to edit the visualization of results</p>
+                            </li>
+                            <br>
+                            <li class="nav-item" @click="showdetail2($event)" id="4">
+                                <p class="nav-link" > How to ask us for help</p>
+                            </li>
+                        </ul>
+                        <br>
+                </div>
+
+                <div class="col-md-8 offset-1">
+                    <div v-if="this.now == 'intro'">
+
+                        <h1 class ="title">
+                            <i class="fa fa-caret-left" @click="back"></i> Analysis Introduction
+                        </h1><br>
+                        <div class="page">
+                            <div>
+                                <div class="overhead">
+                                    <h1>this is header 1</h1>
+                                    <h2>many datas</h2>
+                                </div>
+                                <br><br>
+                                <img v-bind:src="require('../assets/images/a1-1ppt.png')" class="page-image">
+                            </div>
+                            <br><br>
+                            <div>
+                                <div class="overhead">
+                                    <h1>this is header 2</h1>
+                                    <h2>many graphs</h2>
+                                </div>
+                                <br>
+                                <img v-bind:src="require('../assets/images/a1-2ppt.png')" class="page-image">
+                            </div>
+                            <br><br>
+                            <div>
+                                <div class="overhead">
+                                    <h1>this is header 3</h1>
+                                    <h2>projects</h2>
+                                </div>
+                                <br>
+                                <img v-bind:src="require('../assets/images/a1-3ppt.png')" class="page-image">
+                            </div>
+                            <br><br>                           
+
+                        </div>
+                    </div><div v-else-if="this.now =='1'">
+                        <h1 class="title">
+                            <i class="fa fa-caret-left" @click="back"></i> How to start an analysis
+                        </h1><br>
+                        <div class="page">
+                            <div>
+                                <div class="overhead">
+                                    <h1>this is header 1</h1>
+                                    <h2>ababababa</h2>
+                                </div>
+                                <br><br>
+                                <img v-bind:src="require('../assets/images/a2-1ppt.png')" class="page-image">
+                            </div>
+                            <br><br>
+                            <div>
+                                <div class="overhead">
+                                    <h1>this is header 2</h1>
+                                    <h2>ababababa</h2>
+                                </div>
+                                <br><br><br>
+                                <img v-bind:src="require('../assets/images/a2-2ppt.png')" class="page-image">
+                            </div>
+                            <br><br>
+
+                        </div>
+                    </div><div v-else-if="this.now =='2'">
+                        <h1 class="title">
+                            <i class="fa fa-caret-left" @click="back"></i> How to view Analysis Results
+                        </h1><br>
+                        <div class="page">
+                            <div>
+                                <div class="overhead">
+                                    <h1>this is header 1</h1>
+                                    <h2>ababababa</h2>
+                                </div>
+                                <br><br>
+                                <img v-bind:src="require('../assets/images/a3-1ppt.png')" class="page-image">
+                            </div>
+                            <br><br>
+                            <div>
+                                <div class="overhead">
+                                    <h1>this is header 2</h1>
+                                    <h2>ababababa</h2>
+                                </div>
+                                <br><br><br>
+                                <img v-bind:src="require('../assets/images/a3-2ppt.png')" class="page-image">
+                            </div>
+                            <br><br>
+
+                        </div>
+                    </div><div v-else-if="this.now =='3'">
+                        <h1 class="title">
+                            <i class="fa fa-caret-left" @click="back"></i> How to edit the visualization of analysis results
+                        </h1><br>
+                        <div class="page">
+                            <div>
+                                <div class="overhead">
+                                    <h1>this is header 1</h1>
+                                    <h2>ababababa</h2>
+                                </div>
+                                <br><br>
+                                <img v-bind:src="require('../assets/images/4-1ppt.png')" class="page-image">
+                            </div>
+                            <br><br>
+
+
+                    </div>      
+                    </div><div v-else-if="this.now =='4'">
+                        <h1 class="title">
+                            <i class="fa fa-caret-left" @click="back"></i> How to ask us for help
+                        </h1><br>
+                        <div class="page">
+                            <div>
+                                <div class="overhead">
+                                    <h1>this is header 1</h1>
+                                    <h2>ababababa</h2>
+                                </div>
+                                <br><br>
+                                <img v-bind:src="require('../assets/images/5-1ppt.png')" class="page-image">
+                                <img v-bind:src="require('../assets/images/5-2ppt.png')" class="page-image">
+
+                            </div>
+                            <br><br>                           
+                            <div>
+                                <div class="overhead">
+                                    <h1>this is header 1</h1>
+                                    <h2>ababababa</h2>
+                                </div>
+                                <br><br>
+                                <img v-bind:src="require('../assets/images/5-3ppt.png')" class="page-image">
+                                <img v-bind:src="require('../assets/images/5-4ppt.png')" class="page-image">
+
+                            </div>
+                            <br><br>
+                        </div> 
+                    </div>
+                </div>
+            </div>
+        </div>
 
     </div>
 </template>
@@ -325,17 +503,26 @@
 export default {
     data() {
         return {
-                details: false,
+                details: 0,
                 now: "intro",
                 articles:[
-                    {title:"introduction", id:"intro",key:["intro","0"]},
+                    {title:"Introduction", id:"intro",key:["intro","0"]},
                     {title:"How to View Database Information", id:"1",key:["database","1"]},
-                    {title:"How to add TIMEDB database data to your workspace", id:"2",key:["database","2"]},
+                    {title:"How to add data to your workspace", id:"2",key:["database","2"]},
                     {title:"How to Download Database Data", id:"3",key:["database","3"]},
-                    {title:"How to view the  visualization plots of project and sample", id:"4",key:["database","4"]},
+                    {title:"How to view the  visualization plots", id:"4",key:["database","4"]},
                     {title:"How to download the visualization plots", id:"5",key:["database","5"]},
                 ],
+                articles2:[
+                    {title:"Introduction", id:"intro",key:["intro","0"]},
+                    {title:"How to start an analysis", id:"1",key:["database","1"]},
+                    {title:"How to view Analysis Results", id:"2",key:["database","2"]},
+                    {title:"How to edit the visualization of results", id:"3",key:["database","3"]},
+                    {title:"How to ask us for help", id:"4",key:["database","4"]},
+                    // {title:"ou shu xian de hao kan ()", id:"5",key:["database","5"]},
+                ],
                 results:[],
+                results2:[],
                 search_value: null,
                 found: false,
             }
@@ -347,22 +534,36 @@ export default {
     },
     methods: {
         showdetail(a){
-            this.details = true;
+            this.details = 1;
+            this.now= a.currentTarget.id;
+            this.gotop();
+        },
+        showdetail2(a){
+            this.details = 2;
             this.now= a.currentTarget.id;
             this.gotop();
         },
         back(){
-            this.details = false;
+            this.details = 0;
         },
         search(){
             this.found = false;
             this.results = [];
+            this.results2 = [];
             console.log(this.search_value);
             for (var i=0; i<this.articles.length;i++){
                 for(var j =0; j<this.articles[i].key.length;j++){
                     var str = this.articles[i].key[j];
                     if(str.indexOf(this.search_value) !=-1 && this.search_value!=''){
                         this.results.push(this.articles[i]);
+                    }
+                }
+            }
+            for (var i=0; i<this.articles2.length;i++){
+                for(var j =0; j<this.articles2[i].key.length;j++){
+                    var str = this.articles2[i].key[j];
+                    if(str.indexOf(this.search_value) !=-1 && this.search_value!=''){
+                        this.results2.push(this.articles2[i]);
                     }
                 }
             }
@@ -462,6 +663,10 @@ export default {
         margin: 10px;
         padding-top: 2.5%;
         padding-bottom: 2.5%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #333;
         &:hover{
             background-color: #cc4f78;
             color: #fff;
@@ -476,7 +681,7 @@ export default {
     flex-direction: column;
 }
 .page-image{
-    width: 70%;
+    width: 90%;
 
 }
 .sidebar{
