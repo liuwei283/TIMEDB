@@ -11,9 +11,7 @@
             <div class="prepare" v-if="!submitted">
                 <div class="index-banner">
                     <div class="container">
-                        <h1 style="color:red;">
-                            TESTING... Do Not Submit Tasks!
-                        </h1>
+                        
                         <h2 class="display-2">
                             Start Analysis
                         </h2>
@@ -76,7 +74,7 @@
 
                                 </div>
                             </div> -->
-                            <div class = "row submit-container">
+                            <div class = "row">
                                 <div class="col-lg-4 mb-4 justify-content-center text-center" v-for="a in displayedAnalyses" :key="a.id" @click="updateApp(a, true)">
                                     <div class="card">
                                         <img v-if="a.cover_image == null" v-bind:src="require('../assets/images/module.png')" class="card-img-top">
@@ -323,7 +321,6 @@
                                 <br>
                                 <br>
                                 <b-btn @click="checkInputValid()" class="float-right mt-2"><i class="fa fa-location-arrow"></i> Submit</b-btn>
-                                <b-btn @click="checkDemoTask()" class="float-right mt-2"><i class="fa fa-location-arrow"></i> Debug</b-btn>
 
                             </div>
                             
@@ -567,7 +564,6 @@
                 id : null,
                 selected_analysis : null,
                 isConv: false,
-                analysis_category: window.gon.cname,
                 category_name: window.gon.cname,
                 app: { 
                 },

@@ -1,0 +1,215 @@
+// //测试 我就是加注释略略略
+// //改完bug我就是不报错
+
+// svg {
+// 	width = 1000 ;height = 600
+// 	Component {
+// 		XYPlot {
+// 			height = 500; width = 85%; padding = 50
+// 			discreteCategory = true
+// 			valueRange = [0,140]
+// 			Rect{
+// 				width = 100%
+// 				height = 100%
+// 				stroke = "#000"
+// 				fill = "none"
+// 			}
+// 			data = result
+// 			stackedData = {
+// 				stacked: indexes
+// 			}
+// 			StackedBars {
+// 				data = "stacked" 
+// 				:children(d) {
+// 					Rect.full{
+// 						fill = colorMap[d.key]
+// 						width = 40; x = 50%
+// 						anchor = @anchor("top","center")
+// 					}
+// 				}
+// 				width = 100%
+// 				height = 100%
+// 				stroke = "#000"
+// 				fill = "none"
+// 			}
+// 			Text{
+// 				x = 50%; y = @geo(100,20)
+// 				anchor = @anchor("middle","center")
+// 				text = xlabel
+// 				fill = "#000"
+// 				fontSize = 14
+// 			}
+// 			Text{
+// 				x = 50%; y = -15
+// 				anchor = @anchor("middle","center")
+// 				text = title
+// 				fill = "#000"
+// 				fontSize = 15
+// 			}
+// 			Component{
+// 				x = -40; y = 50%
+// 				rotation = @rotate(-90)
+// 				Text{
+// 					text = ylabel
+// 					fill = "#000"
+// 					anchor = @anchor("middle","center")
+// 					fontSize = 14
+// 				}
+// 			}
+// 			Axis("bottom") { y = 100% }
+// 			Axis("left");
+//             Container{
+// 				x = @geo(100,10); y = 50%
+// 				Container{
+// 					Rect {
+// 						anchor = @anchor("middle","left")
+// 						width = 120
+// 						height = indexes.length * 20
+// 						stroke = "#000"
+// 						fill = "none"
+// 					}
+// 				}
+// 				@for (item, index) in indexes {
+// 					Rect {
+// 						key = index
+// 						x = 10
+// 						y = (indexes.length / 2 - index) * 15 - 5
+// 						height = 5
+// 						width = 20
+// 						anchor = @anchor("middle","left")
+// 						fill = colors[index]
+// 					}
+// 					Text{
+// 						key = index
+// 						x = 40
+// 						y = (indexes.length / 2 - index) * 15 - 5
+// 						anchor = @anchor("middle","left")
+// 						text = item
+// 						fill = "#000"
+// 						fontSize = 10
+// 					}
+// 				}
+// 			}
+//             @expr console.log(indexes.length)
+// 		}
+// 	}
+// }
+
+// stacked bar(normalized)
+// 1.2
+// 2019/07/13
+// Xiao Lingran
+svg {
+	//width = data.classifications.length*gridwidth  + 100
+	//height = 800
+	Component {
+		XYPlot {
+			x = 140;y = 60
+			height = height; width = data.classifications.length*gridwidth 
+			discreteCategory = true
+			valueRange = [0,1]
+			data = data.result
+			stackedData = {
+				stacked: data.categories
+			}
+			StackedBars {
+				data = "stacked"		  
+				:children(d){
+					Rect.full{
+						fill = color["C"+d.key]
+						width = 10
+						//x = 50%
+						stroke = "white"
+						anchor = @anchor("top","center")
+						@expr console.log("d:",d)
+						behavior:tooltip{
+                            content = `Sample Name: ${d.data.pos} <br> Category: ${"C"+d.key} <br> Value: ${d.data.value} <br>`
+                        }
+					}
+				}
+				// width = 100%
+				// height = 100%
+				// stroke = "none"
+				// fill = "none"
+			}
+			Text{
+				x = 50%; y = 100%+100
+				anchor = @anchor("middle","center")
+				text = "Sample Name"
+				fill = "#000"
+				fontSize = 14
+			}
+			// Text{
+			// 	x = 50%; y = -15
+			// 	anchor = @anchor("middle","center")
+			// 	text = title
+			// 	fill = "#000"
+			// 	fontSize = 15
+			// }
+			// Component{
+			// 	x = -40; y = 50%
+			// 	rotation = @rotate(-90)
+			// 	Text{
+			// 		text = "Value"
+			// 		fill = "#000"
+			// 		anchor = @anchor("middle","center")
+			// 		fontSize = 14
+			// 	}
+			// }
+			Rect{
+				x = -gridwidth/2
+				width = 100%
+				height = 100%
+				stroke = "#000"
+				fill = "none"
+			}
+			//Axis("bottom") { y = 100% }
+			Axis("bottom") {
+				y = 100%
+            	:label(tick) {
+            		Text(tick.value) {
+            			@let tickX = @scaled-x(tick.value)
+            			@let tickY = 5
+            			y = 10
+            			anchor = @anchor("r", "m")
+            			rotation = @rotate(-45)
+        				fontSize = 10
+            		}
+                }
+            }
+			Axis("left"){x = -5}
+			Container{
+				x = -110; y = 10%
+				Container{
+					Rect {
+						anchor = @anchor("middle","left")
+						width = 80
+						height = data.categories.length * 17
+						stroke = "#000"
+						fill = "none"
+					}
+				}
+				@for (item, index) in data.categories {
+					Rect {
+						key = index
+						x = 10
+						y = (index) * 15 - 35
+						height = 5
+						width = 20
+						anchor = @anchor("middle","left")
+						fill = data.colors[index]
+					}
+					Text{
+						key = index
+						x = 40
+						y = (index) * 15 - 35
+						anchor = @anchor("middle","left")
+						text = "C"+item
+						fill = "#000"
+						fontSize = 10
+					}
+				}
+			}
+		}
+	}
+}

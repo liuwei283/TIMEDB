@@ -56,31 +56,33 @@ link rel='stylesheet' href="https://fonts.googleapis.com/css?family=Oswald&subse
     section#intro_text.heading 
       .container
         h1
-          span.em IMAP
-          br
-          | Immune Analysis Platform
+          span.em TIMEDB
+        br
+        h2
+          | Turmor Immune MicroEnvironment DataBase
+        br
         p
-          | Gut microbiome analysis platform (GMAP) contains three major features:
+          | TIMEDB is an online human tumor immune micro-environment database with comprehensive analysis and interactive visualization.
+          | TIMEDB has three key features:
+
           ul
             li 
-              | curated metagenomics database Human Gut Metagenomics Database of over 10,000 samples
+              | Curated tumor immune microenvironment 
+              =link_to "database", "/database/overview"
+              |  of over 
+              =@samples_num
+              |  samples across 
+              =@cancers_num
+              |  cancers.
             li 
-              | analyze and visualize the results of your data
+              =@analysis_num
+              |  online tumor immune microenvironment 
+              =link_to "anlayses", "/submit/analyses"
             li
-              | co-analysis and visualizing user data with the samples in our databases
-              
-        p
-          | We collected over 10,000 samples of whole-genome shotgun sequencing metagenomics data in the dataset,
-          | curated process the data to taxonomy abundance and functional profiling abundance. 
-          | The analysis pipeline had been implemented on Deepomics.org, 
-          | which allow you to upload your data to process the analysis online and 
-          | get interactive visualization online. Further, you can create your sub dataset 
-          | from our database by searching and selecting on our database page. 
-          | You can then co-analyze your data with the subset you built to process 
-          | our online analysis and visualization. The visualization modules allow you to upload results 
-          | of a single analysis treated by yourself or visualize other commonly used graph used in 
-          | metagenomics analysis.
+              | Comprehesive interactive visualization of tumor immune microenvironment data.
 
+              
+        
 
     section#platform_highlight
       .container
@@ -129,10 +131,12 @@ link rel='stylesheet' href="https://fonts.googleapis.com/css?family=Oswald&subse
             
             .col-lg-4.mb-4.
               h5.text-left
-                |Human Gut Metagenomics Database
+                | Human tumor immune micro-environment database
+                =link_to "database", "/database/overview"
               p.text-left
-                |curated database with over 10,000 
-                |metagenomics sequencing data
+                | Curated databse with over xxx samples of RNA-seq across 
+                =@cances_num 
+                |  cancers, immune infliatration fraction, immune subtype annotation data.
               h5.text-right
                 |Visualize your results
               p.text-right

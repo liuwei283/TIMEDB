@@ -6,6 +6,7 @@ import { registerLandscapeHeatmap} from "./Landscape_heatmap";
 import { registerHRORMountain} from "./HRORMountain";
 import { registerHRORTable } from "./HRORTable";
 import { registerSpaticalInteraction } from "./spatical_interaction";
+import { registerstackedBarsplot} from "./stackedBars";
 
 declare global {
     interface GonInfo {
@@ -35,6 +36,9 @@ export function registerViz(moduleName) {
             break;
         case "spatical_Interaction":
             registerSpaticalInteraction();
+            break;
+        case "stackedBars":
+            registerstackedBarsplot();
             break;
     }
 }

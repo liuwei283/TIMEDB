@@ -386,13 +386,13 @@ export default {
             this.outputs = response.data.message.outputs;
             this.params = response.data.message.params;
             
-                }).catch((error) => {
-                    const message = error.response && error.response.status === 404 ? "The task does not exist" : error;
-                    alertCenter.add('danger', `${message}`);
-                }).finally(() => {
-                    // setTimeout(() => { alertCenter.add('danger', ''); }, 2000);
-                    console.log("Log:", this.inputs, this.outputs, this.params)
-                });
+        }).catch((error) => {
+            const message = error.response && error.response.status === 404 ? "The task does not exist" : error;
+            alertCenter.add('danger', `${message}`);
+        }).finally(() => {
+            // setTimeout(() => { alertCenter.add('danger', ''); }, 2000);
+            console.log("Log:", this.inputs, this.outputs, this.params)
+        });
         this.resource_usage = {
             "x_axis":[
                 "2022-04-27 15:09:53",

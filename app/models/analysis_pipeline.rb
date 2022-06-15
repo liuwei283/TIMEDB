@@ -1,4 +1,5 @@
 class AnalysisPipeline < ApplicationRecord
+  after_find  :render_fields
     ANALYSIS_QUERY = -> { select('analyses.*') }
     
     has_many :tasks
@@ -16,4 +17,12 @@ class AnalysisPipeline < ApplicationRecord
           return false
         end
     end
+
+    private
+    def render_fields
+      markdown = Redcarpet::Markdown.new(Redcarpet::Render::HTML, tables: true, fenced_code_blocks: true)
+      # FIXME: should be DRY
+      self.rendered_doc = markdown.render(documentation.nil? ? '' : documentation)
+    end
+
 end

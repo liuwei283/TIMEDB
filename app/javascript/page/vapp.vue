@@ -2,7 +2,7 @@
      <div id = "vapp" :class= "{'ana': isAnalysis, 'task': !isAnalysis}"> 
         <div id="tool-bar">
             <div v-if= "isAnalysis">
-                <b-button @click="downloadSVG" class="tool-bar-el"><i class="fa fa-download"></i>Download Chart</b-button>
+                <b-button @click="downloadSVG" class="tool-bar-el" variant="outline-secondary"><i class="fa fa-download"></i>Download Chart</b-button>
                 <b-button @click="useDemoFiles" class="tool-bar-el">Use Demo</b-button>
                 <dropdown-select
                     right
@@ -10,8 +10,8 @@
                     :options="taskOutputs"
                     :variant="outline"
                     class="tool-bar-el"/>
-                <b-button @click="downloadDemoFiles" class="tool-bar-el"><i class="far fa-file-archive"></i>Download Data</b-button>
-                <b-button id="editor-conf" @click="toggleEditor">Editor</b-button>
+                <b-button @click="downloadDemoFiles" class="tool-bar-el" variant="outline-secondary"><i class="far fa-file-archive"></i>Download Data</b-button>
+                <b-button id="editor-conf" @click="toggleEditor" variant="outline-secondary">Editor</b-button>
             </div>
             <div v-else>
                 <b-button @click="downloadSVG" class="tool-bar-el"><i class="fa fa-download"/>Download Chart</b-button>
@@ -186,36 +186,48 @@
         position: relative;
         background-color: white;
     }
-    #tool-bar div >* {
-        height: 100%;
-        color: darkgrey;
-        border-top: none;
-        border-left: 1px solid darkgrey;
-        border-bottom: none;
-        border-right: 1px solid darkgrey;
-        margin-bottom: 2px;
-        text-align:center;
-        background-color: white;
-        border-radius: 0;
-    } 
-    .tool-bar-el {
-        float: left;
-        padding-top:0;
-        height: 100%;
-        text-align:center;
-        border: none;
-    }
-    .tool-bar-el /deep/ .btn-secondary {
-        border-radius: 0;
-        padding-top: 0;
-        margin-top: 0;
-    }
-    #tool-bar div{
+    #tool-bar {
         height:2.5em;
-        background-color: white;
-        position: relative;
-        border: 1px solid  #ced4da;
-    }
+        background-color: #f8f9fa;
+        border-bottom: 1px solid #ced4da;
+        .btn {
+            border-radius: 0;
+            border: 1px solid #ced4da;
+        }
+        .btn-group /deep/ .btn {
+            border-radius: 0;
+        }
+    } 
+    // #tool-bar div >* {
+    //     height: 100%;
+    //     color: darkgrey;
+    //     border-top: none;
+    //     border-left: 1px solid darkgrey;
+    //     border-bottom: none;
+    //     border-right: 1px solid darkgrey;
+    //     margin-bottom: 2px;
+    //     text-align:center;
+    //     background-color: white;
+    //     border-radius: 0;
+    // } 
+    // .tool-bar-el {
+    //     float: left;
+    //     padding-top:0;
+    //     height: 100%;
+    //     text-align:center;
+    //     border: none;
+    // }
+    // .tool-bar-el /deep/ .btn-secondary {
+    //     border-radius: 0;
+    //     padding-top: 0;
+    //     margin-top: 0;
+    // }
+    // #tool-bar div{
+    //     height:2.5em;
+    //     background-color: white;
+    //     position: relative;
+    //     border: 1px solid  #ced4da;
+    // }
     #editor-conf {
         float: right;
     }
