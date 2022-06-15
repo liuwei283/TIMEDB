@@ -58,11 +58,13 @@ link rel='stylesheet' href="https://fonts.googleapis.com/css?family=Oswald&subse
         h1
           span.em TIMEDB
         br
-        h2
-          | Turmor Immune MicroEnvironment DataBase
+        h2 
+          i Turmor Immune MicroEnvironment DataBase
         br
         p
           | TIMEDB is an online human tumor immune micro-environment database with comprehensive analysis and interactive visualization.
+          br
+          br
           | TIMEDB has three key features:
 
           ul
@@ -70,13 +72,13 @@ link rel='stylesheet' href="https://fonts.googleapis.com/css?family=Oswald&subse
               | Curated tumor immune microenvironment 
               =link_to "database", "/database/overview"
               |  of over 
-              =@samples_num
-              |  samples across 
-              =@cancers_num
-              |  cancers.
+              strong.number_text =@samples_num
+              strong.number_text  samples across 
+              strong.number_text =@cancers_num
+              strong.number_text  cancers.
             li 
-              =@analysis_num
-              |  online tumor immune microenvironment 
+              strong.number_text =@analysis_num
+              strong.number_text  online tumor immune microenvironment 
               =link_to "anlayses", "/submit/analyses"
             li
               | Comprehesive interactive visualization of tumor immune microenvironment data.
