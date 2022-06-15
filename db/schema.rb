@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_06_07_161134) do
+ActiveRecord::Schema.define(version: 2022_06_14_023052) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -67,6 +67,9 @@ ActiveRecord::Schema.define(version: 2022_06_07_161134) do
     t.integer "multiple_demo_id", default: -1
     t.integer "single_result_id", default: -1
     t.integer "multiple_result_id", default: -1
+    t.integer "multiple_pid", default: -1
+    t.text "documentation"
+    t.text "rendered_doc"
   end
 
   create_table "analysis_user_data", force: :cascade do |t|
@@ -94,8 +97,6 @@ ActiveRecord::Schema.define(version: 2022_06_07_161134) do
 
   create_table "datasets", force: :cascade do |t|
     t.string "name"
-    t.string "description"
-    t.string "tag"
     t.bigint "user_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
@@ -151,7 +152,6 @@ ActiveRecord::Schema.define(version: 2022_06_07_161134) do
 
   create_table "samples", force: :cascade do |t|
     t.string "sample_name"
-    t.string "cancer_name"
     t.string "project_name"
     t.string "c_tumor_stage"
     t.string "c_tumor_grade"

@@ -1,133 +1,575 @@
 <template>
     <!-- eslint-disable max-len -->
-    <div class="row my-4">
-        <div class="col-md-12">
-            <div id="run-app">
-                <alert-center ref="alertCenter" />
-                
-                <!-- Inputs -->
-                <div v-if="!submitted">
-                    <h3 class="text-center">{{ app.name }}
-                        <i class="fa  fa-question-circle" v-b-tooltip
-                                       :title="app.description"></i>
-                    </h3>
-                    <div class="set-input-section" ref="inputSection">
-                        <h4>Set Input Data</h4>
-                        <template v-if="displayedInputs.length > 0">
-                            <div class="row">
-                                <div class="col-md-6" v-for="input in displayedInputs" :key="input.id">
-                                    <label :for="`i-${input.id}`">{{ input.name }}
-                                        <span v-if="input.required" class="required">*</span>
-                                        <i class="fa  fa-question-circle" v-b-tooltip
-                                        :title="input.description"></i>
-                                    </label>
+    <div class="row my-4" >
+        <div v-if="!isLoading">
+            <ul class='list d-none'>
+                <li v-for="a in analyses" :key="a.id" class='list-item'>
+                {{a.id}}: {{a.name}}
+                </li>
+            </ul>
 
-                                    <select class="form-control custom-select" 
-                                        v-if="input.name=='second_i'"
-                                        :id="`i-${input.id}`"
-                                        :name="`i-${input.id}`"
-                                        :required="input.required"
-                                        v-model="selected[`i-${input.id}`]"
-                                        :state="inputValid[`i-${input.id}`]"
-                                    >
-                                        <option value="">--Please choose a file--</option>
-                                        <option v-for="(option, index) in select_box_option" :key="index" :value="option.value" :disabled="option.disabled">
-                                            {{option.lable}}
-                                        </option>
-                                    </select>
-
-                                    <b-form-file
-                                        v-else
-                                        :id="`i-${input.id}`"
-                                        v-model="files[`i-${input.id}`]"
-                                        :state="inputValid[`i-${input.id}`]"
-                                        placeholder="Choose a file or drop it here..."
-                                        drop-placeholder="Drop file here..."
-                                        :name="`i-${input.id}`"
-                                        :required="input.required"
-                                    ></b-form-file>
-
-
-
-                                </div>
-                            </div>
-                        </template>
-                    </div>
-                
-                    <!-- Params -->
-                    <div class="set-param-section mt-4">
-                        <h4>Set Parameters</h4>
-                        <template v-if="Object.keys(displayedParams).length > 0">
-                            <b-list-group>
-                                <div v-for="(value, key) in displayedParams" :key="value.id">
-                                    <b-list-group-item href="javascript:void(0)" v-b-toggle="`m-${value.id}`" class="mb-2">
-                                        <i class="fab fa-app-store-ios"></i> {{ key }}
-                                    </b-list-group-item>
-                                    <b-collapse visible :id="`m-${value.id}`" class="mb-4 p-4 border">
-                                        <div class="row">
-                                            <div class="col-md-6" v-for="param in value.params" :key="param.id">
-                                                <label :for="`p-${param.id}`">{{ param.name }}
-                                                    <span v-if="param.required" class="required">*</span>
-                                                    <i class="fa  fa-question-circle" v-b-tooltip
-                                                    :title="param.description"></i>
-                                                </label>
-                                                <div v-if="param.param_type === 'string'">
-                                                    <b-form-input :id="`p-${param.id}`" :value="param.default" :required="param.required"
-                                                                :name="`p-${param.id}`" :state="inputValid[`p-${param.id}`]" />
-                                                </div>
-                                                <div v-else-if="param.param_type === 'int'">
-                                                    <b-form-input :id="`p-${param.id}`" :value="param.default" type="number" step="1"
-                                                                :required="param.required" :name="`p-${param.id}`"
-                                                                :state="inputValid[`p-${param.id}`]"/>
-                                                </div>
-                                                <div v-else-if="param.param_type === 'float'">
-                                                    <b-form-input :id="`p-${param.id}`" :value="param.default" type="number"
-                                                                step="0.01" :required="param.required"
-                                                                :name="`p-${param.id}`" :state="inputValid[`p-${param.id}`]"/>
-                                                </div>
-                                                <div v-else-if="param.param_type === 'boolean'">
-                                                    <b-form-select :id="`p-${param.id}`" :options="boolSelectOpt" :required="param.required"
-                                                                :name="`p-${param.id}`" :state="inputValid[`p-${param.id}`]"/>
-                                                </div>
-                                                <div v-else-if="param.param_type === 'enum'">
-                                                    <select :id="`p-${param.id}`" class="form-control custom-select" 
-                                                            :required="param.required" :name="`p-${param.id}`" 
-                                                            :state="inputValid[`p-${param.id}`]">
-                                                        <option v-for="option in param.options" :value="option" :key="option"
-                                                                :selected="param.default == option ? 'selected' : ''">
-                                                            {{ option }}
-                                                        </option>
-                                                    </select>
-                                                </div>
-                                                <div v-else-if="param.param_type === 'splitchr'">
-                                                    <b-form-select :id="`p-${param.id}`" :options="boolSelectOpt" 
-                                                                :required="param.required" :name="`p-${param.id}`" 
-                                                                :state="inputValid[`p-${param.id}`]" />
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </b-collapse>
-                                </div>
-                            </b-list-group>
-                        </template>
-                        <p v-if="Object.keys(displayedParams).length == 0">No Parameters.</p>
-                    </div>
-                    
-                    <b-btn @click="submitTask" class="float-right mt-2"><i class="fa fa-location-arrow"></i> Submit</b-btn>
-                    <div class="is-loading" v-if="isLoading">
-                        <i class="fas fa-spinner fa-pulse fa-5x m-0"></i>
-                        <h3 class="mt-4">Submitting task……</h3>
+            <div class="prepare" v-if="!submitted">
+                <div class="index-banner">
+                    <div class="container">
+                        <h1 style="color:red;">
+                            TESTING... Do Not Submit Tasks!
+                        </h1>
+                        <h2 class="display-2">
+                            Start Analysis
+                        </h2>
+                        <p style="font-size:1.2em;">
+                            TIMEDB provides state-of-the-arts tools of immune micro-enviroment deconvolution analysis. Official tutorial is available at Tutorial (link). You may try submit the tasks with our demo input files, or view the ideal demo results.
+                        </p>
                     </div>
                 </div>
-                <div v-else>
-                    <b-card class="text-center job-info">
-                        <p>Job submitted successfully. The job ID is <span class="text-danger">{{jobID}}</span>.</p>
+                <!-- <div v-if="isConv==true" id = "singleMultipleSelect">
+                    <div class="container">
+                        <h2 class="display-5">
+                            Please choose to upload single or multical file(s)/dataset(s): 
+                        </h2>
                         <br>
-                        <p>You can check your job status via this job ID in <a :href="`/submit/job-query?job_id=${jobID}`">job query page</a>.</p>
-                    </b-card>
+                        <button type = "button" id = "single-button" class = "btn btn-dark btn-lg btn-select" @click="updateMode('single')">
+                        Single
+                        </button>
+                        <button type = "button" id = "multiple-button" class = "btn btn-secondary btn-lg btn-select" @click="updateMode('multiple')">
+                        Multiple
+                        </button> -->
+
+                        <!-- <input type="radio" id="single" value="single" v-model="picked_single_multiple">
+                        <label for="single">Single</label>
+                        <input type="radio" id="multiple" value="multiple" v-model="picked_single_multiple">
+                        <label for="multiple">Multiple</label> -->
+                        <!-- <br>
+                        <p class="lead mt-2">You will upload {{ picked_single_multiple }} file(s)/dataset(s)</p> -->
+                    <!-- </div>
+                </div> -->
+                <div class="index-banner">
+                    <div class="container">
+                        <h2 class="display-4">
+                            Module
+                        </h2>
+                        <p class="lead mt-2">
+                            Please choose a module below:
+                        </p>
+                    </div>
+                </div>
+                <div class="container-fluid container" id="analyses_list">
+                    <div id="accordion">
+                        <!-- <div id="head-for-analysis-list">
+                            <h4 class = "mb-2"> Totally {{analyses.length + 1}} Module(s) available </h4>
+                            <button aria-controls="collapseOne" aria-expanded="true" class="btn btn-link" data-target="#collapseOne" data-toggle="collapse">
+                                Totally {{analyses.length + 1}} Module(s) available
+                            </button></h5> -->
+                        <!-- </div> -->
+                        <div class="cols-xs-space cols-sm-space cols-md-space container">
+
+                            <!-- <div class = "row" id = "supervisedSelect" v-if="isConv==true">
+                                <div>
+                                    <h2 class="display-5">
+                                        Submit tasks to supervised or unsupervised analyses:
+                                    </h2>
+                                    <br>
+                                    <input type="radio" class = "btn-check" name="supervise-select" autocomplete="off" id="supervised" value="supervised" v-model="picked_supervised" checked>
+                                    <label for="supervised" class = "btn btn-outline-secondary">Supervised Deconvolution</label>
+                                    <input type="radio" class = "btn-check" name="supervise-select" autocomplete="off" id="unsupervised" value="unsupervised" v-model="picked_supervised">
+                                    <label for="unsupervised" class = "btn btn-outline-secondary">Unsupervised Deconvolution</label>
+
+                                </div>
+                            </div> -->
+                            <div class = "row submit-container">
+                                <div class="col-lg-4 mb-4 justify-content-center text-center" v-for="a in displayedAnalyses" :key="a.id" @click="updateApp(a, true)">
+                                    <div class="card">
+                                        <img v-if="a.cover_image == null" v-bind:src="require('../assets/images/module.png')" class="card-img-top">
+                                        <img v-else :src="a.cover_image" class="card-img-top">
+                                        <div class = "image_overlay image_overlay_blur">
+                                            <div class = "image_title">
+                                                {{a.name}}
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <h4 class = "text-center">{{a.name}}</h4>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <br><br>
+            </div>
+
+
+            <div class = "col-md-12" id = "submit-app-back" v-if="started && !submitted ">
+                <div class = "row">
+                    <div class="col-md-2">
+                        <img v-bind:src="require('../assets/images/nav-up-blue.png')">
+                        <svg width="100px" height="1100px" version="1.1" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M40 0 v 100 l 10 10 l -10 10 v 430 l 10 10 l -10 10 v 530" fill="transparent" stroke="#253959" stroke-width = "3px"></path> 
+                        </svg>
+
+                        <div v-if="step==1" id = "timeline-file" class = "timeline-step" style="vertical-align:center">
+                            <img v-bind:src="require('../assets/images/nav-up-pink.png')" style="margin-right: 10px"> 
+                            <i class="fa fa-arrow-right"></i>  <b-btn v-b-modal.submit-helper class = "btn btn-secondary" id = "helper-trigger"> Module Helper </b-btn>
+                        </div>
+
+                        <div v-if="step==2" id = "timeline-parameter" class = "timeline-step" style="vertical-align:center">
+                            <img v-bind:src="require('../assets/images/timeline-param.png')" style="margin-right: 10px"> 
+                            <i class="fa fa-arrow-right"></i>  <b-btn v-b-modal.submit-helper class = "btn btn-secondary" id = "helper-trigger"> Module Helper </b-btn>
+                        </div>
+
+
+                        <!-- <img v-if="!submittted" v-bind:src="require('../assets/images/nav-submit-gray.png')"> -->
+                        <img v-if="submitted == true" v-bind:src="require('../assets/images/nav-submit-blue.png')">
+                        <img v-else v-bind:src="require('../assets/images/nav-submit-gray.png')">
+                        <br>                      
+                    </div>
+                    <div class="col-md-10">
+                        <div id="run-app">
+                            <alert-center ref="alertCenter" />
+                            
+                            <!-- Inputs -->
+                            <div v-if="started && !submitted">
+
+                                <div class = "row">
+                                    <!-- <div class = "col-md-2">
+                                        <b-btn @click="submitDemoTask()" class="float-right mt-2 btn-lg"><i class="fa fa-caret-right fa-lg"></i>Run demo task</b-btn>
+                                    </div> -->
+                                    <!-- <div class = "col-md-3">
+                                        <h4><i class="fa fa-caret-right fa-lg"></i>Run demo task</h4>
+                                    </div> -->
+                                    <div @click="submitDemoTask()" class = "col-md-2" b-tooltip.hover :title="`Click here to run demo task for ${app.name}`">
+                                        <img class = "demoPng" id = "runDemoImage" v-bind:src="require('../assets/images/runDemo.png')" style="width:100%;">
+                                    </div>
+                                    <div @click="checkDemoTask()" class = "col-md-2" b-tooltip.hover :title="`Click here to check demo task for ${app.name}`">
+                                        <img class = "demoPng" id = "checkDemoImage" v-bind:src="require('../assets/images/checkDemo.png')" style="width:100%;">
+                                    </div>
+                                    <div class = "col-md-2">
+                                    </div>
+                                    <div class = "col-md-6">
+                                        <h6 class="text-right">{{ app.name }}</h6>
+                                        <h2 class = "text-right"> TASK SUBMISSISON </h2>
+                                    </div>
+                                </div>
+                                    
+                                <!-- <div class = "container row justify-content-around">
+                                    <div class = "col-md-6">
+                                        <h4 v-if="picked_single_multiple=='multiple'" class = "text-center">Batch effect config</h4>
+                                        <h4 v-else class = "text-center">File Submission</h4>
+                                    </div>
+                                    <div class = "col-md-6">
+                                        <h4 class = "text-center">Set Parameters</h4>
+                                    </div>
+                                </div> -->
+                                
+                                <div id = "file-upload-step" class = "row justify-content-center submit-container-lg">
+                                    <div>
+                                        <h3 v-if="picked_single_multiple=='multiple'" class = "text-center">Batch effect config</h3>
+                                        <h3 v-else class = "text-center">File Submission</h3>
+                                        <br>
+
+                                        <!-- <div class = "row submit-container justify-content-center h-100">
+                                            <div v-for="input in displayedInputs" :key="input.id" class = "text-center submit-box col-md-6">
+                                                <a :href="`/public/data/module_demo/${app.name}_demo_${input.name}.tsv`" :download=input.name >Demo {{ input.name}} </a>
+                                            </div>
+                                            <div class="col-md-5 text-center submit-box">
+                                                <a href="/public/data/module_demo/demo1.tsv" download = "testing">Download</a>
+                                                <a :href="`/public/data/module_demo/${app.name}_demo1.tsv`" download = "demo1">Download</a>
+                                            </div>
+                                            <div class="col-md-5 offset-2 text-center" style="border:solid;border-radius:20px;padding:20px">
+                                                <a :href="`/public/data/module_demo/${app.name}_demo2.tsv`" download = "demo2">Download</a>
+                                                <a href="/public/data/module_demo/test_demo2.tsv" download = "testing">Download</a>
+                                            </div> 
+                                        </div> -->
+
+                                        <div class = "row submit-box justify-content-center">
+                                            <div v-if="picked_single_multiple=='single'" class = "row justify-content-center">
+                                                <div class = "row justify-content-center">
+                                                    <div class="text-center" v-for="input in displayedInputs" :key="input.id">
+                                                        <label :for="`i-${input.id}`">{{ input.name }}
+                                                            <span v-if="input.required" class="required">*</span>
+                                                        </label>
+                                                        <div v-b-modal="'single-upload-' + input.id" class="uploadPng text-center justify-content-center container" @click="updateStepToFile()">
+                                                            <img v-bind:src="require('../assets/images/big_upload.png')" style="width:90%">
+                                                        </div>
+                                                    </div>
+                                                    
+                                                </div>
+
+                                                <div class = "row justify-content-center">
+                                                    <label>
+                                                        <span>You can select a dataset to merge: </span>
+                                                        <i class="fa fa-question-circle" v-b-tooltip.rightbottom.hover title="You may choose one dataset with single project source to upload merged files"></i>
+                                                    </label>
+                                                    <b-form-select @focus="updateStepToFile()" class="col-md-8" 
+                                                        name="selected-dataset"
+                                                        v-model="ds_selected"
+                                                    >
+                                                        <option value="" key="default">--Please select your own dataset--</option>
+                                                        <option v-for="(option, index) in select_box_option" :key="index" :value="option.value" :disabled="option.disabled">
+                                                            {{option.lable}}
+                                                        </option>
+                                                    </b-form-select>
+                                                </div>
+                                            </div>
+                                            <div v-else class = "row justify-content-center">
+                                                <div class = "text-center submit-container">
+                                                    <label for="pairs_num_select">Please select maximum pairs of files you want to upload:
+                                                    </label>
+                                                    <div>
+                                                        <b-form-input id="pairs_num_select" value=1 max="5" type="number" step="1" name="selected_pairs_num" v-model="multiple_pairs_num" />
+                                                    </div>
+                                                </div>
+                                                <div id = "multiple-upload-box" class = "row justify-content-center text-center" v-if="displayedPairsNum > 0">
+                                                    <div v-for="input_idx in parseInt(displayedPairsNum)" :key="input_idx" class="text-center col-md-4">
+                                                        <div v-b-modal="`batchEffect-config-${input_idx}`" class="uploadPng text-center justify-content-center container" @click="updateStepToFile()">
+                                                            <img v-bind:src="require('../assets/images/batchEffectSetting.png')" style="width:90%;">
+                                                        </div>
+                                                        <div class = "text-center" v-if="updateUploadedStatus[input_idx - 1] == true">
+                                                            <i class="fa fa-check" aria-hidden="true" style="color:green"></i>
+                                                        </div>
+                                                        <div class = "text-center" v-else>
+                                                            <i class="fa fa-times" aria-hidden="true" style="color:red"></i>
+                                                        </div>
+                                                        <br>
+                                                    </div>
+                                                </div>
+                                                <br>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                </div>
+
+                                <div id="parameter-setting-step" class = "row justify-content-center submit-container-lg">
+                                    <div class="set-param-section">
+
+                                        <h3 class = "text-center">Parameter setting</h3>
+                                        <br>
+
+                                        <div class = "row submit-box justify-content-center;">
+                                            <div class = "col-md-6">
+
+                                                <div class = "row mt-3 mb-3" style="height:350px; overflow:scroll;">
+
+                                                 
+                                                        <b-list-group>
+                                                            <div v-for="(value, key) in displayedSingleParams" :key="value.id">
+                                                                <b-list-group-item href="javascript:void(0)" v-b-toggle="`m-${value.id}`" class="mb-2">
+                                                                    <i class="fab fa-app-store-ios"></i> {{ key }}
+                                                                </b-list-group-item>
+                                                                <b-collapse visible :id="`m-${value.id}`" class="mb-4 p-4 border">
+                                                                    
+                                                                    <div class="col-md-10" v-for="param in value.params" :key="param.id">
+                                                                        <div v-if="sync_params_names.indexOf(param.name) !== -1">
+                                                                            <label :for="`p-${param.id}`">{{ param.name }}
+                                                                                <span v-if="param.required" class="required">*</span>
+                                                                            </label>
+                                                                            
+                                                                            <div v-if="param.param_type === 'string'">
+                                                                                <b-form-input @focus="provide_param_desc(param)" :id="`p-${param.id}`" :value="param.default" :required="param.required"
+                                                                                            v-model="parameters[`p-${sync_params[param.name][0].id}`]" :name="`p-${param.id}`" :state="inputValid[`p-${param.id}`]" />
+                                                                            </div>
+                                                                            <div v-else-if="param.param_type === 'enum'">
+                                                                                <select @focus="provide_param_desc(param)" :id="`p-${param.id}`" class="form-control custom-select" 
+                                                                                        v-model="parameters[`p-${sync_params[param.name][0].id}`]" :required="param.required" :name="`p-${param.id}`" 
+                                                                                        :state="inputValid[`p-${param.id}`]">
+                                                                                    <option v-for="option in param.options" :value="option" :key="option"
+                                                                                            :selected="param.default == option ? 'selected' : ''">
+                                                                                        {{ option }}
+                                                                                    </option>
+                                                                                </select>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div v-else>
+                                                                            <label :for="`p-${param.id}`">{{ param.name }}
+                                                                                <span v-if="param.required" class="required">*</span>
+                                                                            </label>
+                                                                        
+                                                                            <div v-if="param.param_type === 'string'">
+                                                                                <b-form-input @focus="provide_param_desc(param)" :id="`p-${param.id}`" :value="param.default" :required="param.required"
+                                                                                            v-model="parameters[`p-${param.id}`]" :name="`p-${param.id}`" :state="inputValid[`p-${param.id}`]" />
+                                                                            </div>
+                                                                            <div v-else-if="param.param_type === 'int'">
+                                                                                <b-form-input @focus="provide_param_desc(param)" :id="`p-${param.id}`" :value="param.default" type="number" step="1"
+                                                                                            v-model="parameters[`p-${param.id}`]" :required="param.required" :name="`p-${param.id}`"
+                                                                                            :state="inputValid[`p-${param.id}`]"/>
+                                                                            </div>
+                                                                            <div v-else-if="param.param_type === 'float'">
+                                                                                <b-form-input @focus="provide_param_desc(param)" :id="`p-${param.id}`" :value="param.default" type="number"
+                                                                                            v-model="parameters[`p-${param.id}`]" step="0.01" :required="param.required"
+                                                                                            :name="`p-${param.id}`" :state="inputValid[`p-${param.id}`]"/>
+                                                                            </div>
+                                                                            <div v-else-if="param.param_type === 'boolean'">
+                                                                                <b-form-select @focus="provide_param_desc(param)" :id="`p-${param.id}`" :options="boolSelectOpt" :required="param.required"
+                                                                                            v-model="parameters[`p-${param.id}`]" :name="`p-${param.id}`" :state="inputValid[`p-${param.id}`]"/>
+                                                                            </div>
+                                                                            <div v-else-if="param.param_type === 'enum'">
+                                                                                <select @focus="provide_param_desc(param)" :id="`p-${param.id}`" class="form-control custom-select" 
+                                                                                        v-model="parameters[`p-${param.id}`]" :required="param.required" :name="`p-${param.id}`" 
+                                                                                        :state="inputValid[`p-${param.id}`]">
+                                                                                    <option v-for="option in param.options" :value="option" :key="option"
+                                                                                            :selected="param.default == option ? 'selected' : ''">
+                                                                                        {{ option }}
+                                                                                    </option>
+                                                                                </select>
+                                                                            </div>
+                                                                            <div v-else-if="param.param_type === 'splitchr'">
+                                                                                <b-form-select @focus="provide_param_desc(param)" :id="`p-${param.id}`" :options="boolSelectOpt" 
+                                                                                            v-model="parameters[`p-${param.id}`]" :required="param.required" :name="`p-${param.id}`" 
+                                                                                            :state="inputValid[`p-${param.id}`]" />
+                                                                            </div>
+                                                                        </div>
+                                                            
+                                                                    </div>
+                                                                    
+                                                                </b-collapse>
+                                                            </div>
+                                                        </b-list-group>
+                                                    <h5 class = "submit-container" v-if="parameters_input.length > 0"> Some self statements here, Some self statements here, Some self statements here.</h5>
+                                                    <div class="col-md-10" v-for="param_input in parameters_input" :key="param_input.id">
+                                                        <label :for="`p-${param_input.id}`">{{ param_input.name }}
+                                                            <span v-if="param_input.required" class="required">*</span>
+                                                        </label>
+                                                        <div>
+                                                            <b-form-file
+                                                                :id="`i-${param_input.id}`"
+                                                                v-model="files[`i-${param_input.id}`]"
+                                                                :state="inputValid[`i-${param_input.id}`]"
+                                                                placeholder="Choose a file or drop it here..."
+                                                                drop-placeholder="Drop file here..." 
+                                                                :name="`i-${param_input.id}`"
+                                                                :required="param_input.required"
+                                                            >
+                                                            </b-form-file>  
+                                                        </div>
+                                                    </div>
+                                                    
+                                                </div>
+                                            </div>
+                                            <div class = "col-md-6" style="height:350px; overflow:scroll; display:flex; flex-direction: column; justify-content: center;">
+                                                <h2>Parameters description</h2>
+                                                <div id = "single_params_desc" v-html="single_params_desc"></div>
+                                            </div>
+                                        </div>
+                                        <p v-if="displayedSingleParams.length == 0">No Parameters.</p>
+                                    </div>
+                                </div>
+                                <br>
+                                <br>
+                                <b-btn @click="checkInputValid()" class="float-right mt-2"><i class="fa fa-location-arrow"></i> Submit</b-btn>
+
+                            </div>
+                            
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+
+            <div v-else-if="submitted">
+                <div class="text-center job-info">
+                    <h1>Successfully</h1>
+                    <h1>Submitted</h1>
+                    <p>We are preparing your visualization,you can copy the code and check the status of your work in the <a ref = "goTo" :href = "`/submit/job-query`" id = "redirection-link">[workspace]</a>.</p>
+                    <div class = "row">
+                        
+                        <div class = "col-md-2">
+                            <b-btn :id = "copyButton" @click = "copyToClipboard" type = "button" class = "btn btn-light">Copy</b-btn>
+                        </div>
+                        <div class = "col-md-2">
+                            <button id = "jobIDButton" type = "button" class = "btn">{{jobID}}</button>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
+
+        <div id = "loadingBlock" v-else>
+            
+            <h3 class="mt-4">
+                <img v-bind:src="require('../assets/images/loading_icon.gif')">
+                We are preparing your submission. Please wait for some minutes.
+            </h3>
+        </div>
+
+
+        <b-modal class= "file-submit-modal" :id="`single-upload-${input.id}`" size="md" :title="`Submit input file - ${input.name}`" centered v-for="input in displayedInputs" :key="input.id">
+                <div class = "row justify-content-center submit-container">
+                    <div class = "col-md-1">
+                    </div>
+                    <button class = "col-md-4 btn btn-secondary">
+                        <a :href="`/public/data/module_demo/${input.name}_demo.csv`" :download="input.name">Download demo file</a>
+                    </button>
+                    <div class = "col-md-7">
+                    </div>
+                    
+                    <div class = "col-md-12 text-center">
+                        <div class = "submit-container">
+                            <div>
+                                <b-form-file
+                                    :id="`i-${input.id}`"
+                                    v-model="files[`i-${input.id}`]"
+                                    :state="inputValid[`i-${input.id}`]"
+                                    placeholder="Choose a file or drop it here..."
+                                    drop-placeholder="Drop file here..." 
+                                    :name="`i-${input.id}`"
+                                    :required="input.required"
+                                    :disabled="picked_single_multiple=='single' && ds_selected != ''"
+                                >
+                                </b-form-file>
+                            </div>
+                        </div>
+                    </div>
+                    <div class = "col-md-10" id = "description-card submit-container">
+                        <div class = "row submit-container">
+                            <div v-html="input.description"></div>
+                        </div>
+                    </div>
+                </div>
+        </b-modal>
+
+        <b-modal class= "file-submit-modal" :id="`batchEffect-config-${input_idx}`" size="xl" centered title="File Submission and Parameter Setting for Batch Effect" v-for="input_idx in parseInt(displayedPairsNum)" :key="input_idx">    
+                
+                
+                <div class = "row justify-content-center">
+
+                    <!-- <div class = "col-md-2">
+                        <b-btn @click="resetMultipleUpload(input_idx)" class="float-right mt-2 btn-lg">Reset</b-btn>
+                    </div>
+                    <div class = "col-md-10">
+                    </div> -->
+
+                    <div class = "col-md-10 text-center">
+                        <h4 class = "mb-4"> File submission </h4>
+                        <div class = "row">
+                            <div id = "be-file-submit" class = "col-md-6 text-center" v-for="input in displayedInputs" :key="input.id">
+                                
+                                <div>
+                                    <label :for="`multiple-i-${input.id}-${input_idx}`" class = "row justify-content-around">
+                                        <div class = "col-md-6 text-left" style="margin:auto;">
+                                            {{ input.name }}
+                                            <span v-if="input.required" class="required" style="color:red;">*</span>
+                                        </div>
+                                        <div class = "col-md-6 text-right">
+                                            <button class = "btn btn-secondary">
+                                                <a :href="`/public/data/module_demo/${input.name}_demo.csv`" :download="input.name">Download demo file</a>
+                                            </button>
+                                        </div>
+                                    </label>
+                                    <b-form-file
+                                        :id="`multiple-i-${input.id}-${input_idx}`"
+                                        v-model="files[`multiple-i-${input.id}-${input_idx}`]"
+                                        :placeholder="files[`multiple-i-${input.id}-${input_idx}`] ? files[`multiple-i-${input.id}-${input_idx}`].name : 'no file uploaded'"
+                                        drop-placeholder="Drop file here..." 
+                                        :name="`multiple-i-${input.id}-${input_idx}`"
+                                        :required="input.required"
+                                    >
+                                    </b-form-file>
+                                    <div class = "submit-container">
+                                        <div v-html="input.description">
+                                        </div>
+                                    </div>
+                                    
+                                </div>
+                                <!-- <div><p>uploaded file name: {{files[`i-${input.id}-${input_idx}`] ? files[`i-${input.id}-${input_idx}`].name : "no file uploaded"}} </p></div> -->
+                            </div>
+                        </div>
+                    </div>
+
+                    <br>
+                    <br>
+
+                    <div class = "col-md-8 justify-content-center submit-container">
+                        <h4>
+                            Or you can select a dataset to merge:
+                        </h4>
+                        <b-form-select
+                            name="selected-dataset"
+                            v-model="ds_selected[input_idx - 1]"
+                        >
+                            <option value="" key="default">--click to select your own dataset--</option>
+                            <option v-for="(option, index) in select_box_option" :key="index" :value="option.value" :disabled="option.disabled">
+                                {{option.lable}}
+                            </option>
+                        </b-form-select>
+                    </div>
+
+                    <br>
+                    <br>
+
+
+                    <div class = "col-md-10 submit-container text-center">
+                        <h4> Parameter setting </h4>
+
+                        <div class = "row justify-content-center">
+                            <div v-if="ds_selected[input_idx - 1] == '' && displayedBatchEffectParams.length > 0" class = "col-md-6" style="vertical-align:center">
+                                <div class="row">
+                                    <div class="col-md-12" style="margin-bottom:10px" v-for="param in displayedBatchEffectParams" :key="param.id">
+
+                                        <label :for="`multiple-p-${param.id}-${input_idx}`">{{ param.name }}
+                                            <span v-if="param.required" class="required" style="color:red;">*</span>
+                                        </label>
+                                        <div v-if="param.param_type === 'enum'">
+                                            <select @focus="provide_multiple_param_desc(param)" :id="`multiple-p-${param.id}-${input_idx}`" class="form-control custom-select"  :placeholder="parameters[`multiple-p-${param.id}-${input_idx}`]"
+                                                    v-model="parameters[`multiple-p-${param.id}-${input_idx}`]" :required="param.required" :name="`multiple-p-${param.id}-${input_idx}`">
+                                                <option v-for="option in param.options" :value="option" :key="option"
+                                                        :selected="param.default == option ? 'selected' : ''">
+                                                    {{ option }}
+                                                </option>
+                                            </select>
+                                        </div>
+                                        <div v-else>
+                                            <b-form-input @focus="provide_multiple_param_desc(param)" :id="`multiple-p-${param.id}-${input_idx}`" :value="param.default" :required="param.required" :placeholder="parameters[`multiple-p-${param.id}-${input_idx}`]"
+                                            v-model="parameters[`multiple-p-${param.id}-${input_idx}`]" :name="`multiple-p-${param.id}-${input_idx}`" />
+                                        </div>
+                                            
+                                    </div>
+                                </div>
+                            </div>
+
+
+
+                            <div v-if="ds_selected[input_idx - 1] != ''" class = "col-md-6" style="vertical-align:center">
+                                <div class="row">
+                                    <div class="col-md-12" style="margin-bottom:10px">
+
+                                        <label :for="`dp-${input_idx}`">{{ ds_params.name }} for selected dataset
+                                            <span v-if="ds_params.required" class="required"  style="color:red;">*</span>
+                                        </label>
+                                        <div v-if="ds_params.param_type === 'enum'">
+                                            <select @focus="provide_multiple_param_desc(ds_params)" :id="`dp-${input_idx}`" class="form-control custom-select"
+                                                    v-model="ds_param_selected[input_idx - 1]" :required="ds_params.required" :name="`${ds_params.name}-${input_idx}`">
+                                                <option v-for="option in ds_params.options" :value="option" :key="option"
+                                                        :selected="ds_params.default == option ? 'selected' : ''">
+                                                    {{ option }}
+                                                </option>
+                                            </select>
+                                        </div>
+                                        <div v-else>
+                                            <b-form-input @focus="provide_multiple_param_desc(ds_params)" :id="`dp-${input_idx}`" :required="ds_params.required" :placeholder="ds_param_selected[input_idx - 1]"
+                                            v-model="ds_param_selected[input_idx - 1]" :name="`${ds_params.name}-${input_idx}`" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class = "col-md-6">
+                                <h2>Parameters description</h2>
+                                <div id = "multiple_params_desc" v-html="multiple_params_desc"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+        </b-modal>
+
+
+        <b-modal v-if="started" ref="submit-helper" v-model="showhelper" id = "submit-helper" size="xl" scrollable title="Module Helper" centered @ok="jumpToUpload">
+            <br>
+            <div class = "row justify-content-center container">
+                <div v-html="selected_analysis.rendered_doc" class = "text-left container" style="margin: 50px;">
+                </div>
+            </div>
+        </b-modal>
+
     </div>
 </template>
 
@@ -140,79 +582,206 @@
     import VueTagsInput from '@johmun/vue-tags-input';
     import AlertCenter from 'components/alert-center.vue';
     import GlobalSaveButton from 'components/global-save-button.vue';
+    import Router from '../router';
     import * as $ from "jquery";
+    import { ModalPlugin } from 'bootstrap-vue'
+    import 'bootstrap/dist/css/bootstrap.css'
+    import 'bootstrap-vue/dist/bootstrap-vue.css'
 
+    Vue.use(ModalPlugin)
     Vue.use(BootstrapVue);
 
     export default {
         data() {
             return {
-                id: window.gon.id,
-                app: {
-                    name: '',
-                    inputs: [],
+                ds_info : {},
+                id : null,
+                selected_analysis : null,
+                isConv: false,
+                app: { 
                 },
-                params: {},
-                pipeline_json: {},
                 files: {
+                },
+                parameters: {
 
                 },
-                selected: {},
+                file_names: {
+
+                },
+                demo_id: 0,
+                result_demo_id: 0,
+                demo: false,
+                demo_inputs: {},
+                demo_parameters: {},
+                ds_selected: [],
+                ds_param_selected: [],
+                ds_params: {},
                 boolSelectOpt: [
                     { value: true, text: 'Yes' },
                     { value: false, text: 'No' },
                 ],
                 inputValid: {},
                 submitted: false,
-                isLoading: false,
                 jobID: '',
+                isLoading: false,
+                analyses: [],
+                started: false,
+                single_params_desc: "",
+                multiple_params_desc: "",
+
+                picked_single_multiple: "single", //for non-deconv module, initial value is single
+                single_parameters: [],
+                multiple_parameters: [],
+                multiple_pairs_num: 1,
+                multiple_completed: [],
+                step: 1,
+                showhelper: false,
+                parameters_input: [],
+                pipeline_json: {},
+                sync_params: {},
+                sync_params_names: ["Project name"],
+
+                test_description: "<h5>There are something testing description</h5><ul><li>The first row is for something.</li><li>The first column is for something. It should be something.</li><li>Please be noted that the uploader is for something and somethind should be...</li></ul><p>This is the end of this line.</p>"
             };
         },
         created() {
-            this.selected = {};
+            this.ds_info = window.gon.select_box_option; //contains information about the nunber of project sources, platform names and project names
+            if ( ['Regression Tools', 'Enrichment Tools', 'Consensus Tools', 'Unsupervised'].includes( this.analysis_category) ) {
+                this.isConv = true; //deconvolution analysis category are different from others
+            }
+            this.updateApp(null, false);
             this.select_box_option = [];
-            var ds = window.gon.select_box_option;
+
             var oplist = [];
-            for (var key in ds){
+            for (var key in this.ds_info){
                 var op = {value: key, lable: key};
                 oplist.push(op);
             }
-            this.select_box_option = oplist
+            this.select_box_option = oplist;
 
-            axios.get(`https://deepomics.org/api/pipeline_flowchart/${this.id}/`).then((response) => {
-                this.app = response.data;
-                this.app.id = this.id;
-                for (var k in this.app.inputs){
-                    // alert(k);
-                    this.files['i-' + this.app.inputs[k].id]  = null;
-                }
-            });
-            axios.get(`https://deepomics.org/api/pipelines/${this.id}/`).then((response) => {
-                const { alertCenter } = this.$refs;
-                if (response.data.code) {
-                    this.app.name = response.data.name;
-                    this.params = response.data.data;
-                    this.pipeline_json = response.data.pipeline_json;
-                } else {
-                    alertCenter.add('danger', response.data.data);
-                }
-            });
-            // $("#disable-fill").fadeIn(10);
-            // this.isLoading=true;
+            axios.get('/submit/pipelines.json',).then(response => {this.analyses = response.data; console.log(response.data)});
+            // for (var k in this.app.inputs){
+            //     this.files['i-' + this.app.inputs[k].id]  = null;
+            // }
+            this.multiple_completed = Array(10).fill(false) //initialize the size and element initial value for multiple upload
         },
         computed: {
             displayedInputs() {
                 // eslint-disable-next-line
-                return _.sortBy(this.app.inputs.filter(x => !x._destroy), ['name']);
+                // for pipeline analyses, we still need to upload these two files, but still in parameters
+                return _.sortBy(this.app.inputs.filter(x => (!x._destroy && x.name != 'CIBERSORT.R' && x.name != 'Signature file')), ['name']);
             },
-            displayedParams() {
+            displayedSingleParams() {
                 // eslint-disable-next-line
-                // return _.sortBy(this.app.params.filter(x => !x._destroy), ['name']);
-                // return _.sortBy(this.app.nodes.filter(x => !x._destroy), ['name']);
-                return this.params;
-            }
+                console.log("logging displayed single parameters:")
+                console.log(this.single_parameters);
+                return this.single_parameters;
+            },
+            displayedBatchEffectParams() {
+                return _.sortBy(this.multiple_parameters.filter(x => !x._destroy), ['name']);
+            },
+            displayedAnalyses() {
+                var filtered_analyses = this.analyses;
+                // if (this.isConv == true) {
+                //     if (this.picked_supervised == "supervised") {
+                //         filtered_analyses = filtered_analyses.filter(item => !(item.name == "TIMEDB Deconv LinSeed"));
+                //     }
+                //     else {
+                //         filtered_analyses = filtered_analyses.filter(item => (item.name == "TIMEDB Deconv LinSeed"));
+                //     }
+                // }
+                return filtered_analyses;
+            },
+            displayedPairsNum() {
+                //always listen to changes of user required pairs number and update related vue parts
+                console.log(this.multiple_pairs_num)
+                return this.multiple_pairs_num;
+            },
+            updateUploadedStatus() {
+                // still for multiple uploading verification
+                console.log("updating upload status under multiple mode:");
+                console.log("multiple pairs number: " + this.multiple_pairs_num);
+                console.log("type of multiple pairs number: " + typeof(this.multiple_pairs_num));
+
+                for (var input_idx = 1; input_idx <= this.multiple_pairs_num;  input_idx++ ) {
+                    this.multiple_completed[input_idx - 1] = true;
+
+                    if (this.ds_selected[input_idx - 1] == "") {
+                        this.app.inputs.forEach((item) => {
+                            console.log(item);
+                            console.log("priting files and status when updating status for multiple upload: " + input_idx + " - " + item.name);
+                            console.log(this.files['multiple-i-' + item.id + '-' + input_idx] == null)
+                            console.log(this.files['multiple-i-' + item.id + '-' + input_idx])
+
+                            // console.log(this.files['i-' + this.app.inputs[k].id + '-' + input_idx] == null)
+                            // console.log(this.files['i-' + this.app.inputs[k].id + '---' + input_idx] == null)
+
+                            if (this.files['multiple-i-' + item.id + '-' + input_idx] == null) {
+                                this.multiple_completed[input_idx - 1] = false;
+                                console.log(item.name + "not uploaded");
+                            }
+                        })
+                    }
+
+                    //check whetehr the parameters can fullfil the requirement
+                    if (this.ds_selected[input_idx - 1] == '') {
+                        for (var mp in this.multiple_parameters) {
+                            var cur_value = this.parameters["multiple-p-" + this.multiple_parameters[mp].id + "-" + input_idx];
+                            const valid = !!cur_value && !!_.trim(cur_value);
+                            if (!valid) {
+                                console.log(cur_value);
+                                console.log("Input parameters has problems")
+                                this.multiple_completed[input_idx - 1] = false;
+                            }
+                        }
+                    }
+                    else {
+                        var cur_ds_param = this.ds_param_selected[input_idx - 1]
+                        if (cur_ds_param == "") this.multiple_completed[input_idx - 1] = false;
+                    }
+                    // document.querySelectorAll("#multiple-upload-" + input_idx + " input[name^='multiple-p']").forEach((input) => {
+                    //     if(input.required) {
+                    //         console.log(input.value);
+                    //         const valid = !!input.value && !!_.trim(input.value);
+                    //         if (!valid) {
+                    //             console.log(input);
+                    //             console.log("Input parameters has problems")
+                    //             this.multiple_completed[input_idx - 1] = false;
+                    //         }
+                    //     }
+                    // })
+                }
+                console.log(this.multiple_completed)
+                return this.multiple_completed;
+            },
+            
         },
         watch: {
+            ds_selected:function(newValue) {
+                if (this.picked_single_multiple == 'single' && newValue != "") {
+                    console.log(newValue);
+                    for (var k in this.app.inputs) {
+                        this.files['i-' + this.app.inputs[k].id]  = null;
+                    }
+                }
+                if (this.picked_single_multiple == 'multiple') {
+                    for (var input_idx = 1; input_idx <= this.multiple_pairs_num;  input_idx++ ) {
+                        if (this.ds_selected[input_idx - 1] != '') {
+                            this.app.inputs.forEach((item) => {
+                                this.files['multiple-i-' + item.id + '-' + input_idx] = null;
+                            })
+                        }
+                    }
+                }
+            },
+            files:function(newValue, oldValue) {
+                console.log(newValue.size);
+                console.log(oldValue.size);
+                console.log("file changes");
+            },
+            multiple_pairs_num:function(newValue) {
+                console.log(newValue);
+            },
         },
         methods: {
             setStatusColor(status) {
@@ -231,41 +800,463 @@
                         return 'danger';
                 }
             },
-            formatInputs() {
-                return Array.from(document.querySelectorAll("input[name^='i-']"))
-                            .filter(x => x.value)
-                            .map(({ name, value }) => ({ [name]: value}));
-            },
             formatParams() {
-                return Array.from(document.querySelectorAll("input[name^='p-'], select[name^='p-']"))
-                            .filter(x => x.value)
-                            .map(({ name, value }) => ({ [name]: value}));
+                var formatted_params = []
+                // for (var sp in this.single_parameters) {
+                //     //since we need to automatic fill the project name and protocol normalization method, we need to rocess here
+                //     formatted_params.push({['p-' + this.single_parameters[sp].id]: this.parameters['p-' + this.single_parameters[sp].id]});
+                // }
+                
+
+                
+            
+                //for single parameters
+                for (let k in this.single_parameters) {
+                    for (let t in this.single_parameters[k].params) {
+                        if(this.sync_params_names.includes(this.single_parameters[k].params[t].name)) {
+                            formatted_params.push({['p-' + this.single_parameters[k].params[t].id]: this.parameters['p-' + this.sync_params[this.single_parameters[k].params[t].name][0].id]});
+                        }
+                        else {
+                            formatted_params.push({['p-' + this.single_parameters[k].params[t].id]: this.parameters['p-' + this.single_parameters[k].params[t].id]});
+                        }
+                    }
+                }
+                
+                //for multiple pipelines, needs to think about the structure
+
+                if (this.picked_single_multiple == 'multiple') {
+                    var formatted_multiple_params = [];
+
+                    for (var mp in this.multiple_parameters) {
+                        var pvalue = "";
+                        var pvalue_arr = [];
+
+                        // if (this.ds_selected != "") {
+                        //     if (this.multiple_parameters[mp].name == 'Datasets name') {
+                        //         pvalue = this.ds_info[this.ds_selected][2];
+                        //     }
+                        //     else if (this.multiple_parameters[mp].name == 'Platforms') {
+                        //         pvalue = this.ds_info[this.ds_selected][1];
+                        //     }
+                        //     else {
+                        //         pvalue =  Array(this.ds_info[this.ds_selected][0]).fill([this.ds_param_selected]).join(',') + ',';
+                        //     }
+                        // }
+                        for (var input_idx = 1; input_idx <= this.multiple_pairs_num;  input_idx++ ) {
+                            if(this.multiple_completed[input_idx - 1] == true && this.ds_selected[input_idx - 1] != "") {
+                                var cur_pvalue = "";
+
+                                if (this.multiple_parameters[mp].name == 'Datasets name') {
+                                    cur_pvalue = this.ds_info[this.ds_selected[input_idx - 1]][2];
+                                }
+                                else if (this.multiple_parameters[mp].name == 'Platforms') {
+                                    cur_pvalue = this.ds_info[this.ds_selected[input_idx - 1]][1];
+                                }
+                                else {
+                                    cur_pvalue =  Array(this.ds_info[this.ds_selected[input_idx - 1]][0]).fill(this.ds_param_selected[input_idx - 1]).join(',');
+                                }
+
+                                if (pvalue == "") {
+                                    pvalue = cur_pvalue;
+                                }
+                                else {
+                                    pvalue = pvalue + "," + cur_pvalue;
+                                }
+
+                            }
+                            // pvalue_arr.push(this.parameters['multiple-p-' + this.multiple_parameters[mp].id + '-' + input_idx]);
+                        }
+
+                        for (var input_idx = 1; input_idx <= this.multiple_pairs_num;  input_idx++ ) {
+                            if(this.multiple_completed[input_idx - 1] == true && this.ds_selected[input_idx - 1] == "") {
+                                if (pvalue == "") {
+                                    pvalue = this.parameters['multiple-p-' + this.multiple_parameters[mp].id + '-' + input_idx];
+                                }
+                                else {
+                                    pvalue = pvalue + "," + this.parameters['multiple-p-' + this.multiple_parameters[mp].id + '-' + input_idx];
+                                }
+                            }
+                        }
+
+                        // pvalue += pvalue_arr.join(',');
+                        formatted_multiple_params.push({ ['p-' + this.multiple_parameters[mp].id]: pvalue});
+                    }
+                    formatted_params = formatted_params.concat(formatted_multiple_params);
+                }
+
+                return formatted_params
             },
-            submitTask() {
+
+            formatFiles() {
+                if (this.picked_single_multiple == 'single') {
+                    return this.files;
+                }
+                else {
+                    var formatted_files = {};
+                    for (var k in this.app.inputs) {
+                        if (this.app.inputs[k].name != "CIBERSORT.R" && this.app.inputs[k].name != "Signature file") {
+                            var input_arr = [];
+                            for (var input_idx = 1; input_idx <= this.multiple_pairs_num;  input_idx++ ) {
+                                if (this.multiple_completed[input_idx - 1] == true && this.ds_selected[input_idx - 1] == "") {
+                                    input_arr.push(this.files['multiple-i-' + this.app.inputs[k].id + '-' + input_idx]);
+                                }
+                            }
+                            formatted_files['i-' + this.app.inputs[k].id] = input_arr;
+                        }
+                    }
+
+                    for (var k in this.parameters_input) {
+                        formatted_files['i-' + this.parameters_input[k].id] = this.files['i-' + this.parameters_input[k].id];
+                    }
+                    console.log("formatted files:");
+                    console.log(formatted_files);
+                    return formatted_files;
+                }
+            },
+
+            formatDatasets() {
+                var ds_arr = []
+                if (this.picked_single_multiple == 'single' && this.ds_selected != "") {
+                    ds_arr.push(this.ds_selected);
+                }
+                if (this.picked_single_multiple == 'multiple') {
+                    for (var input_idx = 0; input_idx < this.multiple_pairs_num;  input_idx++ ) {
+                        if (this.multiple_completed[input_idx] == true && this.ds_selected[input_idx] != "") {
+                            ds_arr.push(this.ds_selected[input_idx]);
+                        }
+                    }
+                }
+                return ds_arr;
+            },
+
+            updateApp(s_ana, flag) {
+                this.started = flag;
+                let newapp;
+                if (s_ana == null) {
+                    newapp = {
+                        id : "-1",
+                        image : "/media/img/instance/Sudden_Cardiac_Death_Detection.png",
+                        name: 'test app for immune platform',
+                        description: 'Sudden cardiac death (SCD) is a sudden, unexpected death caused by loss of heart function (sudden cardiac arrest). Sudden cardiac death is the largest cause of natural death in the United States, causing about 325,000 adult deaths in the United States each year. Sudden cardiac death is responsible for half of all heart disease deaths.\n\nSudden cardiac death occurs most frequently in adults in their mid-30s to mid-40s, and affects men twice as often as it does women. This condition is rare in children, affecting only 1 to 2 per 100,000 children each year.\n\n**Reference**: WH, L., \u0026 Dan, E. (2010). Genetic Variations in NOS1AP are Associated with Sudden Cardiac Death in U.S. White Community Based Populations.",',
+                        inputs: [
+                        ],
+                        params: [
+                            {
+                                id: "pid1",
+                                name: "parameter 1",
+                                param_type: "string",
+                                default: "default value",
+                                required: true,
+                                description: "some descriptioons some descriphvvu uihiuhohnu some descriptions",
+                            },
+                            {
+                                id: "pid2",
+                                name: "parameter 2",
+                                param_type: "string",
+                                default: "default value",
+                                required: true,
+                                description: "some descriptions some descriptions some deescriptions some descriptions",
+                            }
+                        ],
+                    };
+                    this.app = newapp;
+                    this.params_desc = this.app.params[0].description;
+                }
+                else {
+                    console.log("start update app");
+                    this.showhelper = true;
+
+                    this.selected_analysis = s_ana;
+
+                    if (s_ana.name == "TIMEDB Multiple Datasets Immune Comparison") {
+                        this.picked_single_multiple = 'multiple';
+                    }
+                    
+                    var newid;
+                    if (this.picked_single_multiple == "single") {
+                        newid = s_ana.pid;
+                        this.demo_id = s_ana.single_demo_id;
+                        this.result_demo_id = s_ana.single_result_id;
+                    }
+                    else {
+                        newid = s_ana.multiple_pid;
+                        this.demo_id = s_ana.multiple_demo_id;
+                        this.result_demo_id = s_ana.multiple_result_id;
+
+                    }
+
+                    axios.get(`https://deepomics.org/api/pipeline_flowchart/${newid}/`).then((response) => {
+                        this.app = response.data; //response data json has two key: inputs and nodes
+                        this.app.id = newid
+                        for (var k in this.app.inputs){
+                            // alert(k);
+                            this.files['i-' + this.app.inputs[k].id]  = null;
+                        }
+                    }).finally(() => {
+                        console.log("I am coming here ~");
+                        axios.get(`https://deepomics.org/api/pipelines/${newid}/`).then((response) => {
+                            const { alertCenter } = this.$refs;
+                            if (response.data.code) { //successfully fetched
+                                this.app.name = response.data.name;
+                                this.app.params = response.data.data;
+                                this.pipeline_json = response.data.pipeline_json;
+                            } else {
+                                alertCenter.add('danger', response.data.data);
+                            }
+                        }).finally(() => {
+                            console.log("created: fetched inputs:");
+                            console.log(this.app.inputs);
+                            console.log("created: fetched params:");
+                            console.log(this.app.params);
+
+
+                            if (this.picked_single_multiple == "single") {
+                                this.single_parameters = this.app.params;
+                                this.multiple_parameters = [];
+                                this.ds_selected = "";
+                                this.ds_params = this.single_parameters[Object.keys(this.single_parameters)[0]].params[0]
+                            }
+                            else {
+                                this.single_parameters = this.app.params.filter(x => !['Platforms', 'Datasets name', 'Protocol normalization'].includes(x['name']));
+                                this.multiple_parameters = this.app.params.filter(x => ['Platforms', 'Datasets name', 'Protocol normalization'].includes(x['name']));
+                                this.multiple_completed = Array(10).fill(false); // for both file upload and related parameter setting under multiple mode
+                                this.ds_selected = Array(10).fill("");
+                                this.ds_param_selected = Array(10).fill("");
+                                
+                                this.multiple_params_desc = this.multiple_parameters[0].description;
+                                this.ds_params = this.app.params.find(x => x['name'] == 'Protocol normalization');//for dataset parameters
+
+                                console.log("printing dataset parameters");
+                                console.log(this.ds_params.name);
+                            }
+
+                            for (var k in this.app.inputs){
+                                this.file_names['i-' + this.app.inputs[k].id]  = this.app.inputs[k].name; //for later dataset merging - file matching
+                            }
+
+                            for (var k in this.single_parameters) {
+                                console.log(this.single_parameters[k]);
+                                for (let t in this.single_parameters[k].params) {
+                                    console.log("Outputing something: ");
+                                    console.log(this.single_parameters[k].params[t]);
+                                    console.log("Dafult value for fetched parameters: " + this.single_parameters[k].params[t].name);
+                                    console.log(this.single_parameters[k].params[t].default);
+                                    this.parameters['p-' + this.single_parameters[k].params[t].id] = this.single_parameters[k].params[t].default; //commonly only for single parameters
+                                }
+                            }
+
+                            this.single_params_desc = this.single_parameters[Object.keys(this.single_parameters)[0]].params[0].description;
+                            
+                            for (var k in this.app.inputs) {
+                                if (this.app.inputs[k].name == "CIBERSORT.R" || this.app.inputs[k].name == "Signature file") {
+                                    this.parameters_input.push(this.app.inputs[k]);
+                                }
+                            }
+
+                            
+                            for (let m in this.sync_params_names) {
+                                let pname = this.sync_params_names[m];
+                                this.sync_params[pname] = [];
+                                for (let k in this.single_parameters) {
+                                    for (let t in this.single_parameters[k].params) {
+                                        if(this.single_parameters[k].params[t].name == pname) {
+                                            this.sync_params[pname].push(this.single_parameters[k].params[t]);
+                                        }
+                                    }
+                                }
+                            }
+                            console.log(this.sync_params_names);
+                            console.log(this.sync_params);
+
+                            console.log("end update app");
+                        });
+                    });
+                    
+                    
+                }
+            },
+
+
+            checkInputValid() {
+
                 const { alertCenter } = this.$refs;
                 let allRight = true;
-                document.querySelectorAll('input').forEach((input) => {
+                let is_single = (this.picked_single_multiple == 'single')
+
+            
+                //valid checking, need imporvement for complete error reporting
+                document.querySelectorAll("select[name^='multiple-p-'], input[name^='multiple-p-'], input[name^='p-'], select[name^='p-']").forEach((input) => {
                     if(input.required) {
                         const valid = !!input.value && !!_.trim(input.value);
-                        Vue.set(this.inputValid, input.name, valid);
+                        //Vue.set(this.inputValid, input.name, valid);
                         if (!valid) {
+                            console.log(input);
+                            console.log("you missed some required parameters")
+                            console.log(input.name)
                             allRight = false;
+                            alertCenter.add('danger', "You missed some required parameters!");
                         }
                     }
                 })
+
+                //there will be double check later
+                if (is_single && this.ds_selected != "") {
+                    if (this.ds_info[this.ds_selected][0] > 1) {
+                        console.log("Selected datasets has multiple project sources!")
+                        allRight = false
+                        alertCenter.add('danger', "Selected dataset has multiple project sources, but you are under single mode!");
+                    }
+                    // for (var file_inputs in this.files) {
+                    //     if (this.files[file_inputs] != null) {
+                    //         console.log("You should not upload any files if you select datsets under single mode.")
+                    //         allRight = false;
+                    //     }
+                    // }
+                }
+
+                if (allRight == true) {
+                    var anyFile;
+
+                    if (is_single) {
+                        anyFile = true;
+                        if (this.ds_selected == "") {
+                            for (var file_inputs in this.files) {
+                                if (this.files[file_inputs] == null) {
+                                    anyFile = false;
+                                    alertCenter.add('danger', "You are under single mode, but you have not uploaded any file input or selected any single source dataset!");
+                                }
+                            }
+                        }
+                    }
+                    else {
+                        anyFile = false;
+                        for (var input_idx = 0; input_idx < this.multiple_pairs_num;  input_idx++ ) {
+                            if (this.multiple_completed[input_idx] == true) {
+                                anyFile = true;
+                                break;
+                            }
+                        }
+                    }
+                    // for (var file_inputs in this.files) {
+                    //     if (is_single) {
+                    //         anyFile = true;
+                    //         if (this.files[file_inputs] == null) {
+                    //             console.log(file_inputs)
+                    //             anyFile = false;
+                    //             alertCenter.add('danger', "You are under single mode, but you have not uploaded any file input or selected any single source dataset!");
+                    //         }
+                    //     }
+                    //     else {
+                    //         anyFile = false;
+                    //         for (var be_num in this.multiple_pairs_num) {
+                    //             if (this.multiple_completed[be_num] != null) {
+                    //                 anyFile = true;
+                    //             }
+                    //         }
+                    //         if (anyFile == false) {
+                    //             alertCenter.add('danger', "You are under multiple mode, but there is no valid input pairs!");
+                    //         }
+                    //     }
+                    // }
+                    allRight = anyFile == true
+                    if (!allRight) {
+                        alertCenter.add('danger', "Not enough inputs with parameters.");
+                    }
+                }
+
+                console.log("Priting final files keys:")
+                for (var key in this.files) {
+                    console.log(this.files[key]);
+                }
+
+                console.log("Here are final formatted input files and input parameters");
+                console.log(this.formatFiles());
+                console.log(this.formatParams());
+
+                console.log("All right is true here")
+
                 if (allRight) {
-                    let alertData;
-                    $("#disable-fill").fadeIn(10);
-                    this.isLoading=true;
+                    this.submitTask();
+                }
+                else {
+                    alertCenter.add('danger', "Please recheck your inputs. Something error here!");
+                }
+
+            },
+
+            submitDemoTask() {
+                const { alertCenter } = this.$refs;
+                let alertData;
+                var demo_files = {};
+                var demo_params = {};
+
+                let submitted_pid;
+                if (this.picked_single_multiple == 'multiple') {
+                    submitted_pid = this.selected_analysis.multiple_pid;
+                }
+                else {
+                    submitted_pid = this.selected_analysis.pid;
+                }
+                
+                $("#disable-fill").fadeIn(10);
+                this.isLoading = true;
+                console.log("loading: " + this.isLoading);
+
+                axios.post(
+                    `/query-deepomics/`,
+                    objectToFormData({'id': this.demo_id, 'type': 'pipeline'}),
+                    {
+                        headers: {
+                            'X-Requested-With': 'XMLHttpRequest',
+                            'X-CSRF-Token': document.head.querySelector('meta[name="csrf-token"]').content,
+                            'Content-Type': 'multipart/form-data',
+                        },
+                    },
+                ).then((response) => {
+                    console.log("Module query result for testing pipelines:", response);
+                    this.demo_inputs = response.data.message.inputs;
+                    this.demo_parameters = response.data.message.params;
+                    
+                }).catch((error) => {
+                    const message = error.response && error.response.status === 404 ? "The task does not exist" : error;
+                    alertCenter.add('danger', `${message}`);
+                }).finally(() => {
+                    // setTimeout(() => { alertCenter.add('danger', ''); }, 2000);
+                    console.log("Log:", this.demo_inputs, this.demo_parameters)
+
+                    //process demo info
+                    
+                    for (var k in this.demo_inputs){
+                        let input = this.demo_inputs[k];
+                        console.log(input, k);
+                        let f_arr = [];
+                        for (var t in input.files) {
+                            let file = input.files[t];
+                            let f_path = file.path + "/" + file.name;
+                            f_arr.push(f_path);
+                        }
+                        demo_files[`i-${input.id}`] = f_arr.join(","); 
+                    }
+
+                    for (var k in this.demo_parameters) {
+                        let params = this.demo_parameters[k];
+                        demo_params[`p-${params.id}`] = params.value;
+                    }
+
+                    console.log("Outputing demo inputs json:");
+                    console.log(demo_files);
+                    console.log("Outputing demo inputs parameters:");
+                    console.log(demo_params);
+
                     axios.post(
                         `/submit-app-task/`,
                         objectToFormData({
-                            "app_id": this.app.id,
-                            "inputs": this.files,
-                            "params": this.formatParams(),
-                            "selected": this.selected,
-                            "pid": this.id,
-                            "is_pipeline": true,
+                            "search_pid": this.selected_analysis.pid,
+                            "mid": submitted_pid,
+                            "is_demo": true,
+                            "inputs": demo_files,
+                            "params": demo_params,
+                            "pipelines": true,
                         }),
                         {
                             headers: {
@@ -278,21 +1269,123 @@
                         if (response.data.code) {
                             this.jobID = response.data.data.task_id;
                             this.submitted = true;
+                            
                         } else {
                             alertData = response.data.msg;
                         }
                     }).catch((reason) => {
                         alertData = reason;
                     }).finally(() => {
-                        setTimeout(() => {
-                            $("#disable-fill").fadeOut(10);
-                            this.isLoading = false;
-                            if (!!alertData) {
-                                alertCenter.add('danger', alertData);
-                            }
-                        }, 2000);
+                        console.log("submitted");
+                        console.log(demo_files);
+
+
+                        $("#disable-fill").fadeOut(10);
+                        this.isLoading = false;
+                        if (!!alertData) {
+                            this.$refs.alertCenter.add('danger', alertData);
+                        }
+                        // if (this.submitted) {
+                        //     setTimeout(() => {
+                        //         location.replace(`/submit/job-query`)
+                        //     }, 1000);
+                        // }
                     });
+                });
+            },
+
+            checkDemoTask() {
+                window.location.href = '/submit/job-query-demo?demo_id=' + this.result_demo_id + "&jobName=" + this.app.name; 
+            },
+            
+            submitTask() {
+                // send selected file to files
+
+                //this.submitted = true;
+                //this.updateUploadedStatus();
+
+                const { alertCenter } = this.$refs;
+                let alertData;
+       
+                let submitted_mid;
+                if (this.picked_single_multiple == 'multiple') {
+                    submitted_mid = this.selected_analysis.multiple_mid;
                 }
+                else {
+                    submitted_mid = this.selected_analysis.mid;
+                }
+                $("#disable-fill").fadeIn(10);
+                this.isLoading = true;
+                console.log(this.isLoading);
+                axios.post(
+                    `/submit-app-task/`,
+                    
+                    objectToFormData({
+                        "inputs": this.formatFiles(),
+                        "params": this.formatParams(),
+                        "datasets": this.formatDatasets(),
+                        "search_mid": this.selected_analysis.mid,
+                        "mid": submitted_mid,
+                        "is_single": this.picked_single_multiple=='single',
+                        "file_names": this.file_names,
+                        "is_demo": false,
+                    }),
+                    {
+                        headers: {
+                            'X-Requested-With': 'XMLHttpRequest',
+                            'X-CSRF-Token': document.head.querySelector('meta[name="csrf-token"]').content,
+                            'Content-Type': 'multipart/form-data',
+                        },
+                    },
+                ).then((response) => {
+                    if (response.data.code) {
+                        this.jobID = response.data.data.task_id;
+                        this.submitted = true;
+                        
+                    } else {
+                        alertData = response.data.msg;
+                    }
+                }).catch((reason) => {
+                    alertData = reason;
+                }).finally(() => {
+                    $("#disable-fill").fadeOut(10);
+                    this.isLoading = false;
+                    if (!!alertData) {
+                        this.$refs.alertCenter.add('danger', alertData);
+                    }
+                    // if (this.submitted) {
+                    //     setTimeout(() => {
+                    //         location.replace(`/submit/job-query`)
+                    //     }, 1000);
+                    // }
+                });
+            },
+            updateMode(type) {
+                this.started = false;
+                if (type == 'single') {
+                    this.picked_single_multiple = "single";
+                }
+                else {
+                    this.picked_single_multiple = "multiple";
+                }
+                document.getElementById("single-button").classList.toggle("btn-secondary");
+                document.getElementById("single-button").classList.toggle("btn-dark");
+                document.getElementById("multiple-button").classList.toggle("btn-secondary");
+                document.getElementById("multiple-button").classList.toggle("btn-dark");
+            },
+            resetMultipleUpload(input_idx) {
+                
+                for ( var k in this.app.inputs) {
+                    this.files["multiple-i-" + this.app.inputs[k].id + "-" + input_idx] = null;
+                }
+
+                for ( var k in this.multiple_parameters) {
+                    this.parameters["multiple-p-" + this.multiple_parameters[k].id + "-" + input_idx] = null;
+                }
+
+                
+                this.ds_selected[input_idx - 1] = "";
+                this.ds_param_selected[input_idx - 1] = "";
             },
             setSelectBox(){
                 var i = 0;
@@ -302,13 +1395,33 @@
                 for(i=0; i<list.length; i++){
                     s += "<option>" + list[i] + "</option>";
                 }
-
                 this.$refs.select_box = s
-
             },
+            copyToClipboard(){
+                navigator.clipboard.writeText(this.jobID);
+            },
+            jumpToUpload() {
+                var el = document.getElementById('run-app');
+                el.scrollIntoView({behavior: "smooth"});
+            },
+            provide_param_desc(param) {
+                this.single_params_desc = param.description
+                // $("#params_desc").text(param.description);
+                this.step = 2;
+            },
+            provide_multiple_param_desc(param) {
+                this.multiple_params_desc = param.description;
+                // $("#multiple_params_desc").text(param.description)
+            },
+            updateStepToFile() {
+                this.step = 1;
+            },
+            
+            
+
         },
         components: {
-            VueTagsInput, AlertCenter, GlobalSaveButton,
+            VueTagsInput, AlertCenter, GlobalSaveButton
         },
     };
 </script>
@@ -316,12 +1429,37 @@
 <style lang="scss">
 @import '~bootstrap/scss/bootstrap.scss';
 @import '~bootstrap-vue/src/index.scss';
+@import '../assets/stylesheets/partials/variables';
+
+.submit-container {
+    margin: 2em;
+}
+
+.submit-container-lg {
+    margin: 3em;
+}
+
+#submit-app-back.active {
+    filter: blur(5px);
+    //background-color: #000;
+}
+#run-app {
+    background-color: #f8f9fa;
+}
+
+
+// #run-app .row {
+//     display: flex;
+//     align-items: center;
+// }
+
 #run-app #alert-center {
 	z-index: 1000;
 }
 
 #run-app .required {
 	color: red;
+    font-size: 2px;
 }
 
 #run-app .set-input-section label {
@@ -351,20 +1489,240 @@
 #run-app .set-param-section label {
 	margin-top: 10px;
 }
-#run-app .job-info{
+.job-info {
     min-height: 200px;
     padding: 100px 20px;
-    font-size: 30px;
+    font-size: 40px;
+    background-color: #f8f9fa;
+
 }
-.is-loading {
-    margin: 0 1px;
-    padding: 8rem 4rem;
+
+.job-info h1 {
+    font-size: 1.5em;
+    text-align: left;
+}
+
+.job-info p {
+    text-align: left;
+}
+
+.job-info button {
+    font-size: 0.8em;
+}
+
+
+#loadingBlock {
+    //margin: 0 1px;
+    //padding: 8rem 4rem;
     text-align: center;
     color: #000;
-    position: absolute;
-    top:0;
+    //position: fixed !important;
+    //top: 30% !important;
+    //left: 0;
     z-index: 1000;
     width: 100%;
     height: 100%;
+    opacity: 1;
+    //border: solid 1px;
+    vertical-align: center;
 }
+
+#loadingBlock img {
+    width: 200px;
+    //height: 100px;
+    position: relative;
+    top: 10px;
+}
+
+
+.set-input-section img {
+    width: 80%;
+}
+
+#jobIDButton {
+    background-color: $light_theme;
+    color: white;
+}
+
+
+.uploadPng {
+    cursor: pointer;
+    transform: scale(0.8);
+    transition: all 0.5s;
+}
+
+.uploadPng:hover {
+    transform: scale(0.9);
+}
+
+.demoPng {
+    cursor: pointer;
+    transform: scale(1.0);
+    transition: all 0.5s;
+}
+
+.demoPng:hover {
+    transform: scale(1.2);
+}
+
+
+h2.display-4 {
+    text-transform: uppercase;
+}
+
+.cardContainer {
+    cursor: pointer;
+}
+
+
+// #modal-trigger {
+//     overflow:auto;
+//     position: absolute;
+//     top:90px;
+//     z-index:1;
+//     width: 200px;
+// }
+
+// #modal-trigger image {
+//     overflow:auto;
+//     position: absolute;
+//     z-index:1;
+// }
+
+input[type="radio"] {
+  width: 3em;
+  height: 1em;
+  border: 0.15em solid currentColor;
+  border-radius: 50%;
+}
+
+.btn-select {
+    margin: 0.5em;
+    width: 100px;
+}
+
+.bt-secondary {
+    color: white !important;
+}
+
+.submit-box {
+    box-shadow: 0 0 64px darken(#dee2e6, 5%);
+    border-radius: 20px;
+    padding: 20px;
+    width: 100%;
+}
+.submit-box image {
+    width: 100%;
+}
+
+#submit-helper {
+    z-index: 40000 !important;
+}
+
+#submit-helper .submit-container {
+    width: 80%;
+}
+
+.timeline-step {
+    border-radius:20px;
+    overflow:auto;
+    position: absolute;
+    padding: 0px;
+    z-index:1;
+    width: 300px;
+}
+
+.timeline-step img {
+    width: 80px;
+}
+
+#timeline-file {
+    top:150px;
+}
+
+#timeline-parameter {
+    top:600px;
+}
+
+#file-upload-step {
+    // border: solid 1px;
+    margin-left: 10%;
+    margin-top: 50px;
+    height: 450px;
+    // overflow: scroll;
+}
+
+#parameter-setting-step {
+    // border: solid 1px;
+    margin-left: 10%;
+    margin-top: 50px;
+}
+
+.file-submit-modal {
+    vertical-align: center;
+}
+
+.file-submit-modal .row {
+    vertical-align: center;
+
+}
+
+.parent-overlow {
+    position: relative;
+}
+
+#multiple-upload-box {
+    display: block !important;
+    overflow-x: auto !important;
+    white-space: nowrap !important;
+    width : 80%;
+    //box-shadow: 0 0 64px darken(#dee2e6, 2%);
+    display: flex;
+    align-items: center;
+
+
+}
+
+#parameter-setting-step .row {
+    vertical-align: center;
+}
+
+#multiple-upload-box > .text-center {
+    display: inline-block !important;
+}
+
+@-webkit-keyframes greenPulse {
+  from { background-color: #1f201d; -webkit-box-shadow: 0 0 9px #333;}
+  50% { background-color: #8c8b91; -webkit-box-shadow: 0 0 18px #c4c2cd;}
+  to { background-color: #525452; -webkit-box-shadow: 0 0 9px rgb(136, 132, 135);}
+}
+
+.timeline-step .btn {
+  -webkit-animation-name: greenPulse;
+  -webkit-animation-duration: 2s;
+  -webkit-animation-iteration-count: infinite;
+}
+
+#accordion h4 {
+    text-align: center !important;
+    margin-top: 10px;
+}
+
+.modal-backdrop
+{
+    opacity: 1.0 !important;
+    background-color: rgb(165, 165, 165) !important;
+
+}
+
+#submit-helper img {
+    width: 100%;
+}
+
+.btn-light {
+    color: black;
+}
+
+
+
 </style>

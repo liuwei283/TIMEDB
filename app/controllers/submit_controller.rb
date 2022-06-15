@@ -9,7 +9,7 @@ class SubmitController < ApplicationController
   end
 
   def analysesCategory
-    @orders = ['Regression Tools','Enrichment Tools','Consensus Tools','Unsupervised','Patient Subtyping','Survival Analysis','Correlation Analysis','Differential Expression','Comparison Analysis','Pipelines']
+    @orders = ['Regression Tools','Enrichment Tools','Consensus Tools','Unsupervised','Patient Subtyping','Survival Analysis','Correlation Analysis','Differential Expression','Comparison Analysis']
     @analysis_categories = AnalysisCategory.order(:name)
     @analysis_category = AnalysisCategory.find_by name:params[:cname]
 
@@ -39,7 +39,27 @@ class SubmitController < ApplicationController
   end
 
   def pipelines
+    @analysis_categories = AnalysisCategory.order(:name) #no sense, just for sidebar
     @pipelines = AnalysisPipeline.where "hidden = false and pid is not null"
+    Rails.logger.info "The number of the pipelines:"
+    Rails.logger.info @pipelines.count
+
+    uid = session[:user_id]
+    @user = User.find(uid)
+    # user_dir = File.join($user_stor_dir, uid.to_s)
+    @datasets = @user.datasets
+    data = {}
+    @datasets.each do |ds|
+      ds_name = ds.name
+      ps_num = ds.getProjectSources(ds_name).length
+      platform_names, project_names = ds.getProjectsPlatforms(ds_name)
+      # ds_dir = File.join(user_dir, ds_name)
+      # file_list = Dir.entries(ds_dir)[2..-1]
+      data[ds_name] = [ps_num, platform_names, project_names] 
+    end
+
+    gon.push select_box_option: data
+    
   end
 
 
@@ -311,7 +331,7 @@ class SubmitController < ApplicationController
       if !params[:search_mid].blank?
         @analysis = Analysis.find_by mid:params[:search_mid]
       else
-        @pipeline = AnalysisPipeline.find_by pid:params[:pid]
+        @pipeline = AnalysisPipeline.find_by pid:params[:search_pid]
       end
       inputs = Array.new
       params = Array.new
@@ -510,7 +530,7 @@ class SubmitController < ApplicationController
   def query_deepomics
     begin
       client = LocalApi::Client.new
-      result = client.task_info(49, params[:id].to_i, params[:type])
+      result = client.task_info(UID, params[:id].to_i, params[:type])
       render json: result
       return
     end

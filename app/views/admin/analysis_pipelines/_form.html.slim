@@ -1,8 +1,14 @@
 = f.input :name
 = f.input :url, hint: "This name will be embeded in URLs. Hence it must be URL-safe."
 = f.input :pid
+= f.input :multiple_pid
+= f.input :single_demo_id
+= f.input :multiple_demo_id
+= f.input :single_result_id
+= f.input :multiple_result_id
 = f.input :hidden
 = f.input :description
+= f.input :documentation
 = f.input :image_file, as: :file
 - if !@pipeline.cover_image.nil?
   img src = @pipeline.cover_image width="400"

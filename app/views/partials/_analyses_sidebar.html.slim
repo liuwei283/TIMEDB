@@ -3,3 +3,7 @@ ul.list-unstyled.analysis
         li.header class=('active' if @analysis_category.name == c)
             = link_to c, {:controller => "submit", :action => "analysesCategory", :cname => c }
         br
+
+ul.list-unstyled.analysis
+        li.header class=('active' if !@pipelines.blank? )
+            = link_to "Pipelines", {:controller => "submit", :action => "pipelines" }

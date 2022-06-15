@@ -28,9 +28,9 @@ html
 
     = render 'partials/nav'
     #wrapper
-      - if %w[analysis].include? controller_name or controller_name == 'submit' and action_name == 'analysesCategory'
+      - if %w[analysis].include? controller_name or controller_name == 'submit' and ( action_name == 'analysesCategory' or action_name == 'pipelines')
         = render 'partials/side_bar'
-      - if session[:user_id].nil?
+      - if session[:user_id].nil? || !User.exists?(session[:user_id])
         #cookies-eu-banner
           .container
             | We use Cookies to offer a better browsing experience. 
