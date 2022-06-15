@@ -174,7 +174,7 @@ class Admin::TasksController < ApplicationController
             file_paths[dataType] = {id: 0, 
                                     url: File.join('/data/outputs', of1['path'], of1['name']), 
                                     is_demo: true}
-            # files_to_do.delete(of1)
+            files_to_do.delete(of1)
           end
         end
       end

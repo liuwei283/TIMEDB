@@ -74,7 +74,7 @@
 
                                 </div>
                             </div> -->
-                            <div class = "row">
+                            <div class = "row" id="jumpDivStart">
                                 <div class="col-lg-4 mb-4 justify-content-center text-center" v-for="a in displayedAnalyses" :key="a.id" @click="updateApp(a, true)">
                                     <div class="card">
                                         <img v-if="a.cover_image == null" v-bind:src="require('../assets/images/module.png')" class="card-img-top">
@@ -96,6 +96,7 @@
                 </div>
                 <br><br>
             </div>
+
 
 
             <div class = "col-md-12" id = "submit-app-back" v-if="started && !submitted ">
@@ -1329,7 +1330,7 @@
                 navigator.clipboard.writeText(this.jobID);
             },
             jumpToUpload() {
-                var el = document.getElementById('submit-app-back');
+                var el = document.getElementById('jumpDivStart');
                 el.scrollIntoView({behavior: "smooth"});
             },
             provide_param_desc(param) {
