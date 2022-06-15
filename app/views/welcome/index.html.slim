@@ -19,7 +19,7 @@ link rel='stylesheet' href="https://fonts.googleapis.com/css?family=Oswald&subse
         .home-nav#home-sidebar
           .nav-content
             br
-            h3 Documentation 
+            h3 Directly Start
             br
             br
             
@@ -73,13 +73,14 @@ link rel='stylesheet' href="https://fonts.googleapis.com/css?family=Oswald&subse
               =link_to "database", "/database/overview"
               |  of over 
               strong.number_text =@samples_num
-              strong.number_text  samples across 
+              span.noun_text  samples 
+              |  across 
               strong.number_text =@cancers_num
-              strong.number_text  cancers.
+              span.noun_text  cancers.
             li 
               strong.number_text =@analysis_num
-              strong.number_text  online tumor immune microenvironment 
-              =link_to "anlayses", "/submit/analyses"
+              span.noun_text  online tumor immune microenvironment 
+              =link_to "analyses", "/submit/analyses"
             li
               | Comprehesive interactive visualization of tumor immune microenvironment data.
 

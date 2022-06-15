@@ -118,7 +118,7 @@ export function editorConfig(v): EditorDef {
             //         ]    
             //     }
             // },
-            //generateGridConfig(v),
+            generateTestConfig(v),
             //generateTestConfig(v),
         ],
     };

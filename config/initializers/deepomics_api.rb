@@ -123,6 +123,15 @@ module LocalApi
       end
     end
 
+    def task_details(uid, tid, type)
+      connect do |server|
+        write_to_socket server,
+                        entry_point: EntryPoint::TASK_DETAILS,
+                        arguments: { uid: uid, tid: tid, type: type }
+        read_from_socket server
+      end
+    end
+
     private
 
     def connect

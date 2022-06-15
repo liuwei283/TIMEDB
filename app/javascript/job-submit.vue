@@ -625,11 +625,22 @@
             }
             this.select_box_option = oplist;
 
-            axios.get('/submit/analysesCategory.json', { params: { cname: this.category_name}  }).then(response => {this.analyses = response.data; console.log(response.data)});
+            axios.get('/submit/analysesCategory.json', { params: { cname: this.category_name}  }).then(response => {
+                this.analyses = response.data; console.log(response.data)
+            }).finally(() => {
+                if (this.analyses.length == 1) {
+                    this.updateApp(this.analyses[0], true);
+                }
+            });
             // for (var k in this.app.inputs){
             //     this.files['i-' + this.app.inputs[k].id]  = null;
             // }
             this.multiple_completed = Array(10).fill(false)
+            console.log("Coming here here");
+
+            console.log(this.analyses);
+
+            
         },
         computed: {
             displayedInputs() {

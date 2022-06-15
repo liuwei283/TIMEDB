@@ -372,6 +372,7 @@ export default {
         // Code
         axios.post(
             `/query-deepomics/`,
+            //improvement here: when we testing pipeline, here we need to check whether this is analyis or pipeline
             objectToFormData({'id': this.taskId, 'type': 'app'}),
             {
                 headers: {
@@ -391,43 +392,10 @@ export default {
             alertCenter.add('danger', `${message}`);
         }).finally(() => {
             // setTimeout(() => { alertCenter.add('danger', ''); }, 2000);
-            console.log("Log:", this.inputs, this.outputs, this.params)
+            console.log("Log:", this.inputs, this.outputs, this.params);
+            this.getChartsInfo();
         });
-        this.resource_usage = {
-            "x_axis":[
-                "2022-04-27 15:09:53",
-                "2022-04-27 15:09:54",
-                "2022-04-27 15:10:27",
-                "2022-04-27 15:10:34",
-                "2022-04-27 15:10:35",
-                "2022-04-27 15:10:37"
-            ],
-            "memory":{
-                "min":0,
-                "max":174899200,
-                "data":[
-                    0,
-                    7307264,
-                    174882816,
-                    174899200,
-                    174899200,
-                    57958400
-                ]
-            },
-            "cpu":{
-                "min":0,
-                "max":44,
-                "data":[
-                    0,
-                    1,
-                    34,
-                    41,
-                    42,
-                    44
-                ]
-            }
-        };
-        this.update_chart();
+
 
         this.stderr = "Testing...";
         this.stdout = "Testing...";
@@ -445,8 +413,38 @@ export default {
         }
     },
     methods: {
-        update_chart() {
-            this.chartOptions = {
+        getChartsInfo() {
+            axios.post(
+                `/task-details/`,
+                objectToFormData({'id': this.job_id}),
+                {
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest',
+                        'X-CSRF-Token': document.head.querySelector('meta[name="csrf-token"]').content,
+                        'Content-Type': 'multipart/form-data',
+                    },
+                },
+            ).then(res => {
+                    // console.log(res)
+                    //improvement here we need to consider have different plot chart for different tasks
+                    if (arg[0].isPipeline && !res.data.message.code) {
+                        res.data.message.tasks.forEach((t, i) => {
+                            this.update_chart(t);
+                        });
+                    } else if (res.data.message.code) {
+                        
+                        this.update_chart(res.data.message.data);
+                        
+                    } else {
+                        this.taskDetails.code = "API_ERROR";
+                        alertCenter.add('danger', res.data.message);
+                    }
+                    
+            });
+
+        },
+        update_chart(data) {
+            const chartOptions = {
                 tooltip: {
                     trigger: 'axis',
                     axisPointer: {
@@ -475,7 +473,7 @@ export default {
                 xAxis: [
                     {
                         type: 'category',
-                        data: this.resource_usage.x_axis,
+                        data: data.resource_usage.x_axis,
                         axisPointer: {
                             type: 'shadow'
                         }
@@ -485,8 +483,8 @@ export default {
                     {
                         type: 'value',
                         name: 'memory',
-                        min: this.resource_usage.memory.min,
-                        max: this.resource_usage.memory.max,
+                        min: data.resource_usage.memory.min,
+                        max: data.resource_usage.memory.max,
                         // interval: 50,
                         axisLabel: {
                             formatter: function (value, index) {
@@ -504,8 +502,8 @@ export default {
                     {
                         type: 'value',
                         name: 'cpu',
-                        min: this.resource_usage.cpu.min,
-                        max: this.resource_usage.cpu.max,
+                        min: data.resource_usage.cpu.min,
+                        max: data.resource_usage.cpu.max,
                         // interval: 5,
                         axisLabel: {
                             formatter: function (value, index) {
@@ -535,13 +533,13 @@ export default {
                     {
                         name:'memory',
                         type:'line',
-                        data:this.resource_usage.memory.data
+                        data: data.resource_usage.memory.data
                     },
                     {
                         name:'cpu',
                         type:'line',
                         yAxisIndex: 1,
-                        data:this.resource_usage.cpu.data
+                        data:data.resource_usage.cpu.data
                     }
                 ]
             };
@@ -562,20 +560,22 @@ export default {
                     },
                 },
             ).then((response) => {
-                console.log("Module query result:", response);
-                this.inputs = response.data.message.inputs;
-                this.outputs = response.data.message.outputs;
-                this.params = response.data.message.params;
-                this.stderr = response.data.message.error_message;
-                this.job_status = response.data.message.status;
-                
-                    }).catch((error) => {
-                        const message = error.response && error.response.status === 404 ? "The task does not exist" : error;
-                        alertCenter.add('danger', `${message}`);
-                    }).finally(() => {
-                        // setTimeout(() => { alertCenter.add('danger', ''); }, 2000);
-                        console.log("Log:", this.inputs, this.outputs, this.params)
-                    });
+            console.log("Module query result:", response);
+            this.inputs = response.data.message.inputs;
+            this.outputs = response.data.message.outputs;
+            this.params = response.data.message.params;
+            this.stderr = response.data.message.error_message;
+            this.job_status = response.data.message.status;
+            
+                }).catch((error) => {
+                    const message = error.response && error.response.status === 404 ? "The task does not exist" : error;
+                    alertCenter.add('danger', `${message}`);
+                }).finally(() => {
+                    // setTimeout(() => { alertCenter.add('danger', ''); }, 2000);
+                    console.log("Log:", this.inputs, this.outputs, this.params)
+                    this.getChartsInfo();
+
+                });
 
             // console.log("Refreshed. New log:", this.stdout)
 
