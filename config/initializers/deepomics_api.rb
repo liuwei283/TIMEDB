@@ -12,6 +12,7 @@ module LocalApi
     RUN_PIPELINE = 'run_pipeline'
     RUN_MODULE = 'run_module'
     TASK_INFO = 'task_info'
+    TASK_DETAILS = 'task_details'
   end
 
   module Error
