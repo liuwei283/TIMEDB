@@ -35,14 +35,14 @@
               | Samples Detail
 
 
-        li.nav-item.dropdown
-          = link_to '#', class: 'nav-link dropdown-toggle', data: { toggle: 'dropdown' } do 
-            = icon 'fa', 'upload'
-            |  Analyses
-            = icon 'fas', caret_icon 
-          .dropdown-menu 
-            = link_to "/submit/analyses", class: 'dropdown-item' do
-              | Modules
+        / li.nav-item.dropdown
+        /   = link_to '#', class: 'nav-link dropdown-toggle', data: { toggle: 'dropdown' } do 
+        /     = icon 'fa', 'upload'
+        /     |  Analyses
+        /     = icon 'fas', caret_icon 
+        /   .dropdown-menu 
+        /     = link_to "/submit/analyses", class: 'dropdown-item' do
+        /       | Modules
             / = link_to "/submit/pipelines", class: 'dropdown-item' do 
             /   | Pipelines
 
@@ -55,6 +55,10 @@
             
         /     = link_to "/visualizer", class: 'dropdown-item' do 
         /       | Demo Visualizations
+        li.nav-item
+            = link_to '/submit/analyses', class: 'nav-link' do
+              = icon 'fa', 'upload'
+              | Analysis
 
         li.nav-item
             = link_to '/submit/job-query', class: 'nav-link' do

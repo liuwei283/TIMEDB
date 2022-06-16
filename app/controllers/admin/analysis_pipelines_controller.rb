@@ -52,7 +52,7 @@ class Admin::AnalysisPipelinesController < ApplicationController
   private
 
   def pipeline_params
-    p = params.require(:analysis_pipeline).permit(:name, :url, :description, :pid, :multiple_pid, :single_demo_id, :multiple_demo_id, :single_result_id, :multiple_result_id, :documentation:hidden,
+    p = params.require(:analysis_pipeline).permit(:name, :url, :description, :pid, :multiple_pid, :single_demo_id, :multiple_demo_id, :single_result_id, :multiple_result_id, :documentation, :hidden,
                             module_requirements_attributes: {})
     if !params[:analysis_pipeline][:image_file].blank?
       p[:cover_image] = "data:image/png;base64," + Base64.strict_encode64(params[:analysis_pipeline][:image_file].read)

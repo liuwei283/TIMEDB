@@ -30,21 +30,25 @@ html
     #wrapper
       - if %w[analysis].include? controller_name or controller_name == 'submit' and ( action_name == 'analysesCategory' or action_name == 'pipelines')
         = render 'partials/side_bar'
-      - if session[:user_id].nil? || !User.exists?(session[:user_id])
-        #cookies-eu-banner
-          .container
-            | We use Cookies to offer a better browsing experience. 
-            = link_to "Terms and conditions", "/terms", method: :get
-            button.btn.btn-sm.btn-outline-light#cookies-eu-accept
-              = link_to "Accept", "welcome/require_cookie", method: :post
-            
-              
-            
-
-
       #main
         = yield
       #disable-fill
     - unless %w[analysis].include? controller_name
       = render 'partials/footer'
+    - if session[:user_id].nil? || !User.exists?(session[:user_id])
+      #cookies-eu-banner
+        .container
+          h3.text-left Accept Cookies to Continue
+          p.text-left
+          | Encrypted cookie will record your local user information temporarily only when you use our platform to submit analysis tasks.
+          p.text-left
+          | In the meantime, we use Cookies to offer a better browsing experience. 
+          = link_to "Terms and conditions", "/terms", method: :get
+          br
+          br
+          .container.text-right
+            button.btn.btn-sm.btn-outline-light#cookies-eu-cancel.cookies-eu-button
+              | Cancel
+            button.btn.btn-sm.btn-outline-light#cookies-eu-accept.cookies-eu-button
+              = link_to "Accept", "welcome/require_cookie", method: :post
     = yield :page_script

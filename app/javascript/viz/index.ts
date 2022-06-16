@@ -7,6 +7,8 @@ import { registerHRORMountain} from "./HRORMountain";
 import { registerHRORTable } from "./HRORTable";
 import { registerSpaticalInteraction } from "./spatical_interaction";
 import { registerstackedBarsplot} from "./stackedBars";
+import { registerUMAP } from "./UMAP";
+import { registerSubtype } from "./Subtype";
 
 declare global {
     interface GonInfo {
@@ -39,6 +41,12 @@ export function registerViz(moduleName) {
             break;
         case "stackedBars":
             registerstackedBarsplot();
+            break;
+        case "UMAP":
+            registerUMAP();
+            break;
+        case "Subtype":
+            registerSubtype();
             break;
     }
 }

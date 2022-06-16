@@ -1,0 +1,37 @@
+svg {
+	width = 1800
+	height = 800
+	Component {
+        x = 50
+        y = 50
+        @expr console.log(UMAPData)
+        Container {
+            Container {
+                x = -25; y = 30
+                Rows {
+                    Container {
+                        padding = 4
+                        x = -4
+                        Text {
+                            text = "Projects"
+                            fontSize = 15
+                            anchor = @anchor("b", "l")
+                        }
+                    }
+                    Container {
+                        Legend {
+                            data = UMAPData.colorMap.legendData()
+                        }
+                    }
+                }
+            }
+        }
+        Container {
+            x = 100
+            ComplexGroupedScatters {
+                plotSize = [600, 600]
+                @props UMAPData
+            }
+        }
+	}
+}

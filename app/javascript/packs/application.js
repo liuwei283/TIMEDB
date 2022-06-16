@@ -158,7 +158,7 @@ document.addEventListener('DOMContentLoaded', (event) =>  {
         $('#tk_table').toggleClass('dark-table');
 
     };
-    $('#cookies-eu-accept').on('click', () => {
+    $('.cookies-eu-button').on('click', () => {
         $('#cookies-eu-banner').css("display", "None")
     })
 

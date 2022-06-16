@@ -48,6 +48,16 @@ document.addEventListener("DOMContentLoaded", () => {
         { label: 'TCGA', url: 'https://www.cancer.gov/about-nci/organization/ccg/research/structural-genomics/tcga', target: '_top', class: "ds-link" },
         { label: 'GEO', url: 'https://www.ncbi.nlm.nih.gov/geo/', target: '_top', class: "ds-link" },
         { label: 'TARGET', url: 'https://ocg.cancer.gov/programs/target/data-matrix', target: '_top', class: "ds-link" },
+        { label: 'ABIS', url: 'https://timedb.deepomics.org/download', target: '_top', class: "download-link" },
+        { label: 'CIBERSORT', url: 'https://timedb.deepomics.org/download', target: '_top', class: "download-link" },
+        { label: 'CIBERSORTX', url: 'https://timedb.deepomics.org/download', target: '_top', class: "download-link" },
+        { label: 'ImmuCellAI', url: 'https://timedb.deepomics.org/download', target: '_top', class: "download-link" },
+        { label: 'xCell', url: 'https://timedb.deepomics.org/download', target: '_top', class: "download-link" },
+        { label: 'ConsensusTME', url: 'https://timedb.deepomics.org/download', target: '_top', class: "download-link" },
+        { label: 'MCPcounter', url: 'https://timedb.deepomics.org/download', target: '_top', class: "download-link" },
+        { label: 'EPIC', url: 'https://timedb.deepomics.org/download', target: '_top', class: "download-link" },
+        { label: 'TIMER', url: 'https://timedb.deepomics.org/download', target: '_top', class: "download-link" },
+        { label: 'quanTIseq', url: 'https://timedb.deepomics.org/download', target: '_top', class: "download-link" },
     ];
 
     var settings = {

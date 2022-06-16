@@ -317,6 +317,7 @@ export default {
         }
     },
     methods: {
+        //improvement: if query chart success, then here we can also use
         update_chart() {
             this.chartOptions = {
                 tooltip: {

@@ -35,8 +35,11 @@ function init() {
                 dsvHasHeader: false,
                 loaded(data) {
                     const LinSeedData = {};
-                    const classification = data[0].slice(1);
-                    const project: string[] = Array.from(new Set(classification.map(d=>d.split("_")[0])))
+                    let classification = data[0].slice(1);
+                    let project: string[] = Array.from(new Set(classification.map(d=>d.split("_")[0])))
+                    if(project[0] == classification[0]) {
+                        project = ["Single Linseed"]
+                    }
                     const projectData = {}
                     this.data.color = Oviz.color.schemeCategory("dark", project).colors
                     project.forEach((p: string) => {
@@ -50,7 +53,11 @@ function init() {
                         d.slice(1).forEach((col, index) => {
                             LinSeedData[d[0]].push([classification[index], parseFloat(col)]);
                             let sit = classification[index].split("_")
-                            projectData[sit[0]][d[0]].push([sit[1], parseFloat(col)])
+                            if(sit.length == 1) {
+                                projectData["Single Linseed"][d[0]].push([sit[0], parseFloat(col)])
+                            } else {
+                                projectData[sit[0]][d[0]].push([sit[1], parseFloat(col)])
+                            }
                         })
                     });
                     console.log(project)

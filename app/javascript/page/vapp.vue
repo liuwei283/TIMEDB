@@ -104,11 +104,10 @@
                 // window.open(`${window.gon.urls.download_demo_file}`);
                 window.open(window.gon.urls.download_demo_file);
             }
-        },        
+        },
         created() {
             event.rpcRegisterReceiver("getVue", () => this);
             this.isAnalysis = window.gon.viz_mode === viz_mode.ANALYSIS ? true : false
-            
             if (this.isAnalysis) {
                 this.chosenOutput = window.gon.chosen_output || 0
                 this.chosenOutputOld = window.gon.chosen_output || 0

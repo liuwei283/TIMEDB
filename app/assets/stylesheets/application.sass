@@ -27,13 +27,18 @@ html, body
     background: $light-theme
     // border-bottom-style: rigid
     border-bottom: 2px ridge $gray-800
-    padding: 10px 10px
-    text-align: center
+    padding: 25px 25px
+
     color: $white
-    position: sticky
-    top: 70px
+    position: fixed
+    left: 50%
+    top: 50%
+    transform: translate(-50%, -50%)
     //height: 20px
-    width: 100%
+    border-radius: 30px
+    box-shadow: 0 0 32px darken($gray-300, 5%)
+    width: 40%
+    
     z-index: 30
     a
         text-decoration: underline

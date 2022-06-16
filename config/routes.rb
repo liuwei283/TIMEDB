@@ -175,6 +175,8 @@ Rails.application.routes.draw do
   get "/database/refreshSelector", to: 'database#refreshSelector'
 
   post 'query-deepomics', to: 'submit#query_deepomics', format: 'json'
+  post 'task-details', to: 'submit#task_details', format: 'json'
+
 
 
 end

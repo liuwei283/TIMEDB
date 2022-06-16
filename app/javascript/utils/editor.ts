@@ -91,6 +91,7 @@ export function registerEditorConfig(editorConf, vue_name, plot_name?, editorRef
             vue.fraction_conf_landscape = editorConf;
         }
         else {
+            console.log("I am changing the editor cofig here")
             vue.conf = editorConf;
         }
         if (editorRef) {
