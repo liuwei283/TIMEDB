@@ -124,11 +124,11 @@
         <div class="viz-result mb-1" v-else> <!---->
             <b-card no-body>
                 <b-card-header v-b-modal.modalBox class="border-1 py-2">
-                    <b-button class="btn btn-1" @click="returnQuery">
+                    <b-button class="btn btn-1 mb-1" @click="returnQuery">
                         <i class="fas fa-arrow-left"></i> Back to query
                     </b-button>
 
-                    <b-button class="btn btn-1" disabled >
+                    <b-button class="btn btn-1 mb-1" disabled >
                         {{`${jobName} (No.${job_id})`}}
                     </b-button>
 
@@ -137,13 +137,13 @@
                             right
                             v-model="chosenOutput"
                             :options="taskOutputs"
-                            class="tool-bar-el btn px-0 m-0"/><!--v-if="data.outputs.length > 1"-->
+                            class="tool-bar-el btn px-0 mb-1"/><!--v-if="data.outputs.length > 1"-->
                     <dropdown-select
                             v-if="job_status == 'finished'"
                             right
                             v-model="chosenModule"
                             :options="module_names"
-                            class="tool-bar-el btn px-0 m-0"/><!--v-if="data.outputs.length > 1"-->
+                            class="tool-bar-el btn px-0 mb-1"/><!--v-if="data.outputs.length > 1"-->
                     
                     <!-- <b-button v-else variant="dark" class="btn col-md-4" disabled >{{data.outputs[0].name}}
                     </b-button> -->
@@ -437,7 +437,8 @@ export default {
                     },
                 },
             ).then(res => {
-                    // console.log(res)
+                    console.log("Outputing results for charts updates:")
+                    console.log(res)
                     //improvement here we need to consider have different plot chart for different tasks
                     if (res.data.message.code) {
                         this.update_chart(res.data.message.data);
