@@ -443,14 +443,13 @@ export default {
                     if (res.data.message.code) {
                         this.update_chart(res.data.message.data);
                     } else {
-                        this.taskDetails.code = "API_ERROR";
                         alertCenter.add('danger', res.data.message);
                     }
             });
 
         },
         update_chart(data) {
-            const chartOptions = {
+            this.chartOptions = {
                 tooltip: {
                     trigger: 'axis',
                     axisPointer: {
