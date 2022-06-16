@@ -439,19 +439,12 @@ export default {
             ).then(res => {
                     // console.log(res)
                     //improvement here we need to consider have different plot chart for different tasks
-                    if (arg[0].isPipeline && !res.data.message.code) {
-                        res.data.message.tasks.forEach((t, i) => {
-                            this.update_chart(t);
-                        });
-                    } else if (res.data.message.code) {
-                        
+                    if (res.data.message.code) {
                         this.update_chart(res.data.message.data);
-                        
                     } else {
                         this.taskDetails.code = "API_ERROR";
                         alertCenter.add('danger', res.data.message);
                     }
-                    
             });
 
         },
