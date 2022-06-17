@@ -1,4 +1,3 @@
-
 import Oviz from "crux";
 import { editorConfig, editorRef } from "./editor";
 import template from "./template.bvt";
@@ -41,7 +40,6 @@ function init() {
                 type: "csv",
                 multiple: false,
                 loaded(data) {
-                    console.log("data:",data)
                     this.data.oridata = data
                     // Variable 细胞种类
                     // Survival 分组
@@ -58,11 +56,11 @@ function init() {
                     });
                     
                     
-                    console.log("stage",stage)
+
                     //这里对cell进行排序
-                    console.log("???","c_sub_hclust(hclust_G4 vs. hclust_G1)".slice(0,5))
+
                     cells = sortsubtype(data,cells,"1")
-                    console.log("cells:",cells)
+
 
                     this.data.cells = cells //
                     this.data.tempcells = cells  //
@@ -79,9 +77,9 @@ function init() {
                     //pdata = pdata.sort(sortBy('pretty_p',false)) //从大到小
                     let pcells = pdata.map(d=>d.Variable)
                     pcells = Array.from(new Set(pcells))
+                    //pcells = pcells.sort()
                     this.data.pcells = pcells //
-                    console.log("pdata:",pdata)
-                    console.log("this.data.pcells:",this.data.pcells)
+
 
                     let hrdata = []
                     data.forEach(item => {
@@ -91,11 +89,11 @@ function init() {
                     hrdata = hrdata.sort(sortBy('pretty_p',false)) //从大到小
                     let hrcells = hrdata.map(d=>d.Variable)
                     hrcells = Array.from(new Set(hrcells))
+                    //hrcells = hrcells.sort()
                     this.data.hrcells = hrcells //
-                    console.log("hrdata:",hrdata)
-                    console.log("this.data.hrcells:",this.data.hrcells)
 
-                    this.data.sortsign = "nosort" //"psort"
+
+                    this.data.sortsign = "hrsort" //"psort"
 
                     this.data.config = {
                         sign:[
@@ -128,7 +126,7 @@ function init() {
                             }
                         });
                     });
-                    console.log("diff_method:",diff_method);
+
                     //barData
                     let maxlengthPCR = []
                     let barData = {}
@@ -137,7 +135,7 @@ function init() {
                     let eachbar2 = []
                     
                     diff_method.forEach((item,index)=>{
-                        console.log("item:",item)
+                        
                         barData[item.methodkey] = []
                         barData2[item.methodkey] = []
                         //lineData
@@ -157,13 +155,15 @@ function init() {
                                 barData[item.methodkey].push([this.data.cells.indexOf(ditem.Variable),num1*0.8,num1,color,str,ditem.pretty_p,ditem.lower95,ditem.upper95])
                         });
                     })
-                    chosenMethod.length == 0? chosenMethod = ["HR"] : null
+
+
+
+                    chosenMethod.length == 0? chosenMethod = [methoddata[0]] : null
                     eachbar = barData[chosenMethod[0]]
                     eachbar2 = barData2[chosenMethod[0]]
                     // cells.unshift("")
                     // cells.push("")
-                    console.log(cells)
-                    console.log("eachbar:", eachbar)
+
 
                     let cell = []
                     let maxlength = []
@@ -171,7 +171,7 @@ function init() {
                         cell.push(item.replace(/_/g," ").replace(/sub /g," ").slice(1))
                         maxlength.push(TextSize.measuredTextSize(item, 12).width)
                     })
-                    console.log("maxlength:",maxlength)
+
                     let maxtextcell = Math.max(...maxlength)
                     let maxtextPRC = Math.max(...maxlengthPCR)
                     //= TextSize.measuredTextSize("test", 8).width;
@@ -195,9 +195,10 @@ function init() {
         setup() {
             console.log(this["_data"]);
             registerEditorConfig(editorConfig(this), "getVue", "#task-output", editorRef);
-            this.size.height = this.data.cell.length*15 + 200
+            this.size.height = this.data.cell.length*15 + 400
             //this.size.width = this.data.maxtextPRC + 150 + 150
         },
+        
     });
 
     return visualizer;
@@ -212,7 +213,6 @@ export function registerHRORMountain() {
 register(MODULE_NAME, init);
 
 
-
 export function sorteditor(v){
     switch(v.data.sortsign){
         case "hrsort":
@@ -225,8 +225,6 @@ export function sorteditor(v){
             v.data.cells = v.data.tempcells;
             break;
     }
-    console.log("????.>",v.data.sortsign)
-    console.log("v.data.cells:",v.data.cells) 
     
     const newdiff_method = v.data.methoddata.map(x=>new Object({"methodkey":x,"data":[]}))
     let colorMap = {">=1":"red","<1":"blue"}
@@ -247,7 +245,6 @@ export function sorteditor(v){
     let pdata = []
                     
     newdiff_method.forEach((item,index)=>{
-        console.log("item:",item)
         barData[item.methodkey] = []
         barData2[item.methodkey] = []
         //lineData
@@ -322,26 +319,32 @@ function sortBy(attr,rev){
 
 
 export function sortsubtype(data,arr,category){
+    let result1 = []
+    let result2 = []
+    let result3 = []
     let result = []
     if(category=="1"){
         arr.forEach((k,n) => {
             if(k.slice(0,5)=="c_sub"){
-                result.push(k)
+                result1.push(k)
+                result1.sort()
             }
         });
         arr.forEach((k,n) => {
             if(k.slice(0,5)=="c_ajc"){
-                result.push(k)
+                result2.push(k)
+                result2.sort()
             }
         });
         arr.forEach((k,n) => {
             if(k.slice(0,5)!="c_sub"&&k.slice(0,5)!="c_ajc"){
-                result.push(k)
+                result3.push(k)
+                result3.sort()
             }
         });
         
     }
+    result = result1.concat(result2).concat(result3)
     return result
 }
-
 

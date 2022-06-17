@@ -216,52 +216,6 @@ export default {
 
         const { alertCenter } = this.$refs;
 
-        // Test Pipeline
-        axios.post(
-            `/query-deepomics/`,
-            objectToFormData({'id': 528, 'type': 'pipeline'}),
-            {
-                headers: {
-                    'X-Requested-With': 'XMLHttpRequest',
-                    'X-CSRF-Token': document.head.querySelector('meta[name="csrf-token"]').content,
-                    'Content-Type': 'multipart/form-data',
-                },
-            },
-        ).then((response) => {
-            console.log("Pipeline query result:", response);
-            
-                }).catch((error) => {
-                    const message = error.response && error.response.status === 404 ? "The task does not exist" : error;
-                    alertCenter.add('danger', `${message}`);
-                }).finally(() => {
-                    // setTimeout(() => { alertCenter.add('danger', ''); }, 2000);
-                });
-        
-        // Code
-        axios.post(
-            `/query-deepomics/`,
-            objectToFormData({'id': this.taskId, 'type': 'app'}),
-            {  
-                headers: {
-                    'X-Requested-With': 'XMLHttpRequest',
-                    'X-CSRF-Token': document.head.querySelector('meta[name="csrf-token"]').content,
-                    'Content-Type': 'multipart/form-data',
-                },
-            },
-        ).then((response) => {
-            console.log("Module query result:", response);
-            this.inputs = response.data.message.inputs;
-            this.outputs = response.data.message.outputs;
-            this.params = response.data.message.params;
-            
-        }).catch((error) => {
-            const message = error.response && error.response.status === 404 ? "The task does not exist" : error;
-            alertCenter.add('danger', `${message}`);
-        }).finally(() => {
-            // setTimeout(() => { alertCenter.add('danger', ''); }, 2000);
-            console.log("Log:", this.inputs, this.outputs, this.params)
-        });
-
         this.resource_usage = {
             "x_axis":[
                 "2022-04-27 15:09:53",
@@ -298,8 +252,8 @@ export default {
         };
         this.update_chart();
 
-        this.stderr = "Testing...";
-        this.stdout = "Testing...";
+        this.stderr = "Updating...";
+        this.stdout = "Updating...";
 
     },
     watch: {
@@ -317,7 +271,32 @@ export default {
         }
     },
     methods: {
-        //improvement: if query chart success, then here we can also use
+        //improvement multiple charts for pipelines
+        getChartsInfo() {
+            axios.post(
+                `/task-details/`,
+                objectToFormData({'id': this.job_id}),
+                {
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest',
+                        'X-CSRF-Token': document.head.querySelector('meta[name="csrf-token"]').content,
+                        'Content-Type': 'multipart/form-data',
+                    },
+                },
+            ).then(res => {
+                    console.log("Outputing results for charts updates:")
+                    console.log(res)
+                    //improvement here we need to consider have different plot chart for different tasks
+                    if (res.data.message.code) {
+                        this.update_chart(res.data.message.data);
+                        this.stderr = res.data.message.data.task_log.stderr;
+                        this.stdout = res.data.message.data.task_log.stdout;
+                    } else {
+                        alertCenter.add('danger', res.data.message);
+                    }
+            });
+
+        },
         update_chart() {
             this.chartOptions = {
                 tooltip: {
@@ -447,7 +426,8 @@ export default {
                         alertCenter.add('danger', `${message}`);
                     }).finally(() => {
                         // setTimeout(() => { alertCenter.add('danger', ''); }, 2000);
-                        console.log("Log:", this.inputs, this.outputs, this.params)
+                        console.log("Log:", this.inputs, this.outputs, this.params);
+                        this.getChartsInfo();
                     });
 
             // console.log("Refreshed. New log:", this.stdout)
@@ -532,29 +512,6 @@ export default {
             registerViz(this.data.outputs[this.chosenOutput].module_names[this.chosenModule]);
             event.emit("GMT:query-finished", this);
 
-        },
-        refreshJobs() {
-            this.refreshEnd = false;
-            axios.post(
-                `/query-all-tasks/`,
-                null,
-            {  
-                headers: {
-                    'X-Requested-With': 'XMLHttpRequest',
-                    'X-CSRF-Token': document.head.querySelector('meta[name="csrf-token"]').content,
-                    'Content-Type': 'multipart/form-data',
-                },
-            })
-            .then(r => {
-                this.all_jobs = r.data.map((d, index) => {
-                    return  {index, ...d}
-                });
-            }).finally(() => {
-                // wait 1 sec
-                 setTimeout(() => {
-                    this.refreshEnd = true;
-                    }, 1000);
-            });
         },
         returnSubmission(){
             window.location.href = '/submit/analyses';

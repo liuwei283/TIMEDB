@@ -109,7 +109,7 @@ function init() {
         setup() {
             console.log(this["_data"]);
             registerEditorConfig(editorConfig(this), "getVue", "#task-output", editorRef);
-            this.size.height = this.data.cell.length*30+200
+            this.size.height = this.data.cell.length * 30 + 200
         },
     });
 

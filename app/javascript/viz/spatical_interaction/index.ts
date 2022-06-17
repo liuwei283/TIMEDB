@@ -16,7 +16,6 @@ import { findBoundsForValues } from "utils/maths";
 import * as TextSize from "crux/dist/utils/text-size";
 
 //import { minmax } from "crux/dist/utils/math";
-import { brewPalette, MetaInfo } from "viz/meta-overview/data";
 import { Rows } from "crux/dist/element";
 import { mapColor } from "./spatical_data";
 
@@ -28,25 +27,21 @@ function init() {
     if (!window.gon || window.gon.module_name !== MODULE_NAME) return;
     const {visualizer} = Oviz.visualize({
         el: "#canvas",
-        //root:new SpaticalInteraction(),
+        //root:new SpatialInteraction(),
         root: new SpaticalInteraction(),
         //template,
         components: {GridPlot, EditText},
         renderer: "svg",
         width: 1300,
-        height: 700,
+        height: 800,
         
         data: {
             hiddenSamples: new Set(),
             gridSize: [4, 12],
             tempFeature:"c_tumor_stage",
             colors: {
-                // control: controlGroupColors[0],
-                // gout: controlGroupColors[1],
                 na: "#999", //"#777",
                 abd0: "#999", // "#333",
-                // start: "#fff7f3",
-                // end: "#0A2299",
                 start: "#800000",
                 org: "#FF5050",
                 end: "#FFFF00",
@@ -62,15 +57,13 @@ function init() {
                 fileKey: "graphData",
                 type: "csv",
                 loaded(data) {
-                    //设置第一幅图的点的大小 根据P值改变
-                    console.log("graphData:",data)
+
                     let pValue = [1,0.180058736,0.438484609,0.093095968,0.060386346,0.101205517,0.409336727,0.035703033]
                     let nodeR = pValue.map(d => 5 +d*10)
                     this.data.nodeR = nodeR
-                    console.log("nodeR:",nodeR)
                     this.data.nodeRadius = 5
                     this.data.graphRadius = 150
-                    //let selectedFeature = []
+                    
                     
                     let newlabel = data.map(d=>d.Row)
                     let featurelist = getCol(data,"Feature")
@@ -79,7 +72,7 @@ function init() {
 
 
                     newlabel = Array.from(new Set(newlabel))
-                    console.log("newlabel:",newlabel)
+                    
                     this.data.newlabel=newlabel
                     this.data.colorMap = {}
                     this.data.features = []
@@ -104,10 +97,7 @@ function init() {
                             this.data.congroup[item].push({value:ditem+"",text:ditem})
                         });
                     });
-                    console.log("this.data.feaMapgroup:",this.data.feaMapgroup)
-                    console.log("this.data.congroup:",this.data.congroup)
-                    console.log("this.data.colorMap:",this.data.colorMap)
-                    console.log("this.data.features:",this.data.features)
+
 
                     this.data.selectedFeature = "c_tumor_stage"
                     this.data.selectedGroup = "Stage I"

@@ -1,9 +1,55 @@
-ul.list-unstyled.analysis
-    - @orders.each do |c|
-        li.header class=('active' if @analysis_category.name == c)
-            = link_to c, {:controller => "submit", :action => "analysesCategory", :cname => c }
-        br
+/ ul.list-unstyled.analysis
+/     - @orders.each do |c|
+/         li.header class=('active' if @analysis_category.name == c)
+/             = link_to c, {:controller => "submit", :action => "analysesCategory", :cname => c }
+/         br
 
-ul.list-unstyled.analysis
-        li.header class=('active' if !@pipelines.blank? )
-            = link_to "TIMEDB Consensus Tool", {:controller => "submit", :action => "pipelines" }
+/ ul.list-unstyled.analysis
+
+div.text-right
+    = icon 'fas', 'bars', class: 'fa-solid fa-2xl sidebar-toggle'
+
+div class=('active' if !@pipelines.blank? ) id = "pipeline-nav-item"
+    p 
+        = link_to "TIMEDB Consensus Tool", {:controller => "submit", :action => "pipelines" }
+
+div class=('active' if @analysis_category.name == "Comparison Analysis")
+    p 
+        = link_to "Comparison Analysis", {:controller => "submit", :action => "analysesCategory", :cname => "Comparison Analysis"}
+
+div  class=('active' if @analysis_category.name == "Regression Tools")
+    p
+        = link_to "Regression Tools", {:controller => "submit", :action => "analysesCategory", :cname => "Regression Tools"}
+
+div class=('active' if @analysis_category.name == "Enrichment Tools")
+    p 
+        = link_to "Enrichment Tools", {:controller => "submit", :action => "analysesCategory", :cname => "Enrichment Tools"}
+
+div class=('active' if @analysis_category.name == "Consensus Tools")
+    p 
+        = link_to "Consensus Tools", {:controller => "submit", :action => "analysesCategory", :cname => "Consensus Tools"}
+
+div class=('active' if @analysis_category.name == "Unsupervised Tools")
+    p 
+        = link_to "Unsupervised Tools", {:controller => "submit", :action => "analysesCategory", :cname => "Unsupervised Tools"}
+
+div class=('active' if @analysis_category.name == "Patient Subtyping")
+    p
+        = link_to "Patient Subtyping", {:controller => "submit", :action => "analysesCategory", :cname => "Patient Subtyping"}
+
+div class=('active' if @analysis_category.name == "Survival Analysis")
+    p 
+        = link_to "Survival Analysis", {:controller => "submit", :action => "analysesCategory", :cname => "Survival Analysis"}
+
+div class=('active' if @analysis_category.name == "Correlation Analysis")
+    p 
+        = link_to "Correlation Analysis", {:controller => "submit", :action => "analysesCategory", :cname => "Correlation Analysis"}
+
+div class=('active' if @analysis_category.name == "Differential Expression")
+    p 
+        = link_to "Differential Expression", {:controller => "submit", :action => "analysesCategory", :cname => "Differential Expression"}
+    
+
+    
+
+

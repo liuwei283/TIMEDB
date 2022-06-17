@@ -1,7 +1,6 @@
 import Oviz from "crux";
 import template from "./template.bvt";
-//import { BarView } from "viz/spatial_deconvolution_bar_view/bar_view";
-import { processMeta, processGraph } from "./spatical_data"
+import { processGraph } from "./spatical_data"
 import { minmax } from "crux/dist/utils/math";
 import { computeLog } from "utils/maths";
 import { schemeRdYlBu } from "d3-scale-chromatic";
@@ -15,13 +14,10 @@ export class SpaticalInteraction extends Oviz.Component {
     }
 
     public willRender() {
-        //processMeta(this, [])
         processGraph(this)
     }
     
-    //对节点生成弦
     public getRibbonPathForNode(source, target, radius){
-        // 弦生成器： d3.ribbon()
         var path = d3.ribbon()({
             source: {
                 startAngle: source.circleAngle/180*Math.PI,
@@ -36,9 +32,7 @@ export class SpaticalInteraction extends Oviz.Component {
         });     
         return path;
     }
-    //对路径生成弦
     public getRibbonPath(pair, radius){
-        // 弦生成器： d3.ribbon()
         var path = d3.ribbon()({
             source: {
                 startAngle: pair.source.startAngle,

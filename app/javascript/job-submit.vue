@@ -1641,7 +1641,6 @@ input[type="radio"] {
 {
     opacity: 1.0 !important;
     background-color: rgb(165, 165, 165) !important;
-
 }
 
 #submit-helper img {

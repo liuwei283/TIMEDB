@@ -9,8 +9,8 @@ function run(v) {
 export const editorRef = {} as any;
 
 export const generateTextconfig = (v): any => (            {
-    id: "setting-bc",
-    title: "Color Setting",
+    id: "setting-bcg",
+    title: "General Setting",
     layout: "tabs",
     tabs:[
         {
@@ -20,7 +20,7 @@ export const generateTextconfig = (v): any => (            {
                 type: "list",
                 items:[
                     {
-                        title: "width",
+                        title: "Width",
                         type: "input",
                         format: "int",
                         value: {
@@ -35,7 +35,7 @@ export const generateTextconfig = (v): any => (            {
                         },
                     },
                     {
-                        title: "height",
+                        title: "Height",
                         type: "input",
                         format: "int",
                         value: {
@@ -49,13 +49,28 @@ export const generateTextconfig = (v): any => (            {
                             },
                         },
                     },
+                    {
+                        title: "Padding",
+                        type: "input",
+                        format: "int",
+                        value: {
+                            current:  v.data.padding,
+                            callback(x) {
+                                v.data.padding = parseFloat(x);
+                                v.size.height = v.data.height + 300
+                                v.size.width = v.data.data.classifications.length*v.data.gridwidth  + 200
+                                v.data._sizeUpdated = true;
+                                run(v);
+                            },
+                        },
+                    },
                 ]
             }
         }
     ]
 });
 
-export const generateColorconfig = (v): any => (            {
+export const generateColorconfig = (v): any => ({
     id: "setting-bc",
     title: "Color Setting",
     layout: "single-page",
@@ -85,6 +100,7 @@ export function editorConfig(v): EditorDef {
 
             //generateGridPlotConfig(v),
             //generateBoxConfig(v),
+            generateTextconfig(v),
             generateColorconfig(v),
         ],
     };

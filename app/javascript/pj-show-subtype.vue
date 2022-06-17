@@ -6,9 +6,9 @@
         </div><br>
 
         <div id = "subtype-landscape" class = "container Block">
-            <div id="landscapeDescription" class="row description">
+            <!-- <div id="landscapeDescription" class="row description">
                 <h4>Some description for Immune Subtype Landscape in project overview</h4>
-            </div>
+            </div> -->
             <div id = "subtype-landscapeBlock">
                 <div class="dropdown mb-5 mt-5">
                     <!-- <button class="btn btn-secondary dropdown-toggle" type="button" id="subtype_landscape_download_dropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -67,9 +67,9 @@
 
         <div id = "subtype-boxplot" class = "container Block">
 
-            <div id="boxplotDescription" class="row description">
+            <!-- <div id="boxplotDescription" class="row description">
                 <h4>Some description for Immune Cell Data bar in project overview</h4>
-            </div>
+            </div> -->
                 
             <div class="select-bar form-inline row">
                 <div class="sdiv col">
@@ -138,9 +138,9 @@
         <hr />
 
         <div id = "subtype-curve" class = "container Block">
-            <div id="curveDescription" class="row description">
+            <!-- <div id="curveDescription" class="row description">
                 <h4>Some description for KM Curve in project overview</h4>
-            </div>
+            </div> -->
             <div id = "subtype-curveBlock" >
                 <div class="dropdown mb-5 mt-3">
                     <!-- <button class="btn btn-secondary dropdown-toggle" type="button" id="subtype_curve_download_dropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -197,9 +197,9 @@
         <br />
 
         <div id = "subtype-regulator" class = "container Block">
-            <div id="regulatorDescription" class="row description">
+            <!-- <div id="regulatorDescription" class="row description">
             <h4>Some description for immune regulator in project overview</h4>
-            </div>
+            </div> -->
 
             <div id = "subtype-regulatorBlock" >
                 <div class="dropdown mb-5 mt-3">

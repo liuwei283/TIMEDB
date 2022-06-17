@@ -2,6 +2,15 @@ svg{
 	width = 1300; 
 	//height = 600
 	Component {
+		//左边
+		// Container {
+		// 	Image {
+		// 		@expr console.log(image)
+		// 		width = 100; height = 100
+		// 		url = image
+        // 	}
+		// }
+		y = 100
 		Container {
 			XYPlot {
 				x = data.maxtextcell+200;y = 100
@@ -48,9 +57,10 @@ svg{
 						x = d[2]*25;
 						// @let tempx = @scaled-x(d[2])
 						// @expr console.log("tempx:",tempx)
-						
 						Rect {
-							fill = d[3]; width = 6;height = 6
+							//fill = d[3];
+							fill = d[2]>=1? colorMap[">=1"]:colorMap["<1"]
+							width = 6;height = 6
 							behavior:tooltip {
 								content = `values: ${d[2]}<br>`
                             }
@@ -144,7 +154,134 @@ svg{
 					fontSize = 15
 				}
 			}
-		}	
+		}
+		//右
+		// Container {
+		// 	x = 500
+		// 	XYPlot {
+		// 		x = 300;y = 70
+		// 		width = 200;height = 320;padding = 20
+		// 		valueRange = [-1,5]
+		// 		discreteCategory = true
+		// 		data = {eachbar2}
+		// 		@expr console.log("eachbar!!!!",eachbar)
+		// 		//rotation = @rotate(90)
+		// 		yScale = @scaleLinear(-1,6)
+		// 		fill = "none"
+		// 		dataHandler = {
+		// 			eachbar: {
+		// 				pos: d => d[2],
+		// 				//min: d => d[1],
+		// 				value: d => d[0],
+		// 			},
+		// 		}
+		// 		@for(d,i) in eachbar2{
+		// 			@if(i<cell.length){
+		// 				Component {
+		// 					discreteCategory = true
+		// 					Line {
+		// 						fill = "black"
+		// 						x1 = d[6]*25; y1 = @scaled-y(i)+3
+		// 						x2 = d[7]*25; y2 = @scaled-y(i)+3
+		// 					}
+		// 				}
+		// 			}
+					
+		// 		}
+		// 		@for (d, i) in eachbar2 {
+		// 			Component {
+		// 				key = i + "comp"
+		// 				discreteCategory = true
+		// 				//x = @scaled-x(d[2]); 
+		// 				y = @scaled-y(d[0])
+		// 				x = d[2]*25;
+		// 				// @let tempx = @scaled-x(d[2])
+		// 				// @expr console.log("tempx:",tempx)
+						
+		// 				Rect {
+		// 					fill = d[3]; width = 6;height = 6
+		// 					behavior:tooltip {
+		// 						content = `values: ${d[2]}<br>`
+        //                     }
+		// 				}
+		// 			}
+		// 		}
+		// 		Line {
+		// 			fill = "black"
+		// 			x1 = 28; y1 = 20
+		// 			x2 = 28; y2 = 100%
+		// 		}
+		// 		Line {
+		// 			fill = "black"
+		// 			x1 = 20; y1 = 100%
+		// 			x2 = 36; y2 = 100%
+		// 		}
+		// 		@for(d,i) in cell{
+		// 			Component {
+		// 				discreteCategory = true
+		// 				y = @scaled-y(i)
+		// 				x = -200
+		// 				Text {
+		// 					text = d
+		// 				}
+		// 			}
+		// 		}
+		// 		Text{
+		// 			x = -150;
+		// 			text = "cells type"
+		// 			fontSize = 14
+		// 		}
+		// 		@for(d,i) in eachbar2{
+		// 			@if(i<cell.length){
+		// 				Component {
+		// 					discreteCategory = true
+		// 					y = @scaled-y(i)
+		// 					x = 100
+		// 					Text {
+		// 						text = d[4]
+		// 					}
+		// 				}
+		// 			}
+					
+		// 		}
+		// 		@for(d,i) in eachbar2{
+		// 			@if(i<cell.length){
+		// 				Component {
+		// 					discreteCategory = true
+		// 					y = @scaled-y(i)
+		// 					x = 220
+		// 					Text {
+		// 						text = d[5]
+		// 					}
+		// 				}
+		// 			}
+					
+		// 		}
+				
+		// 		Text{
+		// 			x = 110;
+		// 			text = "HR(0.95CI)"
+		// 			fontSize = 14
+		// 		}
+		// 		Text{
+		// 			x = 220;
+		// 			text = "p value"
+		// 			fontSize = 14
+		// 		}
+		// 		Text{
+		// 			x = 15; y = 100%+5
+		// 			text = "1.0"
+		// 			fontSize = 15
+		// 		}
+		// 		Text{
+		// 			x = -20; y = 100%+20
+		// 			text = "Odds Radio"
+		// 			fontSize = 15
+		// 		}
+		// 	}
+		// }
+
+			
 
 	}
 
