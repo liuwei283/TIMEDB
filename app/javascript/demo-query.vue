@@ -6,11 +6,11 @@
         <div class="viz-result mb-1"> <!---->
             <b-card no-body>
                 <b-card-header v-b-modal.modalBox class="border-1 py-2">
-                    <b-button class="btn btn-1" @click="returnSubmission">
+                    <b-button class="btn btn-1 mb-1" @click="returnSubmission">
                         <i class="fas fa-arrow-left"></i> Back to task submission
                     </b-button>
 
-                    <b-button class="btn btn-1" disabled >
+                    <b-button class="btn btn-1 mb-1" disabled >
                         {{`${jobName} (No.${job_id})`}}
                     </b-button>
 
@@ -18,12 +18,12 @@
                             right
                             v-model="chosenOutput"
                             :options="taskOutputs"
-                            class="tool-bar-el btn btn-2 px-0 m-0"/><!--v-if="data.outputs.length > 1"-->
+                            class="tool-bar-el px-0 mb-1"/><!--v-if="data.outputs.length > 1"-->
                     <dropdown-select
                             right
                             v-model="chosenModule"
                             :options="module_names"
-                            class="tool-bar-el btn btn-2 px-0 m-0"/><!--v-if="data.outputs.length > 1"-->
+                            class="tool-bar-el px-0 mb-1"/><!--v-if="data.outputs.length > 1"-->
                     
                     <!-- <b-button v-else variant="dark" class="btn col-md-4" disabled >{{data.outputs[0].name}}
                     </b-button> -->

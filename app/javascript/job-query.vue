@@ -130,13 +130,13 @@
                             right
                             v-model="chosenOutput"
                             :options="taskOutputs"
-                            class="tool-bar-el btn btn-2 px-0 mb-1"/><!--v-if="data.outputs.length > 1"-->
+                            class="tool-bar-el px-0 mb-1"/><!--v-if="data.outputs.length > 1"-->
                     <dropdown-select
                             v-if="job_status == 'finished'"
                             right
                             v-model="chosenModule"
                             :options="module_names"
-                            class="tool-bar-el btn btn-2 px-0 mb-1"/><!--v-if="data.outputs.length > 1"-->
+                            class="tool-bar-el px-0 mb-1"/><!--v-if="data.outputs.length > 1"-->
                     
                     <!-- <b-button v-else variant="dark" class="btn col-md-4" disabled >{{data.outputs[0].name}}
                     </b-button> -->
