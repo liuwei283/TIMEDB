@@ -14,9 +14,9 @@
                 <b-button id="editor-conf" @click="toggleEditor" variant="outline-secondary">Editor</b-button>
             </div>
             <div v-else>
-                <b-button @click="downloadSVG" class="tool-bar-el"><i class="fa fa-download"/>Download Chart</b-button>
-                <b-button @click="downloadDemoFiles" class="tool-bar-el"><i class="far fa-file-archive"></i>Download Data</b-button>
-                <b-button id="editor-conf" @click="toggleEditor">Editor</b-button>
+                <b-button @click="downloadSVG" class="tool-bar-el btn-5"><i class="fa fa-download"/>Download Chart</b-button>
+                <b-button @click="downloadDemoFiles" class="tool-bar-el btn-5"><i class="far fa-file-archive"></i>Download Data</b-button>
+                <b-button id="editor-conf" class = btn-5 @click="toggleEditor">Editor</b-button>
             </div>
         </div>
         <div id="viz-container">
@@ -186,8 +186,11 @@
         background-color: white;
     }
     #tool-bar {
-        height:2.5em;
-        background-color: #f8f9fa;
+        height:auto;
+        padding: 5px;
+        // background-color: #f8f9fa;
+        background-color: #fff;
+        margin-bottom: 1%;
         border-bottom: 1px solid #ced4da;
         .btn {
             border-radius: 0;

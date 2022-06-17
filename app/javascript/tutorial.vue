@@ -154,12 +154,11 @@
                         </h1><br>
                         <div class="page">
                             <div>
-                                <div class="overhead">
-                                    <h1>this is header 1</h1>
-                                    <h2>many datas</h2>
+                                <div class="headers">
+                                    <h1>Database Information</h1>
+                                    <h2>Here can check the entire database information</h2>
                                 </div>
-                                <br><br>
-                                <img v-bind:src="require('../assets/images/1ppt.png')" class="page-image">
+                                <img src="/public/data/image/tutorial/1ppt.png" class="page-image">
                             </div>
                             <br><br>
                             <div>
@@ -168,7 +167,7 @@
                                     <h2>many graphs</h2>
                                 </div>
                                 <br>
-                                <img v-bind:src="require('../assets/images/2ppt.png')" class="page-image">
+                                <img  src="/public/data/image/tutorial/2ppt.png" class="page-image">
                             </div>
                             <br><br>
                             <div>
@@ -177,7 +176,7 @@
                                     <h2>projects</h2>
                                 </div>
                                 <br>
-                                <img v-bind:src="require('../assets/images/3ppt.png')" class="page-image">
+                                <img  src="/public/data/image/tutorial/3ppt.png" class="page-image">
                             </div>
                             <br><br>                           
                             <div>
@@ -186,7 +185,7 @@
                                     <h2>sample</h2>
                                 </div>
                                 <br>
-                                <img v-bind:src="require('../assets/images/4ppt.png')" class="page-image">
+                                <img  src="/public/data/image/tutorial/4ppt.png" class="page-image">
                             </div>
                             <br><br>
 
@@ -207,7 +206,7 @@
                                     <h2>ababababa</h2>
                                 </div>
                                 <br><br>
-                                <img v-bind:src="require('../assets/images/2-1ppt.png')" class="page-image">
+                                <img src="/public/data/image/tutorial/2-1ppt.png" class="page-image">
                             </div>
                             <br><br>
                             <div>
@@ -216,7 +215,7 @@
                                     <h2>ababababa</h2>
                                 </div>
                                 <br><br><br>
-                                <img v-bind:src="require('../assets/images/2-2ppt.png')" class="page-image">
+                                <img src="/public/data/image/tutorial/2-2ppt.png" class="page-image">
                             </div>
                             <br><br>
 
@@ -232,7 +231,7 @@
                                     <h2>ababababa</h2>
                                 </div>
                                 <br><br>
-                                <img v-bind:src="require('../assets/images/3-1ppt.png')" class="page-image">
+                                <img src="/public/data/image/tutorial/3-1ppt.png" class="page-image">
                             </div>
                             <br><br>
                             <div>
@@ -241,7 +240,7 @@
                                     <h2>ababababa</h2>
                                 </div>
                                 <br><br><br>
-                                <img v-bind:src="require('../assets/images/3-2ppt.png')" class="page-image">
+                                <img src="/public/data/image/tutorial/3-2ppt.png" class="page-image">
                             </div>
                             <br><br>
                             <div>
@@ -250,7 +249,7 @@
                                     <h2>ababababa</h2>
                                 </div>
                                 <br><br><br>
-                                <img v-bind:src="require('../assets/images/3-3ppt.png')" class="page-image">
+                                <img src="/public/data/image/tutorial/3-3ppt.png" class="page-image">
                             </div>
                             <br><br>
 
@@ -266,7 +265,7 @@
                                     <h2>ababababa</h2>
                                 </div>
                                 <br><br>
-                                <img v-bind:src="require('../assets/images/4-1ppt.png')" class="page-image">
+                                <img src="/public/data/image/tutorial/4-1ppt.png" class="page-image">
                             </div>
                             <br><br>
 
@@ -276,7 +275,7 @@
                                     <h2>ababababa</h2>
                                 </div>
                                 <br><br>
-                                <img v-bind:src="require('../assets/images/8.png')" class="page-image">
+                                <img src="/public/data/image/tutorial/8.png" class="page-image">
                             </div>
                             <br><br>
                             <div>
@@ -285,7 +284,7 @@
                                     <h2>ababababa</h2>
                                 </div>
                                 <br><br>
-                                <img v-bind:src="require('../assets/images/9.png')" class="page-image">
+                                <img src="/public/data/image/tutorial/9.png" class="page-image">
                             </div>
                             <br><br>
 
@@ -301,8 +300,8 @@
                                     <h2>ababababa</h2>
                                 </div>
                                 <br><br>
-                                <img v-bind:src="require('../assets/images/5-1ppt.png')" class="page-image">
-                                <img v-bind:src="require('../assets/images/5-2ppt.png')" class="page-image">
+                                <img src="/public/data/image/tutorial/5-1ppt.png" class="page-image">
+                                <img src="/public/data/image/tutorial/5-2ppt.png" class="page-image">
 
                             </div>
                             <br><br>                           
@@ -312,8 +311,8 @@
                                     <h2>ababababa</h2>
                                 </div>
                                 <br><br>
-                                <img v-bind:src="require('../assets/images/5-3ppt.png')" class="page-image">
-                                <img v-bind:src="require('../assets/images/5-4ppt.png')" class="page-image">
+                                <img src="/public/data/image/tutorial/5-3ppt.png" class="page-image">
+                                <img src="/public/data/image/tutorial/5-4ppt.png" class="page-image">
 
                             </div>
                             <br><br>
@@ -373,7 +372,7 @@
                                     <h2>many datas</h2>
                                 </div>
                                 <br><br>
-                                <img v-bind:src="require('../assets/images/a1-1ppt.png')" class="page-image">
+                                <img src="/public/data/image/tutorial/a1-1ppt.png" class="page-image">
                             </div>
                             <br><br>
                             <div>
@@ -382,7 +381,7 @@
                                     <h2>many graphs</h2>
                                 </div>
                                 <br>
-                                <img v-bind:src="require('../assets/images/a1-2ppt.png')" class="page-image">
+                                <img src="/public/data/image/tutorial/a1-2ppt.png" class="page-image">
                             </div>
                             <br><br>
                             <div>
@@ -391,7 +390,7 @@
                                     <h2>projects</h2>
                                 </div>
                                 <br>
-                                <img v-bind:src="require('../assets/images/a1-3ppt.png')" class="page-image">
+                                <img src="/public/data/image/tutorial/a1-3ppt.png" class="page-image">
                             </div>
                             <br><br>                           
 
@@ -407,7 +406,7 @@
                                     <h2>ababababa</h2>
                                 </div>
                                 <br><br>
-                                <img v-bind:src="require('../assets/images/a2-1ppt.png')" class="page-image">
+                                <img src="/public/data/image/tutorial/a2-1ppt.png" class="page-image">
                             </div>
                             <br><br>
                             <div>
@@ -416,7 +415,7 @@
                                     <h2>ababababa</h2>
                                 </div>
                                 <br><br><br>
-                                <img v-bind:src="require('../assets/images/a2-2ppt.png')" class="page-image">
+                                <img src="/public/data/image/tutorial/a2-2ppt.png" class="page-image">
                             </div>
                             <br><br>
 
@@ -432,7 +431,7 @@
                                     <h2>ababababa</h2>
                                 </div>
                                 <br><br>
-                                <img v-bind:src="require('../assets/images/a3-1ppt.png')" class="page-image">
+                                <img src="/public/data/image/tutorial/a3-1ppt.png" class="page-image">
                             </div>
                             <br><br>
                             <div>
@@ -441,7 +440,7 @@
                                     <h2>ababababa</h2>
                                 </div>
                                 <br><br><br>
-                                <img v-bind:src="require('../assets/images/a3-2ppt.png')" class="page-image">
+                                <img src="/public/data/image/tutorial/a3-2ppt.png" class="page-image">
                             </div>
                             <br><br>
 
@@ -715,5 +714,8 @@ export default {
     position: absolute ;
     color:#cc4f78;
     z-index: 9;
+}
+.headers{
+    color:#cc4f78;
 }
 </style>

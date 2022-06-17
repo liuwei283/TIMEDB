@@ -127,7 +127,7 @@
 
                 </b-card-body>
 
-                <b-card-body v-show="display==1" class="p-2">
+                <b-card-body v-show="display==1" class="p-2" style="padding: 0px !important;">
                    <div id = "viz-card"> 
                         <VApp/>
                     </div>
@@ -631,7 +631,7 @@ export default {
     position: relative;
 }
 #viz-card {
-    border: 1px solid #999;
+    // border: 1px solid #999;
     height: 835px;
 }
 .v-editor {

@@ -35,7 +35,7 @@ html
       #disable-fill
     - unless %w[analysis].include? controller_name
       = render 'partials/footer'
-    - if session[:user_id].nil? || !User.exists?(session[:user_id])
+    - if (session[:user_id].nil? || !User.exists?(session[:user_id]) )and (session[:non_cookies] == true and  (session[:non_cookies]=false or true))
       #cookies-eu-banner
         .container
           h3.text-left Accept Cookies to Continue
