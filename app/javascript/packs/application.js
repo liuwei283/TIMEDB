@@ -104,6 +104,11 @@ document.addEventListener('DOMContentLoaded', (event) =>  {
         });
     });
 
+    $('.sidebar-toggle').on('click', () => {
+        $(document.getElementById("sidebar")).toggleClass('active');
+
+    });
+
     $('#alerts .alert-group').each((i, el) => {
         const alertGroup = $(el);
         const bar = alertGroup.find('.progress-bar');

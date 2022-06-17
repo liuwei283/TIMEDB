@@ -3,6 +3,8 @@
 //script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"
 //link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous"
 
+meta name="google-site-verification" content="sDvz2pV67iDffAY1lcrWd5CLenIORwxX3YAwLKlZWZA"
+
 script src='https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js'
 //script src="http://nkunited.de/jquery/plugins/svg3dtagcloudV2/js/jquery.svg3dtagcloud.min.js"
 link rel='stylesheet' href="https://fonts.googleapis.com/css?family=Oswald&subset=latin,latin-ext"
@@ -11,7 +13,7 @@ link rel='stylesheet' href="https://fonts.googleapis.com/css?family=Oswald&subse
 
 -use_dark = session[:dark]
 - content_for :title
-  | Immune
+  | TIMEDB
 
 .row
   .col-md-2.container 
@@ -19,38 +21,42 @@ link rel='stylesheet' href="https://fonts.googleapis.com/css?family=Oswald&subse
         .home-nav#home-sidebar
           .nav-content
             br
-            h3 Directly Start
-            br
-            br
-            
-            p Welcome to 
-            p TIMEDB Tutorial 
-            
-            br
-            br
-            =link_to '/tutorial'
+            h2 Directly Start
 
-              .tutorial
-                | Let's start
-
-            br/
-            br/
-
-            i.fa.fa-arrow-down
             br/
             br/
             .row.justify-content-center.text-center
               //.col-md-2
               .col-md-8.sidebarIconBlock
-                h4 Database
+                =link_to '/tutorial'
+                  .sidebar_button.btn-1
+                    | Help
+                =link_to '/tutorial'
+                  =image_tag 'sidebar_help.png', :class=> "d-block w-100"
+              .col-md-8.sidebarIconBlock
+                =link_to 'database/overview'
+                  .sidebar_button.btn-1
+                    | Database
                 =link_to 'database/overview'
                   =image_tag 'sidebar_database.png', :class=> "d-block w-100"
-              / .col-md-2
-              / .col-md-2
               .col-md-8.sidebarIconBlock
-                h4 Analysis
-                =link_to '/submit/analyses'
+                =link_to 'submit/analyses'
+                  .sidebar_button.btn-1
+                    | Analysis
+                =link_to 'submit/analyses'
                   =image_tag 'sidebar_analysis.png', :class=> "d-block w-100"
+                
+
+
+              /   h4 Database
+              /   =link_to 'database/overview'
+              /     =image_tag 'sidebar_database.png', :class=> "d-block w-100"
+              / / .col-md-2
+              / / .col-md-2
+              / .col-md-8.sidebarIconBlock
+              /   h4 Analysis
+              /   =link_to '/submit/analyses'
+              /     =image_tag 'sidebar_analysis.png', :class=> "d-block w-100"
             //.col-md-2
   .col-md-10#main-content.container 
     section#intro_text.heading 

@@ -4,7 +4,7 @@
 .index-banner
 
   
-  .container
+  .wide-container
 
     section#dataset_list
       h2.display-4.font-weight-bold.text-center My dataset
@@ -16,8 +16,12 @@
         span#add_folder_icon
           = link_to new_user_dataset_path(:user_id=>@user.id) do
             = image_tag 'folder-plus.svg'
+    br
+    br
     hr
+    br
+    br
+    br
+  .wide-container
     h2.display-4.font-weight-bold.text-center Task Query
-
-.container-query.mb-10
-  #vapp-job-query
+    #vapp-job-query

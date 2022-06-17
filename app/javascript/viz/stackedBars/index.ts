@@ -31,9 +31,6 @@ function init() {
                 type: "csv",
                 loaded(data) {
 
-                    console.log(data);
-
-                    
                     const classificationKey = data.columns[0]; //Type
                     const classifications = data.map(d => d[classificationKey]); //第一列的名字 //横坐标
                     let categories = data.columns.slice(2); //纵坐标
@@ -47,20 +44,9 @@ function init() {
                         result[item] = [];
                     });
 
-                    console.log("1",categories)
+
                     categories.sort((a,b)=>a-b)
-                    console.log("2",categories)
-                    
-                    //横坐标开始循环
-                    // classifications.forEach(classification => {
-                    //     // let sum = 0;
-                    //     // data.forEach((d) => {
-                    //     //     sum = sum + parseInt(d[category]); //每列求和
-                    //     // });
-                    //     data.forEach(d => {
-                    //         result[d[classificationKey]].push([classification, parseInt(d[classification])]); //加载数据
-                    //     });
-                    // });
+
 
                     
 
@@ -80,11 +66,10 @@ function init() {
                         array[ditem] = sum
                         
                     });
-                    console.log(array) 
+
 
 
                     categories.forEach((item,index) => {
-                        console.log(item)
                         data.forEach((ditem,dindex) => {
                             result[item].push([ditem[classificationKey],parseFloat(ditem[item])/array[ditem[classificationKey]]])
                         });
@@ -95,6 +80,7 @@ function init() {
 
                     this.data.height = 500
                     this.data.gridwidth = 12
+                    this.data.padding = 2
 
                     
                     
@@ -107,8 +93,8 @@ function init() {
             console.log(this["_data"]);
             this.size.height = this.data.height+300
             this.size.width = this.data.data.classifications.length*this.data.gridwidth  + 200
-            // registerEditorConfig(editorConfig(this), editorRef);
             registerEditorConfig(editorConfig(this), "getVue", "#task-output", editorRef);
+            //registerEditorConfig(editorConfig(this), "getVue", "#task-output", editorRef);
 
         },
     });

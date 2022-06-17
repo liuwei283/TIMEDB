@@ -33,17 +33,11 @@
                 </div>
 
                 <div class="local-jobs .container">
-                    <div class = "container row pb-2">
+                    <div class = "container row pb-2 text-center justify-content-center">
                             <div class= "col-7"> 
                                 <h3 class="font-weight-bold float-right">Submitted Tasks</h3>
                             </div>
-
-                            <b-button v-if="this.isDemo"
-                                variant="info"
-                                class=" col-2" @click="downloadInput()">demo input files
-                            </b-button>
-
-                            <b-button v-else
+                            <b-button
                                 variant="success" 
                                 class="btn-sm btn-4 col-1" @click="refreshJobs()">Refresh
                             </b-button>
@@ -164,13 +158,13 @@
                             Visualization
                         </b-button><!---->
 
-                        <b-button class="btn float-right" variant="danger" v-if="job_status=='failed'">
+                        <b-button class="btn float-right btn-5" v-if="job_status=='failed'">
                             Failed
                         </b-button>
-                        <b-button class="btn float-right" variant="success" v-else-if="job_status=='finished'">
+                        <b-button class="btn float-right btn-4" v-else-if="job_status=='finished'">
                             Finished
                         </b-button>
-                        <b-button class="btn float-right" variant="info" v-else>
+                        <b-button class="btn btn-2 float-right" v-else>
                             Running
                         </b-button>
                         
@@ -360,57 +354,59 @@ export default {
 
         const { alertCenter } = this.$refs;
 
+        // for testing the output of task info api
+
         // Test Pipeline
-        axios.post(
-            `/query-deepomics/`,
-            objectToFormData({'id': 528, 'type': 'pipeline'}),
-            {  
-                headers: {
-                    'X-Requested-With': 'XMLHttpRequest',
-                    'X-CSRF-Token': document.head.querySelector('meta[name="csrf-token"]').content,
-                    'Content-Type': 'multipart/form-data',
-                },
-            },
-        ).then((response) => {
-            console.log("Pipeline query result:", response);
+        // axios.post(
+        //     `/query-deepomics/`,
+        //     objectToFormData({'id': 528, 'type': 'pipeline'}),
+        //     {  
+        //         headers: {
+        //             'X-Requested-With': 'XMLHttpRequest',
+        //             'X-CSRF-Token': document.head.querySelector('meta[name="csrf-token"]').content,
+        //             'Content-Type': 'multipart/form-data',
+        //         },
+        //     },
+        // ).then((response) => {
+        //     console.log("Pipeline query result:", response);
             
-                }).catch((error) => {
-                    const message = error.response && error.response.status === 404 ? "The task does not exist" : error;
-                    alertCenter.add('danger', `${message}`);
-                }).finally(() => {
-                    // setTimeout(() => { alertCenter.add('danger', ''); }, 2000);
-                });
+        //         }).catch((error) => {
+        //             const message = error.response && error.response.status === 404 ? "The task does not exist" : error;
+        //             alertCenter.add('danger', `${message}`);
+        //         }).finally(() => {
+        //             // setTimeout(() => { alertCenter.add('danger', ''); }, 2000);
+        //         });
         
-        // Code
-        axios.post(
-            `/query-deepomics/`,
-            //improvement here: when we testing pipeline, here we need to check whether this is analyis or pipeline
-            objectToFormData({'id': this.taskId, 'type': 'app'}),
-            {
-                headers: {
-                    'X-Requested-With': 'XMLHttpRequest',
-                    'X-CSRF-Token': document.head.querySelector('meta[name="csrf-token"]').content,
-                    'Content-Type': 'multipart/form-data',
-                },
-            },
-        ).then((response) => {
-            console.log("Module query result:", response);
-            this.inputs = response.data.message.inputs;
-            this.outputs = response.data.message.outputs;
-            this.params = response.data.message.params;
+        // // Code
+        // axios.post(
+        //     `/query-deepomics/`,
+        //     //improvement here: when we testing pipeline, here we need to check whether this is analyis or pipeline
+        //     objectToFormData({'id': this.taskId, 'type': 'app'}),
+        //     {
+        //         headers: {
+        //             'X-Requested-With': 'XMLHttpRequest',
+        //             'X-CSRF-Token': document.head.querySelector('meta[name="csrf-token"]').content,
+        //             'Content-Type': 'multipart/form-data',
+        //         },
+        //     },
+        // ).then((response) => {
+        //     console.log("Module query result:", response);
+        //     this.inputs = response.data.message.inputs;
+        //     this.outputs = response.data.message.outputs;
+        //     this.params = response.data.message.params;
             
-        }).catch((error) => {
-            const message = error.response && error.response.status === 404 ? "The task does not exist" : error;
-            alertCenter.add('danger', `${message}`);
-        }).finally(() => {
-            // setTimeout(() => { alertCenter.add('danger', ''); }, 2000);
-            console.log("Log:", this.inputs, this.outputs, this.params);
-            this.getChartsInfo();
-        });
+        // }).catch((error) => {
+        //     const message = error.response && error.response.status === 404 ? "The task does not exist" : error;
+        //     alertCenter.add('danger', `${message}`);
+        // }).finally(() => {
+        //     // setTimeout(() => { alertCenter.add('danger', ''); }, 2000);
+        //     console.log("Log:", this.inputs, this.outputs, this.params);
+        //     this.getChartsInfo();
+        // });
 
 
-        this.stderr = "Testing...";
-        this.stdout = "Testing...";
+        this.stderr = "Updating...";
+        this.stdout = "Updating...";
     },
     watch: {
         chosenOutput:function() {
@@ -442,6 +438,8 @@ export default {
                     //improvement here we need to consider have different plot chart for different tasks
                     if (res.data.message.code) {
                         this.update_chart(res.data.message.data);
+                        this.stderr = res.data.message.data.task_log.stderr;
+                        this.stdout = res.data.message.data.task_log.stdout;
                     } else {
                         alertCenter.add('danger', res.data.message);
                     }
@@ -569,7 +567,7 @@ export default {
             this.inputs = response.data.message.inputs;
             this.outputs = response.data.message.outputs;
             this.params = response.data.message.params;
-            this.stderr = response.data.message.error_message;
+            // this.stderr = response.data.message.error_message;
             this.job_status = response.data.message.status;
             
                 }).catch((error) => {
@@ -754,11 +752,13 @@ export default {
 </script>
 
 <style lang="scss">
+@import '~bootstrap/scss/bootstrap.scss';
+@import '~bootstrap-vue/src/index.scss';
+@import '../assets/stylesheets/partials/variables';
 #job-query {
-    min-height: 900px;
-    max-height: 1200px;
-    margin-top: 10px;
+    background-color: #f8f9fa !important;
 }
+
 #job-query .fas.fa-tasks {
 	font-size: 5rem !important;
 	margin-right: 0px;
@@ -767,6 +767,11 @@ export default {
 #job-query .query-card {
     margin: 20px;
 	padding: 3rem;
+    background-color: #f8f9fa;
+    border: none;
+    // border-radius: 30px;
+    // box-shadow: 0 0 32px darken($gray-300, 5%);
+
 }
 // all jobs
 .local-jobs {
@@ -825,8 +830,19 @@ export default {
     transition: all 0.3s
 }
 #table-container {
-    max-height: 40em;
+    max-height: 50em;
     overflow-y: scroll;
+    border: 1px solid darken($gray-300, 5%);
+    border-radius: 10px;
+    thead tr th {
+        border: 0;
+        background-color: #c5d4dd;
+    }
+    thead tr {
+        background: #28ab74 !important;
+    }
+    tbody tr td {border: 0;}
+
 }
 .tooltip-inner {
     text-align: left !important;
