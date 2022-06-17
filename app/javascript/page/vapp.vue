@@ -171,7 +171,6 @@
                         if(response.data.code) location.reload();
                     })
             }
-            
         }
     }
 

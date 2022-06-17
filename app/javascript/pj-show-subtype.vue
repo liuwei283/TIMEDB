@@ -291,6 +291,7 @@ export default {
             data_path : "/public/data/",
             boxplot_selected : null,
             boxplot_selector : [
+                {value:"quanTIseq",label:"quanTIseq"},
                 {value:"ABIS",label:"ABIS"},
                 {value:"CIBERSORTX",label:"CIBERSORTX"},
                 {value:"CIBERSORT",label:"CIBERSORT"},
@@ -298,7 +299,6 @@ export default {
                 {value:"EPIC",label:"EPIC"},
                 {value:"ImmuCellAI",label:"ImmuCellAI"},
                 {value:"MCPcounter",label:"MCPcounter"},
-                {value:"quanTIseq",label:"quanTIseq"},
                 {value:"TIMER",label:"TIMER"},
                 {value:"xCell",label:"xCell"},
             ],
@@ -314,7 +314,7 @@ export default {
         }
     },
     created() {
-        this.boxplot_selected = "ABIS";
+        this.boxplot_selected = "quanTIseq";
         // var method;
         // for (var i = 0; i < 10; i ++ ) {
         //     method = this.boxplot_selector[i]["value"];

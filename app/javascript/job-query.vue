@@ -264,6 +264,9 @@
         </div>
 
     </div>
+    <button @click="submitted=true">
+        test change
+    </button>
 </div>
 </template>
 
@@ -337,6 +340,7 @@ export default {
             this.refreshJobs();
         }
     },
+
     beforeMount() {
         const getJobId = () => {
             const urls = window.location.href.split('?');
@@ -418,6 +422,15 @@ export default {
         },
         chosenModule:function() {
             this.updateVis();
+        },
+        submitted:function(newValue) {
+            if(newValue == true) {
+                document.getElementById("workspace_dataset").style.display = "none";
+            }
+            else {
+                document.getElementById("workspace_dataset").style.display = "block";
+                console.log("fkjbsdgfgb")
+            }
         }
     },
     methods: {
