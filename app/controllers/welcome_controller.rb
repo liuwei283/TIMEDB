@@ -1,7 +1,7 @@
 require 'zip'
 
 class WelcomeController < ApplicationController
-  skip_before_action :validate_cookie, only: [:index, :contact, :terms, :require_cookie]
+  skip_before_action :validate_cookie, only: [:index,:tutorial ,:contact, :terms, :require_cookie]
   def index
     #@user = User.find(session[:user_id])
     @samples_num = Sample.all.count
