@@ -38,8 +38,7 @@
                                 <h3 class="font-weight-bold float-right">Submitted Tasks</h3>
                             </div>
                             <b-button
-                                variant="success" 
-                                class="btn-sm btn-4 col-1" @click="refreshJobs()">Refresh
+                                class="btn-1" @click="refreshJobs()">Refresh
                             </b-button>
                             <div class="col-1"><i v-if="!refreshEnd" class="fas fa-spinner fa-spin" style="font-size:24px"> </i> </div>
                     </div>
@@ -131,13 +130,13 @@
                             right
                             v-model="chosenOutput"
                             :options="taskOutputs"
-                            class="tool-bar-el btn px-0 mb-1"/><!--v-if="data.outputs.length > 1"-->
+                            class="tool-bar-el btn btn-2 px-0 mb-1"/><!--v-if="data.outputs.length > 1"-->
                     <dropdown-select
                             v-if="job_status == 'finished'"
                             right
                             v-model="chosenModule"
                             :options="module_names"
-                            class="tool-bar-el btn px-0 mb-1"/><!--v-if="data.outputs.length > 1"-->
+                            class="tool-bar-el btn btn-2 px-0 mb-1"/><!--v-if="data.outputs.length > 1"-->
                     
                     <!-- <b-button v-else variant="dark" class="btn col-md-4" disabled >{{data.outputs[0].name}}
                     </b-button> -->
@@ -168,7 +167,7 @@
                             Running
                         </b-button>
                         
-                        <b-button class="btn btn-3 float-right" @click="refreshStatus">
+                        <b-button class="btn btn-3 float-right mr-3" @click="refreshStatus">
                             Refresh Status
                         </b-button>
                     </div>
@@ -264,9 +263,6 @@
         </div>
 
     </div>
-    <button @click="submitted=true">
-        test change
-    </button>
 </div>
 </template>
 
@@ -843,8 +839,8 @@ export default {
     transition: all 0.3s
 }
 #table-container {
-    max-height: 50em;
-    overflow-y: scroll;
+    //max-height: 50em;
+    //overflow-y: scroll;
     border: 1px solid darken($gray-300, 5%);
     border-radius: 10px;
     thead tr th {
@@ -870,7 +866,7 @@ export default {
 }
 
 #stdout, #stderr{
-    height: 150px;
+    height: 300px;
     overflow: auto;
     padding: 15px 15px;
     border-radius: 4px; 
