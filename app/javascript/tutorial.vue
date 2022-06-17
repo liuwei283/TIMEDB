@@ -156,33 +156,33 @@
                             <div>
                                 <div class="headers">
                                     <h1>Database Information</h1>
-                                    <h2>Here can check the entire database information</h2>
+                                    <h2>TIMEDB(Turmor Immune MicroEnvironment DataBase)</h2>
                                 </div>
                                 <img src="/public/data/image/tutorial/1ppt.png" class="page-image">
                             </div>
                             <br><br>
                             <div>
-                                <div class="overhead">
-                                    <h1>this is header 2</h1>
-                                    <h2>many graphs</h2>
+                                <div class="headers">
+                                    <!-- <h1></h1> -->
+                                    <h2>We have many kinds of graphs for data visualization</h2>
                                 </div>
                                 <br>
                                 <img  src="/public/data/image/tutorial/2ppt.png" class="page-image">
                             </div>
                             <br><br>
                             <div>
-                                <div class="overhead">
-                                    <h1>this is header 3</h1>
-                                    <h2>projects</h2>
+                                <div class="headers">
+                                    <h1>Projects</h1>
+                                    <h2>Projects Details to view the data and the graphs</h2>
                                 </div>
                                 <br>
                                 <img  src="/public/data/image/tutorial/3ppt.png" class="page-image">
                             </div>
                             <br><br>                           
                             <div>
-                                <div class="overhead">
-                                    <h1>this is header 4</h1>
-                                    <h2>sample</h2>
+                                <div class="headers">
+                                    <h1>Samples</h1>
+                                    <h2>Samples Details to view the data and the graphs</h2>
                                 </div>
                                 <br>
                                 <img  src="/public/data/image/tutorial/4ppt.png" class="page-image">

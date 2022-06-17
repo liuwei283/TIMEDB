@@ -21,7 +21,6 @@
     <tbody>
         <% @projects.each do |p| %>
         <tr>
-            <td> <%=p.id%></td>
 
             <td> <%=link_to("#{p.project_name}", p.original_link)%></td>
 
@@ -58,16 +57,20 @@
             <tbody>
                 <% @projects.each do |p| %>
                     <tr>
-                        <td> <%=p.id%></td>
                         <td> <%=link_to("#{p.project_name}", p.original_link)%></td>
                         <% @attrs2.each do |attr| %>
                         <% if attr != 'id' and attr !='project_name'%>  
                         <td>     
                             <%if @csv_test[p.project_name][attr]=='true'%>
                             <%= link_to("#{p.project_name}_#{attr}.csv","/public/data/cell_data/#{attr}/#{p.project_name}_#{attr}.csv")%>
-                            <% else %>No data<% end %>
+                            <% else %>No data 
+                                <%if @msg_test[p.project_name+attr ] %>
+                                    <%= @msg_test[p.project_name+attr]["reason"]%>
+                                <% end %>
                             <% end %>
                         </td>
+                        <% end %>
+
                         <% end %>
                     </tr>
                 <% end %>
@@ -87,7 +90,6 @@
         <tbody>
             <% @projects.each do |p| %>
                 <tr>
-                    <td> <%=p.id%></td>
                     <td> <%=link_to("#{p.project_name}", p.original_link)%></td>
 
                     <td> 
@@ -98,7 +100,8 @@
                     <td> 
                         <%if @csv_test[p.project_name]['Consensus']=='true'%>
                         <%= link_to("#{p.project_name}_consensus.csv","/public/data/cell_data/#{p.project_name}_Consensus.csv")%>
-                        <% else %>No data<% end %>
+                        <% else %>No data
+                        <% end %>
                     </td>
                 </tr>
             <% end %>
@@ -117,17 +120,20 @@
         <tbody>
             <% @projects.each do |p| %>
                 <tr>
-                    <td> <%=p.id%></td>
                     <td> <%=link_to("#{p.project_name}", p.original_link)%></td>
 
                     <td> 
                         <%if @csv_test[p.project_name]['subtype']=='true'%>
                         <%= link_to("#{p.project_name}_c1_c6.csv","/public/data/subtype/project/#{p.project_name}_c1_c6.csv")%>
-                        <% else %>No data<% end %>
+                        <% else %>No data
+                                <%if @msg_test[p.project_name+'C1-C6' ] %>
+                                    <%= @msg_test[p.project_name+'C1-C6']["reason"]%>
+                                <% end %>
+                        
+                        <% end %>
                     </td>
                 </tr>
             <% end %>
         </tbody>
     </table>
-
 </div>
