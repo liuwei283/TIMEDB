@@ -65,7 +65,17 @@ class ProjectsController < ApplicationController
                 @rows = row.to_hash
             end
         end
+        msg_path = "#{Rails.root}/public/data/warning.csv"
+        msg_text = File.read(msg_path)
+        @msg_test = {}
+    
+        msg_text = CSV.parse(msg_text, :headers => true)
+        msg_text.each do |row|
+            @msg_test[row.to_hash['project']+row.to_hash['method']] =row.to_hash
+        end
         gon.push files:@rows
+        gon.push msg:@msg_test
+
         # transfer columns names to project fraction oerview
         @selector_attrs = []
         @sample_attrs.each do |s_attr|

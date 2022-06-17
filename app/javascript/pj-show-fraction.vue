@@ -128,7 +128,7 @@
             </div>
 
             <div v-if="!getboxplotFexists" class = "text-center row justify-content-center">
-                <h2>No data available</h2>
+                <h2>No data available <br><span v-if="msg[project_name+boxplot_selected]">{{msg[project_name+boxplot_selected]['reason']}}</span></h2>
             </div>
 
         </div>
@@ -199,7 +199,7 @@
             </div>
 
             <div v-if="!getheatmapFexists" class = "text-center row justify-content-center">
-                <h2>No data available</h2>
+                <h2>No data available <br><span v-if="msg[project_name+boxplot_selected]">{{msg[project_name+boxplot_selected]['reason']}}</span></h2>
             </div>
         </div>
 
@@ -300,6 +300,7 @@ export default {
             // cancers: window.gon.cancers,
             project_name: window.gon.project_name,
             file_exist: window.gon.files,
+            msg: window.gon.msg,
             fraction_conf_pie: {},
             fraction_conf_boxplot: {},
             fraction_conf_heatmap: {},
