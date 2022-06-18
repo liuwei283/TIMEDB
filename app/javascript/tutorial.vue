@@ -1,6 +1,6 @@
 <template>
     <div>
-        <link rel="stylesheet" type="text/css" href="chrome-extension://ckkdlimhmcjmikdlpkmbgfkaikojcbjk/themes/github.css" id="_theme"></link>
+        <link rel="stylesheet" type="text/css" href="chrome-extension://ckkdlimhmcjmikdlpkmbgfkaikojcbjk/themes/github.css" id="_theme">
         <div class="container text-center tutorial" v-if="this.details == false">
             <br>
             <div class="row">
@@ -155,7 +155,7 @@
                         </h1><br>
                         <div class="page">
                             <div>
-                                <div class="headers">
+                                <div class="headers markdown-body">
                                     <h1>Welcome to TIMEDB Database</h1>
                                     <p>TIMEDB provides the tumor immune micro-enviornment (TIME) cell proportions from bulk RNA expression profiles of <b>35,000 + samples</b> and <b>500+ projects</b> across <b>43 cancer types</b>. Users can download the following files directly with TIMEDB:
                                     </p>
@@ -203,7 +203,7 @@
 
 
                                         <h2 id="cancer">Cancer</h2>
-                                        If users are interested in one cancer type, they can click the details in <a href="/cancers">''Cancer''</a> page to query the related datasets. <br></br>
+                                        If users are interested in one cancer type, they can click the details in <a href="/cancers">''Cancer''</a> page to query the related datasets. <br>
                                         <img src="/public/data/image/tutorial/1-5ppt.gif" class="page-image">
                                         <h2 id="project">Project</h2>
                                         If users are interested in specific project, they can choose the project in <a href="/projects">''Project''</a> page to query the project.
@@ -771,12 +771,9 @@ export default {
 }
 .overhead{
     position: absolute ;
-    color:#cc4f78;
     z-index: 9;
 }
 .headers{
-    color:#cc4f78;
-
     li{
         font-size: 20px;
     }
@@ -788,7 +785,7 @@ export default {
     }
 }
 .focus{
-    border: 3px solid;
+    border: 3px solid #00008b;
     border-radius: 10px;
     padding: 1%;
 }
