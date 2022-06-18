@@ -32,13 +32,6 @@
                         <button type = "button" id = "multiple-button" class = "btn btn-secondary btn-lg btn-select" @click="updateMode('multiple')">
                         Multiple
                         </button>
-
-                        <!-- <input type="radio" id="single" value="single" v-model="picked_single_multiple">
-                        <label for="single">Single</label>
-                        <input type="radio" id="multiple" value="multiple" v-model="picked_single_multiple">
-                        <label for="multiple">Multiple</label> -->
-                        <!-- <br>
-                        <p class="lead mt-2">You will upload {{ picked_single_multiple }} file(s)/dataset(s)</p> -->
                     </div>
                 </div>
                 <div class="index-banner">
@@ -613,7 +606,7 @@
         },
         created() {
             this.ds_info = window.gon.select_box_option;
-            if ( ['Regression Tools', 'Enrichment Tools', 'Consensus Tools', 'Unsupervised'].includes( this.analysis_category) ) {
+            if ( ['Regression Tools', 'Enrichment Tools', 'Consensus Tools', 'Unsupervised'].indexOf( this.category_name) != -1 ) {
                 this.isConv = true; //deconvolution analysis category are different from others
             }
             this.updateApp(null, false);

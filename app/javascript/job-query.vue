@@ -107,7 +107,6 @@
                             <template #empty>
                                 <h4 class="text-center">No task... <a href="/submit/analyses">Submit your task now</a> </h4>
                             </template>
-                        
                         </b-table>
                     </div>
                 </div>
