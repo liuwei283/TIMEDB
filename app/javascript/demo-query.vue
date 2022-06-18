@@ -297,7 +297,8 @@ export default {
             });
 
         },
-        update_chart() {
+
+        update_chart(data) {
             this.chartOptions = {
                 tooltip: {
                     trigger: 'axis',
@@ -327,7 +328,7 @@ export default {
                 xAxis: [
                     {
                         type: 'category',
-                        data: this.resource_usage.x_axis,
+                        data: data.resource_usage.x_axis,
                         axisPointer: {
                             type: 'shadow'
                         }
@@ -337,8 +338,8 @@ export default {
                     {
                         type: 'value',
                         name: 'memory',
-                        min: this.resource_usage.memory.min,
-                        max: this.resource_usage.memory.max,
+                        min: data.resource_usage.memory.min,
+                        max: data.resource_usage.memory.max,
                         // interval: 50,
                         axisLabel: {
                             formatter: function (value, index) {
@@ -356,8 +357,8 @@ export default {
                     {
                         type: 'value',
                         name: 'cpu',
-                        min: this.resource_usage.cpu.min,
-                        max: this.resource_usage.cpu.max,
+                        min: data.resource_usage.cpu.min,
+                        max: data.resource_usage.cpu.max,
                         // interval: 5,
                         axisLabel: {
                             formatter: function (value, index) {
@@ -387,13 +388,13 @@ export default {
                     {
                         name:'memory',
                         type:'line',
-                        data:this.resource_usage.memory.data
+                        data: data.resource_usage.memory.data
                     },
                     {
                         name:'cpu',
                         type:'line',
                         yAxisIndex: 1,
-                        data:this.resource_usage.cpu.data
+                        data:data.resource_usage.cpu.data
                     }
                 ]
             };
