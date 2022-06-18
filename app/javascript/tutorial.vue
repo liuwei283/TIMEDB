@@ -155,37 +155,45 @@
                         <div class="page">
                             <div>
                                 <div class="headers">
-                                    <h1>Database Information</h1>
-                                    <h2>TIMEDB(Turmor Immune MicroEnvironment DataBase)</h2>
+                                    <h1>Welcome to TIMEDB Database</h1>
+                                    <p>TIMEDB provides the tumor immune micro-enviornment (TIME) cell proportions from bulk RNA expression profiles of <b>50,000 + samples</b> and <b>500+ projects</b> across <b>43 cancer types</b>. Users can download the following files directly with TIMEDB:
+                                    </p>
                                 </div>
                                 <img src="/public/data/image/tutorial/1ppt.png" class="page-image">
                             </div>
-                            <br><br>
                             <div>
                                 <div class="headers">
-                                    <!-- <h1></h1> -->
-                                    <h2>We have many kinds of graphs for data visualization</h2>
+                                    <h2>Gene expression file and meta file</h2>
+                                    <ul>
+                                        <li> Gene expression file: The gene expression file stores the bulk gene expression of tumor samples, with sample as column and gene as row.</li>
+                                        <li>Clinical file: The clinical file stores the manually curated clinical information of the sample, such as age, gender, etc. Each row is a sample and each column is a clinical feature.</li>
+                                        <li>Scaled immmunoregulator expression file: The scaled gene expression profiles of seventy-nine immunoregular genes. [1]</li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="headers">
+                                    <h1>Cancers</h1>
+                                    <h2>Cancers Details to view the data</h2>
                                 </div>
                                 <br>
-                                <img  src="/public/data/image/tutorial/2ppt.png" class="page-image">
+                                <img  src="/public/data/image/tutorial/3ppt.png" class="page-image">
                             </div>
-                            <br><br>
                             <div>
                                 <div class="headers">
                                     <h1>Projects</h1>
                                     <h2>Projects Details to view the data and the graphs</h2>
                                 </div>
                                 <br>
-                                <img  src="/public/data/image/tutorial/3ppt.png" class="page-image">
+                                <img  src="/public/data/image/tutorial/4ppt.png" class="page-image">
                             </div>
-                            <br><br>                           
                             <div>
                                 <div class="headers">
                                     <h1>Samples</h1>
                                     <h2>Samples Details to view the data and the graphs</h2>
                                 </div>
                                 <br>
-                                <img  src="/public/data/image/tutorial/4ppt.png" class="page-image">
+                                <img  src="/public/data/image/tutorial/5ppt.png" class="page-image">
                             </div>
                             <br><br>
 
@@ -201,20 +209,18 @@
                         </h1><br>
                         <div class="page">
                             <div>
-                                <div class="overhead">
-                                    <h1>this is header 1</h1>
-                                    <h2>ababababa</h2>
+                                <div class="headers">
+                                    <h1>Database Information</h1>
+                                    <h2>We have 43 Cancer Type, 538 Projects, 35817 Samples</h2>
                                 </div>
                                 <br><br>
                                 <img src="/public/data/image/tutorial/2-1ppt.png" class="page-image">
                             </div>
-                            <br><br>
                             <div>
-                                <div class="overhead">
-                                    <h1>this is header 2</h1>
-                                    <h2>ababababa</h2>
+                                <div class="headers">
+                                    <h1>Detail Information</h1>
+                                    <h2>You can view the detail information and the data visualization for each cancer type, project or samples</h2>
                                 </div>
-                                <br><br><br>
                                 <img src="/public/data/image/tutorial/2-2ppt.png" class="page-image">
                             </div>
                             <br><br>
@@ -226,32 +232,31 @@
                         </h1><br>
                         <div class="page">
                             <div>
-                                <div class="overhead">
-                                    <h1>this is header 1</h1>
-                                    <h2>ababababa</h2>
+                                <div class="headers">
+                                    <h1>You can check your dataset in workspace</h1>
                                 </div>
-                                <br><br>
                                 <img src="/public/data/image/tutorial/3-1ppt.png" class="page-image">
                             </div>
-                            <br><br>
+                            <br>
                             <div>
-                                <div class="overhead">
-                                    <h1>this is header 2</h1>
-                                    <h2>ababababa</h2>
+                                <div class="headers">
+                                    <h1>Add samples to your dataset from at the page of your dataset</h1>
                                 </div>
-                                <br><br><br>
                                 <img src="/public/data/image/tutorial/3-2ppt.png" class="page-image">
                             </div>
-                            <br><br>
                             <div>
-                                <div class="overhead">
-                                    <h1>this is header 3</h1>
-                                    <h2>ababababa</h2>
+                                <div class="headers">
+                                    <h1>Select the samples and add them to a specify dataset</h1>
                                 </div>
-                                <br><br><br>
                                 <img src="/public/data/image/tutorial/3-3ppt.png" class="page-image">
                             </div>
-                            <br><br>
+                            <br>
+                            <div>
+                                <div class="headers">
+                                    <h1>Also can add samples from a specify project at the project detail page</h1>
+                                </div>
+                                <img src="/public/data/image/tutorial/3-4ppt.jpg" class="page-image">
+                            </div>
 
                         </div>
                     </div><div v-else-if="this.now =='3'">
@@ -260,57 +265,58 @@
                         </h1><br>
                         <div class="page">
                             <div>
-                                <div class="overhead">
-                                    <h1>this is header 1</h1>
-                                    <h2>ababababa</h2>
+                                <div class="headers">
+                                    <h1>Download data from Download Page</h1>
                                 </div>
-                                <br><br>
-                                <img src="/public/data/image/tutorial/4-1ppt.png" class="page-image">
+                                <img src="/public/data/image/tutorial/4-0ppt.jpg" class="page-image">
                             </div>
-                            <br><br>
+                            <br>
+                            <div>
+                                <div class="headers">
+                                    <h1>Download the data from the dataset</h1>
+                                </div>
+                                <img src="/public/data/image/tutorial/4-1ppt.jpg" class="page-image">
+                            </div>
+                            <br>
 
                             <div>
-                                <div class="overhead">
-                                    <h1>this is header 1</h1>
-                                    <h2>ababababa</h2>
+                                <div class="headers">
+                                    <h1>Download data from projects</h1>
                                 </div>
-                                <br><br>
-                                <img src="/public/data/image/tutorial/8.png" class="page-image">
-                            </div>
-                            <br><br>
-                            <div>
-                                <div class="overhead">
-                                    <h1>this is header 1</h1>
-                                    <h2>ababababa</h2>
-                                </div>
-                                <br><br>
                                 <img src="/public/data/image/tutorial/9.png" class="page-image">
                             </div>
+                            <br>
+                            <div>
+                                <div class="overhead">
+                                    <h1>Download data from samples</h1>
+                                </div>
+                                <br><br>
+                                <img src="/public/data/image/tutorial/4-3ppt.jpg" class="page-image">
+                            </div>
                             <br><br>
 
-                    </div>      
+                        </div>      
                     </div><div v-else-if="this.now =='4'">
                         <h1 class="title">
                             <i class="fa fa-caret-left" @click="back"></i> How to view the  visualization plots of project and sample
                         </h1><br>
                         <div class="page">
                             <div>
-                                <div class="overhead">
-                                    <h1>this is header 1</h1>
-                                    <h2>ababababa</h2>
+                                <div class="headers">
+                                    <h1>You can view the visualizations plot of each Project</h1>
+                                    <h2> Subtype page</h2>
                                 </div>
-                                <br><br>
+                                <br>
                                 <img src="/public/data/image/tutorial/5-1ppt.png" class="page-image">
                                 <img src="/public/data/image/tutorial/5-2ppt.png" class="page-image">
 
                             </div>
                             <br><br>                           
                             <div>
-                                <div class="overhead">
-                                    <h1>this is header 1</h1>
-                                    <h2>ababababa</h2>
+                                <div class="headers">
+                                    <h1>Fraction page</h1>
                                 </div>
-                                <br><br>
+                                <br>
                                 <img src="/public/data/image/tutorial/5-3ppt.png" class="page-image">
                                 <img src="/public/data/image/tutorial/5-4ppt.png" class="page-image">
 
@@ -318,11 +324,20 @@
                             <br><br>
                         </div> 
                     </div><div v-else-if="this.now =='5'">
-                        <h1>
+                        <h1 class="title">
                             <i class="fa fa-caret-left" @click="back"></i> How to download the visualization plots
                         </h1><br>
                         <div class="page">
+                            <div>
+                                <div class="headers">
+                                    <h1>Click the Download all charts button to download all Charts </h1>
+                                    <h1>Click the Download button to download chart and relative data files</h1>
+                                </div>
+                                <br>
+                                <img src="/public/data/image/tutorial/6-1ppt.png" class="page-image">
 
+                            </div>
+                            <br><br>
 
                         </div> 
                     </div>
@@ -367,27 +382,23 @@
                         </h1><br>
                         <div class="page">
                             <div>
-                                <div class="overhead">
-                                    <h1>this is header 1</h1>
-                                    <h2>many datas</h2>
+                                <div class="headers">
+                                    <h1>Module</h1>
+                                    <h2>We have many Modules for data analysis</h2>
                                 </div>
-                                <br><br>
                                 <img src="/public/data/image/tutorial/a1-1ppt.png" class="page-image">
                             </div>
                             <br><br>
                             <div>
                                 <div class="overhead">
-                                    <h1>this is header 2</h1>
-                                    <h2>many graphs</h2>
+                                    <h1>We have detail module helper</h1>
                                 </div>
-                                <br>
                                 <img src="/public/data/image/tutorial/a1-2ppt.png" class="page-image">
                             </div>
                             <br><br>
                             <div>
                                 <div class="overhead">
-                                    <h1>this is header 3</h1>
-                                    <h2>projects</h2>
+                                    <h1>Sumbit page to upload files and set parameter</h1>
                                 </div>
                                 <br>
                                 <img src="/public/data/image/tutorial/a1-3ppt.png" class="page-image">
@@ -401,20 +412,17 @@
                         </h1><br>
                         <div class="page">
                             <div>
-                                <div class="overhead">
-                                    <h1>this is header 1</h1>
-                                    <h2>ababababa</h2>
+                                <div class="headers">
+                                    <h1>Select the wanted Module </h1>
                                 </div>
-                                <br><br>
+                                <br>
                                 <img src="/public/data/image/tutorial/a2-1ppt.png" class="page-image">
                             </div>
                             <br><br>
                             <div>
-                                <div class="overhead">
-                                    <h1>this is header 2</h1>
-                                    <h2>ababababa</h2>
+                                <div class="headers">
+                                    <h1>Upload the file and Set the Parameter</h1>
                                 </div>
-                                <br><br><br>
                                 <img src="/public/data/image/tutorial/a2-2ppt.png" class="page-image">
                             </div>
                             <br><br>
@@ -426,20 +434,16 @@
                         </h1><br>
                         <div class="page">
                             <div>
-                                <div class="overhead">
-                                    <h1>this is header 1</h1>
-                                    <h2>ababababa</h2>
+                                <div class="headers">
+                                    <h1>View the Task Query from Workspace</h1>
                                 </div>
-                                <br><br>
                                 <img src="/public/data/image/tutorial/a3-1ppt.png" class="page-image">
                             </div>
                             <br><br>
                             <div>
-                                <div class="overhead">
-                                    <h1>this is header 2</h1>
-                                    <h2>ababababa</h2>
+                                <div class="headers">
+                                    <h1>Click Result to view the Task Detail</h1>
                                 </div>
-                                <br><br><br>
                                 <img src="/public/data/image/tutorial/a3-2ppt.png" class="page-image">
                             </div>
                             <br><br>
@@ -452,11 +456,10 @@
                         <div class="page">
                             <div>
                                 <div class="overhead">
-                                    <h1>this is header 1</h1>
-                                    <h2>ababababa</h2>
+                                    <h1>Click Visualization to view Chart</h1>
+                                    <h2>Using Editor to edit chart</h2>
                                 </div>
-                                <br><br>
-                                <img v-bind:src="require('../assets/images/4-1ppt.png')" class="page-image">
+                                <img src="/public/data/image/tutorial/a4-1ppt.jpg" class="page-image">
                             </div>
                             <br><br>
 
@@ -467,28 +470,7 @@
                             <i class="fa fa-caret-left" @click="back"></i> How to ask us for help
                         </h1><br>
                         <div class="page">
-                            <div>
-                                <div class="overhead">
-                                    <h1>this is header 1</h1>
-                                    <h2>ababababa</h2>
-                                </div>
-                                <br><br>
-                                <img v-bind:src="require('../assets/images/5-1ppt.png')" class="page-image">
-                                <img v-bind:src="require('../assets/images/5-2ppt.png')" class="page-image">
 
-                            </div>
-                            <br><br>                           
-                            <div>
-                                <div class="overhead">
-                                    <h1>this is header 1</h1>
-                                    <h2>ababababa</h2>
-                                </div>
-                                <br><br>
-                                <img v-bind:src="require('../assets/images/5-3ppt.png')" class="page-image">
-                                <img v-bind:src="require('../assets/images/5-4ppt.png')" class="page-image">
-
-                            </div>
-                            <br><br>
                         </div> 
                     </div>
                 </div>
@@ -717,5 +699,11 @@ export default {
 }
 .headers{
     color:#cc4f78;
+    p{
+        font-size: 20px
+    }
+    b{
+        color: #00008b
+    }
 }
 </style>
