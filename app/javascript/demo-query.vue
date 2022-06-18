@@ -63,7 +63,7 @@
                                 <b-collapse :id="`i-${input.id}`">
                                     <ul class="mt-3">
                                         <li v-for="file in input.files" :key="file.id">
-                                            <a :href="`https://deepomics.org/user/data/?this_path=${file.path}`" target="_blank">{{ file.name }}</a>
+                                            <a :href="`https://deepomics.org/explorer/download_rel/?path=${file.path}/${file.name}`" target="_blank">{{ file.name }}</a>
                                         </li>
                                     </ul>
                                 </b-collapse>
@@ -117,7 +117,7 @@
                                 <b-collapse :id="`o-${output.id}`">
                                     <ul class="mt-3">
                                         <li v-for="file in output.files" :key="file.id">
-                                            <a :href="`https://deepomics.org/user/data/?this_path=${file.path}`" target="_blank">{{ file.name }}</a>
+                                            <a :href="`https://deepomics.org/explorer/download_rel/?path=${file.path}/${file.name}`" target="_blank">{{ file.name }}</a>
                                         </li>
                                     </ul>
                                 </b-collapse>

@@ -14,19 +14,33 @@ import * as TextSize from "crux/dist/utils/text-size";
 
 const title = "Clinical Data"
 
-export function extractWord(word){
+export function extractWord(word,width){
   let newword =  word.toLowerCase().replace(/( |^)[a-z]/g, (L) => L.toUpperCase());
-  return newword.match(/\b(\w)/g).join('.')
-}
+  let result = newword.match(/\b(\w)/g).join('.')
+  let words = ""
+  if(TextSize.measuredTextSize(result, 8).width > width*6/7){
+    let finalresult = ""
+    result.split("").forEach((item,index) => {
+      while(TextSize.measuredTextSize(finalresult, 8).width>width*5/7){
+        finalresult = finalresult+item
+      }
+    })
+    words = finalresult
+  }else{
+    words = result
+  }
+  return words
 
+}
 
 
 export function plotDataloaded(_data){
   
   this.data.oridata = _data
 
+  //console.log("data:",_data); 
 
-  let cellList = _data.columns.slice(2) 
+  let cellList = _data.columns.slice(2)
   this.data.oricelllist = _data.columns.slice(2)
   cellList = cellList.slice(0,22) 
   if(cellList.indexOf("P-value") != -1){
@@ -38,17 +52,13 @@ export function plotDataloaded(_data){
     sampleList.push(_data[i][_data.columns[0]])
   }
 
-
   let columns = cellList; 
   this.data.cellList = cellList;
-
   const sampleNames = sampleList;
   this.data.sampleList = sampleList; 
   const changeNames = sampleList;
 
-
-
-  const changeData = [] //全数组矩阵
+  const changeData = [] 
   columns.forEach((arr) =>{
     let temp1 = []
     _data.forEach((d) =>{
@@ -62,34 +72,29 @@ export function plotDataloaded(_data){
   let maxxx = MAXforArr(changeData)
   this.data.maxxx = maxxx 
 
-
   const useData = [] 
   for(let i = 0;i < changeData.length;i++){
     for(let j = 0;j < _data.length;j++){
       const elem = {name:null,data: 0,pValue:0,row: 0,col: 0}
       elem.name = columns[i] 
       elem.data = changeData[i][j] 
-      //elem.pValue = changeData[22][j] 
       elem.row = i + 1 
       elem.col = j + 1 
       useData.push(elem)
     }
   }
-  console.log("useData:",useData) //1343 = 17*79
+
   
 
   this.data.plotSize = [250,500];
   this.data.labelFontSize = 12;
   this.data.tickFontSize = 14;
-  
 
   let newArr = _data;
-
   newArr.map(function(arr){return delete arr.method})
   
 
   let newData =  dataHandler(newArr) 
-
   let testrange0 = MINforArr(newData.result)
   let testrange1 = MAXforArr(newData.result)
 
@@ -98,8 +103,8 @@ export function plotDataloaded(_data){
   newData.means = newData.means.slice(0,22)
   
 
-  let cout1 = getfixed(testrange0) //<0 //需要保留的位数
-  let cout2 = getfixed(testrange1) //>0 //需要保留的位数
+  let cout1 = getfixed(testrange0) 
+  let cout2 = getfixed(testrange1)
 
   if(testrange0<0){
     let range0 = -(Math.abs(testrange0) + 5/(10 ** (cout1+1)))
@@ -118,7 +123,7 @@ export function plotDataloaded(_data){
 
 
   const colors = ["#FCE4EC"]; 
-  let valueRange = [(range0-0.1).toFixed(1),(range1+0.1).toFixed(1)]; 
+  let valueRange = [range0.toFixed(1),(range1+0.1).toFixed(1)];
 
 
   this.data.columns = newData.columns; 
@@ -127,10 +132,8 @@ export function plotDataloaded(_data){
 
 
 
-
   const categoryKey = _data.columns[0]; 
   const categories = sampleList
-
   const classifications = cellList
   const result = {};
   let colorMap = {}
@@ -165,12 +168,14 @@ export function plotDataloaded(_data){
   _data.forEach(d => {
     classifications.forEach((classification,k) => {
       d[classification]=="NA"? d[classification]=0:null
-      result[classification].push([d[categoryKey], Math.abs(parseFloat(d[classification]))/sumMap[d[categoryKey]]]); //这里除以和
+      result[classification].push([d[categoryKey], Math.abs(parseFloat(d[classification]))/sumMap[d[categoryKey]]]); 
     });
   });
+
   this.data.gridPlotWidth = 10;
   this.data.gridPlotheight = 12;
   this.data.stackedWidth = sampleList.length*this.data.gridPlotWidth
+
   return {_data,sampleNames,columns,useData,changeNames,boxdata:{ values: newData.result,means: newData.means,outliers:[], categories: newData.columns },result, categories, classifications, colorMap, stackescolors}
 
 }
@@ -186,7 +191,6 @@ export function showAll(_data,key){
   if(cellList.indexOf("P-value") != -1){
     cellList.splice(cellList.indexOf("P-value"),1)
   }
-
 
   let sampleList = []
   for(let i = 0;i < _data.length;i++){
@@ -240,8 +244,9 @@ export function showAll(_data,key){
   let testrange0 = MINforArr(newData.result)
   let testrange1 = MAXforArr(newData.result)
 
-  let cout1 = getfixed(testrange0) //<0 //需要保留的位数
-  let cout2 = getfixed(testrange1) //>0 //需要保留的位数
+  let cout1 = getfixed(testrange0)
+  let cout2 = getfixed(testrange1)
+
 
   if(testrange0<0){
     let range0 = -(Math.abs(testrange0) + 5/(10 ** (cout1+1)))
@@ -257,8 +262,10 @@ export function showAll(_data,key){
   testrange1<0 ? (range1 = -(Math.abs(testrange1) + 15/(10 ** (cout2+1)))):null
 
 
-  const colors = ["#FCE4EC"]; //boxplot的颜色
-  let valueRange = [range0.toFixed(1),(range1+0.1).toFixed(1)]; //boxplot value range
+
+
+  const colors = ["#FCE4EC"]; 
+  let valueRange = [range0.toFixed(1),(range1+0.1).toFixed(1)]; 
 
   newConfig["columns"] = newData.columns
   newConfig["colors"] = colors
@@ -303,7 +310,7 @@ export function showAll(_data,key){
   _data.forEach(d => {
     classifications.forEach((classification,k) => {
       d[classification]=="NA"? d[classification]=0:null
-      result[classification].push([d[categoryKey], Math.abs(parseFloat(d[classification]))/sumMap[d[categoryKey]]]); //这里除以和
+      result[classification].push([d[categoryKey], Math.abs(parseFloat(d[classification]))/sumMap[d[categoryKey]]]); 
     });
   });
 
@@ -331,26 +338,15 @@ export function showAll(_data,key){
 
 export function clinicalDataloaded(_data){
 
-
   const addNames = this.data.sampleList
   this.data.addNames = addNames
-  
-
 
   let tempResult = mapCNlist(_data[0])
-
   let c_indexList = tempResult["c_"]
   let n_indexList = tempResult["n_"]
-  let clinicalIndexes = aryJoinAry(c_indexList, n_indexList) //混合之后的临床指标
-
-
-
-
+  let clinicalIndexes = aryJoinAry(c_indexList, n_indexList) 
 
   let addName = clinicalIndexes
-
-
-
   let sortaddName = clinicalIndexes
   this.data.sortaddName = sortaddName
 
@@ -361,8 +357,6 @@ export function clinicalDataloaded(_data){
       ditem == item? (cindexes.push(dindex)):null
     });
   })
-
-
 
   function mapClinicalIndex(arr,cindexes){
     let newArr = []
@@ -381,18 +375,17 @@ export function clinicalDataloaded(_data){
   let clinicalSamples = _data.map(k=>k[tg])
 
   let addData = []
+  let newlist = [] //new sample list
   for(let i = 0;i < addNames.length;i++){
-    let index = clinicalSamples.indexOf(addNames[i]) 
+    let index = clinicalSamples.indexOf(addNames[i])
     if(index != -1){ 
       addData.push(_data[index])
+      newlist.push(this.data.sampleList[i])
     }
   }
-
-
+  this.data.newlist = newlist
 
   addData = mapClinicalIndex(addData,cindexes).slice(0)
-
-
 
   var newArr = []
   for(let i = 0;i < addData.length;i++){ 
@@ -405,37 +398,27 @@ export function clinicalDataloaded(_data){
     }
   }
 
-  
-
   let legendType = {} 
   let tempNum = {}
   addName.forEach((item,index)=>{
     legendType[item] = []
     tempNum[item] = []
-    nMCatagory(addData,legendType[item],index)
+    nMCatagory(addData,legendType[item],index) 
     legendType[item] = legendType[item].slice(0).sort()
     legendType[item].unshift("NA")
     legendType[item] = Array.from(new Set(legendType[item]))
   })
-
   this.data.legendType = legendType
-
-
-
-
-
 
   addName.forEach((item,index)=>{
     item.substring(0,2)=="n_"? (tempNum[item] = tempNum[item].slice(1)[tempNum[item].length-1]):null
   });
 
-
   let heatmapLoc = {} 
   addName.forEach((item,index)=>{
   heatmapLoc[item] = []
-    rowColumn(addData,heatmapLoc[item],index,index+23,item,legendType) // 空数据集 addData的第几列 heatmap中的位置
+    rowColumn(addData,heatmapLoc[item],index,index+23,item,legendType) 
   })
-
   
   this.data.heatmapLoc = heatmapLoc
                   
@@ -447,33 +430,20 @@ export function clinicalDataloaded(_data){
   })
 
   this.data.legendLoc = legendLoc
-
-
-
-  let x = TextSize.measuredTextSize("test", 8).width;
-
-
-
   
   let ppp = getfixed(this.data.maxxx)
-
   let textmaxxx = this.data.maxxx + 5/(10 ** (ppp+1))
-
   this.data.textmaxxx = textmaxxx.toFixed(1)
 
-
-  
-  
-
-  let bgendColor = "#00479a" //heatmap legend的颜色 <0
-  let bgstartColor = 	"#dbdbdb"; //heatmap legend的颜色 中间的颜色
-  let gbstartColor = "#dbdbdb" // heatmap legend的颜色 中间的颜色
-  let gbendColor = "#FF0000"//heatmap legend的颜色 >0
+  //"#FF003C" "#EFDAFF" "#EFDAFF" "#004DBE"
+  let bgendColor = "#00479a" 
+  let bgstartColor = 	"#dbdbdb"; 
+  let gbstartColor = "#dbdbdb" 
+  let gbendColor = "#FF0000"
 
   let ageStartColor = "#ee807f";
   let ageEndColor = "#ee2422";
   
-
   let colorScheme =  Oviz.color.schemeGradient(bgstartColor,bgendColor)
   let gbcolorScheme =  Oviz.color.schemeGradient(gbstartColor,gbendColor)
   let ageColorScheme = Oviz.color.ColorSchemeGradient.create(ageStartColor, ageEndColor);
@@ -490,48 +460,33 @@ export function clinicalDataloaded(_data){
   this.data.colorScheme = colorScheme
   this.data.ageColorScheme = ageColorScheme
 
-                    
-
-
 
   let NAlength = NAlen(addName,legendType)
   this.data.NAlength = NAlength
 
-
   let thirdLen = this.data.cellList.length * this.data.gridPlotheight + this.data.cellList.length *15 + 150
   this.data.thirdLen = thirdLen
   
-
-
   let agestr = "n_age"
   let row = _data[0].indexOf(agestr)
-
   let ageData = []
   _data.forEach((item,index) => {
     index!=0? ageData.push(item[row]*1):null
   });
 
-
-
   let ageMax = Math.max(...ageData)
   let ageMin = Math.min(...ageData)
 
-
   let ageRow = clinicalIndexes.indexOf(agestr)
-
 
   this.data.ageMax = ageMax;
   this.data.ageMin = ageMin;
   this.data.ageRow = ageRow;
 
-
-  n_indexList
-
   let n_row = []
   let n_data = {}
   n_indexList.forEach((item,index)=>{
     n_row.push(_data[0].indexOf(item))
-
   })
 
 
@@ -542,8 +497,6 @@ export function clinicalDataloaded(_data){
     });
   })
 
-
-
   let n_crow = []
   n_indexList.forEach((item,index)=>{
     n_crow.push(clinicalIndexes.indexOf(item))
@@ -551,13 +504,11 @@ export function clinicalDataloaded(_data){
 
   let n_legendData = []
   n_indexList.forEach((item,index)=>{
-    let min = Math.min(...n_data[item]) + ""
-    let max = Math.max(...n_data[item]) + ""
-    min == max? (max=="0"? (min = " ",max = " "):null):null
+    let min = Math.min(...n_data[item]).toFixed(1) + ""
+    let max = Math.max(...n_data[item]).toFixed(1) + ""
+    min == max? (max=="0.0"? (min = " ",max = " "):null):null
     n_legendData.push({label:item,row:n_crow[index],min: min,max: max})
   })
-
-
 
   this.data.n_legendData = n_legendData
 
@@ -567,14 +518,211 @@ export function clinicalDataloaded(_data){
 
   this.data.oriClidata = _data
   this.data.clinicalSamples = clinicalSamples
-    
+  
+  let temptips = []
+  sortaddName.forEach((item,index)=>{
+    legendLoc[item].forEach((d,i) => {
+      let tlen = (180-NAlength) / (d.num-1)
+      this.data.tlen = tlen
+      if(TextSize.measuredTextSize(d.data, 8).width>tlen*6/7){
+        temptips.push(d.data)
+      }
+    });
+  })
+  let tipsrow = temptips.length
+  this.data.tipsrow = tipsrow
+
+  if(this.data.sampleList.length!=this.data.newlist.length){
+    let config = recheck(this.data.oridata,this.data.newlist)
+              this.data.result.stackescolors = config["result"].stackescolors
+              this.data.cellList = config["cellList"]
+              this.data.result.useData = config["result"].useData
+              this.data.sampleList = config["sampleList"]
+              this.data.gridPlotWidth = config["gridPlotWidth"]
+              this.data.result.result = config["result"].result
+              this.data.result.classifications =  config["result"].classifications
+              this.data.result.colorMap = config["result"].colorMap
+              this.data.result.columns = config["result"].columns
+              this.data.result.boxdata = config["result"].boxdata
+  }
+
 
   return {sortaddName,newArr,addData,addName}
 
 }
 
-export function switchStyle(v){
 
+export function recheck(_data,newlist){
+
+  //newlist this.data.newlist
+  //_data this.data.oridata
+  let recheckData = []
+
+  for(let i = 0;i < this.data.sampleList.length;i++){
+    let index = newlist.indexOf(this.data.sampleList[i])
+    if(index != -1){
+      recheckData.push(_data[index])
+    }
+  }
+
+  _data = recheckData
+
+  let newConfig = {}
+  let cellList = []
+  let key = 1
+  if(key==-1){
+    cellList = _data.columns.slice(2)
+  }else if(key==1){
+    cellList = _data.columns.slice(2,22)
+  }
+  if(cellList.indexOf("P-value") != -1){
+    cellList.splice(cellList.indexOf("P-value"),1)
+  }
+
+  let sampleList = []
+  for(let i = 0;i < _data.length;i++){
+    sampleList.push(_data[i][_data.columns[0]])
+  }
+
+  let columns = cellList; 
+  newConfig["cellList"] = cellList;
+  const sampleNames = sampleList;
+  newConfig["sampleList"] = sampleList
+  const changeNames = sampleList;
+  const changeData = []
+  columns.forEach((arr) =>{
+    let temp1 = []
+    _data.forEach((d) =>{
+      d[arr]+"" == "NA"? d[arr]=0:null
+      temp1.push(parseFloat(d[arr]))
+    });
+    changeData.push(temp1)
+  });
+
+  let maxxx = MAXforArr(changeData)
+  newConfig["maxxx"] =  maxxx
+
+  const useData = [] 
+  for(let i = 0;i < changeData.length;i++){
+    for(let j = 0;j < _data.length;j++){
+      const elem = {name:null,data: 0,pValue:0,row: 0,col: 0}
+      elem.name = columns[i]
+      elem.data = changeData[i][j]
+      elem.row = i + 1 
+      elem.col = j + 1 
+      useData.push(elem)
+    }
+  }
+  
+
+  let plotSize = [250,500];
+  newConfig["plotSize"] = plotSize
+  newConfig["labelFontSize"] = 12
+  newConfig["tickFontSize"] = 14
+  let newArr = _data;
+  newArr.map(function(arr){return delete arr.method})
+  let newData =  dataHandler(newArr)
+  if(key==1){
+    newData.columns = newData.columns.slice(0,22)
+    newData.result = newData.result.slice(0,22)
+    newData.means = newData.means.slice(0,22)
+  }
+  
+  let testrange0 = MINforArr(newData.result)
+  let testrange1 = MAXforArr(newData.result)
+
+  let cout1 = getfixed(testrange0) 
+  let cout2 = getfixed(testrange1) 
+
+  if(testrange0<0){
+    let range0 = -(Math.abs(testrange0) + 5/(10 ** (cout1+1)))
+    if(testrange1<0){
+      let range1 = -(Math.abs(testrange1) + 5/(10 ** (cout2+1)))
+    }
+  }
+  
+  let range0 = testrange0 - 5/(10 ** (cout1+1))
+  testrange0 == 0? range0 = 0:null
+  let range1 = testrange1 + 5/(10 ** (cout2+1))
+  testrange0<0 ? (range0 = -(Math.abs(testrange0) + 5/(10 ** (cout1+1)))):null
+  testrange1<0 ? (range1 = -(Math.abs(testrange1) + 15/(10 ** (cout2+1)))):null
+
+
+
+
+  const colors = ["#FCE4EC"]; 
+  let valueRange = [(range0-0.1).toFixed(1),(range1+0.1).toFixed(1)]; 
+
+  newConfig["columns"] = newData.columns
+  newConfig["colors"] = colors
+  newConfig["valueRange"] = valueRange 
+
+
+
+  const categoryKey = _data.columns[0]; 
+  const categories = sampleList
+  const classifications = cellList
+
+  const result = {};
+  let colorMap = {}
+  classifications.forEach((item,i)=>{
+    colorMap[item] = []
+  })
+  classifications.forEach((item,i)=>{
+    colorMap[item] = mapColor(item)
+  })
+                    
+
+  const stackescolors = Object.values(colorMap);
+  classifications.forEach((classification, i) => {
+    result[classification] = [];
+  });
+  
+  let sumMap = new Map()
+  const sum = [];
+  _data.forEach(row => {
+    let count = 0,key,value;
+    for ([key, value] of Object.entries(row).slice(1)) { 
+      value == "NA"? value = 0:null
+      if(key != categoryKey) {
+        count += Math.abs(parseFloat(value)); 
+      }
+    }
+    sumMap[row[categoryKey]] = count;
+    sum.push(count)
+  });
+
+
+  _data.forEach(d => {
+    classifications.forEach((classification,k) => {
+      d[classification]=="NA"? d[classification]=0:null
+      result[classification].push([d[categoryKey], Math.abs(parseFloat(d[classification]))/sumMap[d[categoryKey]]]); 
+    });
+  });
+
+  newConfig["gridPlotWidth"] = 10
+  newConfig["gridPlotheight"] = 12
+  newConfig["stackedWidth"] = sampleList.length*newConfig["gridPlotheight"]
+  newConfig["_data"] = _data
+  newConfig["result"] = {}
+  newConfig["result"]["sampleNames"] = sampleNames
+  newConfig["result"]["columns"] = columns
+  newConfig["result"]["useData"] = useData
+  newConfig["result"]["changeNames"] = changeNames
+  newConfig["result"]["boxdata"] = {values: newData.result,means: newData.means,outliers:[], categories: newData.columns }
+  newConfig["result"]["result"] = result
+  newConfig["result"]["categories"] = categories
+  newConfig["result"]["classifications"] = classifications
+  newConfig["result"]["colorMap"] = colorMap
+  newConfig["result"]["stackescolors"] = stackescolors
+
+  return newConfig
+
+
+}
+
+
+export function switchStyle(v){
 
   if(v.data.legendStyle){
     let newsortaddName = []
@@ -586,9 +734,7 @@ export function switchStyle(v){
       });
     })
   
-
     newsortaddName = Array.from(new Set(newsortaddName))
-
   
     let newcindexes = []
   
@@ -597,140 +743,6 @@ export function switchStyle(v){
         ditem == item? (newcindexes.push(dindex)):null
       });
     })
-
-  
-    function mapClinicalIndex(arr,cindexes){
-      let newArr = []
-      arr.forEach((item,index)=>{
-        let newitem = []
-          cindexes.forEach(k => {
-            newitem.push(item[k])
-          });
-        newArr.push(newitem)
-      })
-      return newArr
-    }
-
-    let newaddData = []
-    for(let i = 0;i < v.data.sampleList.length;i++){
-      let index = v.data.clinicalSamples.indexOf(v.data.sampleList[i]) //对应sample name
-      if(index != -1){ //如果匹配上了
-        newaddData.push(v.data.oriClidata[index])
-      }
-    }
-
-  
-    newaddData = mapClinicalIndex(newaddData,newcindexes).slice(0)
-
-  
-    var newnewArr = []
-
-    for(let i = 0;i < newaddData.length;i++){ 
-      for(let j = 0; j < newsortaddName.length;j++){ 
-        const elem = {data:null,row:0,col:0}
-        elem.data = newaddData[i][j]
-        elem.row = 23 + j 
-        elem.col = i + 1
-        newnewArr.push(elem)
-      }
-    }
-
-  
-  
-
-    let newlegendType = {} 
-    let newtempNum = {}
-    newsortaddName.forEach((item,index)=>{
-      newlegendType[item] = []
-      newtempNum[item] = []
-      nMCatagory(newaddData,newlegendType[item],index)
-      newlegendType[item] = newlegendType[item].slice(0).sort()
-      newlegendType[item].unshift("NA")
-      newlegendType[item] = Array.from(new Set(newlegendType[item]))
-    })
-
-
-  
-    newsortaddName.forEach((item,index)=>{
-      item.substring(0,2)=="n_"? (newtempNum[item] = newtempNum[item].slice(1)[newtempNum[item].length-1]):null
-    });
-
-  
-    let newheatmapLoc = {} 
-    newsortaddName.forEach((item,index)=>{
-    newheatmapLoc[item] = []
-        rowColumn(newaddData,newheatmapLoc[item],index,index+23,item,newlegendType) // 空数据集 addData的第几列 heatmap中的位置
-    })
-
-  
-    let newlegendLoc = {}
-    newsortaddName.forEach((item,index)=>{
-      newlegendLoc[item] = []
-      showLegend(newlegendType[item],newlegendLoc[item],index,item.substring(0,2),NAlen(newsortaddName,newlegendType))
-    })
-
-  
-    let newNAlength = NAlen(newsortaddName,newlegendType)
-
-  
-    let newtempResult = mapCNlist(newsortaddName)
-
-    let newc_indexList = newtempResult["c_"]
-    let newn_indexList = newtempResult["n_"]
-  
-
-    let newn_row = []
-    let newn_data = {}
-    newn_indexList.forEach((item,index)=>{
-      newn_row.push(v.data.oriClidata[0].indexOf(item))
-      //n_data[item] = []
-    })
-
-  
-    newn_row.forEach((item,index)=>{
-      newn_data[newn_indexList[index]] = []
-      v.data.oriClidata.forEach((ditem,dindex) => {
-        dindex!=0? (isNaN(ditem[item]*1)? newn_data[newn_indexList[index]].push(0):newn_data[newn_indexList[index]].push(ditem[item]*1)):null
-      });
-    })
-  
-
-  
-    let newn_crow = []
-    newn_indexList.forEach((item,index)=>{
-      newn_crow.push(newsortaddName.indexOf(item))
-    })
-  
-    let newn_legendData = []
-    newn_indexList.forEach((item,index)=>{
-      let min = Math.min(...newn_data[item]) + ""
-      let max = Math.max(...newn_data[item]) + ""
-      min == max? (max=="0"? (min = " ",max = " "):null):null
-      newn_legendData.push({label:item,row:newn_crow[index],min: min,max: max})
-    })
-
-    v.data.legendLoc = newlegendLoc
-    v.data.legendType = newlegendType
-    v.data.n_legendData = newn_legendData
-    v.data["additional"]["sortaddName"] = newsortaddName
-    v.data.heatmapLoc = newheatmapLoc
-
-  
-  }
-  else{
-    let newsortaddName = []
-    newsortaddName = v.data.sortaddName
-    newsortaddName = Array.from(new Set(newsortaddName))
-
-  
-    let newcindexes = []
-  
-    newsortaddName.forEach((item,index)=>{
-      v.data.oriClidata[0].forEach((ditem,dindex) => {
-        ditem == item? (newcindexes.push(dindex)):null
-      });
-    })
-
   
     function mapClinicalIndex(arr,cindexes){
       let newArr = []
@@ -751,15 +763,12 @@ export function switchStyle(v){
         newaddData.push(v.data.oriClidata[index])
       }
     }
-
   
     newaddData = mapClinicalIndex(newaddData,newcindexes).slice(0)
-
   
     var newnewArr = []
-
     for(let i = 0;i < newaddData.length;i++){ 
-      for(let j = 0; j < newsortaddName.length;j++){ 
+      for(let j = 0; j < newsortaddName.length;j++){
         const elem = {data:null,row:0,col:0}
         elem.data = newaddData[i][j]
         elem.row = 23 + j 
@@ -767,10 +776,7 @@ export function switchStyle(v){
         newnewArr.push(elem)
       }
     }
-
   
-  
-
     let newlegendType = {} 
     let newtempNum = {}
     newsortaddName.forEach((item,index)=>{
@@ -781,44 +787,34 @@ export function switchStyle(v){
       newlegendType[item].unshift("NA")
       newlegendType[item] = Array.from(new Set(newlegendType[item]))
     })
-
-
+  
     newsortaddName.forEach((item,index)=>{
       item.substring(0,2)=="n_"? (newtempNum[item] = newtempNum[item].slice(1)[newtempNum[item].length-1]):null
     });
-
   
     let newheatmapLoc = {} 
     newsortaddName.forEach((item,index)=>{
     newheatmapLoc[item] = []
-        rowColumn(newaddData,newheatmapLoc[item],index,index+23,item,newlegendType) // 空数据集 addData的第几列 heatmap中的位置
+        rowColumn(newaddData,newheatmapLoc[item],index,index+23,item,newlegendType)
     })
-
   
     let newlegendLoc = {}
     newsortaddName.forEach((item,index)=>{
       newlegendLoc[item] = []
       showLegend(newlegendType[item],newlegendLoc[item],index,item.substring(0,2),NAlen(newsortaddName,newlegendType))
     })
-
   
     let newNAlength = NAlen(newsortaddName,newlegendType)
-
   
     let newtempResult = mapCNlist(newsortaddName)
-
     let newc_indexList = newtempResult["c_"]
     let newn_indexList = newtempResult["n_"]
   
-  
-
     let newn_row = []
     let newn_data = {}
     newn_indexList.forEach((item,index)=>{
       newn_row.push(v.data.oriClidata[0].indexOf(item))
-      //n_data[item] = []
     })
-
   
     newn_row.forEach((item,index)=>{
       newn_data[newn_indexList[index]] = []
@@ -827,7 +823,6 @@ export function switchStyle(v){
       });
     })
   
-
   
     let newn_crow = []
     newn_indexList.forEach((item,index)=>{
@@ -836,8 +831,121 @@ export function switchStyle(v){
   
     let newn_legendData = []
     newn_indexList.forEach((item,index)=>{
-      let min = Math.min(...newn_data[item]) + ""
-      let max = Math.max(...newn_data[item]) + ""
+      let min = Math.min(...newn_data[item]).toFixed(0) + ""
+      let max = Math.max(...newn_data[item]).toFixed(0) + ""
+      min == max? (max=="0"? (min = " ",max = " "):null):null
+      newn_legendData.push({label:item,row:newn_crow[index],min: min,max: max})
+    })
+
+    v.data.legendLoc = newlegendLoc
+    v.data.legendType = newlegendType
+    v.data.n_legendData = newn_legendData
+    v.data["additional"]["sortaddName"] = newsortaddName
+    v.data.heatmapLoc = newheatmapLoc
+
+  
+  }
+  else{
+    let newsortaddName = []
+    newsortaddName = v.data.sortaddName
+    newsortaddName = Array.from(new Set(newsortaddName))
+  
+    let newcindexes = []
+  
+    newsortaddName.forEach((item,index)=>{
+      v.data.oriClidata[0].forEach((ditem,dindex) => {
+        ditem == item? (newcindexes.push(dindex)):null
+      });
+    })
+  
+    function mapClinicalIndex(arr,cindexes){
+      let newArr = []
+      arr.forEach((item,index)=>{
+        let newitem = []
+          cindexes.forEach(k => {
+            newitem.push(item[k])
+          });
+        newArr.push(newitem)
+      })
+      return newArr
+    }
+    
+    let newaddData = []
+    for(let i = 0;i < v.data.sampleList.length;i++){
+      let index = v.data.clinicalSamples.indexOf(v.data.sampleList[i])
+      if(index != -1){
+        newaddData.push(v.data.oriClidata[index])
+      }
+    }
+  
+    newaddData = mapClinicalIndex(newaddData,newcindexes).slice(0)
+  
+    var newnewArr = []
+    for(let i = 0;i < newaddData.length;i++){ 
+      for(let j = 0; j < newsortaddName.length;j++){ 
+        const elem = {data:null,row:0,col:0}
+        elem.data = newaddData[i][j]
+        elem.row = 23 + j 
+        elem.col = i + 1
+        newnewArr.push(elem)
+      }
+    }
+  
+    let newlegendType = {} 
+    let newtempNum = {}
+    newsortaddName.forEach((item,index)=>{
+      newlegendType[item] = []
+      newtempNum[item] = []
+      nMCatagory(newaddData,newlegendType[item],index) 
+      newlegendType[item] = newlegendType[item].slice(0).sort()
+      newlegendType[item].unshift("NA")
+      newlegendType[item] = Array.from(new Set(newlegendType[item]))
+    })
+  
+    newsortaddName.forEach((item,index)=>{
+      item.substring(0,2)=="n_"? (newtempNum[item] = newtempNum[item].slice(1)[newtempNum[item].length-1]):null
+    });
+  
+    let newheatmapLoc = {} 
+    newsortaddName.forEach((item,index)=>{
+    newheatmapLoc[item] = []
+        rowColumn(newaddData,newheatmapLoc[item],index,index+23,item,newlegendType)
+    })
+  
+    let newlegendLoc = {}
+    newsortaddName.forEach((item,index)=>{
+      newlegendLoc[item] = []
+      showLegend(newlegendType[item],newlegendLoc[item],index,item.substring(0,2),NAlen(newsortaddName,newlegendType))
+    })
+  
+    let newNAlength = NAlen(newsortaddName,newlegendType)
+  
+    let newtempResult = mapCNlist(newsortaddName)
+    let newc_indexList = newtempResult["c_"]
+    let newn_indexList = newtempResult["n_"]
+  
+    let newn_row = []
+    let newn_data = {}
+    newn_indexList.forEach((item,index)=>{
+      newn_row.push(v.data.oriClidata[0].indexOf(item))
+    })
+  
+    newn_row.forEach((item,index)=>{
+      newn_data[newn_indexList[index]] = []
+      v.data.oriClidata.forEach((ditem,dindex) => {
+        dindex!=0? (isNaN(ditem[item]*1)? newn_data[newn_indexList[index]].push(0):newn_data[newn_indexList[index]].push(ditem[item]*1)):null
+      });
+    })
+  
+    let newn_crow = []
+    newn_indexList.forEach((item,index)=>{
+      newn_crow.push(newsortaddName.indexOf(item))
+    })
+  
+    let newn_legendData = []
+    newn_indexList.forEach((item,index)=>{
+      let min = Math.min(...newn_data[item]).toFixed(0) + ""
+      let max = Math.max(...newn_data[item]).toFixed(0) + ""
       min == max? (max=="0"? (min = " ",max = " "):null):null
       newn_legendData.push({label:item,row:newn_crow[index],min: min,max: max})
     })
@@ -853,15 +961,13 @@ export function switchStyle(v){
 
 export function getfixed(num){
   let textnum = num+""
-  console.log("",textnum)
-  console.log("",textnum.split(".")[0])
   let final
-  let rep=/[\.]/; //判断是否有小数点
+  let rep=/[\.]/; 
   rep.test(textnum)? (final = textnum.split(".")[1].lastIndexOf("0")+2):final = 2
   return final
 }
 
-//寻找二维数组最大值
+
 export function MAXforArr(arr){
   let result = []
   let result2 = []
@@ -874,7 +980,7 @@ export function MAXforArr(arr){
   return final
 }
 
-//寻找二维数组最小值
+
 export function MINforArr(arr){
   let result2 = []
   arr.forEach((item,index)=>{
@@ -884,45 +990,33 @@ export function MINforArr(arr){
   return final
 }
 
-//配置heatmap的颜色
+
 export function heatmapColormap(item,cate,legendType,newColors = {}){
-  //item: c_ n_
-  //cate: 种类
+
   let elemcolor = []
-  //console.log("cate:",cate)
+
   newColors[item] = []
-  if(item.substring(0,2)=="c_"){ //这里只配置c_de颜色
-    //legendType[item]
+  if(item.substring(0,2)=="c_"){ 
     let colors = colorMap(legendType[item])
     legendType[item].forEach((d,n) => {
       newColors[item].push({type:d,color:colors[n]})
     });
-    //console.log(newColors)
     newColors[item].forEach((k,m) => {
-      //console.log("k:",k.type)
       if(cate == k.type){
         elemcolor.push(k.color)
-        //console.log(elemcolor)
       }
     });
   }
-  // else if(item.substring(0,2)=="n_"){
-  //   legendType[item].forEach((d,n) => {
-  //     d == "NA"? elemcolor.push("#C0C0C0"):null
-  //   })
-  // }
   return elemcolor
 
 }
-//配置legend颜色
+
 export function colorMap(arr){
   let color1 = ["#C0C0C0"]
   let color2 = ["#C0C0C0","#7d9fee"]
-  //let color3 = ["#C0C0C0","#7d9fee","#ee7db5"] //yuanlai
   let color3 = ["#C0C0C0","#cc4f7b","#314893"]
-  //let color32 = ["#C0C0C0","#ee937d","#a67dee"]
   let color4 = ["#C0C0C0","#ee937d","#ee7db5","#7d9fee"]
-  let color5 = ["#C0C0C0","#86e5e9","#ee7e7d","#cc4f7b","#314893"] //
+  let color5 = ["#C0C0C0","#86e5e9","#ee7e7d","#cc4f7b","#314893"]
   let color6 = ["#C0C0C0","#eed97d","#ee937d","#ee7db5","#a67dee","#7d9fee"]
   let color7 = ["#C0C0C0","#eed97d","#ee937d","#ee7db5","#a67dee","#7d9fee","#7deea4"]
   let color8 = ["#C0C0C0","#eed97d","#ee937d","#ee7db5","#a67dee","#7d9fee","#C0C0C0","#eed97d"]
@@ -931,52 +1025,52 @@ export function colorMap(arr){
   let color11 = ["#C0C0C0","#eed97d","#ee937d","#ee7db5","#a67dee","#7d9fee","#C0C0C0","#eed97d","#ee937d","#ee7db5","#a67dee",]
   let color12 = ["#C0C0C0","#eed97d","#ee937d","#ee7db5","#a67dee","#7d9fee","#C0C0C0","#eed97d","#ee937d","#ee7db5","#a67dee","#7d9fee"]
   let color13 = ["#C0C0C0","#eed97d","#ee937d","#ee7db5","#a67dee","#7d9fee","#C0C0C0","#eed97d","#ee937d","#ee7db5","#a67dee","#7d9fee","#7deea4"]
-  arr.length>7? console.log("超出颜色配置范围!!",arr.length):null
-  switch(arr.length){
-    case 1: return color1; break;
-    case 2: return color2; break;
-    case 3: return color3; break;
-    case 4: return color4; break;
-    case 5: return color5; break;
-    case 6: return color6; break;
-    case 7: return color7; break;
-    case 8: return color8; break;
-    case 9: return color9; break;
-    case 10: return color10; break;
-    case 11: return color11; break;
-    case 12: return color12; break;
-    case 13: return color13; break;
+  if(arr.length<13){
+    switch(arr.length){
+      case 1: return color1; break;
+      case 2: return color2; break;
+      case 3: return color3; break;
+      case 4: return color4; break;
+      case 5: return color5; break;
+      case 6: return color6; break;
+      case 7: return color7; break;
+      case 8: return color8; break;
+      case 9: return color9; break;
+      case 10: return color10; break;
+      case 11: return color11; break;
+      case 12: return color12; break;
+      case 13: return color13; break;
+    }
+  }
+  else{
+    const colorMap = Oviz.color.schemeCategory("light", arr).colors;
+    const colors = Object.values(colorMap);
+    return colors
   }
   
 }
 
 export function NAlen(addName,legendType){
-  //寻找c_的最大值
   let len = []
   addName.forEach((item,index)=>{
     item.substring(0,2) == "c_"? len.push(legendType[item].length):null
   })
-  //console.log("",len)
   let length = 180 / Math.max(...len)
   return length
 }
 
-//生成图例的格子
+
 export function showLegend(arr1,arr2,n,sign,base){
-  //arr1是该指标的种类
-  //生成的用于画图的lengd数据
-  //n是在图例的多少行
-  //sign判断c_还是n_
   if(sign == "c_"){
     for(let i = 0;i < arr1.length;i++){
       const elem = {data:null,row:0,col:0,colors:null,num:0,x:0,textx:0}
       let colors = []
       let color
-      arr1.length > 20? color = "blue":(colors = colorMap(arr1),color = colors[i]) //这里在限制年龄
+      arr1.length > 20? color = "blue":(colors = colorMap(arr1),color = colors[i])
       elem.data = arr1[i]
       elem.row = n
       elem.col = i + 1
-      elem.colors = color //配置颜色
+      elem.colors = color 
       elem.num = arr1.length
       i == 0? elem.textx = base/2 :((arr1.length==2&&i == 1)? elem.textx = base + 1 + (180-base)/(arr1.length-1)*(i)*1/4:elem.textx=18)
       i == 0? elem.x = 0:elem.x = base + (180-base)/(arr1.length-1)*(i-1) +1
@@ -990,7 +1084,7 @@ export function showLegend(arr1,arr2,n,sign,base){
       elem.data = tempArr[i]
       elem.row = n
       elem.col = i + 1
-      tempArr[i]== "NA"? elem.colors = "#C0C0C0":null //配置颜色
+      tempArr[i]== "NA"? elem.colors = "#C0C0C0":null
       elem.num = tempArr.length
       i == 0? elem.textx = base/2 :elem.textx = base + 1 + (180-base)/(tempArr.length-1)*1/2*1/2
       i == 0? elem.x = 0:elem.x = base + (180-base)/(tempArr.length-1)*(i-1) + 1
@@ -1000,9 +1094,7 @@ export function showLegend(arr1,arr2,n,sign,base){
     
 }
 
-//
-export function rowColumn (addData,arr,n,r,item,legendType){ //算左边的图例
-  //addData的第几列 索引 r第几行
+export function rowColumn (addData,arr,n,r,item,legendType){
   let colorhp = []
   for(let i = 0; i < addData.length;i++){
     const elem = {data:null,row:0,col:0,color:null}
@@ -1011,16 +1103,14 @@ export function rowColumn (addData,arr,n,r,item,legendType){ //算左边的图�
     elem.row = r
     elem.col = i + 1
     elem.color = heatmapColormap(item,addData[i][n],legendType)[0]
-    //console.log(elem.color)
     arr.push(elem)
   }
 }
 
 
-//获得临床指标对应的数据对应的种类 主要和legend有关
 export function nMCatagory(addData,arr2,n){
     let arr1 = []
-    arr2.push("NA") //强制在数据列表内增加NA
+    arr2.push("NA")
     for(let i = 0;i < addData.length;i++){
       arr1.push(addData[i][n])
       if(arr1[i] != "NA"){
@@ -1029,33 +1119,27 @@ export function nMCatagory(addData,arr2,n){
         }
       }
     }
-    arr2 = Array.from(new Set(arr2)) //去重+重排序
+    arr2 = Array.from(new Set(arr2))
 }
 
 
-//混合两个数组 c_ n_ c_ ^
 export function aryJoinAry(ary,ary2){
   let minLength;
   let itemAry=[];
   let itemArys=[];
-  //先拿到两个数组中长度较短的那个数组的长度
   if(ary.length>ary2.length){
     minLength=ary2.length;
   }
   else{
     minLength=ary.length;
   }
-  //将两个数组中较长的数组记录下来
   let longAry=arguments[0].length>arguments[1].length?arguments[0]:arguments[1];
-  //循环范围为较短的那个数组的长度
   for (let i = 0; i < minLength; i++) {
-    //将数组放入临时数组中
     itemAry.push(ary[i]);
     itemAry.push(ary2[i])
   }
   itemArys.push(itemAry.concat(longAry.slice(minLength)))
 
-  //itemAry和多余的新数组拼接起来并返回。
   return itemAry.concat(longAry.slice(minLength));
 }
 
@@ -1386,7 +1470,6 @@ export function mapColor(cell){
 
       "Pericytes":"#9ce27e",
       "mv Endothelial cells":"#b698cd",
-      //"mv Endothelial cells":"#b698cd",
       "ly Endothelial cells":"#b698ac",
 
       "Endothelial cell":"#a977cd",
@@ -1415,49 +1498,37 @@ export function mapColor(cell){
 }
 
 
-//选择方法
+
 export function chooseMethod(chosenMethod,data){
   let afterdata = []
-  console.log("chosenMethod:",chosenMethod);
-  console.log("Data.Bardata:",data);
   chosenMethod.forEach((item,index) => {
       if(item != ""){
           afterdata.push(data[index]);
-          // data.forEach((ditem,dindex) => {
-          //     //添加对应的方法
-          //     afterdata.push(ditem[index]);
-          // });
       }
 
   });
   return afterdata;
 }
 
-//store the top methods
+
 export function viewMethod(methoddata){
   let tmpMethod = []
   tmpMethod.push
 }
 
 export function dataHandler(data){
-  //获取横坐标
   let columns = data.columns.slice(2);
-  //console.log("dataHandler columns:",columns)
   if(columns.indexOf("P-value") != -1){
     columns.splice(columns.indexOf("P-value"),1)
   }
 
-  //存放每个box中的所有特征值
   const result = [];
-  //存放所有中位数
   const means = [];
   columns.forEach((arr) => {
     const temp1 = [];
-    //获取每个column对应的所有值
     data.forEach((d) => {
       temp1.push(parseFloat(d[arr]));
     });
-    //通过内置函数得出每组值的下边缘、下四分位数、中位数、上四分位数、上边缘并存入result数组
     const stat = new Oviz.algo.Statistics(temp1);
     result.push([
       stat.min(),
@@ -1466,7 +1537,6 @@ export function dataHandler(data){
       stat.Q3(),
       stat.max(),
     ]);
-    //中位数存入数组
     means.push(stat.mean());
   });
   return { result: result, means, columns: columns }

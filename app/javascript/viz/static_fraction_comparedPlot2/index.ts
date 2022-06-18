@@ -18,9 +18,7 @@ import { registerDefaultBioInfoComponents } from "crux/dist/element/global";
 
 registerDefaultBioInfoComponents();
 
-export function init(id,path,type,eid,plot_name, vue_name){
-    console.log("comparedPlot start___________!!!")
-    console.log("type:",type)
+export function init(id,path,type,eid,plot_name,vue_name){
     Oviz.visualize({
         el:id,
         template,
@@ -30,7 +28,6 @@ export function init(id,path,type,eid,plot_name, vue_name){
             buttonkey: 1,
             buttonclick(d){
                 this.buttonkey = this.buttonkey + d;
-                console.log("buttonkey",this.buttonkey)
                 this.redraw();
             },
             config:{
@@ -58,7 +55,7 @@ export function init(id,path,type,eid,plot_name, vue_name){
         setup() { 
             console.log("comparedPlot: this.data:",this["_data"]);
             processconfig(this)
-            registerEditorConfig(editorConfig(this,eid),vue_name, plot_name); //如果想要启用editor 请去掉这行代码的注释
+            registerEditorConfig(editorConfig(this,eid), vue_name, plot_name); 
         },
     })
 }

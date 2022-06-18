@@ -37,36 +37,16 @@
                 <div class="index-banner">
                     <div class="container">
                         <h2 class="display-4">
-                            Module
+                            Analysis
                         </h2>
                         <p class="lead mt-2">
-                            Please choose a module below:
+                            Please choose an analysis below:
                         </p>
                     </div>
                 </div>
                 <div class="container-fluid container" id="analyses_list">
                     <div id="accordion">
-                        <!-- <div id="head-for-analysis-list">
-                            <h4 class = "mb-2"> Totally {{analyses.length + 1}} Module(s) available </h4>
-                            <button aria-controls="collapseOne" aria-expanded="true" class="btn btn-link" data-target="#collapseOne" data-toggle="collapse">
-                                Totally {{analyses.length + 1}} Module(s) available
-                            </button></h5> -->
-                        <!-- </div> -->
                         <div class="cols-xs-space cols-sm-space cols-md-space container">
-
-                            <!-- <div class = "row" id = "supervisedSelect" v-if="isConv==true">
-                                <div>
-                                    <h2 class="display-5">
-                                        Submit tasks to supervised or unsupervised analyses:
-                                    </h2>
-                                    <br>
-                                    <input type="radio" class = "btn-check" name="supervise-select" autocomplete="off" id="supervised" value="supervised" v-model="picked_supervised" checked>
-                                    <label for="supervised" class = "btn btn-outline-secondary">Supervised Deconvolution</label>
-                                    <input type="radio" class = "btn-check" name="supervise-select" autocomplete="off" id="unsupervised" value="unsupervised" v-model="picked_supervised">
-                                    <label for="unsupervised" class = "btn btn-outline-secondary">Unsupervised Deconvolution</label>
-
-                                </div>
-                            </div> -->
                             <div class = "row" id="jumpDivStart">
                                 <div class="col-lg-4 mb-4 justify-content-center text-center" v-for="a in displayedAnalyses" :key="a.id" @click="updateApp(a, true)">
                                     <div class="card">
@@ -102,12 +82,12 @@
 
                         <div v-if="step==1" id = "timeline-file" class = "timeline-step" style="vertical-align:center">
                             <img v-bind:src="require('../assets/images/nav-up-pink.png')" style="margin-right: 10px"> 
-                            <i class="fa fa-arrow-right"></i>  <b-btn v-b-modal.submit-helper class = "btn btn-secondary" id = "helper-trigger"> Module Helper </b-btn>
+                            <i class="fa fa-arrow-right"></i>  <b-btn v-b-modal.submit-helper class = "btn btn-secondary" id = "helper-trigger"> Analysis Helper </b-btn>
                         </div>
 
                         <div v-if="step==2" id = "timeline-parameter" class = "timeline-step" style="vertical-align:center">
                             <img v-bind:src="require('../assets/images/timeline-param.png')" style="margin-right: 10px"> 
-                            <i class="fa fa-arrow-right"></i>  <b-btn v-b-modal.submit-helper class = "btn btn-secondary" id = "helper-trigger"> Module Helper </b-btn>
+                            <i class="fa fa-arrow-right"></i>  <b-btn v-b-modal.submit-helper class = "btn btn-secondary" id = "helper-trigger"> Analysis Helper </b-btn>
                         </div>
 
 
@@ -522,7 +502,7 @@
         </b-modal>
 
 
-        <b-modal v-if="started" ref="submit-helper" v-model="showhelper" id = "submit-helper" size="xl" scrollable title="Module Helper" centered @ok="jumpToUpload">
+        <b-modal v-if="started" ref="submit-helper" v-model="showhelper" id = "submit-helper" size="xl" scrollable title="Analysis Helper" centered @ok="jumpToUpload">
             <br>
             <div class = "row justify-content-center container">
                 <div v-html="selected_analysis.rendered_doc" class = "text-left container" style="margin: 50px;">

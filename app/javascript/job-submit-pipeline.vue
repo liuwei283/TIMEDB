@@ -2,17 +2,12 @@
     <!-- eslint-disable max-len -->
     <div class="row my-4" >
         <div v-if="!isLoading">
-            <ul class='list d-none'>
-                <li v-for="a in analyses" :key="a.id" class='list-item'>
-                {{a.id}}: {{a.name}}
-                </li>
-            </ul>
 
             <div class="prepare" v-if="!submitted">
                 <div class="index-banner">
                     <div class="container">
                         <h1 style="color:red;">
-                            TESTING... Do Not Submit Tasks!
+                            TESTING PIPELINES... Do Not Submit Tasks!
                         </h1>
                         <h2 class="display-2">
                             Start Analysis
@@ -22,7 +17,7 @@
                         </p>
                     </div>
                 </div>
-                <!-- <div v-if="isConv==true" id = "singleMultipleSelect">
+                <div v-if="isConv==true" id = "singleMultipleSelect">
                     <div class="container">
                         <h2 class="display-5">
                             Please choose to upload single or multical file(s)/dataset(s): 
@@ -33,51 +28,24 @@
                         </button>
                         <button type = "button" id = "multiple-button" class = "btn btn-secondary btn-lg btn-select" @click="updateMode('multiple')">
                         Multiple
-                        </button> -->
-
-                        <!-- <input type="radio" id="single" value="single" v-model="picked_single_multiple">
-                        <label for="single">Single</label>
-                        <input type="radio" id="multiple" value="multiple" v-model="picked_single_multiple">
-                        <label for="multiple">Multiple</label> -->
-                        <!-- <br>
-                        <p class="lead mt-2">You will upload {{ picked_single_multiple }} file(s)/dataset(s)</p> -->
-                    <!-- </div>
-                </div> -->
+                        </button>
+                    </div>
+                </div>
                 <div class="index-banner">
                     <div class="container">
                         <h2 class="display-4">
-                            Module
+                            Analysis
                         </h2>
                         <p class="lead mt-2">
-                            Please choose a module below:
+                            Please choose an analysis below:
                         </p>
                     </div>
                 </div>
                 <div class="container-fluid container" id="analyses_list">
                     <div id="accordion">
-                        <!-- <div id="head-for-analysis-list">
-                            <h4 class = "mb-2"> Totally {{analyses.length + 1}} Module(s) available </h4>
-                            <button aria-controls="collapseOne" aria-expanded="true" class="btn btn-link" data-target="#collapseOne" data-toggle="collapse">
-                                Totally {{analyses.length + 1}} Module(s) available
-                            </button></h5> -->
-                        <!-- </div> -->
                         <div class="cols-xs-space cols-sm-space cols-md-space container">
-
-                            <!-- <div class = "row" id = "supervisedSelect" v-if="isConv==true">
-                                <div>
-                                    <h2 class="display-5">
-                                        Submit tasks to supervised or unsupervised analyses:
-                                    </h2>
-                                    <br>
-                                    <input type="radio" class = "btn-check" name="supervise-select" autocomplete="off" id="supervised" value="supervised" v-model="picked_supervised" checked>
-                                    <label for="supervised" class = "btn btn-outline-secondary">Supervised Deconvolution</label>
-                                    <input type="radio" class = "btn-check" name="supervise-select" autocomplete="off" id="unsupervised" value="unsupervised" v-model="picked_supervised">
-                                    <label for="unsupervised" class = "btn btn-outline-secondary">Unsupervised Deconvolution</label>
-
-                                </div>
-                            </div> -->
-                            <div class = "row submit-container">
-                                <div class="col-lg-4 mb-4 justify-content-center text-center" v-for="a in displayedAnalyses" :key="a.id" @click="updateApp(a, true)">
+                            <div class = "row" id="jumpDivStart">
+                                <div class="col-lg-4 mb-4 justify-content-center text-center" v-for="a in analyses" :key="a.id" @click="updateApp(a, true)">
                                     <div class="card">
                                         <img v-if="a.cover_image == null" v-bind:src="require('../assets/images/module.png')" class="card-img-top">
                                         <img v-else :src="a.cover_image" class="card-img-top">
@@ -107,16 +75,14 @@
 
                         <div v-if="step==1" id = "timeline-file" class = "timeline-step" style="vertical-align:center">
                             <img v-bind:src="require('../assets/images/nav-up-pink.png')" style="margin-right: 10px"> 
-                            <i class="fa fa-arrow-right"></i>  <b-btn v-b-modal.submit-helper class = "btn btn-secondary" id = "helper-trigger"> Module Helper </b-btn>
+                            <i class="fa fa-arrow-right"></i>  <b-btn v-b-modal.submit-helper class = "btn btn-secondary" id = "helper-trigger"> Analysis Helper </b-btn>
                         </div>
 
                         <div v-if="step==2" id = "timeline-parameter" class = "timeline-step" style="vertical-align:center">
                             <img v-bind:src="require('../assets/images/timeline-param.png')" style="margin-right: 10px"> 
-                            <i class="fa fa-arrow-right"></i>  <b-btn v-b-modal.submit-helper class = "btn btn-secondary" id = "helper-trigger"> Module Helper </b-btn>
+                            <i class="fa fa-arrow-right"></i>  <b-btn v-b-modal.submit-helper class = "btn btn-secondary" id = "helper-trigger"> Analysis Helper </b-btn>
                         </div>
 
-
-                        <!-- <img v-if="!submittted" v-bind:src="require('../assets/images/nav-submit-gray.png')"> -->
                         <img v-if="submitted == true" v-bind:src="require('../assets/images/nav-submit-blue.png')">
                         <img v-else v-bind:src="require('../assets/images/nav-submit-gray.png')">
                         <br>                      
@@ -129,12 +95,6 @@
                             <div v-if="started && !submitted">
 
                                 <div class = "row">
-                                    <!-- <div class = "col-md-2">
-                                        <b-btn @click="submitDemoTask()" class="float-right mt-2 btn-lg"><i class="fa fa-caret-right fa-lg"></i>Run demo task</b-btn>
-                                    </div> -->
-                                    <!-- <div class = "col-md-3">
-                                        <h4><i class="fa fa-caret-right fa-lg"></i>Run demo task</h4>
-                                    </div> -->
                                     <div @click="submitDemoTask()" class = "col-md-2" b-tooltip.hover :title="`Click here to run demo task for ${app.name}`">
                                         <img class = "demoPng" id = "runDemoImage" v-bind:src="require('../assets/images/runDemo.png')" style="width:100%;">
                                     </div>
@@ -148,36 +108,12 @@
                                         <h2 class = "text-right"> TASK SUBMISSISON </h2>
                                     </div>
                                 </div>
-                                    
-                                <!-- <div class = "container row justify-content-around">
-                                    <div class = "col-md-6">
-                                        <h4 v-if="picked_single_multiple=='multiple'" class = "text-center">Batch effect config</h4>
-                                        <h4 v-else class = "text-center">File Submission</h4>
-                                    </div>
-                                    <div class = "col-md-6">
-                                        <h4 class = "text-center">Set Parameters</h4>
-                                    </div>
-                                </div> -->
                                 
                                 <div id = "file-upload-step" class = "row justify-content-center submit-container-lg">
                                     <div>
                                         <h3 v-if="picked_single_multiple=='multiple'" class = "text-center">Batch effect config</h3>
                                         <h3 v-else class = "text-center">File Submission</h3>
                                         <br>
-
-                                        <!-- <div class = "row submit-container justify-content-center h-100">
-                                            <div v-for="input in displayedInputs" :key="input.id" class = "text-center submit-box col-md-6">
-                                                <a :href="`/public/data/module_demo/${app.name}_demo_${input.name}.tsv`" :download=input.name >Demo {{ input.name}} </a>
-                                            </div>
-                                            <div class="col-md-5 text-center submit-box">
-                                                <a href="/public/data/module_demo/demo1.tsv" download = "testing">Download</a>
-                                                <a :href="`/public/data/module_demo/${app.name}_demo1.tsv`" download = "demo1">Download</a>
-                                            </div>
-                                            <div class="col-md-5 offset-2 text-center" style="border:solid;border-radius:20px;padding:20px">
-                                                <a :href="`/public/data/module_demo/${app.name}_demo2.tsv`" download = "demo2">Download</a>
-                                                <a href="/public/data/module_demo/test_demo2.tsv" download = "testing">Download</a>
-                                            </div> 
-                                        </div> -->
 
                                         <div class = "row submit-box justify-content-center">
                                             <div v-if="picked_single_multiple=='single'" class = "row justify-content-center">
@@ -196,7 +132,7 @@
                                                 <div class = "row justify-content-center">
                                                     <label>
                                                         <span>You can select a dataset to merge: </span>
-                                                        <i class="fa fa-question-circle" v-b-tooltip.rightbottom.hover title="You may choose one dataset with single project source to upload merged files"></i>
+                                                        <i class="fa fa-question-circle" v-b-tooltip.rightbottom.hover title="You may choose one dataset with single project source to automatically upload merged files"></i>
                                                     </label>
                                                     <b-form-select @focus="updateStepToFile()" class="col-md-8" 
                                                         name="selected-dataset"
@@ -240,7 +176,6 @@
 
                                 <div id="parameter-setting-step" class = "row justify-content-center submit-container-lg">
                                     <div class="set-param-section">
-
                                         <h3 class = "text-center">Parameter setting</h3>
                                         <br>
 
@@ -249,73 +184,56 @@
 
                                                 <div class = "row mt-3 mb-3" style="height:350px; overflow:scroll;">
 
-                                                 
+                                                        
+                                                        <b-form-input @focus="provide_param_desc(single_sync_params[0])" :id="`p-${single_sync_params[0].id}`" :value="single_sync_params[0].default" :required="single_sync_params[0].required"
+                                                            v-model="parameters[`p-${single_sync_params[0].id}`]" :name="`p-${single_sync_params[0].id}`" :state="inputValid[`p-${single_sync_params[0].id}`]" />
+                                                        <br>
+
                                                         <b-list-group>
-                                                            <div v-for="(value, key) in displayedSingleParams" :key="value.id">
+                                                            <div v-for="(value, key) in single_module_params" :key="value.id">
                                                                 <b-list-group-item href="javascript:void(0)" v-b-toggle="`m-${value.id}`" class="mb-2">
                                                                     <i class="fab fa-app-store-ios"></i> {{ key }}
                                                                 </b-list-group-item>
                                                                 <b-collapse visible :id="`m-${value.id}`" class="mb-4 p-4 border">
                                                                     
                                                                     <div class="col-md-10" v-for="param in value.params" :key="param.id">
-                                                                        <div v-if="sync_params_names.indexOf(param.name) !== -1">
-                                                                            <label :for="`p-${param.id}`">{{ param.name }}
-                                                                                <span v-if="param.required" class="required">*</span>
-                                                                            </label>
-                                                                            
-                                                                            <div v-if="param.param_type === 'string'">
-                                                                                <b-form-input @focus="provide_param_desc(param)" :id="`p-${param.id}`" :value="param.default" :required="param.required"
-                                                                                            v-model="parameters[`p-${sync_params[param.name][0].id}`]" :name="`p-${param.id}`" :state="inputValid[`p-${param.id}`]" />
-                                                                            </div>
-                                                                            <div v-else-if="param.param_type === 'enum'">
-                                                                                <select @focus="provide_param_desc(param)" :id="`p-${param.id}`" class="form-control custom-select" 
-                                                                                        v-model="parameters[`p-${sync_params[param.name][0].id}`]" :required="param.required" :name="`p-${param.id}`" 
-                                                                                        :state="inputValid[`p-${param.id}`]">
-                                                                                    <option v-for="option in param.options" :value="option" :key="option"
-                                                                                            :selected="param.default == option ? 'selected' : ''">
-                                                                                        {{ option }}
-                                                                                    </option>
-                                                                                </select>
-                                                                            </div>
-                                                                        </div>
-                                                                        <div v-else>
-                                                                            <label :for="`p-${param.id}`">{{ param.name }}
-                                                                                <span v-if="param.required" class="required">*</span>
-                                                                            </label>
                                                                         
-                                                                            <div v-if="param.param_type === 'string'">
-                                                                                <b-form-input @focus="provide_param_desc(param)" :id="`p-${param.id}`" :value="param.default" :required="param.required"
-                                                                                            v-model="parameters[`p-${param.id}`]" :name="`p-${param.id}`" :state="inputValid[`p-${param.id}`]" />
-                                                                            </div>
-                                                                            <div v-else-if="param.param_type === 'int'">
-                                                                                <b-form-input @focus="provide_param_desc(param)" :id="`p-${param.id}`" :value="param.default" type="number" step="1"
-                                                                                            v-model="parameters[`p-${param.id}`]" :required="param.required" :name="`p-${param.id}`"
-                                                                                            :state="inputValid[`p-${param.id}`]"/>
-                                                                            </div>
-                                                                            <div v-else-if="param.param_type === 'float'">
-                                                                                <b-form-input @focus="provide_param_desc(param)" :id="`p-${param.id}`" :value="param.default" type="number"
-                                                                                            v-model="parameters[`p-${param.id}`]" step="0.01" :required="param.required"
-                                                                                            :name="`p-${param.id}`" :state="inputValid[`p-${param.id}`]"/>
-                                                                            </div>
-                                                                            <div v-else-if="param.param_type === 'boolean'">
-                                                                                <b-form-select @focus="provide_param_desc(param)" :id="`p-${param.id}`" :options="boolSelectOpt" :required="param.required"
-                                                                                            v-model="parameters[`p-${param.id}`]" :name="`p-${param.id}`" :state="inputValid[`p-${param.id}`]"/>
-                                                                            </div>
-                                                                            <div v-else-if="param.param_type === 'enum'">
-                                                                                <select @focus="provide_param_desc(param)" :id="`p-${param.id}`" class="form-control custom-select" 
+                                                                        <label :for="`p-${param.id}`">{{ param.name }}
+                                                                            <span v-if="param.required" class="required">*</span>
+                                                                        </label>
+                                                                    
+                                                                        <div v-if="param.param_type === 'string'">
+                                                                            <b-form-input @focus="provide_param_desc(param)" :id="`p-${param.id}`" :value="param.default" :required="param.required"
+                                                                                        v-model="parameters[`p-${param.id}`]" :name="`p-${param.id}`" :state="inputValid[`p-${param.id}`]" />
+                                                                        </div>
+                                                                        <div v-else-if="param.param_type === 'int'">
+                                                                            <b-form-input @focus="provide_param_desc(param)" :id="`p-${param.id}`" :value="param.default" type="number" step="1"
+                                                                                        v-model="parameters[`p-${param.id}`]" :required="param.required" :name="`p-${param.id}`"
+                                                                                        :state="inputValid[`p-${param.id}`]"/>
+                                                                        </div>
+                                                                        <div v-else-if="param.param_type === 'float'">
+                                                                            <b-form-input @focus="provide_param_desc(param)" :id="`p-${param.id}`" :value="param.default" type="number"
+                                                                                        v-model="parameters[`p-${param.id}`]" step="0.01" :required="param.required"
+                                                                                        :name="`p-${param.id}`" :state="inputValid[`p-${param.id}`]"/>
+                                                                        </div>
+                                                                        <div v-else-if="param.param_type === 'boolean'">
+                                                                            <b-form-select @focus="provide_param_desc(param)" :id="`p-${param.id}`" :options="boolSelectOpt" :required="param.required"
+                                                                                        v-model="parameters[`p-${param.id}`]" :name="`p-${param.id}`" :state="inputValid[`p-${param.id}`]"/>
+                                                                        </div>
+                                                                        <div v-else-if="param.param_type === 'enum'">
+                                                                            <select @focus="provide_param_desc(param)" :id="`p-${param.id}`" class="form-control custom-select" 
+                                                                                    v-model="parameters[`p-${param.id}`]" :required="param.required" :name="`p-${param.id}`" 
+                                                                                    :state="inputValid[`p-${param.id}`]">
+                                                                                <option v-for="option in param.options" :value="option" :key="option"
+                                                                                        :selected="param.default == option ? 'selected' : ''">
+                                                                                    {{ option }}
+                                                                                </option>
+                                                                            </select>
+                                                                        </div>
+                                                                        <div v-else-if="param.param_type === 'splitchr'">
+                                                                            <b-form-select @focus="provide_param_desc(param)" :id="`p-${param.id}`" :options="boolSelectOpt" 
                                                                                         v-model="parameters[`p-${param.id}`]" :required="param.required" :name="`p-${param.id}`" 
-                                                                                        :state="inputValid[`p-${param.id}`]">
-                                                                                    <option v-for="option in param.options" :value="option" :key="option"
-                                                                                            :selected="param.default == option ? 'selected' : ''">
-                                                                                        {{ option }}
-                                                                                    </option>
-                                                                                </select>
-                                                                            </div>
-                                                                            <div v-else-if="param.param_type === 'splitchr'">
-                                                                                <b-form-select @focus="provide_param_desc(param)" :id="`p-${param.id}`" :options="boolSelectOpt" 
-                                                                                            v-model="parameters[`p-${param.id}`]" :required="param.required" :name="`p-${param.id}`" 
-                                                                                            :state="inputValid[`p-${param.id}`]" />
-                                                                            </div>
+                                                                                        :state="inputValid[`p-${param.id}`]" />
                                                                         </div>
                                                             
                                                                     </div>
@@ -323,7 +241,7 @@
                                                                 </b-collapse>
                                                             </div>
                                                         </b-list-group>
-                                                    <h5 class = "submit-container" v-if="parameters_input.length > 0"> Some self statements here, Some self statements here, Some self statements here.</h5>
+                                                    <h5 class = "submit-container" v-if="parameters_input.length > 0"> Some self statements here, Some self statements here.</h5>
                                                     <div class="col-md-10" v-for="param_input in parameters_input" :key="param_input.id">
                                                         <label :for="`p-${param_input.id}`">{{ param_input.name }}
                                                             <span v-if="param_input.required" class="required">*</span>
@@ -349,15 +267,12 @@
                                                 <div id = "single_params_desc" v-html="single_params_desc"></div>
                                             </div>
                                         </div>
-                                        <p v-if="displayedSingleParams.length == 0">No Parameters.</p>
                                     </div>
                                 </div>
                                 <br>
                                 <br>
                                 <b-btn @click="checkInputValid()" class="float-right mt-2"><i class="fa fa-location-arrow"></i> Submit</b-btn>
-
                             </div>
-                            
                         </div>
                     </div>
                 </div>
@@ -371,7 +286,6 @@
                     <h1>Submitted</h1>
                     <p>We are preparing your visualization,you can copy the code and check the status of your work in the <a ref = "goTo" :href = "`/submit/job-query`" id = "redirection-link">[workspace]</a>.</p>
                     <div class = "row">
-                        
                         <div class = "col-md-2">
                             <b-btn :id = "copyButton" @click = "copyToClipboard" type = "button" class = "btn btn-light">Copy</b-btn>
                         </div>
@@ -384,7 +298,6 @@
         </div>
 
         <div id = "loadingBlock" v-else>
-            
             <h3 class="mt-4">
                 <img v-bind:src="require('../assets/images/loading_icon.gif')">
                 We are preparing your submission. Please wait for some minutes.
@@ -392,14 +305,14 @@
         </div>
 
 
-        <b-modal class= "file-submit-modal" :id="`single-upload-${input.id}`" size="md" :title="`Submit input file - ${input.name}`" centered v-for="input in displayedInputs" :key="input.id">
+        <b-modal class= "file-submit-modal" :id="`single-upload-${input.id}`" size="lg" :title="`Submit input file - ${input.name}`" centered v-for="input in displayedInputs" :key="input.id">
                 <div class = "row justify-content-center submit-container">
                     <div class = "col-md-1">
                     </div>
-                    <button class = "col-md-4 btn btn-secondary">
+                    <button class = "col-md-5 btn btn-secondary">
                         <a :href="`/public/data/module_demo/${input.name}_demo.csv`" :download="input.name">Download demo file</a>
                     </button>
-                    <div class = "col-md-7">
+                    <div class = "col-md-6">
                     </div>
                     
                     <div class = "col-md-12 text-center">
@@ -428,141 +341,11 @@
         </b-modal>
 
         <b-modal class= "file-submit-modal" :id="`batchEffect-config-${input_idx}`" size="xl" centered title="File Submission and Parameter Setting for Batch Effect" v-for="input_idx in parseInt(displayedPairsNum)" :key="input_idx">    
-                
-                
-                <div class = "row justify-content-center">
 
-                    <!-- <div class = "col-md-2">
-                        <b-btn @click="resetMultipleUpload(input_idx)" class="float-right mt-2 btn-lg">Reset</b-btn>
-                    </div>
-                    <div class = "col-md-10">
-                    </div> -->
-
-                    <div class = "col-md-10 text-center">
-                        <h4 class = "mb-4"> File submission </h4>
-                        <div class = "row">
-                            <div id = "be-file-submit" class = "col-md-6 text-center" v-for="input in displayedInputs" :key="input.id">
-                                
-                                <div>
-                                    <label :for="`multiple-i-${input.id}-${input_idx}`" class = "row justify-content-around">
-                                        <div class = "col-md-6 text-left" style="margin:auto;">
-                                            {{ input.name }}
-                                            <span v-if="input.required" class="required" style="color:red;">*</span>
-                                        </div>
-                                        <div class = "col-md-6 text-right">
-                                            <button class = "btn btn-secondary">
-                                                <a :href="`/public/data/module_demo/${input.name}_demo.csv`" :download="input.name">Download demo file</a>
-                                            </button>
-                                        </div>
-                                    </label>
-                                    <b-form-file
-                                        :id="`multiple-i-${input.id}-${input_idx}`"
-                                        v-model="files[`multiple-i-${input.id}-${input_idx}`]"
-                                        :placeholder="files[`multiple-i-${input.id}-${input_idx}`] ? files[`multiple-i-${input.id}-${input_idx}`].name : 'no file uploaded'"
-                                        drop-placeholder="Drop file here..." 
-                                        :name="`multiple-i-${input.id}-${input_idx}`"
-                                        :required="input.required"
-                                    >
-                                    </b-form-file>
-                                    <div class = "submit-container">
-                                        <div v-html="input.description">
-                                        </div>
-                                    </div>
-                                    
-                                </div>
-                                <!-- <div><p>uploaded file name: {{files[`i-${input.id}-${input_idx}`] ? files[`i-${input.id}-${input_idx}`].name : "no file uploaded"}} </p></div> -->
-                            </div>
-                        </div>
-                    </div>
-
-                    <br>
-                    <br>
-
-                    <div class = "col-md-8 justify-content-center submit-container">
-                        <h4>
-                            Or you can select a dataset to merge:
-                        </h4>
-                        <b-form-select
-                            name="selected-dataset"
-                            v-model="ds_selected[input_idx - 1]"
-                        >
-                            <option value="" key="default">--click to select your own dataset--</option>
-                            <option v-for="(option, index) in select_box_option" :key="index" :value="option.value" :disabled="option.disabled">
-                                {{option.lable}}
-                            </option>
-                        </b-form-select>
-                    </div>
-
-                    <br>
-                    <br>
-
-
-                    <div class = "col-md-10 submit-container text-center">
-                        <h4> Parameter setting </h4>
-
-                        <div class = "row justify-content-center">
-                            <div v-if="ds_selected[input_idx - 1] == '' && displayedBatchEffectParams.length > 0" class = "col-md-6" style="vertical-align:center">
-                                <div class="row">
-                                    <div class="col-md-12" style="margin-bottom:10px" v-for="param in displayedBatchEffectParams" :key="param.id">
-
-                                        <label :for="`multiple-p-${param.id}-${input_idx}`">{{ param.name }}
-                                            <span v-if="param.required" class="required" style="color:red;">*</span>
-                                        </label>
-                                        <div v-if="param.param_type === 'enum'">
-                                            <select @focus="provide_multiple_param_desc(param)" :id="`multiple-p-${param.id}-${input_idx}`" class="form-control custom-select"  :placeholder="parameters[`multiple-p-${param.id}-${input_idx}`]"
-                                                    v-model="parameters[`multiple-p-${param.id}-${input_idx}`]" :required="param.required" :name="`multiple-p-${param.id}-${input_idx}`">
-                                                <option v-for="option in param.options" :value="option" :key="option"
-                                                        :selected="param.default == option ? 'selected' : ''">
-                                                    {{ option }}
-                                                </option>
-                                            </select>
-                                        </div>
-                                        <div v-else>
-                                            <b-form-input @focus="provide_multiple_param_desc(param)" :id="`multiple-p-${param.id}-${input_idx}`" :value="param.default" :required="param.required" :placeholder="parameters[`multiple-p-${param.id}-${input_idx}`]"
-                                            v-model="parameters[`multiple-p-${param.id}-${input_idx}`]" :name="`multiple-p-${param.id}-${input_idx}`" />
-                                        </div>
-                                            
-                                    </div>
-                                </div>
-                            </div>
-
-
-
-                            <div v-if="ds_selected[input_idx - 1] != ''" class = "col-md-6" style="vertical-align:center">
-                                <div class="row">
-                                    <div class="col-md-12" style="margin-bottom:10px">
-
-                                        <label :for="`dp-${input_idx}`">{{ ds_params.name }} for selected dataset
-                                            <span v-if="ds_params.required" class="required"  style="color:red;">*</span>
-                                        </label>
-                                        <div v-if="ds_params.param_type === 'enum'">
-                                            <select @focus="provide_multiple_param_desc(ds_params)" :id="`dp-${input_idx}`" class="form-control custom-select"
-                                                    v-model="ds_param_selected[input_idx - 1]" :required="ds_params.required" :name="`${ds_params.name}-${input_idx}`">
-                                                <option v-for="option in ds_params.options" :value="option" :key="option"
-                                                        :selected="ds_params.default == option ? 'selected' : ''">
-                                                    {{ option }}
-                                                </option>
-                                            </select>
-                                        </div>
-                                        <div v-else>
-                                            <b-form-input @focus="provide_multiple_param_desc(ds_params)" :id="`dp-${input_idx}`" :required="ds_params.required" :placeholder="ds_param_selected[input_idx - 1]"
-                                            v-model="ds_param_selected[input_idx - 1]" :name="`${ds_params.name}-${input_idx}`" />
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class = "col-md-6">
-                                <h2>Parameters description</h2>
-                                <div id = "multiple_params_desc" v-html="multiple_params_desc"></div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
         </b-modal>
 
 
-        <b-modal v-if="started" ref="submit-helper" v-model="showhelper" id = "submit-helper" size="xl" scrollable title="Module Helper" centered @ok="jumpToUpload">
+        <b-modal v-if="started" ref="submit-helper" v-model="showhelper" id = "submit-helper" size="xl" scrollable title="Analysis Helper" centered @ok="jumpToUpload">
             <br>
             <div class = "row justify-content-center container">
                 <div v-html="selected_analysis.rendered_doc" class = "text-left container" style="margin: 50px;">
@@ -594,62 +377,73 @@
     export default {
         data() {
             return {
-                ds_info : {},
-                id : null,
+                ds_info : {}, // for dataset selection
                 selected_analysis : null,
-                isConv: false,
+                isConv: true,
                 app: { 
+                    //record for fetched information for selected analysis
                 },
                 files: {
+                    // for v-modal in this vue
                 },
                 parameters: {
-
+                    // for v-model in this vue
                 },
                 file_names: {
+                    //record for file names for later dataset merge files in submit controller
 
                 },
-                demo_id: 0,
-                result_demo_id: 0,
-                demo: false,
-                demo_inputs: {},
-                demo_parameters: {},
-                ds_selected: [],
-                ds_param_selected: [],
-                ds_params: {},
+                demo_id: 0, // demo task id for fetching task information
+                result_demo_id: 0, // demo task id for local platform for demo  visualizaition
+                demo_inputs: {}, // for submit demo task
+                demo_parameters: {}, // for submit demo task
+                ds_selected: "", // for selected dataset
+
                 boolSelectOpt: [
                     { value: true, text: 'Yes' },
                     { value: false, text: 'No' },
                 ],
-                inputValid: {},
+                inputValid: {}, // useful for telling user about the problematic parameter input
                 submitted: false,
-                jobID: '',
+                jobID: '', // display submitted job id to user
                 isLoading: false,
-                analyses: [],
+                analyses: [], // all analyses under a specific category for user selection
                 started: false,
+
+                // single_sync_params_desc: "",
+                // single_module_params_desc: "",
+                // multiple_sync_params_desc: "",
+                // multiple_module_params_desc: "",
                 single_params_desc: "",
                 multiple_params_desc: "",
 
-                picked_single_multiple: "single", //for non-deconv module, initial value is single
-                single_parameters: [],
-                multiple_parameters: [],
+                
+                picked_single_multiple: "single",
+
                 multiple_pairs_num: 1,
                 multiple_completed: [],
                 step: 1,
                 showhelper: false,
-                parameters_input: [],
-                pipeline_json: {},
-                sync_params: {},
-                sync_params_names: ["Project name"],
+                parameters_input: [], // for signature file and cibersort r file
+                pipeline_json: {}, // seeems not useful
+                
+                //not syncronized parameters
+                single_module_params: {},
+                multiple_module_params: {},
 
-                test_description: "<h5>There are something testing description</h5><ul><li>The first row is for something.</li><li>The first column is for something. It should be something.</li><li>Please be noted that the uploader is for something and somethind should be...</li></ul><p>This is the end of this line.</p>"
+                //syncronized paramters
+                single_sync_params: [],
+                multiple_sync_params: {},
+                multiple_sync_pnames: ["Dataset name", "Platform"],
+                
+            
             };
         },
         created() {
-            this.ds_info = window.gon.select_box_option; //contains information about the nunber of project sources, platform names and project names
-            if ( ['Regression Tools', 'Enrichment Tools', 'Consensus Tools', 'Unsupervised'].includes( this.analysis_category) ) {
-                this.isConv = true; //deconvolution analysis category are different from others
-            }
-            this.updateApp(null, false);
+            this.ds_info = window.gon.select_box_option;
+            
+            this.isConv = true; 
+            // this.updateApp(null, false);
             this.select_box_option = [];
 
             var oplist = [];
@@ -660,41 +454,33 @@
             this.select_box_option = oplist;
 
             axios.get('/submit/pipelines.json',).then(response => {this.analyses = response.data; console.log(response.data)});
-            // for (var k in this.app.inputs){
-            //     this.files['i-' + this.app.inputs[k].id]  = null;
-            // }
-            this.multiple_completed = Array(10).fill(false) //initialize the size and element initial value for multiple upload
+            // this.multiple_completed = Array(10).fill(false);
         },
         computed: {
             displayedInputs() {
-                // eslint-disable-next-line
-                // for pipeline analyses, we still need to upload these two files, but still in parameters
                 return _.sortBy(this.app.inputs.filter(x => (!x._destroy && x.name != 'CIBERSORT.R' && x.name != 'Signature file')), ['name']);
             },
-            displayedSingleParams() {
-                // eslint-disable-next-line
-                console.log("logging displayed single parameters:")
-                console.log(this.single_parameters);
-                return this.single_parameters;
-            },
-            displayedBatchEffectParams() {
-                return _.sortBy(this.multiple_parameters.filter(x => !x._destroy), ['name']);
-            },
-            displayedAnalyses() {
-                var filtered_analyses = this.analyses;
-                // if (this.isConv == true) {
-                //     if (this.picked_supervised == "supervised") {
-                //         filtered_analyses = filtered_analyses.filter(item => !(item.name == "TIMEDB Deconv LinSeed"));
-                //     }
-                //     else {
-                //         filtered_analyses = filtered_analyses.filter(item => (item.name == "TIMEDB Deconv LinSeed"));
-                //     }
-                // }
-                return filtered_analyses;
-            },
+            // displayedSingleParams() {
+            //     console.log("logging displayed single parameters => called by displayedSingleParams function:")
+            //     console.log(this.single_parameters);
+            //     return this.single_parameters;
+            // },
+            // displayedBatchEffectParams() {
+            //     return _.sortBy(this.multiple_parameters.filter(x => !x._destroy), ['name']);
+            // },
+            // displayedAnalyses() {
+            //     var filtered_analyses = this.analyses;
+            //     // if (this.isConv == true) {
+            //     //     if (this.picked_supervised == "supervised") {
+            //     //         filtered_analyses = filtered_analyses.filter(item => !(item.name == "TIMEDB Deconv LinSeed"));
+            //     //     }
+            //     //     else {
+            //     //         filtered_analyses = filtered_analyses.filter(item => (item.name == "TIMEDB Deconv LinSeed"));
+            //     //     }
+            //     // }
+            //     return filtered_analyses;
+            // },
             displayedPairsNum() {
-                //always listen to changes of user required pairs number and update related vue parts
-                console.log(this.multiple_pairs_num)
                 return this.multiple_pairs_num;
             },
             updateUploadedStatus() {
@@ -966,11 +752,9 @@
                     console.log("start update app");
                     this.showhelper = true;
 
-                    this.selected_analysis = s_ana;
+                    this.selected_analysis = s_ana; // records information of local database
 
-                    if (s_ana.name == "TIMEDB Multiple Datasets Immune Comparison") {
-                        this.picked_single_multiple = 'multiple';
-                    }
+                    //improvement: for some pipeline, should only be multiple mode and no selection should be allowed
                     
                     var newid;
                     if (this.picked_single_multiple == "single") {
@@ -982,24 +766,22 @@
                         newid = s_ana.multiple_pid;
                         this.demo_id = s_ana.multiple_demo_id;
                         this.result_demo_id = s_ana.multiple_result_id;
-
                     }
 
                     axios.get(`https://deepomics.org/api/pipeline_flowchart/${newid}/`).then((response) => {
                         this.app = response.data; //response data json has two key: inputs and nodes
-                        this.app.id = newid
-                        for (var k in this.app.inputs){
-                            // alert(k);
-                            this.files['i-' + this.app.inputs[k].id]  = null;
-                        }
+                        // response data has two json items: inputs and nodes
+                        this.app.id = newid // submitted pipeline id
                     }).finally(() => {
-                        console.log("I am coming here ~");
+                        console.log("Successfully get pipeline flowchart json");
                         axios.get(`https://deepomics.org/api/pipelines/${newid}/`).then((response) => {
                             const { alertCenter } = this.$refs;
-                            if (response.data.code) { //successfully fetched
+                            if (response.data.code) { 
                                 this.app.name = response.data.name;
-                                this.app.params = response.data.data;
+                                this.app.params = response.data.data; // with respect to their modules
                                 this.pipeline_json = response.data.pipeline_json;
+                                // pipeline json records each nodes' inputs, and returned parameters are empty
+                                // parameter information are stored in the response.data.data
                             } else {
                                 alertCenter.add('danger', response.data.data);
                             }
@@ -1009,64 +791,64 @@
                             console.log("created: fetched params:");
                             console.log(this.app.params);
 
+                            
+                            
+                            var params_copy = this.app.params;
+                            for (let k in params_copy) {
+                                let module_params = params_copy[k].params;
+                                this.single_module_params[k].id = params_copy[k].id
+                                this.multiple_module_params[k].id = params_copy[k].id
+                                this.single_module_params[k].params = []
 
-                            if (this.picked_single_multiple == "single") {
-                                this.single_parameters = this.app.params;
-                                this.multiple_parameters = [];
-                                this.ds_selected = "";
-                                this.ds_params = this.single_parameters[Object.keys(this.single_parameters)[0]].params[0]
+
+                                for (let t in module_params) {
+                                    let param = module_params[t];
+                                    // single syncronized parameters array - Project name
+                                    if (param.name == "Project name") {
+                                        this.single_sync_params.push(param);
+                                    }
+                                    else if (this.multiple_sync_pnames.includes(param.name)) {
+                                        if (this.multiple_sync_params[param.name] == null) {
+                                            this.multiple_sync_params[param.name] = [param];
+                                        }
+                                        else {
+                                            this.multiple_sync_params[param.name].push(param);
+                                        }
+                                    }
+                                    else if (this.picked_single_multiple == "multiple" && param.name == "Protocol normalization") {
+                                        this.multiple_module_params[k].params = param;
+                                    }
+                                    else {
+                                        this.parameters['p-' + params.id] = params.default; //commonly only for single parameters
+                                        this.single_module_params[k].params.push(param);
+                                    }
+                                }
                             }
-                            else {
-                                this.single_parameters = this.app.params.filter(x => !['Platforms', 'Datasets name', 'Protocol normalization'].includes(x['name']));
-                                this.multiple_parameters = this.app.params.filter(x => ['Platforms', 'Datasets name', 'Protocol normalization'].includes(x['name']));
-                                this.multiple_completed = Array(10).fill(false); // for both file upload and related parameter setting under multiple mode
+
+
+                            this.single_params_desc = this.single_sync_params[0].description;
+                            this.multiple_params_desc = this.multiple_sync_params["Dataset name"][0].description;
+
+
+                            if (this.picked_single_multiple == "multiple") {
+                                this.multiple_completed = Array(10).fill(false);
                                 this.ds_selected = Array(10).fill("");
-                                this.ds_param_selected = Array(10).fill("");
-                                
-                                this.multiple_params_desc = this.multiple_parameters[0].description;
-                                this.ds_params = this.app.params.find(x => x['name'] == 'Protocol normalization');//for dataset parameters
 
-                                console.log("printing dataset parameters");
-                                console.log(this.ds_params.name);
+                                // this.multiple_sync_params_desc = this.multiple_sync_params["Dataset name"][0].description;
+                                // this.single_module_params_desc = this.multiple_module_params[Object.keys(this.single_parameters)[0]].description;
+
                             }
-
+                            
+                            
                             for (var k in this.app.inputs){
                                 this.file_names['i-' + this.app.inputs[k].id]  = this.app.inputs[k].name; //for later dataset merging - file matching
                             }
 
-                            for (var k in this.single_parameters) {
-                                console.log(this.single_parameters[k]);
-                                for (let t in this.single_parameters[k].params) {
-                                    console.log("Outputing something: ");
-                                    console.log(this.single_parameters[k].params[t]);
-                                    console.log("Dafult value for fetched parameters: " + this.single_parameters[k].params[t].name);
-                                    console.log(this.single_parameters[k].params[t].default);
-                                    this.parameters['p-' + this.single_parameters[k].params[t].id] = this.single_parameters[k].params[t].default; //commonly only for single parameters
-                                }
-                            }
-
-                            this.single_params_desc = this.single_parameters[Object.keys(this.single_parameters)[0]].params[0].description;
-                            
                             for (var k in this.app.inputs) {
                                 if (this.app.inputs[k].name == "CIBERSORT.R" || this.app.inputs[k].name == "Signature file") {
                                     this.parameters_input.push(this.app.inputs[k]);
                                 }
                             }
-
-                            
-                            for (let m in this.sync_params_names) {
-                                let pname = this.sync_params_names[m];
-                                this.sync_params[pname] = [];
-                                for (let k in this.single_parameters) {
-                                    for (let t in this.single_parameters[k].params) {
-                                        if(this.single_parameters[k].params[t].name == pname) {
-                                            this.sync_params[pname].push(this.single_parameters[k].params[t]);
-                                        }
-                                    }
-                                }
-                            }
-                            console.log(this.sync_params_names);
-                            console.log(this.sync_params);
 
                             console.log("end update app");
                         });
@@ -1415,9 +1197,8 @@
             },
             updateStepToFile() {
                 this.step = 1;
-            },
-            
-            
+            }, 
+            // improvement update step tp file or parameters // add some style
 
         },
         components: {

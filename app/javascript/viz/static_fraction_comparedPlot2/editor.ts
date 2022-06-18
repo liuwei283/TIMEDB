@@ -5,7 +5,6 @@ import { copyObject } from "utils/object";
 import { chooseSamples,chooseMethod } from "./data";
 
 function run(v,eid) {
-    // if(v.configchange = true) processconfigData(v);
     v.forceRedraw = true;
     v.run();
 }
@@ -130,7 +129,6 @@ export const generateCusConfig = (v,eid):any =>  ({
                         type:"vue",
                         component: "filter-samples",
                         title:null,
-                        //ref:"highlightSpecies",
                         data:{
                             get samples() {
                                 return Array.from(v.data.sampleData);
@@ -143,7 +141,6 @@ export const generateCusConfig = (v,eid):any =>  ({
                             },
                             callback(choosesample) {
                                 v.data.choosesample= new Set(choosesample);
-                                console.log("v.data.choosesample:",v.data.choosesample)
                                 chooseSamples(v);
                                 v.root._sizeUpdated = true;
                                 run(v,eid);
@@ -163,7 +160,6 @@ export const generateCusConfig = (v,eid):any =>  ({
                         type:"vue",
                         component: "filter-samples",
                         title:null,
-                        //ref:"highlightSpecies",
                         data:{
                             get samples() {
                                 return Array.from(v.data.methoddata);
@@ -175,12 +171,16 @@ export const generateCusConfig = (v,eid):any =>  ({
                                 return "Choose Method";
                             },
                             callback(choosemethod) {
-                                //v.data.chosenMethod = new Set(choosemethod);
                                 v.data.chosenMethod = choosemethod
-                                console.log("v.data.chooseMethod:",choosemethod)
                                 v.data.BarData = chooseMethod(v.data.chosenMethod,v.data.tempBardata);
                                 v.data.PieData = chooseMethod(v.data.chosenMethod,v.data.tempPiedata);
-                                //filterMethod(v);
+                                if(v.data.plotType=="pie"){
+                                    v.size.height = v.data.config.gridheight*12 + 100
+                                    v.size.width = v.data.config.gridwidth * (v.data.chosenMethod.length+1) + 300
+                                }else{
+                                    v.size.height = v.data.config.gridheight* (v.data.celldata.length+2) + 100
+                                    v.size.width = v.data.config.gridwidth * (v.data.chosenMethod.length+1) + 300
+                                }
                                 v.root._sizeUpdated = true;
                                 run(v,eid);
                             },
@@ -192,7 +192,7 @@ export const generateCusConfig = (v,eid):any =>  ({
         },
         {
             id:"csty-common",
-            name:"choose pie or bar",
+            name:"Choose Pie or Bar",
             view:{
                 type:"list",
                 items:[
@@ -201,11 +201,8 @@ export const generateCusConfig = (v,eid):any =>  ({
                         type: "checkbox",
                         Option:v.data.plotType,
                         value:{
-                            //current: v.data.plotType,
-                            //plotType=="bar"
                             callback(d){
                                 v.data.plotType = "pie"
-                                console.log("v.data.plotType:",v.data.plotType)
                                 if(v.data.plotType=="pie"){
                                     v.size.height = v.data.config.gridheight*12 + 100
                                     v.size.width = v.data.config.gridwidth * (v.data.chosenMethod.length+1) + 300
@@ -213,7 +210,7 @@ export const generateCusConfig = (v,eid):any =>  ({
                                     v.size.height = v.data.config.gridheight* (v.data.celldata.length+2) + 100
                                     v.size.width = v.data.config.gridwidth * (v.data.chosenMethod.length+1) + 300
                                 }
-                                v.root._sizeUpdated = true; //更新画布大小
+                                v.root._sizeUpdated = true; 
                                 v.forceRedraw = true;
                                 run(v,eid);
                             }
@@ -224,11 +221,8 @@ export const generateCusConfig = (v,eid):any =>  ({
                         type: "checkbox",
                         Option:v.data.plotType,
                         value:{
-                            //current: v.data.plotType,
-                            //plotType=="bar"
                             callback(d){
                                 v.data.plotType = "bar"
-                                console.log("v.data.plotType:",v.data.plotType)
                                 if(v.data.plotType=="pie"){
                                     v.size.height = v.data.config.gridheight*12 + 100
                                     v.size.width = v.data.config.gridwidth * (v.data.chosenMethod.length+1) + 300

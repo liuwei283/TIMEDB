@@ -1,6 +1,7 @@
 import Oviz from "crux";
 import { editorConfig, editorRef } from "./editor";
 import template from "./template.bvt";
+import { findBoundsForValues } from "utils/maths";
 
 import { groupedChartColors} from "oviz-common/palette";
 import { ComplexBoxplot, processBoxData } from "oviz-components/complex-boxplot";
@@ -10,6 +11,7 @@ import { registerEditorConfig } from "utils/editor";
 import { PieChart } from "crux/dist/element";
 //import { chooseMethod } from "viz/comparedBar2";
 import { isThisTypeNode } from "typescript";
+import { parse } from "utils/newick";
 
 
 let chosenSample = [];
@@ -22,23 +24,20 @@ let rowdata = [];
 
 const title = "Proportion of Immune Cells for Each Sample";
 const xlabel = "";
-const ylabel = "Proportion"; //0515
+const ylabel = "Proportion"; 
 
 export function plotDataloaded(_data){
-    console.log("data:",_data)
     let eachcell = _data.columns.slice(2)
     let newData =  dataHandler(_data,eachcell)
 
     this.data.columns = newData.columns;
     this.data.rowcolumns = eachcell;
     this.data.chosenMethod = chosenMethod;
-    this.data.colors = ["#FCE4EC"];
+    this.data.colors = {"box":"#FCE4EC"}
     this.data.boxdata = {values: newData.result,means: newData.means,outliers:[], categories: newData.columns }
-    console.log("data:",newData.result)
-
-    //计算valueRange
                     
     this.data.valueRange = range(newData.result)
+    
                     
     const plotwidth = 800;
     const padding = 60;
@@ -46,9 +45,9 @@ export function plotDataloaded(_data){
     this.data.padding = padding;
     this.data.gridwidth = (plotwidth - 2 * padding) / this.data.columns.length;
     
-    this.data.titleFontsize = 14 //0515
-    this.data.plotSize = [1000,500] //0515
-    this.data.colorMap = {box:"orange",means:"red",whiskle:"#0078d7"} //0515
+    this.data.titleFontsize = 14 
+    this.data.plotSize = [1000,500] 
+    this.data.colorMap = {box:"orange",means:"red",whiskle:"#0078d7"} 
 
 }
 
@@ -59,7 +58,8 @@ export function range(mapdata){
         resultMax.push(Math.max(...item))
         resultMin.push(Math.min(...item))
     });
-    return [0,(Math.ceil(Math.max(...resultMax))+Math.log(Math.ceil(Math.max(...resultMax))))]
+    return [(Math.min(...resultMin)-0.1).toFixed(1)
+      ,(Math.ceil(Math.max(...resultMax))+Math.log(Math.ceil(Math.max(...resultMax))))]
 
 }
 
@@ -85,3 +85,6 @@ export function dataHandler(data: any,rowcolumns){
     });
     return { result: result, means, columns: rowcolumns }
   }
+
+
+

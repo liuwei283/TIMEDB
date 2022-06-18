@@ -13,12 +13,10 @@ import { isThisTypeNode } from "typescript";
 
 const MODULE_NAME = "static_fraction_pie";
 
-const title = "Proportion of Immune Cells for Each Sample";
-const tickFontSize = 20;
 
 export function plotDataloaded(_data){
-    console.log("staic fraction pie___________________")
-    console.log("_data:",_data)
+    //console.log("staic fraction pie___________________")
+    //console.log("_data:",_data)
     let quotaList = []
     let plotData = {}
     _data.columns.slice(2).forEach(item => {
@@ -30,7 +28,7 @@ export function plotDataloaded(_data){
             plotData[ditem].includes(m[ditem])? null:plotData[ditem][m[ditem]] = []
         });
     })
-    console.log("sort???",plotData)
+    //console.log("sort???",plotData)
     let newPlotdata = {}
 
     let maxLegendtext = []
@@ -42,20 +40,20 @@ export function plotDataloaded(_data){
             maxLegendtext.push(item.length)
         })
     }
-    console.log("newPlotdata:",newPlotdata)
+    //console.log("newPlotdata:",newPlotdata)
 
     let maxLegend = Math.max(...maxLegendtext)
 
     plotData = newPlotdata
 
-    console.log("maxLegend:",maxLegend)
+    // console.log("maxLegend:",maxLegend)
     this.data.maxLegend = maxLegend
     
 
     let temp = {}
     let legend = {}
     let colorMap = {}
-    console.log("sort???",quotaList.sort())
+    //console.log("sort???",quotaList.sort())
 
     quotaList.sort().forEach((ditem,d)=>{
         let each = _data.map(d=>d[ditem])
@@ -81,9 +79,9 @@ export function plotDataloaded(_data){
     this.data.legend = legend
     this.data.listlength = _data.length
     this.data.pieR = 120
-    this.data.tickFontSize = 14
+    this.data.tickFontSize = 16
     this.data.colorMap = colorMap
-    console.log("this.data.colorMap:",this.data.colorMap)
+    // console.log("this.data.colorMap:",this.data.colorMap)
 }
 
 export function buttonFunc(result,buttonkey){

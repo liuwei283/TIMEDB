@@ -39,7 +39,7 @@ export const editorRef = {} as any;
 
 export const generateGridConfig = (v,eid):any =>  ({
     id: eid+"1",
-    title: "Plot Settings",
+    title: "General Settings",
     layout: "single-page",
     view: {
         type: "list",
@@ -83,15 +83,18 @@ export const generateColor = (v,eid):any =>  ({
         items: [
             {
                 type: "vue",
-                title: "Method Color",
+                title: "Color",
                 component: "color-picker",
                 data: {
-                    title: "Method Color",
+                    title: "Color",
                     scheme: copyObject(v.data.colorMap["c_"+v.data.chosenColumn]), //0515
                     id: "pwcolor",
                     callback(colors) {
                         console.log("colors:",colors)
                         v.data.colorMap["c_"+v.data.chosenColumn] = colors; //0515
+                        v.data.legend["c_"+v.data.chosenColumn].forEach(item => {
+                            item.fill = v.data.colorMap["c_"+v.data.chosenColumn][item.label]
+                        });
                         v.data._sizeUpdated = true;
                         v.forceRedraw = true;
                         run(v,eid);

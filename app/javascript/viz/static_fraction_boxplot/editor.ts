@@ -9,22 +9,20 @@ function run(v,eid) {
 }
 export const editorRef = {} as any;
 
-//在editor下添加功能模块
-//一些单选多选
+
 export const generateTestConfig = (v,eid): any => (            {
     id: eid+"1",
-    title: "test content settings",
+    title: "Color Setting",
     layout: "single-page",
     view: {
         type: "list",
-        //添加项目
         items: [
             {
                 type: "vue",
                 title: "",
                 component: "color-picker",
                 data: {
-                    title: "Customize colors",
+                    title: "color",
                     scheme: copyObject(v.data.colors),
                     id: "pwcolor",
                     callback(colors) {
@@ -56,7 +54,7 @@ export const generateGridConfig = (v,eid):any =>  ({
                             current: v.data.plotSize[0],
                             callback(x) {
                                 v.data.plotSize[0] = parseFloat(x);
-                                v.size.width = v.data.plotSize[0]*1 + 100; //设置svg的大小
+                                v.size.width = v.data.plotSize[0]*1 + 100; 
                                 v.size.height = v.data.plotSize[1] + 100;
                                 v.data._sizeUpdated = true;
                                 run(v,eid);
@@ -71,7 +69,7 @@ export const generateGridConfig = (v,eid):any =>  ({
                             current: v.data.plotSize[1],
                             callback(x) {
                                 v.data.plotSize[1] = parseFloat(x);
-                                v.size.width = v.data.plotSize[0]*1 + 100; //设置svg的大小
+                                v.size.width = v.data.plotSize[0]*1 + 100; 
                                 v.size.height = v.data.plotSize[1] + 100;
                                 v.data._sizeUpdated = true;
                                 run(v,eid);
@@ -112,7 +110,6 @@ export const generateGridConfig = (v,eid):any =>  ({
                     {
                         title: "Range Lower Bound",
                         type: "input",
-                        //format: "int",
                         value: {
                             current: v.data.valueRange[0],
                             callback(x) {
@@ -153,12 +150,11 @@ export const generateColorConfig = (v,eid):any =>  ({
                 title: "Box Color",
                 component: "color-picker",
                 data: {
-                    title: "Choose Color",
-                    scheme: copyObject(v.data.colorMap), //0515
+                    title: "color",
+                    scheme: copyObject(v.data.colorMap),
                     id: "pwcolor",
                     callback(colors) {
-                        console.log("colors:",colors)
-                        v.data.colorMap = colors; //0515
+                        v.data.colorMap = colors;
                         v.data._sizeUpdated = true;
                         v.forceRedraw = true;
                         run(v,eid);
@@ -169,8 +165,7 @@ export const generateColorConfig = (v,eid):any =>  ({
     },
 });
 
-//生成对应的配置文件
-//与index.ts连接
+
 export function editorConfig(v,eid): EditorDef {
     return {
         sections: [
