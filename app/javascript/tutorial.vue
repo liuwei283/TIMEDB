@@ -1,5 +1,6 @@
 <template>
     <div>
+        <link rel="stylesheet" type="text/css" href="chrome-extension://ckkdlimhmcjmikdlpkmbgfkaikojcbjk/themes/github.css" id="_theme"></link>
         <div class="container text-center tutorial" v-if="this.details == false">
             <br>
             <div class="row">
@@ -156,45 +157,121 @@
                             <div>
                                 <div class="headers">
                                     <h1>Welcome to TIMEDB Database</h1>
-                                    <p>TIMEDB provides the tumor immune micro-enviornment (TIME) cell proportions from bulk RNA expression profiles of <b>50,000 + samples</b> and <b>500+ projects</b> across <b>43 cancer types</b>. Users can download the following files directly with TIMEDB:
+                                    <p>TIMEDB provides the tumor immune micro-enviornment (TIME) cell proportions from bulk RNA expression profiles of <b>35,000 + samples</b> and <b>500+ projects</b> across <b>43 cancer types</b>. Users can download the following files directly with TIMEDB:
                                     </p>
                                 </div>
                                 <img src="/public/data/image/tutorial/1ppt.png" class="page-image">
                             </div>
                             <div>
-                                <div class="headers">
+                                <div class="headers markdown-body">
                                     <h2>Gene expression file and meta file</h2>
                                     <ul>
-                                        <li> Gene expression file: The gene expression file stores the bulk gene expression of tumor samples, with sample as column and gene as row.</li>
-                                        <li>Clinical file: The clinical file stores the manually curated clinical information of the sample, such as age, gender, etc. Each row is a sample and each column is a clinical feature.</li>
-                                        <li>Scaled immmunoregulator expression file: The scaled gene expression profiles of seventy-nine immunoregular genes. [1]</li>
+                                        <li><code>Gene expression file</code>: The gene expression file stores the bulk gene expression of tumor samples, with sample as column and gene as row.</li>
+                                        <li><code>Clinical file</code>: The clinical file stores the manually curated clinical information of the sample, such as age, gender, etc. Each row is a sample and each column is a clinical feature.</li>
+                                        <li><code>Scaled immmunoregulator expression file</code>: The scaled gene expression profiles of seventy-nine immunoregular genes. <sup>[1]</sup></li>
                                     </ul>
+                                    <h2>TIME cell estimation result file</h2>
+                                    <p>TIMEDB uses <strong>ABIS, CIBERSORT, CIBERSORTX, ConsensusTME, EPIC, ImmucellAI, Mcpcounter, quanTIseq and TIMER</strong> to quantify the cells in tumor microenvironment.  Users can download the following TIME estimation results. </p>
+                                    <ul>
+                                        <li><code>ABIS estimation result file</code>: TIME estimation result from ABIS. <sup>[2]</sup></li>
+                                        <li><code>CIBERSORT estimation result file</code>: TIME estimation result from CIBERSORT. <sup>[3]</sup></li>
+                                        <li><code>CIBERSORTx estimation result file</code>: TIME estimation result from online website <a href="https://cibersortx.stanford.edu/index.php">CIBERSORTx</a>. <sup>[4]</sup></li>
+                                        <li> <code>EPIC estimation result file</code>: TIME estimation result from EPIC. (Applicable only for RNA-Seq count data.) <sup>[5]</sup></li>
+                                        <li> <code>ImmuCellAI estimation result file</code>: TIME estimation result from online website <a href="http://bioinfo.life.hust.edu.cn/ImmuCellAI#!/">ImmuCellAI</a>. <sup>[6]</sup> </li>
+                                        <li> <code>Mcpcounter estimation result file</code>: TIME estimation result from Mcpcounter. <sup>[7]</sup> </li>
+                                        <li> <code>ConsensusTME estimation result file</code>: TIME estimation result from ConsensusTME. (Applicable only for 32 TCGA cancer types.) <sup>[8]</sup> </li>
+                                        <li> <code>TIMER estimation result file</code>: TIME estimation result from ConsensusTME. (Applicable only for 32 TCGA cancer types.)  <sup>[9]</sup> </li>
+                                        <li> <code>quanTIseq estimation result file</code>: TIME estimation result from quanTIseq. <sup>[10]</sup> </li>
+                                        <li> <code>xCell estimation result file</code>: TIME estimation result from xCell. <sup>[11]</sup> </li>
+                                        <li> <code>TIME Consensus estimation result file</code>: This file stores the TIME estimation result of common cell types occured one than once from nine estimation tools.(<a href="public/data/consensus_mapping.csv">download the cell mapping file</a>) <sup>[2-11]</sup> </li>
+                                        <li> <code>TIME All estimation result file</code>: This file stores the TIME estimation result of all cell types from nine estimation tools. <sup>[2-11]</sup> </li>
+                                    </ul>
+                                    <h2>C1-C6 subtyping result file</h2>
+                                        <p>TIMEDB adopts <strong>ImmuneSubtypeClassifier</strong> <sup>[12, 13]</sup>  to catelogue the immune subtype of tumor samples based on gene expression levels. Users can download the result file which shows the probability of sample being six immune status, including C1 (wound healing), C2 (IFN-γ dominant),C3 (inflammatory), C4 (lymphocyte depleted), C5 (immuno-logically quiet), and C6 (TGF-β dominant). </p>
+                                    <h2>Database usage</h2>
+                                    <p>TIMEDB provides four pages to show data: "Overview","Cancer","Project" and "Sample"</p>
+                                    <img src="/public/data/image/tutorial/2-1ppt.png" class="page-image">
+                                    <h3>Overview</h3>
+                                    <p>If users are interested in database summary, they can look through the <a href="/database/overview">''Overview''</a> page. </p>
+                                    <ul>
+                                        <li>Click the anatomy icons to query the related projects.</li>
+                                        <img src="/public/data/image/tutorial/1-1ppt.gif" class="page-image">
+                                        <li>See the visualization.
+                                        <img src="/public/data/image/tutorial/1-2ppt.gif" class="page-image">
+                                        <img src="/public/data/image/tutorial/1-3ppt.gif" class="page-image">
+                                        <img src="/public/data/image/tutorial/1-4ppt.gif" class="page-image">
+
+
+                                        <h2 id="cancer">Cancer</h2>
+                                        If users are interested in one cancer type, they can click the details in <a href="/cancers">''Cancer''</a> page to query the related datasets. <br></br>
+                                        <img src="/public/data/image/tutorial/1-5ppt.gif" class="page-image">
+                                        <h2 id="project">Project</h2>
+                                        If users are interested in specific project, they can choose the project in <a href="/projects">''Project''</a> page to query the project.
+                                        <img src="/public/data/image/tutorial/1-6ppt.gif" class="page-image">
+                                        </li>
+                                    </ul>
+                                    <p>The project table show the clinical information, each project may contains serveral samples. The basic information of sample includes:</p>
+                                    <ul>
+                                        <li><code>sample_name</code>: the name of donor.</li>
+                                        <li><code>project_name</code>: the name of project.</li>
+                                        <li><code>race</code>: the race of donor.</li>
+                                        <li><code>gender</code>: the gender of donor.</li>
+                                        <li><code>age</code>:  the age of donor.</li>
+                                        <li><code>weight</code>: the weight of donor.</li>
+                                        <li><code>height</code>:  the height of donor.</li>
+                                        <li><code>cancer_name</code>: available for cancer donor, the cancer type classification, e.g. <code>OV</code>, <code>LUSC</code>.</li>
+                                        <li><code>tumor_type</code>: available for cancer donor, the detailed cancer type.</li>
+                                        <li><code>tumor_subtype</code>: available for cancer donor, the cancer subtype.</li>
+                                        <li><code>tumor_grade</code>: available for cancer donor, e.g. <code>GradeI</code>, <code>GradeII</code>.</li>
+                                        <li><code>tumor_stage</code>: available for cancer donor, e.g. <code>StageI</code>, <code>StageII</code>. </li>
+                                        <li><code>os</code>: available for cancer or diease donor, overall survival, the length of days from either the date of diagnosis or the start of treatment, that a patient still alive.</li>
+                                        <li><code>os_status</code>: available for cancer donor, the os outcome, binary, value of 1 for death, 0 for alive.</li>
+                                        <li><code>pfs</code>: available for cancer or diease donor, progression-free survival, the length of days during and after the treatment, that a patient lives with the disease but it does not get worse.</li>
+                                        <li><code>pfs_status</code>: available for cancer donor, the pfs outcome, binary, value of 1 for pregression or recurrence, 0 for otherwise.</li>
+                                    </ul>
+                                    <p>The project visulization has two parts:</p>
+                                    <ul>
+                                        <li>"C1_C6 subtyping overview": visualization about immune subtype of tumor samples.</li>
+                                        <img src="/public/data/image/tutorial/5-2ppt.png" class="page-image">
+                                        <li>"TIME estimation overview": visualization about TIME estimation.</li>
+                                        <img src="/public/data/image/tutorial/5-4ppt.png" class="page-image">
+
+                                    </ul>
+                                    <h2>sample</h2>
+                                    <p>If users are interested in specific sample, they can choose the sample in <a href="/samples">"sample"</a> a page to see the sample information.</p>
+                                    <p>In this sample visulization, users could click the button to change the TIME estimation method.</p>
+                                    <div class="focus">
+                                        <p>The visualizations we provide are interactive:</p>
+                                        <ul>
+                                            <li>tooltips
+                                            <font color="red" size="4">找一个database部分好看的图展示改字体大小（fraction）里面倒数第二个图，动图</font></li>
+                                            <li>change the color</li>
+                                            <img src="/public/data/image/tutorial/1-8ppt.gif" class="page-image">
+                                            <li>change the text size</li>
+                                            <img src="/public/data/image/tutorial/1-9ppt.gif" class="page-image">
+                                            <li>rotate the label</li>
+                                            <img src="/public/data/image/tutorial/1-10ppt.gif" class="page-image">
+                                            <li>and multiple online adjustments options, contains but not all listed.</li>
+                                        </ul>
+                                    </div>
+                                    <h2>Citation</h2>
+                                    <em>[1] Vésteinn Thorsson, David L Gibbs, Scott D Brown, Denise Wolf, Dante S Bortone, TaiHsien Ou Yang, Eduard Porta-Pardo, Galen F Gao, Christopher L Plaisier, James A Eddy,et al. The immune landscape of cancer. Immunity, 51(2):411–412, 2019.</em><br>
+                                    <em>[2] Gianni Monaco, Bernett Lee, Weili Xu, Seri Mustafah, You Yi Hwang, Christophe Carré,Nicolas Burdin, Lucian Visan, Michele Ceccarelli, Michael Poidinger, et al. Rna-seq signatures normalized by mrna abundance allow absolute deconvolution of human immune cell types. Cell reports, 26(6):1627–1640, 2019.</em><br>
+                                    <em>[3] Aaron M Newman, Chih Long Liu, Michael R Green, Andrew J Gentles, Weiguo Feng, Yue Xu, Chuong D Hoang, Maximilian Diehn, and Ash A Alizadeh. Robust enumeration of cell subsets from tissue expression profiles. Nature methods, 12(5):453–457, 2015.</em><br>
+                                    <em>[4] A. M. Newman, C. B. Steen, C. L. Liu, A. J. Gentles, A. A. Chaudhuri, F. Scherer, M. S. Khodadoust, M. S. Esfahani, B. A. Luca, and D. Steiner. Determining cell type abundance and expression from bulk tissues with digital cytometry. Nature biotechnology, 37(7):773, 2019.</em><br>
+                                    <em>[5] J. Racle, Kaat De Jonge, P. Baumgaertner, D. E. Speiser, and D. Gfeller. Simultaneous enumeration of cancer and immune cell types from bulk tumor gene expression data. eLife,6,(2017-11-10), 6, 2017.</em><br>
+                                    <em>[6] Ya Ru Miao, Qiong Zhang, Qian Lei, Mei Luo, and An Yuan Guo. Immucellai: a unique method for comprehensive t-cell subsets abundance prediction and its application in cancer immunotherapy. 2019.</em><br>
+                                    <em>[7] Becht E, Giraldo NA, Lacroix L, Buttard B, Elarouci N, Petitprez F, Selves J, Laurent-Puig P, Sautès-Fridman C, Fridman WH, de Reyniès A. Estimating the population abundance of tissue-infiltrating immune and stromal cell populations using gene expression. Genome Biol. 2016 Oct 20;17(1):218.</em><br>
+                                    <em>[8] Alejandro Jiménez-Sánchez, Oliver Cast, and Martin L Miller. Comprehensive benchmarking and integration of tumor microenvironment cell estimation methods. Cancer Research, 79(24):6238–6246, 2019.</em><br>
+                                    <em>[9] T. Li, J. Fan, B. Wang, N. Traugh, Q. Chen, J. S. Liu, B. Li, and X. S. Liu. Timer: A web server for comprehensive analysis of tumor-infiltrating immune cells. Cancer Research, 77(21):e108, 2017.</em><br>
+                                    <em>[10] Francesca Finotello, Clemens Mayer, Christina Plattner, Gerhard Laschober, Dietmar Rieder, Hubert Hackl, Anne Krogsdam, Zuzana Loncova, Wilfried Posch, Doris Wilflingseder, et al. Molecular and pharmacological modulators of the tumor immune contexture revealed by deconvolution of rna-seq data. Genome medicine, 11(1):1–20, 2019.</em><br>
+                                    <em>[11] D. Aran, Z. Hu, and A. J. Butte. xcell: digitally portraying the tissue cellular heterogeneity landscape. Genome Biology, 18(1):220, 2017.</em><br>
+                                    <em>[12] David L Gibbs. Robust classification of immune subtypes in cancer. bioRxiv, 2020.</em><br>
+                                    <em>[13] James A Eddy, Vésteinn Thorsson, Andrew E Lamb, David L Gibbs, Carolina Heimann, Jia Xin Yu, Verena Chung, Yooree Chae, Kristen Dang, Benjamin G Vincent, et al. Criiatlas: an interactive portal for immuno-oncology research. F1000Research, 9, 2020.</em><br>
                                 </div>
+
                             </div>
-                            <div>
-                                <div class="headers">
-                                    <h1>Cancers</h1>
-                                    <h2>Cancers Details to view the data</h2>
-                                </div>
-                                <br>
-                                <img  src="/public/data/image/tutorial/3ppt.png" class="page-image">
-                            </div>
-                            <div>
-                                <div class="headers">
-                                    <h1>Projects</h1>
-                                    <h2>Projects Details to view the data and the graphs</h2>
-                                </div>
-                                <br>
-                                <img  src="/public/data/image/tutorial/4ppt.png" class="page-image">
-                            </div>
-                            <div>
-                                <div class="headers">
-                                    <h1>Samples</h1>
-                                    <h2>Samples Details to view the data and the graphs</h2>
-                                </div>
-                                <br>
-                                <img  src="/public/data/image/tutorial/5ppt.png" class="page-image">
-                            </div>
+
                             <br><br>
 
                         </div>
@@ -699,11 +776,20 @@ export default {
 }
 .headers{
     color:#cc4f78;
+
+    li{
+        font-size: 20px;
+    }
     p{
         font-size: 20px
     }
     b{
         color: #00008b
     }
+}
+.focus{
+    border: 3px solid;
+    border-radius: 10px;
+    padding: 1%;
 }
 </style>
