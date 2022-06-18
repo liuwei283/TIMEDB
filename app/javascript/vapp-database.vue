@@ -351,6 +351,7 @@ export default {
             ],
             bar_selected : null,
             pieMethodSelector : [
+                {value:"quanTIseq",label:"quanTIseq"},
                 {value:"ABIS",label:"ABIS"},
                 {value:"CIBERSORTX",label:"CIBERSORTX"},
                 {value:"CIBERSORT",label:"CIBERSORT"},
@@ -358,7 +359,6 @@ export default {
                 {value:"EPIC",label:"EPIC"},
                 {value:"ImmuCellAI",label:"ImmuCellAI"},
                 {value:"MCPcounter",label:"MCPcounter"},
-                {value:"quanTIseq",label:"quanTIseq"},
                 {value:"TIMER",label:"TIMER"},
                 {value:"xCell",label:"xCell"},
             ],
@@ -375,7 +375,7 @@ export default {
 
         event.rpcRegisterReceiver("getVue", () => this);
         this.bar_selected = "project";
-        this.pieMethodSelected = "ABIS";
+        this.pieMethodSelected = "quanTIseq";
         this.pieCancerSelected = this.cancers[0];
         this.bar_cancer_selected = "ACC";
         this.pie_projects = this.projects[this.pieCancerSelected];
@@ -384,6 +384,7 @@ export default {
         this.regulatorCancerSelected = "ACC";
         this.regulatorProjects = this.projects[this.regulatorCancerSelected];
         this.regulatorProjectSelected = this.regulatorProjects[0];
+        
     },
     mounted() {
         this.all_viz();
@@ -399,13 +400,8 @@ export default {
             return this.regulator_rna_fexists =='true' && this.regulator_subtype_fexists =='true';
         },
     },
-    watch: {
-        // pie_fexists:function(newValue) {
-        //     if (this.pie_fexists == true) {
-        //         immunepie("#pieVis", file_path, "#pie-editor", "overview_pie_viz");
-        //     }
-        // }
-    },
+
+    
     methods: {
             downall(){
             let zip = new JSZip();

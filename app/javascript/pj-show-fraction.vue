@@ -252,6 +252,9 @@
                     </div>
                 </div>
                 <div class="row veBlock">
+                    <div class="need-upload w-100 text-center container" v-if="isLoading">
+                        <img v-bind:src="require('../assets/images/loading_icon.gif')" style="width:50%;">
+                    </div>
                     <div class="md-col-9 vis vizBlock" id = "fraction-landscapeVis">
                     </div>
                     <div id="fraction-landscape-editor" class = "md-col-3 v-editor">
@@ -309,6 +312,7 @@ export default {
             heatmap_selected: null,
             vue_name: "fraction_vue",
             boxplot_selector:[
+                    {value:"quanTIseq",label:"quanTIseq"},
                     {value:"Consensus",label:"Consensus"},
                     {value:"Disable",label:"──────────"},
                     {value:"ABIS",label:"ABIS"},
@@ -318,11 +322,11 @@ export default {
                     {value:"EPIC",label:"EPIC"},
                     {value:"ImmuCellAI",label:"ImmuCellAI"},
                     {value:"MCPcounter",label:"MCPcounter"},
-                    {value:"quanTIseq",label:"quanTIseq"},
                     {value:"TIMER",label:"TIMER"},
                     {value:"xCell",label:"xCell"},
             ],
             heatmap_selector:[
+                    {value:"quanTIseq",label:"quanTIseq"},
                     {value:"ABIS",label:"ABIS"},
                     {value:"CIBERSORT",label:"CIBERSORT"},
                     {value:"CIBERSORTX",label:"CIBERSORTX"},
@@ -330,7 +334,6 @@ export default {
                     {value:"EPIC",label:"EPIC"},
                     {value:"ImmuCellAI",label:"ImmuCellAI"},
                     {value:"MCPcounter",label:"MCPcounter"},
-                    {value:"quanTIseq",label:"quanTIseq"},
                     {value:"TIMER",label:"TIMER"},
                     {value:"xCell",label:"xCell"},
             ],
@@ -345,16 +348,33 @@ export default {
             landscape_cell_fexists: true,
             heatmap_fexists: null,
             clinical_file_path: "",
+            isLoading: false,
         }
     },
     //设置默认值
     created() {
         this.pie_selected = this.pie_selector[0];
-        this.boxplot_selected="Consensus";
-        this.heatmap_selected="ABIS";
+        this.boxplot_selected="quanTIseq";
+        this.heatmap_selected="quanTIseq";
         this.landscape_selected="pie";
         this.clinical_fexists = this.file_exist['clinical'];
 
+        event.on(
+            event.DATA_LOADING_FINISHED,
+            () => {
+                this.isLoading = false;
+                this.$root.$emit("data-loaded");
+            },
+            "vapp-load-finished",
+        );
+
+        event.on(
+            event.DATA_LOADING_STARTED,
+            () => {
+                this.isLoading = true;
+            },
+            "vapp-load-started",
+        );
     },
     mounted() {
         event.rpcRegisterReceiver(this.vue_name, () => this);
