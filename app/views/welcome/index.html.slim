@@ -132,52 +132,69 @@ link rel='stylesheet' href="https://fonts.googleapis.com/css?family=Oswald&subse
 
         #cards_wrapper.container-fluid.container
           .row.cols-xs-space.cols-sm-space.cols-md-space
-            .col-lg-4.mb-4
+            .col-lg-5.mb-4
               .icon
                 .icon_img
                   =link_to '/database/overview'
                     =image_tag (use_dark ? 'icons darkmode12.png' : 'icons brightmode12.png'), :alt=>"Human Gut Metagenomics.png"
             
-            .col-lg-4.mb-4.
-              h5.text-left
-                | Human tumor immune micro-environment database
-                =link_to "database", "/database/overview"
-              p.text-left
-                | Curated databse with over xxx samples of RNA-seq across 
-                =@cances_num 
-                |  cancers, immune infliatration fraction, immune subtype annotation data.
-              h5.text-right
-                |Visualize your results
-              p.text-right
-                |containing  corresponding visualization of analysis result and basic sample and
-                |basic sample information visualization and so on
-            .col-lg-4.mb-4
-              .icon
-                .icon_img
-                  =link_to "/visualizer"
-                    =image_tag (use_dark ? 'icons darkmode22.png' : 'icons brightmode22.png'), :alt=>"Visualize your results.png"
-            .col-lg-4.mb-4
+            .col-lg-7.mb-4.
+              h4.text-left.function-h4
+                | Human tumor immune micro-environment
+                =link_to " database", "/database/overview"
+              p.text-left.function-p
+                | Curated databse with over 
+                strong.number_text =@samples_num
+                span.noun_text  samples 
+                |  of RNA-seq across 
+                strong.number_text =@cancers_num
+                span.noun_text  cancers
+                |  , immune infliatration fraction, immune subtype annotation data.
+              .row
+                .col-md-6
+                  .text-left
+                    p.function-p
+                      =link_to "Database Overview", "/database/overview"
+                    p.function-p
+                      =link_to "Cancers", "cancers"
+                    
+                .col-md-6
+                  .text-left
+                    p.function-p
+                      =link_to "Projects", "projects"
+                    p.function-p
+                      =link_to "Samples", "samples"
+
+            
+            
+            .col-lg-7.mb-4.
+              h4.text-left.function-h4
+                | Automatic
+                =link_to " analyses", "/submit/analyses"
+              p.text-left.function-p
+                strong.number_text 10
+                span.noun_text  online tumor immune microenvironment analysis category 
+                strong.number_text =18
+                span.noun_text  analyses
+              .row
+                .col-md-6
+                  .text-left
+                    p.function-p
+                      =link_to "Database Overview", "/database/overview"
+                    p.function-p
+                      =link_to "Cancers", "cancers"
+                    
+                .col-md-6
+                  .text-left
+                    p.function-p
+                      =link_to "Projects", "projects"
+                    p.function-p
+                      =link_to "Samples", "samples"
+            .col-lg-5.mb-4
               .icon
                 .icon_img
                   =link_to '/submit/analyses'
-                    =image_tag (use_dark ? 'icons darkmode32.png' : 'icons brightmode32.png'), :alt=>"Human Gut Metagenomics.png"
-            .col-lg-4.mb-4.
-              h5.text-left
-                |Analyses
-              p.text-left
-                |curated database with over 10,000 
-                |metagenomics sequencing data
-              h5.text-right
-                |Pipelines
-              p.text-right
-                |containing diversity analysis, differential testing,   
-                |diseases classifier, PCA,
-                |functional enrichments and so on
-            .col-lg-4.mb-4
-              .icon
-                .icon_img
-                  =link_to "/submit/pipelines"
-                    =image_tag (use_dark ? 'icons darkmode42.png' : 'icons brightmode42.png'), :alt=>"Analyze you data.png"
+                    =image_tag (use_dark ? 'icons darkmode42.png' : 'icons brightmode42.png'), :alt=>"Human Gut Metagenomics.png"
 
     #word-cloud.text-center
     =javascript_pack_tag 'word_cloud'

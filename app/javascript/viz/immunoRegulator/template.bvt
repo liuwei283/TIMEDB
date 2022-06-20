@@ -1,6 +1,6 @@
 svg {
-	width = 2000
-	height = 3000
+	width = 1500
+	height = 2100
 	Component.full {
 		x = 100
 		y = 50
@@ -85,11 +85,6 @@ svg {
 							padding = 5
 							width = 20
 							height = 20
-							Rect.full {
-								fill = "#D3D3D3"
-								stroke = "white"
-								strokeWidth = 1
-							}
 							Circle.centered {
 								x = 50%
 								y = 50%
@@ -110,14 +105,18 @@ svg {
 		@let first = Object.keys(RNAdata)[0]
 		@let last = Object.keys(RNAdata).slice(-1)[0]
 		PaginationContainer {
-			x = startX+ 350 + (squareLength+config.yPadding) * RNAdata[first].rowNames.length;
-			y = startY
-			rotation = @rotate(plotRotation)
+			x = -300
+			y = 2000
 			size = RNAdata[first].matrix.length;
 			pageSize = 20
+            behavior:tooltip {
+                content = "if group counts greater than 20, it would be paginated"
+            }
 			:children(d) {
 				Columns {
-					x = 100
+					x = 300 + startX + 450 + (squareLength + config.yPadding) * RNAdata[first].rowNames.length;
+					y = startY - 2000
+					rotation = @rotate(plotRotation)
 					@for (sampleData, index) in RNAdata {
 						@let item = sampleData
 						Container {

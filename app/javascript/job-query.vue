@@ -226,12 +226,15 @@
                         <v-chart :options="chartOptions" />
                     </section>
 
-                    <section id="test-log" class="float-right">
-                        <h4>Test Log</h4>
-                        <p class="font-italic">Console Output</p>
-                        <pre id="stdout" class="light">{{stdout}}</pre>
-                        <p class="font-italic">Error Message</p>
-                        <pre id="stderr">{{stderr}}</pre>
+                    <section id="test-log" class = "row">
+                        <div class = "col-md-6">
+                            <p class="font-italic">Console Output</p>
+                            <pre id="stdout" class="light">{{stdout}}</pre>
+                        </div>
+                        <div class = "col-md-6">
+                            <p class="font-italic">Error Message</p>
+                            <pre id="stderr">{{stderr}}</pre>
+                        </div>
                     </section>
 
                     <section id="outputs" class="mt-4 mb-4">

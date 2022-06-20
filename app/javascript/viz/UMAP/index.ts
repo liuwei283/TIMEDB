@@ -47,7 +47,7 @@ function init() {
                     this.data.plotData = {
                         UMap: {
                             position: {
-                                startX: 100, 
+                                startX: 300, 
                                 startY: 0
                             },
                             plotSize: {

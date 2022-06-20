@@ -146,30 +146,30 @@ export class ComplexGroupedScatters extends Component<ComplexGroupedScattersOpti
                 this.hull = hull
             }
             this.scatterData = this.prop.data
-            if(this.prop.showLabel) {
-                let labels = Object.values(this.prop.data).map(project => {
-                    return Object.entries(project).map(([key, value]) => {
-                        return {
-                            x: (value[0]-this.prop.categroyRange[0])/(this.prop.categroyRange[1] - this.prop.categroyRange[0])*this.prop.plotSize[0],
-                            y: (this.prop.valueRange[1]-value[1])/(this.prop.valueRange[1] - this.prop.valueRange[0])*this.prop.plotSize[1],
-                            name: key,
-                            width: 4.8 * (key.length),
-                            height: 14,
-                            r: 2
-                        }
-                    })
-                }).flat();
-                // let anchors = this.prop.data.data.map(d => {
-                //     return {
-                //         x: d.pos*500,
-                //         y: (1-d.value)*500,
-                //         r: 2
-                //     }
-                // });
-                distributer().label(labels).anchor(labels).width(this.prop.plotSize[0]).height(this.prop.plotSize[1]).start(5000);
-                this.labels = labels
-                console.log(this.labels)
-            }
+        }
+        if(this.prop.showLabel) {
+            let labels = Object.values(this.prop.data).map(project => {
+                return Object.entries(project).map(([key, value]) => {
+                    return {
+                        x: (value[0]-this.prop.categroyRange[0])/(this.prop.categroyRange[1] - this.prop.categroyRange[0])*this.prop.plotSize[0],
+                        y: (this.prop.valueRange[1]-value[1])/(this.prop.valueRange[1] - this.prop.valueRange[0])*this.prop.plotSize[1],
+                        name: key,
+                        width: 4.8 * (key.length),
+                        height: 14,
+                        r: 2
+                    }
+                })
+            }).flat();
+            // let anchors = this.prop.data.data.map(d => {
+            //     return {
+            //         x: d.pos*500,
+            //         y: (1-d.value)*500,
+            //         r: 2
+            //     }
+            // });
+            distributer().label(labels).anchor(labels).width(this.prop.plotSize[0]).height(this.prop.plotSize[1]).start(5000);
+            this.labels = labels
+            console.log(this.labels)
         }
     }
 

@@ -132,7 +132,31 @@ up to here -->
                         <% end %>
                         </ul>
                         '> 
+                        <div data-toggle="tooltip" data-html="true" title= '
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <strong>cancer_name: </strong>
+                                    WT;CCSK;KICH;KIRC;KIRP
+                                </div>
+
+                                <div class="col-md-12">
+                                    <strong>cancer_type: </strong>
+                                    Wilms Tumor;Clear Cell Sarconma of the Kidney;Kidney Chromophobe;Kidney Renal Clear Cell Carcinoma;Kidney Renal Papillary Cell Carcinoma
+                                </div>
+
+                                <div class="col-md-12">
+                                    <strong>data_source: </strong>
+                                    TCGA;GEO;TARGET
+                                </div>
+
+                                <div class="col-md-12">
+                                    <strong>primary_site: </strong>
+                                    Kidney
+                                </div>
+                            </div>
+                        '> 
                         <%= image_tag("kidney.png", class: "rounded-circle z-depth-2") %> 
+                        </div>
 
                         </div>
                         <h4> Kidney</h4>
@@ -147,15 +171,70 @@ up to here -->
                         <% end %>
                         </ul>
                         '> 
+                        <div data-toggle="tooltip" data-html="true" title= '
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <strong>cancer_name: </strong>
+                                    AML;CML;ALL;CLL
+                                </div>
+
+                                <div class="col-md-12">
+                                    <strong>cancer_type: </strong>
+                                    Acute Myeloid Leukemia;Chronic Myelogenous Leukemia;Acute lymphocytic leukemia;chronic lymphocytic leukemia
+                                </div>
+
+                                <div class="col-md-12">
+                                    <strong>data_source: </strong>
+                                    TCGA;GEO;TARGET
+                                </div>
+
+                                <div class="col-md-12">
+                                    <strong>sub_cancer: </strong>
+                                    Myeloid Leukemias
+                                </div>
+
+                                <div class="col-md-12">
+                                    <strong>primary_site: </strong>
+                                    Hematopoietic and reticuloendothelial systems
+                                </div>
+                            </div>
+                        '> 
                         <%= image_tag("Leukemia.png", class: "rounded-circle z-depth-2") %> 
+                        </div>
                         </div> 
                         <h4> Leukemia</h4>
                 </div>
                 <div class = "col-lg-2 col-lg-offset-1 mb-4">
                     <% cancer_other = Cancer.find_by(cancer_type: "Other") %>
                     <%= link_to cancer_other do %>
+                    <div data-toggle="tooltip" data-html="true" title= '
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <strong>cancer_name: </strong>
+                                    OTHERS
+                                </div>
+
+                                <div class="col-md-12">
+                                    <strong>cancer_type: </strong>
+                                    Other
+                                </div>
+
+                                <div class="col-md-12">
+                                    <strong>data_source: </strong>
+                                    GEO
+                                </div>
+
+                                <div class="col-md-12">
+                                    <strong>primary_site: </strong>
+                                    Uterus, NOS
+                                </div>
+                            </div>
+                        '> 
+                        
                         <%= image_tag("others.png", class: "rounded-circle z-depth-2") %>
+                        </div>
                     <% end %>
+                    
                     <h4> <%= "Others" %> </h4>
                 </div>
                 <div class = "col-lg-2 col-lg-offset-1 mb-4">

@@ -22,7 +22,7 @@ export const generateColorConfig = (v): any => (            {
                 title: "",
                 component: "color-picker",
                 data: {
-                    title: "Customize colors",
+                    title: "color",
                     scheme: copyObject(v.data.colorMap),
                     id: "pwcolor",
                     callback(colors) {
@@ -37,7 +37,7 @@ export const generateColorConfig = (v): any => (            {
 
 export const generateChooseConfig = (v): any => ({
     id: "plot_st3",
-    title: "Custom Setting",
+    title: "Customized Setting",
     layout: "tabs",
     tabs:[
         {

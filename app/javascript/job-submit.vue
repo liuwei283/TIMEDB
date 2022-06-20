@@ -263,7 +263,18 @@
                                                                         :state="inputValid[`p-${param.id}`]" />
                                                         </div>
                                                     </div>
-                                                    <h5 class = "submit-container" v-if="parameters_input.length > 0"> Some self statements here, Some self statements here, Some self statements here.</h5>
+                                                    <div class = "col-md-10 mt-4" v-if="parameters_input.length > 0"> 
+                                                        <p>
+                                                            CIBERSORT is only freely available for academic users and could not be directly included in this package.
+                                                            To use CIBERSORT with this package, you need to register on the cibersort website,
+                                                            obtain a license, and download the CIBERSORT source code.
+                                                            The source code package contains two files, that are required:
+                                                        </p>
+                                                        <ol>
+                                                            <li>CIBERSORT.R</li>
+                                                            <li>LM22.txt</li>
+                                                        </ol>
+                                                    </div>
                                                     <div class="col-md-10" v-for="param_input in parameters_input" :key="param_input.id">
                                                         <label :for="`p-${param_input.id}`">{{ param_input.name }}
                                                             <span v-if="param_input.required" class="required">*</span>

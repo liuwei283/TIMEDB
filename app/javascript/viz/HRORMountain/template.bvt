@@ -2,14 +2,6 @@ svg{
 	width = 1300; 
 	//height = 600
 	Component {
-		//左边
-		// Container {
-		// 	Image {
-		// 		@expr console.log(image)
-		// 		width = 100; height = 100
-		// 		url = image
-        // 	}
-		// }
 		y = 100
 		Container {
 			XYPlot {
@@ -21,8 +13,6 @@ svg{
 				valueRange = [-1,cell.length]
 				discreteCategory = true
 				data = {eachbar}
-				@expr console.log("eachbar!!!!",eachbar)
-				@expr console.log("maxtextcell:",data.maxtextcell)
 				//rotation = @rotate(90)
 				yScale = @scaleLinear(-1,6)
 				fill = "none"
@@ -55,8 +45,6 @@ svg{
 						//x = @scaled-x(d[2]); 
 						y = @scaled-y(d[0])
 						x = d[2]*25;
-						// @let tempx = @scaled-x(d[2])
-						// @expr console.log("tempx:",tempx)
 						Rect {
 							//fill = d[3];
 							fill = d[2]>=1? colorMap[">=1"]:colorMap["<1"]
@@ -164,7 +152,6 @@ svg{
 		// 		valueRange = [-1,5]
 		// 		discreteCategory = true
 		// 		data = {eachbar2}
-		// 		@expr console.log("eachbar!!!!",eachbar)
 		// 		//rotation = @rotate(90)
 		// 		yScale = @scaleLinear(-1,6)
 		// 		fill = "none"
@@ -195,9 +182,7 @@ svg{
 		// 				//x = @scaled-x(d[2]); 
 		// 				y = @scaled-y(d[0])
 		// 				x = d[2]*25;
-		// 				// @let tempx = @scaled-x(d[2])
-		// 				// @expr console.log("tempx:",tempx)
-						
+		// 				// @let tempx = @scaled-x(d[2])				
 		// 				Rect {
 		// 					fill = d[3]; width = 6;height = 6
 		// 					behavior:tooltip {

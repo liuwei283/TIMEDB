@@ -94,18 +94,21 @@
                         </table>
                     </section>
 
-                    <section id="resource-usage" class="p-0 float-left">
-                        <h4>Resource Usage</h4>
-                        <v-chart :options="chartOptions" />
-                    </section>
+                    <div class="row">
+                        <div id="resource-usage" class="p-4 col-md-6">
+                            <h4>Resource Usage</h4>
+                            <v-chart :options="chartOptions" />
+                        </div>
 
-                    <section id="test-log" class="float-right">
-                        <h4>Test Log</h4>
-                        <p class="font-italic">Console Output</p>
-                        <pre id="stdout" class="light">{{stdout}}</pre>
-                        <p class="font-italic">Error Message</p>
-                        <pre id="stderr">{{stderr}}</pre>
-                    </section>
+                        <div id="task-log" class = "col-md-6">
+                            <p class="font-italic">Console Output</p>
+                            <pre id="stdout" class="light">{{stdout}}</pre>
+                            <p class="font-italic">Error Message</p>
+                            <pre id="stderr">{{stderr}}</pre>
+                        </div>
+
+                       
+                    </div>
 
                     <section id="outputs" class="mt-4 mb-4">
                         <h4 class="pt-2">Outputs</h4>
