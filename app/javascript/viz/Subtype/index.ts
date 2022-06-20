@@ -17,7 +17,6 @@ function init() {
         components: { ComplexGroupedBars },
         data: {
             plotSize   : [1000, 600],
-            yLabel: "sample size",
         },
         loadData: {
             SubtypeData: {
@@ -58,6 +57,32 @@ function init() {
                     console.log(stat)
                     console.log(classifications)
                     console.log(colorMap)
+                    this.data.plotData = {
+                        Subtype: {
+                            position: {
+                                startX: 100, 
+                                startY: 0
+                            },
+                            plotSize: {
+                                width: 1550, 
+                                height: 500
+                            },
+                            fontSize: {
+                                labelSize: 8
+                            },
+                            tag: {
+                                yLabel: "sample size",
+                            },
+                            rotation: {
+                                // plotRotation: 0,
+                                xRotation: -20,
+                                // yRoatation: 0
+                            },
+                            color: {
+                                colorMap: colorMap
+                            }
+                        }
+                    }
                     return {stat: result, classifications, colorMap};
                 }
             }

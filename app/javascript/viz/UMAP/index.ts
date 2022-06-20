@@ -44,12 +44,37 @@ function init() {
                     const colorMap = Oviz.color.schemeCategory("light", classifications);
                     console.log(classifications)
                     console.log(colorMap)
+                    this.data.plotData = {
+                        UMap: {
+                            position: {
+                                startX: 100, 
+                                startY: 0
+                            },
+                            plotSize: {
+                                width: 600, 
+                                height: 600
+                            },
+                            tag: {
+                                xLabel: "X",
+                                yLabel: "Y",
+                            },
+                            color: {
+                                colorMap: colorMap
+                            },
+                            customized: {
+                                showLabel: true,
+                                showConvexHull: true,
+                                radius: 3
+                            }
+                        }
+                    }
                     return {data: result, classifications, colorMap, categroyRange: [minX, maxX], valueRange: [minY, maxY], radius: 3}
                 }
             }
         },
         setup() {
             console.log(this)
+            // this.data.plotData = {UMAPData: this.data.UMAPData}
             registerEditorConfig(editorConfig(this), "getVue", "#task-output");
         }
     });

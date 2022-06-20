@@ -45,7 +45,7 @@
                     <div id="accordion">
                         <div class="cols-xs-space cols-sm-space cols-md-space container">
                             <div class = "row" id="jumpDivStart">
-                                <div class="col-lg-4 mb-4 justify-content-center text-center" v-for="a in analyses" :key="a.id" @click="updateApp(a, true)">
+                                <div class="col-lg-4 mb-4 justify-content-center text-center" v-for="a in analyses" :key="a.pid" @click="updateApp(a, true)">
                                     <div class="card">
                                         <img v-if="a.cover_image == null" v-bind:src="require('../assets/images/module.png')" class="card-img-top">
                                         <img v-else :src="a.cover_image" class="card-img-top">
@@ -118,7 +118,7 @@
                                         <div class = "row submit-box justify-content-center">
                                             <div v-if="picked_single_multiple=='single'" class = "row justify-content-center">
                                                 <div class = "row justify-content-center">
-                                                    <div class="text-center" v-for="input in displayedInputs" :key="input.id">
+                                                    <div class="text-center" v-for="input in pure_inputs" :key="input.id">
                                                         <label :for="`i-${input.id}`">{{ input.name }}
                                                             <span v-if="input.required" class="required">*</span>
                                                         </label>
@@ -158,12 +158,12 @@
                                                         <div v-b-modal="`batchEffect-config-${input_idx}`" class="uploadPng text-center justify-content-center container" @click="updateStepToFile()">
                                                             <img v-bind:src="require('../assets/images/batchEffectSetting.png')" style="width:90%;">
                                                         </div>
-                                                        <div class = "text-center" v-if="updateUploadedStatus[input_idx - 1] == true">
+                                                        <!-- <div class = "text-center" v-if="updateUploadedStatus[input_idx - 1] == true">
                                                             <i class="fa fa-check" aria-hidden="true" style="color:green"></i>
                                                         </div>
                                                         <div class = "text-center" v-else>
                                                             <i class="fa fa-times" aria-hidden="true" style="color:red"></i>
-                                                        </div>
+                                                        </div> -->
                                                         <br>
                                                     </div>
                                                 </div>
@@ -184,7 +184,9 @@
 
                                                 <div class = "row mt-3 mb-3" style="height:350px; overflow:scroll;">
 
-                                                        
+                                                        <label :for="`p-${single_sync_params[0].id}`">{{ single_sync_params[0].name }}
+                                                            <span v-if="single_sync_params[0].required" class="required">*</span>
+                                                        </label>
                                                         <b-form-input @focus="provide_param_desc(single_sync_params[0])" :id="`p-${single_sync_params[0].id}`" :value="single_sync_params[0].default" :required="single_sync_params[0].required"
                                                             v-model="parameters[`p-${single_sync_params[0].id}`]" :name="`p-${single_sync_params[0].id}`" :state="inputValid[`p-${single_sync_params[0].id}`]" />
                                                         <br>
@@ -305,18 +307,15 @@
         </div>
 
 
-        <b-modal class= "file-submit-modal" :id="`single-upload-${input.id}`" size="lg" :title="`Submit input file - ${input.name}`" centered v-for="input in displayedInputs" :key="input.id">
+        <b-modal class= "file-submit-modal" :id="`single-upload-${input.id}`" size="lg" :title="`Submit input file - ${input.name}`" centered v-for="input in pure_inputs" :key="input.id">
                 <div class = "row justify-content-center submit-container">
-                    <div class = "col-md-1">
+                    <div class="col-md-12 text-left mb-4">
+                        <button class = "btn btn-secondary">
+                            <a :href="`/public/data/module_demo/${input.name}_demo.csv`" :download="input.name">Download demo file</a>
+                        </button>
                     </div>
-                    <button class = "col-md-5 btn btn-secondary">
-                        <a :href="`/public/data/module_demo/${input.name}_demo.csv`" :download="input.name">Download demo file</a>
-                    </button>
-                    <div class = "col-md-6">
-                    </div>
-                    
                     <div class = "col-md-12 text-center">
-                        <div class = "submit-container">
+                        <div>
                             <div>
                                 <b-form-file
                                     :id="`i-${input.id}`"
@@ -332,7 +331,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class = "col-md-10" id = "description-card submit-container">
+                    <div class = "col-md-10 text-center" id = "description-card">
                         <div class = "row submit-container">
                             <div v-html="input.description"></div>
                         </div>
@@ -341,9 +340,124 @@
         </b-modal>
 
         <b-modal class= "file-submit-modal" :id="`batchEffect-config-${input_idx}`" size="xl" centered title="File Submission and Parameter Setting for Batch Effect" v-for="input_idx in parseInt(displayedPairsNum)" :key="input_idx">    
+                <div class = "row justify-content-center">
 
+                    <div class = "col-md-10 text-center">
+                        <h4 class = "mb-4"> File submission </h4>
+                        <div class = "row">
+                            <div id = "be-file-submit" class = "col-md-6 text-center" v-for="input in pure_inputs" :key="input.id">
+                                <div>
+                                    <label :for="`multiple-i-${input.id}-${input_idx}`" class = "row justify-content-around">
+                                        <div class = "col-md-6 text-left" style="margin:auto;">
+                                            {{ input.name }}
+                                            <span v-if="input.required" class="required" style="color:red;">*</span>
+                                        </div>
+                                        <div class = "col-md-6 text-right">
+                                            <button class = "btn btn-secondary">
+                                                <a :href="`/public/data/module_demo/${input.name}_demo.csv`" :download="input.name">Download demo file</a>
+                                            </button>
+                                        </div>
+                                    </label>
+                                    <b-form-file
+                                        :id="`multiple-i-${input.id}-${input_idx}`"
+                                        v-model="files[`multiple-i-${input.id}-${input_idx}`]"
+                                        :placeholder="files[`multiple-i-${input.id}-${input_idx}`] ? files[`multiple-i-${input.id}-${input_idx}`].name : 'no file uploaded'"
+                                        drop-placeholder="Drop file here..." 
+                                        :name="`multiple-i-${input.id}-${input_idx}`"
+                                        :required="input.required"
+                                        :disabled="ds_selected[input_idx - 1]!=''"
+                                    >
+                                    </b-form-file>
+                                    <div class = "submit-container">
+                                        <div v-html="input.description">
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                            </div>
+                        </div>
+                    </div>
+
+                    <br>
+                    <br>
+
+                    <div class = "col-md-8 justify-content-center submit-container">
+                        <h4>
+                            Or you can select a dataset to merge:
+                        </h4>
+                        <b-form-select
+                            name="selected-dataset"
+                            v-model="ds_selected[input_idx - 1]"
+                        >
+                            <option value="" key="default">--click to select your own dataset--</option>
+                            <option v-for="(option, index) in select_box_option" :key="index" :value="option.value" :disabled="option.disabled">
+                                {{option.lable}}
+                            </option>
+                        </b-form-select>
+                    </div>
+
+                    <br>
+                    <br>
+
+                    <div class = "col-md-10 submit-container text-center" v-if="picked_single_multiple=='multiple'">
+                        <h4> Parameter setting </h4>
+
+                        <div class = "row justify-content-center">
+
+                            <div class = "col-md-6">
+                                <div v-if="ds_selected[input_idx - 1] == ''" style="vertical-align:center">
+                                    <div class="row" style="margin-bottom:10px" v-for="(params, pname) in multiple_sync_params" :key="pname">
+                                        <label :for="`multiple-p-${params[0].id}-${input_idx}`">{{ params[0].name }}
+                                            <span v-if="params[0].required" class="required" style="color:red;">*</span>
+                                        </label>
+                                        <div>
+                                            <b-form-input @focus="provide_multiple_param_desc(params[0])" :id="`multiple-p-${params[0].id}-${input_idx}`" :value="params[0].default" :required="params[0].required" :placeholder="parameters[`multiple-p-${params[0].id}-${input_idx}`]"
+                                            v-model="parameters[`multiple-p-${params[0].id}-${input_idx}`]" :name="`multiple-p-${params[0].id}-${input_idx}`" />
+                                        </div>
+                                            
+                                    </div>
+                                </div>
+
+                                <div class = "row">
+                                    <b-list-group>
+                                        <div v-for="(value, key) in multiple_module_params" :key="value.id">
+                                            <div v-if="value.params!=null">
+                                                <b-list-group-item href="javascript:void(0)" v-b-toggle="`mm-${value.id}`" class="mb-2">
+                                                    <i class="fab fa-app-store-ios"></i> {{ key }}
+                                                </b-list-group-item>
+                                                <b-collapse visible :id="`mm-${value.id}`" class="mb-4 p-4 border">
+                                                    
+                                                    <div class="col-md-10">
+                                                        <label :for="`multiple-p-${value.params.id}-${input_idx}`">{{ value.params.name }}
+                                                            <span v-if="value.params.required" class="required" style="color:red;">*</span>
+                                                        </label>
+                                                        <div>
+                                                            <select @focus="provide_param_desc(value.params)" class="form-control custom-select" 
+                                                                    v-model="parameters[`multiple-p-${value.params.id}-${input_idx}`]" :required="value.params.required"
+                                                                    :state="inputValid[`multiple-p-${value.params.id}-${input_idx}`]">
+                                                                <option v-for="option in value.params.options" :value="option" :key="option"
+                                                                        :selected="value.params.default == option ? 'selected' : ''">
+                                                                    {{ option }}
+                                                                </option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                    
+                                                </b-collapse>
+                                            </div>
+                                        </div>
+                                    </b-list-group>
+                                        
+                                </div>
+                            </div>
+                            <div class = "col-md-6">
+                                <h2>Parameters description</h2>
+                                <div id = "multiple_params_desc" v-html="multiple_params_desc"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
         </b-modal>
-
 
         <b-modal v-if="started" ref="submit-helper" v-model="showhelper" id = "submit-helper" size="xl" scrollable title="Analysis Helper" centered @ok="jumpToUpload">
             <br>
@@ -425,6 +539,7 @@
                 step: 1,
                 showhelper: false,
                 parameters_input: [], // for signature file and cibersort r file
+                pure_inputs: [],
                 pipeline_json: {}, // seeems not useful
                 
                 //not syncronized parameters
@@ -435,6 +550,8 @@
                 single_sync_params: [],
                 multiple_sync_params: {},
                 multiple_sync_pnames: ["Dataset name", "Platform"],
+
+                demo_setting_json: {},
                 
             
             };
@@ -443,7 +560,7 @@
             this.ds_info = window.gon.select_box_option;
             
             this.isConv = true; 
-            // this.updateApp(null, false);
+            this.updateApp(null, false);
             this.select_box_option = [];
 
             var oplist = [];
@@ -457,9 +574,11 @@
             // this.multiple_completed = Array(10).fill(false);
         },
         computed: {
-            displayedInputs() {
-                return _.sortBy(this.app.inputs.filter(x => (!x._destroy && x.name != 'CIBERSORT.R' && x.name != 'Signature file')), ['name']);
-            },
+            //improvement sort the parameter with respect to their default name
+            // displayedInputs() {
+            //     return this.pure_inputs;
+            //     return _.sortBy(this.app.inputs.filter(x => (!x._destroy && x.name != 'CIBERSORT.R' && x.name != 'Signature file')), ['name']);
+            // },
             // displayedSingleParams() {
             //     console.log("logging displayed single parameters => called by displayedSingleParams function:")
             //     console.log(this.single_parameters);
@@ -492,52 +611,53 @@
                 for (var input_idx = 1; input_idx <= this.multiple_pairs_num;  input_idx++ ) {
                     this.multiple_completed[input_idx - 1] = true;
 
+                    //check whether input value is empty or not
                     if (this.ds_selected[input_idx - 1] == "") {
-                        this.app.inputs.forEach((item) => {
-                            console.log(item);
-                            console.log("priting files and status when updating status for multiple upload: " + input_idx + " - " + item.name);
-                            console.log(this.files['multiple-i-' + item.id + '-' + input_idx] == null)
-                            console.log(this.files['multiple-i-' + item.id + '-' + input_idx])
-
-                            // console.log(this.files['i-' + this.app.inputs[k].id + '-' + input_idx] == null)
-                            // console.log(this.files['i-' + this.app.inputs[k].id + '---' + input_idx] == null)
-
+                        this.pure_inputs.forEach((item) => {
+                            // console.log(item);
+                            // console.log("priting files and status when updating status for multiple upload: " + input_idx + " - " + item.name);
+                            // console.log(this.files['multiple-i-' + item.id + '-' + input_idx] == null)
+                            // console.log(this.files['multiple-i-' + item.id + '-' + input_idx])
                             if (this.files['multiple-i-' + item.id + '-' + input_idx] == null) {
                                 this.multiple_completed[input_idx - 1] = false;
-                                console.log(item.name + "not uploaded");
+                                console.log(item.name + " is not uploaded");
                             }
                         })
                     }
 
-                    //check whetehr the parameters can fullfil the requirement
-                    if (this.ds_selected[input_idx - 1] == '') {
-                        for (var mp in this.multiple_parameters) {
-                            var cur_value = this.parameters["multiple-p-" + this.multiple_parameters[mp].id + "-" + input_idx];
+                    //check module syncronized parameters
+                    if (this.multiple_completed[input_idx - 1] == true && this.ds_selected[input_idx - 1] == '') {
+                        for (let input_name in this.multiple_sync_params) {
+                            var rep_input = this.multiple_sync_params[input_name][0];
+                            var cur_value = this.parameters["multiple-p-" + rep_input.id + "-" + input_idx];
                             const valid = !!cur_value && !!_.trim(cur_value);
+                            //all of multipe parameters are required
                             if (!valid) {
                                 console.log(cur_value);
-                                console.log("Input parameters has problems")
+                                console.log("Input parameters has problems, and the problematic value is: ");
+                                console.log(cur_value);
                                 this.multiple_completed[input_idx - 1] = false;
                             }
                         }
                     }
-                    else {
-                        var cur_ds_param = this.ds_param_selected[input_idx - 1]
-                        if (cur_ds_param == "") this.multiple_completed[input_idx - 1] = false;
+
+                    //check module not syncronized parameters
+                    if (this.multiple_completed[input_idx - 1] == true) {
+                        for (let module_name in this.multiple_module_params) {
+                            let module_param = multiple_module_params[k].params;
+                            var cur_value = this.parameters["multiple-p-" + module_param.id + "-" + input_idx];
+                            const valid = !!cur_value && !!_.trim(cur_value);
+                            //all of multipe parameters are required
+                            if (!valid) {
+                                console.log(cur_value);
+                                console.log("Input parameters has problems, and the problematic value is: ");
+                                console.log(cur_value);
+                                this.multiple_completed[input_idx - 1] = false;
+                            }
+                        }
                     }
-                    // document.querySelectorAll("#multiple-upload-" + input_idx + " input[name^='multiple-p']").forEach((input) => {
-                    //     if(input.required) {
-                    //         console.log(input.value);
-                    //         const valid = !!input.value && !!_.trim(input.value);
-                    //         if (!valid) {
-                    //             console.log(input);
-                    //             console.log("Input parameters has problems")
-                    //             this.multiple_completed[input_idx - 1] = false;
-                    //         }
-                    //     }
-                    // })
                 }
-                console.log(this.multiple_completed)
+                console.log(this.multiple_completed);
                 return this.multiple_completed;
             },
             
@@ -545,27 +665,27 @@
         watch: {
             ds_selected:function(newValue) {
                 if (this.picked_single_multiple == 'single' && newValue != "") {
+                    console.log("new selected dataset is (under single mode): ");
                     console.log(newValue);
-                    for (var k in this.app.inputs) {
-                        this.files['i-' + this.app.inputs[k].id]  = null;
+                    for (var k in this.pure_inputs) {
+                        this.files['i-' + this.pure_inputs[k].id]  = null;
                     }
                 }
                 if (this.picked_single_multiple == 'multiple') {
                     for (var input_idx = 1; input_idx <= this.multiple_pairs_num;  input_idx++ ) {
                         if (this.ds_selected[input_idx - 1] != '') {
-                            this.app.inputs.forEach((item) => {
+                            this.pure_inputs.forEach((item) => {
                                 this.files['multiple-i-' + item.id + '-' + input_idx] = null;
                             })
                         }
                     }
                 }
             },
-            files:function(newValue, oldValue) {
-                console.log(newValue.size);
-                console.log(oldValue.size);
+            files:function() {
                 console.log("file changes");
             },
             multiple_pairs_num:function(newValue) {
+                console.log("new multiple pairs number is: ");
                 console.log(newValue);
             },
         },
@@ -588,88 +708,79 @@
             },
             formatParams() {
                 var formatted_params = []
-                // for (var sp in this.single_parameters) {
-                //     //since we need to automatic fill the project name and protocol normalization method, we need to rocess here
-                //     formatted_params.push({['p-' + this.single_parameters[sp].id]: this.parameters['p-' + this.single_parameters[sp].id]});
-                // }
-                
 
-                
-            
-                //for single parameters
-                for (let k in this.single_parameters) {
-                    for (let t in this.single_parameters[k].params) {
-                        if(this.sync_params_names.includes(this.single_parameters[k].params[t].name)) {
-                            formatted_params.push({['p-' + this.single_parameters[k].params[t].id]: this.parameters['p-' + this.sync_params[this.single_parameters[k].params[t].name][0].id]});
-                        }
-                        else {
-                            formatted_params.push({['p-' + this.single_parameters[k].params[t].id]: this.parameters['p-' + this.single_parameters[k].params[t].id]});
-                        }
+                //for single syncronized parameters
+                var single_sync_value = this.parameters["p-" + this.single_sync_params[0].id];
+                for (let k in this.single_sync_params) {
+                    formatted_params.push({['p-' + this.single_sync_params[k].id]: single_sync_value});
+                }
+
+                //for single module parameters
+                for (let module_name in this.single_module_params) {
+                    let module_params = this.single_module_params[module_name];
+                    for (let k in module_params) {
+                        formatted_params.push({['p-' + module_params[k].id]: this.parameters["p-" + module_params[k].id]});
                     }
                 }
-                
-                //for multiple pipelines, needs to think about the structure
 
-                if (this.picked_single_multiple == 'multiple') {
-                    var formatted_multiple_params = [];
-
-                    for (var mp in this.multiple_parameters) {
-                        var pvalue = "";
-                        var pvalue_arr = [];
-
-                        // if (this.ds_selected != "") {
-                        //     if (this.multiple_parameters[mp].name == 'Datasets name') {
-                        //         pvalue = this.ds_info[this.ds_selected][2];
-                        //     }
-                        //     else if (this.multiple_parameters[mp].name == 'Platforms') {
-                        //         pvalue = this.ds_info[this.ds_selected][1];
-                        //     }
-                        //     else {
-                        //         pvalue =  Array(this.ds_info[this.ds_selected][0]).fill([this.ds_param_selected]).join(',') + ',';
-                        //     }
-                        // }
-                        for (var input_idx = 1; input_idx <= this.multiple_pairs_num;  input_idx++ ) {
-                            if(this.multiple_completed[input_idx - 1] == true && this.ds_selected[input_idx - 1] != "") {
-                                var cur_pvalue = "";
-
-                                if (this.multiple_parameters[mp].name == 'Datasets name') {
-                                    cur_pvalue = this.ds_info[this.ds_selected[input_idx - 1]][2];
+                // under multiple mode
+                // thingking - first is dataset merging, second is file uploading
+                // improvement: considering time consuming
+                if (this.picked_single_multiple == "multiple") {
+                    var multiple_sync_array = {};
+                    var multiple_module_array = {};
+                    for (let msp_name in this.multiple_sync_params) {
+                        multiple_sync_array[msp_name] = [];
+                    }
+                    for (let module_name in this.multiple_module_params) {
+                        multiple_module_array[module_name] = [];
+                    }
+                    for (let input_idx = 1; input_idx <=  this.multiple_pairs_num; input_idx++ ) {
+                        if (this.multiple_completed[input_idx - 1] == true) {
+                            // if this pair is from dataset merging
+                            if (this.ds_selected[input_idx - 1] != '') {
+                                console.log("for input pair " + input_idx + " we use dataset merging");
+                                //Dataset name
+                                let dataset_names = this.ds_info[this.ds_selected[input_idx - 1]][2].split(',');
+                                //Platform name
+                                let platform_names = this.ds_info[this.ds_selected[input_idx - 1]][1].split(',');
+                                //project source number
+                                let ps_number = this.ds_info[this.ds_selected[input_idx - 1]][0];
+                                multiple_sync_array['Dataset name'] += dataset_names;
+                                multiple_sync_array["Platform"] += platform_names;
+                                for (let module_name in this.multiple_module_params) {
+                                    multiple_module_array[module_name] += Array(ps_number).fill(this.parameters["multiple-p-" + this.multiple_module_params[module_name].params.id + "-" + input_idx]);
                                 }
-                                else if (this.multiple_parameters[mp].name == 'Platforms') {
-                                    cur_pvalue = this.ds_info[this.ds_selected[input_idx - 1]][1];
-                                }
-                                else {
-                                    cur_pvalue =  Array(this.ds_info[this.ds_selected[input_idx - 1]][0]).fill(this.ds_param_selected[input_idx - 1]).join(',');
-                                }
-
-                                if (pvalue == "") {
-                                    pvalue = cur_pvalue;
-                                }
-                                else {
-                                    pvalue = pvalue + "," + cur_pvalue;
-                                }
-
                             }
-                            // pvalue_arr.push(this.parameters['multiple-p-' + this.multiple_parameters[mp].id + '-' + input_idx]);
-                        }
 
-                        for (var input_idx = 1; input_idx <= this.multiple_pairs_num;  input_idx++ ) {
-                            if(this.multiple_completed[input_idx - 1] == true && this.ds_selected[input_idx - 1] == "") {
-                                if (pvalue == "") {
-                                    pvalue = this.parameters['multiple-p-' + this.multiple_parameters[mp].id + '-' + input_idx];
-                                }
-                                else {
-                                    pvalue = pvalue + "," + this.parameters['multiple-p-' + this.multiple_parameters[mp].id + '-' + input_idx];
+                        }
+                    }
+                    for (let input_idx = 1; input_idx <=  this.multiple_pairs_num; input_idx++ ) {
+                        if (this.multiple_completed[input_idx - 1] == true) {this.parameters["multiple-p-" + this.multiple_module_params[module_name].params.id + "-" + input_idx]
+                            // if this pair is from dataset merging
+                            if (this.ds_selected[input_idx - 1] == '') {
+                                console.log("for input pair " + input_idx + " we use file uploading:");
+                                multiple_sync_array['Dataset name'].push(this.parameters["multiple-p-" + this.multiple_sync_params['Dataset name'][0].id + "-" + input_idx]);
+                                multiple_sync_array["Platform"].push(this.parameters["multiple-p-" + this.multiple_sync_params['Platform'][0].id + "-" + input_idx]);
+                                for (let module_name in this.multiple_module_params) {
+                                    multiple_module_array[module_name].push(this.parameters["multiple-p-" + this.multiple_module_params[module_name].params.id + "-" + input_idx]);
                                 }
                             }
                         }
-
-                        // pvalue += pvalue_arr.join(',');
-                        formatted_multiple_params.push({ ['p-' + this.multiple_parameters[mp].id]: pvalue});
                     }
-                    formatted_params = formatted_params.concat(formatted_multiple_params);
+                    for (let msp_name in this.multiple_sync_params) {
+                        let sync_pvalue = multiple_sync_array[msp_name].join(',');
+                        for (let k in this.multiple_sync_params[msp_name]) {
+                            formatted_params.push({['p-' + this.multiple_sync_params[msp_name][k].id]: sync_pvalue});
+                        }
+                    }
+                    for (let module_name in this.multiple_module_params) {
+                        let integrated_value = multiple_module_array[module_name].join(",");
+                        formatted_params.push({['p-' + this.multiple_module_params[module_name].params.id]: integrated_value});
+                    }
                 }
-
+                console.log("formatted parameters:");
+                console.log(formatted_params);
                 return formatted_params
             },
 
@@ -679,16 +790,14 @@
                 }
                 else {
                     var formatted_files = {};
-                    for (var k in this.app.inputs) {
-                        if (this.app.inputs[k].name != "CIBERSORT.R" && this.app.inputs[k].name != "Signature file") {
-                            var input_arr = [];
-                            for (var input_idx = 1; input_idx <= this.multiple_pairs_num;  input_idx++ ) {
-                                if (this.multiple_completed[input_idx - 1] == true && this.ds_selected[input_idx - 1] == "") {
-                                    input_arr.push(this.files['multiple-i-' + this.app.inputs[k].id + '-' + input_idx]);
-                                }
+                    for (var k in pure_inputs) {
+                        var input_arr = [];
+                        for (var input_idx = 1; input_idx <= this.multiple_pairs_num;  input_idx++ ) {
+                            if (this.multiple_completed[input_idx - 1] == true && this.ds_selected[input_idx - 1] == "") {
+                                input_arr.push(this.files['multiple-i-' + pure_inputs[k].id + '-' + input_idx]);
                             }
-                            formatted_files['i-' + this.app.inputs[k].id] = input_arr;
                         }
+                        formatted_files['i-' + pure_inputs[k].id] = input_arr;
                     }
 
                     for (var k in this.parameters_input) {
@@ -716,7 +825,6 @@
             },
 
             updateApp(s_ana, flag) {
-                this.started = flag;
                 let newapp;
                 if (s_ana == null) {
                     newapp = {
@@ -750,7 +858,6 @@
                 }
                 else {
                     console.log("start update app");
-                    this.showhelper = true;
 
                     this.selected_analysis = s_ana; // records information of local database
 
@@ -767,11 +874,8 @@
                         this.demo_id = s_ana.multiple_demo_id;
                         this.result_demo_id = s_ana.multiple_result_id;
                     }
-
                     axios.get(`https://deepomics.org/api/pipeline_flowchart/${newid}/`).then((response) => {
-                        this.app = response.data; //response data json has two key: inputs and nodes
-                        // response data has two json items: inputs and nodes
-                        this.app.id = newid // submitted pipeline id
+                        this.app = response.data;
                     }).finally(() => {
                         console.log("Successfully get pipeline flowchart json");
                         axios.get(`https://deepomics.org/api/pipelines/${newid}/`).then((response) => {
@@ -791,18 +895,19 @@
                             console.log("created: fetched params:");
                             console.log(this.app.params);
 
-                            
-                            
                             var params_copy = this.app.params;
                             for (let k in params_copy) {
-                                let module_params = params_copy[k].params;
+
+                                var module_params = params_copy[k].params;
+                                this.single_module_params[k] = {};
+                                this.multiple_module_params[k] = {};
                                 this.single_module_params[k].id = params_copy[k].id
                                 this.multiple_module_params[k].id = params_copy[k].id
                                 this.single_module_params[k].params = []
 
 
                                 for (let t in module_params) {
-                                    let param = module_params[t];
+                                    var param = module_params[t];
                                     // single syncronized parameters array - Project name
                                     if (param.name == "Project name") {
                                         this.single_sync_params.push(param);
@@ -817,23 +922,23 @@
                                     }
                                     else if (this.picked_single_multiple == "multiple" && param.name == "Protocol normalization") {
                                         this.multiple_module_params[k].params = param;
+                                
+
                                     }
                                     else {
-                                        this.parameters['p-' + params.id] = params.default; //commonly only for single parameters
+                                        this.parameters['p-' + param.id] = param.default; //commonly only for single parameters
                                         this.single_module_params[k].params.push(param);
                                     }
                                 }
                             }
 
-
                             this.single_params_desc = this.single_sync_params[0].description;
-                            this.multiple_params_desc = this.multiple_sync_params["Dataset name"][0].description;
 
 
                             if (this.picked_single_multiple == "multiple") {
                                 this.multiple_completed = Array(10).fill(false);
                                 this.ds_selected = Array(10).fill("");
-
+                                this.multiple_params_desc = this.multiple_sync_params["Dataset name"][0].description;
                                 // this.multiple_sync_params_desc = this.multiple_sync_params["Dataset name"][0].description;
                                 // this.single_module_params_desc = this.multiple_module_params[Object.keys(this.single_parameters)[0]].description;
 
@@ -848,11 +953,21 @@
                                 if (this.app.inputs[k].name == "CIBERSORT.R" || this.app.inputs[k].name == "Signature file") {
                                     this.parameters_input.push(this.app.inputs[k]);
                                 }
+                                else {
+                                    this.pure_inputs.push(this.app.inputs[k]);
+                                }
                             }
-
                             console.log("end update app");
+                            console.log(this.single_sync_params);
+                            console.log(this.single_module_params);
+                            console.log(this.multiple_sync_params);
+                            console.log(this.multiple_module_params);
+
+                            this.showhelper = true;
+                            this.started = flag;
                         });
                     });
+
                     
                     
                 }
@@ -1098,7 +1213,6 @@
                 }
                 $("#disable-fill").fadeIn(10);
                 this.isLoading = true;
-                console.log(this.isLoading);
                 axios.post(
                     `/submit-app-task/`,
                     
@@ -1155,20 +1269,20 @@
                 document.getElementById("multiple-button").classList.toggle("btn-secondary");
                 document.getElementById("multiple-button").classList.toggle("btn-dark");
             },
-            resetMultipleUpload(input_idx) {
+            // resetMultipleUpload(input_idx) {
                 
-                for ( var k in this.app.inputs) {
-                    this.files["multiple-i-" + this.app.inputs[k].id + "-" + input_idx] = null;
-                }
+            //     for ( var k in this.app.inputs) {
+            //         this.files["multiple-i-" + this.app.inputs[k].id + "-" + input_idx] = null;
+            //     }
 
-                for ( var k in this.multiple_parameters) {
-                    this.parameters["multiple-p-" + this.multiple_parameters[k].id + "-" + input_idx] = null;
-                }
+            //     for ( var k in this.multiple_parameters) {
+            //         this.parameters["multiple-p-" + this.multiple_parameters[k].id + "-" + input_idx] = null;
+            //     }
 
                 
-                this.ds_selected[input_idx - 1] = "";
-                this.ds_param_selected[input_idx - 1] = "";
-            },
+            //     this.ds_selected[input_idx - 1] = "";
+            //     this.ds_param_selected[input_idx - 1] = "";
+            // },
             setSelectBox(){
                 var i = 0;
                 var s = "<option disabled vaule=''>Choose a file</option>";

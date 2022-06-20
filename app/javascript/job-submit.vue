@@ -332,34 +332,30 @@
         </div>
 
 
-        <b-modal class= "file-submit-modal" :id="`single-upload-${input.id}`" size="md" :title="`Submit input file - ${input.name}`" centered v-for="input in displayedInputs" :key="input.id">
+        <b-modal class= "file-submit-modal" :id="`single-upload-${input.id}`" size="lg" :title="`Submit input file - ${input.name}`" centered v-for="input in displayedInputs" :key="input.id">
                 <div class = "row justify-content-center submit-container">
-                    <div class = "col-md-1">
-                    </div>
-                    <button class = "col-md-6 btn btn-secondary">
-                        <a :href="`/public/data/module_demo/${input.name}_demo.csv`" :download="input.name">Download demo file</a>
-                    </button>
-                    <div class = "col-md-5">
+                    <div class="col-md-12 text-left mb-4">
+                        <button class = "btn btn-secondary">
+                            <a :href="`/public/data/module_demo/${input.name}_demo.csv`" :download="input.name">Download demo file</a>
+                        </button>
                     </div>
                     
                     <div class = "col-md-12 text-center">
-                        <div class = "submit-container">
-                            <div>
-                                <b-form-file
-                                    :id="`i-${input.id}`"
-                                    v-model="files[`i-${input.id}`]"
-                                    :state="inputValid[`i-${input.id}`]"
-                                    placeholder="Choose a file or drop it here..."
-                                    drop-placeholder="Drop file here..." 
-                                    :name="`i-${input.id}`"
-                                    :required="input.required"
-                                    :disabled="picked_single_multiple=='single' && ds_selected != ''"
-                                >
-                                </b-form-file>
-                            </div>
+                        <div>
+                            <b-form-file
+                                :id="`i-${input.id}`"
+                                v-model="files[`i-${input.id}`]"
+                                :state="inputValid[`i-${input.id}`]"
+                                placeholder="Choose a file or drop it here..."
+                                drop-placeholder="Drop file here..." 
+                                :name="`i-${input.id}`"
+                                :required="input.required"
+                                :disabled="picked_single_multiple=='single' && ds_selected != ''"
+                            >
+                            </b-form-file>
                         </div>
                     </div>
-                    <div class = "col-md-10" id = "description-card submit-container">
+                    <div class = "col-md-10 text-center" id = "description-card">
                         <div class = "row submit-container">
                             <div v-html="input.description"></div>
                         </div>

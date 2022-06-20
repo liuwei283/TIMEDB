@@ -4,7 +4,7 @@ class SubmitController < ApplicationController
   # $user_stor_dir = "#{Rails.root}/data/user"
   def analyses
     @analysis_categories = AnalysisCategory.order(:name)
-    category1 = @analysis_categories[0].name
+    category1 = "Regression Tools"
     redirect_to action: "analysesCategory", cname: category1
   end
 

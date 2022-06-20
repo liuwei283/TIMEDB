@@ -26,13 +26,16 @@ svg {
             }
         }
         Container {
-            x = 100
+            x = plotData.Subtype.position.startX
+            y = plotData.Subtype.position.startY
             ComplexGroupedBars {
+                @props SubtypeData
                 :background {}
                 :box {}
-                plotSize = [1550, 500]
-				ylabel = yLabel
-                @props SubtypeData
+                plotSize = [plotData.Subtype.plotSize.width, plotData.Subtype.plotSize.height]
+				ylabel = plotData.Subtype.tag.yLabel
+                @props plotData.Subtype.color
+                @props plotData.Subtype.plotSize
                 generateTooltip = (d) => {
                     return "Cell type: " + d.data.pos + "</br>" + "Subtype" + ": " + d.key + "</br>" + "Sample Size: " + d.data.value
                 }
@@ -48,9 +51,10 @@ svg {
                                 @let tickX = @scaled-x(tick.value)
                                 @let tickY = 5
                                 y = 10
-                                anchor = @anchor("r", "m")
-                                rotation = @rotate(-20)
-                                fontSize = prop.tickFontSize
+                                // anchor = @anchor("r", "m")
+                                anchor = plotData.Subtype.rotation.xRotation > 0? @anchor("t", "l"): @anchor("t", "r")
+                                rotation = @rotate(plotData.Subtype.rotation.xRotation)
+                                fontSize = plotData.Subtype.fontSize.labelSize
                             }
                         }
                     }

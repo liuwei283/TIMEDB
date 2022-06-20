@@ -20,17 +20,22 @@ svg {
                     }
                     Container {
                         Legend {
-                            data = UMAPData.colorMap.legendData()
+                            data = plotData.UMap.color.colorMap.legendData()
                         }
                     }
                 }
             }
         }
         Container {
-            x = 100
+            x = plotData.UMap.position.startX
+            y = plotData.UMap.position.startY
             ComplexGroupedScatters {
                 plotSize = [600, 600]
                 @props UMAPData
+                @props plotData.UMap.color
+                @props plotData.UMap.customized
+                @props plotData.UMap.tag
+                @props plotData.UMap.plotSize
             }
         }
 	}

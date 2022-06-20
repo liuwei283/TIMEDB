@@ -1,0 +1,235 @@
+svg {
+	width = 2000
+	height = 3000
+	Component.full {
+		x = 100
+		y = 50
+		Component {
+			x = -75
+			y = 100
+			Container {
+				Rows {
+					Container {
+						padding = 4
+						x = -25
+						Text {
+							text = "Immune Checkpoint"
+							fontSize = 15
+						}
+					}
+					Container {
+						Legend {
+							data = checkPointColor.legendData()
+						}
+					}
+				}
+			}
+			Container {
+				y = 100
+				Rows {
+					Container {
+						padding = 4
+						Text {
+							text = "mRNA"
+							fontSize = 15
+						}
+					}
+					Container {
+						Text {
+							text = "Expression"
+							fontSize = 15
+						}
+					}
+					Component {
+						x = 10
+						y = 5
+						Rect {
+							height = 50; width = 20
+							fill = @gradient("bg")
+						}
+						Axis {
+							yScale = @scale-linear(valueRange.dataRange[1], valueRange.dataRange[0], 0, 50)
+							x = 20
+							orientation = "right"
+							includeEndTicks = false
+						}
+						Component.full {
+							y = 50
+							Rect {
+								height = 50; width = 20
+								fill = @gradient("ng")
+							}
+							Axis {
+								yScale = @scale-linear(valueRange.negdataRange[1], valueRange.negdataRange[0], 0, 50)
+								x = 20
+								orientation = "right"
+								includeEndTicks = false
+							}
+						}
+					}
+				}
+			}
+			Container {
+				y = 280
+				Rows {
+					Container {
+						padding = 5
+						Text {
+							text = "P value"
+							fontSize = 15
+						}
+					}
+					@let pvals = [0.04, 0.03, 0.02, 0.01]
+					@for (item, index) in pvals {
+						Container {
+							padding = 5
+							width = 20
+							height = 20
+							Rect.full {
+								fill = "#D3D3D3"
+								stroke = "white"
+								strokeWidth = 1
+							}
+							Circle.centered {
+								x = 50%
+								y = 50%
+								r = (index + 1) * 1.5
+								fill = "black"
+							}
+							Text {
+								x = 40
+								y = 50%
+								anchor = @anchor("m", "c")
+								text = item
+							}
+						}
+					}
+				}
+			}
+		}
+		@let first = Object.keys(RNAdata)[0]
+		@let last = Object.keys(RNAdata).slice(-1)[0]
+		PaginationContainer {
+			x = startX+ 350 + (squareLength+config.yPadding) * RNAdata[first].rowNames.length;
+			y = startY
+			rotation = @rotate(plotRotation)
+			size = RNAdata[first].matrix.length;
+			pageSize = 20
+			:children(d) {
+				Columns {
+					x = 100
+					@for (sampleData, index) in RNAdata {
+						@let item = sampleData
+						Container {
+							width = (squareLength+config.xPadding) * (item.colNames.length+1)
+							ComplexHeatMap {
+								y = 200
+								@props config
+								squareLength = squareLength
+								matrix = sampleData.matrix.slice(d.startIndex, d.endIndex)
+								rMatrix = pKey == "P.Value"? sampleData.rMatrix.slice(d.startIndex, d.endIndex): sampleData.rMatrixS.slice(d.startIndex, d.endIndex)
+								rowNames = sampleData.rowNames.slice(d.startIndex, d.endIndex)
+								colNames = sampleData.colNames
+								circle.stroke = "none"
+								Component {
+									x = -(squareLength + config.xPadding)/2
+									y = -(squareLength + config.yPadding)
+									Rect {
+										width = (squareLength+config.xPadding)*item.colNames.length
+										height = 2
+										fill = "000"
+									}
+									XYPlot {
+										y = -155
+										height = 150
+										width = (squareLength+config.xPadding)* item.colNames.length
+										discreteCategory = true
+										data = partition(item, sampleData.matrix.slice(d.startIndex, d.endIndex))
+										stackedData = {
+											stacked: ["pos", "neg"]
+										}
+										StackedBars {
+											data = "stacked"
+											:children(d){
+												Rect.full {
+													fill = d.key == "pos" ? groups.colors.endColor: groups.colors.negativeEndColor
+													x = 50%
+													anchor = @anchor("top", "center")
+												}
+											}
+										}
+										@if index == first {
+											Axis("left") {
+												yScale = @scale-linear(10, 0)
+											}
+										}
+									}
+								}
+								:rowAxis(d) {
+									@if index == last {
+										Component {
+											x = d.prop.squareLength*(2 + sampleData.colNames.length)
+											// Rect.centered {
+											// 	width = d.prop.squareLength
+											// 	height = d.prop.squareLength
+											// 	fill = "blue"
+											// }
+											Text {
+												// anchor = @anchor("middle", "center")
+												anchor = @anchor("m", "r")
+												text = d.item
+												fill = "black"
+												fontSize = (labelSize)
+												rotation = @rotate(xRotation)
+											}
+										}
+									}
+								}
+								:colAxis(d) {
+									Component {
+										x = 2 * d.prop.squareLength
+										Rect.centered {
+											x = -d.prop.squareLength
+											width = d.prop.squareLength
+											height = d.prop.squareLength
+											fill = checkPointColor.colors[nameMapper[d.item].CheckPoint]
+										}
+										Rect.centered {
+											x = 80
+											width = 2
+											height = d.prop.squareLength + config.xPadding
+											fill = "000"
+										}
+										Text{
+											rotation = @rotate(180)
+											anchor = @anchor("b", "r")
+											y = -d.prop.squareLength/2
+											key = d.key
+											text = d.item
+											fill = "#000"
+											fontSize = @scaled(labelSize)
+										}
+										@if(d.key == Math.floor(d.prop.colNames.length/2)) {
+											Component {
+												x = 90
+												// rotation = @rotate(d.prop.colNames.length>=5? -90: -75)
+												Text {
+													rotation = @rotate(180)
+													anchor = @anchor("b", "r")
+													// anchor = @anchor("t", "c")
+													text = index
+													fill = "#000"
+													fontSize = @scaled(labelSize)
+												}
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+}
