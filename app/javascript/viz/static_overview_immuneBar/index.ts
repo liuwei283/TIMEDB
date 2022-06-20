@@ -21,7 +21,6 @@ export function init(vid, path, eid, plot_name) {
             ylabel,
             startX: 0, 
             startY: 70,
-            width: 1000,
             height: 500, 
             titleSize: 14, 
             labelSize: 12, 
@@ -43,10 +42,12 @@ export function init(vid, path, eid, plot_name) {
                     this.data.result = data.slice(1);
                     this.data.sampleSize = data.slice(1).reduce((pre, cur) => pre+parseInt(cur[1]), 0);
                     this.data.valueRange = valueRange
+                    this.data.width = Math.max(1000, 30*this.data.result.length)
                 },
             },
         },
         setup() { 
+            this.size = {height: 600, width: 300+this.data.width}
             console.log(this);
             registerEditorConfig(editorConfig(this, eid), "getVue", plot_name);
         },
