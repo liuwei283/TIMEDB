@@ -84,9 +84,9 @@ link rel='stylesheet' href="https://fonts.googleapis.com/css?family=Oswald&subse
               strong.number_text =@cancers_num
               span.noun_text  cancers.
             li 
-              strong.number_text =@analysis_num
+              strong.number_text =21
               span.noun_text  online tumor immune microenvironment 
-              =link_to "analyses", "/submit/analyses"
+              =link_to "analyses.", "/submit/analyses"
             li
               | Comprehesive interactive visualization of tumor immune microenvironment data.
 
@@ -150,19 +150,16 @@ link rel='stylesheet' href="https://fonts.googleapis.com/css?family=Oswald&subse
                 strong.number_text =@cancers_num
                 span.noun_text  cancers
                 |  , immune infliatration fraction, immune subtype annotation data.
-              .row
-                .col-md-6
-                  .text-left
-                    p.function-p
-                      =link_to "Database Overview", "/database/overview"
-                    p.function-p
+              .row.justify-content-center.redirection-function
+                
+                  .text-center
+                    .btn.btn-1.m-2
+                      =link_to "Overview", "/database/overview"
+                    .btn.btn-1.m-2
                       =link_to "Cancers", "cancers"
-                    
-                .col-md-6
-                  .text-left
-                    p.function-p
+                    .btn.btn-1.m-2
                       =link_to "Projects", "projects"
-                    p.function-p
+                    .btn.btn-1.m-2
                       =link_to "Samples", "samples"
 
             
@@ -174,22 +171,16 @@ link rel='stylesheet' href="https://fonts.googleapis.com/css?family=Oswald&subse
               p.text-left.function-p
                 strong.number_text 10
                 span.noun_text  online tumor immune microenvironment analysis category 
-                strong.number_text =18
-                span.noun_text  analyses
-              .row
-                .col-md-6
-                  .text-left
-                    p.function-p
-                      =link_to "Database Overview", "/database/overview"
-                    p.function-p
-                      =link_to "Cancers", "cancers"
-                    
-                .col-md-6
-                  .text-left
-                    p.function-p
-                      =link_to "Projects", "projects"
-                    p.function-p
-                      =link_to "Samples", "samples"
+                strong.number_text =21
+                span.noun_text  analyses.
+              #analysis-redirection.redirection-function
+                - @function_level1.each_with_index do |cat, idx|
+                  .level1.btn.btn-1.m-2 data-toggle="collapse" href="#level2#{idx}" aria-expanded="false" aria-controls="level2#{idx}" =cat
+                - @function_level1.each_with_index do |cat, idx| 
+                  div.collapse id="level2#{idx}"
+                    - @function_level2[idx].each do |aname|
+                      .btn.btn-3.m-2
+                        =link_to aname, "submit/analysesCategory?cname=#{aname}"
             .col-lg-5.mb-4
               .icon
                 .icon_img

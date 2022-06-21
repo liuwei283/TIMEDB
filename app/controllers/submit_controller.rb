@@ -770,7 +770,7 @@ class SubmitController < ApplicationController
     @matched_jsnames = []
 
     @matched_visualizers.each do |mvis|
-      @matched_jsnames.push(mvis.js_module_name)
+      @matched_jsnames.push([mvis.name, mvis.js_module_name])
     end
 
     Rails.logger.debug("check visualizers of this analysis:")

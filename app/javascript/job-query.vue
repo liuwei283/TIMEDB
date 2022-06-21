@@ -661,29 +661,29 @@ export default {
         },
         updateGon(output) {
             event.emit("GMT:reset-query", this);
-            this.module_names = output.module_names.map((x, i) => ({value: i, text: x}));
+            this.module_names = output.module_names.map((x, i) => ({value: i, text: x[0]}));
             this.chosenModule = 0;
-            window.gon.module_name = output.module_names[this.chosenModule];
+            window.gon.module_name = output.module_names[this.chosenModule][1];
             
             window.gon.required_data = output.required_data;
             if (!window.gon.urls) window.gon.urls = {};
             window.gon.urls.chosen_file_paths = `/api/analysis/${output.analysis_id}/chosen_file_paths?visualizer=${this.chosenModule}`;
             window.gon.urls.download_demo_file = `/api/analysis/${output.analysis_id}/download_demo_file?visualizer=${this.chosenModule}`;
             console.log("outputing to be visualized plot:")
-            console.log(output.module_names[this.chosenModule]);
-            registerViz(output.module_names[this.chosenModule]);
+            console.log(output.module_names[this.chosenModule][1]);
+            registerViz(output.module_names[this.chosenModule][1]);
             event.emit("GMT:query-finished", this);
         },
         updateVis() {
             event.emit("GMT:reset-query", this);
-            window.gon.module_name = this.data.outputs[this.chosenOutput].module_names[this.chosenModule];
+            window.gon.module_name = this.data.outputs[this.chosenOutput].module_names[this.chosenModule][1];
 
             window.gon.required_data = this.data.outputs[this.chosenOutput].required_data;
             if (!window.gon.urls) window.gon.urls = {};
             window.gon.urls.chosen_file_paths = `/api/analysis/${this.data.outputs[this.chosenOutput].analysis_id}/chosen_file_paths?visualizer=${this.chosenModule}`;
             window.gon.urls.download_demo_file = `/api/analysis/${this.data.outputs[this.chosenOutput].analysis_id}/download_demo_file?visualizer=${this.chosenModule}`;
             
-            registerViz(this.data.outputs[this.chosenOutput].module_names[this.chosenModule]);
+            registerViz(this.data.outputs[this.chosenOutput].module_names[this.chosenModule][1]);
             event.emit("GMT:query-finished", this);
 
         },
@@ -835,7 +835,7 @@ export default {
 }
 #viz-card {
     border: 1px solid #999;
-    height: 835px;
+    //height: 835px;
 }
 .v-editor {
     position: absolute;

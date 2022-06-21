@@ -9,7 +9,11 @@
 div.text-right
     = icon 'fas', 'bars', class: 'fa-solid fa-2xl sidebar-toggle'
 
-div class=('active' if !@pipelines.blank? ) id = "pipeline-nav-item"
+div class=('active' if @pipelines.blank? && @analysis_category.blank?) id = "pipeline-nav-item"
+    p 
+        = link_to "Analysis Helper", "/tutorial"
+
+div class=('active' if !@pipelines.blank? )
     p 
         = link_to "TIMEDB Consensus Tool", {:controller => "submit", :action => "pipelines" }
 
