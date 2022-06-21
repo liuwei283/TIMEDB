@@ -263,7 +263,7 @@
                                                                         :state="inputValid[`p-${param.id}`]" />
                                                         </div>
                                                     </div>
-                                                    <div class = "col-md-10 mt-4" v-if="parameters_input.length > 0"> 
+                                                    <div class = "submit-container mt-4" v-if="parameters_input.length > 0"> 
                                                         <p>
                                                             CIBERSORT is only freely available for academic users and could not be directly included in this package.
                                                             To use CIBERSORT with this package, you need to register on the cibersort website,
@@ -973,6 +973,7 @@
                         this.single_params_desc = this.single_parameters[0].description;
 
                         if (this.local_analysis_name == "TIMEDB Deconv CIBERSORT") {
+                            this.parameters_input=[];
                             for (var k in this.app.inputs) {
                                 if (this.app.inputs[k].name == "CIBERSORT.R" || this.app.inputs[k].name == "Signature file") {
                                     this.parameters_input.push(this.app.inputs[k]);

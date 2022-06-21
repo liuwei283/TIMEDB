@@ -158,12 +158,12 @@
                                                         <div v-b-modal="`batchEffect-config-${input_idx}`" class="uploadPng text-center justify-content-center container" @click="updateStepToFile()">
                                                             <img v-bind:src="require('../assets/images/batchEffectSetting.png')" style="width:90%;">
                                                         </div>
-                                                        <!-- <div class = "text-center" v-if="updateUploadedStatus[input_idx - 1] == true">
+                                                        <div class = "text-center" v-if="updateUploadedStatus[input_idx - 1] == true">
                                                             <i class="fa fa-check" aria-hidden="true" style="color:green"></i>
                                                         </div>
                                                         <div class = "text-center" v-else>
                                                             <i class="fa fa-times" aria-hidden="true" style="color:red"></i>
-                                                        </div> -->
+                                                        </div>
                                                         <br>
                                                     </div>
                                                 </div>
@@ -183,15 +183,14 @@
                                             <div class = "col-md-6">
 
                                                 <div class = "row mt-3 mb-3" style="height:350px; overflow:scroll;">
-
-                                                        <label :for="`p-${single_sync_params[0].id}`">{{ single_sync_params[0].name }}
-                                                            <span v-if="single_sync_params[0].required" class="required">*</span>
-                                                        </label>
-                                                        <b-form-input @focus="provide_param_desc(single_sync_params[0])" :id="`p-${single_sync_params[0].id}`" :value="single_sync_params[0].default" :required="single_sync_params[0].required"
-                                                            v-model="parameters[`p-${single_sync_params[0].id}`]" :name="`p-${single_sync_params[0].id}`" :state="inputValid[`p-${single_sync_params[0].id}`]" />
-                                                        <br>
-
                                                         <b-list-group>
+                                                            <b-list-group-item class="mb-2">
+                                                                <label :for="`p-${single_sync_params[0].id}`">{{ single_sync_params[0].name }}
+                                                                    <span v-if="single_sync_params[0].required" class="required">*</span>
+                                                                </label>
+                                                                <b-form-input @focus="provide_param_desc(single_sync_params[0])" :id="`p-${single_sync_params[0].id}`" :value="single_sync_params[0].default" :required="single_sync_params[0].required"
+                                                                    v-model="parameters[`p-${single_sync_params[0].id}`]" :name="`p-${single_sync_params[0].id}`" :state="inputValid[`p-${single_sync_params[0].id}`]" />
+                                                            </b-list-group-item>
                                                             <div v-for="(value, key) in single_module_params" :key="value.id">
                                                                 <b-list-group-item href="javascript:void(0)" v-b-toggle="`m-${value.id}`" class="mb-2">
                                                                     <i class="fab fa-app-store-ios"></i> {{ key }}
@@ -243,7 +242,18 @@
                                                                 </b-collapse>
                                                             </div>
                                                         </b-list-group>
-                                                    <h5 class = "submit-container" v-if="parameters_input.length > 0"> Some self statements here, Some self statements here.</h5>
+                                                    <div class = "col-md-10 mt-4" v-if="parameters_input.length > 0"> 
+                                                        <p>
+                                                            CIBERSORT is only freely available for academic users and could not be directly included in this package.
+                                                            To use CIBERSORT with this package, you need to register on the cibersort website,
+                                                            obtain a license, and download the CIBERSORT source code.
+                                                            The source code package contains two files, that are required:
+                                                        </p>
+                                                        <ol>
+                                                            <li>CIBERSORT.R</li>
+                                                            <li>LM22.txt</li>
+                                                        </ol>
+                                                    </div>
                                                     <div class="col-md-10" v-for="param_input in parameters_input" :key="param_input.id">
                                                         <label :for="`p-${param_input.id}`">{{ param_input.name }}
                                                             <span v-if="param_input.required" class="required">*</span>
@@ -399,27 +409,28 @@
                     <br>
                     <br>
 
-                    <div class = "col-md-10 submit-container text-center" v-if="picked_single_multiple=='multiple'">
+                    <div class = "col-md-12 text-center" v-if="picked_single_multiple=='multiple'">
                         <h4> Parameter setting </h4>
 
-                        <div class = "row justify-content-center">
-
+                        <div class = "row m-5">
                             <div class = "col-md-6">
-                                <div v-if="ds_selected[input_idx - 1] == ''" style="vertical-align:center">
-                                    <div class="row" style="margin-bottom:10px" v-for="(params, pname) in multiple_sync_params" :key="pname">
-                                        <label :for="`multiple-p-${params[0].id}-${input_idx}`">{{ params[0].name }}
-                                            <span v-if="params[0].required" class="required" style="color:red;">*</span>
-                                        </label>
-                                        <div>
-                                            <b-form-input @focus="provide_multiple_param_desc(params[0])" :id="`multiple-p-${params[0].id}-${input_idx}`" :value="params[0].default" :required="params[0].required" :placeholder="parameters[`multiple-p-${params[0].id}-${input_idx}`]"
-                                            v-model="parameters[`multiple-p-${params[0].id}-${input_idx}`]" :name="`multiple-p-${params[0].id}-${input_idx}`" />
-                                        </div>
-                                            
-                                    </div>
-                                </div>
-
-                                <div class = "row">
+                                <div style="height:350px; overflow:scroll;">
                                     <b-list-group>
+                                        <div v-if="ds_selected[input_idx - 1] == ''" style="vertical-align:center">
+                                            <b-list-group-item class="mb-2">
+                                                <div style="margin-bottom:10px" v-for="(params, pname) in multiple_sync_params" :key="pname">
+                                                    <label :for="`multiple-p-${params[0].id}-${input_idx}`">{{ params[0].name }}
+                                                        <span v-if="params[0].required" class="required" style="color:red;">*</span>
+                                                    </label>
+                                                    <div>
+                                                        <b-form-input @focus="provide_multiple_param_desc(params[0])" :id="`multiple-p-${params[0].id}-${input_idx}`" :value="params[0].default" :required="params[0].required" :placeholder="parameters[`multiple-p-${params[0].id}-${input_idx}`]"
+                                                        v-model="parameters[`multiple-p-${params[0].id}-${input_idx}`]" :name="`multiple-p-${params[0].id}-${input_idx}`" />
+                                                    </div>
+                                                        
+                                                </div>
+                                            </b-list-group-item>
+                                        </div>
+                                    
                                         <div v-for="(value, key) in multiple_module_params" :key="value.id">
                                             <div v-if="value.params!=null">
                                                 <b-list-group-item href="javascript:void(0)" v-b-toggle="`mm-${value.id}`" class="mb-2">
@@ -427,27 +438,18 @@
                                                 </b-list-group-item>
                                                 <b-collapse visible :id="`mm-${value.id}`" class="mb-4 p-4 border">
                                                     
-                                                    <div class="col-md-10">
+                                                    
                                                         <label :for="`multiple-p-${value.params.id}-${input_idx}`">{{ value.params.name }}
                                                             <span v-if="value.params.required" class="required" style="color:red;">*</span>
                                                         </label>
-                                                        <div>
-                                                            <select @focus="provide_param_desc(value.params)" class="form-control custom-select" 
-                                                                    v-model="parameters[`multiple-p-${value.params.id}-${input_idx}`]" :required="value.params.required"
-                                                                    :state="inputValid[`multiple-p-${value.params.id}-${input_idx}`]">
-                                                                <option v-for="option in value.params.options" :value="option" :key="option"
-                                                                        :selected="value.params.default == option ? 'selected' : ''">
-                                                                    {{ option }}
-                                                                </option>
-                                                            </select>
-                                                        </div>
-                                                    </div>
-                                                    
+                                                        <div v-if="value.params.param_type === 'string'">
+                                                            <b-form-input @focus="provide_param_desc(value.params)" :value="value.params.default" :required="value.params.required"
+                                                                        v-model="parameters[`multiple-p-${value.params.id}-${input_idx}`]" :state="inputValid[`multiple-p-${value.params.id}-${input_idx}`]" />
+                                                        </div> 
                                                 </b-collapse>
                                             </div>
                                         </div>
-                                    </b-list-group>
-                                        
+                                    </b-list-group>  
                                 </div>
                             </div>
                             <div class = "col-md-6">
@@ -628,13 +630,15 @@
                     //check module syncronized parameters
                     if (this.multiple_completed[input_idx - 1] == true && this.ds_selected[input_idx - 1] == '') {
                         for (let input_name in this.multiple_sync_params) {
+                            
                             var rep_input = this.multiple_sync_params[input_name][0];
+                            console.log(rep_input);
                             var cur_value = this.parameters["multiple-p-" + rep_input.id + "-" + input_idx];
                             const valid = !!cur_value && !!_.trim(cur_value);
                             //all of multipe parameters are required
                             if (!valid) {
                                 console.log(cur_value);
-                                console.log("Input parameters has problems, and the problematic value is: ");
+                                console.log("Input sync parameters has problems, and the problematic value is: ");
                                 console.log(cur_value);
                                 this.multiple_completed[input_idx - 1] = false;
                             }
@@ -643,16 +647,20 @@
 
                     //check module not syncronized parameters
                     if (this.multiple_completed[input_idx - 1] == true) {
-                        for (let module_name in this.multiple_module_params) {
-                            let module_param = multiple_module_params[k].params;
-                            var cur_value = this.parameters["multiple-p-" + module_param.id + "-" + input_idx];
-                            const valid = !!cur_value && !!_.trim(cur_value);
-                            //all of multipe parameters are required
-                            if (!valid) {
-                                console.log(cur_value);
-                                console.log("Input parameters has problems, and the problematic value is: ");
-                                console.log(cur_value);
-                                this.multiple_completed[input_idx - 1] = false;
+                        for (let k in this.multiple_module_params) {
+                            console.log("jbjhbjb", k);
+                            console.log(this.multiple_module_params[k].params);
+                            if ( this.multiple_module_params[k].params != null) {
+                            
+                                var cur_value = this.parameters["multiple-p-" + this.multiple_module_params[k].params.id + "-" + input_idx];
+                                const valid = !!cur_value && !!_.trim(cur_value);
+                                //all of multipe parameters are required
+                                if (!valid) {
+                                    console.log(cur_value);
+                                    console.log("Input module parameters has problems, and the problematic value is: ");
+                                    console.log(cur_value);
+                                    this.multiple_completed[input_idx - 1] = false;
+                                }
                             }
                         }
                     }
@@ -683,6 +691,9 @@
             },
             files:function() {
                 console.log("file changes");
+            },
+            parameters:function() {
+                console.log("parameter changes");
             },
             multiple_pairs_num:function(newValue) {
                 console.log("new multiple pairs number is: ");
@@ -857,6 +868,17 @@
                     this.params_desc = this.app.params[0].description;
                 }
                 else {
+
+                    //clear inputs and parameters container
+                    this.single_sync_params = [];
+                    this.single_module_params = {};
+                    this.multiple_sync_params = {};
+                    this.multiple_module_params = {};
+                    this.pure_inputs = [];
+                    this.parameters_input = [];
+
+
+                    this.showhelper = true;
                     console.log("start update app");
 
                     this.selected_analysis = s_ana; // records information of local database
@@ -963,7 +985,6 @@
                             console.log(this.multiple_sync_params);
                             console.log(this.multiple_module_params);
 
-                            this.showhelper = true;
                             this.started = flag;
                         });
                     });

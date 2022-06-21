@@ -101,6 +101,7 @@
                         </div>
 
                         <div id="task-log" class = "col-md-6">
+                            <h4> Log Message</h4>
                             <p class="font-italic">Console Output</p>
                             <pre id="stdout" class="light">{{stdout}}</pre>
                             <p class="font-italic">Error Message</p>
