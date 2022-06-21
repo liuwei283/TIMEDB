@@ -485,7 +485,7 @@ class SubmitController < ApplicationController
       
       # submit task
       client = LocalApi::Client.new
-      if is_pipeline
+      if is_pipeline == "true"
         result = client.run_pipeline(UID, PROJECT_ID, app_id.to_i, inputs, params)
       else
         result = client.run_module(UID, PROJECT_ID, app_id.to_i, inputs, params)

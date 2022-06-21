@@ -1133,7 +1133,7 @@
                 ).then((response) => {
                     console.log("Module query result for testing pipelines:", response);
                     this.demo_inputs = response.data.message.inputs;
-                    this.demo_parameters = response.data.message.params;
+                    this.demo_parameters = response.data.message.node_records;
                     
                 }).catch((error) => {
                     const message = error.response && error.response.status === 404 ? "The task does not exist" : error;
@@ -1157,8 +1157,10 @@
                     }
 
                     for (var k in this.demo_parameters) {
-                        let params = this.demo_parameters[k];
-                        demo_params[`p-${params.id}`] = params.value;
+                        let module_params = this.demo_parameters[k].params;
+                        for (let t in module_params) {
+                            demo_params[`p-${module_params[t].id}`] = module_params.value;
+                        }
                     }
 
                     console.log("Outputing demo inputs json:");
