@@ -1159,7 +1159,7 @@
                     for (var k in this.demo_parameters) {
                         let module_params = this.demo_parameters[k].params;
                         for (let t in module_params) {
-                            demo_params[`p-${module_params[t].id}`] = module_params.value;
+                            demo_params[`p-${module_params[t].id}`] = module_params[t].value;
                         }
                     }
 
@@ -1176,7 +1176,7 @@
                             "is_demo": true,
                             "inputs": demo_files,
                             "params": demo_params,
-                            "pipelines": true,
+                            "is_pipeline": true,
                         }),
                         {
                             headers: {
