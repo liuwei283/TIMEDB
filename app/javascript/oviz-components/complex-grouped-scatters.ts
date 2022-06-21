@@ -9,13 +9,14 @@ export interface ComplexGroupedScattersOption extends XYPlotOption {
     classifications: Array<string>;
     radius: number;
     showLabel: boolean;
+    showConvexHull: boolean;
 
     plotSize: [number, number]; // [width, height]
     valueRange: [number, number];
     categroyRange: [number, number];
     colorMap: any; // ColorSchemeCategory
-    xlabel: string;
-    ylabel: string;
+    xLabel: string;
+    yLabel: string;
     generateScatterTooltip?: (d) => string;
     generateHullTooltip?: (d) => string;
 }
@@ -37,6 +38,7 @@ export class ComplexGroupedScatters extends Component<ComplexGroupedScattersOpti
             width = prop.plotSize[0]
             xScale = @scale-linear(prop.categroyRange[0], prop.categroyRange[1])
             yScale = @scale-linear(prop.valueRange[1], prop.valueRange[0])
+            @props prop
             @yield background default {
                 Rect {
                     width = 100%
@@ -45,16 +47,17 @@ export class ComplexGroupedScatters extends Component<ComplexGroupedScattersOpti
                     fill = "none"
                 }
             }
-            Component {
-                @for (item, index) in hull {
-                    @if item != null {
-                        Polygon {
-                            @expr console.log(item)
-                            points = @scaled(item);
-                            fill = colorMap[index]
-                            fillOpacity = 0.2
-                            behavior:tooltip {
-                                content = prop.generateHullTooltip({item, index})
+            @if prop.showConvexHull {
+                Component {
+                    @for (item, index) in hull {
+                        @if item != null {
+                            Polygon {
+                                points = @scaled(item);
+                                fill = colorMap.colors[index]
+                                fillOpacity = 0.2
+                                behavior:tooltip {
+                                    content = prop.generateHullTooltip({item, index})
+                                }
                             }
                         }
                     }
@@ -64,11 +67,10 @@ export class ComplexGroupedScatters extends Component<ComplexGroupedScattersOpti
                 @for (item, index) in scatterData {
                     @for (point, label) in item {
                         Circle.centered {
-                            @expr console.log(point)
                             x = @scaled-x(point[0])
                             y = @scaled-y(point[1])
                             r = prop.radius
-                            fill = colorMap[index]
+                            fill = colorMap.colors[index]
                             behavior:tooltip {
                                 content = prop.generateScatterTooltip({point, index, label})
                             }
@@ -76,33 +78,35 @@ export class ComplexGroupedScatters extends Component<ComplexGroupedScattersOpti
                     }
                 }
             }
-			@for (item, index) in labels {
-				Container {
-					x = item.x
-					y = item.y
-					Rect.centered.detached {
-						width = item.width
-						height = item.height
-						fill = "DAB88B"
-						fillOpacity = 0.7
-						cornerRadius = 4
-						stroke = "black"
-					}
-					Text.centered {
-						text = item.name
-						fill = "white"
-                        fontSize = 8
-					}
-				}
-			}
+            @if prop.showLabel {
+                @for (item, index) in labels {
+                    Container {
+                        x = item.x
+                        y = item.y
+                        Rect.centered.detached {
+                            width = item.width
+                            height = item.height
+                            fill = "DAB88B"
+                            fillOpacity = 0.7
+                            cornerRadius = 4
+                            stroke = "black"
+                        }
+                        Text.centered {
+                            text = item.name
+                            fill = "white"
+                            fontSize = 7
+                        }
+                    }
+                }
+            }
             @yield xAxis default {
                 Text {
                     x = 50%; y = @geo(100,20)
                     anchor = @anchor("middle","center")
-                    text = prop.xlabel
+                    text = prop.xLabel
                     fill = "#000"
                     fontSize = 14
-                    @props prop.opt.xlabel
+                    @props prop.opt.xLabel
                 }
                 Axis("bottom") {
                     y = 100%
@@ -114,11 +118,11 @@ export class ComplexGroupedScatters extends Component<ComplexGroupedScattersOpti
                     x = -40; y = 50%
                     rotation = @rotate(-90)
                     Text{
-                        text = prop.ylabel
+                        text = prop.yLabel
                         fill = "#000"
                         anchor = @anchor("middle","center")
                         fontSize = 14
-                        @props prop.opt.ylabel
+                        @props prop.opt.yLabel
                     }
                 }
                 Axis("left") {
@@ -131,27 +135,31 @@ export class ComplexGroupedScatters extends Component<ComplexGroupedScattersOpti
     }
 
     public willRender(): void {
+        console.log(this.prop)
         if (this._firstRender) {
             this.colorMap = this.prop.colorMap || Oviz.color.schemeCategory("light", this.prop.classifications);
-            const hull = {}
-            Object.entries(this.prop.data).forEach(([key, value]: [string, any]) => {
-                hull[key] = polygonHull(Object.values(value))
-            })
+            if(this.prop.showConvexHull) {
+                const hull = {}
+                Object.entries(this.prop.data).forEach(([key, value]: [string, any]) => {
+                    hull[key] = polygonHull(Object.values(value))
+                })
+                this.hull = hull
+            }
             this.scatterData = this.prop.data
-            this.hull = hull
+        }
+        if(this.prop.showLabel) {
             let labels = Object.values(this.prop.data).map(project => {
                 return Object.entries(project).map(([key, value]) => {
                     return {
                         x: (value[0]-this.prop.categroyRange[0])/(this.prop.categroyRange[1] - this.prop.categroyRange[0])*this.prop.plotSize[0],
                         y: (this.prop.valueRange[1]-value[1])/(this.prop.valueRange[1] - this.prop.valueRange[0])*this.prop.plotSize[1],
                         name: key,
-                        width: 4.5 * (key.length),
+                        width: 4.8 * (key.length),
                         height: 14,
                         r: 2
                     }
                 })
             }).flat();
-            console.log(labels)
             // let anchors = this.prop.data.data.map(d => {
             //     return {
             //         x: d.pos*500,
@@ -169,11 +177,13 @@ export class ComplexGroupedScatters extends Component<ComplexGroupedScattersOpti
         return {
             ...super.defaultProp,
             plotSize: [400, 400],
-            xlabel: "X",
-            ylabel: "Y",
+            xLabel: "X",
+            yLabel: "Y",
             categroyRange: [0, 1],
             valueRange: [0, 1],
-            radius: 2,
+            showLabel: false,
+            showConvexHull: true,
+            radius: 3,
             generateHullTooltip: (d) => 'Project: ' + d.index + '<br>' + 'Sample number: ' + d.item.length, 
             generateScatterTooltip: (d) => 'Project: ' + d.index + '<br>' + 'Sample name: ' + d.label + '<br>' + 'X value: ' + d.point[0].toFixed(2) + '<br>' + 'Y value: ' + d.point[1].toFixed(2), 
         };

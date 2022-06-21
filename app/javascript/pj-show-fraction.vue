@@ -6,9 +6,9 @@
         </div><br>
 
         <div id = "fraction-pie" class = "container Block">
-            <!-- <div class="row description">
-              <h4>Some description for Project Clinical Feature Piechart in project fraction overview</h4>
-            </div> -->
+            <div class="row description">
+              <h4>Project Clinical Feature Piechart</h4>
+            </div>
 
             <div class="select-bar form-inline row">
               <div class="sdiv col">
@@ -71,9 +71,9 @@
 
 
         <div id = "fraction-boxplot" class = "container Block">
-            <!-- <div class="row description">
-              <h4>Some description for Cell Fraction Boxplot in project fraction overview</h4>
-            </div> -->
+            <div class="row description">
+              <h4>Project Immune Cell Fraction Boxplot</h4>
+            </div>
 
             <div class="select-bar form-inline row">
               <div class="sdiv col">
@@ -134,9 +134,9 @@
         </div>
 
         <div id = "fraction-heatmap" class = "container Block">
-            <!-- <div class="row description">
-              <h4>Some description for Project Immunce Cell Fraction Heatmap</h4>
-            </div> -->
+            <div class="row description">
+              <h4>Project Immunce Cell Fraction Landscape</h4>
+            </div>
 
             <div class="select-bar form-inline row">
               <div class="sdiv col">
@@ -204,9 +204,9 @@
         </div>
 
         <div id = "fraction-landscape" class = "container Block">
-            <!-- <div class="row description">
-              <h4>Some description for Cell Fraction Landscape in project fraction overview</h4>
-            </div> -->
+            <div class="row description">
+              <h4>Project Consensus Immune Cell Fraction Landscape</h4>
+            </div>
 
             <div class="select-bar form-inline row">
               <div class="sdiv col">

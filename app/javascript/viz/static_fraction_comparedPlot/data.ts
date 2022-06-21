@@ -12,10 +12,8 @@ import { groupBy, getGroups } from "utils/array";
 import { findBoundsForValues } from "./math";
 import { createCallSignature, isJSDocThisTag, isTemplateExpression } from "typescript";
 import { currentEventContext } from "crux/src/event";
-import {generateDiverConfig} from"./editor";
 import { NAME } from "crux/src/template/compiler/tokens";
 
-//设置数据格式
 export let plotData = {
     barPlotdata: [],
     piePlotdata: [],
@@ -42,22 +40,17 @@ export function checkIfNaN(value) {
     return value !== value;
 }
 
-//_data = this.data
-export function plotDataloaded(_data){
-    console.log("comparedPlot_____________________________")
 
+export function plotDataloaded(_data){
     this.data.rowcolumns = _data.columns.slice(2,)
     let temp = _data
     plotData.sampleList = _data.map(d => d["sample_name"])
     plotData.sampleList = Array.from(new Set(plotData.sampleList))
-    console.log("sampleList:",plotData.sampleList)
 
-    //get methodData = method name
     _data.forEach((item,index) => {
         plotData.methoddata.includes(item.method)? null :plotData.methoddata.push(item.method)
     });
     
-    //the different method data array[{methodkey: data:[]},{}...]
     const different_method_data = plotData.methoddata.map(x=>new Object({"methodkey":x,"data":[]}))
     different_method_data.forEach((item,index)=>{
         _data.forEach((ditem,dindex)=> {
@@ -67,12 +60,10 @@ export function plotDataloaded(_data){
         });
     })
     plotData.rowdata = different_method_data
-    console.log("different_method_data:",different_method_data)
 
     let eachmethodcells =[]
     plotData.cellpageindex [1] = generalparm(plotData.sampleList)
 
-    //bardata
     different_method_data.forEach((ditem,dindex)=> { 
             const barresult= eachBardata(ditem.data,dindex,plotData.cellpageindex[1],this.data.rowcolumns) 
             plotData.BarData.push(barresult.eachBardata)
@@ -85,45 +76,27 @@ export function plotDataloaded(_data){
                 this.data.barcolors= barresult.colors
             }
     })
-    console.log("this.data.barlegenddata:",this.data.barlegenddata) //
-    
-    console.log("this.data.rowcolumns!!!",this.data.rowcolumns)  //cells names
 
-    //先获得不同方法下样本的最大值
     let tempMaxsample = []
     different_method_data.forEach((item,index) => {
         tempMaxsample.push(item["data"].length)
     });
     let maxSamplenum = Math.max(...tempMaxsample)
-    console.log("maxSamplenum:____",maxSamplenum)
-    //补充满数据
+
     let pieDiff_methodData = different_method_data.slice(0)
-    console.log("pieDiff_methodData:",pieDiff_methodData)
+
 
     pieDiff_methodData.forEach((item,index)=>{
         if(item["data"].length<maxSamplenum){
-            // for(let i=0;i<(maxSamplenum-item["data"].length);i++){
-            //     item["data"].push({"sample_name":"NA","method":item["methodkey"]})
-            // }
             for(let i=item["data"].length;i<maxSamplenum;i++){
                 item["data"].push({"sample_name":plotData.sampleList[i],"method":item["methodkey"]})
             }
         }
     })
-    console.log("pieDiff_methodData:_____",pieDiff_methodData)
 
-
-    //piedata
     pieDiff_methodData.forEach((ditem,dindex)=> { 
-        //dindex每个方法的索引
-        //ditem每个方法
-        //cellpageindex[1] 总共的页数
-        //this.data.rowcolumns免疫细胞的种类
-        console.log("method:!!",ditem)
         const pieresult= eachPiedata(ditem,dindex,plotData.cellpageindex[1],this.data.rowcolumns)
-        //push每个方法
-        plotData.PieData.push(pieresult.eachBardata) //?
-        console.log("each method pieData:",pieresult.eachBardata)
+        plotData.PieData.push(pieresult.eachBardata) 
         if(dindex==0){
             this.data.sampleData = pieresult.sampleData;
             this.data.pielegenddata = pieresult.insidelegendata; 
@@ -133,15 +106,14 @@ export function plotDataloaded(_data){
             this.data.eachSamplename = pieresult.eachSamplename;
         }
     })
-    console.log("piePlotdata:",plotData.PieData)
 
-    //edit demo show data
+
     plotData.cellpageindex [0] = this.data.buttonkey
     plotData.chosenMethod.length == 0? plotData.chosenMethod = plotData.methoddata:null
     
-    //post
+
     this.data.cellpageindex = plotData.cellpageindex
-    console.log("plotData.cellpageindex:",plotData.cellpageindex);
+
     
     this.data.valuerange = findBounds(plotData.valuerange)
     this.data.BarData= plotData.BarData
@@ -152,20 +124,17 @@ export function plotDataloaded(_data){
     this.data.tempBardata = plotData.BarData;
     this.data.tempPiedata = plotData.PieData;
 
-    //this.data.plotType = "pie"; //判断
+
     this.data.gridSize = [210,92]
     
-    this.data.methodFontsize = 10 //0515
-    this.data.sampleFontsize = 10 //0515
-    this.data.cellFontsize = 10 //0515
+    this.data.methodFontsize = 10 
+    this.data.sampleFontsize = 10 
+    this.data.cellFontsize = 10 
 
-
-    console.log("_data:",_data)
     
 } 
 
 
-//选择样本
 export function chooseSamples(v:any){
     plotData.BarData=[]
     v.data.buttonkey = 1
@@ -177,7 +146,7 @@ export function chooseSamples(v:any){
     let newdata=[] 
     v.data.rowdata.forEach((item,index)=> {
         const filtered = item.data.filter(word => samples.includes(String(word["sample_name"])));
-        filtered.columns = v.data.rowcolumns//v.data.filteredSample.includes(word[""]));
+        filtered.columns = v.data.rowcolumns
         newdata.push({"methodkey":item.methodkey,"data":filtered})
     });
 
@@ -185,7 +154,6 @@ export function chooseSamples(v:any){
     cellpageindex[1]  = generalparm(newdata[0].data)
     let eachmethodcells = [];
     newdata.forEach((ditem,dindex)=> { 
-        console.log("ditem:",ditem)
         const barresult = eachBardata(ditem.data,dindex,cellpageindex[1],v.data.rowcolumns) 
         plotData.BarData.push(barresult.eachBardata)
         eachmethodcells.push({"method":ditem.methodkey,"result":barresult.cellvalues})
@@ -218,10 +186,9 @@ export function chooseSamples(v:any){
     v.run();
 } 
 
-//生成pie的数据
+
 export function eachPiedata(ditem,dindex,number,cellarray){
-    console.log("function : eachPiedata_______________")
-    //ditem 方法名
+
     let eachBardata = [];
     let cells
     let columns = Object.keys(ditem.data[0]).slice(2,);
@@ -232,7 +199,7 @@ export function eachPiedata(ditem,dindex,number,cellarray){
     let colors = {};
 
     for(var i=0;i<number;i++){  
-        //
+        
         let BarData_dindex = []
         let SampleName_dindex = []
         let eachlegendata = []
@@ -251,7 +218,6 @@ export function eachPiedata(ditem,dindex,number,cellarray){
                 val.forEach((k,d) => {
                     k=="NA"? vals.push(null): vals.push(k)
                 });
-                //let color = Oviz.color.Color.hsl((cateindex%6)*60, 60+Math.floor((cateindex/6))*10, 60+Math.floor((cateindex/6))*10)
                 let color = mapColor(cateitem)
                 eachcolumns.push({name:cateitem,value: Number(vals[colindex+10*i]),color});
                 
@@ -267,9 +233,7 @@ export function eachPiedata(ditem,dindex,number,cellarray){
         });
 
         columns.forEach((cell,index)=> {
-            //let colour = Oviz.color.Color.hsl((index%6)*60, 60+Math.floor((index/6))*10, 60+Math.floor((index/6))*10)
             let colour = mapColor(cell)
-            //colors[cell] = colour.string
             eachlegendata.push({fill:colour, label:cell})
         });
         
@@ -603,7 +567,6 @@ export function mapColor(cell){
 
         "Pericytes":"#9ce27e",
         "mv Endothelial cells":"#b698cd",
-        //"mv Endothelial cells":"#b698cd",
         "ly Endothelial cells":"#b698ac",
 
         "Endothelial cell":"#a977cd",
@@ -632,9 +595,8 @@ export function mapColor(cell){
   }
 
 
-//生成bar的数据
+
 export function eachBardata(ditem,dindex,number,cellarray){
-    console.log("dindex:",dindex)
     let eachBardata = [];
     let cells
     let columns = ditem.columns; 
@@ -649,11 +611,9 @@ export function eachBardata(ditem,dindex,number,cellarray){
         let eachlegendata = [] 
         let dddata = ditem.slice(10*i,10*(i+1)) 
         columns.forEach((colitem,colindex) => { 
-            //console.log("colindex:",colindex)
             let eachcolumns = [];
             let eachcolumnvalues = {"cellname":colitem,"values":[],rank:i}
             dddata.forEach((item,index)=> {
-                //correct "" to ID
                 if(item[colitem]=="NA")
                     return null;
                 else{
@@ -664,14 +624,10 @@ export function eachBardata(ditem,dindex,number,cellarray){
                 plotData.categories.push([item["sample_name"]]);
                 const color = Oviz.color.Color.hsl((index%6)*60, 60+Math.floor((index/6))*10, 60+Math.floor((index/6))*10)
                 colors[item["sample_name"]] = color.string
-                //console.log("item:",item)
                 if(dindex==0&&colindex==1){
-                    console.log("yes")
                     eachlegendata.push({type: "Custom",label:item["sample_name"],fill:color.string});
                     sampleData.push(item["sample_name"]);
                 }
-                //console.log("eachlegendata",eachlegendata)
-                //console.log("sampleData",sampleData)
             });
             const ecolumnsobject ={[colitem]:eachcolumns} 
             BarData_dindex.push(ecolumnsobject)
@@ -705,7 +661,7 @@ export function findBounds(dataarray){
     return [min,max]
 }
 
-//选择方法的函数
+
 export function chooseMethod(chosenMethod,data){
     let afterdata = []
     chosenMethod.forEach((item,index) => {
@@ -713,20 +669,16 @@ export function chooseMethod(chosenMethod,data){
             item == ditem? afterdata.push(data[dindex]):null
         });
     });
-    console.log("afterdata:",afterdata)
     return afterdata;
 }
 
-//得到页数
 export function generalparm(item){
     const allpage = Math.ceil(item.length/10) 
     return allpage
 }
 
-//过滤方法
 export function filterMethod(v:any){
     v.data.PieData = chooseMethod(v.data.chosenMethod,v.data.tempPiedata);
-    console.log("editor:",v.data.chosenMethod,v.data.tempPiedata)
     v.forceRedraw = true;
     v.run();
 }

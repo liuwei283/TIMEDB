@@ -63,7 +63,7 @@
                                 <b-collapse :id="`i-${input.id}`">
                                     <ul class="mt-3">
                                         <li v-for="file in input.files" :key="file.id">
-                                            <a :href="`https://deepomics.org/user/data/?this_path=${file.path}`" target="_blank">{{ file.name }}</a>
+                                            <a :href="`https://deepomics.org/explorer/download_rel/?path=${file.path}/${file.name}`" target="_blank">{{ file.name }}</a>
                                         </li>
                                     </ul>
                                 </b-collapse>
@@ -94,18 +94,22 @@
                         </table>
                     </section>
 
-                    <section id="resource-usage" class="p-0 float-left">
-                        <h4>Resource Usage</h4>
-                        <v-chart :options="chartOptions" />
-                    </section>
+                    <div class="row">
+                        <div id="resource-usage" class="p-4 col-md-6">
+                            <h4>Resource Usage</h4>
+                            <v-chart :options="chartOptions" />
+                        </div>
 
-                    <section id="test-log" class="float-right">
-                        <h4>Test Log</h4>
-                        <p class="font-italic">Console Output</p>
-                        <pre id="stdout" class="light">{{stdout}}</pre>
-                        <p class="font-italic">Error Message</p>
-                        <pre id="stderr">{{stderr}}</pre>
-                    </section>
+                        <div id="task-log" class = "col-md-6">
+                            <h4> Log Message</h4>
+                            <p class="font-italic">Console Output</p>
+                            <pre id="stdout" class="light">{{stdout}}</pre>
+                            <p class="font-italic">Error Message</p>
+                            <pre id="stderr">{{stderr}}</pre>
+                        </div>
+
+                       
+                    </div>
 
                     <section id="outputs" class="mt-4 mb-4">
                         <h4 class="pt-2">Outputs</h4>
@@ -117,7 +121,7 @@
                                 <b-collapse :id="`o-${output.id}`">
                                     <ul class="mt-3">
                                         <li v-for="file in output.files" :key="file.id">
-                                            <a :href="`https://deepomics.org/user/data/?this_path=${file.path}`" target="_blank">{{ file.name }}</a>
+                                            <a :href="`https://deepomics.org/explorer/download_rel/?path=${file.path}/${file.name}`" target="_blank">{{ file.name }}</a>
                                         </li>
                                     </ul>
                                 </b-collapse>
@@ -127,7 +131,7 @@
 
                 </b-card-body>
 
-                <b-card-body v-show="display==1" class="p-2" style="padding: 0px !important;">
+                <b-card-body v-show="display==1" class="p-2 mb-10" style="padding: 0px !important;">
                    <div id = "viz-card"> 
                         <VApp/>
                     </div>
@@ -488,29 +492,29 @@ export default {
 
         updateGon(output) {
             event.emit("GMT:reset-query", this);
-            this.module_names = output.module_names.map((x, i) => ({value: i, text: x}));
+            this.module_names = output.module_names.map((x, i) => ({value: i, text: x[0]}));
             this.chosenModule = 0;
-            window.gon.module_name = output.module_names[this.chosenModule];
+            window.gon.module_name = output.module_names[this.chosenModule][1];
             
             window.gon.required_data = output.required_data;
             if (!window.gon.urls) window.gon.urls = {};
             window.gon.urls.chosen_file_paths = `/api/analysis/${output.analysis_id}/chosen_file_paths?visualizer=${this.chosenModule}`;
             window.gon.urls.download_demo_file = `/api/analysis/${output.analysis_id}/download_demo_file?visualizer=${this.chosenModule}`;
             console.log("outputing to be visualized plot:")
-            console.log(output.module_names[this.chosenModule]);
-            registerViz(output.module_names[this.chosenModule]);
+            console.log(output.module_names[this.chosenModule][1]);
+            registerViz(output.module_names[this.chosenModule][1]);
             event.emit("GMT:query-finished", this);
         },
         updateVis() {
             event.emit("GMT:reset-query", this);
-            window.gon.module_name = this.data.outputs[this.chosenOutput].module_names[this.chosenModule];
+            window.gon.module_name = this.data.outputs[this.chosenOutput].module_names[this.chosenModule][1];
 
             window.gon.required_data = this.data.outputs[this.chosenOutput].required_data;
             if (!window.gon.urls) window.gon.urls = {};
             window.gon.urls.chosen_file_paths = `/api/analysis/${this.data.outputs[this.chosenOutput].analysis_id}/chosen_file_paths?visualizer=${this.chosenModule}`;
             window.gon.urls.download_demo_file = `/api/analysis/${this.data.outputs[this.chosenOutput].analysis_id}/download_demo_file?visualizer=${this.chosenModule}`;
             
-            registerViz(this.data.outputs[this.chosenOutput].module_names[this.chosenModule]);
+            registerViz(this.data.outputs[this.chosenOutput].module_names[this.chosenModule][1]);
             event.emit("GMT:query-finished", this);
 
         },
@@ -530,8 +534,8 @@ export default {
 
 <style lang="scss">
 #job-query {
-    min-height: 900px;
-    max-height: 1200px;
+    //min-height: 900px;
+    //max-height: 1200px;
     margin-top: 10px;
 }
 #job-query .fas.fa-tasks {
@@ -589,8 +593,8 @@ export default {
     position: relative;
 }
 #viz-card {
-    // border: 1px solid #999;
-    height: 835px;
+    border: none !important;
+    // height: 835px;
 }
 .v-editor {
     position: absolute;

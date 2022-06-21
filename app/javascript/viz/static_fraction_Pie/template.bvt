@@ -5,7 +5,7 @@ svg {
 		Text.centered {
 			x = 530;y = 40
 			fontSize = tickFontSize
-			text = "current column:" + "  "+ generText(chosenColumn) + "  " 
+			text = "Current Column:" + "  "+ generText(chosenColumn) + "  " 
 			//text = "Current Column:" + "  "+ "tumor grade" + "  "
 		}
 		PieChart.centered {
@@ -33,6 +33,7 @@ svg {
 			@props legendPos
 			data = legend["c_"+chosenColumn]
 			@expr console.log("legend data:",legend["c_"+chosenColumn])
+			//fill = colorMap["c_"+ chosenColumn][d.data.raw.name]
 			padding = 4
 			lineHeight = 13
 			legendWidth = 15

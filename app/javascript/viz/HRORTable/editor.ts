@@ -9,15 +9,58 @@ function run(v) {
 }
 export const editorRef = {} as any;
 
-//在editor下添加功能模块
-//一些单选多选
-export const generateTestConfig = (v): any => (            {
+export const generateTextconfig = (v): any => ({
+    id: "setting-bcg",
+    title: "General Setting",
+    layout: "tabs",
+    tabs:[
+        {
+            id:"g-common",
+            name:"Size Setting",
+            view:{
+                type: "list",
+                items:[
+                    {
+                        title: "Width",
+                        type: "input",
+                        format: "int",
+                        value: {
+                            current: v.data.data.plotwidth,
+                            callback(x) {
+                                v.data.data.plotwidth = parseFloat(x);
+                                v.size.width = 320 + v.data.data.plotwidth + v.data.maxcelllength;
+                                v.data._sizeUpdated = true;
+                                run(v);
+                            },
+                        },
+                    },
+                    {
+                        title: "Height",
+                        type: "input",
+                        format: "int",
+                        value: {
+                            current:  v.data.data.gridheight ,
+                            callback(x) {
+                                v.data.data.gridheight = parseFloat(x);
+                                v.size.height = v.data.cell.length * v.data.data.gridheight  + 200
+                                v.data._sizeUpdated = true;
+                                run(v);
+                            },
+                        },
+                    },
+                ]
+            }
+        }
+    ]
+});
+
+
+export const generateColorConfig = (v): any => ({
     id: "setting-bc",
-    title: "test content settings",
+    title: "Color Setting",
     layout: "single-page",
     view: {
         type: "list",
-        //添加项目
         items: [
             {
                 type: "vue",
@@ -25,10 +68,10 @@ export const generateTestConfig = (v): any => (            {
                 component: "color-picker",
                 data: {
                     title: "Customize colors",
-                    scheme: copyObject(v.data.colors),
+                    scheme: copyObject(v.data.colorMap),
                     id: "pwcolor",
                     callback(colors) {
-                        v.data.colors = colors;
+                        v.data.colorMap = colors;
                         run(v);
                     },
                 },
@@ -42,84 +85,8 @@ export const generateTestConfig = (v): any => (            {
 export function editorConfig(v): EditorDef {
     return {
         sections: [
-            // {
-            //     id: "data",
-            //     title: "edit Data",
-            //     layout: "tabs",
-            //     tabs: [
-            //         {
-            //             id: "gData",
-            //             name: "General",
-            //             view: {
-            //                 type: "list",
-            //                 items: [
-            //                 {
-            //                     title: "Range Lower Bound",
-            //                     type: "input",
-            //                     ref: "lowerBound",
-            //                     value: {
-            //                         //current: v.data.data.valueRange[0],
-            //                         current: v.data.valueRange[0],
-            //                         callback(d) {
-            //                             v.data.valueRange[0] = parseFloat(d);
-            //                             run(v);
-            //                         },
-            //                     },
-            //                 },
-            //                 {
-            //                     title: "Range Upper Bound",
-            //                     type: "input",
-            //                     ref: "upperBound",
-            //                     value: {
-            //                         current: v.data.valueRange[1],
-            //                         callback(d) {
-            //                             v.data.valueRange[1] = parseFloat(d);
-            //                             run(v);
-            //                         },
-            //                     },
-            //                 },            
-            //                 ],
-            //             },
-            //         },
-            //     ],
-            // },
-            // {
-            //     id: "general",
-            //     title: "Choose Method",
-            //     layout: "single-page",
-            //     view: {
-            //         type:"list",
-            //         items:[
-            //             {
-            //                 type:"vue",
-            //                 component: "filter-samples",
-            //                 title:null,
-            //                 ref:"highlightSpecies",
-            //                 data:{
-            //                     get samples() {
-            //                         return Array.from(v.data.methoddata);
-            //                     },
-            //                     get defaultValue() {
-            //                         return false;
-            //                     },
-            //                     get title() {
-            //                         return "Choose Method";
-            //                     },
-            //                     callback(choosesmethod) {
-            //                         v.data.chosenMethod = new Set(choosesmethod);
-            //                         console.log("v.data.chosenMethod:",v.data.chosenMethod)
-            //                         filteredMethod(v);
-            //                         v.root._sizeUpdated = true;
-            //                         run(v);
-            //                     },
-            //                 }
-
-            //             },
-            //         ]    
-            //     }
-            // },
-            generateTestConfig(v),
-            //generateTestConfig(v),
+            generateTextconfig(v),
+            generateColorConfig(v),
         ],
     };
 }

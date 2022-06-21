@@ -7,6 +7,9 @@ class WelcomeController < ApplicationController
     @samples_num = Sample.all.count
     @cancers_num = Cancer.all.count
     @analysis_num = Analysis.all.count + AnalysisPipeline.all.count
+
+    @function_level1 = ['TIME Estimation Category', 'Comparison Category', 'Other Category']
+    @function_level2 = [['Regression Tools', 'Enrichment Tools', 'Unsupervised Tools', 'Consensus Tools'], ['Datasets Comparison', 'TIME Estimation Comparison'], ['Patient Subtyping', 'Survival Analysis', 'Correlation Analysis', 'Differential Expression']]
   end
 
   def tutorial

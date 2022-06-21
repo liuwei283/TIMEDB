@@ -179,16 +179,16 @@
 <style scoped lang="scss">
     #vapp {
         width: 100%;
-        min-height: 25rem;
-        // height: auto;
+        //min-height: 25rem;
         position: relative;
-        background-color: white;
+        background-color: #f8f9fa;
+        border: none !important;
     }
     #tool-bar {
         height:auto;
         padding: 5px;
         // background-color: #f8f9fa;
-        background-color: #fff;
+        background-color: #f8f9fa;
         margin-bottom: 1%;
         border-bottom: 1px solid #ced4da;
         .btn {
@@ -233,9 +233,9 @@
         float: right;
     }
     #canvas {
-        min-height: calc(500px - 2.5em);
-        width: calc(100vw - 250px);
-        overflow: scroll;
+        // min-height: calc(500px - 2.5em);
+        // width: calc(100vw - 250px);
+        // overflow: scroll;
     }
     .col-md-12 {
         width: 80px;
@@ -244,7 +244,7 @@
         // position: relative;
         // height:  calc(100% - 2.5em);
         // height: 100%;
-        min-height: calc(500px - 2.5em);
+        //min-height: calc(500px - 2.5em);
         position: relative;
     }
     #v-editor {

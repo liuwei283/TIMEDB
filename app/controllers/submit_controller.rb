@@ -4,7 +4,7 @@ class SubmitController < ApplicationController
   # $user_stor_dir = "#{Rails.root}/data/user"
   def analyses
     @analysis_categories = AnalysisCategory.order(:name)
-    category1 = @analysis_categories[0].name
+    category1 = "Regression Tools"
     redirect_to action: "analysesCategory", cname: category1
   end
 
@@ -485,7 +485,7 @@ class SubmitController < ApplicationController
       
       # submit task
       client = LocalApi::Client.new
-      if is_pipeline
+      if is_pipeline == "true"
         result = client.run_pipeline(UID, PROJECT_ID, app_id.to_i, inputs, params)
       else
         result = client.run_module(UID, PROJECT_ID, app_id.to_i, inputs, params)
@@ -770,7 +770,7 @@ class SubmitController < ApplicationController
     @matched_jsnames = []
 
     @matched_visualizers.each do |mvis|
-      @matched_jsnames.push(mvis.js_module_name)
+      @matched_jsnames.push([mvis.name, mvis.js_module_name])
     end
 
     Rails.logger.debug("check visualizers of this analysis:")

@@ -11,7 +11,6 @@ function run(v) {
 }
 export const editorRef = {} as any;
 
-
 function update(v,eid) {
     v.forceRedraw = true;
     v.run();
@@ -19,12 +18,12 @@ function update(v,eid) {
 
 export const generateTestConfig = (v,eid): any => ({
     id: "plot_st",
-    title: "Custom Setting",
+    title: "Customized Setting",
     layout: "tabs",
     tabs:[
         {
             id:"g-common",
-            name:"common",
+            name:"Common",
             view:{
                 type: "list",
                 items:[
@@ -35,8 +34,7 @@ export const generateTestConfig = (v,eid): any => ({
                             current: v.data.legendStyle,
                             callback(d) {
                                 v.data.legendStyle = d;
-                                console.log("now style:",v.data.legendStyle)
-                                switchStyle(v); //0608
+                                switchStyle(v);
                                 v.forceRedraw = true;
                                 v.data._sizeUpdated = true;
                                 update(v,eid);
@@ -60,7 +58,7 @@ export function editorConfig(v,eid): EditorDef {
         sections: [
             {
                 id: eid+"1",
-                title: "General Setting",
+                title: "General Settings",
                 layout: "tabs",
                 tabs: [
                     {
@@ -76,17 +74,21 @@ export function editorConfig(v,eid): EditorDef {
                                     value: {
                                         current: v.data.gridPlotWidth,
                                         callback(x) {
-                                            //v.data.gridPlotWidth = parseFloat(x);
+                                            v.data.gridPlotWidth = parseFloat(x);
+                                            v.size.width = v.data.result.useData[v.data.sampleList.length-1].col*(v.data.gridPlotWidth-1) + 450
+                                            v.size.height = v.data.cellList.length *12 + 170 + 
+                                                            v.data.cellList.length*(v.data.gridPlotheight) + v.data.gridPlotheight/2
+                                                            + (v.data.sortaddName.length-1) * v.data.gridPlotheight 
+                                                            + 30
+                                                            + v.data.tipsrow*7
                                             v.data._sizeUpdated = true;
                                             update(v,eid);
                                         },
                                     },
                                 },
-                                
                             ],
                         },
                     },
-                    
                 ],
             },
             //generateTestConfig(v)

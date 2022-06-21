@@ -35,13 +35,16 @@ export function init(id,clinical_file_path,cellData_file_path,eid,plot_name,vue_
             legendLap,
             title,
             tips:[],
-           dots_color,
+            dots_color,
             legendPos: {x: 0, y: 0},
             buttonkey:1,
             buttonclick(d){
+              //console.log("ori:",this.buttonkey)
               this.buttonkey = this.buttonkey*(-1);
+              //console.log("new:",this.buttonkey)
             
               let config = showAll(this.oridata,this.buttonkey)
+              //console.log("config:",config)
               this.result.stackescolors = config["result"].stackescolors
               this.cellList = config["cellList"]
               this.result.useData = config["result"].useData
@@ -56,9 +59,11 @@ export function init(id,clinical_file_path,cellData_file_path,eid,plot_name,vue_
               this.$v.size.height = this.cellList.length *12 + 170 + 
                               this.cellList.length*(this.gridPlotheight) + this.gridPlotheight/2
                               + (this.sortaddName.length-1) * this.gridPlotheight 
-                              + 50
+                              + 30
+                              + this.tipsrow*7
 
-
+            //console.log("this:",this)
+            //console.log("buttonkey",this.buttonkey)
             this.redraw();
           },
           updateLegendPos(ev, el, deltaPos) {
@@ -78,21 +83,22 @@ export function init(id,clinical_file_path,cellData_file_path,eid,plot_name,vue_
             this.redraw();
           },
           replaceUpper(text,width){
-            let x = TextSize.measuredTextSize(text, 8).width; //得到字的长度
+            let x = TextSize.measuredTextSize(text, 8).width;
             //console.log(x)
             let final
-            x>width*6/7? (final = extractWord(text),this.tips.push(text)):final = text
+            x>width*6/7? (final = extractWord(text,width),this.tips.push(text)):final = text
+            
             this.tips = Array.from(this.tips)
             return final
           },
-          join(tiplist){
+          join(tiplist,width){
             let str = []
             tiplist = Array.from(tiplist)
             tiplist = Array.from(new Set(tiplist))
             tiplist.forEach((item,index)=>{
-              str.push(" "+extractWord(item)+": "+item)
+              str.push(" "+extractWord(item,width)+": "+item)
             })
-            //console.log(str)
+            
             str = Array.from(str)
             return str
           }
@@ -114,7 +120,7 @@ export function init(id,clinical_file_path,cellData_file_path,eid,plot_name,vue_
         },
         setup() { 
             console.log("this.data:",this["_data"]);
-            
+
             this.defineGradient("gb", "vertical", [this.data.gbendColor, this.data.gbstartColor]);
             this.defineGradient("kg", "vertical", ["#dbdbdb", "blue"]);
             this.defineGradient("age", "horizontal", [this.data.ageStartColor, this.data.ageEndColor]);
@@ -124,11 +130,12 @@ export function init(id,clinical_file_path,cellData_file_path,eid,plot_name,vue_
             this.size.height = this.data.cellList.length *12 + 170 + 
                               this.data.cellList.length*(this.data.gridPlotheight) + this.data.gridPlotheight/2
                               + (this.data.sortaddName.length-1) * this.data.gridPlotheight 
-                              + 50
+                              + 30
+                              + this.data.tipsrow*7
             //registerEditorConfig(editorConfig(this), editorRef);
 
             registerEditorConfig(editorConfig(this,eid), vue_name, plot_name);
-        
+            
           },
     })
 }

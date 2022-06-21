@@ -143,7 +143,7 @@ export const generateCusConfig = (v,eid):any =>  ({
                             },
                             callback(choosesample) {
                                 v.data.choosesample= new Set(choosesample);
-                                console.log("v.data.choosesample:",v.data.choosesample)
+                                // console.log("v.data.choosesample:",v.data.choosesample)
                                 chooseSamples(v);
                                 v.root._sizeUpdated = true;
                                 run(v,eid);
@@ -177,9 +177,16 @@ export const generateCusConfig = (v,eid):any =>  ({
                             callback(choosemethod) {
                                 //v.data.chosenMethod = new Set(choosemethod);
                                 v.data.chosenMethod = choosemethod
-                                console.log("v.data.chooseMethod:",choosemethod)
+                                // console.log("v.data.chooseMethod:",choosemethod)
                                 v.data.BarData = chooseMethod(v.data.chosenMethod,v.data.tempBardata);
                                 v.data.PieData = chooseMethod(v.data.chosenMethod,v.data.tempPiedata);
+                                if(v.data.plotType=="pie"){
+                                    v.size.height = v.data.config.gridheight*12 + 100
+                                    v.size.width = v.data.config.gridwidth * (v.data.chosenMethod.length+1) + 300
+                                }else{
+                                    v.size.height = v.data.config.gridheight* (v.data.celldata.length+2) + 100
+                                    v.size.width = v.data.config.gridwidth * (v.data.chosenMethod.length+1) + 300
+                                }
                                 //filterMethod(v);
                                 v.root._sizeUpdated = true;
                                 run(v,eid);
@@ -192,7 +199,7 @@ export const generateCusConfig = (v,eid):any =>  ({
         },
         {
             id:eid+"csty-common",
-            name:"choose pie or bar",
+            name:"Choose Pie or Bar",
             view:{
                 type:"list",
                 items:[
@@ -205,7 +212,7 @@ export const generateCusConfig = (v,eid):any =>  ({
                             //plotType=="bar"
                             callback(d){
                                 v.data.plotType = "pie"
-                                console.log("v.data.plotType:",v.data.plotType)
+                                // console.log("v.data.plotType:",v.data.plotType)
                                 if(v.data.plotType=="pie"){
                                     v.size.height = v.data.config.gridheight*12 + 100
                                     v.size.width = v.data.config.gridwidth * (v.data.chosenMethod.length+1) + 300
@@ -228,7 +235,7 @@ export const generateCusConfig = (v,eid):any =>  ({
                             //plotType=="bar"
                             callback(d){
                                 v.data.plotType = "bar"
-                                console.log("v.data.plotType:",v.data.plotType)
+                                // console.log("v.data.plotType:",v.data.plotType)
                                 if(v.data.plotType=="pie"){
                                     v.size.height = v.data.config.gridheight*12 + 100
                                     v.size.width = v.data.config.gridwidth * (v.data.chosenMethod.length+1) + 300

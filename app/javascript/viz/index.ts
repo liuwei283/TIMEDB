@@ -9,6 +9,7 @@ import { registerSpaticalInteraction } from "./spatical_interaction";
 import { registerstackedBarsplot} from "./stackedBars";
 import { registerUMAP } from "./UMAP";
 import { registerSubtype } from "./Subtype";
+import { registerimmunoRegulator} from "./immunoRegulator";
 
 declare global {
     interface GonInfo {
@@ -47,6 +48,9 @@ export function registerViz(moduleName) {
             break;
         case "Subtype":
             registerSubtype();
+            break;
+        case "immunoRegulator":
+            registerimmunoRegulator();
             break;
     }
 }

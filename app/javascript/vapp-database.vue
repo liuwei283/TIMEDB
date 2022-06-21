@@ -5,9 +5,9 @@
         <button class="btn btn-outline-dark" @click="downall()">Download all charts</button>
         </div><br>
         <div id = "barPlot" class = "container Block">
-            <!-- <div id="barDescription" class="row description">
-                <h4>Some description for bar plot</h4>
-            </div> -->
+            <div id="barDescription" class="row description">
+                <h4>Sample Bar Plot</h4>
+            </div>
             <div class="select-bar form-inline row">
 
                 <div class="sdiv col">
@@ -75,9 +75,9 @@
 
 
         <div id = "piePlot" class = "container Block">
-            <!-- <div id="pieDescription" class="row description">
-                <h4>Some description for pie plot</h4>
-            </div> -->
+            <div id="pieDescription" class="row description">
+                <h4>Project Immune Cell Fraction Piechart</h4>
+            </div>
 
             <div class="select-bar form-inline row">
 
@@ -160,9 +160,9 @@
         <hr>
         <br>
         <div id = "landscape" class = "container Block">
-            <!-- <div id="landscapeDescription" class="row description">
-                <h4>Some description for Immune Subtype Landscape</h4>
-            </div> -->
+            <div id="landscapeDescription" class="row description">
+                <h4>C1-C6 Landscape</h4>
+            </div>
             <div class="select-bar form-inline row">
                 <div class="sdiv col">
                     <div class="select-title">
@@ -223,9 +223,9 @@
             <hr>
         <br>
         <div id = "regulatorPlot" class = "container Block">
-            <!-- <div id="regulatorDescription" class="row description">
-                <h4>Some description for immuneregulator plot</h4>
-            </div> -->
+            <div id="regulatorDescription" class="row description">
+                <h4>C1-C6 Immunoregulator Expression </h4>
+            </div>
             <div class="select-bar form-inline row">
                 <div class="sdiv col">
                     <div class="select-title">

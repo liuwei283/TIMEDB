@@ -37,36 +37,16 @@
                 <div class="index-banner">
                     <div class="container">
                         <h2 class="display-4">
-                            Module
+                            Analysis
                         </h2>
                         <p class="lead mt-2">
-                            Please choose a module below:
+                            Please choose an analysis below:
                         </p>
                     </div>
                 </div>
                 <div class="container-fluid container" id="analyses_list">
                     <div id="accordion">
-                        <!-- <div id="head-for-analysis-list">
-                            <h4 class = "mb-2"> Totally {{analyses.length + 1}} Module(s) available </h4>
-                            <button aria-controls="collapseOne" aria-expanded="true" class="btn btn-link" data-target="#collapseOne" data-toggle="collapse">
-                                Totally {{analyses.length + 1}} Module(s) available
-                            </button></h5> -->
-                        <!-- </div> -->
                         <div class="cols-xs-space cols-sm-space cols-md-space container">
-
-                            <!-- <div class = "row" id = "supervisedSelect" v-if="isConv==true">
-                                <div>
-                                    <h2 class="display-5">
-                                        Submit tasks to supervised or unsupervised analyses:
-                                    </h2>
-                                    <br>
-                                    <input type="radio" class = "btn-check" name="supervise-select" autocomplete="off" id="supervised" value="supervised" v-model="picked_supervised" checked>
-                                    <label for="supervised" class = "btn btn-outline-secondary">Supervised Deconvolution</label>
-                                    <input type="radio" class = "btn-check" name="supervise-select" autocomplete="off" id="unsupervised" value="unsupervised" v-model="picked_supervised">
-                                    <label for="unsupervised" class = "btn btn-outline-secondary">Unsupervised Deconvolution</label>
-
-                                </div>
-                            </div> -->
                             <div class = "row" id="jumpDivStart">
                                 <div class="col-lg-4 mb-4 justify-content-center text-center" v-for="a in displayedAnalyses" :key="a.id" @click="updateApp(a, true)">
                                     <div class="card">
@@ -102,12 +82,12 @@
 
                         <div v-if="step==1" id = "timeline-file" class = "timeline-step" style="vertical-align:center">
                             <img v-bind:src="require('../assets/images/nav-up-pink.png')" style="margin-right: 10px"> 
-                            <i class="fa fa-arrow-right"></i>  <b-btn v-b-modal.submit-helper class = "btn btn-secondary" id = "helper-trigger"> Module Helper </b-btn>
+                            <i class="fa fa-arrow-right"></i>  <b-btn v-b-modal.submit-helper class = "btn btn-secondary" id = "helper-trigger"> Analysis Helper </b-btn>
                         </div>
 
                         <div v-if="step==2" id = "timeline-parameter" class = "timeline-step" style="vertical-align:center">
                             <img v-bind:src="require('../assets/images/timeline-param.png')" style="margin-right: 10px"> 
-                            <i class="fa fa-arrow-right"></i>  <b-btn v-b-modal.submit-helper class = "btn btn-secondary" id = "helper-trigger"> Module Helper </b-btn>
+                            <i class="fa fa-arrow-right"></i>  <b-btn v-b-modal.submit-helper class = "btn btn-secondary" id = "helper-trigger"> Analysis Helper </b-btn>
                         </div>
 
 
@@ -283,7 +263,18 @@
                                                                         :state="inputValid[`p-${param.id}`]" />
                                                         </div>
                                                     </div>
-                                                    <h5 class = "submit-container" v-if="parameters_input.length > 0"> Some self statements here, Some self statements here, Some self statements here.</h5>
+                                                    <div class = "submit-container mt-4" v-if="parameters_input.length > 0"> 
+                                                        <p>
+                                                            CIBERSORT is only freely available for academic users and could not be directly included in this package.
+                                                            To use CIBERSORT with this package, you need to register on the cibersort website,
+                                                            obtain a license, and download the CIBERSORT source code.
+                                                            The source code package contains two files, that are required:
+                                                        </p>
+                                                        <ol>
+                                                            <li>CIBERSORT.R</li>
+                                                            <li>LM22.txt</li>
+                                                        </ol>
+                                                    </div>
                                                     <div class="col-md-10" v-for="param_input in parameters_input" :key="param_input.id">
                                                         <label :for="`p-${param_input.id}`">{{ param_input.name }}
                                                             <span v-if="param_input.required" class="required">*</span>
@@ -352,34 +343,30 @@
         </div>
 
 
-        <b-modal class= "file-submit-modal" :id="`single-upload-${input.id}`" size="md" :title="`Submit input file - ${input.name}`" centered v-for="input in displayedInputs" :key="input.id">
+        <b-modal class= "file-submit-modal" :id="`single-upload-${input.id}`" size="lg" :title="`Submit input file - ${input.name}`" centered v-for="input in displayedInputs" :key="input.id">
                 <div class = "row justify-content-center submit-container">
-                    <div class = "col-md-1">
-                    </div>
-                    <button class = "col-md-6 btn btn-secondary">
-                        <a :href="`/public/data/module_demo/${input.name}_demo.csv`" :download="input.name">Download demo file</a>
-                    </button>
-                    <div class = "col-md-5">
+                    <div class="col-md-12 text-left mb-4">
+                        <button class = "btn btn-secondary">
+                            <a :href="`/public/data/module_demo/${input.name}_demo.csv`" :download="input.name">Download demo file</a>
+                        </button>
                     </div>
                     
                     <div class = "col-md-12 text-center">
-                        <div class = "submit-container">
-                            <div>
-                                <b-form-file
-                                    :id="`i-${input.id}`"
-                                    v-model="files[`i-${input.id}`]"
-                                    :state="inputValid[`i-${input.id}`]"
-                                    placeholder="Choose a file or drop it here..."
-                                    drop-placeholder="Drop file here..." 
-                                    :name="`i-${input.id}`"
-                                    :required="input.required"
-                                    :disabled="picked_single_multiple=='single' && ds_selected != ''"
-                                >
-                                </b-form-file>
-                            </div>
+                        <div>
+                            <b-form-file
+                                :id="`i-${input.id}`"
+                                v-model="files[`i-${input.id}`]"
+                                :state="inputValid[`i-${input.id}`]"
+                                placeholder="Choose a file or drop it here..."
+                                drop-placeholder="Drop file here..." 
+                                :name="`i-${input.id}`"
+                                :required="input.required"
+                                :disabled="picked_single_multiple=='single' && ds_selected != ''"
+                            >
+                            </b-form-file>
                         </div>
                     </div>
-                    <div class = "col-md-10" id = "description-card submit-container">
+                    <div class = "col-md-10 text-center" id = "description-card">
                         <div class = "row submit-container">
                             <div v-html="input.description"></div>
                         </div>
@@ -522,7 +509,7 @@
         </b-modal>
 
 
-        <b-modal v-if="started" ref="submit-helper" v-model="showhelper" id = "submit-helper" size="xl" scrollable title="Module Helper" centered @ok="jumpToUpload">
+        <b-modal v-if="started" ref="submit-helper" v-model="showhelper" id = "submit-helper" size="xl" scrollable title="Analysis Helper" centered @ok="jumpToUpload">
             <br>
             <div class = "row justify-content-center container">
                 <div v-html="selected_analysis.rendered_doc" class = "text-left container" style="margin: 50px;">
@@ -986,6 +973,7 @@
                         this.single_params_desc = this.single_parameters[0].description;
 
                         if (this.local_analysis_name == "TIMEDB Deconv CIBERSORT") {
+                            this.parameters_input=[];
                             for (var k in this.app.inputs) {
                                 if (this.app.inputs[k].name == "CIBERSORT.R" || this.app.inputs[k].name == "Signature file") {
                                     this.parameters_input.push(this.app.inputs[k]);
