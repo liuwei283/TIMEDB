@@ -32,6 +32,8 @@
                     </div>
                     <div class="col-md-8 text-center">
                         <br><br>
+                        <h2 style="color: #314893">Database Tutorial</h2>
+
                         <div class="row">
                             <div v-for="a in articles" :id="a.id" @click="showdetail($event)" class="col-md-5 tutorial-items text-center" :key="a.id">
                             {{a.title}}
@@ -81,6 +83,7 @@
                     </div> -->
                     <div class="col-md-8 text-center">
                         <br><br>
+                        <h2 style="color: #cc4f78">Analysis Tutorial</h2>
                         <div class="row">
                             <div v-for="a in articles2" :id="a.id" @click="showdetail2($event)" class="col-md-5 tutorial-items-red text-center" :key="a.id">
                             {{a.title}}
@@ -127,7 +130,7 @@
                             <br>
 
                             <li class="nav-item" @click="showdetail($event)" id="2">
-                                <p class="nav-link" >How to add data to your workspace</p>
+                                <p class="nav-link" >How to Add Data to Your Workspace</p>
                             </li>
                             <br>
 
@@ -136,11 +139,11 @@
                             </li>
                             <br>
                             <li class="nav-item" @click="showdetail($event)" id="4">
-                                <p class="nav-link" >How to view the  visualization plots</p>
+                                <p class="nav-link" >How to View the Visualization Plots</p>
                             </li>
                             <br>
                             <li class="nav-item" @click="showdetail($event)" id="5">
-                                <p class="nav-link" > How to download the visualization plots</p>
+                                <p class="nav-link" > How to Download the Visualization Plots</p>
                             </li>
                         </ul>
                         <br>
@@ -159,6 +162,7 @@
                                     <h1>Welcome to TIMEDB Database</h1>
                                     <p>TIMEDB provides the tumor immune micro-enviornment (TIME) cell proportions from bulk RNA expression profiles of <b>35,000 + samples</b> and <b>500+ projects</b> across <b>43 cancer types</b>. Users can download the following files directly with TIMEDB:
                                     </p>
+                                    <br>
                                 </div>
                                 <img src="/public/data/image/tutorial/1ppt.png" class="page-image">
                             </div>
@@ -188,6 +192,7 @@
                                     </ul>
                                     <h2>C1-C6 subtyping result file</h2>
                                         <p>TIMEDB adopts <strong>ImmuneSubtypeClassifier</strong> <sup>[12, 13]</sup>  to catelogue the immune subtype of tumor samples based on gene expression levels. Users can download the result file which shows the probability of sample being six immune status, including C1 (wound healing), C2 (IFN-γ dominant),C3 (inflammatory), C4 (lymphocyte depleted), C5 (immuno-logically quiet), and C6 (TGF-β dominant). </p>
+                                    <hr>
                                     <h2>Database usage</h2>
                                     <p>TIMEDB provides four pages to show data: "Overview","Cancer","Project" and "Sample"</p>
                                     <img src="/public/data/image/tutorial/2-1ppt.png" class="page-image">
@@ -201,7 +206,7 @@
                                         <img src="/public/data/image/tutorial/1-3ppt.gif" class="page-image">
                                         <img src="/public/data/image/tutorial/1-4ppt.gif" class="page-image">
 
-
+                                        <br>
                                         <h2 id="cancer">Cancer</h2>
                                         If users are interested in one cancer type, they can click the details in <a href="/cancers">''Cancer''</a> page to query the related datasets. <br>
                                         <img src="/public/data/image/tutorial/1-5ppt.gif" class="page-image">
@@ -237,23 +242,23 @@
                                         <img src="/public/data/image/tutorial/5-4ppt.png" class="page-image">
 
                                     </ul>
-                                    <h2>sample</h2>
+                                    <h2>Sample</h2>
                                     <p>If users are interested in specific sample, they can choose the sample in <a href="/samples">"sample"</a> a page to see the sample information.</p>
                                     <p>In this sample visulization, users could click the button to change the TIME estimation method.</p>
-                                    <div class="focus">
-                                        <p>The visualizations we provide are interactive:</p>
+                                    <hr>
+                                    <h1>The visualizations we provide are interactive:</h1>
+
+                                    <!-- <div class="focus"> -->
                                         <ul>
-                                            <li>tooltips
-                                            <font color="red" size="4">找一个database部分好看的图展示改字体大小（fraction）里面倒数第二个图，动图</font></li>
-                                            <li>change the color</li>
+                                            <li>change the color</li><br>
                                             <img src="/public/data/image/tutorial/1-8ppt.gif" class="page-image">
-                                            <li>change the text size</li>
+                                            <li>change the text size</li><br>
                                             <img src="/public/data/image/tutorial/1-9ppt.gif" class="page-image">
-                                            <li>rotate the label</li>
+                                            <li>rotate the label</li><br>
                                             <img src="/public/data/image/tutorial/1-10ppt.gif" class="page-image">
                                             <li>and multiple online adjustments options, contains but not all listed.</li>
                                         </ul>
-                                    </div>
+                                    <!-- </div> -->
                                     <h2>Citation</h2>
                                     <em>[1] Vésteinn Thorsson, David L Gibbs, Scott D Brown, Denise Wolf, Dante S Bortone, TaiHsien Ou Yang, Eduard Porta-Pardo, Galen F Gao, Christopher L Plaisier, James A Eddy,et al. The immune landscape of cancer. Immunity, 51(2):411–412, 2019.</em><br>
                                     <em>[2] Gianni Monaco, Bernett Lee, Weili Xu, Seri Mustafah, You Yi Hwang, Christophe Carré,Nicolas Burdin, Lucian Visan, Michele Ceccarelli, Michael Poidinger, et al. Rna-seq signatures normalized by mrna abundance allow absolute deconvolution of human immune cell types. Cell reports, 26(6):1627–1640, 2019.</em><br>
@@ -286,19 +291,21 @@
                         </h1><br>
                         <div class="page">
                             <div>
-                                <div class="headers">
+                                <div class="headers markdown-body">
                                     <h1>Database Information</h1>
-                                    <h2>We have 43 Cancer Type, 538 Projects, 35817 Samples</h2>
-                                </div>
-                                <br><br>
-                                <img src="/public/data/image/tutorial/2-1ppt.png" class="page-image">
-                            </div>
-                            <div>
-                                <div class="headers">
+                                    <h2>We have <b>43</b> Type, <b>538</b> Projects, <b>35817</b> Samples</h2>
+                                    <img src="/public/data/image/tutorial/2-1ppt.png" class="page-image">
+                                    <img src="/public/data/image/tutorial/2-2ppt.png" class="page-image">
+                                    <hr>
                                     <h1>Detail Information</h1>
-                                    <h2>You can view the detail information and the data visualization for each cancer type, project or samples</h2>
+                                    <p>You can view the detail information and the data visualization for each cancer type, project or samples</p>
+                                    <p>Let's take Project as an example </p>
+                                    <p>Click Filter to select information and Click Details to view Project's samples and charts</p>
+                                    <img src="/public/data/image/tutorial/1-6ppt.gif" class="page-image">
+                                    <img src="/public/data/image/tutorial/5-2ppt.png" class="page-image">
+                                    <img src="/public/data/image/tutorial/5-4ppt.png" class="page-image">
+
                                 </div>
-                                <img src="/public/data/image/tutorial/2-2ppt.png" class="page-image">
                             </div>
                             <br><br>
 
@@ -309,32 +316,26 @@
                         </h1><br>
                         <div class="page">
                             <div>
-                                <div class="headers">
+                                <div class="headers markdown-body">
                                     <h1>You can check your dataset in workspace</h1>
-                                </div>
-                                <img src="/public/data/image/tutorial/3-1ppt.png" class="page-image">
-                            </div>
-                            <br>
-                            <div>
-                                <div class="headers">
-                                    <h1>Add samples to your dataset from at the page of your dataset</h1>
-                                </div>
-                                <img src="/public/data/image/tutorial/3-2ppt.png" class="page-image">
-                            </div>
-                            <div>
-                                <div class="headers">
-                                    <h1>Select the samples and add them to a specify dataset</h1>
-                                </div>
-                                <img src="/public/data/image/tutorial/3-3ppt.png" class="page-image">
-                            </div>
-                            <br>
-                            <div>
-                                <div class="headers">
-                                    <h1>Also can add samples from a specify project at the project detail page</h1>
-                                </div>
-                                <img src="/public/data/image/tutorial/3-4ppt.jpg" class="page-image">
-                            </div>
+                                    <p>TIMEDB provides function that user can create their own dataset from multiple projects.</p>
+                                    <p>User can upload their dataset data for analysis later</p>
+                                    <img src="/public/data/image/tutorial/3-1ppt.png" class="page-image">
+                                    <hr>
+                                    <h1>Add samples to your dataset </h1>
+                                    <h2>Directly add samples from the dataset page</h2>
+                                    <p>Click Edit Dataset and go to add sample, it will jump to Samples page</p>
+                                    <p>Then, select samples and export them to your dataset</p>
+                                    <img src="/public/data/image/tutorial/3-2ppt.png" class="page-image">
+                                    <img src="/public/data/image/tutorial/3-3ppt.png" class="page-image">
+                                    <h2>Also, you can add samples from a specify project</h2>
+                                    <img src="/public/data/image/tutorial/3-4ppt.jpg" class="page-image">
 
+
+                                </div>
+                                
+                            </div>
+                            <br><br></br>
                         </div>
                     </div><div v-else-if="this.now =='3'">
                         <h1 class="title">
@@ -342,33 +343,17 @@
                         </h1><br>
                         <div class="page">
                             <div>
-                                <div class="headers">
+                                <div class="headers markdown-body">
                                     <h1>Download data from Download Page</h1>
-                                </div>
-                                <img src="/public/data/image/tutorial/4-0ppt.jpg" class="page-image">
-                            </div>
-                            <br>
-                            <div>
-                                <div class="headers">
+                                    <p>The Download page contains the relative files of all projects</p>
+                                    <img src="/public/data/image/tutorial/4-0ppt.jpg" class="page-image">
                                     <h1>Download the data from the dataset</h1>
-                                </div>
-                                <img src="/public/data/image/tutorial/4-1ppt.jpg" class="page-image">
-                            </div>
-                            <br>
-
-                            <div>
-                                <div class="headers">
+                                    <img src="/public/data/image/tutorial/4-1ppt.jpg" class="page-image">
                                     <h1>Download data from projects</h1>
-                                </div>
-                                <img src="/public/data/image/tutorial/9.png" class="page-image">
-                            </div>
-                            <br>
-                            <div>
-                                <div class="overhead">
+                                    <img src="/public/data/image/tutorial/9.png" class="page-image">
                                     <h1>Download data from samples</h1>
+                                    <img src="/public/data/image/tutorial/4-3ppt.jpg" class="page-image">
                                 </div>
-                                <br><br>
-                                <img src="/public/data/image/tutorial/4-3ppt.jpg" class="page-image">
                             </div>
                             <br><br>
 
@@ -379,24 +364,16 @@
                         </h1><br>
                         <div class="page">
                             <div>
-                                <div class="headers">
+                                <div class="headers markdown-body">
                                     <h1>You can view the visualizations plot of each Project</h1>
-                                    <h2> Subtype page</h2>
+                                    <p>The visualizations we provide are interactive, you can use the editor to do some personal change</p>
+                                    <h2> "C1_C6 subtyping overview": visualization about immune subtype of tumor samples.</h2>
+                                    <img src="/public/data/image/tutorial/5-1ppt.png" class="page-image">
+                                    <img src="/public/data/image/tutorial/5-2ppt.png" class="page-image">
+                                    <h2>"TIME estimation overview": visualization about TIME estimation</h2>
+                                    <img src="/public/data/image/tutorial/5-3ppt.png" class="page-image">
+                                    <img src="/public/data/image/tutorial/5-4ppt.png" class="page-image">
                                 </div>
-                                <br>
-                                <img src="/public/data/image/tutorial/5-1ppt.png" class="page-image">
-                                <img src="/public/data/image/tutorial/5-2ppt.png" class="page-image">
-
-                            </div>
-                            <br><br>                           
-                            <div>
-                                <div class="headers">
-                                    <h1>Fraction page</h1>
-                                </div>
-                                <br>
-                                <img src="/public/data/image/tutorial/5-3ppt.png" class="page-image">
-                                <img src="/public/data/image/tutorial/5-4ppt.png" class="page-image">
-
                             </div>
                             <br><br>
                         </div> 
@@ -406,16 +383,16 @@
                         </h1><br>
                         <div class="page">
                             <div>
-                                <div class="headers">
-                                    <h1>Click the Download all charts button to download all Charts </h1>
-                                    <h1>Click the Download button to download chart and relative data files</h1>
-                                </div>
-                                <br>
-                                <img src="/public/data/image/tutorial/6-1ppt.png" class="page-image">
+                                <div class="headers markdown-body">
+                                    <ul>
+                                    <li>Click the Download all charts button to download all Charts </li>
+                                    <li>Click the Download button to download chart and relative data files</li>
+                                    </ul>
+                                    <img src="/public/data/image/tutorial/6-1ppt.png" class="page-image">
 
+                                </div>
                             </div>
                             <br><br>
-
                         </div> 
                     </div>
                 </div>
@@ -431,21 +408,17 @@
                             </li>
                             <br>
                             <li class="nav-item" @click="showdetail2($event)" id="1">
-                                <p class="nav-link ">How to start an analysis</p>
+                                <p class="nav-link ">How to Complete an Analysis</p>
                             </li>
                             <br>
 
                             <li class="nav-item" @click="showdetail2($event)" id="2">
-                                <p class="nav-link" >How to view Analysis Results</p>
+                                <p class="nav-link" >Analysis Tutorial</p>
                             </li>
                             <br>
 
                             <li class="nav-item" @click="showdetail2($event)" id="3">
-                                <p class="nav-link" href="#">How to edit the visualization of results</p>
-                            </li>
-                            <br>
-                            <li class="nav-item" @click="showdetail2($event)" id="4">
-                                <p class="nav-link" > How to ask us for help</p>
+                                <p class="nav-link" href="#">How to Ask Us for Help</p>
                             </li>
                         </ul>
                         <br>
@@ -458,52 +431,89 @@
                             <i class="fa fa-caret-left" @click="back"></i> Analysis Introduction
                         </h1><br>
                         <div class="page">
-                            <div>
-                                <div class="headers">
-                                    <h1>Module</h1>
-                                    <h2>We have many Modules for data analysis</h2>
-                                </div>
-                                <img src="/public/data/image/tutorial/a1-1ppt.png" class="page-image">
-                            </div>
-                            <br><br>
-                            <div>
-                                <div class="overhead">
-                                    <h1>We have detail module helper</h1>
-                                </div>
-                                <img src="/public/data/image/tutorial/a1-2ppt.png" class="page-image">
-                            </div>
-                            <br><br>
-                            <div>
-                                <div class="overhead">
-                                    <h1>Sumbit page to upload files and set parameter</h1>
-                                </div>
-                                <br>
-                                <img src="/public/data/image/tutorial/a1-3ppt.png" class="page-image">
+                            <div class="markdown-body headers">
+                                <h1>Welcome to TIMEDB Analysis</h1>
+                                <p>TIMEDB provides 18 online tumor immune microenvironment analyses,details are shown in the following table:</p>
+                                <table>
+                                    <tr>    <th>Analysis Category</th>  <th>Analysis</th> </tr>
+                                    <tr>    <td rowspan="5">Regression Tools</td>   <td>TIMEDB Decov CIBERSORT</td>  </tr>
+                                    <tr>    <td>TIMEDB Decov TIMER</td>  </tr>
+                                    <tr>    <td>TIMEDB Decov EPIC </td>  </tr>
+                                    <tr>    <td>TIMEDB Decov ABIS</td>  </tr>
+                                    <tr>    <td>TIMEDB Decov quanTIseq</td>  </tr>
+                                    <tr>    <td rowspan="3">Enrichment Tools</td>   <td>TIMEDB Decov xCell</td>  </tr>
+                                    <tr>    <td>TIMEDB Decov MCPcounter</td>  </tr>
+                                    <tr>    <td>TIMEDB Decov ConsensusTME</td>  </tr>
+                                    <tr>    <td>Unsupervised Tools</td>   <td>TIMEDB Decov Linseed</td>  </tr>
+                                    <tr>    <td rowspan="2">Consensus Tools</td> <td>TIMEDB Consensus array</td>  </tr>
+                                    <tr>    <td>TIMEDB Consensus RNA-Seq</td>  </tr>
+                                    <tr>    <td>Datasets Comparison</td> <td>TIMEDB Batch Effect</td>  </tr>
+                                    <tr>    <td rowspan="2">TIME Estimation Comparsion</td>   <td>TIMEDB Comparison array</td>  </tr>
+                                    <tr>    <td>TIMEDB Comparison RNA-Seq </td>  </tr>
+                                    <tr>    <td rowspan="2">Patient Subtyping</td>           <td>TIMEDB Cell Fraction Subtyping</td>  </tr>
+                                    <tr>    <td>TIMEDB C1-C6 Subtyping</td>  </tr>
+                                    <tr>    <td rowspan="2">Survival Analysis</td>   <td>TIMEDB HR OR</td>  </tr>
+                                    <tr>    <td>TIMEDB KM Estimator</td>  </tr>
+                                    <tr>    <td rowspan="2">Colrrelation Analysis</td>   <td>TIMEDB Cell Interaction</td>  </tr>
+                                    <tr>    <td>TIMEDB Cell Correlation</td>  </tr>
+                                    <tr>    <td>Different Expression</td>   <td>TIMEDB Immunoregulator</td>  </tr>
+
+                                </table>
+                                <h2>Analysis submit and check</h2>
+                                <p>TIMEDB provides a friendly submission page that guides users through analysis step by step.</p>
+                                <p>Users could view analysis detailed tutorial, run demo and view demo results with one click. </p>
+                                <img src="/public/data/image/tutorial/a-1-1ppt.png" class="page-image">
+                                <p>During the submission process, the file format and parameters are explained in detail. </p>
+                                <img src="/public/data/image/tutorial/a-1-2ppt.gif" class="page-image">
+                                <p>For results, TIMEDB provides results downloads, as well as interactive visualization. </p>
+                                <img src="/public/data/image/tutorial/a-1-3ppt.gif" class="page-image">
+                                <p>Click to view the detailed steps of submitting the analysis.</p>
+                                <button class="btn-5 btn" @click="showdetail2($event)" id="1">analysis steps</button>
+                                <h2>Contact with us if you meet some problems</h2>
+                                <p>You may contact us:</p>
+                                <p>Dr LI, Shuaicheng</p>
+                                <p>Email: Shuaicli@cityu.edu.hk</p>
                             </div>
                             <br><br>                           
 
                         </div>
                     </div><div v-else-if="this.now =='1'">
                         <h1 class="title">
-                            <i class="fa fa-caret-left" @click="back"></i> How to start an analysis
+                            <i class="fa fa-caret-left" @click="back"></i> How to Conmplete an Analysis
                         </h1><br>
                         <div class="page">
-                            <div>
-                                <div class="headers">
-                                    <h1>Select the wanted Module </h1>
-                                </div>
-                                <br>
-                                <img src="/public/data/image/tutorial/a2-1ppt.png" class="page-image">
-                            </div>
-                            <br><br>
-                            <div>
-                                <div class="headers">
-                                    <h1>Upload the file and Set the Parameter</h1>
-                                </div>
-                                <img src="/public/data/image/tutorial/a2-2ppt.png" class="page-image">
-                            </div>
-                            <br><br>
+                            <div class="headers markdown-body">
+                                <h1>Analysis steps</h1>
+                                <p>TIMEDB analyses are used in much the same way.</p>
+                                <h2>Step one: choose the analysis.</h2>
+                                <p>In TIMEDB, <a href="/submit/analysesCategory?cname=Regression+Tools">Regression tools</a> include ABIS, quanTIseq, CIBERSORT and other analyses. Users can select the analysis according to the number of datasets they upload and the analysis method.</p>
+                                <img src="/public/data/image/tutorial/a-2-1ppt.gif" class="page-image">
+                                <hr>
+                                <h2>Step 2 (optional): read the analysis helper, run the demo file.</h2>
+                                <p>After selecting one analysis, the user entering for the first time will directly see the analysis helper, where the file format and parameters will be explained in detail.</p>
+                                <img src="/public/data/image/tutorial/a-2-2ppt.gif" class="page-image">
+                                <p>In each anlaysis, TIMEDB provides a "RUN DEMO" button. Users can run the demo task with one just click. </p>
+                                <img src="/public/data/image/tutorial/a-2-3ppt.gif" class="page-image">
+                                <hr>
+                                <h2>Step three: upload the file</h2>
+                                <p>Users can prepare their own files or select their own DataSets directly from the workspace for uploading. (see <a href="#" @click="jumpadd">how to add datasets in workspace </a>)</p>
+                                <img src="/public/data/image/tutorial/a-2-4ppt.gif" class="page-image">
+                                <p>Users can check the file format and download the demo file in "upload page". 动图展示</p>
+                                <img src="/public/data/image/tutorial/a-2-5ppt.gif" class="page-image">
+                                <h2>In the document submission section, all submitted file should be CSV format.</h2>
+                                <hr>
+                                <h2>Step four: set parameters</h2>
+                                <p>Users can fill the desired analysis paramters guided by detailed paramter explaination.</p>
+                                <img src="/public/data/image/tutorial/a-2-6ppt.gif" class="page-image">
+                                <hr>
+                                <h2>Step five: submit and view the results</h2>
+                                <p>After the task is submitted, the user gets a task id, which is automatically added to the user's workspace.</p>
+                                <img src="/public/data/image/tutorial/a-2-3ppt.gif" class="page-image">
+                                <p>In the workspace section, you can view the status of task. There are three task status: running, finished, and failed, which respectively indicate that the task is in progress, the task is completed and the task is failed. Click "check" to view the task results and interactive visualization.</p>
+                                <img src="/public/data/image/tutorial/a-2-7ppt.gif" class="page-image">
 
+                            </div>
+                            <br><br>
                         </div>
                     </div><div v-else-if="this.now =='2'">
                         <h1 class="title">
@@ -528,27 +538,51 @@
                         </div>
                     </div><div v-else-if="this.now =='3'">
                         <h1 class="title">
-                            <i class="fa fa-caret-left" @click="back"></i> How to edit the visualization of analysis results
-                        </h1><br>
-                        <div class="page">
-                            <div>
-                                <div class="overhead">
-                                    <h1>Click Visualization to view Chart</h1>
-                                    <h2>Using Editor to edit chart</h2>
-                                </div>
-                                <img src="/public/data/image/tutorial/a4-1ppt.jpg" class="page-image">
-                            </div>
-                            <br><br>
-
-
-                    </div>      
-                    </div><div v-else-if="this.now =='4'">
-                        <h1 class="title">
                             <i class="fa fa-caret-left" @click="back"></i> How to ask us for help
                         </h1><br>
                         <div class="page">
+                            <div>
+                                <div class="headers markdown-body">
+                                    <h1>Team</h1>
+                                    <p>Based in City University of Hong Kong, led by Dr. Shuaicheng LI, we are a multidisciplinary group of top-ranking and aspiring undergraduates, research assistants and Ph.D. students working tirelessly to bring you a brand-new experience in bioinformatics research that frees you from all the chores and empowers your journey of discovery.</p>
+                                        <div class="team-member-container">
+                                            <div class="team-member-links"><a class="link" href="http://www.cs.cityu.edu.hk/profile/shuaicli.html"><i
+                                                        class="fas fa-home"></i></a><a class="link link-m" 
+                                                    href="mailto:shuaicli@cityu.edu.hk"><i class="fas fa-envelope"></i></a></div>
+                                            <div class="team-member"><img alt="Dr. LI Shuaicheng" class="avatar"
+                                                    src="/public/data/image/tutorial/boss.jpg">
+                                                <div class="intro">
+                                                    <h2>Dr. LI Shuaicheng</h2>
+                                                    <h5>Supervisor</h5>
+                                                    <p>Supervisor</p>
+                                                </div>
+                                            </div>
+                                        </div>                                
+                                    <blockquote>
+                                        <div class='row'>
+                                            <div class="col-md-5">
+                                                <h3>Contact Us</h3>
+                                                <p>Dr LI, Shuaicheng</p>
+                                                <p>Tat Chee Avenue, Kowloon, Hong Kong</p>
+                                                <p>Email: <a href="mailto:shuaicli@cityu.edu.hk">shuaicli@cityu.edu.hk</a></p>
+                                            </div>
 
-                        </div> 
+
+                                            
+                                            <div class="col-md-3">
+                                                <h3>About Us</h3>
+                                                <p>Creating An Integrated Cloud-based System for Bioinformatics Visualization is our passion.</p>
+                                                <p><a href="/terms">Privacy Policy</a></p>
+                                            </div>
+                                        </div>
+                                    </blockquote>
+                                </div>
+
+                            </div>
+                            <br><br>
+    
+
+                        </div>      
                     </div>
                 </div>
             </div>
@@ -566,17 +600,16 @@ export default {
                 articles:[
                     {title:"Introduction", id:"intro",key:["intro","0"]},
                     {title:"How to View Database Information", id:"1",key:["database","1"]},
-                    {title:"How to add data to your workspace", id:"2",key:["database","2"]},
+                    {title:"How to Add Data to Your Workspace", id:"2",key:["database","2"]},
                     {title:"How to Download Database Data", id:"3",key:["database","3"]},
-                    {title:"How to view the  visualization plots", id:"4",key:["database","4"]},
-                    {title:"How to download the visualization plots", id:"5",key:["database","5"]},
+                    {title:"How to View the  Visualization Plots", id:"4",key:["database","4"]},
+                    {title:"How to Download the Visualization Plots", id:"5",key:["database","5"]},
                 ],
                 articles2:[
                     {title:"Introduction", id:"intro",key:["intro","0"]},
-                    {title:"How to start an analysis", id:"1",key:["database","1"]},
-                    {title:"How to view Analysis Results", id:"2",key:["database","2"]},
-                    {title:"How to edit the visualization of results", id:"3",key:["database","3"]},
-                    {title:"How to ask us for help", id:"4",key:["database","4"]},
+                    {title:"How to Complete an Analysis", id:"1",key:["database","1"]},
+                    {title:"Analysis tutorial", id:"2",key:["database","2"]},
+                    {title:"How to Ask Us for Help", id:"3",key:["database","3"]},
                     // {title:"ou shu xian de hao kan ()", id:"5",key:["database","5"]},
                 ],
                 results:[],
@@ -633,7 +666,12 @@ export default {
         },
         gotop(){
             $('html,body').animate({scrollTop:'0px'},'fast');
-        }
+        },
+        jumpadd(){
+            this.details=1;
+            this.now=3;
+            this.gotop();
+        },
     }
 }
 </script>
@@ -788,5 +826,67 @@ export default {
     border: 3px solid #00008b;
     border-radius: 10px;
     padding: 1%;
+}
+img{
+    background-color: transparent !important;
+    margin-bottom: 2%;
+}
+.team-member-container{
+    position: relative;
+    flex-basis: 50%;
+    min-width: 430px;
+    padding: 1.75rem 2rem;
+    &:hover{
+        .team-member{
+            transform: translate(0,-20px);
+        }
+        .team-member-links{
+            transform: translate(0,20px);
+        }
+    }
+}
+.team-member-links{
+    position: absolute;
+    transition: all .2s ease-in;
+    height: 56px;
+    bottom: 1.25rem;
+    left: 2rem;
+    right: 2rem;
+    padding-top: 6px;
+    background: linear-gradient(120deg,#9c4cf0,#7512dd 85%);
+    border-radius: 0 0 4px 4px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    a{
+        color: #fff;
+    }
+}
+.team-member{
+    position: relative;
+    transition: all .2s ease-in;
+    border-radius: 4px;
+    border: 1px solid #2a2a2a;
+    padding: 2.5rem;
+    height: 100%;
+    background: linear-gradient(120deg,#212529,#101214);
+    box-shadow: 0 0 16px #2a2a2a;
+    display: flex;
+    align-items: center;
+    .avatar{
+        width: 112px;
+        flex-basis: 112px;
+        flex-shrink: 0;
+        height: 112px;
+        border: 1px solid #333;
+        border-radius: 57px;
+        margin: 0 15px;
+        box-shadow: 0 0 4px #000;
+    }
+    .intro{
+        text-align: left;
+        padding-left: 1em;
+        color: #adb5bd
+    }
 }
 </style>
