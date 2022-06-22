@@ -502,107 +502,107 @@ export default {
                                 status: data.status};
         },
 
-        update_chart(data) {
-            this.chartOptions = {
-                tooltip: {
-                    trigger: 'axis',
-                    axisPointer: {
-                        type: 'cross',
-                        crossStyle: {
-                            color: '#999'
-                        }
-                    }
-                },
-                toolbox: {
-                    feature: {
-                        dataZoom: {
-                            yAxisIndex: 'none'
-                        }
-                    }
-                },
-                dataZoom: [
-                    {
-                        show: true,
-                        realtime: true,
-                    }
-                ],
-                legend: {
-                    data:['memory','cpu']
-                },
-                xAxis: [
-                    {
-                        type: 'category',
-                        data: data.resource_usage.x_axis,
-                        axisPointer: {
-                            type: 'shadow'
-                        }
-                    }
-                ],
-                yAxis: [
-                    {
-                        type: 'value',
-                        name: 'memory',
-                        min: data.resource_usage.memory.min,
-                        max: data.resource_usage.memory.max,
-                        // interval: 50,
-                        axisLabel: {
-                            formatter: function (value, index) {
-                                let units = ['','K','M','G','T','P','E','Z'];
-                                for (let i=0; i<units.length; i++) {
-                                    if (value < 1024) {
-                                        return Math.floor(value*10)/10.0 + units[i] + 'B';
-                                    }
-                                    value /= 1024.0;
-                                }
-                                return Math.floor(value) + 'YiB';
-                            }
-                        }
-                    },
-                    {
-                        type: 'value',
-                        name: 'cpu',
-                        min: data.resource_usage.cpu.min,
-                        max: data.resource_usage.cpu.max,
-                        // interval: 5,
-                        axisLabel: {
-                            formatter: function (value, index) {
-                                let units = ['s','min','h','d','w'];
-                                let unitNum = [60.0, 60.0, 24.0, 7.0, 1.0];
-                                for (let i=0; i<units.length; i++) {
-                                    if (value < unitNum[i]) {
-                                        // ignore numbers after floating point for minutes
-                                        if (i == 0){
-                                            return Math.floor(value) + units[i];
-                                        } else if (units[i] == 'min'){
-                                            return Math.floor(value) + units[i];
-                                        } else if (i > 1){
-                                            return Math.floor(value) + units[i] + Math.floor(value*10)%10/10*unitNum[i-1] + units[i-1];
-                                        }
+        // update_chart(data) {
+        //     this.chartOptions = {
+        //         tooltip: {
+        //             trigger: 'axis',
+        //             axisPointer: {
+        //                 type: 'cross',
+        //                 crossStyle: {
+        //                     color: '#999'
+        //                 }
+        //             }
+        //         },
+        //         toolbox: {
+        //             feature: {
+        //                 dataZoom: {
+        //                     yAxisIndex: 'none'
+        //                 }
+        //             }
+        //         },
+        //         dataZoom: [
+        //             {
+        //                 show: true,
+        //                 realtime: true,
+        //             }
+        //         ],
+        //         legend: {
+        //             data:['memory','cpu']
+        //         },
+        //         xAxis: [
+        //             {
+        //                 type: 'category',
+        //                 data: data.resource_usage.x_axis,
+        //                 axisPointer: {
+        //                     type: 'shadow'
+        //                 }
+        //             }
+        //         ],
+        //         yAxis: [
+        //             {
+        //                 type: 'value',
+        //                 name: 'memory',
+        //                 min: data.resource_usage.memory.min,
+        //                 max: data.resource_usage.memory.max,
+        //                 // interval: 50,
+        //                 axisLabel: {
+        //                     formatter: function (value, index) {
+        //                         let units = ['','K','M','G','T','P','E','Z'];
+        //                         for (let i=0; i<units.length; i++) {
+        //                             if (value < 1024) {
+        //                                 return Math.floor(value*10)/10.0 + units[i] + 'B';
+        //                             }
+        //                             value /= 1024.0;
+        //                         }
+        //                         return Math.floor(value) + 'YiB';
+        //                     }
+        //                 }
+        //             },
+        //             {
+        //                 type: 'value',
+        //                 name: 'cpu',
+        //                 min: data.resource_usage.cpu.min,
+        //                 max: data.resource_usage.cpu.max,
+        //                 // interval: 5,
+        //                 axisLabel: {
+        //                     formatter: function (value, index) {
+        //                         let units = ['s','min','h','d','w'];
+        //                         let unitNum = [60.0, 60.0, 24.0, 7.0, 1.0];
+        //                         for (let i=0; i<units.length; i++) {
+        //                             if (value < unitNum[i]) {
+        //                                 // ignore numbers after floating point for minutes
+        //                                 if (i == 0){
+        //                                     return Math.floor(value) + units[i];
+        //                                 } else if (units[i] == 'min'){
+        //                                     return Math.floor(value) + units[i];
+        //                                 } else if (i > 1){
+        //                                     return Math.floor(value) + units[i] + Math.floor(value*10)%10/10*unitNum[i-1] + units[i-1];
+        //                                 }
 
 
-                                    }
-                                    value /= unitNum[i];
-                                }
-                                return Math.floor(value) + 'w';
-                            }
-                        }
-                    }
-                ],
-                series: [
-                    {
-                        name:'memory',
-                        type:'line',
-                        data: data.resource_usage.memory.data
-                    },
-                    {
-                        name:'cpu',
-                        type:'line',
-                        yAxisIndex: 1,
-                        data:data.resource_usage.cpu.data
-                    }
-                ]
-            };
-        },
+        //                             }
+        //                             value /= unitNum[i];
+        //                         }
+        //                         return Math.floor(value) + 'w';
+        //                     }
+        //                 }
+        //             }
+        //         ],
+        //         series: [
+        //             {
+        //                 name:'memory',
+        //                 type:'line',
+        //                 data: data.resource_usage.memory.data
+        //             },
+        //             {
+        //                 name:'cpu',
+        //                 type:'line',
+        //                 yAxisIndex: 1,
+        //                 data:data.resource_usage.cpu.data
+        //             }
+        //         ]
+        //     };
+        // },
         refreshStatus() {
             console.log("Now refresh task", this.taskId)
             this.stdout = new Date() + " output test."
@@ -632,7 +632,7 @@ export default {
                     }).finally(() => {
                         // setTimeout(() => { alertCenter.add('danger', ''); }, 2000);
                         console.log("Log:", this.inputs, this.outputs, this.params);
-                        this.getChartsInfo();
+                        this.viewTaskDetails();
                     });
 
             // console.log("Refreshed. New log:", this.stdout)
