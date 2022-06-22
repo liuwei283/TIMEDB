@@ -55,6 +55,18 @@ Rails.application.routes.draw do
   root 'welcome#index'
 
   get 'tutorial', to: 'welcome#tutorial', as: 'tutorial'
+  get '/tutorial/database/1', to: "tutorial#database1"
+  get '/tutorial/database/2', to: "tutorial#database2"
+  get '/tutorial/database/3', to: "tutorial#database3"
+  get '/tutorial/database/4', to: "tutorial#database4"
+  get '/tutorial/database/5', to: "tutorial#database5"
+  get '/tutorial/analysis/1', to: "tutorial#analysis1"
+  get '/tutorial/analysis/2', to: "tutorial#analysis2"
+  get '/tutorial/analysis/3', to: "tutorial#analysis3"
+  get '/tutorial/analysis/4', to: "tutorial#analysis4"
+
+
+
   get 'contact', to: 'welcome#contact', as: 'contact'
   get 'docs', to: redirect('docs/index.html')
   get 'terms', to: 'welcome#terms', as: 'terms'
