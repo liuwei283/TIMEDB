@@ -594,6 +594,12 @@ class SubmitController < ApplicationController
         @task =Task.find_by! id:params[:job_id], user_id:session[:user_id]
       end
 
+      if !@task.analysis.blank?
+        result_json[:type] = "app"
+      else
+        result_json[:type] = "pipeline"
+      end
+
       result_json[:tid] = @task.tid
       
       if TaskOutput.where(task_id:@task.id).exists?
@@ -605,7 +611,7 @@ class SubmitController < ApplicationController
           parsed_output = processTaskOutput()
           response_body << parsed_output
         end
-        render json: {"body": response_body, "tid": result_json[:tid]}
+        render json: {"body": response_body, "tid": result_json[:tid], "type": result_json[:type]}
         return
       end
       # query task
