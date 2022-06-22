@@ -334,7 +334,7 @@ export default {
             const { alertCenter } = this.$refs;
             this.taskDetails.id = this.job_id;
             this.taskDetails.tasks = {};
-            axios.post(`/task_details/`,
+            axios.post(`/task-details/`,
                 objectToFormData({'id': this.job_id}),
                 {
                     headers: {
