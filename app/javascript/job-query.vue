@@ -188,9 +188,7 @@
                                 <b-collapse :id="`i-${input.id}`">
                                     <ul class="mt-3">
                                         <li v-for="file in input.files" :key="file.id">
-                                        <a :href="`https://deepomics.org/explorer/download_rel/?path=${file.path}/${file.name}`" target="_blank">{{ file.name }}</a>
-
-                                            <!-- <a :href="`https://deepomics.org/user/data/?this_path=${file.path}`" target="_blank">{{ file.name }}</a> -->
+                                            <a :href="`https://deepomics.org/explorer/download_rel/?path=${file.path}/${file.name}`" target="_blank">{{ file.name }}</a>
                                         </li>
                                     </ul>
                                 </b-collapse>
@@ -199,61 +197,157 @@
                     </section>
 
                     <section id="settings" class="mt-2 mb-4">
-                        <h4>Settings</h4>
-                        <table class="table table-bordered">
-                            <thead>
-                                <tr>
-                                    <th>Name</th>
-                                    <th>Prefix</th>
-                                    <th>Default</th>
-                                    <th>Value</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr v-for="param in params" :key="`p-${param.id}`">
-                                    <td>{{ param.name }} <i class="fa fa-question-circle" v-b-tooltip
-                                                        :title="param.desc" placement="bottom"></i></td>
-                                    <td>{{ param.prefix }}</td>
-                                    <td>{{ param.default }}</td>
-                                    <td>{{ param.value }}</td>
-                                </tr>
-                            </tbody>
-                        </table>
+                        <div v-if="job_type=='app'">
+                            <h4 class="pb-1">Settings</h4>
+                            <table class="table table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>Name</th>
+                                        <th>Prefix</th>
+                                        <th>Default</th>
+                                        <th>Value</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr v-for="param in params" :key="`p-${param.id}`">
+                                        <td>{{ param.name }} <i class="fa fa-question-circle" v-b-tooltip
+                                                            :title="param.desc" placement="bottom"></i></td>
+                                        <td>{{ param.prefix }}</td>
+                                        <td>{{ param.default }}</td>
+                                        <td>{{ param.value }}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div v-else>
+                            <h4 class = "pb-1">Settings</h4>
+                            <b-list-group>
+                                <b-list-group-item v-for="task_setting in params" href="javascript:void(0)" v-b-toggle="`i-${task_setting.id}`" :key="`i-${task_setting.id}`">
+                                    <i class="fa fa-cog"></i> {{ task_setting.app_name }}
+                                    <b-collapse :id="`i-${task_setting.id}`">
+                                        <table class="table table-bordered">
+                                            <thead>
+                                                <tr>
+                                                    <th>Name</th>
+                                                    <th>Prefix</th>
+                                                    <th>Default</th>
+                                                    <th>Value</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr v-for="param in task_setting.params" :key="`p-${param.id}`">
+                                                    <td>{{ param.name }} <i class="fa fa-question-circle" v-b-tooltip
+                                                                        :title="param.desc" placement="bottom"></i></td>
+                                                    <td>{{ param.prefix }}</td>
+                                                    <td>{{ param.default }}</td>
+                                                    <td>{{ param.value }}</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </b-collapse>
+                                </b-list-group-item>
+                            </b-list-group>
+                        </div>
                     </section>
 
-                    <div class="row">
-                        <div id="resource-usage" class="p-4 col-md-6">
-                            <h4>Resource Usage</h4>
-                            <v-chart :options="chartOptions" />
-                        </div>
+                    <div id="details-container">
+                        <div class = "row" v-if="taskDetails.type == 'pipeline'">
+                            <h4>Module Tasks Status</h4>
+                            <table class="table table-bordered">
+                                <tbody>
+                                    <tr v-for="(task, taskKey) in taskDetails.tasks"
+                                    :key="taskKey" >
+                                        <td>{{ task.name }}</td>
+                                        <td>
+                                            <b-badge pill variant="success"
+                                                    v-if="task.status == 'finished'">
+                                                    Finished
+                                                    </b-badge>
+                                        </td>
+                                        <td><b-button variant="light" class="float-right" size="small"
+                                        @click="taskDetails.activeTask = taskKey">
+                                        <i class="fas fa-eye"></i> View</b-button></td>
+                                    </tr>
+                                </tbody>
+                                <!-- <li class="list-group-item" 
+                                    v-for="(task, taskKey) in taskDetails.tasks"
+                                    :key="taskKey"
+                                >
+                                    {{task.name}}
+                                    <b-badge pill variant="success"
+                                        v-if="task.status == 'finished'"
+                                    >Finished</b-badge>
+                                    <b-badge pill variant="failed" class="float-right"
+                                        v-else-if="task.status == 'failed'"
+                                    >Failed</b-badge>
+                                    <b-badge pill variant="info" v-else>Running</b-badge>
 
-                        <div id="task-log" class = "col-md-6">
-                            <h4> Log Message</h4>
-                            <p class="font-italic">Console Output</p>
-                            <pre id="stdout" class="light">{{stdout}}</pre>
-                            <p class="font-italic">Error Message</p>
-                            <pre id="stderr">{{stderr}}</pre>
+                                    <b-button variant="light" class="float-right" size="small"
+                                        @click="taskDetails.activeTask = taskKey">
+                                        <i class="fas fa-eye"></i> View</b-button>
+                                </li> -->
+                            </table>
+                        </div>
+                        <div>
+                            <div class="row">
+                                <div id="resource-usage" class="p-4 col-md-6">
+                                    <h4>Resource Usage</h4>
+                                    <v-chart :options="taskDetails.tasks[taskDetails.activeTask].chartOptions" />
+                                </div>
+                                <div id="task-log" class = "col-md-6 p-4">
+                                    <h4> Log Message</h4>
+                                    <p class="font-italic">Console Output</p>
+                                    <pre id="stdout" class="light">{{ taskDetails.tasks[taskDetails.activeTask].log.stdout }}</pre>
+                                    <p class="font-italic">Error Message</p>
+                                    <pre id="stderr">{{ taskDetails.tasks[taskDetails.activeTask].log.stderr }}</pre>
+                                </div>
+                            </div>
                         </div>
                     </div>
 
                     <section id="outputs" class="mt-4 mb-4">
-                        <h4 class="pt-2">Outputs</h4>
-                        <b-list-group>
-                            <b-list-group-item v-for="output in outputs" href="javascript:void(0)" v-b-toggle="`o-${output.id}`" :key="`o-${output.id}`">
-                                <i class="fa fa-file"></i> {{ output.name }}
-                                <i class="fa fa-question-circle" v-b-tooltip
-                                :title="output.desc"></i>
-                                <b-collapse :id="`o-${output.id}`">
-                                    <ul class="mt-3">
-                                        <li v-for="file in output.files" :key="file.id">
-                                            <!-- <a :href="`https://deepomics.org/user/data/?this_path=${file.path}`" target="_blank">{{ file.name }}</a> -->
-                                            <a :href="`https://deepomics.org/explorer/download_rel/?path=${file.path}/${file.name}`" target="_blank">{{ file.name }}</a>
-
-                                        </li>
-                                    </ul>
-                                </b-collapse>
-                            </b-list-group-item>
-                        </b-list-group>
+                        <div v-if="job_type=='app'">
+                            <h4 class="pt-2">Outputs</h4>
+                            <b-list-group>
+                                <b-list-group-item v-for="output in outputs" href="javascript:void(0)" v-b-toggle="`o-${output.id}`" :key="`o-${output.id}`">
+                                    <i class="fa fa-file"></i> {{ output.name }}
+                                    <i class="fa fa-question-circle" v-b-tooltip
+                                    :title="output.desc"></i>
+                                    <b-collapse :id="`o-${output.id}`">
+                                        <ul class="mt-3">
+                                            <li v-for="file in output.files" :key="file.id">
+                                                <a :href="`https://deepomics.org/explorer/download_rel/?path=${file.path}/${file.name}`" target="_blank">{{ file.name }}</a>
+                                            </li>
+                                        </ul>
+                                    </b-collapse>
+                                </b-list-group-item>
+                            </b-list-group>
+                        </div>
+                        <div v-else>
+                            <h4 class = "pb-1">Outputs</h4>
+                            <b-list-group>
+                                <b-list-group-item :id="`fparent-${task_ouput.module_id}`" v-for="task_output in outputs" href="javascript:void(0)" v-b-toggle="`i-${task_output.module_id}`" :key="`i-${task_output.module_id}`">
+                                    <i class="fa fa-tasks"></i> {{ task_output.name }}
+                                    <b-collapse :id="`i-${task_output.module_id}`" :data-parent="`fparent-${task_ouput.module_id}`">
+                                                <b-list-group>
+                                                    <b-list-group-item :id="`parent-${ouput.id}`" v-for="output in task_output.outputs" href="javascript:void(0)" v-b-toggle="`o-${output.id}`" :key="`o-${output.id}`">
+                                                        <i class="fa fa-file"></i> {{ output.name }}
+                                                        <i class="fa fa-question-circle" v-b-tooltip
+                                                        :title="output.desc"></i>
+                                                        <b-collapse :id="`o-${output.id}`" :data-parent="`parent-${ouput.id}`">
+                                                            <ul class="mt-3">
+                                                                <li v-for="file in output.files" :key="file.id">
+                                                                    <a :href="`https://deepomics.org/explorer/download_rel/?path=${file.path}/${file.name}`" target="_blank">{{ file.name }}</a>
+                                                                </li>
+                                                            </ul>
+                                                        </b-collapse>
+                                                    </b-list-group-item>
+                                                </b-list-group>
+                                        
+                                    </b-collapse>
+                                </b-list-group-item>
+                            </b-list-group>
+                        </div>
                     </section>
 
                 </b-card-body>
@@ -329,8 +423,23 @@ export default {
                 stdout: '',
                 error: ''
             },
-            chartOptions: {},
-            job_status: "",            
+
+            job_status: "", 
+            
+            taskDetails: {
+                code: "NO_CHOSEN",
+                id: null,
+                type: 'app',
+                activeTask: '',
+                tasks: {},
+                // name: "",
+                // status: "",
+                // log: {
+                //     stdout: '',
+                //     error: ''
+                // },
+                // chartOptions: {},
+            },
         };
     },
     created() {
@@ -436,9 +545,12 @@ export default {
         }
     },
     methods: {
-        getChartsInfo() {
-            axios.post(
-                `/task-details/`,
+        //improvement multiple charts for pipelines
+        viewTaskDetails() {
+            const { alertCenter } = this.$refs;
+            this.taskDetails.id = this.job_id;
+            this.taskDetails.tasks = {};
+            axios.post(`/task-details/`,
                 objectToFormData({'id': this.job_id}),
                 {
                     headers: {
@@ -446,23 +558,35 @@ export default {
                         'X-CSRF-Token': document.head.querySelector('meta[name="csrf-token"]').content,
                         'Content-Type': 'multipart/form-data',
                     },
-                },
-            ).then(res => {
-                    console.log("Outputing results for charts updates:")
-                    console.log(res)
-                    //improvement here we need to consider have different plot chart for different tasks
-                    if (res.data.message.code) {
-                        this.update_chart(res.data.message.data);
-                        this.stderr = res.data.message.data.task_log.stderr;
-                        this.stdout = res.data.message.data.task_log.stdout;
+
+                }
+                ).then(res => {
+                    console.log("viewTaskDetails fetched information:");
+                    console.log(res);
+                    // console.log(res)
+                    if (this.job_type == "pipeline" && !res.data.message.code) {
+                        this.taskDetails.code = "CHOSEN";
+                        this.taskDetails.type = 'pipeline';
+                        res.data.message.tasks.forEach((t, i) => {
+                            if (i == 0) this.taskDetails.activeTask = `monitor_m_${t.module_id}`;
+                            this.update_chart(t, `monitor_m_${t.module_id}`);
+                        });
+                    } else if (res.data.message.code) {
+                        this.taskDetails.code = "CHOSEN";
+                        this.taskDetails.type = 'app';
+                        this.taskDetails.activeTask = `monitor_m_${this.job_id}`;
+                        this.update_chart(res.data.message.data, `monitor_m_${this.job_id}`);
+                        // this.taskDetails.log = res.data.message.data.task_log;
                     } else {
+                        this.taskDetails.code = "API_ERROR";
                         alertCenter.add('danger', res.data.message);
                     }
+                    console.log("viewTaskDetails Result:");
+                    console.log(this.taskDetails);
             });
-
         },
-        update_chart(data) {
-            this.chartOptions = {
+        update_chart(data, key) {
+            const chartOptions = {
                 tooltip: {
                     trigger: 'axis',
                     axisPointer: {
@@ -561,6 +685,10 @@ export default {
                     }
                 ]
             };
+            this.taskDetails.tasks[key] = {chartOptions,
+                                log: data.task_log,
+                                name: data.name,
+                                status: data.status};
         },
         refreshStatus() {
             console.log("Now refresh task", this.taskId)
@@ -569,7 +697,7 @@ export default {
             // Production Code
             axios.post(
                 `/query-deepomics/`,
-                objectToFormData({'id': this.taskId, 'type': 'app'}),
+                objectToFormData({'id': this.taskId, 'type': this.job_type}),
                 {  
                     headers: {
                         'X-Requested-With': 'XMLHttpRequest',
@@ -578,24 +706,28 @@ export default {
                     },
                 },
             ).then((response) => {
-            console.log("Module query result:", response);
-            this.inputs = response.data.message.inputs;
-            this.outputs = response.data.message.outputs;
-            this.params = response.data.message.params;
-            // this.stderr = response.data.message.error_message;
-            this.job_status = response.data.message.status;
+                this.job_status = response.data.message.status;
+                this.inputs = response.data.message.inputs;
+
+                if (this.job_type == "app") {
+                    this.outputs = response.data.message.outputs;
+                    this.params = response.data.message.params;
+                }
+                else {
+                    this.outputs = response.data.message.tasks;
+                    this.params = response.data.message.node_records;
+                }
             
-                }).catch((error) => {
-                    const message = error.response && error.response.status === 404 ? "The task does not exist" : error;
-                    alertCenter.add('danger', `${message}`);
-                }).finally(() => {
-                    // setTimeout(() => { alertCenter.add('danger', ''); }, 2000);
-                    console.log("Log:", this.inputs, this.outputs, this.params)
-                    this.getChartsInfo();
+            }).catch((error) => {
+                const message = error.response && error.response.status === 404 ? "The task does not exist" : error;
+                alertCenter.add('danger', `${message}`);
+            }).finally(() => {
+                // setTimeout(() => { alertCenter.add('danger', ''); }, 2000);
+                console.log("Log:", this.inputs, this.outputs, this.params)
+                this.getChartsInfo();
 
-                });
+            });
 
-            // console.log("Refreshed. New log:", this.stdout)
 
             
         },
@@ -642,7 +774,9 @@ export default {
 
                         //tid
                         this.taskId = response.data.tid;
-                        console.log("this.taskId:", this.taskId)
+                        this.job_type = response.data.type;
+                        console.log("this.taskId:", this.taskId);
+                        console.log("this.job_type:", this.job_type); //get the type of the task
                     }
                 }).catch((error) => {
                     const message = error.response && error.response.status === 404 ? "The task does not exist" : error;

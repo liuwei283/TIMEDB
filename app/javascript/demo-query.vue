@@ -169,7 +169,7 @@
                                     <h4>Resource Usage</h4>
                                     <v-chart :options="taskDetails.tasks[taskDetails.activeTask].chartOptions" />
                                 </div>
-                                <div id="task-log" class = "col-md-6">
+                                <div id="task-log" class = "col-md-6 p-4">
                                     <h4> Log Message</h4>
                                     <p class="font-italic">Console Output</p>
                                     <pre id="stdout" class="light">{{ taskDetails.tasks[taskDetails.activeTask].log.stdout }}</pre>
@@ -201,27 +201,27 @@
                         <div v-else>
                             <h4 class = "pb-1">Outputs</h4>
                             <b-list-group>
-                                <b-list-group-item v-for="task_output in outputs" href="javascript:void(0)" v-b-toggle="`i-${task_output.module_id}`" :key="`i-${task_output.module_id}`">
+                                <b-list-group-item :id="`fparent-${task_ouput.module_id}`" v-for="task_output in outputs" href="javascript:void(0)" v-b-toggle="`i-${task_output.module_id}`" :key="`i-${task_output.module_id}`">
                                     <i class="fa fa-tasks"></i> {{ task_output.name }}
-                                    <b-collapse :id="`i-${task_output.module_id}`">
-                                                
-                                        <div v-for="output in task_output.outputs" href="javascript:void(0)" v-b-toggle="`o-${output.id}`" :key="`o-${output.id}`">
-                                            <i class="fa fa-file"></i> {{ output.name }}
-                                            <i class="fa fa-question-circle" v-b-tooltip
-                                            :title="output.desc"></i>
-                                            <b-collapse :id="`o-${output.id}`">
-                                                <ul class="mt-3">
-                                                    <li v-for="file in output.files" :key="file.id">
-                                                        <a :href="`https://deepomics.org/explorer/download_rel/?path=${file.path}/${file.name}`" target="_blank">{{ file.name }}</a>
-                                                    </li>
-                                                </ul>
-                                            </b-collapse>
-                                        </div>
+                                    <b-collapse :id="`i-${task_output.module_id}`" :data-parent="`fparent-${task_ouput.module_id}`">
+                                                <b-list-group>
+                                                    <b-list-group-item :id="`parent-${ouput.id}`" v-for="output in task_output.outputs" href="javascript:void(0)" v-b-toggle="`o-${output.id}`" :key="`o-${output.id}`">
+                                                        <i class="fa fa-file"></i> {{ output.name }}
+                                                        <i class="fa fa-question-circle" v-b-tooltip
+                                                        :title="output.desc"></i>
+                                                        <b-collapse :id="`o-${output.id}`" :data-parent="`parent-${ouput.id}`">
+                                                            <ul class="mt-3">
+                                                                <li v-for="file in output.files" :key="file.id">
+                                                                    <a :href="`https://deepomics.org/explorer/download_rel/?path=${file.path}/${file.name}`" target="_blank">{{ file.name }}</a>
+                                                                </li>
+                                                            </ul>
+                                                        </b-collapse>
+                                                    </b-list-group-item>
+                                                </b-list-group>
                                         
                                     </b-collapse>
                                 </b-list-group-item>
                             </b-list-group>
-
                         </div>
                     </section>
 
