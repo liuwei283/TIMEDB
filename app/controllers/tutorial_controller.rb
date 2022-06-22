@@ -1,5 +1,5 @@
 class TutorialController < ApplicationController
-    skip_before_action :validate_cookie, only: []
+    skip_before_action :validate_cookie, only: [:database1,:database2,:database3,:database4,:database5,:database6,:analysis1,:analysis2,:analysis4,:analysis4]
 
     def database1
     end
