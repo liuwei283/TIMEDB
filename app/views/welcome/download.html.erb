@@ -125,7 +125,7 @@
 
                     <td> 
                         <%if @csv_test[p.project_name]['subtype']=='true'%>
-                        <%= link_to("#{p.project_name}_c1_c6.csv","/public/data/subtype/project/#{p.project_name}_c1_c6.csv")%>
+                        <%= link_to("#{p.project_name}_c1_c6.csv","/public/data/subtype/c1_c6/project/#{p.project_name}_c1_c6.csv")%>
                         <% else %>No data
                                 <%if @msg_test[p.project_name+'C1-C6' ] %>
                                     <%= @msg_test[p.project_name+'C1-C6']["reason"]%>

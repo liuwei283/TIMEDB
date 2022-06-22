@@ -292,7 +292,7 @@
                             <div class="row">
                                 <div id="resource-usage" class="p-4 col-md-6">
                                     <h4>Resource Usage</h4>
-                                    <v-chart v-if="refreshEnd==true" :options="taskDetails.tasks[taskDetails.activeTask].chartOptions" />
+                                    <v-chart :options="taskDetails.tasks[taskDetails.activeTask].chartOptions" />
                                 </div>
                                 <div id="task-log" class = "col-md-6 p-4">
                                     <h4> Log Message</h4>
@@ -689,7 +689,6 @@ export default {
                                 log: data.task_log,
                                 name: data.name,
                                 status: data.status};
-            this.refreshEnd = true;
         },
         refreshStatus() {
             console.log("Now refresh task", this.taskId)
@@ -738,7 +737,6 @@ export default {
             window.open(window.gon.urls.download_input_demo);
         },
         searchJob() {
-            this.refreshEnd = false;
             const { alertCenter } = this.$refs;
             
             if (this.job_id.length <= 0){

@@ -167,7 +167,7 @@
                             <div class="row">
                                 <div id="resource-usage" class="p-4 col-md-6">
                                     <h4>Resource Usage</h4>
-                                    <v-chart v-if="refreshEnd==true" :options="taskDetails.tasks[taskDetails.activeTask].chartOptions" />
+                                    <v-chart :options="taskDetails.tasks[taskDetails.activeTask].chartOptions" />
                                 </div>
                                 <div id="task-log" class = "col-md-6 p-4">
                                     <h4> Log Message</h4>
@@ -319,11 +319,12 @@ export default {
         };
     },
     created() {
+        this.refreshEnd = false;
         this.isDemo = true;
         let demo_result_id = window.gon.demo_result_id;
         this.job_id = demo_result_id
         this.searchJob();
-        this.refreshEnd = false;
+        
 
     },
     mounted(){
