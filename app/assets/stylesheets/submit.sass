@@ -36,7 +36,17 @@ $sidebar-width: 250px
     overflow-y: scroll
     overflow-x: hidden
     width: 100vw
-    border-left: 1px solid $gray-300
+    //border-left: 1px solid $gray-300
+
+    .cookie-reminder
+        z-index: 10000
+        width: 100%
+        color: white
+        background-color: $light-theme
+        position: fixed
+        top: 70px
+        p
+            margin: 5px
 
 $sidebar-background-color: desaturate(lighten($orange, 45%), 80%)
 
@@ -76,7 +86,7 @@ $sidebar-background-color: desaturate(lighten($orange, 45%), 80%)
         
         position: absolute
         overflow: auto
-        border-top: 1px solid $gray-300
+        // border-top: 1px solid $gray-300
 
         #pipeline-nav-item
             margin-top: 4em

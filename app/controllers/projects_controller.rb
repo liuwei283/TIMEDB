@@ -79,8 +79,10 @@ class ProjectsController < ApplicationController
         # transfer columns names to project fraction oerview
         @selector_attrs = []
         @sample_attrs.each do |s_attr|
-            if s_attr.include?("c_")
-                @selector_attrs.push(s_attr.gsub("c_", ""))
+            if (!["c_tumor_subtype", "c_treatment", "c_source_name"].include? s_attr)
+                if s_attr.include?("c_")
+                    @selector_attrs.push(s_attr.gsub("c_", ""))
+                end
             end
         end
         gon.push selector_attrs:@selector_attrs

@@ -549,6 +549,7 @@ class SubmitController < ApplicationController
                 end
         # pipeline task
         if task.analysis_id.blank? and result['status'] == 'success'
+            Rails.logger.debug "Fetched task details information for pipelines:"
             Rails.logger.debug result
             mapped_result = {
                 status: 'success',
@@ -577,13 +578,10 @@ class SubmitController < ApplicationController
     end
   end
 
-
-
-  
-
   def query_app_task
     result_json = {
       tid: nil,
+      type: nil,
       body: nil,
       code: false,
       data: ''
@@ -594,6 +592,12 @@ class SubmitController < ApplicationController
         @task = Task.find_by! id:params[:job_id], is_demo: true
       else 
         @task =Task.find_by! id:params[:job_id], user_id:session[:user_id]
+      end
+
+      if !@task.analysis.blank?
+        result_json[:type] = "app"
+      else
+        result_json[:type] = "pipeline"
       end
 
       result_json[:tid] = @task.tid
@@ -607,7 +611,7 @@ class SubmitController < ApplicationController
           parsed_output = processTaskOutput()
           response_body << parsed_output
         end
-        render json: {"body": response_body, "tid": result_json[:tid]}
+        render json: {"body": response_body, "tid": result_json[:tid], "type": result_json[:type]}
         return
       end
       # query task
@@ -631,11 +635,15 @@ class SubmitController < ApplicationController
         
         if result['message']['status'] == 'finished'
           if result['message']['type'] == "module" # module task
+            Rails.logger.info "Query app task: this is an app task"
+            result_json[:type] = "app"
             @analysis = @task.analysis
             @task_output = create_task_output(result['message'])
             parsed_output = processTaskOutput()
             response_body << parsed_output
           else
+            Rails.logger.info "Query app task: this is an pipeline task"
+            result_json[:type] = "pipeline"
             @response_body = []
             result['message']['tasks'].each do |mrs|
               @analysis = Analysis.find_by(mid:mrs['module_id'])
@@ -645,7 +653,7 @@ class SubmitController < ApplicationController
             end
           end
         end
-        render json: {"body": response_body, "tid": result_json[:tid]}
+        render json: {"body": response_body, "tid": result_json[:tid], "type": result_json[:type]}
         return
       else
         result_json[:data] = result['message']

@@ -167,7 +167,7 @@ export class ComplexGroupedScatters extends Component<ComplexGroupedScattersOpti
             //         r: 2
             //     }
             // });
-            distributer().label(labels).anchor(labels).width(this.prop.plotSize[0]).height(this.prop.plotSize[1]).start(5000);
+            distributer().label(labels).anchor(labels).width(this.prop.plotSize[0]).height(this.prop.plotSize[1]).start(2000);
             this.labels = labels
             console.log(this.labels)
         }

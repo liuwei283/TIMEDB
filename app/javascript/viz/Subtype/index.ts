@@ -25,24 +25,47 @@ function init() {
                 loaded(data) {
                     // the data should dsvHasHeader
                     let classifications = [];
-                    const cols = data.columns.filter((col) => col.slice(0, 15) == "c_sub_Quantile_")
+                    // const cols = data.columns.filter((col) => col.slice(0, 15) == "c_sub_Quantile_")
+                    const cols = data.columns.filter((col) => col.slice(0, 6) == "c_sub_")
                     const stat = {}
                     cols.forEach(col => {
-                        stat[col.slice(15)] = {}
+                        stat[col.slice(6).split("_").join(" ")] = {}
                     })
                     data.forEach(d => {
                         cols.forEach(col => {
                             let type = d[col].split("_").slice(-1)[0];
-                            col = col.slice(15);
+                            col = col.slice(6).split("_").join(" ");
                             if(! classifications.includes(type)) {
                                 classifications.push(type);
                                 cols.forEach(col => {
-                                    stat[col.slice(15)][type] = [0, 0, 0, 0, 0, 0];
+                                    stat[col.slice(6).split("_").join(" ")][type] = [0, 0, 0, 0, 0, 0];
                                 })
                             }
                             stat[col][type][5] += 1;
                         })
                     })
+                    console.log(stat)
+                    console.log(classifications)
+
+                    // // const cols = data.columns.filter((col) => col.slice(0, 15) == "c_sub_Quantile_")
+                    // const cols = data.columns.filter((col) => col.slice(0, 6) == "c_sub_")
+                    // const stat = {}
+                    // cols.forEach(col => {
+                    //     stat[col.slice(6)] = {}
+                    // })
+                    // data.forEach(d => {
+                    //     cols.forEach(col => {
+                    //         let type = d[col].slice(6).split("_").join(' ');
+                    //         col = col.slice(6);
+                    //         if(! classifications.includes(type)) {
+                    //             classifications.push(type);
+                    //             cols.forEach(col => {
+                    //                 stat[col.slice(6)][type] = [0, 0, 0, 0, 0, 0];
+                    //             })
+                    //         }
+                    //         stat[col][type][5] += 1;
+                    //     })
+                    // })
                     classifications = classifications.sort();
                     const colorMap = Oviz.color.schemeCategory("light", classifications);
                     colorMap.colors["NA"]="#808080"
@@ -53,10 +76,6 @@ function init() {
                             result[c][key] = value[c]
                         })
                     })
-                    console.log(result)
-                    console.log(stat)
-                    console.log(classifications)
-                    console.log(colorMap)
                     this.data.plotData = {
                         Subtype: {
                             position: {

@@ -56,7 +56,8 @@ export function editorConfig(v): EditorDef {
                         value: {
                             current: v.data.plotData[plot][tab][item],
                             callback(d) {
-                                v.data.plotData[plot][tab][item] = parseInt(d);
+                                console.log(d)
+                                v.data.plotData[plot][tab][item] = isNaN(parseInt(d))? d: parseInt(d);
                                 run(v);
                             }
                         }

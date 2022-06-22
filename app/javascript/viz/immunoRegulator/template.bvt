@@ -109,9 +109,6 @@ svg {
 			y = 2000
 			size = RNAdata[first].matrix.length;
 			pageSize = 20
-            behavior:tooltip {
-                content = "if group counts greater than 20, it would be paginated"
-            }
 			:children(d) {
 				Columns {
 					x = 300 + startX + 450 + (squareLength + config.yPadding) * RNAdata[first].rowNames.length;
@@ -154,6 +151,9 @@ svg {
 													fill = d.key == "pos" ? groups.colors.endColor: groups.colors.negativeEndColor
 													x = 50%
 													anchor = @anchor("top", "center")
+													behavior:tooltip {
+														content = "value: " + d.data.value
+													}
 												}
 											}
 										}
@@ -192,6 +192,9 @@ svg {
 											width = d.prop.squareLength
 											height = d.prop.squareLength
 											fill = checkPointColor.colors[nameMapper[d.item].CheckPoint]
+											behavior:tooltip {
+												content = "immune checkpoint: "+nameMapper[d.item].CheckPoint
+											}
 										}
 										Rect.centered {
 											x = 80

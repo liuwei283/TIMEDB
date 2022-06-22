@@ -19,6 +19,9 @@ export class PaginationContainer extends Component<PaginationContainerOption> {
                 Rows {
                     width = 100%
                     Columns {
+                        behavior:tooltip {
+                            content = "if group counts greater than " + prop.pageSize + ", it would be paginated"
+                        }
                         x = 50%
                         Container {
                             padding = 6

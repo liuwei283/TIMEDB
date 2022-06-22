@@ -42,8 +42,6 @@ function init() {
                     let maxX = Math.ceil(Math.max(... data.map(d => parseFloat(d[1]))))
                     let maxY = Math.ceil(Math.max(... data.map(d => parseFloat(d[2]))))
                     const colorMap = Oviz.color.schemeCategory("light", classifications);
-                    console.log(classifications)
-                    console.log(colorMap)
                     this.data.plotData = {
                         UMap: {
                             position: {
@@ -62,7 +60,7 @@ function init() {
                                 colorMap: colorMap
                             },
                             customized: {
-                                showLabel: true,
+                                showLabel: false,
                                 showConvexHull: true,
                                 radius: 3
                             }
