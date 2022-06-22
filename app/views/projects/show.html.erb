@@ -131,7 +131,7 @@
               <% if @rows['rna_immu'] == 'true' %>
               <a class="dropdown-item navitem" href="/public/data/immuneRegulator/immuReg_<%= @project.project_name%>.csv">Download scaled gene expression data</a>
               <% end %>
-              <a class="dropdown-item navitem" href="#">Download deconvolution results</a>
+              <!--<a class="dropdown-item navitem" href="#">Download deconvolution results</a>-->
               <% if @rows['subtype'] == 'true' %>
               <a class="dropdown-item navitem" href="/public/data/subtype/c1_c6/project/<%= @project.project_name%>_c1_c6.csv">Download C1-C6 subtype result</a>
               <% end %>
