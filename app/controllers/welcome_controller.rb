@@ -6,6 +6,7 @@ class WelcomeController < ApplicationController
     #@user = User.find(session[:user_id])
     @samples_num = Sample.all.count
     @cancers_num = Cancer.all.count
+    @projects_num = Project.all.count
     @analysis_num = Analysis.all.count + AnalysisPipeline.all.count
 
     @function_level1 = ['TIME Estimation Category', 'Comparison Category', 'Other Category']

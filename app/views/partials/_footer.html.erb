@@ -15,7 +15,7 @@
             <div class="col-md-2">
                 <h4>Database</h4>
                 <ul>
-                    <li><a href='/database/overview/'>Database Information</a></li>
+                    <li><a href='/database/overview/'>Overview</a></li>
                     <li><%=link_to 'Cancers Detail', cancers_path%></li>
                     <li><%=link_to 'Projects Detail', projects_path%></li>
                     <li><%=link_to 'Samples Detail', samples_path%></li>
@@ -23,11 +23,13 @@
             </div>
 
             <div class="col-md-2">
-                <h4>Analysis</h4>
-                <ul>
+                <h4>
+                <a href="/submit/analyses">Analysis</a>
+                </h4>
+                <%# <ul>
                     <li><a href="/submit/analyses">Modules</li>
                     <li><a href="/submit/pipelines">Pipelines</li>
-                </ul>
+                </ul> %>
             </div>
             <div class="col-md-2">
                 <h4>Workspace</h4>

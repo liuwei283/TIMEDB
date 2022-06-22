@@ -149,34 +149,65 @@ footer.page-footer
     p, ul, h4
         color: $white
 
+
+
 body.welcome
     #wrapper
-        width: 100%
+        display: flex
     .navbar
         z-index: 1
     .navbar.navbar-light
         //border-bottom: 1px solid #aaa
-    #main-content
-        border-left: 1px solid $gray-300
-        max-width: calc(100% - 250px)
+    #main
+        margin: auto
+        overflow-y: scroll
+        overflow-x: hidden
+        width: 100vw
 
-
-    .side
-        min-width: 200px
+    #sidebar
+        background-color: #f8f9fa //theme gray
         position: sticky !important
-        //left: 10px
-        top: 90px
-        //margin-top: 10px
-        z-index: 20
+        top: 70px !important
+        height: 1000px
+        overflow: hiden
+        margin-left: -300px
+        transition: .5s
+        width: 200px
 
-        .home-nav
-            //height: 5%
-            width: 100%
-            text-align: center
-            display: flex
-            justify-content: center
+        &.active //use button to toggle this class
+            min-width: 250px
+            max-width: 250px
+            margin-left: 0
+            & + #main
+                transition: .5s
+                //max-width: calc(100% - 250px)
+            
+            .text-right
+                font-size: 2em !important
+                position: fixed
+                left: 200px
+                top: 80px
+                transition: .5s
+        &:not(.active)
+            .text-right
+                font-size: 2em !important
+                position: fixed
+                left: 20px
+                top: 80px
+                transition: .5s
+    
+        text-align: center
+        display: flex
+        justify-content: center
+        .sidebar-content
+        
+            position: absolute
+            overflow: auto
+            // border-top: 1px solid $gray-300
+
             h2
                 color: #314893
+                margin-top: 3em
             p 
                 margin-bottom: 0
             .fa-arrow-down
@@ -194,11 +225,14 @@ body.welcome
             .sidebarIconBlock
                 margin-top: 2em
                 margin-bottom: 2em
-              
+                
                 img 
                     //margin-top: 3em
                     width: 80% !important
                     margin: auto
+
+
+
 
 
 

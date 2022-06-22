@@ -49,7 +49,7 @@
                                     <div class="card">
                                         <img v-if="a.cover_image == null" v-bind:src="require('../assets/images/module.png')" class="card-img-top">
                                         <img v-else :src="a.cover_image" class="card-img-top">
-                                        <div class = "image_overlay image_overlay_blur">
+                                        <div class = "image_overlay image_overlay_blur container">
                                             <div class = "image_title">
                                                 {{a.name}}
                                             </div>
@@ -341,7 +341,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class = "col-md-10 text-center" id = "description-card">
+                    <div class = "col-md-10 text-left" id = "description-card">
                         <div class = "row submit-container">
                             <div v-html="input.description"></div>
                         </div>
@@ -378,7 +378,7 @@
                                         :disabled="ds_selected[input_idx - 1]!=''"
                                     >
                                     </b-form-file>
-                                    <div class = "submit-container">
+                                    <div class = "submit-container text-left">
                                         <div v-html="input.description">
                                         </div>
                                     </div>
@@ -760,10 +760,11 @@
                                 multiple_sync_array['Dataset name'] += dataset_names;
                                 multiple_sync_array["Platform"] += platform_names;
                                 for (let module_name in this.multiple_module_params) {
-                                    multiple_module_array[module_name] += Array(ps_number).fill(this.parameters["multiple-p-" + this.multiple_module_params[module_name].params.id + "-" + input_idx]);
+                                    if (this.multiple_module_params[module_name].params != null) {
+                                        multiple_module_array[module_name] += Array(ps_number).fill(this.parameters["multiple-p-" + this.multiple_module_params[module_name].params.id + "-" + input_idx]);
+                                    }
                                 }
                             }
-
                         }
                     }
                     for (let input_idx = 1; input_idx <=  this.multiple_pairs_num; input_idx++ ) {
@@ -774,7 +775,9 @@
                                 multiple_sync_array['Dataset name'].push(this.parameters["multiple-p-" + this.multiple_sync_params['Dataset name'][0].id + "-" + input_idx]);
                                 multiple_sync_array["Platform"].push(this.parameters["multiple-p-" + this.multiple_sync_params['Platform'][0].id + "-" + input_idx]);
                                 for (let module_name in this.multiple_module_params) {
-                                    multiple_module_array[module_name].push(this.parameters["multiple-p-" + this.multiple_module_params[module_name].params.id + "-" + input_idx]);
+                                    if (this.multiple_module_params[module_name].params != null) {
+                                        multiple_module_array[module_name].push(this.parameters["multiple-p-" + this.multiple_module_params[module_name].params.id + "-" + input_idx]);
+                                    }
                                 }
                             }
                         }
@@ -786,8 +789,10 @@
                         }
                     }
                     for (let module_name in this.multiple_module_params) {
-                        let integrated_value = multiple_module_array[module_name].join(",");
-                        formatted_params.push({['p-' + this.multiple_module_params[module_name].params.id]: integrated_value});
+                        if (this.multiple_module_params[module_name].params != null) {
+                            let integrated_value = multiple_module_array[module_name].join(",");
+                            formatted_params.push({['p-' + this.multiple_module_params[module_name].params.id]: integrated_value});
+                        }
                     }
                 }
                 console.log("formatted parameters:");
@@ -1639,6 +1644,10 @@ input[type="radio"] {
 
 .btn-light {
     color: black;
+}
+
+.modal.fade {
+  z-index: 1000000000 !important;
 }
 
 

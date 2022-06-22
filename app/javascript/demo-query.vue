@@ -94,21 +94,62 @@
                         </table>
                     </section>
 
-                    <div class="row">
-                        <div id="resource-usage" class="p-4 col-md-6">
-                            <h4>Resource Usage</h4>
-                            <v-chart :options="chartOptions" />
-                        </div>
 
-                        <div id="task-log" class = "col-md-6">
-                            <h4> Log Message</h4>
-                            <p class="font-italic">Console Output</p>
-                            <pre id="stdout" class="light">{{stdout}}</pre>
-                            <p class="font-italic">Error Message</p>
-                            <pre id="stderr">{{stderr}}</pre>
-                        </div>
 
-                       
+                    <div id="details-container">
+                        <div class = "row" v-if="taskDetails.type == 'pipeline'">
+                            <section id="module_tasks" class="mb-4">
+                                <h4>Module Tasks Status</h4>
+                                <ul class="list-group">
+                                    <li class="list-group-item" 
+                                        v-for="(task, taskKey) in taskDetails.tasks"
+                                        :key="taskKey"
+                                    >
+                                        {{task.name}}
+                                        <b-badge pill variant="success"
+                                            v-if="task.status == 'finished'"
+                                        >Finished</b-badge>
+                                        <b-badge pill variant="failed" class="float-right"
+                                            v-else-if="task.status == 'failed'"
+                                        >Failed</b-badge>
+                                        <b-badge pill variant="info" v-else>Running</b-badge>
+
+                                        <b-button variant="light" class="float-right" size="small"
+                                            @click="taskDetails.activeTask = taskKey">
+                                            <i class="fas fa-eye"></i> View</b-button>
+                                    </li>
+                                </ul>
+                            </section>
+                            <section id="error-log" class="mb-4">
+                                <h4>Task Logs</h4>
+                                <p class="font-italic">Error Message</p>
+                                <pre id="stdout" class="light">{{ taskDetails.tasks[taskDetails.activeTask].log.error }}</pre>
+                            </section>
+                            <section id="resource-usage" class="mb-4">
+                                <h4>Resource Usage</h4>
+                                <v-chart :options="taskDetails.tasks[taskDetails.activeTask].chartOptions" />
+                            </section>
+                            <section id="console-log" class="mb-4">
+                                <h4>Task Logs</h4>
+                                <p class="font-italic">Console Output</p>
+                                <pre id="stdout" class="light">{{ taskDetails.tasks[taskDetails.activeTask].log.stdout }}</pre>
+                            </section>
+                        </div>
+                        <div v-else>
+                            <div class="row">
+                                <div id="resource-usage" class="p-4 col-md-6">
+                                    <h4>Resource Usage</h4>
+                                    <v-chart :options="chartOptions" />
+                                </div>
+                                <div id="task-log" class = "col-md-6">
+                                    <h4> Log Message</h4>
+                                    <p class="font-italic">Console Output</p>
+                                    <pre id="stdout" class="light">{{stdout}}</pre>
+                                    <p class="font-italic">Error Message</p>
+                                    <pre id="stderr">{{stderr}}</pre>
+                                </div>
+                            </div>
+                        </div>
                     </div>
 
                     <section id="outputs" class="mt-4 mb-4">
@@ -192,6 +233,7 @@ export default {
             isDemo: true,
 
             taskId: 5212,
+            job_type: "app",
             display:1,
             inputs: [], 
             outputs: [],
@@ -204,7 +246,22 @@ export default {
                 error: ''
             },
             chartOptions: {},
-            job_status: "",            
+            job_status: "", 
+            
+            taskDetails: {
+                code: "NO_CHOSEN",
+                id: null,
+                type: 'app',
+                activeTask: '',
+                tasks: {},
+                // name: "",
+                // status: "",
+                // log: {
+                //     stdout: '',
+                //     error: ''
+                // },
+                // chartOptions: {},
+            }
         };
     },
     created() {
@@ -216,10 +273,7 @@ export default {
     },
     mounted(){
         window.gon.viz_mode = "task-output";
-
-
         const { alertCenter } = this.$refs;
-
         this.resource_usage = {
             "x_axis":[
                 "2022-04-27 15:09:53",
@@ -276,9 +330,11 @@ export default {
     },
     methods: {
         //improvement multiple charts for pipelines
-        getChartsInfo() {
-            axios.post(
-                `/task-details/`,
+        viewTaskDetails() {
+            const { alertCenter } = this.$refs;
+            this.taskDetails.id = this.job_id;
+            this.taskDetails.tasks = {};
+            axios.post(`/task_details/`,
                 objectToFormData({'id': this.job_id}),
                 {
                     headers: {
@@ -286,20 +342,164 @@ export default {
                         'X-CSRF-Token': document.head.querySelector('meta[name="csrf-token"]').content,
                         'Content-Type': 'multipart/form-data',
                     },
-                },
-            ).then(res => {
-                    console.log("Outputing results for charts updates:")
-                    console.log(res)
-                    //improvement here we need to consider have different plot chart for different tasks
-                    if (res.data.message.code) {
-                        this.update_chart(res.data.message.data);
-                        this.stderr = res.data.message.data.task_log.stderr;
-                        this.stdout = res.data.message.data.task_log.stdout;
+
+                }
+                ).then(res => {
+                    console.log("viewTaskDetails fetched information:");
+                    console.log(res);
+                    // console.log(res)
+                    if (this.job_type == "pipeline" && !res.data.message.code) {
+                        this.taskDetails.code = "CHOSEN";
+                        this.taskDetails.type = 'pipeline';
+                        res.data.message.tasks.forEach((t, i) => {
+                            if (i == 0) this.taskDetails.activeTask = `monitor_m_${t.module_id}`;
+                            this.update_chart(t, `monitor_m_${t.module_id}`);
+                        });
+                    } else if (res.data.message.code) {
+                        this.taskDetails.code = "CHOSEN";
+                        this.taskDetails.type = 'app';
+                        this.taskDetails.activeTask = `monitor_m_${this.job_id}`;
+                        this.update_chart(res.data.message.data, `monitor_m_${this.job_id}`);
+                        // this.taskDetails.log = res.data.message.data.task_log;
                     } else {
+                        this.taskDetails.code = "API_ERROR";
                         alertCenter.add('danger', res.data.message);
                     }
+                    console.log("viewTaskDetails Result:");
+                    console.log(this.taskDetails);
             });
+        },
 
+        // getChartsInfo() {
+        //     axios.post(
+        //         `/task-details/`,
+        //         objectToFormData({'id': this.job_id}),
+        //         {
+        //             headers: {
+        //                 'X-Requested-With': 'XMLHttpRequest',
+        //                 'X-CSRF-Token': document.head.querySelector('meta[name="csrf-token"]').content,
+        //                 'Content-Type': 'multipart/form-data',
+        //             },
+        //         },
+        //     ).then(res => {
+        //             console.log("Outputing results for charts updates:")
+        //             console.log(res)
+        //             //improvement here we need to consider have different plot chart for different tasks
+        //             if (res.data.message.code) {
+        //                 this.update_chart(res.data.message.data);
+        //                 this.stderr = res.data.message.data.task_log.stderr;
+        //                 this.stdout = res.data.message.data.task_log.stdout;
+        //             } else {
+        //                 alertCenter.add('danger', res.data.message);
+        //             }
+        //     });
+
+        // },
+
+        update_chart(data, key) {
+            const chartOptions = {
+                tooltip: {
+                    trigger: 'axis',
+                    axisPointer: {
+                        type: 'cross',
+                        crossStyle: {
+                            color: '#999'
+                        }
+                    }
+                },
+                toolbox: {
+                    feature: {
+                        dataZoom: {
+                            yAxisIndex: 'none'
+                        }
+                    }
+                },
+                dataZoom: [
+                    {
+                        show: true,
+                        realtime: true,
+                    }
+                ],
+                legend: {
+                    data:['memory','cpu']
+                },
+                xAxis: [
+                    {
+                        type: 'category',
+                        data: data.resource_usage.x_axis,
+                        axisPointer: {
+                            type: 'shadow'
+                        }
+                    }
+                ],
+                yAxis: [
+                    {
+                        type: 'value',
+                        name: 'memory',
+                        min: data.resource_usage.memory.min,
+                        max: data.resource_usage.memory.max,
+                        // interval: 50,
+                        axisLabel: {
+                            formatter: function (value, index) {
+                                let units = ['','K','M','G','T','P','E','Z'];
+                                for (let i=0; i<units.length; i++) {
+                                    if (value < 1024) {
+                                        return Math.floor(value*10)/10.0 + units[i] + 'B';
+                                    }
+                                    value /= 1024.0;
+                                }
+                                return Math.floor(value) + 'YiB';
+                            }
+                        }
+                    },
+                    {
+                        type: 'value',
+                        name: 'cpu',
+                        min: data.resource_usage.cpu.min,
+                        max: data.resource_usage.cpu.max,
+                        // interval: 5,
+                        axisLabel: {
+                            formatter: function (value, index) {
+                                let units = ['s','min','h','d','w'];
+                                let unitNum = [60.0, 60.0, 24.0, 7.0, 1.0];
+                                for (let i=0; i<units.length; i++) {
+                                    if (value < unitNum[i]) {
+                                        // ignore numbers after floating point for minutes
+                                        if (i == 0){
+                                            return Math.floor(value) + units[i];
+                                        } else if (units[i] == 'min'){
+                                            return Math.floor(value) + units[i];
+                                        } else if (i > 1){
+                                            return Math.floor(value) + units[i] + Math.floor(value*10)%10/10*unitNum[i-1] + units[i-1];
+                                        }
+
+
+                                    }
+                                    value /= unitNum[i];
+                                }
+                                return Math.floor(value) + 'w';
+                            }
+                        }
+                    }
+                ],
+                series: [
+                    {
+                        name:'memory',
+                        type:'line',
+                        data: data.resource_usage.memory.data
+                    },
+                    {
+                        name:'cpu',
+                        type:'line',
+                        yAxisIndex: 1,
+                        data:data.resource_usage.cpu.data
+                    }
+                ]
+            };
+            this.taskDetails.tasks[key] = {chartOptions,
+                                log: data.task_log,
+                                name: data.name,
+                                status: data.status};
         },
 
         update_chart(data) {
@@ -476,7 +676,9 @@ export default {
 
                         //tid
                         this.taskId = response.data.tid;
-                        console.log("this.taskId:", this.taskId)
+                        this.job_type = response.data.type;
+                        console.log("this.taskId:", this.taskId);
+                        console.log("this.job_type:", this.job_type); //get the type of the task
                     }
                 }).catch((error) => {
                     const message = error.response && error.response.status === 404 ? "The task does not exist" : error;

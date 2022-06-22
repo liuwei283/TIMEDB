@@ -317,6 +317,7 @@ export default {
             isDemo: false,
 
             taskId: 5212,
+            job_type: "app",
             display:0,
             inputs: [], 
             outputs: [],

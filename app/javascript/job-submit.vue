@@ -52,7 +52,7 @@
                                     <div class="card">
                                         <img v-if="a.cover_image == null" v-bind:src="require('../assets/images/module.png')" class="card-img-top">
                                         <img v-else :src="a.cover_image" class="card-img-top">
-                                        <div class = "image_overlay image_overlay_blur">
+                                        <div class = "image_overlay image_overlay_blur container">
                                             <div class = "image_title">
                                                 {{a.name}}
                                             </div>
@@ -366,7 +366,7 @@
                             </b-form-file>
                         </div>
                     </div>
-                    <div class = "col-md-10 text-center" id = "description-card">
+                    <div class = "col-md-10 text-left" id = "description-card">
                         <div class = "row submit-container">
                             <div v-html="input.description"></div>
                         </div>
@@ -411,7 +411,7 @@
                                         :required="input.required"
                                     >
                                     </b-form-file>
-                                    <div class = "submit-container">
+                                    <div class = "submit-container text-left">
                                         <div v-html="input.description">
                                         </div>
                                     </div>
@@ -1630,6 +1630,10 @@ input[type="radio"] {
 
 .btn-light {
     color: black;
+}
+
+.modal.fade {
+  z-index: 1000000000 !important;
 }
 
 
