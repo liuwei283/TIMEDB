@@ -128,8 +128,23 @@
                     <div id="details-container">
                         <div class = "row" v-if="taskDetails.type == 'pipeline'">
                             <h4>Module Tasks Status</h4>
-                            <ul class="list-group">
-                                <li class="list-group-item" 
+                            <table class="table table-bordered">
+                                <tbody>
+                                    <tr v-for="(task, taskKey) in taskDetails.tasks"
+                                    :key="taskKey" >
+                                        <td>{{ task.name }}</td>
+                                        <td>
+                                            <b-badge pill variant="success"
+                                                    v-if="task.status == 'finished'">
+                                                    Finished
+                                                    </b-badge>
+                                        </td>
+                                        <td><b-button variant="light" class="float-right" size="small"
+                                        @click="taskDetails.activeTask = taskKey">
+                                        <i class="fas fa-eye"></i> View</b-button></td>
+                                    </tr>
+                                </tbody>
+                                <!-- <li class="list-group-item" 
                                     v-for="(task, taskKey) in taskDetails.tasks"
                                     :key="taskKey"
                                 >
@@ -145,8 +160,8 @@
                                     <b-button variant="light" class="float-right" size="small"
                                         @click="taskDetails.activeTask = taskKey">
                                         <i class="fas fa-eye"></i> View</b-button>
-                                </li>
-                            </ul>
+                                </li> -->
+                            </table>
                         </div>
                         <div>
                             <div class="row">
@@ -189,20 +204,19 @@
                                 <b-list-group-item v-for="task_output in outputs" href="javascript:void(0)" v-b-toggle="`i-${task_output.module_id}`" :key="`i-${task_output.module_id}`">
                                     <i class="fa fa-tasks"></i> {{ task_output.name }}
                                     <b-collapse :id="`i-${task_output.module_id}`">
-                                                <b-list-group>
-                                                    <b-list-group-item v-for="output in task_output.outputs" href="javascript:void(0)" v-b-toggle="`o-${output.id}`" :key="`o-${output.id}`">
-                                                        <i class="fa fa-file"></i> {{ output.name }}
-                                                        <i class="fa fa-question-circle" v-b-tooltip
-                                                        :title="output.desc"></i>
-                                                        <b-collapse :id="`o-${output.id}`">
-                                                            <ul class="mt-3">
-                                                                <li v-for="file in output.files" :key="file.id">
-                                                                    <a :href="`https://deepomics.org/explorer/download_rel/?path=${file.path}/${file.name}`" target="_blank">{{ file.name }}</a>
-                                                                </li>
-                                                            </ul>
-                                                        </b-collapse>
-                                                    </b-list-group-item>
-                                                </b-list-group>
+                                                
+                                        <div v-for="output in task_output.outputs" href="javascript:void(0)" v-b-toggle="`o-${output.id}`" :key="`o-${output.id}`">
+                                            <i class="fa fa-file"></i> {{ output.name }}
+                                            <i class="fa fa-question-circle" v-b-tooltip
+                                            :title="output.desc"></i>
+                                            <b-collapse :id="`o-${output.id}`">
+                                                <ul class="mt-3">
+                                                    <li v-for="file in output.files" :key="file.id">
+                                                        <a :href="`https://deepomics.org/explorer/download_rel/?path=${file.path}/${file.name}`" target="_blank">{{ file.name }}</a>
+                                                    </li>
+                                                </ul>
+                                            </b-collapse>
+                                        </div>
                                         
                                     </b-collapse>
                                 </b-list-group-item>
@@ -270,7 +284,7 @@ export default {
             taskOutputs: [{value: 0, text: "Demo Files", secondaryText: ""}],
             taskVisualizers: [{value: 0, text: "Demo Files", secondaryText: ""}],
 
-            refreshEnd: true,
+            refreshEnd: false,
             isDemo: true,
 
             taskId: 5212,
@@ -286,7 +300,6 @@ export default {
                 stdout: '',
                 error: ''
             },
-            chartOptions: {},
             job_status: "", 
             
             taskDetails: {
@@ -302,14 +315,16 @@ export default {
                 //     error: ''
                 // },
                 // chartOptions: {},
-            }
+            },
         };
     },
     created() {
-        this.refreshEnd = true;
+        this.refreshEnd = false;
         this.isDemo = true;
         let demo_result_id = window.gon.demo_result_id;
         this.job_id = demo_result_id
+    },
+    beforeMount() {
         this.searchJob();
     },
     mounted(){
@@ -542,107 +557,6 @@ export default {
                                 status: data.status};
         },
 
-        // update_chart(data) {
-        //     this.chartOptions = {
-        //         tooltip: {
-        //             trigger: 'axis',
-        //             axisPointer: {
-        //                 type: 'cross',
-        //                 crossStyle: {
-        //                     color: '#999'
-        //                 }
-        //             }
-        //         },
-        //         toolbox: {
-        //             feature: {
-        //                 dataZoom: {
-        //                     yAxisIndex: 'none'
-        //                 }
-        //             }
-        //         },
-        //         dataZoom: [
-        //             {
-        //                 show: true,
-        //                 realtime: true,
-        //             }
-        //         ],
-        //         legend: {
-        //             data:['memory','cpu']
-        //         },
-        //         xAxis: [
-        //             {
-        //                 type: 'category',
-        //                 data: data.resource_usage.x_axis,
-        //                 axisPointer: {
-        //                     type: 'shadow'
-        //                 }
-        //             }
-        //         ],
-        //         yAxis: [
-        //             {
-        //                 type: 'value',
-        //                 name: 'memory',
-        //                 min: data.resource_usage.memory.min,
-        //                 max: data.resource_usage.memory.max,
-        //                 // interval: 50,
-        //                 axisLabel: {
-        //                     formatter: function (value, index) {
-        //                         let units = ['','K','M','G','T','P','E','Z'];
-        //                         for (let i=0; i<units.length; i++) {
-        //                             if (value < 1024) {
-        //                                 return Math.floor(value*10)/10.0 + units[i] + 'B';
-        //                             }
-        //                             value /= 1024.0;
-        //                         }
-        //                         return Math.floor(value) + 'YiB';
-        //                     }
-        //                 }
-        //             },
-        //             {
-        //                 type: 'value',
-        //                 name: 'cpu',
-        //                 min: data.resource_usage.cpu.min,
-        //                 max: data.resource_usage.cpu.max,
-        //                 // interval: 5,
-        //                 axisLabel: {
-        //                     formatter: function (value, index) {
-        //                         let units = ['s','min','h','d','w'];
-        //                         let unitNum = [60.0, 60.0, 24.0, 7.0, 1.0];
-        //                         for (let i=0; i<units.length; i++) {
-        //                             if (value < unitNum[i]) {
-        //                                 // ignore numbers after floating point for minutes
-        //                                 if (i == 0){
-        //                                     return Math.floor(value) + units[i];
-        //                                 } else if (units[i] == 'min'){
-        //                                     return Math.floor(value) + units[i];
-        //                                 } else if (i > 1){
-        //                                     return Math.floor(value) + units[i] + Math.floor(value*10)%10/10*unitNum[i-1] + units[i-1];
-        //                                 }
-
-
-        //                             }
-        //                             value /= unitNum[i];
-        //                         }
-        //                         return Math.floor(value) + 'w';
-        //                     }
-        //                 }
-        //             }
-        //         ],
-        //         series: [
-        //             {
-        //                 name:'memory',
-        //                 type:'line',
-        //                 data: data.resource_usage.memory.data
-        //             },
-        //             {
-        //                 name:'cpu',
-        //                 type:'line',
-        //                 yAxisIndex: 1,
-        //                 data:data.resource_usage.cpu.data
-        //             }
-        //         ]
-        //     };
-        // },
         refreshStatus() {
             console.log("Now refresh task", this.taskId)
             axios.post(
