@@ -324,7 +324,7 @@
                             </b-list-group>
                         </div>
                         <div v-else>
-                            <h4 class = "pb-1">Outputs</h4>
+                            <!-- <h4 class = "pb-1">Outputs</h4>
                             <b-list-group>
                                 <b-list-group-item :id="`fparent-${task_ouput.module_id}`" v-for="task_output in outputs" href="javascript:void(0)" v-b-toggle="`i-${task_output.module_id}`" :key="`i-${task_output.module_id}`">
                                     <i class="fa fa-tasks"></i> {{ task_output.name }}
@@ -346,7 +346,7 @@
                                         
                                     </b-collapse>
                                 </b-list-group-item>
-                            </b-list-group>
+                            </b-list-group> -->
                         </div>
                     </section>
 
@@ -431,14 +431,15 @@ export default {
                 id: null,
                 type: 'app',
                 activeTask: '',
-                tasks: {},
-                // name: "",
-                // status: "",
-                // log: {
-                //     stdout: '',
-                //     error: ''
-                // },
-                // chartOptions: {},
+                tasks: {
+                    "test": {
+                        chartOptions: {},
+                        log: {
+                            stderr: "",
+                            stdout: "",
+                        }
+                    }
+                },
             },
         };
     },
