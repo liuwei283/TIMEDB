@@ -35,7 +35,7 @@
                     <div >
 
                         <h1 class ="title">
-                            <i class="fa fa-caret-left" ></i> How to view Analysis Results
+                            <i class="fa fa-caret-left" ></i> Analysis Tutorials
                         </h1><br>
                         <div class="page">
                             <h1>
