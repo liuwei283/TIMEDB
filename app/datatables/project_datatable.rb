@@ -17,7 +17,7 @@ class ProjectDatatable < ApplicationDatatable
               column << project[attr]
             end
           end
-          column << link_to('Details', project)
+          column << "<button class='btn btn-1'> #{link_to('Details', project)} </button>"
           # column << link_to('Show', overview_project_path(project))
         end
       end

@@ -12,7 +12,7 @@ class SampleDatatable < ApplicationDatatable
               column << sample[attr]
             end
           end
-          column << link_to('Show', "projects/#{sample.project_id}/samples/#{sample.id}")
+          column << "<button class='btn btn-1'> #{link_to('Show', "projects/#{sample.project_id}/samples/#{sample.id}")} </button>"
         end
       end
     end

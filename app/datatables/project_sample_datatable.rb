@@ -13,7 +13,7 @@ class ProjectSampleDatatable < ApplicationDatatable
           end
         end
         project_id = Sample.find(sample['id']).project_id
-        column << link_to('Show', "/projects/#{project_id}/samples/#{sample['id']}") 
+        column << "<button class='btn btn-1'> #{link_to('Show', "/projects/#{project_id}/samples/#{sample['id']}")} </button>"
       end
     end
   end

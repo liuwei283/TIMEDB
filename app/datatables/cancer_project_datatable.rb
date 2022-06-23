@@ -12,7 +12,7 @@ class CancerProjectDatatable < ApplicationDatatable
                 column << project[attr]
             end
           end
-          column << link_to('Details', project)
+          column << "<button class='btn btn-1'> #{link_to('Details', project)} </button>"
         end
       end
     end

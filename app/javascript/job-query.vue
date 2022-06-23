@@ -330,11 +330,11 @@
                                     <i class="fa fa-tasks"></i> {{ task_output.name }}
                                     <b-collapse :id="`i-${task_output.module_id}`" :data-parent="`fparent-${task_output.module_id}`">
                                                 <b-list-group>
-                                                    <b-list-group-item :id="`parent-${ouput.id}`" v-for="output in task_output.outputs" href="javascript:void(0)" v-b-toggle="`o-${output.id}`" :key="`o-${output.id}`">
+                                                    <b-list-group-item :id="`parent-${output.id}`" v-for="output in task_output.outputs" href="javascript:void(0)" v-b-toggle="`o-${output.id}`" :key="`o-${output.id}`">
                                                         <i class="fa fa-file"></i> {{ output.name }}
                                                         <i class="fa fa-question-circle" v-b-tooltip
                                                         :title="output.desc"></i>
-                                                        <b-collapse :id="`o-${output.id}`" :data-parent="`parent-${ouput.id}`">
+                                                        <b-collapse :id="`o-${output.id}`" :data-parent="`parent-${output.id}`">
                                                             <ul class="mt-3">
                                                                 <li v-for="file in output.files" :key="file.id">
                                                                     <a :href="`https://deepomics.org/explorer/download_rel/?path=${file.path}/${file.name}`" target="_blank">{{ file.name }}</a>

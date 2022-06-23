@@ -350,6 +350,8 @@
                             <a :href="`/public/data/module_demo/${input.name}_demo.csv`" :download="input.name">Download demo file</a>
                         </button>
                     </div>
+
+                    <h6 style="color: gray;" class="p-2"><i>Please upload .csv files for analysis</i></h6>
                     
                     <div class = "col-md-12 text-center">
                         <div>
@@ -366,6 +368,7 @@
                             </b-form-file>
                         </div>
                     </div>
+                    
                     <div class = "col-md-10 text-left" id = "description-card">
                         <div class = "row submit-container">
                             <div v-html="input.description"></div>
@@ -387,7 +390,7 @@
 
                     <div class = "col-md-10 text-center">
                         <h4 class = "mb-4"> File submission </h4>
-                        <div class = "row">
+                        <div class = "row justify-content-center">
                             <div id = "be-file-submit" class = "col-md-6 text-center" v-for="input in displayedInputs" :key="input.id">
                                 
                                 <div>
@@ -402,6 +405,7 @@
                                             </button>
                                         </div>
                                     </label>
+                                    <h6 style="color: gray;" class="p-2"><i>Please upload .csv files for analysis</i></h6>
                                     <b-form-file
                                         :id="`multiple-i-${input.id}-${input_idx}`"
                                         v-model="files[`multiple-i-${input.id}-${input_idx}`]"
