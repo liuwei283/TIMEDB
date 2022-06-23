@@ -1313,6 +1313,8 @@
             },
             copyToClipboard(){
                 navigator.clipboard.writeText(this.jobID);
+                document.getElementById('copyButton').removeClass('btn-light');
+                document.getElementById('copyButton').addClass('btn-dark');
             },
             jumpToUpload() {
                 var el = document.getElementById('jumpDivStart');
