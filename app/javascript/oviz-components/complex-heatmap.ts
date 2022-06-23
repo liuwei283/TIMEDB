@@ -15,6 +15,7 @@ interface ComplexHeatMapOption extends ComponentOption {
   matrix: Array<Array<number>>; // matrix里每一个数组为一列元素
   rMatrix: Array<Array<number>>; // matrix里每一个数组为一列元素
   showVal: boolean; // 在格子上显示值
+  showStar: boolean;//显著性的星星
   valSize: number; // 默认8
   axisSize: number; // 默认8
   centered: boolean; // 中心放在某位置，待解决三角函数
@@ -46,7 +47,7 @@ export class ComplexHeatMap extends Component<ComplexHeatMapOption> {
   private _ncolorScheme;
   private _rMatrix;
   private _rScale;
-  private generateTooltip : (d) => string = (d) => "value: "+d;
+  private generateTooltip : (d) => string = (d) => "value: "+d.toFixed(3);
 
   willRender() {
     this._rMatrix = this.prop.rMatrix || this.prop.matrix;
@@ -65,7 +66,7 @@ export class ComplexHeatMap extends Component<ComplexHeatMapOption> {
     // matrix外维为行、内维为列，instancename实际上是选取列的
       
     return this.t` 
-        Component {
+        Container {
             @let wd = (prop.squareLength+prop.xPadding) * prop.colNames.length
             @let ht = (prop.squareLength+prop.yPadding) * prop.rowNames.length
             width = wd
@@ -94,7 +95,7 @@ export class ComplexHeatMap extends Component<ComplexHeatMapOption> {
                             @if prop.showCircle {
                                 Circle.centered {
                                     key = [index2, index1];
-                                    @let valR = _rScale(_rMatrix[index2][index1])
+                                    @let valR = _rScale(pavl)
                                     r = @scaled(prop.squareLength / 2* valR > 0? prop.squareLength / 2* valR: 0)
                                     stroke = "#000"
                                     // fill = "#fff"
@@ -133,7 +134,7 @@ export class ComplexHeatMap extends Component<ComplexHeatMapOption> {
                                             x1 = 90
                                             x2 = value * 360 + 90
                                             r1 = 0
-                                            @let valR = _rScale(_rMatrix[index2][index1])
+                                            @let valR = _rScale(pavl)
                                             r2 = @scaled(radius * valR)
                                             // fill = prop.colorScheme.get(value)
                                             fill = value>=prop.pivot? _colorScheme.get(_vScale(value)) : _ncolorScheme.get(_nScale(value))
@@ -148,6 +149,18 @@ export class ComplexHeatMap extends Component<ComplexHeatMapOption> {
                                             anchor = @anchor("middle", "center")
                                             // text = value.toFixed(2).toString().slice(-2)
                                             text = value
+                                            fontSize = @scaled(prop.valSize)
+                                            @props prop.opt.val
+                                        }
+                                    }
+                                }
+                                @if prop.showStar {
+                                    Container {
+                                        rotation = @rotate(90)
+                                        Text {
+                                            @let pval = _rMatrix[index2][index1]
+                                            anchor = @anchor("middle", "center")
+                                            text = pavl < 0.001? "***": pavl < 0.01? "**": pavl < 0.05? "*": ""
                                             fontSize = @scaled(prop.valSize)
                                             @props prop.opt.val
                                         }
@@ -231,6 +244,7 @@ export class ComplexHeatMap extends Component<ComplexHeatMapOption> {
       colNames: null,
       rowNames: null,
       showVal: false, // 在格子上显示值
+      showStar: false,
       valSize: 8, // 默认8
       centered: false, // 中心放在某位置，待解决三角函数
       showCircle: false, // 展示中间为圆

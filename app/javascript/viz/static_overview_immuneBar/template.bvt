@@ -21,8 +21,8 @@ svg {
 			Bars {
 				:children(d){
 					Rect.full{
-						cornerRadius = 6
-						stroke = groups.colors["border"]
+						// cornerRadius = 6
+						// stroke = groups.colors["border"]
 						fill = groups.colors["fill"]
 						width = 25
 						x = 50%
