@@ -46,24 +46,33 @@
                                     {{option.label}}
                                 </option>
                             </select> -->
-                            <select @change="helperchange" v-model="analysis">
+                            <!-- <select @change="helperchange" v-model="analysis">
                                 <option v-for="(option, index) in list" :key="index" :value="option" >
                                     {{option.name}}
                                 </option>
-                            </select>
-                            <hr>
-                            <div class="">
-                                <div v-html="content" class="doc"></div>
+                            </select> -->
 
+                            <dropdown-select
+                                left
+                                v-model="analysis"
+                                :options="test"
+                                class="tool-bar-el px-0 mb-1 select"/>
+                            <br>
+                            <br>
+                            <div>
+                                <div v-html="content" class="doc"></div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-
     </div>
 </template>
 <script lang = 'ts'>
+import Vue from 'vue';
+import DropDownSelect from "page/builtin/dropdown-select.vue";
+Vue.component("dropdown-select", DropDownSelect);
+
 
 export default {
     data() {
@@ -71,14 +80,13 @@ export default {
             // cancers: window.gon.cancers,
             now: null,
             list: window.gon.all_analysis,
+            test: window.gon.text,
             content: "",
-            analysis: null,
+            analysis: 0,
         }
     },
     created() {
-        this.analysis = this.list[0];
-        this.now = this.list[0].name;
-        this.content = this.list[0].rendered_doc;
+        this.content = this.test[this.analysis].ana.rendered_doc;
     },
     mounted() {
 
@@ -86,23 +94,28 @@ export default {
     computed: {
 
     },
+    watch:{
+        analysis:function(){
+            this.content = this.test[this.analysis].ana.rendered_doc;
+
+        }
+    },
     methods: {
         helperchange(){
             this.now = this.analysis.name;
             this.content = this.analysis.rendered_doc;
         }
     },
+    updated(){
+        $('.doc').find('img').css('width','100%');
+    }
 }
 
 </script>
 <style scoped lang = "scss">
 
-select{
-    width: 100%;
+.select{
+    width: 248px;
 }
-.doc{
-    img{
-        width: 100%
-    }
-}
+
 </style>
