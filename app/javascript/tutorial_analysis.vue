@@ -35,7 +35,7 @@
                     <div >
 
                         <h1 class ="title">
-                            <i class="fa fa-caret-left" ></i> How to view Analysis Results
+                            <i class="fa fa-caret-left" ></i> Analysis Tutorials
                         </h1><br>
                         <div class="page">
                             <h1>
@@ -51,7 +51,11 @@
                                     {{option.name}}
                                 </option>
                             </select>
-                            <div id = "single_params_desc" v-html="content"></div>
+                            <hr>
+                            <div class="row justify-content-center container">
+                                <div v-html="content"></div>
+
+                            </div>
                         </div>
                     </div>
                 </div>
