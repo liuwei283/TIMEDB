@@ -1225,6 +1225,7 @@
                 window.location.href = '/submit/job-query-demo?demo_id=' + this.result_demo_id + "&jobName=" + this.app.name; 
             },
             
+            
             submitTask() {
                 // send selected file to files
 
@@ -1325,6 +1326,8 @@
             },
             copyToClipboard(){
                 navigator.clipboard.writeText(this.jobID);
+                document.getElementById('copyButton').removeClass('btn-light');
+                document.getElementById('copyButton').addClass('btn-dark');
             },
             jumpToUpload() {
                 var el = document.getElementById('run-app');

@@ -324,17 +324,18 @@
                             </b-list-group>
                         </div>
                         <div v-else>
-                            <h4 class = "pb-1">Outputs</h4>
+                            <h4 class = "pb-1">Output</h4>
                             <b-list-group>
-                                <b-list-group-item :id="`fparent-${task_output.module_id}`" v-for="task_output in outputs" href="javascript:void(0)" v-b-toggle="`i-${task_output.module_id}`" :key="`i-${task_output.module_id}`">
+                                <b-list-group-item v-for="task_output in outputs" href="javascript:void(0)" v-b-toggle="`i-${task_output.module_id}`" :key="`i-${task_output.module_id}`">
                                     <i class="fa fa-tasks"></i> {{ task_output.name }}
-                                    <b-collapse :id="`i-${task_output.module_id}`" :data-parent="`fparent-${task_output.module_id}`">
+                                    <b-collapse :id="`i-${task_output.module_id}`">
+                                            <div>
                                                 <b-list-group>
-                                                    <b-list-group-item :id="`parent-${output.id}`" v-for="output in task_output.outputs" href="javascript:void(0)" v-b-toggle="`o-${output.id}`" :key="`o-${output.id}`">
+                                                    <b-list-group-item v-for="output in task_output.outputs" href="javascript:void(0)" v-b-toggle="`o-${output.id}`" :key="`o-${output.id}`" @click="$event.stopPropagation();">
                                                         <i class="fa fa-file"></i> {{ output.name }}
                                                         <i class="fa fa-question-circle" v-b-tooltip
                                                         :title="output.desc"></i>
-                                                        <b-collapse :id="`o-${output.id}`" :data-parent="`parent-${output.id}`">
+                                                        <b-collapse :id="`o-${output.id}`">
                                                             <ul class="mt-3">
                                                                 <li v-for="file in output.files" :key="file.id">
                                                                     <a :href="`https://deepomics.org/explorer/download_rel/?path=${file.path}/${file.name}`" target="_blank">{{ file.name }}</a>
@@ -343,6 +344,7 @@
                                                         </b-collapse>
                                                     </b-list-group-item>
                                                 </b-list-group>
+                                            </div>
                                         
                                     </b-collapse>
                                 </b-list-group-item>

@@ -144,23 +144,6 @@
                                         <i class="fas fa-eye"></i> View</b-button></td>
                                     </tr>
                                 </tbody>
-                                <!-- <li class="list-group-item" 
-                                    v-for="(task, taskKey) in taskDetails.tasks"
-                                    :key="taskKey"
-                                >
-                                    {{task.name}}
-                                    <b-badge pill variant="success"
-                                        v-if="task.status == 'finished'"
-                                    >Finished</b-badge>
-                                    <b-badge pill variant="failed" class="float-right"
-                                        v-else-if="task.status == 'failed'"
-                                    >Failed</b-badge>
-                                    <b-badge pill variant="info" v-else>Running</b-badge>
-
-                                    <b-button variant="light" class="float-right" size="small"
-                                        @click="taskDetails.activeTask = taskKey">
-                                        <i class="fas fa-eye"></i> View</b-button>
-                                </li> -->
                             </table>
                         </div>
                         <div>
@@ -199,17 +182,18 @@
                             </b-list-group>
                         </div>
                         <div v-else>
-                            <h4 class = "pb-1">Outputs</h4>
+                            <h4 class = "pb-1">Output</h4>
                             <b-list-group>
-                                <b-list-group-item :id="`fparent-${task_output.module_id}`" v-for="task_output in outputs" href="javascript:void(0)" v-b-toggle="`i-${task_output.module_id}`" :key="`i-${task_output.module_id}`">
+                                <b-list-group-item v-for="task_output in outputs" href="javascript:void(0)" v-b-toggle="`i-${task_output.module_id}`" :key="`i-${task_output.module_id}`">
                                     <i class="fa fa-tasks"></i> {{ task_output.name }}
-                                    <b-collapse :id="`i-${task_output.module_id}`" :data-parent="`fparent-${task_output.module_id}`">
+                                    <b-collapse :id="`i-${task_output.module_id}`">
+                                            <div>
                                                 <b-list-group>
-                                                    <b-list-group-item :id="`parent-${ouput.id}`" v-for="output in task_output.outputs" href="javascript:void(0)" v-b-toggle="`o-${output.id}`" :key="`o-${output.id}`">
+                                                    <b-list-group-item v-for="output in task_output.outputs" href="javascript:void(0)" v-b-toggle="`o-${output.id}`" :key="`o-${output.id}`" @click="$event.stopPropagation();">
                                                         <i class="fa fa-file"></i> {{ output.name }}
                                                         <i class="fa fa-question-circle" v-b-tooltip
                                                         :title="output.desc"></i>
-                                                        <b-collapse :id="`o-${output.id}`" :data-parent="`parent-${ouput.id}`">
+                                                        <b-collapse :id="`o-${output.id}`">
                                                             <ul class="mt-3">
                                                                 <li v-for="file in output.files" :key="file.id">
                                                                     <a :href="`https://deepomics.org/explorer/download_rel/?path=${file.path}/${file.name}`" target="_blank">{{ file.name }}</a>
@@ -218,6 +202,7 @@
                                                         </b-collapse>
                                                     </b-list-group-item>
                                                 </b-list-group>
+                                            </div>
                                         
                                     </b-collapse>
                                 </b-list-group-item>
@@ -336,6 +321,28 @@ export default {
 
     },
     mounted(){
+        this.outputs = [
+            {
+                module_id: 1022,
+                name: "module1",
+                outputs: [
+                    {
+                        desc: "something",
+                        id: 888,
+                        name: "test file name",
+                        files: [
+                            {
+                                name: "name1",
+                                path: "path1",
+                            }
+
+                        ]
+
+                    }
+                ],
+                status: "finished",
+            }
+        ]
         window.gon.viz_mode = "task-output";
         const { alertCenter } = this.$refs;
         this.resource_usage = {
