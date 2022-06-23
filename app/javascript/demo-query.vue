@@ -200,10 +200,10 @@
                         </div>
                         <div v-else>
                             <h4 class = "pb-1">Outputs</h4>
-                            <!-- <b-list-group>
-                                <b-list-group-item :id="`fparent-${task_ouput.module_id}`" v-for="task_output in outputs" href="javascript:void(0)" v-b-toggle="`i-${task_output.module_id}`" :key="`i-${task_output.module_id}`">
+                            <b-list-group>
+                                <b-list-group-item :id="`fparent-${task_output.module_id}`" v-for="task_output in outputs" href="javascript:void(0)" v-b-toggle="`i-${task_output.module_id}`" :key="`i-${task_output.module_id}`">
                                     <i class="fa fa-tasks"></i> {{ task_output.name }}
-                                    <b-collapse :id="`i-${task_output.module_id}`" :data-parent="`fparent-${task_ouput.module_id}`">
+                                    <b-collapse :id="`i-${task_output.module_id}`" :data-parent="`fparent-${task_output.module_id}`">
                                                 <b-list-group>
                                                     <b-list-group-item :id="`parent-${ouput.id}`" v-for="output in task_output.outputs" href="javascript:void(0)" v-b-toggle="`o-${output.id}`" :key="`o-${output.id}`">
                                                         <i class="fa fa-file"></i> {{ output.name }}
@@ -221,7 +221,7 @@
                                         
                                     </b-collapse>
                                 </b-list-group-item>
-                            </b-list-group> -->
+                            </b-list-group>
                         </div>
                     </section>
 
