@@ -6,10 +6,9 @@ $(document).ready(function() {
       columnDefs: [
         {
           targets: 0,
-
         }
       ],
-
+      "order": [[0,"desc"]],
     });
     var oTable2 = $("#table2").DataTable({
       columnDefs: [
@@ -18,6 +17,7 @@ $(document).ready(function() {
 
         }
       ],
+      "order": [[0,"desc"]],
 
       scrollX: true,
     });
@@ -28,6 +28,7 @@ $(document).ready(function() {
 
         }
       ],
+      "order": [[0,"desc"]],
 
     });
     var oTable4 = $("#table4").DataTable({
@@ -37,6 +38,7 @@ $(document).ready(function() {
 
         }
       ],
+      "order": [[0,"desc"]],
 
     });
 

@@ -35,7 +35,7 @@
                     <div >
 
                         <h1 class ="title">
-                            <i class="fa fa-caret-left" ></i> Analysis Tutorials
+                            <a href="/tutorial"><i class="fa fa-caret-left" ></i></a> Analysis Tutorials
                         </h1><br>
                         <div class="page">
                             <h1>
@@ -52,8 +52,8 @@
                                 </option>
                             </select>
                             <hr>
-                            <div class="row justify-content-center container">
-                                <div v-html="content"></div>
+                            <div class="">
+                                <div v-html="content" class="doc"></div>
 
                             </div>
                         </div>
@@ -96,11 +96,13 @@ export default {
 
 </script>
 <style scoped lang = "scss">
-.select-title{
-    
-}
+
 select{
     width: 100%;
 }
-
+.doc{
+    img{
+        width: 100%
+    }
+}
 </style>
