@@ -79,7 +79,7 @@ export class ComplexHeatMap extends Component<ComplexHeatMapOption> {
             @let data2 = prop.rowNames
             @for (item1, index2) in data1 {
                 @for (item2, index1) in item1 {
-                    @if ((index1 >= index2) && prop.showUpper) || ((index1 < index2) && prop.showLower) {
+                    @if ((index1 > index2) && prop.showUpper) || ((index1 < index2) && prop.showLower) || ((index1 == index2) && prop.showLower && prop.showUpper) {
                         @let value = item2
                         Container {
                             x = @scaled-x((prop.squareLength+prop.xPadding) * (index1))
@@ -95,7 +95,8 @@ export class ComplexHeatMap extends Component<ComplexHeatMapOption> {
                             @if prop.showCircle {
                                 Circle.centered {
                                     key = [index2, index1];
-                                    @let valR = _rScale(pavl)
+                                    @let pval = _rMatrix[index2][index1]
+                                    @let valR = _rScale(pval)
                                     r = @scaled(prop.squareLength / 2* valR > 0? prop.squareLength / 2* valR: 0)
                                     stroke = "#000"
                                     // fill = "#fff"
@@ -134,7 +135,8 @@ export class ComplexHeatMap extends Component<ComplexHeatMapOption> {
                                             x1 = 90
                                             x2 = value * 360 + 90
                                             r1 = 0
-                                            @let valR = _rScale(pavl)
+                                            @let pval = _rMatrix[index2][index1]
+                                            @let valR = _rScale(pval)
                                             r2 = @scaled(radius * valR)
                                             // fill = prop.colorScheme.get(value)
                                             fill = value>=prop.pivot? _colorScheme.get(_vScale(value)) : _ncolorScheme.get(_nScale(value))
@@ -160,7 +162,7 @@ export class ComplexHeatMap extends Component<ComplexHeatMapOption> {
                                         Text {
                                             @let pval = _rMatrix[index2][index1]
                                             anchor = @anchor("middle", "center")
-                                            text = pavl < 0.001? "***": pavl < 0.01? "**": pavl < 0.05? "*": ""
+                                            text = pval < 0.001? "***": pval < 0.01? "**": pval < 0.05? "*": ""
                                             fontSize = @scaled(prop.valSize)
                                             @props prop.opt.val
                                         }
@@ -176,12 +178,13 @@ export class ComplexHeatMap extends Component<ComplexHeatMapOption> {
             }
             @for (item2, index2) in data2 {
                 Container {
-                    x = @scaled-x( - prop.squareLength)
+                    @let upper = prop.showUpper && !prop.showLower
+                    x = @scaled-x(upper? (prop.squareLength+prop.yPadding)*prop.rowNames.length: - prop.squareLength)
                     y = @scaled-y(index2 * (prop.squareLength+prop.yPadding))
+                    anchor = upper? @anchor("m", "l"): @anchor("middle", "right")
                     @yield rowAxis with {item: item2, key: index2, prop: prop} default {
                         Text{
                             key = index2
-                            anchor = @anchor("middle", "right")
                             text = item2
                             fill = "#000"
                             fontSize = @scaled(11)
@@ -197,9 +200,10 @@ export class ComplexHeatMap extends Component<ComplexHeatMapOption> {
                 @let data2 = prop.colNames
                 @for (item2, index2) in data2 {
                     Container {
-                        x = @scaled-x((prop.squareLength+prop.yPadding)*prop.rowNames.length)
+                        @let upper = prop.showUpper && !prop.showLower
+                        x = @scaled-x(upper? - prop.squareLength: (prop.squareLength+prop.yPadding)*prop.rowNames.length)
                         y = @scaled-y( - index2 * (prop.squareLength+prop.xPadding))
-                        anchor = @anchor("m", "l")
+                        anchor = upper? @anchor("m", "r"): @anchor("m", "l")
                         @yield colAxis with {item: item2, key: index2, prop: prop} default {
                             Text {
                                 key = index2
@@ -274,3 +278,4 @@ export const mockData = {
   ],
   rotation: 90,
 };
+f

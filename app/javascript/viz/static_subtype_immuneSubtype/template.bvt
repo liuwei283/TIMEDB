@@ -56,7 +56,7 @@ svg {
 							Text {
 								rotation = @rotate(xRotation)
 								@let t1 = txt[1].split("_").map(d=>d.split(" ")).flat().map(d => d[0]).join(". ")
-								text = txt[1].length >= 10 ? t1: txt[1];
+								text = txt[1].length <= 10 ? txt[1]: t1.length <=8? t1: (t1.slice(0,7)+"..")
 								anchor = @anchor("m", "c")
 								fontSize = labelSize
 								behavior:tooltip {
@@ -68,43 +68,43 @@ svg {
                 }
 			}
 		}
-		Container {
-			y = startY + height
-			anchor = @anchor("b", "l")
-			Text {
-				x = -90
-				y = 200
-				text = "Full name of acronyms"
-			}
-			Columns {
-				x = -90
-				y = 220
-				Rows {
-					@let rows = acronyms.slice(0, 60)
-					@for (acronym, index) in rows {
-						Container {
-							padding = 1
-							Text {
-								text = acronym
-								fontSize = 8
-							}
-						}
-					}
-				}
-				Rows {
-					x = 10
-					@let rows = acronyms.slice(60)
-					@for (acronym, index) in rows {
-						Container {
-							padding = 1
-							Text {
-								text = acronym
-								fontSize = 8
-							}
-						}
-					}
-				}
-			}
-		}
+		// Container {
+		// 	y = startY + height
+		// 	anchor = @anchor("b", "l")
+		// 	Text {
+		// 		x = -90
+		// 		y = 200
+		// 		text = "Full name of acronyms"
+		// 	}
+		// 	Columns {
+		// 		x = -90
+		// 		y = 220
+		// 		Rows {
+		// 			@let rows = acronyms.slice(0, 60)
+		// 			@for (acronym, index) in rows {
+		// 				Container {
+		// 					padding = 1
+		// 					Text {
+		// 						text = acronym
+		// 						fontSize = 8
+		// 					}
+		// 				}
+		// 			}
+		// 		}
+		// 		Rows {
+		// 			x = 10
+		// 			@let rows = acronyms.slice(60)
+		// 			@for (acronym, index) in rows {
+		// 				Container {
+		// 					padding = 1
+		// 					Text {
+		// 						text = acronym
+		// 						fontSize = 8
+		// 					}
+		// 				}
+		// 			}
+		// 		}
+		// 	}
+		// }
 	}
 }
