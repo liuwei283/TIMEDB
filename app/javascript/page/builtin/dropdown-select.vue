@@ -17,7 +17,7 @@
 
     interface Option {
         text: string;
-        value: string | number;
+        value: string | number ;
     }
 
     @Component({

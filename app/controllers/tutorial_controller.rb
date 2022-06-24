@@ -20,6 +20,11 @@ class TutorialController < ApplicationController
     def analysis3
         @all_analysis = Analysis.all;
         gon.push all_analysis:@all_analysis
+        @list= []
+        @all_analysis.each_with_index do |a, idx|
+            @list.push({value:idx, text:a.name, ana:a})
+        end
+        gon.push text: @list
 
     end
     def analysis4

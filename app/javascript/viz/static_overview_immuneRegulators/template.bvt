@@ -4,9 +4,56 @@ svg {
 	Component.full {
 		x = 120
 		y = 100
-		Component {
+		Rows {
 			x = -100
+			y = 20
 			Container {
+				Rows {
+					Container {
+						y = -4
+						Text {
+							text = "Scaled mRNA"
+							fontSize = 15
+						}
+					}
+					Container {
+						Text {
+							text = "Expression"
+							fontSize = 15
+						}
+					}
+					Container {
+						y = 4
+						Container {
+							height = 50; width = 20
+							Rect.full {
+								fill = @gradient("bg")
+							}
+							Axis {
+								yScale = @scale-linear(valueRange.dataRange[1], 0, 0, 50)
+								x = 20
+								orientation = "right"
+								includeEndTicks = false
+							}
+						}
+						Container {
+							y = 50
+							height = 50; width = 20
+							Rect.full {
+								fill = @gradient("ng")
+							}
+							Axis {
+								yScale = @scale-linear(0, valueRange.negdataRange[0], 0, 50)
+								x = 20
+								orientation = "right"
+								includeEndTicks = false
+							}
+						}
+					}
+				}
+			}
+			Container {
+				y = 20
 				Rows {
 					Container {
 						padding = 4
@@ -23,50 +70,6 @@ svg {
 					}
 				}
 			}
-			Container {
-				y = 100
-				Rows {
-					Container {
-						y = -4
-						Text {
-							text = "mRNA"
-							fontSize = 15
-						}
-					}
-					Container {
-						Text {
-							text = "Expression"
-							fontSize = 15
-						}
-					}
-					Component {
-						y = 4
-						Rect {
-							height = 50; width = 20
-							fill = @gradient("bg")
-						}
-						Axis {
-							yScale = @scale-linear(valueRange.dataRange[1], 0, 0, 50)
-							x = 20
-							orientation = "right"
-							includeEndTicks = false
-						}
-						Component.full {
-							y = 50
-							Rect {
-								height = 50; width = 20
-								fill = @gradient("ng")
-							}
-							Axis {
-								yScale = @scale-linear(0, valueRange.negdataRange[0], 0, 50)
-								x = 20
-								orientation = "right"
-								includeEndTicks = false
-							}
-						}
-					}
-				}
-			}	
 		}
 		@let first = Object.keys(RNAdata)[0]
 		Columns {

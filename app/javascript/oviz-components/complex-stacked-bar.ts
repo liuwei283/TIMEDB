@@ -42,7 +42,7 @@ export class ComplexStackedBar extends Component<ComplexStackedBarOption> {
 						stroke = "white"
 						strokeOpacity = 0.5
 						strokeWidth = 1
-						width = prop.widMap == null? prop.baseWidth: 1 + prop.baseWidth * Math.log2(prop.widMap[d.data.pos])/Math.log2(barMax)
+						width = prop.widMap == null? prop.baseWidth: 1 + prop.baseWidth * Math.log2(1+prop.widMap[d.data.pos])/Math.log2(1+barMax)
 						x = 50%
 						anchor = @anchor("top","center")
 						behavior:tooltip {
