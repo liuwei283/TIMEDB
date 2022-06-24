@@ -15,7 +15,7 @@
                         <h2 class="display-2">
                             Start Analysis
                             <button class = "btn btn-1" style="display:inline" >
-                            <a href= "tutorial/analysis/2">Submit Helper</a>
+                            <a href= "/tutorial/analysis/2">Submit Helper</a>
                             </button>
                         </h2>
 
