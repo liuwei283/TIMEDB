@@ -64,6 +64,9 @@
                 <br><br>
             </div>
 
+            <div id="jumpStart" style="height:100px;">
+            </div>
+
 
             <div class = "col-md-12" id = "submit-app-back" v-if="started && !submitted ">
                 <div class = "row">
@@ -1330,7 +1333,7 @@
                 document.getElementById('copyButton').addClass('btn-dark');
             },
             jumpToUpload() {
-                var el = document.getElementById('run-app');
+                var el = document.getElementById('jumpStart');
                 el.scrollIntoView({behavior: "smooth"});
             },
             provide_param_desc(param) {

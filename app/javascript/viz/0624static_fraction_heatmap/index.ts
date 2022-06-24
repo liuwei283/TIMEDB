@@ -22,13 +22,14 @@ const legendLap = 20;
 
 const title = "Clinical Data"
 
-const MODULE_NAME = "Landscape_heatmap";
-
-function init() {
-    if (!window.gon || window.gon.module_name !== MODULE_NAME) return;
-    const {visualizer} = Oviz.visualize({
-        el: "#canvas",
+export function init(id,clinical_file_path,cellData_file_path,eid,plot_name,vue_name){
+    //path1:cell Data
+    //path2:Clinical Data
+    Oviz.visualize({
+        el:id,
         template,
+        renderer:"svg",
+        theme: "light",
         data: {
           leftPadding,
           legendLap,
@@ -95,47 +96,42 @@ function init() {
             str = Array.from(str)
             return str
           }
-
         },
         loadData: {
-            RNAData: {
-                fileKey: "RNAData",
+          RNAData: {
                 type: "csv",
-                dsvHasHeader:true,
+                url: cellData_file_path,
+                dsvHasHeader: true, 
                 loaded:plotDataloaded
             },
-            ClinicalData:{
-               fileKey: "ClinicalData",
-               type: "csv",
-               dsvHasHeader:false,
-               loaded:clinicalDataloaded
-            },
+            ClinicalData: {
+              //Clinical
+                url: clinical_file_path,
+                type: "csv",
+                dsvHasHeader:false,
+                loaded:clinicalDataloaded
+            }
         },
-        setup() {
-          console.log("this.data:",this["_data"]);
+        setup() { 
+            console.log("this.data:",this["_data"]);
 
-          this.defineGradient("gb", "vertical", [this.data.gbendColor, this.data.gbstartColor]);
-          this.defineGradient("kg", "vertical", ["#dbdbdb", "blue"]);
-          this.defineGradient("age", "horizontal", [this.data.ageStartColor, this.data.ageEndColor]);
-          const padding = 60; 
-          this.data.padding = padding;
-          this.size.width = this.data.RNAData.useData[this.data.sampleList.length-1].col*(this.data.gridPlotWidth-1) + 330 + getMaxlength(this)
-          this.size.height = this.data.cellList.length *12 + 170 + 
-                            this.data.cellList.length*(this.data.gridPlotheight) + this.data.gridPlotheight/2
-                            + (this.data.sortaddName.length-1) * this.data.gridPlotheight 
-                            + 30
-                            + this.data.tipsrow*7
-
-          //registerEditorConfig(editorConfig(this));
-          registerEditorConfig(editorConfig(this), "getVue", "#task-output", editorRef);
-        },
-    });
-
-    return visualizer;
+            this.defineGradient("gb", "vertical", [this.data.gbendColor, this.data.gbstartColor]);
+            this.defineGradient("kg", "vertical", ["#dbdbdb", "blue"]);
+            this.defineGradient("age", "horizontal", [this.data.ageStartColor, this.data.ageEndColor]);
+            const padding = 60; 
+            this.data.padding = padding;
+            this.size.width = this.data.RNAData.useData[this.data.sampleList.length-1].col*(this.data.gridPlotWidth-1) + 330 + getMaxlength(this)
+            this.size.height = this.data.cellList.length *12 + 170 + 
+                              this.data.cellList.length*(this.data.gridPlotheight) + this.data.gridPlotheight/2
+                              + (this.data.sortaddName.length-1) * this.data.gridPlotheight 
+                              + 30
+                              + this.data.tipsrow*7
+                              
+            //registerEditorConfig(editorConfig(this), editorRef);
+            registerEditorConfig(editorConfig(this,eid), vue_name, plot_name);
+            
+          },
+    })
 }
 
-export function registerLandscapeHeatmap() {
-    register(MODULE_NAME, init);
-}
 
-register(MODULE_NAME, init);

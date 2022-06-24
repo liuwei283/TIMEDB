@@ -13,6 +13,13 @@ GIT
     mimemagic (0.3.5)
 
 GEM
+  remote: http://insecure.rails-assets.org/
+  specs:
+    rails-assets-datatables (1.10.21)
+      rails-assets-jquery (>= 1.7.0)
+    rails-assets-jquery (3.6.0)
+
+GEM
   remote: https://rubygems.org/
   remote: http://insecure.rails-assets.org/
   specs:
@@ -146,8 +153,8 @@ GEM
     erubi (1.10.0)
     execjs (2.8.1)
     ffi (1.15.4)
-    font-awesome-sass (5.4.1)
-      sassc (>= 1.11)
+    font-awesome-sass (6.1.1)
+      sassc (~> 2.0)
     globalid (1.0.0)
       activesupport (>= 5.0)
     gon (6.4.0)
@@ -396,7 +403,7 @@ DEPENDENCIES
   carrierwave (~> 2.0)
   devise
   ed25519 (>= 1.2, < 2.0)
-  font-awesome-sass (~> 5.4.1)
+  font-awesome-sass (~> 6.1.1)
   gon
   hashids
   httparty

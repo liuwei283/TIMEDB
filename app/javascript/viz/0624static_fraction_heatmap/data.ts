@@ -1542,3 +1542,4 @@ export function dataHandler(data){
   });
   return {result: result, means, columns: columns}
 }
+

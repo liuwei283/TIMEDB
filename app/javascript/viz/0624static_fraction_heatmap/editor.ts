@@ -11,12 +11,12 @@ function run(v) {
 }
 export const editorRef = {} as any;
 
-function update(v) {
+function update(v,eid) {
     v.forceRedraw = true;
     v.run();
 }
 
-export const generateTestConfig = (v): any => ({
+export const generateTestConfig = (v,eid): any => ({
     id: "plot_st",
     title: "Customized Setting",
     layout: "tabs",
@@ -37,7 +37,7 @@ export const generateTestConfig = (v): any => ({
                                 switchStyle(v);
                                 v.forceRedraw = true;
                                 v.data._sizeUpdated = true;
-                                update(v);
+                                update(v,eid);
                             },
                         },
                     },
@@ -51,13 +51,13 @@ export const generateTestConfig = (v): any => ({
 
 
 
-export function editorConfig(v): EditorDef {
+export function editorConfig(v,eid): EditorDef {
 
     //const d = v.data;
     return {
         sections: [
             {
-                id: "stplot1",
+                id: eid+"1",
                 title: "General Settings",
                 layout: "tabs",
                 tabs: [
@@ -83,8 +83,8 @@ export function editorConfig(v): EditorDef {
                                                             + v.data.tipsrow*7
                                             v.data._sizeUpdated = true;
                                             v.forceRedraw = true;
-                                            v.run();
-                                            update(v);
+                                            v.data._sizeUpdated = true;
+                                            update(v,eid);
                                         },
                                     },
                                 },
@@ -94,7 +94,7 @@ export function editorConfig(v): EditorDef {
                 ],
             },
             //generateTestConfig(v)
-            generateTestConfig(v),
+            generateTestConfig(v,eid),
         ]
     }
 }
