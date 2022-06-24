@@ -520,11 +520,17 @@
         <b-modal v-if="started" ref="submit-helper" v-model="showhelper" id = "submit-helper" size="xl" scrollable title="Analysis Helper" centered @ok="jumpToUpload">
             <br>
             <div class = "row justify-content-center container">
-                <div v-html="selected_analysis.rendered_doc" class = "text-left container" style="margin: 50px;">
+                <div id="rendered_doc" v-html="selected_analysis.rendered_doc" class = "text-left container" style="margin: 50px;">
                 </div>
             </div>
+
         </b-modal>
 
+            <div id="outerdiv" style="position:fixed; border-color:rgba(0,0,0,0.7);z-index:99999;display:none;overflow: scroll;">
+                <div id="innerdiv" style="">
+                    <img id="bigimg" style="border:5px solid #fff;" src=""/>
+                </div>
+            </div>
     </div>
 </template>
 
@@ -545,6 +551,8 @@
 
     Vue.use(ModalPlugin)
     Vue.use(BootstrapVue);
+
+
 
     export default {
         data() {
@@ -1343,6 +1351,44 @@
         components: {
             VueTagsInput, AlertCenter, GlobalSaveButton
         },
+        updated(){
+
+            $("#rendered_doc").find('img').on('click', function() {
+                var _this = $(this);
+                imgShow("#outerdiv", "#innerdiv", "#bigimg", _this);
+            });
+            function imgShow(outerdiv, innerdiv, bigimg, _this) {
+                var src = _this.attr("src");
+                $(bigimg).attr("src", src);
+
+                $("<img/>").attr("src", src).on('load', function() {
+                    var windowW = $(window).width();
+                    var windowH = $(window).height();
+                    var realWidth = this.width;
+                    var realHeight = this.height;
+                    var imgWidth, imgHeight;
+                    var scale = 0.9;
+
+                    if(realWidth > windowW * scale) {
+                        imgWidth = windowW * scale;
+                        imgHeight = imgWidth / realWidth * realHeight;
+                    }
+
+                    $(bigimg).css("width", imgWidth);
+
+                    var w = (windowW - imgWidth) / 2;
+                    var h = (windowH - imgHeight) / 2;
+                    $(outerdiv).css({"top": 100, "left":w});
+                    $(outerdiv).css({"height":windowH* scale, "left":w});
+
+                    $(outerdiv).fadeIn("fast");
+                });
+                window.addEventListener("click", function(e){
+                   $(outerdiv).fadeOut("fast");
+                });
+
+            }
+        }
     };
 </script>
 
@@ -1645,7 +1691,5 @@ input[type="radio"] {
 .modal.fade {
   z-index: 1000000000 !important;
 }
-
-
 
 </style>
