@@ -6,7 +6,10 @@ import template from "./template.bvt";
 const xlabel = "";
 const ylabel = "sample sizes";
 const valueRange = [0,70];
-const colors = {fill: "#66c", border: "#fcf"};
+const colors = {
+    fill: "#66c", 
+    // border: "#fcf"
+};
 
 const MODULE_NAME = "immuneBar";
 

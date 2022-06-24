@@ -121,7 +121,7 @@ export function ClinicalProcessor(data, c16Classification ) {
     });
     data.columns.forEach(col => {
         if(col.slice(0, 2) == "c_") {
-            data.slice(1).forEach(d => {
+            data.forEach(d => {
                 if(! valid.includes(d[idKey])) return;
                 let colName = col.slice(2)+"__"+d[col];
                 if(widMap[colName] == null) {
