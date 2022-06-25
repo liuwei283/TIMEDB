@@ -278,4 +278,3 @@ export const mockData = {
   ],
   rotation: 90,
 };
-f
