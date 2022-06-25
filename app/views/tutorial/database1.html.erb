@@ -3,44 +3,54 @@
             <br><br>
             <div class="row">
                 <div class="sidebar">
-                        <ul class="nav flex-column ">
+                        <ul class="nav flex-column sidebar-nav">
+                            <a href="/tutorial">
+                                <li class="nav-item">
+                                    <p class="nav-link" >Back to Tutorial Home Page</p>
+                                </li>
+                            </a>
+                            <br>
                             <a href="/tutorial/database/1">
-                            <li class="nav-item" @click="showdetail($event)" id ="intro">
-                                <p class="nav-link" >Introduction</p>
-                            </li>
+                                <li class="nav-item">
+                                    <p class="nav-link" >Introduction</p>
+                                </li>
                             </a>
                             <br>
                             <a href="/tutorial/database/2">
-                            <li class="nav-item" @click="showdetail($event)" id="1">
-                                <p class="nav-link ">How to View Database Information</p>
-                            </li>
+                                <li class="nav-item">
+                                    <p class="nav-link ">How to View Database Information</p>
+                                </li>
                             </a>
                             <br>
-
                             <a href="/tutorial/database/3">
-                            <li class="nav-item" @click="showdetail($event)" id="2">
-                                <p class="nav-link" >How to Add Data to Your Workspace</p>
-                            </li>
+                                <li class="nav-item" >
+                                    <p class="nav-link" >How to Add Data to Your Workspace</p>
+                                </li>
                             </a>
                             <br>
-
                             <a href="/tutorial/database/4">
 
-                            <li class="nav-item" @click="showdetail($event)" id="3">
-                                <p class="nav-link" href="#"> How to Download Database Data</p>
-                            </li>
+                                <li class="nav-item" >
+                                    <p class="nav-link"> How to Download Database Data</p>
+                                </li>
                             </a>
                             <br>
                             <a href="/tutorial/database/5">
-                            <li class="nav-item" @click="showdetail($event)" id="4">
-                                <p class="nav-link" >How to View the Visualization Plots</p>
-                            </li>
+                                <li class="nav-item">
+                                    <p class="nav-link" >How to View the Visualization Plots</p>
+                                </li>
                             </a>
                             <br>
                             <a href="/tutorial/database/6">
-                            <li class="nav-item" @click="showdetail($event)" id="5">
-                                <p class="nav-link" > How to Download the Visualization Plots</p>
-                            </li>
+                                <li class="nav-item" >
+                                    <p class="nav-link" > How to Download the Visualization Plots</p>
+                                </li>
+                            </a>
+                            <br>
+                            <a href="/tutorial/analysis/1">
+                                <li class="nav-item">
+                                    <p class="nav-link" > Analysis Tutorial</p>
+                                </li>
                             </a>
                         </ul>
                         <br>
@@ -51,11 +61,11 @@
                     <div>
 
                         <h1 class ="title">
-                            <a href="/tutorial"><i class="fa fa-caret-left"></i></a> Database Introduction
+                            <a href="/tutorial"><i class="fa fa-backward"></i></a> Database Introduction
                         </h1><br>
                         <div class="page">
                             <div>
-                                <div class="headers markdown-body">
+                                <div class="headers">
                                     <h1>Welcome to TIMEDB Database</h1>
                                     <p>TIMEDB provides the tumor immune micro-enviornment (TIME) cell proportions from bulk RNA expression profiles of <b>35,000 + samples</b> and <b>500+ projects</b> across <b>43 cancer types</b>. Users can download the following files directly with TIMEDB:
                                     </p>
@@ -64,7 +74,7 @@
                                 <img src="/public/data/image/tutorial/1ppt.png" class="page-image">
                             </div>
                             <div>
-                                <div class="headers markdown-body">
+                                <div class="headers">
                                     <br>
                                     <h2>Gene expression file and meta file</h2>
                                     <ul>
@@ -95,7 +105,7 @@
                                     <hr>
                                     <br>
                                     <h2>Database usage</h2>
-                                    <p>TIMEDB provides four pages to show data: "Overview","Cancer","Project" and "Sample"</p>
+                                    <p>TIMEDB provides four pages to show data: "Overview","Cancer","Project" and "Sample".</p>
                                     <img src="/public/data/image/tutorial/2-1ppt.png" class="page-image">
                                     <br>
                                     <h3>Overview</h3>
@@ -157,11 +167,11 @@
                                     <!-- <div class="focus"> -->
                                         <ul>
                                             <br>
-                                            <li>change the color</li><br>
+                                            <li>change the color.</li><br>
                                             <img src="/public/data/image/tutorial/1-8ppt.gif" class="page-image"><br>
-                                            <li>change the text size</li><br>
+                                            <li>change the text size.</li><br>
                                             <img src="/public/data/image/tutorial/1-9ppt.gif" class="page-image"><br>
-                                            <li>rotate the label</li><br>
+                                            <li>rotate the label.</li><br>
                                             <img src="/public/data/image/tutorial/1-10ppt.gif" class="page-image"><br>
                                             <li>and multiple online adjustments options, contains but not all listed.</li>
                                         </ul>

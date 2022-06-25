@@ -1,34 +1,45 @@
 <% content_for :title, 'Tutorial Analysis' %>
 
-            <link rel="stylesheet" type="text/css" href="chrome-extension://ckkdlimhmcjmikdlpkmbgfkaikojcbjk/themes/github.css" id="_theme">
-
             <br><br>
             <div class="row">
                 <div class="sidebar">
-                        <ul class="nav flex-column ">
+                        <ul class="nav flex-column sidebar-nav">
+                            <a href="/tutorial">
+                                <li class="nav-item" >
+                                    <p class="nav-link" >Back to Tutorial Home Page</p>
+                                </li>
+                            </a>
+                            <br>
                             <a href="/tutorial/analysis/1">
-                                <li class="nav-item" id ="intro">
+                                <li class="nav-item" >
                                     <p class="nav-link" >Introduction</p>
                                 </li>
                             </a>
                             <br>
                             <a href="/tutorial/analysis/2">
-                                <li class="nav-item" id="1">
+                                <li class="nav-item" >
                                     <p class="nav-link ">How to Complete an Analysis</p>
                                 </li>
                             </a>
                             <br>
                             <a href="/tutorial/analysis/3">
-                                <li class="nav-item"id="2">
-                                    <p class="nav-link" >Analysis Tutorial</p>
+                                <li class="nav-item" >
+                                    <p class="nav-link" >What Analysis We Have</p>
                                 </li>
                             </a>
                             <br>
                             <a href="/tutorial/analysis/4">
-                                <li class="nav-item" id="3">
-                                    <p class="nav-link" href="#">How to Ask Us for Help</p>
+                                <li class="nav-item" >
+                                    <p class="nav-link">How to Ask Us for Help</p>
                                 </li>
                             </a>
+                            <br>
+                            <a href="/tutorial/database/1">
+                                <li class="nav-item" >
+                                    <p class="nav-link" >Database Tutorial</p>
+                                </li>
+                            </a>
+                            <br>
                         </ul>
                         <br>
                 </div>
@@ -38,15 +49,16 @@
 
                         <h1 class ="title">
 
-                            <a href="/tutorial"><i class="fa fa-caret-left" @click="back"></i></a> Analysis Introduction
+                            <a href="/tutorial"><i class="fa fa-backward"></i></a> Analysis Introduction
                         </h1><br>
                         <div class="page">
                             <div class="headers">
                                 <h1>Welcome to TIMEDB Analysis</h1>
                                 <p>TIMEDB provides 18 online tumor immune microenvironment analyses,details are shown in the following table:</p>
-                                <div class="markdown-body">
-                                <table>
-                                    <tr>    <th>Analysis Category</th>  <th>Analysis</th> </tr>
+                                <div >
+                                <table class="table table-border analysis-table">
+                                    <thead><tr>    <th>Analysis Category</th>  <th>Analysis</th> </tr><thead>
+                                    <tbody>
                                     <tr>    <td rowspan="5">Regression Tools</td>   <td>TIMEDB Decov CIBERSORT</td>  </tr>
                                     <tr>    <td>TIMEDB Decov TIMER</td>  </tr>
                                     <tr>    <td>TIMEDB Decov EPIC </td>  </tr>
@@ -68,7 +80,7 @@
                                     <tr>    <td rowspan="2">Colrrelation Analysis</td>   <td>TIMEDB Cell Interaction</td>  </tr>
                                     <tr>    <td>TIMEDB Cell Correlation</td>  </tr>
                                     <tr>    <td>Different Expression</td>   <td>TIMEDB Immunoregulator</td>  </tr>
-
+                                    <tbody>
                                 </table>
                                 </div>
                                 <br>
@@ -85,13 +97,14 @@
                                 <br>
                                 <p>Click to view the detailed steps of submitting the analysis.</p>
                                 <a href = "/tutorial/analysis/2">
-                                <button class="btn-5 btn" >analysis steps</button>
+                                <button class="btn-1 btn" >Analysis Steps</button>
                                 </a>
                                 <br>
+                                <hr>
                                 <h2>Contact with us if you meet some problems</h2>
-                                <p>You may contact us:</p>
+                                <p><a href="/tutoral/analysis/4">You may contact us:</a></p>
                                 <p>Dr LI, Shuaicheng</p>
-                                <p>Email: Shuaicli@cityu.edu.hk</p>
+                                <p>Email: <a href="mailto:shuaicli@cityu.edu.hk">shuaicli@cityu.edu.hk</a></p>
                             </div>
                             <br><br>                           
 

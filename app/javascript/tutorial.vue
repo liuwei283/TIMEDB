@@ -23,7 +23,7 @@
             </div>
             <div v-if="this.found == false">
                 <i class="fa fa-chevron-down fa-3x"></i>
-
+                <hr>
                 <div class="row">
                     <div class="col-md-4 text-center">
                         <!-- <%=image_tag src="icons brightmode12.png" ,class:  "d-block w-100"%> -->
@@ -32,11 +32,11 @@
                     </div>
                     <div class="col-md-8 text-center">
                         <br><br>
-                        <h2 style="color: #314893">Database Tutorial</h2>
+                        <h2 style="color: #99E3E7">Database Tutorial</h2>
 
                         <div class="row">
                             <div v-for="a in articles" :id="a.id" @click="showdetail($event)" class="col-md-5 tutorial-items text-center" :key="a.id">
-                            {{a.title}}
+                            <b>{{a.title}}</b>
                             
                             </div>
                         </div>
@@ -44,59 +44,60 @@
 
 
                 </div>
-
+                <hr>
                 <div class="row">
-                    <!-- <div class="col-md-8 text-center">
-                        <br><br>
-                        <div class="row">
-                            <div class="col-md-5 tutorial-items-red text-center">
-                                introduction
-                            </div>
 
-                            <div class="col-md-5 tutorial-items-red text-center">
-                                How to view Database Information
-                            </div>
-
-                        </div>
-
-                        <div class="row">
-
-                            <div class="col-md-5 tutorial-items-red text-center">
-                                How to view Database Information
-                            </div>
-
-                            <div class="col-md-5 tutorial-items-red text-center">
-                                How to view Database Information
-                            </div>
-
-                            </div>
-                            <div class="row">
-                            <div class="col-md-5 tutorial-items-red text-center">
-                                How to view Database Information
-                            </div>
-
-                            <div class="col-md-5 tutorial-items-red text-center">
-                                How to view Database Information
-                            </div>
-
-                        </div>
-                    </div> -->
                     <div class="col-md-8 text-center">
                         <br><br>
                         <h2 style="color: #cc4f78">Analysis Tutorial</h2>
                         <div class="row">
                             <div v-for="a in articles2" :id="a.id" @click="showdetail2($event)" class="col-md-5 tutorial-items-red text-center" :key="a.id">
-                            {{a.title}}
+                            <b>{{a.title}}</b>
                             
                             </div>
                         </div>
                     </div>
                     <div class="col-md-4 text-center">
-                        <img v-bind:src="require('../assets/images/analyses1.png')" class="d-block w-100">
+                        <img v-bind:src="require('../assets/images/analyses12.png')" class="d-block w-100">
 
                     </div>
                     
                 </div>
+                <hr><br>
+                <div class="row">
+                    <div class="col-md-7 text-center browser">
+                        <div class=" ">
+                        <h2>Browser compatibility</h2>
+                        <table class="table table-bordered">
+                            <tr>
+                                <td> </td> <td>Firefox</td> <td>Chrome</td> <td>Safari</td> <td>Edge</td>
+                            </tr>
+                            <tr>
+                                <td>Linux</td> <td> </td> <td> </td> <td> </td> <td> </td>
+                            </tr>
+                            <tr>
+                                <td>Macos</td> <td> </td> <td>√</td> <td> </td> <td></td>
+                            </tr>
+                            <tr>
+                                <td>Windows</td> <td> </td> <td> </td> <td> </td> <td> </td>
+                            </tr>
+                        </table>
+                        <p>Browser compatibility of TIMEDB, √ for pass and - for not applicable</p>
+                        </div>
+                    </div>
+                    <div class="col-md-4 offset-1 text-center">
+                        <br><br>
+                        <h2 style="color: #314893">Ask for Help</h2>
+
+                            <div v-for="a in articles3" :id="a.id" @click="showdetail2($event)" class="tutorial-items-3 text-center" :key="a.id">
+                            <b>{{a.title}}</b>
+                            
+                            </div>
+                    </div>
+
+                </div>
+
+                <br><br>
             </div>
             <div v-if="this.found == true">
                 <h1 class="title"><i class="fa fa-caret-left" @click="backsearch"></i>There are the search results</h1>
@@ -106,6 +107,9 @@
                         {{a.title}}
                     </div>
                     <div v-for="a in results2" :id="a.id" @click="showdetail2($event)" class="col-md-5 tutorial-items-red text-center" :key="a.id">
+                        {{a.title}}
+                    </div>
+                    <div v-for="a in results3" :id="a.id" @click="showdetail2($event)" class="col-md-5 tutorial-items-3 text-center" :key="a.id">
                         {{a.title}}
                     </div>
                 </div>
@@ -129,22 +133,26 @@ export default {
         return {
                 details: 0,
                 articles:[
-                    {title:"Introduction", id:"1",key:["intro","0"]},
-                    {title:"How to View Database Information", id:"2",key:["database","1"]},
-                    {title:"How to Add Data to Your Workspace", id:"3",key:["database","2"]},
-                    {title:"How to Download Database Data", id:"4",key:["database","3"]},
-                    {title:"How to View the  Visualization Plots", id:"5",key:["database","4"]},
-                    {title:"How to Download the Visualization Plots", id:"6",key:["database","5"]},
+                    {title:"Introduction", id:"1",key:["intro"]},
+                    {title:"How to View Database Information", id:"2",key:["database"]},
+                    {title:"How to Add Data to Your Workspace", id:"3",key:["database"]},
+                    {title:"How to Download Database Data", id:"4",key:["database"]},
+                    {title:"How to View the  Visualization Plots", id:"5",key:["database"]},
+                    {title:"How to Download the Visualization Plots", id:"6",key:["database"]},
                 ],
                 articles2:[
-                    {title:"Introduction", id:"1",key:["intro","0"]},
-                    {title:"How to Complete an Analysis", id:"2",key:["database","1"]},
-                    {title:"Analysis tutorial", id:"3",key:["database","2"]},
-                    {title:"How to Ask Us for Help", id:"4",key:["database","3"]},
+                    {title:"Introduction", id:"1",key:["intro"]},
+                    {title:"How to Complete an Analysis", id:"2",key:["database"]},
+                    {title:"What Analysis We Have", id:"3",key:["database"]},
+                    // {title:"How to Ask Us for Help", id:"4",key:["database"]},
                     // {title:"ou shu xian de hao kan ()", id:"5",key:["database","5"]},
+                ],
+                articles3:[
+                    {title:"How to Ask Us for Help", id:"4",key:["database"]},
                 ],
                 results:[],
                 results2:[],
+                results3:[],
                 search_value: null,
                 found: false,
             }
@@ -165,13 +173,12 @@ export default {
             window.location.href = url;
 
         },
-        back(){
-            this.details = 0;
-        },
+
         search(){
             this.found = false;
             this.results = [];
             this.results2 = [];
+            this.results3= [];
             console.log(this.search_value);
             for (var i=0; i<this.articles.length;i++){
                 for(var j =0; j<this.articles[i].key.length;j++){
@@ -189,20 +196,20 @@ export default {
                     }
                 }
             }
-
+            for (var i=0; i<this.articles3.length;i++){
+                for(var j =0; j<this.articles3[i].key.length;j++){
+                    var str = this.articles3[i].key[j];
+                    if(str.indexOf(this.search_value) !=-1 && this.search_value!=''){
+                        this.results3.push(this.articles3[i]);
+                    }
+                }
+            }
             this.found = true;
         },
         backsearch(){
             this.found = false;
         },
-        gotop(){
-            $('html,body').animate({scrollTop:'0px'},'fast');
-        },
-        jumpadd(){
-            this.details=1;
-            this.now=3;
-            this.gotop();
-        },
+
     }
 }
 </script>
@@ -266,7 +273,7 @@ export default {
 
     .tutorial-items{
         border: solid;
-        border-color: #314893;
+        border-color: #99E3E7;
         border-radius: 30px ;
         margin: 10px;
         // height:5%;
@@ -275,10 +282,11 @@ export default {
         display: flex;
         align-items: center;
         justify-content: center;
-        color: #333;
+        background-color: #99E3E7;
+        color: #fff;
         &:hover{
-            background-color: #314893;
-            color: #fff;
+            background-color: #fff;
+            color: #333;
         }
 
     }
@@ -293,12 +301,41 @@ export default {
         display: flex;
         align-items: center;
         justify-content: center;
-        color: #333;
+        background-color: #cc4f78;
+        color: #fff;
         &:hover{
-            background-color: #cc4f78;
-            color: #fff;
+            background-color: #fff;
+            color: #333;
         }
 
+    }
+        .tutorial-items-3{
+        border: solid;
+        border-color: #314893;
+        border-radius: 30px ;
+        margin: 10px;
+        padding-top: 2.5%;
+        padding-bottom: 2.5%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: #314893;
+        color: #fff;
+        &:hover{
+            background-color: #fff;
+            color: #333;
+        }
+
+    }
+    .browser{
+        padding: 0;
+        border: 2px !important;
+    }
+    .col-md-4 {
+        .tutorial-items-3{
+            padding-bottom: 5% !important;
+            padding-top: 5% !important;
+        }
     }
 
 }
