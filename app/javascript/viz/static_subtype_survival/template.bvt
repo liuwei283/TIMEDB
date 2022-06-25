@@ -15,8 +15,8 @@ svg {
 				@let data = plotData[plot]
 				x = data.startX; y = data.startY
 				// @let showOs = ClinicalData.survivalData[plot] != null && Object.values(ClinicalData.survivalData[plot]).reduce((prev, curr) => prev || (!isNaN(curr) && curr != null && curr != []), false) 
-				@let show = ClinicalData.survivalData[plot] != null && Object.values(ClinicalData.survivalData[plot]).reduce((prev, curr) => prev || (curr != null && curr != [] && curr.reduce((prev, curr) => prev || !isNaN(curr), false)), false)
-				@if show {
+				// @let show = ClinicalData.survivalData[plot] != null && Object.values(ClinicalData.survivalData[plot]).reduce((prev, curr) => prev || (curr != null && curr != [] && curr.reduce((prev, curr) => prev || !isNaN(curr), false)), false)
+				@if show[plot] {
 					SurvivalLine {
 						rawData = ClinicalData.survivalData[plot]
 						classifications = ClinicalData.classifications
