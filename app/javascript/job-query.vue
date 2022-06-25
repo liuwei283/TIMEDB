@@ -607,7 +607,7 @@ export default {
                     console.log("viewTaskDetails fetched information:");
                     console.log(res);
                     // console.log(res)
-                    if (this.job_type == "pipeline" && res.data.code != false && res.data.message.code) {
+                    if (this.job_type == "pipeline" && res.data.code != false && !res.data.message.code) {
                         this.taskDetails.code = "CHOSEN";
                         this.taskDetails.type = 'pipeline';
                         res.data.message.tasks.forEach((t, i) => {
@@ -615,7 +615,7 @@ export default {
                             if (i == 0) this.taskDetails.activeTask = `monitor_m_${t.module_id}`;
                         });
                     }
-                    else if (this.job_type == "app" && res.data.message.code) {
+                    else if (this.job_type == "app" && res.data.message.code == true) {
                         this.taskDetails.code = "CHOSEN";
                         this.taskDetails.type = 'app';
                         this.update_chart(res.data.message.data, `monitor_m_${this.job_id}`);
