@@ -139,6 +139,7 @@
                         >
                         Running
                         </b-badge>
+                        <i v-if="!refreshEnd" class="fas fa-spinner fa-spin" style="font-size:24px"> </i>
                     </h3>
 
                     <b-button class="btn btn-1 col-md-2" @click="returnQuery" @mouseover="backIcon=backColor" @mouseleave="backIcon=backWhite;">
@@ -165,7 +166,7 @@
                         <img v-bind:src="refreshIcon">
                         Refresh Status
                     </b-button>
-                    <div class="col-1"><i v-if="!refreshEnd" class="fas fa-spinner fa-spin" style="font-size:24px"> </i> </div>
+                    
 
                     <div class="switchBtn mt-4 mb-4">
                         
@@ -264,7 +265,7 @@
                         </div>
                     </section>
 
-                    <section id="details-container" class="mt-2 mb-4">
+                    <section id="details-container" class="mt-2 mb-4" v-if="taskDetailsCompleted==true">
                         <div class = "row" v-if="taskDetails.type == 'pipeline'">
                             <h4>Module Tasks Status</h4>
                             <table class="table table-bordered">
@@ -457,6 +458,7 @@ export default {
                     }
                 },
             },
+            taskDetailsCompleted: true,
             backIcon: require('../assets/images/query_back_white.png'),
             backWhite: require('../assets/images/query_back_white.png'),
             backColor: require('../assets/images/query_back_color.png'),
@@ -589,7 +591,8 @@ export default {
                         stdout: "",
                     }
                 }
-            },
+            };
+            this.taskDetails.activeTask = "test";
             axios.post(`/task-details/`,
                 objectToFormData({'id': this.job_id}),
                 {
@@ -611,7 +614,7 @@ export default {
                             this.update_chart(t, `monitor_m_${t.module_id}`);
                             if (i == 0) this.taskDetails.activeTask = `monitor_m_${t.module_id}`;
                         });
-                    } 
+                    }
                     else if (this.job_type == "app" && res.data.message.code) {
                         this.taskDetails.code = "CHOSEN";
                         this.taskDetails.type = 'app';
@@ -619,6 +622,7 @@ export default {
                         this.taskDetails.activeTask = `monitor_m_${this.job_id}`;
                         // this.taskDetails.log = res.data.message.data.task_log;
                     } else {
+                        this.taskDetailsCompleted = false;
                         this.taskDetails.code = "API_ERROR";
                         alertCenter.add('danger', res.data.message);
                     }
@@ -806,6 +810,8 @@ export default {
                         this.data.outputs = response.data.body;
 
                         this.chosenOutput = 0;
+                        this.submitted = true;
+
                         if (response.data.body.length > 0) {
                             this.updateGon(this.data.outputs[0]);
                             this.taskOutputs = this.data.outputs.map((x, i) => ({value: i, text: x.name}));
@@ -826,8 +832,6 @@ export default {
                         this.refreshStatus();
                     }
                     this.refreshEnd = true;
-                    this.submitted = true;
-
                 });
             }
         },

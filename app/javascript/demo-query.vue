@@ -457,6 +457,7 @@ export default {
                     }
                 }
             },
+            this.taskDetails.activeTask = "test";
             axios.post(`/task-details/`,
                 objectToFormData({'id': this.job_id}),
                 {
