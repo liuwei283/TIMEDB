@@ -8,11 +8,34 @@ function run(v, eid) {
 
 export const editorRef = {} as any;
 
+const generalTabs = {
+    "position": [
+        "startX", 
+        "startY"
+    ],
+    "plotSize": [
+        "width", 
+        "height"
+    ], 
+    "fontSize": [
+        "titleSize", 
+        "labelSize"
+    ],
+    "tag": [
+        "title", 
+        "ylabel", 
+        "xlabel"
+    ],
+    "Rotation": [
+        "xRotation", 
+    ]
+}
+
 const generalSetting = ["startX", "startY", "width", "height", "titleSize", "labelSize", "title", "ylabel", "xlabel", "xRotation"]
 
-export const generateCompositeGeneralConfig = (v, eid): any => ({
+export const generateCompositePlotConfig = (v, eid): any => ({
     id: eid + "general",
-    title: "General Setting",
+    title: "Plot Setting",
     layout: "tabs",
     tabs: v.data.plots.map((plot) => ({
     	id: plot,
@@ -64,7 +87,7 @@ export const generateCompositeColorConfig = (v, eid): any => ({
 export function editorConfig(v, eid): EditorDef {
     return {
         sections: [
-            generateCompositeGeneralConfig(v, eid),
+            generateCompositePlotConfig(v, eid),
             generateCompositeColorConfig(v, eid),
         ],
     };
