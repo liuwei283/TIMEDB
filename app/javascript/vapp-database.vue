@@ -346,10 +346,10 @@ export default {
 
             data_path : "/public/data",
             bar_selector: [
-                {value: "project", label: "Project"},
                 {value: "cancer", label: "Cancer type"},
+                {value: "project", label: "Project"},
             ],
-            bar_selected : null,
+            bar_selected : 'cancer',
             pieMethodSelector : [
                 {value:"quanTIseq",label:"quanTIseq"},
                 {value:"ABIS",label:"ABIS"},
