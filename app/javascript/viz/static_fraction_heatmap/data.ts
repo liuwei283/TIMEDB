@@ -2,7 +2,6 @@ import Oviz from "crux";
 import { editorConfig, editorRef } from "./editor";
 import template from "./template.bvt";
 
-//import { groupedChartColors} from "oviz-common/palette";
 import { ComplexBoxplot, processBoxData } from "oviz-components/complex-boxplot";
 import { GridPlot } from "oviz-components/grid-plot";
 import { EditText } from "oviz-components/edit-text";
@@ -14,17 +13,33 @@ import * as TextSize from "crux/dist/utils/text-size";
 
 const title = "Clinical Data"
 
+export function getMaxlength(v){
+  let columnsTextlength = []
+  v.data.RNAData.columns.forEach((item,index) => {
+    columnsTextlength.push(TextSize.measuredTextSize(item,10).width)
+  });
+  let maxcolumnsTextlength = Math.max(...columnsTextlength)
+  let clinicalTextlength = []
+  v.data.ClinicalData.sortaddName.forEach((item,index) => {
+    clinicalTextlength.push(TextSize.measuredTextSize(item,10).width)
+  });
+  let maxclinicalTextlength = Math.max(...clinicalTextlength)
+  let result = 130
+  maxcolumnsTextlength>maxclinicalTextlength? result = maxcolumnsTextlength:result = maxclinicalTextlength
+  return result
+}
+
 export function extractWord(word,width){
   let newword =  word.toLowerCase().replace(/( |^)[a-z]/g, (L) => L.toUpperCase());
   let result = newword.match(/\b(\w)/g).join('.')
   let words = ""
-  if(TextSize.measuredTextSize(result, 8).width > width*6/7){
+  if(TextSize.measuredTextSize(result, 8).width > width*2/3){
     let finalresult = ""
-    result.split("").forEach((item,index) => {
-      while(TextSize.measuredTextSize(finalresult, 8).width>width*5/7){
-        finalresult = finalresult+item
+    let i = 0
+      while(TextSize.measuredTextSize(finalresult, 8).width<width*2/3){
+        finalresult = finalresult+ result.split("")[i]
+        i += 1
       }
-    })
     words = finalresult
   }else{
     words = result
@@ -33,24 +48,21 @@ export function extractWord(word,width){
 
 }
 
-
 export function plotDataloaded(_data){
   
+  console.log("RNAData",_data)
+
   this.data.oridata = _data
 
-  //console.log("data:",_data); 
-
   let cellList = _data.columns.slice(2)
+
   this.data.oricelllist = _data.columns.slice(2)
-  cellList = cellList.slice(0,22) 
+  cellList = cellList.slice(0,22)
   if(cellList.indexOf("P-value") != -1){
     cellList.splice(cellList.indexOf("P-value"),1)
   }
 
-  let sampleList = []
-  for(let i = 0;i < _data.length;i++){
-    sampleList.push(_data[i][_data.columns[0]])
-  }
+  let sampleList = _data.map(x=>x["sample_name"])
 
   let columns = cellList; 
   this.data.cellList = cellList;
@@ -58,7 +70,7 @@ export function plotDataloaded(_data){
   this.data.sampleList = sampleList; 
   const changeNames = sampleList;
 
-  const changeData = [] 
+  const changeData = []
   columns.forEach((arr) =>{
     let temp1 = []
     _data.forEach((d) =>{
@@ -68,7 +80,6 @@ export function plotDataloaded(_data){
     changeData.push(temp1)
   });
 
-
   let maxxx = MAXforArr(changeData)
   this.data.maxxx = maxxx 
 
@@ -77,19 +88,17 @@ export function plotDataloaded(_data){
     for(let j = 0;j < _data.length;j++){
       const elem = {name:null,data: 0,pValue:0,row: 0,col: 0}
       elem.name = columns[i] 
-      elem.data = changeData[i][j] 
+      elem.data = changeData[i][j]
       elem.row = i + 1 
       elem.col = j + 1 
       useData.push(elem)
     }
   }
-
   
-
   this.data.plotSize = [250,500];
   this.data.labelFontSize = 12;
   this.data.tickFontSize = 14;
-
+  
   let newArr = _data;
   newArr.map(function(arr){return delete arr.method})
   
@@ -103,7 +112,7 @@ export function plotDataloaded(_data){
   newData.means = newData.means.slice(0,22)
   
 
-  let cout1 = getfixed(testrange0) 
+  let cout1 = getfixed(testrange0)
   let cout2 = getfixed(testrange1)
 
   if(testrange0<0){
@@ -119,20 +128,14 @@ export function plotDataloaded(_data){
   testrange0<0 ? (range0 = -(Math.abs(testrange0) + 5/(10 ** (cout1+1)))):null
   testrange1<0 ? (range1 = -(Math.abs(testrange1) + 15/(10 ** (cout2+1)))):null
 
+  const colors = ["#FCE4EC"];
+  let valueRange = [(range0-0.1).toFixed(1),(range1+0.1).toFixed(1)];
 
+  this.data.columns = newData.columns;
+  this.data.colors = colors;
+  this.data.valueRange = valueRange;
 
-
-  const colors = ["#FCE4EC"]; 
-  let valueRange = [range0.toFixed(1),(range1+0.1).toFixed(1)];
-
-
-  this.data.columns = newData.columns; 
-  this.data.colors = colors; 
-  this.data.valueRange = valueRange; 
-
-
-
-  const categoryKey = _data.columns[0]; 
+  const categoryKey = _data.columns[0];
   const categories = sampleList
   const classifications = cellList
   const result = {};
@@ -154,7 +157,7 @@ export function plotDataloaded(_data){
   const sum = [];
   _data.forEach(row => {
     let count = 0,key,value;
-    for ([key, value] of Object.entries(row).slice(1)) { 
+    for ([key, value] of Object.entries(row).slice(1)) {
       value == "NA"? value = 0:null
       if(key != categoryKey) {
         count += Math.abs(parseFloat(value)); 
@@ -171,7 +174,6 @@ export function plotDataloaded(_data){
       result[classification].push([d[categoryKey], Math.abs(parseFloat(d[classification]))/sumMap[d[categoryKey]]]); 
     });
   });
-
   this.data.gridPlotWidth = 10;
   this.data.gridPlotheight = 12;
   this.data.stackedWidth = sampleList.length*this.data.gridPlotWidth
@@ -245,8 +247,7 @@ export function showAll(_data,key){
   let testrange1 = MAXforArr(newData.result)
 
   let cout1 = getfixed(testrange0)
-  let cout2 = getfixed(testrange1)
-
+  let cout2 = getfixed(testrange1) 
 
   if(testrange0<0){
     let range0 = -(Math.abs(testrange0) + 5/(10 ** (cout1+1)))
@@ -261,17 +262,12 @@ export function showAll(_data,key){
   testrange0<0 ? (range0 = -(Math.abs(testrange0) + 5/(10 ** (cout1+1)))):null
   testrange1<0 ? (range1 = -(Math.abs(testrange1) + 15/(10 ** (cout2+1)))):null
 
-
-
-
-  const colors = ["#FCE4EC"]; 
-  let valueRange = [range0.toFixed(1),(range1+0.1).toFixed(1)]; 
+  const colors = ["#FCE4EC"];
+  let valueRange = [range0.toFixed(1),(range1+0.1).toFixed(1)];
 
   newConfig["columns"] = newData.columns
   newConfig["colors"] = colors
   newConfig["valueRange"] = valueRange 
-
-
 
   const categoryKey = _data.columns[0]; 
   const categories = sampleList
@@ -286,7 +282,6 @@ export function showAll(_data,key){
     colorMap[item] = mapColor(item)
   })
                     
-
   const stackescolors = Object.values(colorMap);
   classifications.forEach((classification, i) => {
     result[classification] = [];
@@ -338,13 +333,16 @@ export function showAll(_data,key){
 
 export function clinicalDataloaded(_data){
 
+
+  console.log("Clincial Data",_data)
+
   const addNames = this.data.sampleList
   this.data.addNames = addNames
 
   let tempResult = mapCNlist(_data[0])
   let c_indexList = tempResult["c_"]
   let n_indexList = tempResult["n_"]
-  let clinicalIndexes = aryJoinAry(c_indexList, n_indexList) 
+  let clinicalIndexes = aryJoinAry(c_indexList, n_indexList)
 
   let addName = clinicalIndexes
   let sortaddName = clinicalIndexes
@@ -370,12 +368,11 @@ export function clinicalDataloaded(_data){
     return newArr
   }
 
-
   let tg = _data[0].indexOf("sample_name")
   let clinicalSamples = _data.map(k=>k[tg])
 
   let addData = []
-  let newlist = [] //new sample list
+  let newlist = []
   for(let i = 0;i < addNames.length;i++){
     let index = clinicalSamples.indexOf(addNames[i])
     if(index != -1){ 
@@ -403,7 +400,7 @@ export function clinicalDataloaded(_data){
   addName.forEach((item,index)=>{
     legendType[item] = []
     tempNum[item] = []
-    nMCatagory(addData,legendType[item],index) 
+    nMCatagory(addData,legendType[item],index)
     legendType[item] = legendType[item].slice(0).sort()
     legendType[item].unshift("NA")
     legendType[item] = Array.from(new Set(legendType[item]))
@@ -414,28 +411,58 @@ export function clinicalDataloaded(_data){
     item.substring(0,2)=="n_"? (tempNum[item] = tempNum[item].slice(1)[tempNum[item].length-1]):null
   });
 
-  let heatmapLoc = {} 
   addName.forEach((item,index)=>{
-  heatmapLoc[item] = []
-    rowColumn(addData,heatmapLoc[item],index,index+23,item,legendType) 
+    legendType[item].length>7 && item.substring(0,2) == "c_"? delete legendType[item]:null
   })
-  
-  this.data.heatmapLoc = heatmapLoc
-                  
 
+  addName = Object.keys(legendType)
+  sortaddName = addName
+  this.data.sortaddName = sortaddName
   let legendLoc = {}
   addName.forEach((item,index)=>{
     legendLoc[item] = []
     showLegend(legendType[item],legendLoc[item],index,item.substring(0,2),NAlen(addName,legendType))
   })
-
   this.data.legendLoc = legendLoc
+
+  
+
+  let newcindexes = []
+  addName.forEach((item,index)=>{
+    _data[0].forEach((ditem,dindex) => {
+      ditem == item? (newcindexes.push(dindex)):null
+    });
+  })
+
+  let filteraddData = []
+  for(let i = 0;i < addNames.length;i++){
+    let index = clinicalSamples.indexOf(addNames[i])
+    if(index != -1){
+      filteraddData.push(_data[index])
+    }
+  }
+
+
+  addData = mapClinicalIndex(filteraddData,newcindexes).slice(0)
+
+  let filtern_indexList = []
+  filtern_indexList = addName.filter(k=>{if(k.substring(0,2)=="n_"){return k}})
+
+  n_indexList = filtern_indexList
+
+  let heatmapLoc = {} 
+  addName.forEach((item,index)=>{
+  heatmapLoc[item] = []
+    rowColumn(addData,heatmapLoc[item],index,index+23,item,legendType)
+  })
+  
+  this.data.heatmapLoc = heatmapLoc
+
   
   let ppp = getfixed(this.data.maxxx)
   let textmaxxx = this.data.maxxx + 5/(10 ** (ppp+1))
   this.data.textmaxxx = textmaxxx.toFixed(1)
 
-  //"#FF003C" "#EFDAFF" "#EFDAFF" "#004DBE"
   let bgendColor = "#00479a" 
   let bgstartColor = 	"#dbdbdb"; 
   let gbstartColor = "#dbdbdb" 
@@ -448,7 +475,6 @@ export function clinicalDataloaded(_data){
   let gbcolorScheme =  Oviz.color.schemeGradient(gbstartColor,gbendColor)
   let ageColorScheme = Oviz.color.ColorSchemeGradient.create(ageStartColor, ageEndColor);
   
-
   this.data.bgstartColor = bgstartColor
   this.data.bgendColor = bgendColor
   this.data.gbstartColor = gbstartColor
@@ -460,35 +486,18 @@ export function clinicalDataloaded(_data){
   this.data.colorScheme = colorScheme
   this.data.ageColorScheme = ageColorScheme
 
-
   let NAlength = NAlen(addName,legendType)
   this.data.NAlength = NAlength
 
   let thirdLen = this.data.cellList.length * this.data.gridPlotheight + this.data.cellList.length *15 + 150
   this.data.thirdLen = thirdLen
-  
-  let agestr = "n_age"
-  let row = _data[0].indexOf(agestr)
-  let ageData = []
-  _data.forEach((item,index) => {
-    index!=0? ageData.push(item[row]*1):null
-  });
 
-  let ageMax = Math.max(...ageData)
-  let ageMin = Math.min(...ageData)
-
-  let ageRow = clinicalIndexes.indexOf(agestr)
-
-  this.data.ageMax = ageMax;
-  this.data.ageMin = ageMin;
-  this.data.ageRow = ageRow;
-
+  n_indexList
   let n_row = []
   let n_data = {}
   n_indexList.forEach((item,index)=>{
     n_row.push(_data[0].indexOf(item))
   })
-
 
   n_row.forEach((item,index)=>{
     n_data[n_indexList[index]] = []
@@ -499,23 +508,26 @@ export function clinicalDataloaded(_data){
 
   let n_crow = []
   n_indexList.forEach((item,index)=>{
-    n_crow.push(clinicalIndexes.indexOf(item))
+    n_crow.push(addName.indexOf(item))
   })
 
   let n_legendData = []
   n_indexList.forEach((item,index)=>{
-    let min = Math.min(...n_data[item]).toFixed(1) + ""
-    let max = Math.max(...n_data[item]).toFixed(1) + ""
-    min == max? (max=="0.0"? (min = " ",max = " "):null):null
+    let min = Math.min(...n_data[item]) + ""
+    let max = Math.max(...n_data[item]) + ""
+    min == max? (max=="0"? (min = " ",max = " "):null):null
     n_legendData.push({label:item,row:n_crow[index],min: min,max: max})
   })
-
-  this.data.n_legendData = n_legendData
-
+  let n_color = {}
+  n_legendData.forEach((item,index)=>{
+    if(item.min!=" "&&item.max!=" "){
+      n_color[item.label] = {min:item.min,max:item.max}
+    }
+  })
+  this.data.n_color = n_color
   
+  this.data.n_legendData = n_legendData
   this.data.legendStyle = "false"
-
-
   this.data.oriClidata = _data
   this.data.clinicalSamples = clinicalSamples
   
@@ -533,39 +545,38 @@ export function clinicalDataloaded(_data){
   this.data.tipsrow = tipsrow
 
   if(this.data.sampleList.length!=this.data.newlist.length){
-    let config = recheck(this.data.oridata,this.data.newlist)
-              this.data.result.stackescolors = config["result"].stackescolors
-              this.data.cellList = config["cellList"]
-              this.data.result.useData = config["result"].useData
-              this.data.sampleList = config["sampleList"]
-              this.data.gridPlotWidth = config["gridPlotWidth"]
-              this.data.result.result = config["result"].result
-              this.data.result.classifications =  config["result"].classifications
-              this.data.result.colorMap = config["result"].colorMap
-              this.data.result.columns = config["result"].columns
-              this.data.result.boxdata = config["result"].boxdata
+    let config = recheck(this.data.oridata,this.data.newlist,this.data.sampleList)
+    this.data.RNAData.stackescolors = config["result"].stackescolors
+    this.data.cellList = config["cellList"]
+    this.data.RNAData.useData = config["result"].useData
+    this.data.sampleList = config["sampleList"]
+    this.data.gridPlotWidth = config["gridPlotWidth"]
+    this.data.RNAData.result = config["result"].result
+    this.data.RNAData.classifications =  config["result"].classifications
+    this.data.RNAData.colorMap = config["result"].colorMap
+    this.data.RNAData.columns = config["result"].columns
+    this.data.RNAData.boxdata = config["result"].boxdata
   }
-
 
   return {sortaddName,newArr,addData,addName}
 
 }
 
 
-export function recheck(_data,newlist){
+export function recheck(_data,newlist,newsampleList){
 
-  //newlist this.data.newlist
-  //_data this.data.oridata
   let recheckData = []
 
-  for(let i = 0;i < this.data.sampleList.length;i++){
-    let index = newlist.indexOf(this.data.sampleList[i])
+  for(let i = 0;i < newsampleList.length;i++){
+    let index = newlist.indexOf(newsampleList[i])
     if(index != -1){
       recheckData.push(_data[index])
     }
   }
 
+  let tempcols = _data.columns
   _data = recheckData
+  _data.columns = tempcols 
 
   let newConfig = {}
   let cellList = []
@@ -651,7 +662,7 @@ export function recheck(_data,newlist){
 
 
   const colors = ["#FCE4EC"]; 
-  let valueRange = [(range0-0.1).toFixed(1),(range1+0.1).toFixed(1)]; 
+  let valueRange = [(range0-0.1).toFixed(1),(range1+0.1).toFixed(1)];
 
   newConfig["columns"] = newData.columns
   newConfig["colors"] = colors
@@ -696,7 +707,7 @@ export function recheck(_data,newlist){
   _data.forEach(d => {
     classifications.forEach((classification,k) => {
       d[classification]=="NA"? d[classification]=0:null
-      result[classification].push([d[categoryKey], Math.abs(parseFloat(d[classification]))/sumMap[d[categoryKey]]]); 
+      result[classification].push([d[categoryKey], Math.abs(parseFloat(d[classification]))/sumMap[d[categoryKey]]]);
     });
   });
 
@@ -733,8 +744,9 @@ export function switchStyle(v){
         v.data.legendType[item].length==1? add = add -1:(ditem["newrow"] = add,newsortaddName.push(item))
       });
     })
-  
+
     newsortaddName = Array.from(new Set(newsortaddName))
+
   
     let newcindexes = []
   
@@ -758,8 +770,8 @@ export function switchStyle(v){
 
     let newaddData = []
     for(let i = 0;i < v.data.sampleList.length;i++){
-      let index = v.data.clinicalSamples.indexOf(v.data.sampleList[i]) 
-      if(index != -1){ 
+      let index = v.data.clinicalSamples.indexOf(v.data.sampleList[i])
+      if(index != -1){
         newaddData.push(v.data.oriClidata[index])
       }
     }
@@ -768,7 +780,7 @@ export function switchStyle(v){
   
     var newnewArr = []
     for(let i = 0;i < newaddData.length;i++){ 
-      for(let j = 0; j < newsortaddName.length;j++){
+      for(let j = 0; j < newsortaddName.length;j++){ 
         const elem = {data:null,row:0,col:0}
         elem.data = newaddData[i][j]
         elem.row = 23 + j 
@@ -777,7 +789,7 @@ export function switchStyle(v){
       }
     }
   
-    let newlegendType = {} 
+    let newlegendType = {}
     let newtempNum = {}
     newsortaddName.forEach((item,index)=>{
       newlegendType[item] = []
@@ -787,7 +799,7 @@ export function switchStyle(v){
       newlegendType[item].unshift("NA")
       newlegendType[item] = Array.from(new Set(newlegendType[item]))
     })
-  
+
     newsortaddName.forEach((item,index)=>{
       item.substring(0,2)=="n_"? (newtempNum[item] = newtempNum[item].slice(1)[newtempNum[item].length-1]):null
     });
@@ -803,6 +815,7 @@ export function switchStyle(v){
       newlegendLoc[item] = []
       showLegend(newlegendType[item],newlegendLoc[item],index,item.substring(0,2),NAlen(newsortaddName,newlegendType))
     })
+
   
     let newNAlength = NAlen(newsortaddName,newlegendType)
   
@@ -823,7 +836,6 @@ export function switchStyle(v){
       });
     })
   
-  
     let newn_crow = []
     newn_indexList.forEach((item,index)=>{
       newn_crow.push(newsortaddName.indexOf(item))
@@ -831,8 +843,8 @@ export function switchStyle(v){
   
     let newn_legendData = []
     newn_indexList.forEach((item,index)=>{
-      let min = Math.min(...newn_data[item]).toFixed(0) + ""
-      let max = Math.max(...newn_data[item]).toFixed(0) + ""
+      let min = Math.min(...newn_data[item]) + ""
+      let max = Math.max(...newn_data[item]) + ""
       min == max? (max=="0"? (min = " ",max = " "):null):null
       newn_legendData.push({label:item,row:newn_crow[index],min: min,max: max})
     })
@@ -840,7 +852,7 @@ export function switchStyle(v){
     v.data.legendLoc = newlegendLoc
     v.data.legendType = newlegendType
     v.data.n_legendData = newn_legendData
-    v.data["additional"]["sortaddName"] = newsortaddName
+    v.data["ClinicalData"]["sortaddName"] = newsortaddName
     v.data.heatmapLoc = newheatmapLoc
 
   
@@ -849,9 +861,7 @@ export function switchStyle(v){
     let newsortaddName = []
     newsortaddName = v.data.sortaddName
     newsortaddName = Array.from(new Set(newsortaddName))
-  
     let newcindexes = []
-  
     newsortaddName.forEach((item,index)=>{
       v.data.oriClidata[0].forEach((ditem,dindex) => {
         ditem == item? (newcindexes.push(dindex)):null
@@ -873,7 +883,7 @@ export function switchStyle(v){
     let newaddData = []
     for(let i = 0;i < v.data.sampleList.length;i++){
       let index = v.data.clinicalSamples.indexOf(v.data.sampleList[i])
-      if(index != -1){
+      if(index != -1){ 
         newaddData.push(v.data.oriClidata[index])
       }
     }
@@ -881,7 +891,7 @@ export function switchStyle(v){
     newaddData = mapClinicalIndex(newaddData,newcindexes).slice(0)
   
     var newnewArr = []
-    for(let i = 0;i < newaddData.length;i++){ 
+    for(let i = 0;i < newaddData.length;i++){
       for(let j = 0; j < newsortaddName.length;j++){ 
         const elem = {data:null,row:0,col:0}
         elem.data = newaddData[i][j]
@@ -944,8 +954,8 @@ export function switchStyle(v){
   
     let newn_legendData = []
     newn_indexList.forEach((item,index)=>{
-      let min = Math.min(...newn_data[item]).toFixed(0) + ""
-      let max = Math.max(...newn_data[item]).toFixed(0) + ""
+      let min = Math.min(...newn_data[item]) + ""
+      let max = Math.max(...newn_data[item]) + ""
       min == max? (max=="0"? (min = " ",max = " "):null):null
       newn_legendData.push({label:item,row:newn_crow[index],min: min,max: max})
     })
@@ -953,7 +963,7 @@ export function switchStyle(v){
     v.data.legendLoc = newlegendLoc
     v.data.legendType = newlegendType
     v.data.n_legendData = newn_legendData
-    v.data["additional"]["sortaddName"] = newsortaddName
+    v.data["ClinicalData"]["sortaddName"] = newsortaddName
     v.data.heatmapLoc = newheatmapLoc
   }
 
@@ -962,11 +972,10 @@ export function switchStyle(v){
 export function getfixed(num){
   let textnum = num+""
   let final
-  let rep=/[\.]/; 
+  let rep=/[\.]/;
   rep.test(textnum)? (final = textnum.split(".")[1].lastIndexOf("0")+2):final = 2
   return final
 }
-
 
 export function MAXforArr(arr){
   let result = []
@@ -980,7 +989,6 @@ export function MAXforArr(arr){
   return final
 }
 
-
 export function MINforArr(arr){
   let result2 = []
   arr.forEach((item,index)=>{
@@ -990,11 +998,9 @@ export function MINforArr(arr){
   return final
 }
 
-
 export function heatmapColormap(item,cate,legendType,newColors = {}){
 
   let elemcolor = []
-
   newColors[item] = []
   if(item.substring(0,2)=="c_"){ 
     let colors = colorMap(legendType[item])
@@ -1016,7 +1022,7 @@ export function colorMap(arr){
   let color2 = ["#C0C0C0","#7d9fee"]
   let color3 = ["#C0C0C0","#cc4f7b","#314893"]
   let color4 = ["#C0C0C0","#ee937d","#ee7db5","#7d9fee"]
-  let color5 = ["#C0C0C0","#86e5e9","#ee7e7d","#cc4f7b","#314893"]
+  let color5 = ["#C0C0C0","#86e5e9","#ee7e7d","#cc4f7b","#314893"] 
   let color6 = ["#C0C0C0","#eed97d","#ee937d","#ee7db5","#a67dee","#7d9fee"]
   let color7 = ["#C0C0C0","#eed97d","#ee937d","#ee7db5","#a67dee","#7d9fee","#7deea4"]
   let color8 = ["#C0C0C0","#eed97d","#ee937d","#ee7db5","#a67dee","#7d9fee","#C0C0C0","#eed97d"]
@@ -1059,7 +1065,6 @@ export function NAlen(addName,legendType){
   return length
 }
 
-
 export function showLegend(arr1,arr2,n,sign,base){
   if(sign == "c_"){
     for(let i = 0;i < arr1.length;i++){
@@ -1098,7 +1103,6 @@ export function rowColumn (addData,arr,n,r,item,legendType){
   let colorhp = []
   for(let i = 0; i < addData.length;i++){
     const elem = {data:null,row:0,col:0,color:null}
-    
     elem.data = addData[i][n]
     elem.row = r
     elem.col = i + 1
@@ -1106,7 +1110,6 @@ export function rowColumn (addData,arr,n,r,item,legendType){
     arr.push(elem)
   }
 }
-
 
 export function nMCatagory(addData,arr2,n){
     let arr1 = []
@@ -1498,7 +1501,6 @@ export function mapColor(cell){
 }
 
 
-
 export function chooseMethod(chosenMethod,data){
   let afterdata = []
   chosenMethod.forEach((item,index) => {
@@ -1509,7 +1511,6 @@ export function chooseMethod(chosenMethod,data){
   });
   return afterdata;
 }
-
 
 export function viewMethod(methoddata){
   let tmpMethod = []
@@ -1539,5 +1540,6 @@ export function dataHandler(data){
     ]);
     means.push(stat.mean());
   });
-  return { result: result, means, columns: columns }
+  return {result: result, means, columns: columns}
 }
+

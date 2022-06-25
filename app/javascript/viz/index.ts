@@ -10,6 +10,8 @@ import { registerstackedBarsplot} from "./stackedBars";
 import { registerUMAP } from "./UMAP";
 import { registerSubtype } from "./Subtype";
 import { registerimmunoRegulator} from "./immunoRegulator";
+import { registerModuleComparedPlot} from "./module_comparedPlot";
+import { registerCellCorrelation} from "./CellCorrelation";
 
 declare global {
     interface GonInfo {
@@ -52,5 +54,10 @@ export function registerViz(moduleName) {
         case "immunoRegulator":
             registerimmunoRegulator();
             break;
+        case "module_comparedPlot":
+            registerModuleComparedPlot();
+            break;
+        case "CellCorrelation":
+            registerCellCorrelation();
     }
 }

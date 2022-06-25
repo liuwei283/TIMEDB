@@ -141,7 +141,7 @@
                         </b-badge>
                     </h3>
                     
-                    <b-button class="btn btn-1 col-md-2" @click="returnSubmission">
+                    <b-button class="btn btn-1 col-md-2" @click="returnQuery">
                         <img v-bind:src="require('../assets/images/query_back.png')">
                         Back
                     </b-button>

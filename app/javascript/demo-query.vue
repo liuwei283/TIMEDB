@@ -61,14 +61,14 @@
                     <div class="switchBtn mt-4 mb-4">
                         
                         <dropdown-select
-                            v-if="taskOutputs.length>1"
+                            v-if="job_status == 'finished' && taskOutputs.length>1"
                             right
                             v-model="chosenOutput"
                             :options="taskOutputs"
                             class="tool-bar-el px-0 mb-1 col-md-3"/><!--v-if="data.outputs.length > 1"-->
                         
                         <dropdown-select
-                            v-if="module_names.length>1"
+                            v-if="job_status == 'finished' && module_names.length>1"
                             right
                             v-model="chosenModule"
                             :options="module_names"

@@ -144,7 +144,6 @@ function init() {
             registerEditorConfig(editorConfig(this, 1), "getVue", "#task-output");
         },
     });
-
     return visualizer;
 }
 
