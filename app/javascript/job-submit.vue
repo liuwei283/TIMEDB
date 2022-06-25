@@ -1221,7 +1221,7 @@
             },
 
             checkDemoTask() {
-                window.location.href = '/submit/job-query-demo?demo_id=' + this.result_demo_id + "&jobName=" + this.app.name; 
+                window.location.href = '/submit/job-query-demo?demo_id=' + this.result_demo_id + "&jobName=" + this.local_analysis_name; 
             },
             
             submitTask() {

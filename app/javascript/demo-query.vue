@@ -33,28 +33,28 @@
 
 
                     
-                    <b-button class="btn btn-1 col-md-2" @click="returnSubmission">
-                        <img v-bind:src="require('../assets/images/query_back.png')">
+                    <b-button class="btn btn-1 col-md-2" @click="returnSubmission" @mouseover="backIcon=backColor" @mouseleave="backIcon=backWhite;">
+                        <img v-bind:src="backIcon">
                         Back
                     </b-button>
      
-                    <b-button class="btn btn-1 col-md-2" @click="display=0" :class="{active:display==0}">
-                        <img v-bind:src="require('../assets/images/query_monitor.png')">
+                    <b-button class="btn btn-1 col-md-2" @click="display=0" :class="{active:display==0}" @mouseover="monitorIcon=monitorColor" @mouseleave="monitorIcon=monitorWhite;">
+                        <img v-bind:src="monitorIcon">
                         Task Monitor
                     </b-button>
 
-                    <b-button class="btn btn-1 col-md-2" @click="display=1" :class="{active:display==1}" v-if="job_status == 'finished'">
-                        <img v-bind:src="require('../assets/images/query_visualization.png')">
+                    <b-button class="btn btn-1 col-md-2" @click="display=1" :class="{active:display==1}" v-if="job_status == 'finished'" @mouseover="visIcon=visColor" @mouseleave="visIcon=visWhite;">
+                        <img v-bind:src="visIcon">
                         Visualization
                     </b-button><!---->
 
-                    <b-button class="btn btn-1 col-md-2" disabled v-else>
-                        <img v-bind:src="require('../assets/images/query_visualization.png')">
+                    <b-button class="btn btn-1 col-md-2" disabled v-else @mouseover="visIcon=visColor" @mouseleave="visIcon=visWhite;">
+                        <img v-bind:src="visIcon">
                         Visualization
-                    </b-button><!---->
+                    </b-button>
 
-                    <b-button class="btn btn-3 float-right col-md-2" @click="refreshStatus">
-                        <img v-bind:src="require('../assets/images/query_refresh.png')">
+                    <b-button class="btn btn-3 float-right col-md-2" @click="refreshStatus" @mouseover="refreshIcon=refreshColor" @mouseleave="refreshIcon=refreshWhite;">
+                        <img v-bind:src="refreshIcon">
                         Refresh Status
                     </b-button>
 
@@ -338,6 +338,22 @@ export default {
                 // },
                 // chartOptions: {},
             },
+
+            backIcon: require('../assets/images/query_back_white.png'),
+            backWhite: require('../assets/images/query_back_white.png'),
+            backColor: require('../assets/images/query_back_color.png'),
+
+            monitorIcon: require('../assets/images/query_monitor_white.png'),
+            monitorWhite: require('../assets/images/query_monitor_white.png'),
+            monitorColor: require('../assets/images/query_monitor_color.png'),
+
+            visIcon: require('../assets/images/query_visualization_white.png'),
+            visWhite: require('../assets/images/query_visualization_white.png'),
+            visColor: require('../assets/images/query_visualization_color.png'),
+
+            refreshIcon: require('../assets/images/query_refresh_white.png'),
+            refreshWhite: require('../assets/images/query_refresh_white.png'),
+            refreshColor: require('../assets/images/query_refresh_color.png'),
         };
     },
     created() {

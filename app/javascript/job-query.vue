@@ -140,43 +140,43 @@
                         Running
                         </b-badge>
                     </h3>
-                    
-                    <b-button class="btn btn-1 col-md-2" @click="returnQuery">
-                        <img v-bind:src="require('../assets/images/query_back.png')">
+
+                    <b-button class="btn btn-1 col-md-2" @click="returnQuery" @mouseover="backIcon=backColor" @mouseleave="backIcon=backWhite;">
+                        <img v-bind:src="backIcon">
                         Back
                     </b-button>
      
-                    <b-button class="btn btn-1 col-md-2" @click="display=0" :class="{active:display==0}">
-                        <img v-bind:src="require('../assets/images/query_monitor.png')">
+                    <b-button class="btn btn-1 col-md-2" @click="display=0" :class="{active:display==0}" @mouseover="monitorIcon=monitorColor" @mouseleave="monitorIcon=monitorWhite;">
+                        <img v-bind:src="monitorIcon">
                         Task Monitor
                     </b-button>
 
-                    <b-button class="btn btn-1 col-md-2" @click="display=1" :class="{active:display==1}" v-if="job_status == 'finished'">
-                        <img v-bind:src="require('../assets/images/query_visualization.png')">
+                    <b-button class="btn btn-1 col-md-2" @click="display=1" :class="{active:display==1}" v-if="job_status == 'finished'" @mouseover="visIcon=visColor" @mouseleave="visIcon=visWhite;">
+                        <img v-bind:src="visIcon">
                         Visualization
                     </b-button><!---->
 
-                    <b-button class="btn btn-1 col-md-2" disabled v-else>
-                        <img v-bind:src="require('../assets/images/query_visualization.png')">
+                    <b-button class="btn btn-1 col-md-2" disabled v-else @mouseover="visIcon=visColor" @mouseleave="visIcon=visWhite;">
+                        <img v-bind:src="visIcon">
                         Visualization
-                    </b-button><!---->
+                    </b-button>
 
-                    <b-button class="btn btn-3 float-right col-md-2" @click="refreshStatus">
-                        <img v-bind:src="require('../assets/images/query_refresh.png')">
+                    <b-button class="btn btn-3 float-right col-md-2" @click="refreshStatus" @mouseover="refreshIcon=refreshColor" @mouseleave="refreshIcon=refreshWhite;">
+                        <img v-bind:src="refreshIcon">
                         Refresh Status
                     </b-button>
 
                     <div class="switchBtn mt-4 mb-4">
                         
                         <dropdown-select
-                            v-if="taskOutputs.length>1"
+                            v-if="job_status == 'finished' && taskOutputs.length>1"
                             right
                             v-model="chosenOutput"
                             :options="taskOutputs"
                             class="tool-bar-el px-0 mb-1 col-md-3"/><!--v-if="data.outputs.length > 1"-->
                         
                         <dropdown-select
-                            v-if="module_names.length>1"
+                            v-if="job_status == 'finished' && module_names.length>1"
                             right
                             v-model="chosenModule"
                             :options="module_names"
@@ -263,7 +263,7 @@
                         </div>
                     </section>
 
-                    <div id="details-container">
+                    <div id="details-container" class="mt-2 mb-4">
                         <div class = "row" v-if="taskDetails.type == 'pipeline'">
                             <h4>Module Tasks Status</h4>
                             <table class="table table-bordered">

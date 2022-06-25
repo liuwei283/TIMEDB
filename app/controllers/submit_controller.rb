@@ -647,6 +647,9 @@ class SubmitController < ApplicationController
             @response_body = []
             result['message']['tasks'].each do |mrs|
               @analysis = Analysis.find_by(mid:mrs['module_id'])
+              if @analysis.blank?
+                @analysis = Analysis.find_by(multiple_mid:mrs['module_id'])
+              end
               @task_output = create_task_output(mrs)
               parsed_output = processTaskOutput()
               response_body << parsed_output
