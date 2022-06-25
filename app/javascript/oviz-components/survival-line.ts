@@ -137,7 +137,7 @@ export class SurvivalLine extends Component<SurvivalLineOption> {
                                 anchor = @anchor("m", "c")
                                 x = @scaled-x(p[0]); y = @scaled-y(p[1])
                                 text = "+"
-                                fontSize = 6
+                                fontSize = 11
                                 stroke = _colorMap.colors[_d.index]
                                 @props prop.opt.miniLine
                             }

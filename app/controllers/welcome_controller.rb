@@ -90,11 +90,10 @@ class WelcomeController < ApplicationController
     csf_path = "#{Rails.root}/public/data/project_files.csv"
     csv_text = File.read(csf_path) 
     @csv_test = {}
-    @attrs1 = ['project_name','Gene expression data','meta data','scaled data']
-    @attrs2 = ['project_name','CIBERSORT','CIBERSORTX','ABIS','ImmuCellAI','xCell','ConsensusTME','MCPcounter','EPIC','TIMER','quanTIseq'];
-    @attrs3 = ['project_name','All_method','Consensus Cell']
-    @attrs4 = ['project_name','C1-C6 Subtype']
-
+    @attrs1 = ['Project','Gene expression data','meta data','scaled data']
+    @attrs2 = ['Project','CIBERSORT','CIBERSORTX','ABIS','ImmuCellAI','xCell','ConsensusTME','MCPcounter','EPIC','TIMER','quanTIseq'];
+    @attrs3 = ['Project','All_method','Consensus Cell']
+    @attrs4 = ['Project','C1-C6 Subtype']
     csv_text = CSV.parse(csv_text, :headers => true)
     csv_text.each do |row|
         @csv_test[row.to_hash['project_name']] =row.to_hash

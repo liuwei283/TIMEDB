@@ -53,6 +53,11 @@ export function init(id, subtypePath, clinicalDataPath, eid, plot_name, vue_name
                 dependsOn: ["subtype"],
                 loaded(data) {
                     this.data.ClinicalData = ClinicalProcessor(data, this.data.c16Classification)
+                    let isShow = ["os", "pfs"].map(plot => this.data.ClinicalData.survivalData[plot] != null && Object.values(this.data.ClinicalData.survivalData[plot]).reduce((prev, curr) => prev || (curr != null && curr != [] && curr.reduce((prev, curr) => prev || !isNaN(curr), false)), false))
+                    this.data.show = {
+                        "os": isShow[0],
+                        "pfs": isShow[1]
+                    }
                 },
             },
         },

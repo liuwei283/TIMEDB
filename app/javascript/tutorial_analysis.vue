@@ -3,30 +3,43 @@
             <br><br>
             <div class="row">
                 <div class="sidebar">
-                        <ul class="nav flex-column ">
+                        <ul class="nav flex-column sidebar-nav">
+                            <a href="/tutorial">
+                                <li class="nav-item" >
+                                    <p class="nav-link" >Back to Tutorial Home Page</p>
+                                </li>
+                            </a>
+                            <br>
                             <a href="/tutorial/analysis/1">
-                                <li class="nav-item" id ="intro">
+                                <li class="nav-item" >
                                     <p class="nav-link" >Introduction</p>
                                 </li>
                             </a>
                             <br>
                             <a href="/tutorial/analysis/2">
-                                <li class="nav-item" id="1">
+                                <li class="nav-item" >
                                     <p class="nav-link ">How to Complete an Analysis</p>
                                 </li>
                             </a>
                             <br>
                             <a href="/tutorial/analysis/3">
-                                <li class="nav-item" id="2">
-                                    <p class="nav-link" >Analysis Tutorial</p>
+                                <li class="nav-item" >
+                                    <p class="nav-link" >What Analysis We Have</p>
                                 </li>
                             </a>
                             <br>
                             <a href="/tutorial/analysis/4">
-                                <li class="nav-item" id="3">
-                                    <p class="nav-link" href="#">How to Ask Us for Help</p>
+                                <li class="nav-item" >
+                                    <p class="nav-link">How to Ask Us for Help</p>
                                 </li>
                             </a>
+                            <br>
+                            <a href="/tutorial/database/1">
+                                <li class="nav-item" >
+                                    <p class="nav-link" >Database Tutorial</p>
+                                </li>
+                            </a>
+                            <br>
                         </ul>
                         <br>
                 </div>
@@ -35,7 +48,7 @@
                     <div >
 
                         <h1 class ="title">
-                            <a href="/tutorial"><i class="fa fa-caret-left" ></i></a> Analysis Tutorials
+                            <a href="/tutorial"><i class="fa fa-backward" ></i></a> What Analysis We Have
                         </h1><br>
                         <div class="page">
                             <h1>

@@ -60,7 +60,7 @@ class AdminController < ApplicationController
         file = File.open(file_path,"w")
         s = "id,project_name,clinical,subtype,rna_immu,RNA,all"
         boxplot_selector= ["Consensus","ABIS","CIBERSORTX","CIBERSORT","ConsensusTME","EPIC","ImmuCellAI","MCPcounter","quanTIseq","TIMER", "xCell"]
-
+        number = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];
         boxplot_selector.each do |boxplot_selected|
             s += ",#{boxplot_selected}"
         end
@@ -78,38 +78,53 @@ class AdminController < ApplicationController
 
             if File.exists?(clinical_file_path)
                 s+= ",true"
+                number[0]+=1;
             else
                 s+=',false'
             end
             if File.exists?(subtype_file_path)
                 s+= ",true"
+                number[1]+=1;
             else
                 s+=',false'
             end            
             if File.exists?(rna_immu_file_path)
                 s+= ",true"
+                number[2]+=1;
+
             else
                 s+=',false'
             end
             if File.exists?(rna_file_path)
                 s+= ",true"
+                number[3]+=1;
+
             else
                 s+=',false'
             end
             if File.exists?(all_file_path)
                 s+= ",true"
+                number[4]+=1;
+
             else
                 s+=',false'
             end
-            boxplot_selector.each do |boxplot_selected|
+
+            boxplot_selector.each_with_index do |boxplot_selected,index|
                 cellData_file_path = $data_dir + "cell_data/" + boxplot_selected + "/" + name + "_" + boxplot_selected + ".csv";
                 if File.exists?(cellData_file_path)
                     s+= ",true"
+                    number[index+5] +=1
                 else
                     s+=',false'
                 end
             end
             
+        end
+        s+="\n";
+        s+='number,number'
+        number.each do |n|
+            s+= ','+ n.to_s;
         end
         file.write(s)
         file.close

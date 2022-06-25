@@ -10,7 +10,7 @@ img
     margin-bottom: 2%;
 
 
-.fa-caret-left
+.fa-backward
     color :#314893 !important
     &:hover
         color: #1e6fff !important
@@ -106,12 +106,14 @@ img
     width: 90%
 
 .sidebar
+    overflow: scroll;
     text-align: center
     padding-left: 0
     position: sticky
     width: 16.67%
     height: 20%
-    top: 15%
+    max-height: 90vh
+    top: 10%
     li
 
         background-color: #314893
@@ -130,7 +132,14 @@ img
         justify-content: center
         display: flex
         align-items: center
-    
+
+.sidebar-nav
+    position: relative !important;
+.analysis-table
+    td
+        vertical-align: middle !important;
+        border: 1px solid #dee2e6 !important;
+
 .headers
     li
         font-size: 20px
@@ -163,7 +172,7 @@ img
     left: 2rem
     right: 2rem
     padding-top: 6px
-    background: linear-gradient(120deg,#1e6fff,#2167FF 85%)
+    background: #314893
     border-radius: 0 0 4px 4px
     display: flex
     justify-content: center

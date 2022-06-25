@@ -3,30 +3,43 @@
             <br><br>
             <div class="row">
                 <div class="sidebar">
-                        <ul class="nav flex-column ">
+                        <ul class="nav flex-column sidebar-nav">
+                            <a href="/tutorial">
+                                <li class="nav-item" >
+                                    <p class="nav-link" >Back to Tutorial Home Page</p>
+                                </li>
+                            </a>
+                            <br>
                             <a href="/tutorial/analysis/1">
-                                <li class="nav-item" id ="intro">
+                                <li class="nav-item" >
                                     <p class="nav-link" >Introduction</p>
                                 </li>
                             </a>
                             <br>
                             <a href="/tutorial/analysis/2">
-                                <li class="nav-item" id="1">
+                                <li class="nav-item" >
                                     <p class="nav-link ">How to Complete an Analysis</p>
                                 </li>
                             </a>
                             <br>
                             <a href="/tutorial/analysis/3">
-                                <li class="nav-item"id="2">
-                                    <p class="nav-link" >Analysis Tutorial</p>
+                                <li class="nav-item" >
+                                    <p class="nav-link" >What Analysis We Have</p>
                                 </li>
                             </a>
                             <br>
                             <a href="/tutorial/analysis/4">
-                                <li class="nav-item" id="3">
-                                    <p class="nav-link" href="#">How to Ask Us for Help</p>
+                                <li class="nav-item" >
+                                    <p class="nav-link">How to Ask Us for Help</p>
                                 </li>
                             </a>
+                            <br>
+                            <a href="/tutorial/database/1">
+                                <li class="nav-item" >
+                                    <p class="nav-link" >Database Tutorial</p>
+                                </li>
+                            </a>
+                            <br>
                         </ul>
                         <br>
                 </div>
@@ -35,10 +48,10 @@
                     <div >
 
                         <h1 class ="title">
-                            <a href="/tutorial"><i class="fa fa-caret-left" @click="back"></i></a> How to Complete an Analysis
+                            <a href="/tutorial"><i class="fa fa-backward" @click="back"></i></a> How to Complete an Analysis
                         </h1><br>
                         <div class="page">
-                            <div class="headers markdown-body">
+                            <div class="headers ">
                                 <h1>Analysis steps</h1>
                                 <p>TIMEDB analyses are used in much the same way.</p>
                                 <h2>Step one: choose the analysis.</h2>
@@ -52,7 +65,7 @@
                                 <img src="/public/data/image/tutorial/a-2-3ppt.gif" class="page-image">
                                 <hr>
                                 <h2>Step three: upload the file</h2>
-                                <p>Users can prepare their own files or select their own DataSets directly from the workspace for uploading. (see <a href="/tutorial/database/3">how to add datasets in workspace </a>)</p>
+                                <p>Users can prepare their own files or select their own DataSets directly from the workspace for uploading. (<a href="/tutorial/database/3">how to add datasets in workspace</a>)</p>
                                 <img src="/public/data/image/tutorial/a-2-4ppt.gif" class="page-image">
                                 <p>Users can check the file format and download the demo file in "upload page".</p>
                                 <img src="/public/data/image/tutorial/a-2-5ppt.gif" class="page-image">
