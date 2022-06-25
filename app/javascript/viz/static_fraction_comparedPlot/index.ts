@@ -18,7 +18,7 @@ import { registerDefaultBioInfoComponents } from "crux/dist/element/global";
 
 registerDefaultBioInfoComponents();
 
-export function init(id,path,type,eid,plot_name,vue_name){
+export function init(id,path,type,eid,plot_name, vue_name){
     Oviz.visualize({
         el:id,
         template,
@@ -61,6 +61,7 @@ export function init(id,path,type,eid,plot_name,vue_name){
 }
 
 export function processconfig(v){
+    v.data.maxText>90? (v.data.config.gridheight = v.data.config.gridwidth = v.data.maxText + 16 ):null
     if(v.data.plotType=="pie"){
         v.size.height = v.data.config.gridheight*12 + 100
         v.size.width = v.data.config.gridwidth * (v.data.chosenMethod.length+1) + 300 + v.data.maxchosencelldatatextlength - 95.6
@@ -68,7 +69,6 @@ export function processconfig(v){
         v.size.height = v.data.config.gridheight* (v.data.celldata.length+2) + 100
         v.size.width = v.data.config.gridwidth * (v.data.chosenMethod.length+1) + 300 + v.data.maxsampletextlength - 77.77
     }
-    v.data.maxText>90? (v.data.config.gridheight = v.data.config.gridwidth = v.data.maxText + 8 ):null
     v.data.BarData = v.data.BarData.slice(0,v.data.chosenMethod.length)
     v.data.PieData = v.data.PieData.slice(0,v.data.chosenMethod.length)
 }

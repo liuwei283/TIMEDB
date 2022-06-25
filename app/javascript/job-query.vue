@@ -263,7 +263,7 @@
                         </div>
                     </section>
 
-                    <div id="details-container" class="mt-2 mb-4">
+                    <section id="details-container" class="mt-2 mb-4">
                         <div class = "row" v-if="taskDetails.type == 'pipeline'">
                             <h4>Module Tasks Status</h4>
                             <table class="table table-bordered">
@@ -316,7 +316,7 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </section>
 
                     <section id="outputs" class="mt-4 mb-4">
                         <div v-if="job_type=='app'">
@@ -445,7 +445,7 @@ export default {
                 code: "NO_CHOSEN",
                 id: null,
                 type: 'app',
-                activeTask: '',
+                activeTask: 'test',
                 tasks: {
                     "test": {
                         chartOptions: {},
@@ -456,6 +456,21 @@ export default {
                     }
                 },
             },
+            backIcon: require('../assets/images/query_back_white.png'),
+            backWhite: require('../assets/images/query_back_white.png'),
+            backColor: require('../assets/images/query_back_color.png'),
+
+            monitorIcon: require('../assets/images/query_monitor_white.png'),
+            monitorWhite: require('../assets/images/query_monitor_white.png'),
+            monitorColor: require('../assets/images/query_monitor_color.png'),
+
+            visIcon: require('../assets/images/query_visualization_white.png'),
+            visWhite: require('../assets/images/query_visualization_white.png'),
+            visColor: require('../assets/images/query_visualization_color.png'),
+
+            refreshIcon: require('../assets/images/query_refresh_white.png'),
+            refreshWhite: require('../assets/images/query_refresh_white.png'),
+            refreshColor: require('../assets/images/query_refresh_color.png'),
         };
     },
     created() {
@@ -584,14 +599,14 @@ export default {
                         this.taskDetails.code = "CHOSEN";
                         this.taskDetails.type = 'pipeline';
                         res.data.message.tasks.forEach((t, i) => {
-                            if (i == 0) this.taskDetails.activeTask = `monitor_m_${t.module_id}`;
                             this.update_chart(t, `monitor_m_${t.module_id}`);
+                            if (i == 0) this.taskDetails.activeTask = `monitor_m_${t.module_id}`;
                         });
                     } else if (res.data.message.code) {
                         this.taskDetails.code = "CHOSEN";
                         this.taskDetails.type = 'app';
-                        this.taskDetails.activeTask = `monitor_m_${this.job_id}`;
                         this.update_chart(res.data.message.data, `monitor_m_${this.job_id}`);
+                        this.taskDetails.activeTask = `monitor_m_${this.job_id}`;
                         // this.taskDetails.log = res.data.message.data.task_log;
                     } else {
                         this.taskDetails.code = "API_ERROR";

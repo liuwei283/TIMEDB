@@ -190,6 +190,9 @@
                     </div>
                 </div>
                 <div class="row veBlock">
+                    <div class="need-upload w-100 text-center container" v-if="isLoading">
+                        <img v-bind:src="require('../assets/images/loading_icon.gif')" style="width:50%;">
+                    </div>
                     <div class="md-col-9 vis vizBlock" id = "fraction-heatmapVis">
                     </div>
                     <div id="fraction-heatmap-editor" class = "md-col-3 v-editor">

@@ -154,7 +154,7 @@
                         </div>
                     </section>
 
-                    <div id="details-container">
+                    <section id="details-container">
                         <div class = "row" v-if="taskDetails.type == 'pipeline'">
                             <h4>Module Tasks Status</h4>
                             <table class="table table-bordered">
@@ -190,7 +190,7 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </section>
 
                     <section id="outputs" class="mt-4 mb-4">
                         <div v-if="job_type=='app'">
@@ -467,14 +467,14 @@ export default {
                         this.taskDetails.code = "CHOSEN";
                         this.taskDetails.type = 'pipeline';
                         res.data.message.tasks.forEach((t, i) => {
-                            if (i == 0) this.taskDetails.activeTask = `monitor_m_${t.module_id}`;
                             this.update_chart(t, `monitor_m_${t.module_id}`);
+                            if (i == 0) this.taskDetails.activeTask = `monitor_m_${t.module_id}`;
                         });
                     } else if (res.data.message.code) {
                         this.taskDetails.code = "CHOSEN";
                         this.taskDetails.type = 'app';
-                        this.taskDetails.activeTask = `monitor_m_${this.job_id}`;
                         this.update_chart(res.data.message.data, `monitor_m_${this.job_id}`);
+                        this.taskDetails.activeTask = `monitor_m_${this.job_id}`;
                         // this.taskDetails.log = res.data.message.data.task_log;
                     } else {
                         this.taskDetails.code = "API_ERROR";
@@ -484,32 +484,6 @@ export default {
                     console.log(this.taskDetails);
             });
         },
-
-        // getChartsInfo() {
-        //     axios.post(
-        //         `/task-details/`,
-        //         objectToFormData({'id': this.job_id}),
-        //         {
-        //             headers: {
-        //                 'X-Requested-With': 'XMLHttpRequest',
-        //                 'X-CSRF-Token': document.head.querySelector('meta[name="csrf-token"]').content,
-        //                 'Content-Type': 'multipart/form-data',
-        //             },
-        //         },
-        //     ).then(res => {
-        //             console.log("Outputing results for charts updates:")
-        //             console.log(res)
-        //             //improvement here we need to consider have different plot chart for different tasks
-        //             if (res.data.message.code) {
-        //                 this.update_chart(res.data.message.data);
-        //                 this.stderr = res.data.message.data.task_log.stderr;
-        //                 this.stdout = res.data.message.data.task_log.stdout;
-        //             } else {
-        //                 alertCenter.add('danger', res.data.message);
-        //             }
-        //     });
-
-        // },
 
         update_chart(data, key) {
             const chartOptions = {

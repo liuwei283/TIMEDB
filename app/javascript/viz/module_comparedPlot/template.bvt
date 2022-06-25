@@ -30,12 +30,13 @@ svg{
                 Container{
                     x = 140 + maxsampletextlength - 77.77
                     Columns{
-                        y = -config.gridheight/2
+                        //y = -config.gridheight/2
+                        y = -45
                         @for(item,i) in chosenMethod{
                             Container {
                                 padding = config.padding
                                 Rect {
-                                    height = config.gridheight/2
+                                    height = 45
                                     width = config.gridwidth-config.padding*2
                                     stroke = "#000"
                                     fill = "none"
@@ -43,7 +44,7 @@ svg{
                                 Text.centered{
                                     text = item
                                     x = config.gridwidth/2-3
-                                    y = config.gridheight/4
+                                    y = 22.5
                                     anchor = @anchor("middle", "center")
                                     fontSize = methodFontsize 
                                 }
@@ -52,22 +53,25 @@ svg{
                     }                
                 }
                 Container{
-                    x = 140
+                    x = 140 + maxsampletextlength - 77.77
                     Rows{
-                        x = -38-(config.gridwidth-94)/2
+                        x = -23-(config.gridwidth-94)/2
                         @for (citem,cindex) in celldata{
                             Container{
                                 padding = config.padding
                                 Rect {
-                                    width = config.gridwidth/2 - config.padding - 4.5
+                                    //width = config.gridwidth/2 - config.padding - 4.5
+                                    width = 45
                                     height = config.gridheight - 2*config.padding 
                                     stroke = "#000"
                                     fill = "none"
                                 }
                                 Text.centered {
                                     text = citem
-                                    x = config.gridwidth/4-7
+                                    //x = config.gridwidth/4-7
+                                    x = 22.5
                                     y = config.gridheight/2 + config.padding
+                                    //y = 22.5
                                     anchor = @anchor("middle", "center")
                                     rotation= @rotate(-90)
                                     fontSize = cellFontsize 
@@ -78,7 +82,7 @@ svg{
                 }
 
                 Columns {
-                    x = 140
+                    x = 140 + maxsampletextlength - 77.77
                     Columns{
                         @for (item,index) in BarData{
                             @let ditem = item[buttonkey-1]
@@ -174,7 +178,8 @@ svg{
             
             Columns{
                 anchor = @anchor("center","top")
-                x = (methoddata.length*(config.gridwidth))/2 + 140
+                //x = (methoddata.length*(config.gridwidth))/2 + 140
+                x = (chosenMethod.length*config.gridwidth-50)/2 + 150;
                 y = celldata.length*(config.gridheight)+50
                 Component {
                     @let disabled = buttonkey === 1
@@ -230,14 +235,16 @@ svg{
                     }          
             }
             Container{
-                x = 150
+                x = 150 + maxchosencelldatatextlength - 90
                 Columns{
-                    y = -config.gridheight/2 + 7
+                    //y = -config.gridheight/2 + 12
+                    y = -45
                     @for(item,i) in chosenMethod{
                         Container {
                             padding = config.padding
                             Rect {
-                                height = config.gridheight/2 - 7
+                                //height = config.gridheight/2 - 12
+                                height = 45
                                 width = config.gridwidth-config.padding*2
                                 stroke = "#000"
                                 fill = "none"
@@ -245,7 +252,8 @@ svg{
                             Text.centered{
                                 text = item
                                 x = config.gridwidth/2 - config.padding
-                                y = config.gridheight/4 - 3.5
+                                //y = config.gridheight/4 - 6
+                                y = 22.5
                                 anchor = @anchor("middle", "center")
                                 fontSize = methodFontsize 
                             }
@@ -256,7 +264,7 @@ svg{
             Container{
                 x = 150 + maxchosencelldatatextlength - 90
                 Rows{
-                    x=-50
+                    x=-56
                     @let nowSample = eachSamplename[buttonkey-1]
                     @let nowSampledata = Object.values(nowSample)
                     @for (citem,cindex) in nowSample.i{
@@ -265,13 +273,13 @@ svg{
                             Rect {
                                 x = 11.5;y = -0.0428*cindex
                                 
-                                height = config.gridheight - 7.85; width = 38;
+                                height = config.gridheight - 7.85; width = 45;
                                 stroke = "#000"
                                 fill = "none"
                             }
                             Text.centered {
                                 text = nowSample.i[cindex]
-                                x = 60/2
+                                x = 60/2 + 7/2
                                 y = (config.gridheight + 9)/2
                                 anchor = @anchor("middle", "center")
                                 rotation= @rotate(-90)
@@ -282,7 +290,7 @@ svg{
                 }
             }
             Columns {
-                x = 150
+                x = 150 + maxchosencelldatatextlength - 90
                 Columns{
                     @for (item,index) in PieData{
                         @let ditem = item[buttonkey-1] 
