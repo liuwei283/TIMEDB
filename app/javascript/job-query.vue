@@ -139,44 +139,46 @@
                         >
                         Running
                         </b-badge>
+                        <i v-if="!refreshEnd" class="fas fa-spinner fa-spin" style="font-size:24px"> </i>
                     </h3>
-                    
-                    <b-button class="btn btn-1 col-md-2" @click="returnQuery">
-                        <img v-bind:src="require('../assets/images/query_back.png')">
+
+                    <b-button class="btn btn-1 col-md-2" @click="returnQuery" @mouseover="backIcon=backColor" @mouseleave="backIcon=backWhite;">
+                        <img v-bind:src="backIcon">
                         Back
                     </b-button>
      
-                    <b-button class="btn btn-1 col-md-2" @click="display=0" :class="{active:display==0}">
-                        <img v-bind:src="require('../assets/images/query_monitor.png')">
+                    <b-button class="btn btn-1 col-md-2" @click="display=0" :class="{active:display==0}" @mouseover="monitorIcon=monitorColor" @mouseleave="monitorIcon=monitorWhite;">
+                        <img v-bind:src="monitorIcon">
                         Task Monitor
                     </b-button>
 
-                    <b-button class="btn btn-1 col-md-2" @click="display=1" :class="{active:display==1}" v-if="job_status == 'finished'">
-                        <img v-bind:src="require('../assets/images/query_visualization.png')">
+                    <b-button class="btn btn-1 col-md-2" @click="display=1" :class="{active:display==1}" v-if="job_status == 'finished'" @mouseover="visIcon=visColor" @mouseleave="visIcon=visWhite;">
+                        <img v-bind:src="visIcon">
                         Visualization
                     </b-button><!---->
 
-                    <b-button class="btn btn-1 col-md-2" disabled v-else>
-                        <img v-bind:src="require('../assets/images/query_visualization.png')">
+                    <b-button class="btn btn-1 col-md-2" disabled v-else @mouseover="visIcon=visColor" @mouseleave="visIcon=visWhite;">
+                        <img v-bind:src="visIcon">
                         Visualization
-                    </b-button><!---->
+                    </b-button>
 
-                    <b-button class="btn btn-3 float-right col-md-2" @click="refreshStatus">
-                        <img v-bind:src="require('../assets/images/query_refresh.png')">
+                    <b-button class="btn btn-3 float-right col-md-2" @click="searchJob" @mouseover="refreshIcon=refreshColor" @mouseleave="refreshIcon=refreshWhite;">
+                        <img v-bind:src="refreshIcon">
                         Refresh Status
                     </b-button>
+                    
 
                     <div class="switchBtn mt-4 mb-4">
                         
                         <dropdown-select
-                            v-if="taskOutputs.length>1"
+                            v-if="job_status == 'finished' && taskOutputs.length>1"
                             right
                             v-model="chosenOutput"
                             :options="taskOutputs"
                             class="tool-bar-el px-0 mb-1 col-md-3"/><!--v-if="data.outputs.length > 1"-->
                         
                         <dropdown-select
-                            v-if="module_names.length>1"
+                            v-if="job_status == 'finished' && module_names.length>1"
                             right
                             v-model="chosenModule"
                             :options="module_names"
@@ -263,7 +265,7 @@
                         </div>
                     </section>
 
-                    <div id="details-container">
+                    <section id="details-container" class="mt-2 mb-4" v-if="taskDetailsCompleted==true">
                         <div class = "row" v-if="taskDetails.type == 'pipeline'">
                             <h4>Module Tasks Status</h4>
                             <table class="table table-bordered">
@@ -316,7 +318,7 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </section>
 
                     <section id="outputs" class="mt-4 mb-4">
                         <div v-if="job_type=='app'">
@@ -445,7 +447,7 @@ export default {
                 code: "NO_CHOSEN",
                 id: null,
                 type: 'app',
-                activeTask: '',
+                activeTask: 'test',
                 tasks: {
                     "test": {
                         chartOptions: {},
@@ -456,6 +458,22 @@ export default {
                     }
                 },
             },
+            taskDetailsCompleted: true,
+            backIcon: require('../assets/images/query_back_white.png'),
+            backWhite: require('../assets/images/query_back_white.png'),
+            backColor: require('../assets/images/query_back_color.png'),
+
+            monitorIcon: require('../assets/images/query_monitor_white.png'),
+            monitorWhite: require('../assets/images/query_monitor_white.png'),
+            monitorColor: require('../assets/images/query_monitor_color.png'),
+
+            visIcon: require('../assets/images/query_visualization_white.png'),
+            visWhite: require('../assets/images/query_visualization_white.png'),
+            visColor: require('../assets/images/query_visualization_color.png'),
+
+            refreshIcon: require('../assets/images/query_refresh_white.png'),
+            refreshWhite: require('../assets/images/query_refresh_white.png'),
+            refreshColor: require('../assets/images/query_refresh_color.png'),
         };
     },
     created() {
@@ -565,7 +583,16 @@ export default {
         viewTaskDetails() {
             const { alertCenter } = this.$refs;
             this.taskDetails.id = this.job_id;
-            this.taskDetails.tasks = {};
+            this.taskDetails.tasks = {
+                "test": {
+                    chartOptions: {},
+                    log: {
+                        stderr: "",
+                        stdout: "",
+                    }
+                }
+            };
+            this.taskDetails.activeTask = "test";
             axios.post(`/task-details/`,
                 objectToFormData({'id': this.job_id}),
                 {
@@ -580,20 +607,22 @@ export default {
                     console.log("viewTaskDetails fetched information:");
                     console.log(res);
                     // console.log(res)
-                    if (this.job_type == "pipeline" && !res.data.message.code) {
+                    if (this.job_type == "pipeline" && res.data.code != false && res.data.message.code) {
                         this.taskDetails.code = "CHOSEN";
                         this.taskDetails.type = 'pipeline';
                         res.data.message.tasks.forEach((t, i) => {
-                            if (i == 0) this.taskDetails.activeTask = `monitor_m_${t.module_id}`;
                             this.update_chart(t, `monitor_m_${t.module_id}`);
+                            if (i == 0) this.taskDetails.activeTask = `monitor_m_${t.module_id}`;
                         });
-                    } else if (res.data.message.code) {
+                    }
+                    else if (this.job_type == "app" && res.data.message.code) {
                         this.taskDetails.code = "CHOSEN";
                         this.taskDetails.type = 'app';
-                        this.taskDetails.activeTask = `monitor_m_${this.job_id}`;
                         this.update_chart(res.data.message.data, `monitor_m_${this.job_id}`);
+                        this.taskDetails.activeTask = `monitor_m_${this.job_id}`;
                         // this.taskDetails.log = res.data.message.data.task_log;
                     } else {
+                        this.taskDetailsCompleted = false;
                         this.taskDetails.code = "API_ERROR";
                         alertCenter.add('danger', res.data.message);
                     }
@@ -707,6 +736,7 @@ export default {
                                 status: data.status};
         },
         refreshStatus() {
+
             console.log("Now refresh task", this.taskId)
             this.stdout = new Date() + " output test."
             // this.stderr = new Date() + " error test."
@@ -742,10 +772,7 @@ export default {
                 console.log("Log:", this.inputs, this.outputs, this.params)
                 this.viewTaskDetails();
 
-            });
-
-
-            
+            });  
         },
 
 
@@ -753,6 +780,7 @@ export default {
             window.open(window.gon.urls.download_input_demo);
         },
         searchJob() {
+            this.refreshEnd = false;
             const { alertCenter } = this.$refs;
             
             if (this.job_id.length <= 0){
@@ -782,11 +810,12 @@ export default {
                         this.data.outputs = response.data.body;
 
                         this.chosenOutput = 0;
+                        this.submitted = true;
+
                         if (response.data.body.length > 0) {
                             this.updateGon(this.data.outputs[0]);
                             this.taskOutputs = this.data.outputs.map((x, i) => ({value: i, text: x.name}));
                         }
-                        this.submitted = true;
 
                         //tid
                         this.taskId = response.data.tid;
@@ -802,6 +831,7 @@ export default {
                     if (this.submitted) {
                         this.refreshStatus();
                     }
+                    this.refreshEnd = true;
                 });
             }
         },

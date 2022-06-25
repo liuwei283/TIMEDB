@@ -299,7 +299,7 @@
                                                     
                                                 </div>
                                             </div>
-                                            <div class = "col-md-6" style="height:350px; overflow:scroll; display:flex; flex-direction: column; justify-content: center;">
+                                            <div class = "col-md-6" style="height:350px; overflow:scroll; justify-content: center;">
                                                 <h2>Parameters description</h2>
                                                 <div id = "single_params_desc" v-html="single_params_desc"></div>
                                             </div>
@@ -419,7 +419,7 @@
                                         :required="input.required"
                                     >
                                     </b-form-file>
-                                    <div class = "submit-container text-left">
+                                    <div class = "submit-container text-left" style="height:300px;overflow:scroll;">
                                         <div v-html="input.description">
                                         </div>
                                     </div>
@@ -456,7 +456,7 @@
                         <h4> Parameter setting </h4>
 
                         <div class = "row justify-content-center">
-                            <div v-if="ds_selected[input_idx - 1] == '' && displayedBatchEffectParams.length > 0" class = "col-md-6" style="vertical-align:center">
+                            <div v-if="ds_selected[input_idx - 1] == '' && displayedBatchEffectParams.length > 0" class = "col-md-6" style="vertical-align:center; height:300px;overflow:scroll;">
                                 <div class="row">
                                     <div class="col-md-12" style="margin-bottom:10px" v-for="param in displayedBatchEffectParams" :key="param.id">
 
@@ -483,7 +483,7 @@
 
 
 
-                            <div v-if="ds_selected[input_idx - 1] != ''" class = "col-md-6" style="vertical-align:center">
+                            <div v-if="ds_selected[input_idx - 1] != ''" class = "col-md-6" style="vertical-align:center; height:300px;overflow:scroll;">
                                 <div class="row">
                                     <div class="col-md-12" style="margin-bottom:10px">
 
@@ -507,7 +507,7 @@
                                 </div>
                             </div>
 
-                            <div class = "col-md-6">
+                            <div class = "col-md-6 text-left" style="vertical-align:center; height:300px;overflow:scroll;">
                                 <h2>Parameters description</h2>
                                 <div id = "multiple_params_desc" v-html="multiple_params_desc"></div>
                             </div>
@@ -609,7 +609,7 @@
         },
         created() {
             this.ds_info = window.gon.select_box_option;
-            if ( ['Regression Tools', 'Enrichment Tools', 'Consensus Tools', 'Unsupervised'].indexOf( this.category_name) != -1 ) {
+            if ( ['Regression Tools', 'Enrichment Tools', 'Consensus Tools', 'Unsupervised Tools'].indexOf( this.category_name) != -1 ) {
                 this.isConv = true; //deconvolution analysis category are different from others
             }
             this.updateApp(null, false);
@@ -1221,7 +1221,7 @@
             },
 
             checkDemoTask() {
-                window.location.href = '/submit/job-query-demo?demo_id=' + this.result_demo_id + "&jobName=" + this.app.name; 
+                window.location.href = '/submit/job-query-demo?demo_id=' + this.result_demo_id + "&jobName=" + this.local_analysis_name; 
             },
             
             submitTask() {

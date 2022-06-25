@@ -6,9 +6,6 @@
             <div class="prepare" v-if="!submitted">
                 <div class="index-banner">
                     <div class="container">
-                        <h1 style="color:red;">
-                            TESTING PIPELINES... Do Not Submit Tasks!
-                        </h1>
                         <h2 class="display-2">
                             Start Analysis
                             <button class = "btn btn-1" style="display:inline" >
@@ -52,7 +49,7 @@
                                     <div class="card">
                                         <img v-if="a.cover_image == null" v-bind:src="require('../assets/images/module.png')" class="card-img-top">
                                         <img v-else :src="a.cover_image" class="card-img-top">
-                                        <div class = "image_overlay image_overlay_blur container">
+                                        <div v-bind:class = "selected_analysis!=null&&selected_analysis.name==a.name?'image_overlay image_overlay_blur container active':'image_overlay image_overlay_blur container'">
                                             <div class = "image_title">
                                                 {{a.name}}
                                             </div>

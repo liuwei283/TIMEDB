@@ -3,6 +3,7 @@ import { EditorDef } from "utils/editor";
 import { copyObject } from "utils/object";
 //import { filterSamples,chooseSamples,chooseMethod } from "./data";
 import { chooseSamples,chooseMethod } from "./data";
+import {processconfig} from "./index"
 
 function run(v) {
     // if(v.configchange = true) processconfigData(v);
@@ -33,11 +34,12 @@ export const generateGridConfig = (v):any =>  ({
                                 v.data.config.gridheight = parseFloat(d);
                                 if(v.data.plotType=="pie"){
                                     v.size.height = v.data.config.gridheight*12 + 100
-                                    v.size.width = v.data.config.gridwidth * (v.data.chosenMethod.length+1) + 300
+                                    v.size.width = v.data.config.gridwidth * (v.data.chosenMethod.length+1) + 300 + v.data.maxchosencelldatatextlength - 95.6
                                 }else{
                                     v.size.height = v.data.config.gridheight* (v.data.celldata.length+2) + 100
-                                    v.size.width = v.data.config.gridwidth * (v.data.chosenMethod.length+1) + 300
+                                    v.size.width = v.data.config.gridwidth * (v.data.chosenMethod.length+1) + 300 + v.data.maxsampletextlength - 77.77
                                 }
+                                //console.log("v.size:",v.size.width)
                                 run(v);
                             },
                         },
@@ -51,11 +53,12 @@ export const generateGridConfig = (v):any =>  ({
                                 v.data.config.gridwidth = parseFloat(d);
                                 if(v.data.plotType=="pie"){
                                     v.size.height = v.data.config.gridheight*12 + 100
-                                    v.size.width = v.data.config.gridwidth * (v.data.chosenMethod.length+1) + 300
+                                    v.size.width = v.data.config.gridwidth * (v.data.chosenMethod.length+1) + 300 + v.data.maxchosencelldatatextlength - 95.6
                                 }else{
                                     v.size.height = v.data.config.gridheight* (v.data.celldata.length+2) + 100
-                                    v.size.width = v.data.config.gridwidth * (v.data.chosenMethod.length+1) + 300
+                                    v.size.width = v.data.config.gridwidth * (v.data.chosenMethod.length+1) + 300 + v.data.maxsampletextlength - 77.77
                                 }
+                                //console.log("v.size:",v.size.width)
                                 run(v);
                             },
                         },
@@ -182,10 +185,10 @@ export const generateCusConfig = (v):any =>  ({
                                 // console.log("v.data.plotType:",v.data.plotType)
                                 if(v.data.plotType=="pie"){
                                     v.size.height = v.data.config.gridheight*12 + 100
-                                    v.size.width = v.data.config.gridwidth * (v.data.chosenMethod.length+1) + 300
+                                    v.size.width = v.data.config.gridwidth * (v.data.chosenMethod.length+1) + 300 + v.data.maxchosencelldatatextlength - 95.6
                                 }else{
                                     v.size.height = v.data.config.gridheight* (v.data.celldata.length+2) + 100
-                                    v.size.width = v.data.config.gridwidth * (v.data.chosenMethod.length+1) + 300
+                                    v.size.width = v.data.config.gridwidth * (v.data.chosenMethod.length+1) + 300 + v.data.maxsampletextlength - 77.77
                                 }
                                 v.root._sizeUpdated = true; //更新画布大小
                                 v.forceRedraw = true;
@@ -205,10 +208,10 @@ export const generateCusConfig = (v):any =>  ({
                                 // console.log("v.data.plotType:",v.data.plotType)
                                 if(v.data.plotType=="pie"){
                                     v.size.height = v.data.config.gridheight*12 + 100
-                                    v.size.width = v.data.config.gridwidth * (v.data.chosenMethod.length+1) + 300
+                                    v.size.width = v.data.config.gridwidth * (v.data.chosenMethod.length+1) + 300 + v.data.maxchosencelldatatextlength - 95.6
                                 }else{
                                     v.size.height = v.data.config.gridheight* (v.data.celldata.length+2) + 100
-                                    v.size.width = v.data.config.gridwidth * (v.data.chosenMethod.length+1) + 300
+                                    v.size.width = v.data.config.gridwidth * (v.data.chosenMethod.length+1) + 300 + v.data.maxsampletextlength - 77.77
                                 }
                                 v.root._sizeUpdated = true;
                                 v.forceRedraw = true;

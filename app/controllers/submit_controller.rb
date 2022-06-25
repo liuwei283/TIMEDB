@@ -548,7 +548,9 @@ class SubmitController < ApplicationController
                     client.task_details(UID, task.tid, 'app')
                 end
         # pipeline task
-        if task.analysis_id.blank? and result['status'] == 'success'
+        Rails.logger.info "Getting task details returned msg"
+        Rails.logger.info result
+        if task.analysis_id.blank? and result['status'] == 'success' and result['message']['code'] == true
             Rails.logger.debug "Fetched task details information for pipelines:"
             Rails.logger.debug result
             mapped_result = {
@@ -647,6 +649,9 @@ class SubmitController < ApplicationController
             @response_body = []
             result['message']['tasks'].each do |mrs|
               @analysis = Analysis.find_by(mid:mrs['module_id'])
+              if @analysis.blank?
+                @analysis = Analysis.find_by(multiple_mid:mrs['module_id'])
+              end
               @task_output = create_task_output(mrs)
               parsed_output = processTaskOutput()
               response_body << parsed_output
