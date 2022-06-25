@@ -15,7 +15,7 @@
                         <h2 class="display-2">
                             Start Analysis
                             <button class = "btn btn-1" style="display:inline" >
-                            <a href= "tutorial/analysis/2">Submit Helper</a>
+                            <a href= "/tutorial/analysis/2">Submit Helper</a>
                             </button>
                         </h2>
 
@@ -51,12 +51,12 @@
                 <div class="container-fluid container" id="analyses_list">
                     <div id="accordion">
                         <div class="cols-xs-space cols-sm-space cols-md-space container">
-                            <div class = "row" id="jumpDivStart">
+                            <div class = "row">
                                 <div class="col-lg-4 mb-4 justify-content-center text-center" v-for="a in displayedAnalyses" :key="a.id" @click="updateApp(a, true)">
                                     <div class="card">
                                         <img v-if="a.cover_image == null" v-bind:src="require('../assets/images/module.png')" class="card-img-top">
                                         <img v-else :src="a.cover_image" class="card-img-top">
-                                        <div class = "image_overlay image_overlay_blur container">
+                                        <div v-bind:class = "selected_analysis!=null&&selected_analysis.name==a.name?'image_overlay image_overlay_blur container active':'image_overlay image_overlay_blur container'">
                                             <div class = "image_title">
                                                 {{a.name}}
                                             </div>
@@ -73,8 +73,8 @@
                 </div>
                 <br><br>
             </div>
-
-
+            <div id="jumpStart" style="height:100px;">
+            </div>
 
             <div class = "col-md-12" id = "submit-app-back" v-if="started && !submitted ">
                 <div class = "row">
@@ -1329,8 +1329,8 @@
                 document.getElementById('copyButton').addClass('btn-dark');
             },
             jumpToUpload() {
-                var el = document.getElementById('jumpDivStart');
-                el.scrollIntoView({behavior: "smooth"});
+                var el = document.getElementById('jumpStart');
+                el.scrollIntoView({behavior: "smooth", block: "start", inline: "nearest"});
             },
             provide_param_desc(param) {
                 this.single_params_desc = param.description

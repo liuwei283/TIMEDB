@@ -26,6 +26,7 @@ import VApp from "page/vapp.vue";
 
 // import EditText from "oviz-components/edit-text-vue.vue";
 import FilterSamplesBind from "oviz-components/filter-samples-bind.vue";
+import FilterSamples from "oviz-components/filter-samples.vue";
 
 import ColorPicker from "page/builtin/color-picker.vue";
 import SectionFiles from "page/builtin/section-files.vue";
@@ -34,7 +35,7 @@ import SectionFiles from "page/builtin/section-files.vue";
 
 import { registerDefaultEditorConfig } from "utils/editor";
 
-
+Vue.component("filter-samples", FilterSamples);
 Vue.component("filter-samples-bind", FilterSamplesBind);
 Vue.component("color-picker", ColorPicker);
 Vue.component("section-files", SectionFiles);

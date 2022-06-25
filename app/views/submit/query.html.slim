@@ -13,9 +13,10 @@
     
 
     section#dataset_list
-      h2.display-4.font-weight-bold.text-center My dataset
-      button class = "btn btn-1" style="display:inline" 
-        = link_to "Workspace Helper", "tutorial/database/3"
+      h2.display-4.font-weight-bold.text-center
+        | My dataset
+        button class = "btn btn-1 ml-4" style="display:inline" 
+          = link_to "Dataset Helper", "tutorial/database/3"
       br
       .element_wrapper
         - @dataset_list.each do |dataset|
@@ -31,6 +32,10 @@
     br
     br
   .wide-container
-    h2.mt-5.display-4.font-weight-bold.text-center Task Query
+    h2.mt-5.display-4.font-weight-bold.text-center
+      | Task Query
+      button class = "btn btn-1 ml-4" style="display:inline" 
+          = link_to "Query Helper", "tutorial/analysis/2"
+
     #vapp-job-query
     .mt-10 style="height:100px;"

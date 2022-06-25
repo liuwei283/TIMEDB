@@ -6,47 +6,76 @@
         <div class="viz-result mb-1"> <!---->
             <b-card no-body>
                 <b-card-header v-b-modal.modalBox class="border-1 py-2">
-                    <b-button class="btn btn-1 mb-1" @click="returnSubmission">
-                        <i class="fas fa-arrow-left"></i> Back to task submission
+                    <h3 class="m-4 text-center"><strong>{{`${jobName} (No.${job_id})`}}</strong>
+
+                    <b-badge
+                        pill
+                        v-if="job_status=='failed'"
+                        class="badge-failed"
+                    >
+                    Failed
+                    </b-badge>
+                    <b-badge
+                        pill
+                        v-if="job_status=='finished'"
+                        class="badge-finished"
+                    >
+                    Finished
+                    </b-badge>
+                    <b-badge
+                        pill
+                        v-else
+                        class="badge-running"
+                    >
+                    Running
+                    </b-badge>
+                    </h3>
+
+
+                    
+                    <b-button class="btn btn-1 col-md-2" @click="returnSubmission">
+                        <img v-bind:src="require('../assets/images/query_back.png')">
+                        Back
+                    </b-button>
+     
+                    <b-button class="btn btn-1 col-md-2" @click="display=0" :class="{active:display==0}">
+                        <img v-bind:src="require('../assets/images/query_monitor.png')">
+                        Task Monitor
                     </b-button>
 
-                    <b-button class="btn btn-1 mb-1" disabled >
-                        {{`${jobName} (No.${job_id})`}}
+                    <b-button class="btn btn-1 col-md-2" @click="display=1" :class="{active:display==1}" v-if="job_status == 'finished'">
+                        <img v-bind:src="require('../assets/images/query_visualization.png')">
+                        Visualization
+                    </b-button><!---->
+
+                    <b-button class="btn btn-1 col-md-2" disabled v-else>
+                        <img v-bind:src="require('../assets/images/query_visualization.png')">
+                        Visualization
+                    </b-button><!---->
+
+                    <b-button class="btn btn-3 float-right col-md-2" @click="refreshStatus">
+                        <img v-bind:src="require('../assets/images/query_refresh.png')">
+                        Refresh Status
                     </b-button>
 
-                    <dropdown-select
+                    <div class="switchBtn mt-4 mb-4">
+                        
+                        <dropdown-select
+                            v-if="job_status == 'finished' && taskOutputs.length>1"
                             right
                             v-model="chosenOutput"
                             :options="taskOutputs"
-                            class="tool-bar-el px-0 mb-1"/><!--v-if="data.outputs.length > 1"-->
-                    <dropdown-select
+                            class="tool-bar-el px-0 mb-1 col-md-3"/><!--v-if="data.outputs.length > 1"-->
+                        
+                        <dropdown-select
+                            v-if="job_status == 'finished' && module_names.length>1"
                             right
                             v-model="chosenModule"
                             :options="module_names"
-                            class="tool-bar-el px-0 mb-1"/><!--v-if="data.outputs.length > 1"-->
-                    
-                    <!-- <b-button v-else variant="dark" class="btn col-md-4" disabled >{{data.outputs[0].name}}
-                    </b-button> -->
+                            class="tool-bar-el px-0 mb-1 col-md-3"/><!--v-if="data.outputs.length > 1"-->
 
-
-
-                    <div class="tabBtn">
-                        <b-button class="btn btn-1" @click="display=0" :class="{active:display==0}">
-                            Task Monitor
-                        </b-button>
-
-                        <b-button class="btn btn-1" @click="display=1" :class="{active:display==1}" v-if="job_status == 'finished'">
-                            Visualization
-                        </b-button><!---->
-
-                        <b-button class="btn btn-1" disabled v-else>
-                            Visualization
-                        </b-button><!---->
-
-                        <b-button class="btn btn-3 float-right" @click="refreshStatus">
-                            Refresh Status
-                        </b-button>
                     </div>
+                    
 
 
                 </b-card-header>
@@ -823,4 +852,10 @@ export default {
     padding: 0;
     width: 40%;
 }
+
+.card-header img {
+    width: 10%;
+    margin-right: 5px;
+}
+
 </style>

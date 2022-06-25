@@ -11,6 +11,9 @@
                         </h1>
                         <h2 class="display-2">
                             Start Analysis
+                            <button class = "btn btn-1" style="display:inline" >
+                            <a href= "/tutorial/analysis/2">Submit Helper</a>
+                            </button>
                         </h2>
                         <p style="font-size:1.2em;">
                             TIMEDB provides state-of-the-arts tools of immune micro-enviroment deconvolution analysis. Official tutorial is available at Tutorial (link). You may try submit the tasks with our demo input files, or view the ideal demo results.
@@ -62,6 +65,9 @@
                     </div>
                 </div>
                 <br><br>
+            </div>
+
+            <div id="jumpStart" style="height:100px;">
             </div>
 
 
@@ -1330,7 +1336,7 @@
                 document.getElementById('copyButton').addClass('btn-dark');
             },
             jumpToUpload() {
-                var el = document.getElementById('run-app');
+                var el = document.getElementById('jumpStart');
                 el.scrollIntoView({behavior: "smooth"});
             },
             provide_param_desc(param) {

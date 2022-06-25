@@ -2,7 +2,7 @@ import { ListGroupPlugin } from "bootstrap-vue";
 import { generateGridPlotConfig } from "oviz-components/grid-plot";
 import { EditorDef } from "utils/editor";
 import { copyObject } from "utils/object";
-import { switchStyle } from "./data";
+import { getMaxlength, switchStyle } from "./data";
 //import { chooseMethod } from "./index";
 
 function run(v) {
@@ -75,12 +75,14 @@ export function editorConfig(v,eid): EditorDef {
                                         current: v.data.gridPlotWidth,
                                         callback(x) {
                                             v.data.gridPlotWidth = parseFloat(x);
-                                            v.size.width = v.data.result.useData[v.data.sampleList.length-1].col*(v.data.gridPlotWidth-1) + 450
+                                            v.size.width = v.data.RNAData.useData[v.data.sampleList.length-1].col*(v.data.gridPlotWidth-1) + 330 + getMaxlength(v)
                                             v.size.height = v.data.cellList.length *12 + 170 + 
                                                             v.data.cellList.length*(v.data.gridPlotheight) + v.data.gridPlotheight/2
                                                             + (v.data.sortaddName.length-1) * v.data.gridPlotheight 
                                                             + 30
                                                             + v.data.tipsrow*7
+                                            v.data._sizeUpdated = true;
+                                            v.forceRedraw = true;
                                             v.data._sizeUpdated = true;
                                             update(v,eid);
                                         },

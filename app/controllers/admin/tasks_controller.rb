@@ -59,9 +59,9 @@ class Admin::TasksController < ApplicationController
       client = LocalApi::Client.new
       result = ''
       if !@task.analysis.blank?
-        result = client.task_info(45, @task.tid, 'app')
+        result = client.task_info(49, @task.tid, 'app')
       else
-        result = client.task_info(45, @task.tid, 'pipeline')
+        result = client.task_info(49, @task.tid, 'pipeline')
       end
       if !result['message']['status'].blank?
         result_json[:code] = true
@@ -87,9 +87,9 @@ class Admin::TasksController < ApplicationController
       client = LocalApi::Client.new
       result = ''
       if !@task.analysis.blank?
-        result = client.task_info(45, @task.tid, 'app')
+        result = client.task_info(49, @task.tid, 'app')
       else
-        result = client.task_info(45, @task.tid, 'pipeline')
+        result = client.task_info(49, @task.tid, 'pipeline')
       end
       if @task.status == 'submitted'
         @task.status = result['message']['status'] if !result['message']['status'].blank?
@@ -152,7 +152,11 @@ class Admin::TasksController < ApplicationController
     task_output = @task.task_outputs.new
     task_output.analysis = @analysis
     file_paths = {}
-    files_to_do = mrs['outputs'][0]['files']
+    files_to_do = []
+    mrs['outputs'].each do |ofile|
+      ofile = ofile['files'][0]
+      files_to_do.push(ofile)
+    end
     
     @analysis.files_info.each do |dataType, info|
       @viz_data_source = VizDataSource.find_by(data_type:dataType)
@@ -162,7 +166,7 @@ class Admin::TasksController < ApplicationController
             if matchPattern(of1['name'], fName)
               file_paths[dataType] = [] if file_paths[dataType].blank?
               file_paths[dataType] << {id: 0, 
-                                      url: File.join('/data/outputs', of1['path'], of1['name']), 
+                                      url: File.join('', of1['path'], of1['name']), 
                                       is_demo: true}
               # files_to_do.delete(of1)
             end
@@ -172,9 +176,9 @@ class Admin::TasksController < ApplicationController
         files_to_do.each do |of1|
           if matchPattern(of1['name'], info['outputFileName'])
             file_paths[dataType] = {id: 0, 
-                                    url: File.join('/data/outputs', of1['path'], of1['name']), 
+                                    url: File.join('', of1['path'], of1['name']), 
                                     is_demo: true}
-            files_to_do.delete(of1)
+            # files_to_do.delete(of1)
           end
         end
       end

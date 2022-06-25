@@ -10,20 +10,20 @@ import { register } from "page/visualizers";
 import { editorConfig} from"./editor";
 //import { plotDataloaded,processconfig } from"./data";
 import { plotDataloaded,checkIfNaN } from"./data";
-
-
-const MODULE_NAME = "static_comparedPlot";
-
 import { registerDefaultBioInfoComponents } from "crux/dist/element/global";
+
+
+const MODULE_NAME = "module_comparedPlot";
 
 registerDefaultBioInfoComponents();
 
-export function init(id,path,type,eid,plot_name,vue_name){
-    Oviz.visualize({
-        el:id,
+
+function init() {
+    if (!window.gon || window.gon.module_name !== MODULE_NAME) return;
+    const {visualizer} = Oviz.visualize({
+        el: "#canvas",
         template,
-        renderer:"svg",
-        theme: "light",
+        components: {GridPlot},
         data: {
             buttonkey: 1,
             buttonclick(d){
@@ -35,7 +35,7 @@ export function init(id,path,type,eid,plot_name,vue_name){
                 gridwidth:98,
                 padding:4,
             },
-            plotType:type,
+            plotType:"pie",
             findNA(sampleData){
                 let num = 0,plot
                 sampleData.forEach((item,index) => {
@@ -47,17 +47,27 @@ export function init(id,path,type,eid,plot_name,vue_name){
         },
         loadData: {
             comparedData: {
+                fileKey: "comparedData",
                 type: "csv",
-                url: path,
                 loaded: plotDataloaded,
             },
+            
         },
-        setup() { 
+        setup() {
             console.log("comparedPlot: this.data:",this["_data"]);
             processconfig(this)
-            registerEditorConfig(editorConfig(this,eid), vue_name, plot_name); //如果想要启用editor 请去掉这行代码的注释
+            registerEditorConfig(editorConfig(this), "getVue", "#task-output");
         },
-    })
+    });
+    return visualizer;
+}
+
+
+
+register(MODULE_NAME, init);
+
+export function registerModuleComparedPlot() {
+    register(MODULE_NAME, init);
 }
 
 export function processconfig(v){
@@ -72,9 +82,5 @@ export function processconfig(v){
     v.data.BarData = v.data.BarData.slice(0,v.data.chosenMethod.length)
     v.data.PieData = v.data.PieData.slice(0,v.data.chosenMethod.length)
 }
-
-
-
-
 
 

@@ -1,0 +1,69 @@
+svg {
+	width = 1800
+	height = 800
+	Component {
+        x = 100+startX
+        y = 100+startY
+		Container {
+			y = 100
+			Component {
+				x = 10
+				y = 5
+				Rect {
+					height = 50; width = 20
+					fill = @gradient("bg")
+				}
+				Axis {
+					yScale = @scale-linear(valueRange.dataRange[1], valueRange.dataRange[0], 0, 50)
+					x = 20
+					orientation = "right"
+					includeEndTicks = false
+				}
+				Component.full {
+					y = 50
+					Rect {
+						height = 50; width = 20
+						fill = @gradient("ng")
+					}
+					Axis {
+						yScale = @scale-linear(valueRange.negdataRange[1], valueRange.negdataRange[0], 0, 50)
+						x = 20
+						orientation = "right"
+						includeEndTicks = false
+					}
+				}
+			}
+		}
+        Component {
+            x = CorrelationData.colNames.length*squareLength
+            y = CorrelationData.colNames.length*squareLength
+            rotation = @rotate(-45)
+            Component {
+                x = 30
+                y = -30
+                ComplexHeatMap {
+                    @props config
+                    @props CorrelationData
+                    showUpper = true
+                    showLower = false
+					colAxis.fontSize = labelSize
+					rowAxis.fontSize = labelSize
+					squareLength = squareLength
+                }
+            }
+            Component {
+                x = -30
+                y = 30
+                ComplexHeatMap {
+                    @props config
+                    @props CorrelationData
+                    showUpper = false
+                    showLower = true
+					colAxis.fontSize = labelSize
+					rowAxis.fontSize = labelSize
+					squareLength = squareLength
+                }
+            }
+        }
+	}
+}

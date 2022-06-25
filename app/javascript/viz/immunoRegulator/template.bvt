@@ -167,13 +167,14 @@ svg {
 								:rowAxis(d) {
 									@if index == last {
 										Component {
-											x = d.prop.squareLength*(2 + sampleData.colNames.length)
+											x = (squareLength + d.prop.xPadding) * (2 + sampleData.colNames.length)
 											// Rect.centered {
 											// 	width = d.prop.squareLength
 											// 	height = d.prop.squareLength
 											// 	fill = "blue"
 											// }
 											Text {
+												x = (squareLength + d.prop.xPadding) * (2+ sampleData.colNames.length)
 												// anchor = @anchor("middle", "center")
 												anchor = @anchor("m", "r")
 												text = d.item

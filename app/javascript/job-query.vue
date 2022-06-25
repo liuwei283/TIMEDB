@@ -59,21 +59,21 @@
                             <template #cell(status)="data">
                                 <b-badge
                                     pill
-                                    variant="success"
+                                    class="badge-finished"
                                     v-if="data.item.status == 'finished'"
                                 >Finished</b-badge>
 
                                 <span v-else-if="data.item.status == 'failed'" v-b-tooltip.rightbottom.html title="Please check the format of your file!">
                                     <b-badge
                                         pill
-                                        variant="danger"
+                                        class="badge-failed"
                                     >
                                         Failed
                                         <i class="fas fa-exclamation-circle small"></i>
                                     </b-badge>
                                 </span>
 
-                                <b-badge pill variant="info" v-else>Running</b-badge>
+                                <b-badge pill class="badge-running" v-else>Running</b-badge>
                             </template>
 
                             <template #cell(operation)="data">
@@ -116,63 +116,76 @@
         <div class="viz-result mb-1" v-else> <!---->
             <b-card no-body>
                 <b-card-header v-b-modal.modalBox class="border-1 py-2">
-                    <b-button class="btn btn-1 mb-1" @click="returnQuery">
-                        <i class="fas fa-arrow-left"></i> Back to query
+                    <h3 class="m-4 text-center">
+                        <strong>{{`${jobName} (No.${job_id})`}}</strong>
+                        <b-badge
+                            pill
+                            v-if="job_status=='failed'"
+                            class="badge-failed"
+                        >
+                        Failed
+                        </b-badge>
+                        <b-badge
+                            pill
+                            v-if="job_status=='finished'"
+                            class="badge-finished"
+                        >
+                        Finished
+                        </b-badge>
+                        <b-badge
+                            pill
+                            v-else
+                            class="badge-running"
+                        >
+                        Running
+                        </b-badge>
+                    </h3>
+                    
+                    <b-button class="btn btn-1 col-md-2" @click="returnQuery">
+                        <img v-bind:src="require('../assets/images/query_back.png')">
+                        Back
+                    </b-button>
+     
+                    <b-button class="btn btn-1 col-md-2" @click="display=0" :class="{active:display==0}">
+                        <img v-bind:src="require('../assets/images/query_monitor.png')">
+                        Task Monitor
                     </b-button>
 
-                    <b-button class="btn btn-1 mb-1" disabled >
-                        {{`${jobName} (No.${job_id})`}}
+                    <b-button class="btn btn-1 col-md-2" @click="display=1" :class="{active:display==1}" v-if="job_status == 'finished'">
+                        <img v-bind:src="require('../assets/images/query_visualization.png')">
+                        Visualization
+                    </b-button><!---->
+
+                    <b-button class="btn btn-1 col-md-2" disabled v-else>
+                        <img v-bind:src="require('../assets/images/query_visualization.png')">
+                        Visualization
+                    </b-button><!---->
+
+                    <b-button class="btn btn-3 float-right col-md-2" @click="refreshStatus">
+                        <img v-bind:src="require('../assets/images/query_refresh.png')">
+                        Refresh Status
                     </b-button>
 
-                    <dropdown-select
-                            v-if="job_status == 'finished'"
+                    <div class="switchBtn mt-4 mb-4">
+                        
+                        <dropdown-select
+                            v-if="taskOutputs.length>1"
                             right
                             v-model="chosenOutput"
                             :options="taskOutputs"
-                            class="tool-bar-el px-0 mb-1"/><!--v-if="data.outputs.length > 1"-->
-                    <dropdown-select
-                            v-if="job_status == 'finished'"
+                            class="tool-bar-el px-0 mb-1 col-md-3"/><!--v-if="data.outputs.length > 1"-->
+                        
+                        <dropdown-select
+                            v-if="module_names.length>1"
                             right
                             v-model="chosenModule"
                             :options="module_names"
-                            class="tool-bar-el px-0 mb-1"/><!--v-if="data.outputs.length > 1"-->
-                    
-                    <!-- <b-button v-else variant="dark" class="btn col-md-4" disabled >{{data.outputs[0].name}}
-                    </b-button> -->
+                            class="tool-bar-el px-0 mb-1 col-md-3"/><!--v-if="data.outputs.length > 1"-->
 
-
-
-
-                    <div class="tabBtn">
-                        <b-button class="btn btn-1" @click="display=0" :class="{active:display==0}">
-                            Task Monitor
-                        </b-button>
-
-                        <b-button class="btn btn-1" @click="display=1" :class="{active:display==1}" v-if="job_status == 'finished'">
-                            Visualization
-                        </b-button><!---->
-
-                        <b-button class="btn btn-1" disabled v-else>
-                            Visualization
-                        </b-button><!---->
-
-                        <b-button class="btn float-right btn-5" v-if="job_status=='failed'">
-                            Failed
-                        </b-button>
-                        <b-button class="btn float-right btn-4" v-else-if="job_status=='finished'">
-                            Finished
-                        </b-button>
-                        <b-button class="btn btn-2 float-right" v-else>
-                            Running
-                        </b-button>
-                        
-                        <b-button class="btn btn-3 float-right mr-3" @click="refreshStatus">
-                            Refresh Status
-                        </b-button>
                     </div>
-
-
                 </b-card-header>
+
+
 
                 <b-card-body v-show="display==0" class="p-4" >
 
@@ -1033,4 +1046,8 @@ export default {
     width: 40%;
 }
 
+.card-header img {
+    width: 10%;
+    margin-right: 5px;
+}
 </style>
