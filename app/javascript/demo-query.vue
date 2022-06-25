@@ -448,7 +448,15 @@ export default {
         viewTaskDetails() {
             const { alertCenter } = this.$refs;
             this.taskDetails.id = this.job_id;
-            this.taskDetails.tasks = {};
+            this.taskDetails.tasks = {
+                "test": {
+                    chartOptions: {},
+                    log: {
+                        stderr: "",
+                        stdout: "",
+                    }
+                }
+            },
             axios.post(`/task-details/`,
                 objectToFormData({'id': this.job_id}),
                 {
@@ -463,14 +471,15 @@ export default {
                     console.log("viewTaskDetails fetched information:");
                     console.log(res);
                     // console.log(res)
-                    if (this.job_type == "pipeline" && !res.data.message.code) {
+                    if (this.job_type == "pipeline" && res.data.code != false && res.data.message.code) {
                         this.taskDetails.code = "CHOSEN";
                         this.taskDetails.type = 'pipeline';
                         res.data.message.tasks.forEach((t, i) => {
                             this.update_chart(t, `monitor_m_${t.module_id}`);
                             if (i == 0) this.taskDetails.activeTask = `monitor_m_${t.module_id}`;
                         });
-                    } else if (res.data.message.code) {
+                    }
+                    else if (this.job_type == "app" && res.data.message.code) {
                         this.taskDetails.code = "CHOSEN";
                         this.taskDetails.type = 'app';
                         this.update_chart(res.data.message.data, `monitor_m_${this.job_id}`);

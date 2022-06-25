@@ -161,10 +161,11 @@
                         Visualization
                     </b-button>
 
-                    <b-button class="btn btn-3 float-right col-md-2" @click="refreshStatus" @mouseover="refreshIcon=refreshColor" @mouseleave="refreshIcon=refreshWhite;">
+                    <b-button class="btn btn-3 float-right col-md-2" @click="searchJob" @mouseover="refreshIcon=refreshColor" @mouseleave="refreshIcon=refreshWhite;">
                         <img v-bind:src="refreshIcon">
                         Refresh Status
                     </b-button>
+                    <div class="col-1"><i v-if="!refreshEnd" class="fas fa-spinner fa-spin" style="font-size:24px"> </i> </div>
 
                     <div class="switchBtn mt-4 mb-4">
                         
@@ -580,7 +581,15 @@ export default {
         viewTaskDetails() {
             const { alertCenter } = this.$refs;
             this.taskDetails.id = this.job_id;
-            this.taskDetails.tasks = {};
+            this.taskDetails.tasks = {
+                "test": {
+                    chartOptions: {},
+                    log: {
+                        stderr: "",
+                        stdout: "",
+                    }
+                }
+            },
             axios.post(`/task-details/`,
                 objectToFormData({'id': this.job_id}),
                 {
@@ -595,14 +604,15 @@ export default {
                     console.log("viewTaskDetails fetched information:");
                     console.log(res);
                     // console.log(res)
-                    if (this.job_type == "pipeline" && !res.data.message.code) {
+                    if (this.job_type == "pipeline" && res.data.code != false && res.data.message.code) {
                         this.taskDetails.code = "CHOSEN";
                         this.taskDetails.type = 'pipeline';
                         res.data.message.tasks.forEach((t, i) => {
                             this.update_chart(t, `monitor_m_${t.module_id}`);
                             if (i == 0) this.taskDetails.activeTask = `monitor_m_${t.module_id}`;
                         });
-                    } else if (res.data.message.code) {
+                    } 
+                    else if (this.job_type == "app" && res.data.message.code) {
                         this.taskDetails.code = "CHOSEN";
                         this.taskDetails.type = 'app';
                         this.update_chart(res.data.message.data, `monitor_m_${this.job_id}`);
@@ -722,6 +732,7 @@ export default {
                                 status: data.status};
         },
         refreshStatus() {
+
             console.log("Now refresh task", this.taskId)
             this.stdout = new Date() + " output test."
             // this.stderr = new Date() + " error test."
@@ -757,10 +768,7 @@ export default {
                 console.log("Log:", this.inputs, this.outputs, this.params)
                 this.viewTaskDetails();
 
-            });
-
-
-            
+            });  
         },
 
 
@@ -768,6 +776,7 @@ export default {
             window.open(window.gon.urls.download_input_demo);
         },
         searchJob() {
+            this.refreshEnd = false;
             const { alertCenter } = this.$refs;
             
             if (this.job_id.length <= 0){
@@ -801,7 +810,6 @@ export default {
                             this.updateGon(this.data.outputs[0]);
                             this.taskOutputs = this.data.outputs.map((x, i) => ({value: i, text: x.name}));
                         }
-                        this.submitted = true;
 
                         //tid
                         this.taskId = response.data.tid;
@@ -817,6 +825,9 @@ export default {
                     if (this.submitted) {
                         this.refreshStatus();
                     }
+                    this.refreshEnd = true;
+                    this.submitted = true;
+
                 });
             }
         },

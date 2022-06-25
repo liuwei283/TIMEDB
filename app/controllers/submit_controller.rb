@@ -548,6 +548,8 @@ class SubmitController < ApplicationController
                     client.task_details(UID, task.tid, 'app')
                 end
         # pipeline task
+        Rails.logger.info "Getting task details returned msg"
+        Rails.logger.info result
         if task.analysis_id.blank? and result['status'] == 'success'
             Rails.logger.debug "Fetched task details information for pipelines:"
             Rails.logger.debug result
