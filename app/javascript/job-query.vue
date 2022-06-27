@@ -3,7 +3,7 @@
 <div id="job-query">
     <alert-center ref="alertCenter" />
     <div>
-        <div v-if="!submitted"> <!---->
+        <div v-if="!submitted" id="list-table"> <!---->
             <b-card class="text-center query-card">
 
                 <div class="img-icon">
@@ -33,13 +33,17 @@
                 </div>
 
                 <div class="local-jobs .container">
-                    <div class = "container row pb-2 text-center justify-content-center">
-                            <div class= "col-7"> 
-                                <h3 class="font-weight-bold float-right">Submitted Tasks</h3>
+                    <div class = "container row pb-2 text-center justify-content-center" style="margin:auto;">
+                            <div class="col-4">
                             </div>
-                            <b-button
-                                class="btn-1" @click="refreshJobs()">Refresh
-                            </b-button>
+                            <div class= "col-4" style="margin:auto;"> 
+                                <h3 class="font-weight-bold" style="margin:auto;">Submitted Tasks</h3>
+                            </div>
+                            <div class="col-3 text-left">
+                                <b-button
+                                    class="btn-1" @click="refreshJobs()">Refresh
+                                </b-button>
+                            </div>
                             <div class="col-1"><i v-if="!refreshEnd" class="fas fa-spinner fa-spin" style="font-size:24px"> </i> </div>
                     </div>
 
@@ -1065,5 +1069,12 @@ export default {
 .card-header img {
     width: 10%;
     margin-right: 5px;
+}
+#list-table .btn-1 {
+    width: 150px !important;
+    height: 40px !important;
+    font-size: 15px;
+    padding: auto;
+
 }
 </style>
