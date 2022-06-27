@@ -1,27 +1,22 @@
 <template>
     <!-- eslint-disable max-len -->
-    <div class="row my-4" >
+    <div>
         <div v-if="!isLoading">
-            <ul class='list d-none'>
+            <!-- <ul class='list d-none'>
                 <li v-for="a in analyses" :key="a.id" class='list-item'>
                 {{a.id}}: {{a.name}}
                 </li>
-            </ul>
+            </ul> -->
 
             <div class="prepare" v-if="!submitted">
                 <div class="index-banner">
                     <div class="container">
-                        
                         <h2 class="display-2">
-                            Start Analysis
+                            <!-- Start Analysis -->
                             <button class = "btn btn-1" style="display:inline" >
-                            <a href= "/tutorial/analysis/2">Submit Helper</a>
+                            <a href= "/tutorial/analysis/2">Submission Helper</a>
                             </button>
                         </h2>
-
-                        <p style="font-size:1.2em;">
-                            TIMEDB provides state-of-the-arts tools of immune micro-enviroment deconvolution analysis. Official tutorial is available at Tutorial (link). You may try submit the tasks with our demo input files, or view the ideal demo results.
-                        </p>
                     </div>
                 </div>
                 <div v-if="isConv==true" id = "singleMultipleSelect">
@@ -48,26 +43,22 @@
                         </p>
                     </div>
                 </div>
-                <div class="container-fluid container" id="analyses_list">
-                    <div id="accordion">
-                        <div class="cols-xs-space cols-sm-space cols-md-space container">
-                            <div class = "row">
-                                <div class="col-lg-4 mb-4 justify-content-center text-center" v-for="a in displayedAnalyses" :key="a.id" @click="updateApp(a, true)">
-                                    <div class="card">
-                                        <img v-if="a.cover_image == null" v-bind:src="require('../assets/images/module.png')" class="card-img-top">
-                                        <img v-else :src="a.cover_image" class="card-img-top">
-                                        <div v-bind:class = "selected_analysis!=null&&selected_analysis.name==a.name?'image_overlay image_overlay_blur container active':'image_overlay image_overlay_blur container'">
-                                            <div class = "image_title">
-                                                {{a.name}}
-                                            </div>
-                                            <div class = "image_decscription">
-                                                {{a.description}}
-                                            </div>
-                                        </div>
+                <div id="analyses_list" class="container">
+                    <div id="accordion" class="row" style="width:100%;">
+                        <div class="col-md-4 col-sm-4 col-lg-4 text-center" v-for="a in displayedAnalyses" :key="a.id" @click="updateApp(a, true)">
+                            <div class="card">
+                                <img v-if="a.cover_image == null" v-bind:src="require('../assets/images/module.png')" class="card-img-top">
+                                <img v-else :src="a.cover_image" class="card-img-top">
+                                <div v-bind:class = "selected_analysis!=null&&selected_analysis.name==a.name?'image_overlay image_overlay_blur container active':'image_overlay image_overlay_blur container'">
+                                    <div class = "image_title">
+                                        {{a.name}}
                                     </div>
-                                    <h4 class = "text-center">{{a.name}}</h4>
+                                    <div class = "image_decscription">
+                                        {{a.description}}
+                                    </div>
                                 </div>
                             </div>
+                            <h4 class = "text-center">{{a.name}}</h4>
                         </div>
                     </div>
                 </div>
@@ -328,7 +319,7 @@
                     <div class = "row">
                         
                         <div class = "col-md-2">
-                            <b-btn :id = "copyButton" @click = "copyToClipboard" type = "button" class = "btn btn-light">Copy</b-btn>
+                            <b-btn :id = "copyButton" @click = "copyToClipboard" type = "button" class = "btn btn-dark">Copy</b-btn>
                         </div>
                         <div class = "col-md-2">
                             <button id = "jobIDButton" type = "button" class = "btn">{{jobID}}</button>

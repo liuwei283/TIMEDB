@@ -67,7 +67,8 @@ $(function () {
         },
         {
             targets: -1,
-            orderable: false  
+            orderable: false,
+            className: "tableLastColumn",
         },
         {
             targets: invis,

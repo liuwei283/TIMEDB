@@ -266,8 +266,8 @@
                     </section>
 
                     <section id="details-container" class="mt-2 mb-4" v-if="taskDetailsCompleted==true">
-                        <div class = "row" v-if="taskDetails.type == 'pipeline'">
-                            <h4>Module Tasks Status</h4>
+                        <div v-if="taskDetails.type == 'pipeline'">
+                            <h4 class="pb-1">Module Tasks Status</h4>
                             <table class="table table-bordered">
                                 <tbody>
                                     <tr v-for="(task, taskKey) in taskDetails.tasks"
@@ -284,23 +284,6 @@
                                         <i class="fas fa-eye"></i> View</b-button></td>
                                     </tr>
                                 </tbody>
-                                <!-- <li class="list-group-item" 
-                                    v-for="(task, taskKey) in taskDetails.tasks"
-                                    :key="taskKey"
-                                >
-                                    {{task.name}}
-                                    <b-badge pill variant="success"
-                                        v-if="task.status == 'finished'"
-                                    >Finished</b-badge>
-                                    <b-badge pill variant="failed" class="float-right"
-                                        v-else-if="task.status == 'failed'"
-                                    >Failed</b-badge>
-                                    <b-badge pill variant="info" v-else>Running</b-badge>
-
-                                    <b-button variant="light" class="float-right" size="small"
-                                        @click="taskDetails.activeTask = taskKey">
-                                        <i class="fas fa-eye"></i> View</b-button>
-                                </li> -->
                             </table>
                         </div>
                         <div>
@@ -458,7 +441,7 @@ export default {
                     }
                 },
             },
-            taskDetailsCompleted: true,
+            taskDetailsCompleted: false,
             backIcon: require('../assets/images/query_back_white.png'),
             backWhite: require('../assets/images/query_back_white.png'),
             backColor: require('../assets/images/query_back_color.png'),
@@ -607,20 +590,23 @@ export default {
                     console.log("viewTaskDetails fetched information:");
                     console.log(res);
                     // console.log(res)
-                    if (this.job_type == "pipeline" && res.data.code != false && res.data.message.code) {
+                    if (this.job_type == "pipeline" && res.data.message.code != false) {
                         this.taskDetails.code = "CHOSEN";
                         this.taskDetails.type = 'pipeline';
                         res.data.message.tasks.forEach((t, i) => {
                             this.update_chart(t, `monitor_m_${t.module_id}`);
                             if (i == 0) this.taskDetails.activeTask = `monitor_m_${t.module_id}`;
                         });
+                        this.taskDetailsCompleted = true;
                     }
-                    else if (this.job_type == "app" && res.data.message.code) {
+                    else if (this.job_type == "app" && res.data.message.code == true) {
                         this.taskDetails.code = "CHOSEN";
                         this.taskDetails.type = 'app';
                         this.update_chart(res.data.message.data, `monitor_m_${this.job_id}`);
                         this.taskDetails.activeTask = `monitor_m_${this.job_id}`;
                         // this.taskDetails.log = res.data.message.data.task_log;
+                        this.taskDetailsCompleted = true;
+
                     } else {
                         this.taskDetailsCompleted = false;
                         this.taskDetails.code = "API_ERROR";
