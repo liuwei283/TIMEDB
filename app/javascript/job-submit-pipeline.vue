@@ -1,6 +1,6 @@
 <template>
     <!-- eslint-disable max-len -->
-    <div class="row my-4" >
+    <div>
         <div v-if="!isLoading">
 
             <div class="prepare" v-if="!submitted">

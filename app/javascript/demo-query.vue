@@ -154,9 +154,9 @@
                         </div>
                     </section>
 
-                    <section id="details-container">
-                        <div class = "row" v-if="taskDetails.type == 'pipeline'">
-                            <h4>Module Tasks Status</h4>
+                    <section id="details-container" class="mt-2 mb-4" v-if="taskDetailsCompleted==true">
+                        <div v-if="taskDetails.type == 'pipeline'">
+                            <h4 class="pb-1">Module Tasks Status</h4>
                             <table class="table table-bordered">
                                 <tbody>
                                     <tr v-for="(task, taskKey) in taskDetails.tasks"
@@ -322,13 +322,6 @@ export default {
                 type: 'app',
                 activeTask: 'test',
                 tasks: {
-                    "test": {
-                        chartOptions: {},
-                        log: {
-                            stderr: "",
-                            stdout: "",
-                        }
-                    }
                 },
                 // name: "",
                 // status: "",
@@ -338,7 +331,7 @@ export default {
                 // },
                 // chartOptions: {},
             },
-
+            taskDetailsCompleted: false,
             backIcon: require('../assets/images/query_back_white.png'),
             backWhite: require('../assets/images/query_back_white.png'),
             backColor: require('../assets/images/query_back_color.png'),
@@ -449,13 +442,6 @@ export default {
             const { alertCenter } = this.$refs;
             this.taskDetails.id = this.job_id;
             this.taskDetails.tasks = {
-                "test": {
-                    chartOptions: {},
-                    log: {
-                        stderr: "",
-                        stdout: "",
-                    }
-                }
             },
             this.taskDetails.activeTask = "test";
             axios.post(`/task-details/`,
@@ -472,13 +458,14 @@ export default {
                     console.log("viewTaskDetails fetched information:");
                     console.log(res);
                     // console.log(res)
-                    if (this.job_type == "pipeline" && res.data.code != false && !res.data.message.code) {
+                    if (this.job_type == "pipeline" && res.data.message.code != false) {
                         this.taskDetails.code = "CHOSEN";
                         this.taskDetails.type = 'pipeline';
                         res.data.message.tasks.forEach((t, i) => {
                             this.update_chart(t, `monitor_m_${t.module_id}`);
                             if (i == 0) this.taskDetails.activeTask = `monitor_m_${t.module_id}`;
                         });
+                        this.taskDetailsCompleted = true;
                     }
                     else if (this.job_type == "app" && res.data.message.code == true) {
                         this.taskDetails.code = "CHOSEN";
@@ -486,6 +473,7 @@ export default {
                         this.update_chart(res.data.message.data, `monitor_m_${this.job_id}`);
                         this.taskDetails.activeTask = `monitor_m_${this.job_id}`;
                         // this.taskDetails.log = res.data.message.data.task_log;
+                        this.taskDetailsCompleted = true;
                     } else {
                         this.taskDetails.code = "API_ERROR";
                         alertCenter.add('danger', res.data.message);
