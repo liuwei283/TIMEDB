@@ -302,7 +302,7 @@
                     <p>We are preparing your visualization,you can copy the code and check the status of your work in the <a ref = "goTo" :href = "`/submit/job-query`" id = "redirection-link">[workspace]</a>.</p>
                     <div class = "row">
                         <div class = "col-md-2">
-                            <b-btn :id = "copyButton" @click = "copyToClipboard" type = "button" class = "btn btn-light">Copy</b-btn>
+                            <b-btn :id = "copyButton" @click = "copyToClipboard" type = "button" class = "btn btn-dark">Copy</b-btn>
                         </div>
                         <div class = "col-md-2">
                             <button id = "jobIDButton" type = "button" class = "btn">{{jobID}}</button>

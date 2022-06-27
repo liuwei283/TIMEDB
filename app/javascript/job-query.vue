@@ -3,7 +3,7 @@
 <div id="job-query">
     <alert-center ref="alertCenter" />
     <div>
-        <div v-if="!submitted" id="list-table"> <!---->
+        <div v-if="!submitted"> <!---->
             <b-card class="text-center query-card">
 
                 <div class="img-icon">
@@ -32,19 +32,21 @@
                     </b-input-group>
                 </div>
 
-                <div class="local-jobs .container">
+                <div class="local-jobs container">
                     <div class = "container row pb-2 text-center justify-content-center" style="margin:auto;">
-                            <div class="col-4">
-                            </div>
-                            <div class= "col-4" style="margin:auto;"> 
-                                <h3 class="font-weight-bold" style="margin:auto;">Submitted Tasks</h3>
-                            </div>
-                            <div class="col-3 text-left">
-                                <b-button
-                                    class="btn-1" @click="refreshJobs()">Refresh
-                                </b-button>
-                            </div>
-                            <div class="col-1"><i v-if="!refreshEnd" class="fas fa-spinner fa-spin" style="font-size:24px"> </i> </div>
+                        <div class="col-md-4">
+                        </div>
+                        <div class= "col-md-4" style="margin:auto;"> 
+                            <h3 class="font-weight-bold" style="margin:auto;">Submitted Tasks</h3>
+                        </div>
+                        <div class="col-md-3 text-left">
+                            <b-button
+                                class="btn-1" @click="refreshJobs()">Refresh
+                            </b-button>
+                        </div>
+                        <div class="col-md-1">
+                            <i v-if="!refreshEnd" class="fas fa-spinner fa-spin" style="font-size:24px"> </i> 
+                        </div>
                     </div>
 
                     <div id="table-container">
@@ -461,6 +463,8 @@ export default {
             refreshIcon: require('../assets/images/query_refresh_white.png'),
             refreshWhite: require('../assets/images/query_refresh_white.png'),
             refreshColor: require('../assets/images/query_refresh_color.png'),
+
+            
         };
     },
     created() {
@@ -571,13 +575,6 @@ export default {
             const { alertCenter } = this.$refs;
             this.taskDetails.id = this.job_id;
             this.taskDetails.tasks = {
-                "test": {
-                    chartOptions: {},
-                    log: {
-                        stderr: "",
-                        stdout: "",
-                    }
-                }
             };
             this.taskDetails.activeTask = "test";
             axios.post(`/task-details/`,
@@ -588,7 +585,6 @@ export default {
                         'X-CSRF-Token': document.head.querySelector('meta[name="csrf-token"]').content,
                         'Content-Type': 'multipart/form-data',
                     },
-
                 }
                 ).then(res => {
                     console.log("viewTaskDetails fetched information:");
@@ -614,7 +610,7 @@ export default {
                     } else {
                         this.taskDetailsCompleted = false;
                         this.taskDetails.code = "API_ERROR";
-                        alertCenter.add('danger', res.data.message);
+                        //alertCenter.add('danger', res.data.message);
                     }
                     console.log("viewTaskDetails Result:");
                     console.log(this.taskDetails);
