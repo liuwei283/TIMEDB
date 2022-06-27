@@ -9,4 +9,6 @@ json.array! @pipelines do |pipeline|
     json.single_result_id pipeline.single_result_id
     json.multiple_result_id pipeline.multiple_result_id
     json.rendered_doc pipeline.rendered_doc
+    json.cover_image pipeline.cover_image
+、
 end

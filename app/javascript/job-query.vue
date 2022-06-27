@@ -1070,11 +1070,4 @@ export default {
     width: 10%;
     margin-right: 5px;
 }
-#list-table .btn-1 {
-    width: 150px !important;
-    height: 40px !important;
-    font-size: 15px;
-    padding: auto;
-
-}
 </style>
