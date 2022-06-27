@@ -183,11 +183,14 @@ class SubmitController < ApplicationController
       end
       if !t.analysis.blank?
         jobName = t.analysis.name
+        category = t.analysis.analysis_category.name
       else
         jobName = t.analysis_pipeline.name
+        category = "pipeline"
       end
       parsed_jobs.push({
         jobName: jobName,
+        category: category,
         jobId: t.id,
         created: t.created_at,
         status: t.status,

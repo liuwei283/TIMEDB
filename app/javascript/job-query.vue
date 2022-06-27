@@ -32,7 +32,7 @@
                     </b-input-group>
                 </div>
 
-                <div class="local-jobs container">
+                <div class="local-jobs">
                     <div class = "container row pb-2 text-center justify-content-center" style="margin:auto;">
                         <div class="col-md-4">
                         </div>
@@ -463,6 +463,12 @@ export default {
             refreshIcon: require('../assets/images/query_refresh_white.png'),
             refreshWhite: require('../assets/images/query_refresh_white.png'),
             refreshColor: require('../assets/images/query_refresh_color.png'),
+
+            modules_relation: {
+                "TIMEDB Deconv CIBERSORT": [
+                    "TIMEDB Cell Fraction Subtyping,TIMEDB KM Estimator,Correlation Analysis", "TIMEDB C1-C6 Subtyping", "TIMEDB Immunoregulator"
+                ]
+            }
 
             
         };
