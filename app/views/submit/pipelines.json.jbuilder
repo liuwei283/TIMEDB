@@ -10,5 +10,4 @@ json.array! @pipelines do |pipeline|
     json.multiple_result_id pipeline.multiple_result_id
     json.rendered_doc pipeline.rendered_doc
     json.cover_image pipeline.cover_image
-、
 end
