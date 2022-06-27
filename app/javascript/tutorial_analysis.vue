@@ -44,7 +44,7 @@
                         <br>
                 </div>
 
-                <div class="col-md-8 offset-1">
+                <div class="container">
                     <div >
 
                         <h1 class ="title">
