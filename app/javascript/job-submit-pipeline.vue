@@ -1383,6 +1383,9 @@
                     if(realWidth > windowW * scale) {
                         imgWidth = windowW * scale;
                         imgHeight = imgWidth / realWidth * realHeight;
+                    }else{
+                        imgWidth = realWidth;
+                        imgHeight = imgHeight;
                     }
 
                     $(bigimg).css("width", imgWidth);

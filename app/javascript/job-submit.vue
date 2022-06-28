@@ -513,7 +513,6 @@
             <div class = "row justify-content-center container">
                 <div class="container infor" style="background-color: #">
                     <i > Please Click the Image If You Want to Enlarge It</i>
-
                 </div>
                 <div id="rendered_doc" v-html="selected_analysis.rendered_doc" class = "text-left container" style="margin: 50px;">
                 </div>
@@ -1367,6 +1366,9 @@
                     if(realWidth > windowW * scale) {
                         imgWidth = windowW * scale;
                         imgHeight = imgWidth / realWidth * realHeight;
+                    }else{
+                        imgWidth = realWidth;
+                        imgHeight = imgHeight;
                     }
 
                     $(bigimg).css("width", imgWidth);
@@ -1374,7 +1376,7 @@
                     var w = (windowW - imgWidth) / 2;
                     var h = (windowH - imgHeight) / 2;
                     $(outerdiv).css({"top": 100, "left":w});
-                    $(outerdiv).css({"height":windowH* scale, "left":w});
+                    $(outerdiv).css({"height":windowH* scale, "width":w});
 
                     $(outerdiv).fadeIn("fast");
                 });
