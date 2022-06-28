@@ -356,6 +356,15 @@
                         </div>
                     </section>
 
+                    <section id="module_recommendation" v-if="this.modules_relation[this.category] != null" class="mt-4 mb-4">
+                        <h4 class="pb-1"> You can run the following modules using output files:</h4>
+                        <ul class="container">
+                            <li v-for="analysis_names in this.modules_relation[this.category]" v-bind:key="analysis_names">
+                                {{analysis_names}}
+                            </li>
+                        </ul>
+                    </section>
+
                 </b-card-body>
 
                 <b-card-body v-show="display==1" class="p-2">
@@ -402,6 +411,7 @@ export default {
         return {
             job_id: null,
             jobName: '',
+            category: '',
             all_jobs: [],
             fields: ["index", "jobName", "jobId", "created", "status", "operation"],
             showTable:  true,
@@ -465,12 +475,22 @@ export default {
             refreshColor: require('../assets/images/query_refresh_color.png'),
 
             modules_relation: {
-                "TIMEDB Deconv CIBERSORT": [
+                "Regression Tools": [
                     "TIMEDB Cell Fraction Subtyping,TIMEDB KM Estimator,Correlation Analysis", "TIMEDB C1-C6 Subtyping", "TIMEDB Immunoregulator"
+                ],
+                "Enrichment Tools": [
+                    "TIMEDB Cell Fraction Subtyping,TIMEDB KM Estimator,Correlation Analysis", "TIMEDB C1-C6 Subtyping", "TIMEDB Immunoregulator"
+                ],
+                "Unsupervised Tools": [
+                    "TIMEDB Cell Fraction Subtyping,TIMEDB KM Estimator,Correlation Analysis", "TIMEDB C1-C6 Subtyping", "TIMEDB Immunoregulator"
+                ],
+                "Comparison Analysis": [
+                    "Regression Tools, Consensus Tools, Enrichment Tools,Consensus Tools,TIME Estimation Comparison,single dataset,Clinical data integrated,Gene expression data integrated)"
+                ],
+                "Patient Subtyping": [
+                    "TIMEDB HR OR"
                 ]
-            }
-
-            
+            } 
         };
     },
     created() {
@@ -772,6 +792,7 @@ export default {
             window.open(window.gon.urls.download_input_demo);
         },
         searchJob() {
+            this.taskDetailsCompleted = false;
             this.refreshEnd = false;
             const { alertCenter } = this.$refs;
             
@@ -781,6 +802,7 @@ export default {
                 this.all_jobs.forEach(j => {
                     if (j.jobId === parseInt(this.job_id))
                         this.jobName = j.jobName;
+                        this.category = j.category;
                 })
                 axios.post(
                     `/query-app-task/`,

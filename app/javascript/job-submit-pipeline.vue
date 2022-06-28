@@ -69,7 +69,7 @@
 
 
             <div class = "col-md-12" id = "submit-app-back" v-if="started && !submitted ">
-                <div class = "row">
+                <div class = "row mb-5">
                     <div class="col-md-2">
                         <img v-bind:src="require('../assets/images/nav-up-blue.png')">
                         <svg width="100px" height="1100px" version="1.1" xmlns="http://www.w3.org/2000/svg">
