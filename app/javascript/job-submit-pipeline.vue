@@ -469,8 +469,10 @@
         <b-modal v-if="started" ref="submit-helper" v-model="showhelper" id = "submit-helper" size="xl" scrollable title="Analysis Helper" centered @ok="jumpToUpload">
             <br>
             <div class = "row justify-content-center container">
-                <h2> Click the Images to Enlarge</h2>
+                <div class="container infor" style="background-color: #">
+                    <i > Please Click the Image If You Want to Enlarge It</i>
 
+                </div>
                 <div id="rendered_doc" v-html="selected_analysis.rendered_doc" class = "text-left container" style="margin: 50px;">
                 </div>
             </div>
@@ -1702,6 +1704,16 @@ input[type="radio"] {
   z-index: 1000000000 !important;
 }
 
-
+.infor{
+    i{
+        font-size: 16px;
+    }
+    background-color: #314893;
+    color: #fff;
+    margin-left: 50px !important;
+    margin-right: 50px !important;
+    padding: 15px;
+    border-radius: 20px;
+}
 
 </style>
