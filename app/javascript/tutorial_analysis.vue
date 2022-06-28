@@ -44,7 +44,7 @@
                         <br>
                 </div>
 
-                <div class="container">
+                <div class="col-md-8 offset-1">
                     <div >
 
                         <h1 class ="title">
@@ -85,6 +85,7 @@
 import Vue from 'vue';
 import DropDownSelect from "page/builtin/dropdown-select.vue";
 Vue.component("dropdown-select", DropDownSelect);
+import * as $ from "jquery";
 
 
 export default {
