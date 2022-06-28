@@ -97,10 +97,6 @@ class ProjectSampleDatatable < ApplicationDatatable
     # %w(first_name last_name email phone_number)
   end
 
-  def sort_column
-    columns[params[:order]['0'][:column].to_i - 1]
-  end
-
   # def sort_direction
   #   params[:order]['0'][:dir] == "desc" ? "desc" : "asc"
   # end

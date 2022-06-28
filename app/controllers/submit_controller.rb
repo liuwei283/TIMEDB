@@ -3,9 +3,26 @@ class SubmitController < ApplicationController
   PROJECT_ID = 393
   # $user_stor_dir = "#{Rails.root}/data/user"
   def analyses
-    @analysis_categories = AnalysisCategory.order(:name)
-    category1 = "Regression Tools"
-    redirect_to action: "analysesCategory", cname: category1
+    input_aname = params[:aname]
+    if input_aname
+      if Analysis.find_by(name:input_aname)
+        Rails.logger.info "1111111"
+        category1 = Analysis.find_by(name:input_aname).analysis_category.name
+        ana1 = Analysis.find_by(name:input_aname).name
+        @analysis_categories = AnalysisCategory.order(:name)
+        redirect_to action: "analysesCategory", cname: category1, aname: ana1
+      else
+        Rails.logger.info "222222221"
+
+        redirect_to action: "analysesCategory", cname: input_aname
+      end
+    else
+      Rails.logger.info "33333331"
+
+      category1 = "Regression Tools"
+      @analysis_categories = AnalysisCategory.order(:name)
+      redirect_to action: "analysesCategory", cname: category1
+    end
   end
 
   def analysesCategory
@@ -31,6 +48,10 @@ class SubmitController < ApplicationController
       # ds_dir = File.join(user_dir, ds_name)
       # file_list = Dir.entries(ds_dir)[2..-1]
       data[ds_name] = [ps_num, platform_names, project_names] 
+    end
+
+    if params[:aname]
+      gon.push input_aname: params[:aname]
     end
 
     gon.push select_box_option: data
@@ -100,6 +121,8 @@ class SubmitController < ApplicationController
   end
 
   def query
+    @analyses = Analysis.all
+    @pipelines = AnalysisPipeline.all
     uid = session[:user_id]
     @user = User.find(uid)
     @dataset_list = @user.datasets

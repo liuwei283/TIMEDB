@@ -23,6 +23,7 @@ class ProjectsController < ApplicationController
             format.csv { send_data @projects.to_csv }
             format.json { render json: ProjectDatatable.new(view_context) }
         end
+        session[:first] = true
     end
   
     def show

@@ -154,7 +154,7 @@
                                                 <div class = "row justify-content-center">
                                                     <div class="text-center" v-for="input in displayedInputs" :key="input.id">
                                                         <label :for="`i-${input.id}`">{{ input.name }}
-                                                            <span v-if="input.required" class="required">*</span>
+                                                            <span class="required">*</span>
                                                         </label>
                                                         <div v-b-modal="'single-upload-' + input.id" class="uploadPng text-center justify-content-center container" @click="updateStepToFile()">
                                                             <img v-bind:src="require('../assets/images/big_upload.png')" style="width:90%">
@@ -272,7 +272,7 @@
                                                     </div>
                                                     <div class="col-md-10" v-for="param_input in parameters_input" :key="param_input.id">
                                                         <label :for="`p-${param_input.id}`">{{ param_input.name }}
-                                                            <span v-if="param_input.required" class="required">*</span>
+                                                            <span class="required">*</span>
                                                         </label>
                                                         <div>
                                                             <b-form-file
@@ -357,7 +357,6 @@
                                 placeholder="Choose a file or drop it here..."
                                 drop-placeholder="Drop file here..." 
                                 :name="`i-${input.id}`"
-                                :required="input.required"
                                 :disabled="picked_single_multiple=='single' && ds_selected != ''"
                             >
                             </b-form-file>
@@ -392,7 +391,7 @@
                                     <label :for="`multiple-i-${input.id}-${input_idx}`" class = "row justify-content-around">
                                         <div class = "col-md-6 text-left" style="margin:auto;">
                                             {{ input.name }}
-                                            <span v-if="input.required" class="required" style="color:red;">*</span>
+                                            <span class="required" style="color:red;">*</span>
                                         </div>
                                         <div class = "col-md-6 text-right">
                                             <button class = "btn btn-secondary">
@@ -620,6 +619,10 @@
                 if (this.analyses.length == 1) {
                     this.updateApp(this.analyses[0], true);
                 }
+                if (window.gon.input_aname != null) {
+                    var input_selected = this.analyses.find(x => x['name'] == window.gon.input_aname);
+                    this.updateApp(input_selected, true);
+                }
             });
             // for (var k in this.app.inputs){
             //     this.files['i-' + this.app.inputs[k].id]  = null;
@@ -628,8 +631,6 @@
             console.log("Coming here here");
 
             console.log(this.analyses);
-
-            
         },
         computed: {
             displayedInputs() {
