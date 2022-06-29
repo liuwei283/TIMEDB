@@ -442,12 +442,20 @@
                                                     <i class="fab fa-app-store-ios"></i> {{ key }}
                                                 </b-list-group-item>
                                                 <b-collapse visible :id="`mm-${value.id}`" class="mb-4 p-4 border">
-                                                    
-                                                    
                                                         <label :for="`multiple-p-${value.params.id}-${input_idx}`">{{ value.params.name }}
                                                             <span v-if="value.params.required" class="required" style="color:red;">*</span>
                                                         </label>
-                                                        <div v-if="value.params.param_type === 'string'">
+                                                        <div v-if="value.params.name === 'Protocol normalization'">
+                                                            <select @focus="provide_param_desc(value.params)" :value="value.params.default" :required="value.params.required" class="form-control custom-select" 
+                                                                    v-model="parameters[`multiple-p-${value.params.id}-${input_idx}`]"
+                                                                    >
+                                                                <option v-for="option in protocol_options" :value="option" :key="option"
+                                                                        selected="array_none">
+                                                                    {{ option }}
+                                                                </option>
+                                                            </select>
+                                                        </div>
+                                                        <div v-else>
                                                             <b-form-input @focus="provide_param_desc(value.params)" :value="value.params.default" :required="value.params.required"
                                                                         v-model="parameters[`multiple-p-${value.params.id}-${input_idx}`]" :state="inputValid[`multiple-p-${value.params.id}-${input_idx}`]" />
                                                         </div> 
@@ -567,14 +575,19 @@
                 multiple_sync_pnames: ["Dataset name", "Platform"],
 
                 demo_setting_json: {},
+                ptype: "",
+                protocol_options: [
+                    "array_none", "array_quantile", "RNA-Seq_TPM", "RNA-Seq_none"
+                ]
                 
             
             };
         },
         created() {
             this.ds_info = window.gon.select_box_option;
+            this.ptype = window.gon.ptype;
             
-            this.isConv = true; 
+            this.isConv = true;
             this.updateApp(null, false);
             this.select_box_option = [];
 
@@ -585,7 +598,9 @@
             }
             this.select_box_option = oplist;
 
-            axios.get('/submit/pipelines.json',).then(response => {this.analyses = response.data; console.log(response.data)});
+            axios.get('/submit/pipelines.json', { params: { ptype: this.ptype }  }).then(response => {
+                this.analyses = response.data; console.log(response.data)
+            });
             // this.multiple_completed = Array(10).fill(false);
         },
         computed: {
