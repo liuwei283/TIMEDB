@@ -244,7 +244,7 @@ class ProjectsController < ApplicationController
   
     private 
         def project_params
-            params.require(:project).permit(:project_name, :cancer_name, :num_of_samples, :cancer_id)
+            params.require(:project).permit(:project_name, :cancer_name, :num_of_samples, :cancer_id, :platform, :data_type)
         end
   
 end
