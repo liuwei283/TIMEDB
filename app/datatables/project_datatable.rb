@@ -57,7 +57,7 @@ class ProjectDatatable < ApplicationDatatable
       Rails.logger.info "0000"
       if params[:order]['0'][:column].to_i == 0
         #projects = Project.order(project_name=="TCGA_ACC")
-        projects = Project.order("project_name not LIKE '%TCGA%'")
+        projects = Project.order("project_name not LIKE '%TCGA_%'").order(:id)
         # Rails.logger.info fo_projects.class
         # Rails.logger.info "8888888888888"
         # so_projects = Project.where("project_name not like ?", "%TCGA_ACC%")
