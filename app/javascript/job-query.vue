@@ -3,7 +3,7 @@
 <div id="job-query">
     <alert-center ref="alertCenter" />
     <div>
-        <div v-if="!submitted" id="list-table"> <!---->
+        <div v-if="!submitted"> <!---->
             <b-card class="text-center query-card">
 
                 <div class="img-icon">
@@ -32,19 +32,21 @@
                     </b-input-group>
                 </div>
 
-                <div class="local-jobs .container">
+                <div class="local-jobs">
                     <div class = "container row pb-2 text-center justify-content-center" style="margin:auto;">
-                            <div class="col-4">
-                            </div>
-                            <div class= "col-4" style="margin:auto;"> 
-                                <h3 class="font-weight-bold" style="margin:auto;">Submitted Tasks</h3>
-                            </div>
-                            <div class="col-3 text-left">
-                                <b-button
-                                    class="btn-1" @click="refreshJobs()">Refresh
-                                </b-button>
-                            </div>
-                            <div class="col-1"><i v-if="!refreshEnd" class="fas fa-spinner fa-spin" style="font-size:24px"> </i> </div>
+                        <div class="col-md-4">
+                        </div>
+                        <div class= "col-md-4" style="margin:auto;"> 
+                            <h3 class="font-weight-bold" style="margin:auto;">Submitted Tasks</h3>
+                        </div>
+                        <div class="col-md-3 text-left">
+                            <b-button
+                                class="btn-1" @click="refreshJobs()">Refresh
+                            </b-button>
+                        </div>
+                        <div class="col-md-1">
+                            <i v-if="!refreshEnd" class="fas fa-spinner fa-spin" style="font-size:24px"> </i> 
+                        </div>
                     </div>
 
                     <div id="table-container">
@@ -353,7 +355,35 @@
                             </b-list-group>
                         </div>
                     </section>
+                    <hr>
 
+                    <section id="module_recommendation" v-if="modules_relation[category]" class="mt-4 mb-4">
+                        <h4> Recommended for you</h4>
+                        <!-- <ul class="container">
+                            <li v-for="analysis_names in modules_relation[category]" v-bind:key="analysis_names">
+                                {{analysis_names}}
+                            </li>
+                        </ul> -->
+
+                        <div class="row m-4 text-center" style="border-left: 10px solid #34498e;">
+                            <div class="col-4" style="width:80%;" v-for="(group,idx) in modules_relation[category]" :key="idx" >
+                                <h5>
+                                    Analysis Group 
+                                    <span v-if="modules_relation[category].length > 1"> {{idx + 1}} </span>
+                                    <b-button class="ml-2 btn btn-3" disabled>
+                                        Submit All
+                                    </b-button>
+                                </h5> 
+                                <div>
+                                    <div class="row m-4 text-center" v-for="(aname, idx2) in group.split(',')" :key="idx2" @click="updateApp(a, true)">
+                                        <b-button class="btn btn-1 w-100" @click="submitRecommendation(aname)">
+                                            <h4 class = "text-center">{{aname}}</h4>
+                                        </b-button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
                 </b-card-body>
 
                 <b-card-body v-show="display==1" class="p-2">
@@ -400,6 +430,7 @@ export default {
         return {
             job_id: null,
             jobName: '',
+            category: 'Regression Tools',
             all_jobs: [],
             fields: ["index", "jobName", "jobId", "created", "status", "operation"],
             showTable:  true,
@@ -413,6 +444,7 @@ export default {
             taskOutputs: [{value: 0, text: "Demo Files", secondaryText: ""}],
             refreshEnd: true,
             isDemo: false,
+            analysis: [],
 
             taskId: 5212,
             job_type: "app",
@@ -461,6 +493,24 @@ export default {
             refreshIcon: require('../assets/images/query_refresh_white.png'),
             refreshWhite: require('../assets/images/query_refresh_white.png'),
             refreshColor: require('../assets/images/query_refresh_color.png'),
+
+            modules_relation: {
+                "Regression Tools": [
+                    "TIMEDB Cell Fraction Subtyping,TIMEDB KM Estimator,Correlation Analysis", "TIMEDB C1-C6", "TIMEDB Immunoregulator"
+                ],
+                "Enrichment Tools": [
+                    "TIMEDB Cell Fraction Subtyping,TIMEDB KM Estimator,Correlation Analysis", "TIMEDB C1-C6", "TIMEDB Immunoregulator"
+                ],
+                "Unsupervised Tools": [
+                    "TIMEDB Cell Fraction Subtyping,TIMEDB KM Estimator,Correlation Analysis", "TIMEDB C1-C6", "TIMEDB Immunoregulator"
+                ],
+                "Comparison Analysis": [
+                    "Regression Tools,Consensus Tools,Enrichment Tools"
+                ],
+                "Patient Subtyping": [
+                    "TIMEDB HR OR"
+                ]
+            } 
         };
     },
     created() {
@@ -471,6 +521,7 @@ export default {
         } else {
             this.refreshJobs();
         }
+        axios.get('/submit/query.json',).then(response => {this.analyses = response.data; console.log("Fetched analyses data:"); console.log(response.data)});
     },
 
     beforeMount() {
@@ -565,19 +616,29 @@ export default {
             }
         }
     },
+    computed: {
+        // displayedRecommended() {
+        //     var rec_list = this.modules_relation[this.category];
+
+        //     for (var k in rec_list) {
+        //         //for each group
+        //         var group = rec_list[k].split(",");
+        //         for (var t in group) {
+        //             aname = group[t];
+        //             if (aname == "Consensus Tools") {
+        //             }
+        //         }
+                
+        //     }
+        // }
+    },
     methods: {
         //improvement multiple charts for pipelines
         viewTaskDetails() {
+            this.taskDetailsCompleted = false;
             const { alertCenter } = this.$refs;
             this.taskDetails.id = this.job_id;
             this.taskDetails.tasks = {
-                "test": {
-                    chartOptions: {},
-                    log: {
-                        stderr: "",
-                        stdout: "",
-                    }
-                }
             };
             this.taskDetails.activeTask = "test";
             axios.post(`/task-details/`,
@@ -588,7 +649,6 @@ export default {
                         'X-CSRF-Token': document.head.querySelector('meta[name="csrf-token"]').content,
                         'Content-Type': 'multipart/form-data',
                     },
-
                 }
                 ).then(res => {
                     console.log("viewTaskDetails fetched information:");
@@ -614,7 +674,7 @@ export default {
                     } else {
                         this.taskDetailsCompleted = false;
                         this.taskDetails.code = "API_ERROR";
-                        alertCenter.add('danger', res.data.message);
+                        //alertCenter.add('danger', res.data.message);
                     }
                     console.log("viewTaskDetails Result:");
                     console.log(this.taskDetails);
@@ -770,6 +830,7 @@ export default {
             window.open(window.gon.urls.download_input_demo);
         },
         searchJob() {
+            this.taskDetailsCompleted = false;
             this.refreshEnd = false;
             const { alertCenter } = this.$refs;
             
@@ -779,6 +840,7 @@ export default {
                 this.all_jobs.forEach(j => {
                     if (j.jobId === parseInt(this.job_id))
                         this.jobName = j.jobName;
+                        this.category = j.category;
                 })
                 axios.post(
                     `/query-app-task/`,
@@ -929,6 +991,10 @@ export default {
             this.job_id = token;
             this.searchJob();
         },
+        submitRecommendation(aname) {
+            if(aname=="Consensus Tools") window.location.href = '/submit/pipelines';
+            else window.location.href = '/submit/analyses/?aname=' + aname;
+        }
     },
     components: {
         AlertCenter,

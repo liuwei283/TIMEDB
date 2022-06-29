@@ -154,7 +154,7 @@
                                                 <div class = "row justify-content-center">
                                                     <div class="text-center" v-for="input in displayedInputs" :key="input.id">
                                                         <label :for="`i-${input.id}`">{{ input.name }}
-                                                            <span v-if="input.required" class="required">*</span>
+                                                            <span class="required">*</span>
                                                         </label>
                                                         <div v-b-modal="'single-upload-' + input.id" class="uploadPng text-center justify-content-center container" @click="updateStepToFile()">
                                                             <img v-bind:src="require('../assets/images/big_upload.png')" style="width:90%">
@@ -272,7 +272,7 @@
                                                     </div>
                                                     <div class="col-md-10" v-for="param_input in parameters_input" :key="param_input.id">
                                                         <label :for="`p-${param_input.id}`">{{ param_input.name }}
-                                                            <span v-if="param_input.required" class="required">*</span>
+                                                            <span class="required">*</span>
                                                         </label>
                                                         <div>
                                                             <b-form-file
@@ -357,7 +357,6 @@
                                 placeholder="Choose a file or drop it here..."
                                 drop-placeholder="Drop file here..." 
                                 :name="`i-${input.id}`"
-                                :required="input.required"
                                 :disabled="picked_single_multiple=='single' && ds_selected != ''"
                             >
                             </b-form-file>
@@ -392,7 +391,7 @@
                                     <label :for="`multiple-i-${input.id}-${input_idx}`" class = "row justify-content-around">
                                         <div class = "col-md-6 text-left" style="margin:auto;">
                                             {{ input.name }}
-                                            <span v-if="input.required" class="required" style="color:red;">*</span>
+                                            <span class="required" style="color:red;">*</span>
                                         </div>
                                         <div class = "col-md-6 text-right">
                                             <button class = "btn btn-secondary">
@@ -511,7 +510,9 @@
         <b-modal v-if="started" ref="submit-helper" v-model="showhelper" id = "submit-helper" size="xl" scrollable title="Analysis Helper" centered @ok="jumpToUpload">
             <br>
             <div class = "row justify-content-center container">
-                <h2> Click the Images to Enlarge</h2>
+                <div class="container infor" style="background-color: #">
+                    <i > Please Click the Image If You Want to Enlarge It</i>
+                </div>
                 <div id="rendered_doc" v-html="selected_analysis.rendered_doc" class = "text-left container" style="margin: 50px;">
                 </div>
             </div>
@@ -620,6 +621,10 @@
                 if (this.analyses.length == 1) {
                     this.updateApp(this.analyses[0], true);
                 }
+                if (window.gon.input_aname != null) {
+                    var input_selected = this.analyses.find(x => x['name'] == window.gon.input_aname);
+                    this.updateApp(input_selected, true);
+                }
             });
             // for (var k in this.app.inputs){
             //     this.files['i-' + this.app.inputs[k].id]  = null;
@@ -628,8 +633,6 @@
             console.log("Coming here here");
 
             console.log(this.analyses);
-
-            
         },
         computed: {
             displayedInputs() {
@@ -1364,6 +1367,9 @@
                     if(realWidth > windowW * scale) {
                         imgWidth = windowW * scale;
                         imgHeight = imgWidth / realWidth * realHeight;
+                    }else{
+                        imgWidth = realWidth;
+                        imgHeight = imgHeight;
                     }
 
                     $(bigimg).css("width", imgWidth);
@@ -1371,7 +1377,7 @@
                     var w = (windowW - imgWidth) / 2;
                     var h = (windowH - imgHeight) / 2;
                     $(outerdiv).css({"top": 100, "left":w});
-                    $(outerdiv).css({"height":windowH* scale, "left":w});
+                    $(outerdiv).css({"height":windowH* scale, "width":w});
 
                     $(outerdiv).fadeIn("fast");
                 });
@@ -1683,5 +1689,15 @@ input[type="radio"] {
 .modal.fade {
   z-index: 1000000000 !important;
 }
-
+.infor{
+    i{
+        font-size: 16px;
+    }
+    background-color: #314893;
+    color: #fff;
+    margin-left: 50px !important;
+    margin-right: 50px !important;
+    padding: 15px;
+    border-radius: 20px;
+}
 </style>

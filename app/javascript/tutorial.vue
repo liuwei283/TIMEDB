@@ -32,7 +32,7 @@
                     </div>
                     <div class="col-md-8 text-center">
                         <br><br>
-                        <h2 style="color: #99E3E7">Database Tutorial</h2>
+                        <h2 style="color: #1cb0b6 ">Database Tutorial</h2>
 
                         <div class="row">
                             <div v-for="a in articles" :id="a.id" @click="showdetail($event)" class="col-md-5 tutorial-items text-center" :key="a.id">
@@ -87,7 +87,7 @@
                     </div>
                     <div class="col-md-4 offset-1 text-center">
                         <br><br>
-                        <h2 style="color: #314893">Ask for Help</h2>
+                        <h2 style="color: #314893">Help</h2>
 
                             <div v-for="a in articles3" :id="a.id" @click="showdetail2($event)" class="tutorial-items-3 text-center" :key="a.id">
                             <b>{{a.title}}</b>
@@ -273,7 +273,7 @@ export default {
 
     .tutorial-items{
         border: solid;
-        border-color: #99E3E7;
+        border-color: #1cb0b6 ;
         border-radius: 30px ;
         margin: 10px;
         // height:5%;
@@ -282,7 +282,7 @@ export default {
         display: flex;
         align-items: center;
         justify-content: center;
-        background-color: #99E3E7;
+        background-color: #1cb0b6 ;
         color: #fff;
         &:hover{
             background-color: #fff;
