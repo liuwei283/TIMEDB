@@ -59,10 +59,18 @@ class SubmitController < ApplicationController
   end
 
   def pipelines
+    type = params[:ptype]
+    if type == "all"
+      @all_pipelines = AnalysisPipeline.where("name LIKE '%All%'").all
+      @pipelines = @all_pipelines
+    else
+      @consensus_pipelines = AnalysisPipeline.where("name LIKE '%Consensus%'").all
+      @pipelines = @consensus_pipelines
+    end
     @analysis_categories = AnalysisCategory.order(:name) #no sense, just for sidebar
-    @pipelines = AnalysisPipeline.where "hidden = false and pid is not null"
+    # @pipelines = AnalysisPipeline.where "hidden = false and pid is not null"
     Rails.logger.info "The number of the pipelines:"
-    Rails.logger.info @pipelines.count
+    #Rails.logger.info @pipelines.count
 
     uid = session[:user_id]
     @user = User.find(uid)

@@ -20,7 +20,7 @@
                 <div v-if="isConv==true" id = "singleMultipleSelect">
                     <div class="container">
                         <h2 class="display-5">
-                            Please choose to upload single or multical file(s)/dataset(s): 
+                            Please choose to upload single or multiple dataset(s): 
                         </h2>
                         <br>
                         <button type = "button" id = "single-button" class = "btn btn-dark btn-lg btn-select" @click="updateMode('single')">
@@ -47,8 +47,8 @@
                             <div class = "row" id="jumpDivStart">
                                 <div class="col-lg-4 mb-4 justify-content-center text-center" v-for="a in analyses" :key="a.pid" @click="updateApp(a, true)">
                                     <div class="card">
-                                        <img v-if="a.cover_image == null" v-bind:src="require('../assets/images/module.png')" class="card-img-top">
-                                        <img v-else :src="a.cover_image" class="card-img-top">
+                                        <img v-if="a.cover_image == null" v-bind:src="require('../assets/images/module.png')" class="card-img-top pipeline_img">
+                                        <img v-else :src="a.cover_image" class="pipeline_img card-img-top">
                                         <div v-bind:class = "selected_analysis!=null&&selected_analysis.name==a.name?'image_overlay image_overlay_blur container active':'image_overlay image_overlay_blur container'">
                                             <div class = "image_title">
                                                 {{a.name}}

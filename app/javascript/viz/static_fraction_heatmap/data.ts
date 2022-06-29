@@ -49,8 +49,6 @@ export function extractWord(word,width){
 }
 
 export function plotDataloaded(_data){
-  
-  console.log("RNAData",_data)
 
   this.data.oridata = _data
 
@@ -333,9 +331,6 @@ export function showAll(_data,key){
 
 export function clinicalDataloaded(_data){
 
-
-  console.log("Clincial Data",_data)
-
   const addNames = this.data.sampleList
   this.data.addNames = addNames
 
@@ -423,6 +418,7 @@ export function clinicalDataloaded(_data){
     legendLoc[item] = []
     showLegend(legendType[item],legendLoc[item],index,item.substring(0,2),NAlen(addName,legendType))
   })
+
   this.data.legendLoc = legendLoc
 
   
@@ -457,6 +453,14 @@ export function clinicalDataloaded(_data){
   })
   
   this.data.heatmapLoc = heatmapLoc
+
+  addName.forEach((item,index)=>{
+    this.data.heatmapLoc[item].forEach((ditem,dindex) => {
+      this.data.legendLoc[item].forEach((d,k) => {
+        ditem.data == d.data? (d.sampleSize+=1) :null
+      });
+    });
+  });
 
   
   let ppp = getfixed(this.data.maxxx)
@@ -513,9 +517,9 @@ export function clinicalDataloaded(_data){
 
   let n_legendData = []
   n_indexList.forEach((item,index)=>{
-    let min = Math.min(...n_data[item]) + ""
-    let max = Math.max(...n_data[item]) + ""
-    min == max? (max=="0"? (min = " ",max = " "):null):null
+    let min = Math.min(...n_data[item]).toFixed(1) + ""
+    let max = Math.max(...n_data[item]).toFixed(1) + ""
+    min == max? (max=="0.0"? (min = " ",max = " "):null):null
     n_legendData.push({label:item,row:n_crow[index],min: min,max: max})
   })
   let n_color = {}
@@ -530,6 +534,8 @@ export function clinicalDataloaded(_data){
   this.data.legendStyle = "false"
   this.data.oriClidata = _data
   this.data.clinicalSamples = clinicalSamples
+
+
   
   let temptips = []
   sortaddName.forEach((item,index)=>{
@@ -843,12 +849,20 @@ export function switchStyle(v){
   
     let newn_legendData = []
     newn_indexList.forEach((item,index)=>{
-      let min = Math.min(...newn_data[item]) + ""
-      let max = Math.max(...newn_data[item]) + ""
-      min == max? (max=="0"? (min = " ",max = " "):null):null
+      let min = Math.min(...newn_data[item]).toFixed(1) + ""
+      let max = Math.max(...newn_data[item]).toFixed(1) + ""
+      min == max? (max=="0.0"? (min = " ",max = " "):null):null
       newn_legendData.push({label:item,row:newn_crow[index],min: min,max: max})
     })
 
+    newsortaddName.forEach((item,index)=>{
+      newheatmapLoc[item].forEach((ditem,dindex) => {
+        newlegendLoc[item].forEach((d,k) => {
+          ditem.data == d.data? d.sampleSize += 1 :null
+        });
+      });
+    });
+    
     v.data.legendLoc = newlegendLoc
     v.data.legendType = newlegendType
     v.data.n_legendData = newn_legendData
@@ -954,9 +968,9 @@ export function switchStyle(v){
   
     let newn_legendData = []
     newn_indexList.forEach((item,index)=>{
-      let min = Math.min(...newn_data[item]) + ""
-      let max = Math.max(...newn_data[item]) + ""
-      min == max? (max=="0"? (min = " ",max = " "):null):null
+      let min = Math.min(...newn_data[item]).toFixed(1) + ""
+      let max = Math.max(...newn_data[item]).toFixed(1) + ""
+      min == max? (max=="0.0"? (min = " ",max = " "):null):null
       newn_legendData.push({label:item,row:newn_crow[index],min: min,max: max})
     })
 
@@ -1068,7 +1082,7 @@ export function NAlen(addName,legendType){
 export function showLegend(arr1,arr2,n,sign,base){
   if(sign == "c_"){
     for(let i = 0;i < arr1.length;i++){
-      const elem = {data:null,row:0,col:0,colors:null,num:0,x:0,textx:0}
+      const elem = {data:null,row:0,col:0,colors:null,num:0,x:0,textx:0,sampleSize:0}
       let colors = []
       let color
       arr1.length > 20? color = "blue":(colors = colorMap(arr1),color = colors[i])
@@ -1077,6 +1091,7 @@ export function showLegend(arr1,arr2,n,sign,base){
       elem.col = i + 1
       elem.colors = color 
       elem.num = arr1.length
+      //elem.sampleSize = 
       i == 0? elem.textx = base/2 :((arr1.length==2&&i == 1)? elem.textx = base + 1 + (180-base)/(arr1.length-1)*(i)*1/4:elem.textx=18)
       i == 0? elem.x = 0:elem.x = base + (180-base)/(arr1.length-1)*(i-1) +1
       arr2.push(elem)
@@ -1085,7 +1100,7 @@ export function showLegend(arr1,arr2,n,sign,base){
   else if(sign == "n_"){
     let tempArr = ["NA",""]
     for(let i = 0;i < tempArr.length;i++){
-      const elem = {data:null,row:0,col:0,colors:null,num:0,x:0,textx:0}
+      const elem = {data:null,row:0,col:0,colors:null,num:0,x:0,textx:0,sampleSize:null}
       elem.data = tempArr[i]
       elem.row = n
       elem.col = i + 1
@@ -1542,4 +1557,3 @@ export function dataHandler(data){
   });
   return {result: result, means, columns: columns}
 }
-
