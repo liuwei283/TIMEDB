@@ -60,9 +60,12 @@ class AdminController < ApplicationController
         file = File.open(file_path,"w")
         s = "id,project_name,clinical,subtype,rna_immu,RNA,all"
         boxplot_selector= ["Consensus","ABIS","CIBERSORTX","CIBERSORT","ConsensusTME","EPIC","ImmuCellAI","MCPcounter","quanTIseq","TIMER", "xCell"]
-        number = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];
+        number = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];
         boxplot_selector.each do |boxplot_selected|
             s += ",#{boxplot_selected}"
+        end
+        boxplot_selector.each do |boxplot_selected|
+            s += ",#{boxplot_selected}_full"
         end
         @projects = Project.order(:id)
         @projects.each do |project|
@@ -115,6 +118,15 @@ class AdminController < ApplicationController
                 if File.exists?(cellData_file_path)
                     s+= ",true"
                     number[index+5] +=1
+                else
+                    s+=',false'
+                end
+            end
+            boxplot_selector.each_with_index do |boxplot_selected,index|
+                cellData_file_path = $data_dir + "cell_data/" + boxplot_selected + "/" + name + "_" + boxplot_selected +"_full"+ ".csv";
+                if File.exists?(cellData_file_path)
+                    s+= ",true"
+                    number[index+16] +=1
                 else
                     s+=',false'
                 end

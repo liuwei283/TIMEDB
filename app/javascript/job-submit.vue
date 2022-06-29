@@ -1377,7 +1377,7 @@
                     var w = (windowW - imgWidth) / 2;
                     var h = (windowH - imgHeight) / 2;
                     $(outerdiv).css({"top": 100, "left":w});
-                    $(outerdiv).css({"height":windowH* scale, "width":w});
+                    $(outerdiv).css({"height":windowH* scale, "width":imgWidth});
 
                     $(outerdiv).fadeIn("fast");
                 });

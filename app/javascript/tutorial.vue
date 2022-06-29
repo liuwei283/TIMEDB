@@ -67,19 +67,19 @@
                 <div class="row">
                     <div class="col-md-7 text-center browser">
                         <div class=" ">
-                        <h2>Browser compatibility</h2>
+                        <h2>Browser Compatibility</h2>
                         <table class="table table-bordered">
                             <tr>
                                 <td> </td> <td>Firefox</td> <td>Chrome</td> <td>Safari</td> <td>Edge</td>
                             </tr>
                             <tr>
-                                <td>Linux</td> <td> </td> <td> </td> <td> </td> <td> </td>
+                                <td>Linux</td> <td>√ </td> <td> √</td> <td> √</td> <td> - </td>
                             </tr>
                             <tr>
-                                <td>Macos</td> <td> </td> <td>√</td> <td> </td> <td></td>
+                                <td>Macos</td> <td> √</td> <td>√</td> <td>√ </td> <td>√ </td>
                             </tr>
                             <tr>
-                                <td>Windows</td> <td> </td> <td> </td> <td> </td> <td> </td>
+                                <td>Windows</td> <td>√ </td> <td> √</td> <td>√ </td> <td>√ </td>
                             </tr>
                         </table>
                         <p>Browser compatibility of TIMEDB, √ for pass and - for not applicable</p>
@@ -100,7 +100,7 @@
                 <br><br>
             </div>
             <div v-if="this.found == true">
-                <h1 class="title"><i class="fa fa-caret-left" @click="backsearch"></i>There are the search results</h1>
+                <h1 class="title" style="text-align: left;"><i class="fa fa-caret-left" @click="backsearch"></i>There are the search results</h1>
 
                 <div class="row" style="margin-left:15%">
                     <div v-for="a in results" :id="a.id" @click="showdetail($event)" class="col-md-5 tutorial-items text-center" :key="a.id">
@@ -133,22 +133,21 @@ export default {
         return {
                 details: 0,
                 articles:[
-                    {title:"Introduction", id:"1",key:["intro"]},
-                    {title:"How to View Database Information", id:"2",key:["database"]},
-                    {title:"How to Add Data to Your Workspace", id:"3",key:["database"]},
-                    {title:"How to Download Database Data", id:"4",key:["database"]},
-                    {title:"How to View the  Visualization Plots", id:"5",key:["database"]},
-                    {title:"How to Download the Visualization Plots", id:"6",key:["database"]},
+                    {title:"Introduction", id:"1",key:["database","intro"]},
+                    {title:"How to View Database Information", id:"2",key:["database","information","data"]},
+                    {title:"How to Add Data to Your Workspace", id:"3",key:["database","workspace","dataset","data"]},
+                    {title:"How to Download Database Data", id:"4",key:["database","download","data"]},
+                    {title:"How to View the  Visualizations", id:"5",key:["database","visualization"]},
+                    {title:"How to Download the Visualizations", id:"6",key:["database","visualization","download"]},
                 ],
                 articles2:[
-                    {title:"Introduction", id:"1",key:["intro"]},
-                    {title:"How to Complete an Analysis", id:"2",key:["database"]},
-                    {title:"What Analysis We Have", id:"3",key:["database"]},
-                    // {title:"How to Ask Us for Help", id:"4",key:["database"]},
-                    // {title:"ou shu xian de hao kan ()", id:"5",key:["database","5"]},
+                    {title:"Introduction", id:"1",key:["anaylsis","intro"]},
+                    {title:"How to Complete an Analysis", id:"2",key:["analysis","step","complete"]},
+                    {title:"What Analysis We Have", id:"3",key:["analysis","helper","kind"]},
+
                 ],
                 articles3:[
-                    {title:"How to Ask Us for Help", id:"4",key:["database"]},
+                    {title:"How to Ask Us for Help", id:"4",key:["help","cite","contact","cityu"]},
                 ],
                 results:[],
                 results2:[],
@@ -179,11 +178,13 @@ export default {
             this.results = [];
             this.results2 = [];
             this.results3= [];
+            this.search_value = this.search_value.toLowerCase();
             console.log(this.search_value);
+
             for (var i=0; i<this.articles.length;i++){
                 for(var j =0; j<this.articles[i].key.length;j++){
                     var str = this.articles[i].key[j];
-                    if(str.indexOf(this.search_value) !=-1 && this.search_value!=''){
+                    if((str.indexOf(this.search_value) !=-1 || this.search_value.indexOf(str)!=-1)&& this.search_value!=''){
                         this.results.push(this.articles[i]);
                     }
                 }

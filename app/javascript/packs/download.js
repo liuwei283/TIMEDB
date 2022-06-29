@@ -42,5 +42,16 @@ $(document).ready(function() {
 
     });
 
+    var oTable5 = $("#table5").DataTable({
+      columnDefs: [
+        {
+          targets: 0,
+
+        }
+      ],
+      "order": [[0,"desc"]],
+      scrollX: true,
+
+    });
     
 });

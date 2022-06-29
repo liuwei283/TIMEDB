@@ -105,36 +105,107 @@ img
 .page-image
     width: 90%
 
-.sidebar
-    overflow: scroll;
-    text-align: center
-    padding-left: 0
-    position: sticky
-    width: 16.67%
-    height: 20%
-    max-height: 90vh
-    top: 10%
-    li
+// .sidebar
+//     // overflow: scroll;
+//     // text-align: center
+//     // padding-left: 0
+//     // position: sticky
+//     width: 16.67%
+//     // height: 20%
+//     // max-height: 90vh
+//     // top: 10%
+//     // li
 
-        background-color: #314893
-        color:#fff
-        padding-top: 2.5%
-        padding-bottom: 2.5%
-        border-top-right-radius: 30px
-        border-bottom-right-radius: 30px
-        &:hover
-            background-color: #1e6fff
+//     //     background-color: #314893
+//     //     color:#fff
+//     //     padding-top: 2.5%
+//     //     padding-bottom: 2.5%
+//     //     border-top-right-radius: 30px
+//     //     border-bottom-right-radius: 30px
+//     //     &:hover
+//     //         background-color: #1e6fff
         
+//     //     p
+//     //         margin: 0
+        
+//     //     height: 70px
+//     //     justify-content: center
+//     //     display: flex
+//     //     align-items: center
+
+#sidebar
+    background-color: #f8f9fa //theme gray
+    position: sticky !important
+    top: 70px !important
+    height: 1000px
+    overflow: hiden
+    margin-left: -300px
+    transition: .5s
+
+
+    &.active //use button to toggle this class
+        min-width: 350px
+        max-width: 350px
+        margin-left: 0
+        & + #main
+            transition: .5s
+            max-width: calc(100% - 250px)
+        
+        .text-right
+            font-size: 2em !important
+            position: fixed
+            left: 200px
+            top: 80px
+            transition: .5s
+    &:not(.active)
+        .text-right
+            font-size: 2em !important
+            position: fixed
+            left: 20px
+            top: 80px
+            transition: .5s
+    
+    .sidebar-content
+        
+        position: absolute
+        overflow: auto
+        // border-top: 1px solid $gray-300
+
+        #pipeline-nav-item
+            margin-top: 4em
+
         p
-            margin: 0
-        
-        height: 70px
-        justify-content: center
-        display: flex
-        align-items: center
+            margin-left: 1.5em
+            
+            margin-top: .5em
+            margin-bottom: 1em
+            font-size: 1.2em
+            padding-top: 1em
+            padding-bottom: 1em
+            
+        a
+            color: $light-theme !important
 
-.sidebar-nav
-    position: relative !important;
+        .active
+            border-right: .5em solid $light-theme
+            background-color: #bec2c9
+
+#side-tutorial-bar
+    // margin-left: 20px !important;
+    padding-left: 0;
+    list-style: none
+    li
+        padding-left: 20px;
+
+
+// .sidebar-nav
+//     position: relative !important;
+.sidebar-tutorial-toggle
+    .active 
+        display: none;
+    .active1
+        border-right: .5em solid $light-theme
+        background-color: #bec2c9
 .analysis-table
     td
         vertical-align: middle !important;
