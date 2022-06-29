@@ -12,6 +12,7 @@
     "@rails/ujs": "^6.0.0",
     "@rails/webpacker": "^5.2.1",
     "@types/ace": "^0.0.46",
+    "babel-loader": "^8.2.5",
     "axios": "^0.19.2",
     "babel-loader": "^8.2.5",
     "babel-preset-typescript-vue": "^1.1.1",
@@ -47,7 +48,6 @@
   },
   "version": "0.1.0",
   "devDependencies": {
-    "@types/jquery": "^3.5.14",
     "webpack-dev-server": "^3.11.0"
   }
 }

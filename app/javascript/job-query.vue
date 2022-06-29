@@ -3,7 +3,7 @@
 <div id="job-query">
     <alert-center ref="alertCenter" />
     <div>
-        <div v-if="!submitted"> <!---->
+        <div v-if="submitted"> <!---->
             <b-card class="text-center query-card">
 
                 <div class="img-icon">
@@ -357,7 +357,7 @@
                     </section>
                     <hr>
 
-                    <section id="module_recommendation" v-if="modules_relation[category]" class="mt-4 mb-4">
+                    <section id="module_recommendation" class="mt-4 mb-4">
                         <h4> Recommended for you</h4>
                         <!-- <ul class="container">
                             <li v-for="analysis_names in modules_relation[category]" v-bind:key="analysis_names">
@@ -521,7 +521,7 @@ export default {
         } else {
             this.refreshJobs();
         }
-        axios.get('/submit/query.json',).then(response => {this.analyses = response.data; console.log("Fetched analyses data:"); console.log(response.data)});
+        // axios.get('/submit/query.json',).then(response => {this.analyses = response.data; console.log("Fetched analyses data:"); console.log(response.data)});
     },
 
     beforeMount() {
@@ -841,6 +841,8 @@ export default {
                     if (j.jobId === parseInt(this.job_id))
                         this.jobName = j.jobName;
                         this.category = j.category;
+                        console.log("This vategory is:");
+                        console.log(this.category);
                 })
                 axios.post(
                     `/query-app-task/`,
