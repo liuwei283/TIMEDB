@@ -1,68 +1,52 @@
     <% content_for :title, 'Tutorial Database' %>
 
-            <br><br>
             <div class="row">
-                <div class="sidebar">
-                        <ul class="nav flex-column sidebar-nav">
+                <nav id="sidebar" class="active">
+                    <div class="sidebar-content">
+                        <div>
                             <a href="/tutorial">
-                                <li class="nav-item">
-                                    <p class="nav-link" >Back to Tutorial Home Page</p>
-                                </li>
+                            <p>
+                            <i class="fa fa-arrow-left"></i>Back
+                            </p>
                             </a>
-                            <br>
+                        </div>
+                        <div>
                             <a href="/tutorial/database/1">
-                                <li class="nav-item">
-                                    <p class="nav-link" >Introduction</p>
-                                </li>
+                            <p>Introduction
+                            </p>
                             </a>
-                            <br>
-                            <a href="/tutorial/database/2">
-                                <li class="nav-item">
-                                    <p class="nav-link ">How to View Database Information</p>
-                                </li>
+                        </div>
+                        <div class="sidebar-tutorial-toggle">
+                            <a href="#">
+                            <p>Usage &nbsp<i class="fa fa-angle-down" id="arrow"></i>
+                            </p>
                             </a>
-                            <br>
-                            <a href="/tutorial/database/3">
-                                <li class="nav-item" >
-                                    <p class="nav-link" >How to Add Data to Your Workspace</p>
-                                </li>
-                            </a>
-                            <br>
-                            <a href="/tutorial/database/4">
-
-                                <li class="nav-item" >
-                                    <p class="nav-link"> How to Download Database Data</p>
-                                </li>
-                            </a>
-                            <br>
-                            <a href="/tutorial/database/5">
-                                <li class="nav-item">
-                                    <p class="nav-link" >How to View the Visualizations</p>
-                                </li>
-                            </a>
-                            <br>
-                            <a href="/tutorial/database/6">
-                                <li class="nav-item" >
-                                    <p class="nav-link" > How to Download the Visualizations</p>
-                                </li>
-                            </a>
-                            <br>
+                            <ul id="side-tutorial-bar" class="active">
+                                <a href="/tutorial/database/2"><li>How to View Database Information</li></a>
+                                <a href="/tutorial/database/3"><li>How to Add Data to Your Workspace</li></a>
+                                <a href="/tutorial/database/4"><li>How to Download Database Data</li></a>
+                                <a href="/tutorial/database/5"><li  class="active1">How to View the Visualizations</li></a>
+                                <a href="/tutorial/database/6"><li>How to Download the Visualizations</li></a>
+                            </ul>
+                        </div>
+                        <div class="">
                             <a href="/tutorial/analysis/1">
-                                <li class="nav-item">
-                                    <p class="nav-link" > Analysis Tutorial</p>
-                                </li>
+                            <p>Analysis  documentation
+                            </p>
                             </a>
-                            <br>
+                        </div>
+                        <div class="">
                             <a href="/tutorial/analysis/4">
-                                <li class="nav-item" >
-                                    <p class="nav-link">How to Ask Us for Help</p>
-                                </li>
+                            <p>Help
+                            </p>
                             </a>
-                        </ul>
-                        <br>
-                </div>
+                        </div>
+                    </div>
+                </nav>
 
                 <div class="col-md-8 offset-1">
+
+                    <br><br>
 
                     <div>
 

@@ -111,7 +111,11 @@ document.addEventListener('DOMContentLoaded', (event) =>  {
         $(document.getElementById("sidebar")).toggleClass('active');
 
     });
+    $('.sidebar-tutorial-toggle').on('click', () => {
+        $("#side-tutorial-bar").toggleClass('active');
+        $("#arrow").toggleClass('fa-angle-up fa-angle-down');
 
+    });
     $('#alerts .alert-group').each((i, el) => {
         const alertGroup = $(el);
         const bar = alertGroup.find('.progress-bar');

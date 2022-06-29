@@ -1,50 +1,50 @@
 <template>
     <div>
-            <br><br>
             <div class="row">
-                <div class="sidebar">
-                        <ul class="nav flex-column sidebar-nav">
+                <nav id="sidebar" class="active">
+                    <div class="sidebar-content">
+                        <div>
                             <a href="/tutorial">
-                                <li class="nav-item" >
-                                    <p class="nav-link" >Back to Tutorial Home Page</p>
-                                </li>
+                            <p>
+                            <i class="fa fa-arrow-left"></i>Back
+                            </p>
                             </a>
-                            <br>
+                        </div>
+                        <div>
                             <a href="/tutorial/analysis/1">
-                                <li class="nav-item" >
-                                    <p class="nav-link" >Introduction</p>
-                                </li>
+                            <p>Introduction
+                            </p>
                             </a>
-                            <br>
-                            <a href="/tutorial/analysis/2">
-                                <li class="nav-item" >
-                                    <p class="nav-link ">How to Complete an Analysis</p>
-                                </li>
+                        </div>
+                        <div class="sidebar-tutorial-toggle">
+                            <a href="#">
+                            <p>Usage &nbsp<i class="fa fa-angle-down" id="arrow"></i>
+                            </p>
                             </a>
-                            <br>
-                            <a href="/tutorial/analysis/3">
-                                <li class="nav-item" >
-                                    <p class="nav-link" >What Analysis We Have</p>
-                                </li>
-                            </a>
-                            <br>
-                            <a href="/tutorial/analysis/4">
-                                <li class="nav-item" >
-                                    <p class="nav-link">How to Ask Us for Help</p>
-                                </li>
-                            </a>
-                            <br>
+                            <ul id="side-tutorial-bar" class="active">
+                                <a href="/tutorial/analysis/2"><li>How to Complete Analysis</li></a>
+                                <a href="/tutorial/analysis/3"><li class="active1">What Analysis We Have</li></a>
+                            </ul>
+                        </div>
+                        <div class="">
                             <a href="/tutorial/database/1">
-                                <li class="nav-item" >
-                                    <p class="nav-link" >Database Tutorial</p>
-                                </li>
+                            <p>Database documentation
+                            </p>
                             </a>
-                            <br>
-                        </ul>
-                        <br>
-                </div>
+                        </div>
+                        <div class="">
+                            <a href="/tutorial/analysis/4">
+                            <p>Help
+                            </p>
+                            </a>
+                        </div>
+                    </div>
+                </nav>
+
 
                 <div class="col-md-8 offset-1">
+                                <br><br>
+
                     <div >
 
                         <h1 class ="title">
