@@ -3,7 +3,7 @@
 <div id="job-query">
     <alert-center ref="alertCenter" />
     <div>
-        <div v-if="submitted"> <!---->
+        <div v-if="!submitted"> <!---->
             <b-card class="text-center query-card">
 
                 <div class="img-icon">
