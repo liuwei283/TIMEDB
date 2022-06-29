@@ -838,11 +838,11 @@ export default {
                 this.valid_name = false;
             }else {
                 this.all_jobs.forEach(j => {
-                    if (j.jobId === parseInt(this.job_id))
+                    if (j.jobId === parseInt(this.job_id)) {
                         this.jobName = j.jobName;
                         this.category = j.category;
-                        console.log("This vategory is:");
                         console.log(this.category);
+                    }
                 })
                 axios.post(
                     `/query-app-task/`,
