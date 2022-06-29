@@ -357,7 +357,7 @@
                     </section>
                     <hr>
 
-                    <section id="module_recommendation" class="mt-4 mb-4">
+                    <section id="module_recommendation" v-if="modules_relation[category] != null" class="mt-4 mb-4">
                         <h4> Recommended for you</h4>
                         <!-- <ul class="container">
                             <li v-for="analysis_names in modules_relation[category]" v-bind:key="analysis_names">
