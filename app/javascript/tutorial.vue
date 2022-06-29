@@ -73,13 +73,13 @@
                                 <td> </td> <td>Firefox</td> <td>Chrome</td> <td>Safari</td> <td>Edge</td>
                             </tr>
                             <tr>
-                                <td>Linux</td> <td> </td> <td> </td> <td> </td> <td> </td>
+                                <td>Linux</td> <td>√ </td> <td> √</td> <td> √</td> <td> - </td>
                             </tr>
                             <tr>
-                                <td>Macos</td> <td> </td> <td>√</td> <td> </td> <td></td>
+                                <td>Macos</td> <td> √</td> <td>√</td> <td>√ </td> <td>√ </td>
                             </tr>
                             <tr>
-                                <td>Windows</td> <td> </td> <td> </td> <td> </td> <td> </td>
+                                <td>Windows</td> <td>√ </td> <td> √</td> <td>√ </td> <td>√ </td>
                             </tr>
                         </table>
                         <p>Browser compatibility of TIMEDB, √ for pass and - for not applicable</p>
