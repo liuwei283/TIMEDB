@@ -6,6 +6,9 @@ class ApplicationDatatable
       @view = view
       @obj = obj
       @config = config
+      # if @first.blank?
+      #   @first = true
+      # end
     end
   
     def as_json(options = {})
@@ -27,10 +30,16 @@ class ApplicationDatatable
     end
   
     def sort_column
-      columns[params[:order]['0'][:column].to_i]
+      columns[params[:order]['0'][:column].to_i-1]
     end
   
     def sort_direction
       params[:order]['0'][:dir] == "desc" ? "desc" : "asc"
+    end
+
+    def additional_data
+      {
+        first: 'true'
+      }
     end
   end  

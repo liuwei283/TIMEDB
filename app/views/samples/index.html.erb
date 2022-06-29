@@ -91,8 +91,8 @@
 
   <%= form_tag make_selected_file_samples_path,class:(session[:dark] ? "dark-table mb-4": "mb-4"), multipart: true do %>
     <%= content_tag :table, role: :datatable, class: "display", id: "table_page", data: { url: samples_path(format: :json)} do %>
-      <p>Click <span style= "color: #006fff;">sample name</span> to view the original link of project。
-        Click <span style= "color: #006fff;">details</span> to view the data table, subtype visulization and fraction visulization.
+      <p>You can click <span style= "color: #006fff;">sample name</span> to view the original link of samples。
+      You can click <span style= "color: #006fff;">details</span> to view the detailed information for samples.
       </p>
       <thead>
             <th>

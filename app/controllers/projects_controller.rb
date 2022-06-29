@@ -23,6 +23,7 @@ class ProjectsController < ApplicationController
             format.csv { send_data @projects.to_csv }
             format.json { render json: ProjectDatatable.new(view_context) }
         end
+        session[:first] = true
     end
   
     def show
@@ -243,7 +244,7 @@ class ProjectsController < ApplicationController
   
     private 
         def project_params
-            params.require(:project).permit(:project_name, :cancer_name, :num_of_samples, :cancer_id)
+            params.require(:project).permit(:project_name, :cancer_name, :num_of_samples, :cancer_id, :platform, :data_type)
         end
   
 end

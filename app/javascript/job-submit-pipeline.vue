@@ -69,7 +69,7 @@
 
 
             <div class = "col-md-12" id = "submit-app-back" v-if="started && !submitted ">
-                <div class = "row">
+                <div class = "row mb-5">
                     <div class="col-md-2">
                         <img v-bind:src="require('../assets/images/nav-up-blue.png')">
                         <svg width="100px" height="1100px" version="1.1" xmlns="http://www.w3.org/2000/svg">
@@ -123,7 +123,7 @@
                                                 <div class = "row justify-content-center">
                                                     <div class="text-center" v-for="input in pure_inputs" :key="input.id">
                                                         <label :for="`i-${input.id}`">{{ input.name }}
-                                                            <span v-if="input.required" class="required">*</span>
+                                                            <span class="required">*</span>
                                                         </label>
                                                         <div v-b-modal="'single-upload-' + input.id" class="uploadPng text-center justify-content-center container" @click="updateStepToFile()">
                                                             <img v-bind:src="require('../assets/images/big_upload.png')" style="width:90%">
@@ -302,7 +302,7 @@
                     <p>We are preparing your visualization,you can copy the code and check the status of your work in the <a ref = "goTo" :href = "`/submit/job-query`" id = "redirection-link">[workspace]</a>.</p>
                     <div class = "row">
                         <div class = "col-md-2">
-                            <b-btn :id = "copyButton" @click = "copyToClipboard" type = "button" class = "btn btn-light">Copy</b-btn>
+                            <b-btn :id = "copyButton" @click = "copyToClipboard" type = "button" class = "btn btn-dark">Copy</b-btn>
                         </div>
                         <div class = "col-md-2">
                             <button id = "jobIDButton" type = "button" class = "btn">{{jobID}}</button>
@@ -364,7 +364,7 @@
                                     <label :for="`multiple-i-${input.id}-${input_idx}`" class = "row justify-content-around">
                                         <div class = "col-md-6 text-left" style="margin:auto;">
                                             {{ input.name }}
-                                            <span v-if="input.required" class="required" style="color:red;">*</span>
+                                            <span class="required" style="color:red;">*</span>
                                         </div>
                                         <div class = "col-md-6 text-right">
                                             <button class = "btn btn-secondary">

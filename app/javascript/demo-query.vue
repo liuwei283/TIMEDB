@@ -61,7 +61,7 @@
                     <div class="switchBtn mt-4 mb-4">
                         
                         <dropdown-select
-                            v-if="job_status == 'finished' && taskOutputs.length>1"
+                            
                             right
                             v-model="chosenOutput"
                             :options="taskOutputs"

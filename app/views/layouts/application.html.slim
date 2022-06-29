@@ -31,7 +31,7 @@ html
 
     = render 'partials/nav'
     #wrapper
-      - if %w[analysis].include? controller_name or (controller_name == 'submit' and ( action_name == 'analysesCategory' or action_name == 'pipelines')) or controller_name == 'welcome'
+      - if %w[analysis].include? controller_name or (controller_name == 'submit' and ( action_name == 'analysesCategory' or action_name == 'pipelines')) or (controller_name == 'welcome' && action_name == "index")
         = render 'partials/side_bar'
       #main
         = yield
