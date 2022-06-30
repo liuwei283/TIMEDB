@@ -1690,13 +1690,13 @@ input[type="radio"] {
 }
 .infor{
     i{
-        font-size: 16px;
+        font-size: 8px;
     }
     background-color: #314893;
     color: #fff;
     margin-left: 50px !important;
     margin-right: 50px !important;
-    padding: 15px;
+    padding: 10px;
     border-radius: 20px;
 }
 </style>

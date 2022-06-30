@@ -19,10 +19,19 @@ class TutorialController < ApplicationController
     end
     def analysis3
         @all_analysis = Analysis.all;
-        gon.push all_analysis:@all_analysis
+        @all_pipeline = AnalysisPipeline.all;
+
         @list= []
+        
         @all_analysis.each_with_index do |a, idx|
-            @list.push({value:idx, text:a.name, ana:a})
+            if(a.hidden == false)
+                @list.push({value:a, text:a.name, ana:a})
+            end
+        end
+        @all_pipeline.each_with_index do |a, idx|
+            if(a.hidden == false)
+                @list.push({value:a, text:a.name, ana:a})
+            end
         end
         gon.push text: @list
 
