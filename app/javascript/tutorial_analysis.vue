@@ -93,14 +93,14 @@ export default {
         return {
             // cancers: window.gon.cancers,
             now: null,
-            list: window.gon.all_analysis,
             test: window.gon.text,
             content: "",
-            analysis: 0,
+            analysis: "",
         }
     },
     created() {
-        this.content = this.test[this.analysis].ana.rendered_doc;
+        this.analysis=this.test[0].value;
+        this.content = this.analysis.rendered_doc;
         $('.doc').find('img').css('width','100%');
 
     },
@@ -112,7 +112,7 @@ export default {
     },
     watch:{
         analysis:function(){
-            this.content = this.test[this.analysis].ana.rendered_doc;
+            this.content = this.analysis.rendered_doc;
 
         }
     },
