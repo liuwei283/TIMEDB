@@ -184,24 +184,27 @@ export default {
             for (var i=0; i<this.articles.length;i++){
                 for(var j =0; j<this.articles[i].key.length;j++){
                     var str = this.articles[i].key[j];
-                    if((str.indexOf(this.search_value) !=-1 || this.search_value.indexOf(str)!=-1)&& this.search_value!=''){
+                    if((str.indexOf(this.search_value) !=-1 || this.search_value.indexOf(str)!=-1) && this.search_value!=''){
                         this.results.push(this.articles[i]);
+                        break;
                     }
                 }
             }
             for (var i=0; i<this.articles2.length;i++){
                 for(var j =0; j<this.articles2[i].key.length;j++){
                     var str = this.articles2[i].key[j];
-                    if(str.indexOf(this.search_value) !=-1 && this.search_value!=''){
+                    if((str.indexOf(this.search_value) !=-1 || this.search_value.indexOf(str)!=-1) && this.search_value!=''){
                         this.results2.push(this.articles2[i]);
+                        break;
                     }
                 }
             }
             for (var i=0; i<this.articles3.length;i++){
                 for(var j =0; j<this.articles3[i].key.length;j++){
                     var str = this.articles3[i].key[j];
-                    if(str.indexOf(this.search_value) !=-1 && this.search_value!=''){
+                    if((str.indexOf(this.search_value) !=-1 || this.search_value.indexOf(str)!=-1) && this.search_value!=''){
                         this.results3.push(this.articles3[i]);
+                        break;
                     }
                 }
             }
