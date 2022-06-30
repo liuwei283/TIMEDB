@@ -32,7 +32,7 @@
                     </div>
                     <div class="col-md-8 text-center">
                         <br><br>
-                        <h2 style="color: #1cb0b6 ">Database Tutorial</h2>
+                        <h2 style="color: #1cb0b6 " class="col-md-11">Database Tutorial</h2>
 
                         <div class="row">
                             <div v-for="a in articles" :id="a.id" @click="showdetail($event)" class="col-md-5 tutorial-items text-center" :key="a.id">
@@ -49,7 +49,7 @@
 
                     <div class="col-md-8 text-center">
                         <br><br>
-                        <h2 style="color: #cc4f78">Analysis Tutorial</h2>
+                        <h2 style="color: #cc4f78" class="col-md-10" >Analysis Tutorial</h2>
                         <div class="row">
                             <div v-for="a in articles2" :id="a.id" @click="showdetail2($event)" class="col-md-5 tutorial-items-red text-center" :key="a.id">
                             <b>{{a.title}}</b>
@@ -65,10 +65,11 @@
                 </div>
                 <hr><br>
                 <div class="row">
-                    <div class="col-md-7 text-center browser">
+                    <div class="col-md-8 text-center browser">
                         <div class=" ">
                         <h2>Browser Compatibility</h2>
-                        <table class="table table-bordered">
+                        <table class="table table-bordered table-striped">
+                        <tbody>
                             <tr>
                                 <td> </td> <td>Firefox</td> <td>Chrome</td> <td>Safari</td> <td>Edge</td>
                             </tr>
@@ -81,11 +82,12 @@
                             <tr>
                                 <td>Windows</td> <td>√ </td> <td> √</td> <td>- </td> <td>√ </td>
                             </tr>
+                        </tbody>
                         </table>
                         <p>Browser compatibility of TIMEDB, √ for pass and - for not applicable</p>
                         </div>
                     </div>
-                    <div class="col-md-4 offset-1 text-center">
+                    <div class="col-md-4 text-center">
                         <br><br>
                         <h2 style="color: #314893">Help</h2>
 
@@ -184,24 +186,27 @@ export default {
             for (var i=0; i<this.articles.length;i++){
                 for(var j =0; j<this.articles[i].key.length;j++){
                     var str = this.articles[i].key[j];
-                    if((str.indexOf(this.search_value) !=-1 || this.search_value.indexOf(str)!=-1)&& this.search_value!=''){
+                    if((str.indexOf(this.search_value) !=-1 || this.search_value.indexOf(str)!=-1) && this.search_value!=''){
                         this.results.push(this.articles[i]);
+                        break;
                     }
                 }
             }
             for (var i=0; i<this.articles2.length;i++){
                 for(var j =0; j<this.articles2[i].key.length;j++){
                     var str = this.articles2[i].key[j];
-                    if(str.indexOf(this.search_value) !=-1 && this.search_value!=''){
+                    if((str.indexOf(this.search_value) !=-1 || this.search_value.indexOf(str)!=-1) && this.search_value!=''){
                         this.results2.push(this.articles2[i]);
+                        break;
                     }
                 }
             }
             for (var i=0; i<this.articles3.length;i++){
                 for(var j =0; j<this.articles3[i].key.length;j++){
                     var str = this.articles3[i].key[j];
-                    if(str.indexOf(this.search_value) !=-1 && this.search_value!=''){
+                    if((str.indexOf(this.search_value) !=-1 || this.search_value.indexOf(str)!=-1) && this.search_value!=''){
                         this.results3.push(this.articles3[i]);
+                        break;
                     }
                 }
             }

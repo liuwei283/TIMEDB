@@ -106,11 +106,11 @@ export function ClinicalProcessor(data, c16Classification ) {
     const group = Object.keys(c16Classification.group).sort();
     const valid = Object.keys(c16Classification.mapper);
     const mapper = c16Classification.mapper;
-    const survivalData = {os: {}, pfs: {}}
+    const survivalData = {os: {}, pfs: {}};
     Object.entries(c16Classification.mapper).forEach((d: [string, string]) => {
         mapper[d[0].slice(0,12)] = d[1];
     });
-    const widMap = {}
+    const widMap = {};
     const idKey = "sample_name";
     const osKey = "os";
     const pfsKey = "pfs";
@@ -132,10 +132,17 @@ export function ClinicalProcessor(data, c16Classification ) {
                 if(mapper[d[idKey]] != null) {
                     ++widMap[colName];
                     ++result[mapper[d[idKey]]][colName];
-                    survivalData.os[mapper[d[idKey]]].push(parseFloat(d[osKey]));
-                    survivalData.pfs[mapper[d[idKey]]].push(parseFloat(d[pfsKey]));
+                    // survivalData.os[mapper[d[idKey]]].push(parseFloat(d[osKey]));
+                    // survivalData.pfs[mapper[d[idKey]]].push(parseFloat(d[pfsKey]));
                 }
             });
+        }
+    });
+    data.forEach(d => {
+        if(! valid.includes(d[idKey])) return;
+        if(mapper[d[idKey]] != null) {
+            survivalData.os[mapper[d[idKey]]].push(parseFloat(d[osKey]));
+            survivalData.pfs[mapper[d[idKey]]].push(parseFloat(d[pfsKey]));
         }
     });
     group.forEach(g => {

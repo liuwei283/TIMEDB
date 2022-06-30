@@ -72,7 +72,7 @@
                         <% if attr != 'id' and attr !='Project'%>  
                         <td>     
                             <%if @csv_test[p.project_name][attr+'_full']=='true'%>
-                            <%= link_to("#{p.project_name}_#{attr}.csv","/public/data/cell_data/#{attr}/#{p.project_name}_#{attr}'_full.csv")%>
+                            <%= link_to("#{p.project_name}_#{attr}.csv","/public/data/cell_data/#{attr}/#{p.project_name}_#{attr}_full.csv")%>
                             <% else %>No data 
                                 <%if @msg_test[p.project_name+attr +'_full'] %>
                                     <%= @msg_test[p.project_name+attr+'_full']["reason"]%>
