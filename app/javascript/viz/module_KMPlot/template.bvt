@@ -1,0 +1,200 @@
+svg {
+	Component {
+		XYPlot {
+			x = 100;y = 40
+			height = common.plotheight
+			width = common.plotwidth
+			hasPadding = false
+			@let lineData = OSPlotdata.plotData
+			data = lineData
+			dataHandler = {
+				default: {
+					values: d => d.values,
+					pos: d => d[0],
+					min: d => d[1],
+					value: d => d[1],
+				}
+			}
+			valueRange = [0, 1]
+			Axis("bottom") { y = 100% }
+			Axis("left");
+			Rect {
+				width = 100%
+				height = 100%
+				fill = "none"
+				stroke = "black"
+				strokeWidth = 1
+			}
+			@for (d, i) in lineData {
+				Polyline {
+					key = i + "line"
+					points = @scaled(d.values)
+					stroke = OSPlotdata.colormap[OSPlotdata.groupindex[d.key]]
+					strokeWidth = 2
+				}
+			}
+			@for (d,i) in OSDotsdata{
+				@for (k,n) in d.values{
+					Text.centered {
+						x = @scaled-x(k[0]); y = @scaled-y(k[1])
+						text = "+"
+						fill = OSPlotdata.colormap[d.key]
+						fontSize = 12
+					}
+				}
+				
+			}
+			Text {
+				text = "OS"
+				x = 50%; y = -common.offset-5
+				fontSize = common.titlesize
+				anchor = @anchor("bottom", "center")
+			}
+			Text {
+				text = "Time (Day)"
+				x = 50%; y = @geo(100, 15)
+				anchor = @anchor("top", "center")
+			}
+			Component {
+				x = -25; y = 50%
+				rotation = @rotate(-90)
+				Text {
+					text = "Survival Probability"
+					anchor = @anchor("bottom", "center")
+				}
+			}
+			Container {
+				x = common.plotwidth;y = -20
+				Rect {
+                    x = 20;y = 18
+                    width = 30 + common.maxtextlength;
+					height = OSPlotdata.groupindex.length *12 + 22
+                    stroke = "black"
+                    fill = "none"
+                }
+				Text {
+					x = 25;y = 20
+					text = OSPlotdata.chosenClinical
+					fontSize = 12
+				}
+				@for (item, index) in OSPlotdata.groupindex {
+                    Rect {
+                        key = index
+                        x = 30;
+						y = (index+1)*12 -2.5 + 30
+                        height = 5;width = 12
+                        fill = OSPlotdata.colormap[item]
+                    }
+                    Text {
+                        key = index
+                        x = 50;
+						y = (index+1)* 12 - 5 + 30
+                        text = item
+                        fill = "#000"
+                        fontSize = 10
+                    }
+                }
+			}
+		}
+		XYPlot {
+			x = 220 + common.plotwidth + common.maxtextlength ;
+			y = 40
+			height = common.plotheight
+			width = common.plotwidth
+			hasPadding = false
+			@let lineData = PFSPlotdata.plotData
+			data = lineData
+			dataHandler = {
+				default: {
+					values: d => d.values,
+					pos: d => d[0],
+					min: d => d[1],
+					value: d => d[1],
+				}
+			}
+			valueRange = [0, 1]
+			Axis("bottom") { y = 100% }
+			Axis("left");
+			Rect {
+				width = 100%
+				height = 100%
+				fill = "none"
+				stroke = "black"
+				strokeWidth = 1
+			}
+			@for (d, i) in lineData {
+				Polyline {
+					key = i + "line"
+					points = @scaled(d.values)
+					stroke = PFSPlotdata.colormap[PFSPlotdata.groupindex[d.key]]
+					strokeWidth = 2
+				}
+			}
+			@for (d,i) in PFSDotsdata{
+				@for (k,n) in d.values{
+					Text.centered {
+						x = @scaled-x(k[0]); y = @scaled-y(k[1])
+						text = "+"
+						fill = PFSPlotdata.colormap[d.key]
+						fontSize = 12
+					}
+				}
+				
+			}
+			Text {
+				text = "PFS"
+				x = 50%; y = -common.offset-5
+				fontSize = common.titlesize
+				anchor = @anchor("bottom", "center")
+			}
+
+			Text {
+				text = "Time (Day)"
+				x = 50%; y = @geo(100, 15)
+				anchor = @anchor("top", "center")
+			}
+
+			Component {
+				x = -25; y = 50%
+				rotation = @rotate(-90)
+				Text {
+					text = "Survival Probability"
+					anchor = @anchor("bottom", "center")
+				}
+			}
+			Container {
+				x = common.plotwidth;y = -20
+				Rect {
+                    x = 20;y = 18
+                    width = 30 + common.maxtextlength;
+					height = PFSPlotdata.groupindex.length *12 + 22
+                    stroke = "black"
+                    fill = "none"
+                }
+				Text {
+					x = 25;y = 20
+					text = PFSPlotdata.chosenClinical
+					fontSize = 12
+				}
+				@for (item, index) in PFSPlotdata.groupindex {
+                    Rect {
+                        key = index
+                        x = 30;
+						y = (index+1)*12 -2.5 + 30
+                        height = 5;width = 12
+                        fill = PFSPlotdata.colormap[item]
+                    }
+                    Text {
+                        key = index
+                        x = 50;
+						y = (index+1)*12 -5 + 30
+                        text = item
+                        fill = "#000"
+                        fontSize = 10
+                    }
+                }
+			}
+
+		}
+	}
+}

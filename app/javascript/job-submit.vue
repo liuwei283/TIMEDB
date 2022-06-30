@@ -154,7 +154,7 @@
                                                 <div class = "row justify-content-center">
                                                     <div class="text-center" v-for="input in displayedInputs" :key="input.id">
                                                         <label :for="`i-${input.id}`">{{ input.name }}
-                                                            <span class="required">*</span>
+                                                            <span v-if="input.required" class="required">*</span>
                                                         </label>
                                                         <div v-b-modal="'single-upload-' + input.id" class="uploadPng text-center justify-content-center container" @click="updateStepToFile()">
                                                             <img v-bind:src="require('../assets/images/big_upload.png')" style="width:90%">
@@ -391,7 +391,7 @@
                                     <label :for="`multiple-i-${input.id}-${input_idx}`" class = "row justify-content-around">
                                         <div class = "col-md-6 text-left" style="margin:auto;">
                                             {{ input.name }}
-                                            <span class="required" style="color:red;">*</span>
+                                            <span v-if="input.required" class="required">*</span>
                                         </div>
                                         <div class = "col-md-6 text-right">
                                             <button class = "btn btn-secondary">
@@ -453,11 +453,11 @@
                                         <label :for="`multiple-p-${param.id}-${input_idx}`">{{ param.name }}
                                             <span v-if="param.required" class="required" style="color:red;">*</span>
                                         </label>
-                                        <div v-if="param.param_type === 'enum'">
+                                        <div v-if="param.name === 'Protocol normalization'">
                                             <select @focus="provide_multiple_param_desc(param)" :id="`multiple-p-${param.id}-${input_idx}`" class="form-control custom-select"  :placeholder="parameters[`multiple-p-${param.id}-${input_idx}`]"
                                                     v-model="parameters[`multiple-p-${param.id}-${input_idx}`]" :required="param.required" :name="`multiple-p-${param.id}-${input_idx}`">
-                                                <option v-for="option in param.options" :value="option" :key="option"
-                                                        :selected="param.default == option ? 'selected' : ''">
+                                                <option v-for="option in protocol_options" :value="option" :key="option"
+                                                        selected="array_none">
                                                     {{ option }}
                                                 </option>
                                             </select>
@@ -480,25 +480,22 @@
                                         <label :for="`dp-${input_idx}`">{{ ds_params.name }} for selected dataset
                                             <span v-if="ds_params.required" class="required"  style="color:red;">*</span>
                                         </label>
-                                        <div v-if="ds_params.param_type === 'enum'">
-                                            <select @focus="provide_multiple_param_desc(ds_params)" :id="`dp-${input_idx}`" class="form-control custom-select"
-                                                    v-model="ds_param_selected[input_idx - 1]" :required="ds_params.required" :name="`${ds_params.name}-${input_idx}`">
-                                                <option v-for="option in ds_params.options" :value="option" :key="option"
-                                                        :selected="ds_params.default == option ? 'selected' : ''">
+                                        <div>
+                                            <select @focus="provide_multiple_param_desc(ds_params)" class="form-control custom-select"
+                                                    v-model="ds_param_selected[input_idx - 1]" :required="ds_params.required" :placeholder="ds_param_selected[input_idx - 1]">
+                                                <option v-for="option in protocol_options" :value="option" :key="option"
+                                                        selected="array_none">
                                                     {{ option }}
                                                 </option>
                                             </select>
                                         </div>
-                                        <div v-else>
-                                            <b-form-input @focus="provide_multiple_param_desc(ds_params)" :id="`dp-${input_idx}`" :required="ds_params.required" :placeholder="ds_param_selected[input_idx - 1]"
-                                            v-model="ds_param_selected[input_idx - 1]" :name="`${ds_params.name}-${input_idx}`" />
-                                        </div>
+                                        
                                     </div>
                                 </div>
                             </div>
 
                             <div class = "col-md-6 text-left" style="vertical-align:center; height:300px;overflow:scroll;">
-                                <h2>Parameters description</h2>
+                                <!-- <h2>Parameters description</h2> -->
                                 <div id = "multiple_params_desc" v-html="multiple_params_desc"></div>
                             </div>
                         </div>
@@ -596,7 +593,9 @@
                 showhelper: false,
                 parameters_input: [],
                 local_analysis_name: "",
-
+                protocol_options: [
+                    "array_none", "array_quantile", "RNA-Seq_TPM", "RNA-Seq_none"
+                ],
                 test_description: "<h5>There are something testing description</h5><ul><li>The first row is for something.</li><li>The first column is for something. It should be something.</li><li>Please be noted that the uploader is for something and somethind should be...</li></ul><p>This is the end of this line.</p>"
             };
         },

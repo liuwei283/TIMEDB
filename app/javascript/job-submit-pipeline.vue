@@ -123,7 +123,7 @@
                                                 <div class = "row justify-content-center">
                                                     <div class="text-center" v-for="input in pure_inputs" :key="input.id">
                                                         <label :for="`i-${input.id}`">{{ input.name }}
-                                                            <span class="required">*</span>
+                                                            <span v-if="input.name != 'Clinical data'" class="required">*</span>
                                                         </label>
                                                         <div v-b-modal="'single-upload-' + input.id" class="uploadPng text-center justify-content-center container" @click="updateStepToFile()">
                                                             <img v-bind:src="require('../assets/images/big_upload.png')" style="width:90%">
@@ -259,7 +259,7 @@
                                                     </div>
                                                     <div class="col-md-10" v-for="param_input in parameters_input" :key="param_input.id">
                                                         <label :for="`p-${param_input.id}`">{{ param_input.name }}
-                                                            <span v-if="param_input.required" class="required">*</span>
+                                                            <span class="required">*</span>
                                                         </label>
                                                         <div>
                                                             <b-form-file
@@ -364,7 +364,7 @@
                                     <label :for="`multiple-i-${input.id}-${input_idx}`" class = "row justify-content-around">
                                         <div class = "col-md-6 text-left" style="margin:auto;">
                                             {{ input.name }}
-                                            <span class="required" style="color:red;">*</span>
+                                            <span v-if="input.name != 'Clinical data'" class="required">*</span>
                                         </div>
                                         <div class = "col-md-6 text-right">
                                             <button class = "btn btn-secondary">

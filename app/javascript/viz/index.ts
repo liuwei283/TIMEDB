@@ -11,6 +11,8 @@ import { registerUMAP } from "./UMAP";
 import { registerSubtype } from "./Subtype";
 import { registerimmunoRegulator} from "./immunoRegulator";
 import { registerModuleComparedPlot} from "./module_comparedPlot";
+import { registerModuleKMPlot } from "./module_KMPlot";
+import { registerModuleConsensusView } from "./module_consensusView";
 import { registerCellCorrelation} from "./CellCorrelation";
 
 declare global {
@@ -59,5 +61,12 @@ export function registerViz(moduleName) {
             break;
         case "CellCorrelation":
             registerCellCorrelation();
+            break;
+        case "module_KMPlot":
+            registerModuleKMPlot();
+            break;
+        case "module_consensusView":
+            registerModuleConsensusView();
+            break;
     }
 }
