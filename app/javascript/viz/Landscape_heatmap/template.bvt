@@ -272,7 +272,7 @@ svg{
                                 fontSize = 8
                             }
                             Text.centered {
-                                x = 170;y = (item.row-0.5)*gridPlotheight
+                                x = 175-n_legendmaxlength;y = (item.row-0.5)*gridPlotheight
                                 text = item.max
                                 fontSize = 8
                             }
@@ -328,40 +328,40 @@ svg{
             }
         }
 
-        @if (state.activeX !== null && setPlot==true){
-                Rect {
-                    x = state.activeX;
-                    y = 60
-                    height = cellList.length *12 + 10
-                    width = gridPlotWidth-2
-                    stroke = "#000"
-                    strokeWidth = 2
-                    fill = "none"
-                    events = "none"
-                }
-                Rect {
-                    x = state.activeX;
-                    y = cellList.length *12 + 50 + 51
-                    height = RNAData.useData[0].row*gridPlotheight + (cellList.length-1)*gridPlotheight
-                    width = gridPlotWidth-2
-                    stroke = "#000"
-                    strokeWidth = 2
-                    fill = "none"
-                    events = "none"
-                }
-                Rect {
-                    x = state.activeX;
-                    y = (cellList.length-1) * gridPlotheight + cellList.length *12 + 150 + 12.2
-                    // height = (cellList.length-1) *12 + 10
-                    height = ClinicalData.sortaddName.length*12
-                    //@expr console.log("ClinicalData.sortaddName:",ClinicalData.sortaddName.length)
-                    width = gridPlotWidth-2
-                    stroke = "#000"
-                    strokeWidth = 2
-                    fill = "none"
-                    events = "none"
-                }
-        }
+        // @if (state.activeX !== null && setPlot==true){
+        //         Rect {
+        //             x = state.activeX;
+        //             y = 60
+        //             height = cellList.length *12 + 10
+        //             width = gridPlotWidth-2
+        //             stroke = "#000"
+        //             strokeWidth = 2
+        //             fill = "none"
+        //             events = "none"
+        //         }
+        //         Rect {
+        //             x = state.activeX;
+        //             y = cellList.length *12 + 50 + 51
+        //             height = RNAData.useData[0].row*gridPlotheight + (cellList.length-1)*gridPlotheight
+        //             width = gridPlotWidth-2
+        //             stroke = "#000"
+        //             strokeWidth = 2
+        //             fill = "none"
+        //             events = "none"
+        //         }
+        //         Rect {
+        //             x = state.activeX;
+        //             y = (cellList.length-1) * gridPlotheight + cellList.length *12 + 150 + 12.2
+        //             // height = (cellList.length-1) *12 + 10
+        //             height = ClinicalData.sortaddName.length*12
+        //             //@expr console.log("ClinicalData.sortaddName:",ClinicalData.sortaddName.length)
+        //             width = gridPlotWidth-2
+        //             stroke = "#000"
+        //             strokeWidth = 2
+        //             fill = "none"
+        //             events = "none"
+        //         }
+        // }
         
     }
 }

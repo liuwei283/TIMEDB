@@ -516,9 +516,11 @@ export function clinicalDataloaded(_data){
   })
 
   let n_legendData = []
+  let n_legendtextlength = []
   n_indexList.forEach((item,index)=>{
     let min = Math.min(...n_data[item]).toFixed(1) + ""
     let max = Math.max(...n_data[item]).toFixed(1) + ""
+    n_legendtextlength.push(TextSize.measuredTextSize(max,8).width)
     min == max? (max=="0.0"? (min = " ",max = " "):null):null
     n_legendData.push({label:item,row:n_crow[index],min: min,max: max})
   })
@@ -528,6 +530,10 @@ export function clinicalDataloaded(_data){
       n_color[item.label] = {min:item.min,max:item.max}
     }
   })
+  
+  this.data.n_legendmaxlength = Math.max(...n_legendtextlength).toFixed(0)
+  console.log("?????textmaxlength::::",this.data.n_legendmaxlength)
+
   this.data.n_color = n_color
   
   this.data.n_legendData = n_legendData
