@@ -559,7 +559,7 @@ class SubmitController < ApplicationController
       end
     rescue StandardError => e
       result_json[:code] = false
-      result_json[:data] = e.message
+      result_json[:data] = e.message + "\nWe do not have corrosponding rna file."
     end
     render json: result_json
   end

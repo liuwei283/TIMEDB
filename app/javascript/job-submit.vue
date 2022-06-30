@@ -957,8 +957,8 @@
 
                         }
                         else {
-                            this.single_parameters = this.app.params.filter(x => !['Platforms', 'Datasets name', 'Protocol normalization'].includes(x['name']));
-                            this.multiple_parameters = this.app.params.filter(x => ['Platforms', 'Datasets name', 'Protocol normalization'].includes(x['name']));
+                            this.single_parameters = this.app.params.filter(x => !['Platform name', 'Platform', 'Dataset name', 'Protocol normalization'].includes(x['name']));
+                            this.multiple_parameters = this.app.params.filter(x => ['Platform name', 'Platform', 'Dataset name', 'Protocol normalization'].includes(x['name']));
                             this.multiple_completed = Array(10).fill(false); // for both file upload and related parameter setting under multiple mode
                             this.ds_selected = Array(10).fill("");
                             this.ds_param_selected = Array(10).fill("");
