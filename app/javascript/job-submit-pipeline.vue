@@ -479,12 +479,13 @@
             <div class = "row justify-content-center container">
                 <div class="container infor" style="background-color: #">
                     <i > Please Click the Image If You Want to Enlarge It</i>
-
                 </div>
                 <div id="rendered_doc" v-html="selected_analysis.rendered_doc" class = "text-left container" style="margin: 50px;">
                 </div>
             </div>
+
         </b-modal>
+
             <div id="outerdiv" style="position:fixed; border-color:rgba(0,0,0,0.7);z-index:99999;display:none;overflow: scroll;">
                 <div id="innerdiv" style="">
                     <img id="bigimg" style="border:5px solid #fff;" src=""/>
@@ -1408,7 +1409,7 @@
                     var w = (windowW - imgWidth) / 2;
                     var h = (windowH - imgHeight) / 2;
                     $(outerdiv).css({"top": 100, "left":w});
-                    $(outerdiv).css({"height":windowH* scale, "left":imgWidth});
+                    $(outerdiv).css({"height":windowH* scale, "width":imgWidth});
 
                     $(outerdiv).fadeIn("fast");
                 });
@@ -1724,13 +1725,13 @@ input[type="radio"] {
 
 .infor{
     i{
-        font-size: 16px;
+        font-size: 8px;
     }
     background-color: #314893;
     color: #fff;
     margin-left: 50px !important;
     margin-right: 50px !important;
-    padding: 15px;
+    padding: 10px;
     border-radius: 20px;
 }
 

@@ -101,6 +101,8 @@ export default {
     },
     created() {
         this.content = this.test[this.analysis].ana.rendered_doc;
+        $('.doc').find('img').css('width','100%');
+
     },
     mounted() {
 
