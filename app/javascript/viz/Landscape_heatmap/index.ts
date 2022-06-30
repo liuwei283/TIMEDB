@@ -67,11 +67,13 @@ function init() {
             number:null,
             rank:null
           },
-          setActive(data,rank){
-            this.AcitiveDots.number=data[1];
-            this.AcitiveDots.index=data[0];
-            this.AcitiveDots.rank=rank;
-            this.redraw();
+          setPlot:false,
+          setActive(x: number|string,y: number = null){
+            if(typeof x=== "string"){
+              const xPos = this.sampleList.indexOf(x)*(this.gridPlotWidth-2)+ 300
+              this.setState({activeX: xPos});
+              this.setPlot = true
+            }else{this.setState({activeX: x, activeY:y})}
           },
           replaceUpper(text,width){
             let x = TextSize.measuredTextSize(text, 8).width;

@@ -81,5 +81,3 @@ export function processconfig(v){
     v.data.BarData = v.data.BarData.slice(0,v.data.chosenMethod.length)
     v.data.PieData = v.data.PieData.slice(0,v.data.chosenMethod.length)
 }
-
-

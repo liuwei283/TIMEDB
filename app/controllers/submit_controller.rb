@@ -26,6 +26,8 @@ class SubmitController < ApplicationController
   end
 
   def analysesCategory
+    Rails.logger.info "33333331"
+
     @analysis_categories = AnalysisCategory.order(:name)
     @analysis_category = AnalysisCategory.find_by name:params[:cname]
 
@@ -59,8 +61,18 @@ class SubmitController < ApplicationController
   end
 
   def pipelines
+    type = params[:ptype]
+    Rails.logger.info params[:ptype]
+    Rails.logger.info params[:ptype].class
+    Rails.logger.info "777"
+    if type == "all"
+      @all_pipelines = AnalysisPipeline.where("name LIKE '%All%'").all
+      @pipelines = @all_pipelines
+    else
+      @consensus_pipelines = AnalysisPipeline.where("name LIKE '%Consensus%'").all
+      @pipelines = @consensus_pipelines
+    end
     @analysis_categories = AnalysisCategory.order(:name) #no sense, just for sidebar
-    @pipelines = AnalysisPipeline.where "hidden = false and pid is not null"
     Rails.logger.info "The number of the pipelines:"
     Rails.logger.info @pipelines.count
 
@@ -77,9 +89,9 @@ class SubmitController < ApplicationController
       # file_list = Dir.entries(ds_dir)[2..-1]
       data[ds_name] = [ps_num, platform_names, project_names] 
     end
-
     gon.push select_box_option: data
-    
+    gon.push ptype: type
+
   end
 
 

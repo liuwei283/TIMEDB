@@ -13,9 +13,12 @@ div class=('active' if @pipelines.blank? && @analysis_category.blank?) id = "pip
     p 
         = link_to "Analysis Helper", "/tutorial/analysis/3"
 
-div class=('active' if !@pipelines.blank? )
+div class=('active' if !@consensus_pipelines.blank? )
     p 
-        = link_to "Consensus Tools", {:controller => "submit", :action => "pipelines" }
+        = link_to "Consensus Tools", {:controller => "submit", :action => "pipelines", :ptype => "consensus" }
+div class=('active' if !@all_pipelines.blank? )
+    p 
+        = link_to "Estimation Comparison", {:controller => "submit", :action => "pipelines", :ptype => "all" }
 
 div class=('active' if !@analysis_category.blank? && @analysis_category.name == "Comparison Analysis")
     p

@@ -55,7 +55,7 @@
                     </div>
                 </div>
                 <div class="row veBlock">
-                    <div class="md-col-9 vis vizBlock" id = "fraction-pieVis">
+                    <div class="md-col-9" id = "fraction-pieVis">
                     </div>
                     <div id="fraction-pie-editor" class = "md-col-3 v-editor">
                         <OvizEditor :config="fraction_conf_pie" :editorWidth = "280"/>
@@ -72,7 +72,7 @@
 
         <div id = "fraction-boxplot" class = "container Block">
             <div class="row description">
-              <h4>Project Immune Cell Fraction Boxplot</h4>
+              <h4>Project TIME Estimation Cell Fraction Boxplot</h4>
             </div>
 
             <div class="select-bar form-inline row">
@@ -190,7 +190,7 @@
                     </div>
                 </div>
                 <div class="row veBlock">
-                    <div class="need-upload w-100 text-center container" v-if="isLoading">
+                    <div class="need-upload w-100 text-center container" v-if="heatMapisLoading">
                         <img v-bind:src="require('../assets/images/loading_icon.gif')" style="width:50%;">
                     </div>
                     <div class="md-col-9 vis vizBlock" id = "fraction-heatmapVis">
@@ -208,7 +208,7 @@
 
         <div id = "fraction-landscape" class = "container Block">
             <div class="row description">
-              <h4>Project Consensus Immune Cell Fraction Landscape</h4>
+              <h4>Project Consensus TIME Estimation Cell Fraction Landscape</h4>
             </div>
 
             <div class="select-bar form-inline row">
@@ -255,7 +255,7 @@
                     </div>
                 </div>
                 <div class="row veBlock">
-                    <div class="need-upload w-100 text-center container" v-if="isLoading">
+                    <div class="need-upload w-100 text-center container" v-if="landscapeisLoading">
                         <img v-bind:src="require('../assets/images/loading_icon.gif')" style="width:50%;">
                     </div>
                     <div class="md-col-9 vis vizBlock" id = "fraction-landscapeVis">
@@ -351,7 +351,8 @@ export default {
             landscape_cell_fexists: true,
             heatmap_fexists: null,
             clinical_file_path: "",
-            isLoading: false,
+            heatMapisLoading: false,
+            landscapeisLoding: false,
         }
     },
     //设置默认值
@@ -365,7 +366,12 @@ export default {
         event.on(
             event.DATA_LOADING_FINISHED,
             () => {
-                this.isLoading = false;
+                if(this.heatMapisLoading == true) {
+                    this.heatMapisLoading = false;
+                }
+                if(this.landscapeisLoading == true) {
+                    this.landscapeisLoading = false;
+                }
                 this.$root.$emit("data-loaded");
             },
             "vapp-load-finished",
@@ -374,7 +380,7 @@ export default {
         event.on(
             event.DATA_LOADING_STARTED,
             () => {
-                this.isLoading = true;
+                // this.isLoading = true;
             },
             "vapp-load-started",
         );
@@ -415,6 +421,7 @@ export default {
 
         },
         landscapeViz(){
+            this.landscapeisLoading = true;
             var cellData_file_path = this.data_path + "cell_data/Consensus/" + this.project_name + "_Consensus.csv";
             this.landscape_cell_fexists = this.file_exist['Consensus'];
             
@@ -428,6 +435,7 @@ export default {
         },
 
         heatmapViz() {
+            this.heatMapisLoading = true;
             var cellData_file_path = this.data_path + "cell_data/" + this.heatmap_selected + "/" + this.project_name + "_" + this.heatmap_selected + ".csv";
             this.heatmap_fexists = this.file_exist[this.heatmap_selected];
             if(this.clinical_fexists=="true" && this.heatmap_fexists=='true'){
@@ -435,7 +443,6 @@ export default {
                 fractionHeatmap("#fraction-heatmapVis", this.clinical_file_path, cellData_file_path, "#fraction-heatmap-editor", "fraction_heatmap_viz", this.vue_name);
             }else{
                 document.getElementById("fraction_heatmapBlock").style.display = "none";
-
             }
         },
 

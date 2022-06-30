@@ -189,7 +189,6 @@
                             v-model="chosenModule"
                             :options="module_names"
                             class="tool-bar-el px-0 mb-1 col-md-3"/><!--v-if="data.outputs.length > 1"-->
-
                     </div>
                 </b-card-header>
 
@@ -370,9 +369,9 @@
                                 <h5>
                                     Analysis Group 
                                     <span v-if="modules_relation[category].length > 1"> {{idx + 1}} </span>
-                                    <b-button class="ml-2 btn btn-3" disabled>
+                                    <!-- <b-button class="ml-2 btn btn-3" disabled>
                                         Submit All
-                                    </b-button>
+                                    </b-button> -->
                                 </h5> 
                                 <div>
                                     <div class="row m-4 text-center" v-for="(aname, idx2) in group.split(',')" :key="idx2" @click="updateApp(a, true)">
