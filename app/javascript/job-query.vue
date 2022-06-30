@@ -6,11 +6,11 @@
         <div v-if="!submitted"> <!---->
             <b-card class="text-center query-card">
 
-                <div class="img-icon">
+                <!-- <div class="img-icon">
                     <i class="fas fa-tasks"></i>
-                </div>
+                </div> -->
 
-                <p>Find your submitted task by Task ID</p>
+                
 
                 <div class="row justify-content-center">
                     <b-input-group class="justify-content-center">
@@ -30,6 +30,7 @@
                         </b-input-group-append>
 
                     </b-input-group>
+                    <p style="color:gray;font-size:1.4em;position:relative;right:30px;"><i>You could find the submitted task by Task ID.</i></p>
                 </div>
 
                 <div class="local-jobs">
@@ -111,7 +112,7 @@
 
                             </template>
                             <template #empty>
-                                <h4 class="text-center">No task... <a href="/submit/analyses">Submit your task now</a> </h4>
+                                <h4 class="text-center">No task... <a href="/submit/analyses">Please submit your tasks.</a> </h4>
                             </template>
                         </b-table>
                     </div>

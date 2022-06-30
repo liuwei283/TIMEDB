@@ -51,7 +51,11 @@ class CancerDatatable < ApplicationDatatable
   
       # will_paginate
       # users = User.page(page).per_page(per_page)
-      cancers = Cancer.order("#{sort_column} #{sort_direction}")
+      if params[:order]['0'][:column].to_i == 0
+        cancers = Cancer.order("#{columns[params[:order]['0'][:column].to_i]} #{sort_direction}")
+      else
+        cancers = Cancer.order("#{sort_column} #{sort_direction}")
+      end
       cancers = cancers.page(page).per(per_page)
       if params[:search][:value] != ""
         cancers = cancers.where(search_string.join(' or '), search: "%#{params[:search][:value]}%")

@@ -47,7 +47,11 @@ class CancerProjectDatatable < ApplicationDatatable
   
       # will_paginate
       # users = User.page(page).per_page(per_page)
-      projects = @obj.projects.order("#{sort_column} #{sort_direction}")
+      if params[:order]['0'][:column].to_i == 0
+        projects = @obj.projects.order("#{columns[params[:order]['0'][:column].to_i]} #{sort_direction}")
+      else
+        projects = @obj.projects.order("#{sort_column} #{sort_direction}")
+      end
       projects = projects.page(page).per(per_page)
       if params[:search][:value] != ""
         projects = projects.where(search_string.join(' or '), search: "%#{params[:search][:value]}%")

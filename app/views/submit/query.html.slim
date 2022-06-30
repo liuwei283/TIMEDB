@@ -13,6 +13,9 @@
     section#dataset_list
       h2.display-4.font-weight-bold.text-center
         | My dataset
+      p.text-center
+        i style="color:gray;font-size:1.4em;" You could create a dataset by selecting tumor samples from TIMEDB database and run the analysis.
+      .text-center
         button class = "btn btn-1 ml-4" style="display:inline" 
           = link_to "Dataset Helper", "/tutorial/database/3"
       br
@@ -25,10 +28,11 @@
             = image_tag 'folder-plus.svg'
     br
     br
+    
+    br
+    br
+    br
     hr
-    br
-    br
-    br
   .wide-container
     h2.mt-5.display-4.font-weight-bold.text-center
       | Task Query

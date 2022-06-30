@@ -143,14 +143,6 @@
             </div>
             <div id = "subtype-curveBlock" >
                 <div class="dropdown mb-5 mt-3">
-                    <!-- <button class="btn btn-secondary dropdown-toggle" type="button" id="subtype_curve_download_dropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        Download
-                    </button>
-                    <div class="dropdown-menu" aria-labelledby="subtype_curve_download_dropdwon">
-                        <a class="dropdown-item" :href="clinical_file_path"  id = "subtype_landscape_clincial_download">Download clinical file</a>
-                        <a class="dropdown-item" :href="subtype_file_path" id = "subtype_landscape_subtype_download">Download subtype file</a>
-                        <a class="dropdown-item viz_download" id = "subtype-curve_viz_download" @click="down_graph($event)">Download subtype curve chart</a>
-                    </div> -->
                     <div id="db-toolbar-curve" class="mb-5">
                         <div class="db-tool-nav">
                             <div class="btn btn-outline-dark" data-toggle="collapse" data-target="#download_box-curve" aria-expanded="true" aria-controls="download_box-curve">

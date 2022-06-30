@@ -374,7 +374,7 @@ export default {
     created() {
 
         event.rpcRegisterReceiver("getVue", () => this);
-        this.bar_selected = "project";
+        this.bar_selected = "cancer";
         this.pieMethodSelected = "quanTIseq";
         this.pieCancerSelected = this.cancers[0];
         this.bar_cancer_selected = "ACC";

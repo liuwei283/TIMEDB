@@ -49,7 +49,11 @@ class SampleDatatable < ApplicationDatatable
   
       # will_paginate
       # users = User.page(page).per_page(per_page)
-      samples = Sample.order("#{sort_column} #{sort_direction}")
+      if params[:order]['0'][:column].to_i == 0
+        samples = Sample.order("#{columns[params[:order]['0'][:column].to_i]} #{sort_direction}")
+      else
+        samples = Sample.order("#{sort_column} #{sort_direction}")
+      end
       samples = samples.page(page).per(per_page)
       if params[:search][:value] != ""
         samples = samples.where(search_string.join(' or '), search: "%#{params[:search][:value]}%")

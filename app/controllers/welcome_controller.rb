@@ -4,7 +4,10 @@ class WelcomeController < ApplicationController
   skip_before_action :validate_cookie, only: [:index, :tutorial ,:contact, :terms, :require_cookie]
   def index
     #@user = User.find(session[:user_id])
-    @samples_num = Sample.all.count
+    @samples_num = 0
+    Cancer.all.each do |cancer|
+      @samples_num += cancer.number_of_samples
+    end
     @cancers_num = Cancer.all.count
     @projects_num = Project.all.count
     @analysis_num = Analysis.all.count + AnalysisPipeline.all.count
