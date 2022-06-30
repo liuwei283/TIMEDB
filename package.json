@@ -14,7 +14,6 @@
     "@types/ace": "^0.0.46",
     "babel-loader": "^8.2.5",
     "axios": "^0.19.2",
-    "babel-loader": "^8.2.5",
     "babel-preset-typescript-vue": "^1.1.1",
     "bootstrap": "^4.5.0",
     "bootstrap-vue": "^2.15.0",
