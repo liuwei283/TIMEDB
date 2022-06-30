@@ -99,7 +99,7 @@ export default {
         }
     },
     created() {
-        this.analysis=this.test[0].value;
+        // this.analysis=this.test[0].value;
         this.content = this.analysis.rendered_doc;
         $('.doc').find('img').css('width','100%');
 
