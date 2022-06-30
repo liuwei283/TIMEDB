@@ -209,7 +209,7 @@
                                     
                                 </div>
 
-                                <div id="parameter-setting-step" class = "row justify-content-center submit-container-lg">
+                                <div id="parameter-setting-step" class = "row justify-content-center submit-container-lg" v-if="displayedSingleParams.length>0 || parameters_input.length>0">
                                     <div class="set-param-section">
 
                                         <h3 class = "text-center">Parameter setting</h3>

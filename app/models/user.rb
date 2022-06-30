@@ -9,9 +9,11 @@ class User < ApplicationRecord
         @users = User.where "updated_at < ?", 2.weeks.ago
         cleaned_user = []
         @users.each do |user|
-            FileUtils.rm_rf "#{Rails.root}/data/user/#{user.id}" if Dir.exist? "#{Rails.root}/data/user/#{user.id}"
-            cleaned_user << user.id
-            user.destroy
+            if (user.id != 355)
+                FileUtils.rm_rf "#{Rails.root}/data/user/#{user.id}" if Dir.exist? "#{Rails.root}/data/user/#{user.id}"
+                cleaned_user << user.id
+                user.destroy
+            end
         end
         Rails.logger.info "inactive user #{cleaned_user} cleared successfully"
     end

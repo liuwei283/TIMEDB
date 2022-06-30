@@ -3,7 +3,6 @@ class Task < ApplicationRecord
     belongs_to :analysis, optional: true
     belongs_to :analysis_pipeline, optional: true
     has_many :task_outputs, dependent: :destroy
-    # before_destroy :check_demo?, prepend: true
 
     def getBrief
         return "Task-#{id} (#{self.getAppName}, #{self.status}, user-#{self.user.id})"
@@ -22,12 +21,6 @@ class Task < ApplicationRecord
         end
         return @app_name
     end
-
-    # def check_demo?
-    #     if self.is_demo
-    #         throw(:abort)
-    #     end
-    # end
 
     def getAppId
         @app_id = ""
