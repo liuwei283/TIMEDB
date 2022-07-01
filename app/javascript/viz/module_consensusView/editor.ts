@@ -1,7 +1,7 @@
 import { generateGridPlotConfig } from "oviz-components/grid-plot";
 import { EditorDef } from "utils/editor";
 import { copyObject } from "utils/object";
-import { plotData,getBoxdata,diff_method_data,getcolormap,getDiffdata,getPiedata } from "./data";
+import { getBoxdata,getcolormap,getPiedata, filteritemmethod } from "./data";
 import {processconfig} from "./index"
 
 function run(v) {
@@ -91,6 +91,43 @@ export const generateGridConfig = (v):any =>  ({
                 ],
             },
         },
+        {
+            id: "ttxt",
+            name: "Boxplot Value Range",
+            view: {
+                type: "list",
+                items: [
+                    {
+                        title: "Boxplot Value Range Higher ",
+                        type: "input",
+                        format: "float",
+                        value: {
+                            current: v.data.valueRange[1],
+                            callback(x) {
+                                v.data.valueRange[1] = parseFloat(x);
+                                v.data._sizeUpdated = true;
+                                run(v);
+                            },
+                        },
+                    },
+                    {
+                        title: "Boxplot Value Range Lower ",
+                        type: "input",
+                        format: "float",
+                        value: {
+                            current: v.data.valueRange[0],
+                            callback(x) {
+                                v.data.valueRange[0] = parseFloat(x);
+                                v.data._sizeUpdated = true;
+                                run(v);
+                            },
+                        },
+                    },
+                    
+                ],
+            },
+        },
+    
     ]
 });
 
@@ -157,19 +194,26 @@ export const generateSelectConfig = (v):any =>  ({
                         title: "Choose Clinical Type",
                         type: "select",
                         //ref: "depthSelect",
-                        options: v.data.plotData.common.methodlist,
+                        options: v.data.methodselect,
                         bind: {
-                            object: v.data.plotData.common,
-                            path: "methodlist",
+                            object: v.data,
+                            path: "methodselect",
                             callback(d) {
+
                                 v.data.plotData.chosenMethod = d
-                                v.data.plotData.common.celllist = v.data.oridata.columns.slice(2) //cell list
-                                v.data.plotData.common.methodlist = Array.from(new Set(v.data.oridata.map(d => d["method"]))) //method list
-                                let newData = getDiffdata(plotData,v.data.oridata)
-                                getBoxdata(v.data.plotData,newData)
-                                getPiedata(v.data.plotData,newData)
-                                v.data.piecolormap = getcolormap(plotData)
-                                v.data.plotData = plotData
+
+                                console.log("d::",d)
+
+                                console.log("v.data.oridata:",v.data.initialdata)
+
+                                let newtestnon = filteritemmethod(v.data.nochangData,v.data.plotData.chosenMethod+"")
+                                console.log("editor testnon::",newtestnon)
+                                
+                                getBoxdata(v.data.plotData,newtestnon)
+                                getPiedata(v.data.plotData,newtestnon)
+
+                                v.data.piecolormap = getcolormap(v.data.plotData)
+                                v.data.plotData = v.data.plotData
                                 v.forceRedraw = true;
                                 v.run();
                             },

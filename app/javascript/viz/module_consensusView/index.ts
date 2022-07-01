@@ -8,7 +8,7 @@ import { GridPlot } from "oviz-components/grid-plot";
 import { registerEditorConfig } from "utils/editor";
 import { register } from "page/visualizers";
 import { editorConfig} from"./editor";
-import { plotDataloaded,checkIfNaN } from"./data";
+import { plotDataloaded,checkIfNaN, oriDataload } from"./data";
 import { registerDefaultBioInfoComponents } from "crux/dist/element/global";
 import { configlayout } from "./layout";
 
@@ -34,8 +34,8 @@ function init() {
                 gridwidth:98,
                 padding:4,
             },
-            showbox:true,
-            showpie:false,
+            showbox:false,
+            showpie:true,
             findNA(sampleData){
                 let num = 0,plot
                 sampleData.forEach((item,index) => {
@@ -51,6 +51,11 @@ function init() {
                 type: "csv",
                 loaded: plotDataloaded,
             },
+            consensusOri:{
+                fileKey: "consensusView",
+                type: "csv",
+                loaded: oriDataload,
+            }
             
         },
         setup() {

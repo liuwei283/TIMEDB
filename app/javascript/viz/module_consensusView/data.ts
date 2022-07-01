@@ -14,15 +14,13 @@ import { createCallSignature, isJSDocThisTag, isTemplateExpression } from "types
 import { currentEventContext } from "crux/src/event";
 import { NAME } from "crux/src/template/compiler/tokens";
 import * as TextSize from "crux/dist/utils/text-size";
-import { chooseMethod } from "immuneColor/mapColor";
-import { loadOriginalData } from "viz/dna/data";
-import { parseData } from "crux/dist/element";
+
 
 export let plotData = {
     common:{
         samplelist:[],
         methodlist:[],
-        celllist:[],
+        celllist:{},
         title:"",
         padding:null,
         pien:null,
@@ -37,8 +35,8 @@ export let plotData = {
         colorMap:{},
         valueRange:[],
         bheight:300,
-        bwidth:700,
-        fontsize:10,
+        bwidth:800,
+        fontsize:9,
     },
     chosenMethod:null,
     chosenSample:null,
@@ -51,37 +49,87 @@ export function checkIfNaN(value) {
 
 export let diff_method_data = {}
 
+export function getCelllist(_data,plotData){
+    plotData.common.celllist = {}
+    plotData.common.methodlist.forEach((item,index)=>{
+        plotData.common.celllist[item] = []
+        _data.columns.slice(1).forEach((ditem,dindex) => {
+            // ditem.split("|")[1] == item ? plotData.common.celllist[item].push(ditem.split("|")[0]):null
+            ditem.split("|")[1] == item ? plotData.common.celllist[item].push(ditem):null
+        });
+    })
+}
+export function oriDataload(_data){
+    // console.log("no change:",_data)
+    this.data.nochangData = _data
+}
+
 export function plotDataloaded(_data){
 
-    plotData.common.celllist = _data.columns.slice(2) //cell list
+    // console.log("_data:",_data)
+    let initialdata = []
+    _data.forEach((item,index) => {
+        initialdata.push(item)
+    });
+    this.data.initialdata =initialdata
+    // console.log("initial data:",initialdata)
+
     plotData.common.samplelist = Array.from(new Set(_data.map(d => d["sample_name"]))) //sample list
-    plotData.common.methodlist = Array.from(new Set(_data.map(d => d["method"]))) //method list
+    plotData.common.methodlist = Array.from(new Set(_data.columns.slice(1).map(x=>x.split("|")[1]))) //method list
 
-    diff_method_data = getDiffdata(plotData,_data)
+    getCelllist(_data,plotData)
 
-    this.data.oridata = _data
 
-    //boxplot data
-    //notice
     plotData.chosenMethod == null? plotData.chosenMethod = plotData.common.methodlist[0]:null
-    getBoxdata(plotData,diff_method_data)
 
-    //pieplot data
-    //notice
-    plotData.chosenSample == null? plotData.chosenSample = plotData.common.samplelist[0]:null
-    getPiedata(plotData,diff_method_data)
+    let testnon = filteritemmethod(_data,plotData.chosenMethod)
 
+    getBoxdata(plotData,testnon)
+    getPiedata(plotData,testnon)
+
+    this.data.valueRange = range(plotData.boxData.boxPlotdata.values,plotData.boxData.boxPlotdata.means)
+
+    // console.log("又来了又来了")
     //get colormap
     this.data.piecolormap = getcolormap(plotData)
     this.data.plotData = plotData
 
-    const methodselect = plotData.common.methodlist.map((x,index)=>new Object({"text":x,"value":index}))
-    const sampleselect = plotData.common.samplelist.map((x,index)=>new Object({"text":x,"value":index}))
-
-
-
+    const methodselect = plotData.common.methodlist.map((x =>new Object({"text":x,"value":x})))
+    // const sampleselect = plotData.common.samplelist.map((x,index)=>new Object({"text":x,"value":index}))
+    this.data.methodselect = methodselect
 
 } 
+
+export function filteritemmethod(_data,method){
+    let tempcell = []
+    let newdata = {}
+    let tempData = []
+    _data.forEach(ditem => {
+        tempData.push(JSON.parse(JSON.stringify(ditem)))
+    });
+    _data.columns.slice(1).forEach((k,t)=>{
+        k.split("|")[1] != method? tempcell.push(k):null
+    })
+    // console.log("temcell:",tempcell,tempcell.length)
+    //
+    tempcell.forEach((item,index)=>{
+        // item 需要删掉的方法
+        // 
+        newdata = tempData.map((m,n)=>{
+            delete m[item]
+            return m
+        })
+        // newdata[item] = []
+        // tempData.forEach((m,n) => {
+        //     delete m[item]
+        //     newdata[item] = m
+        // });        
+        // delete itemobj[item]
+        // newdata = itemobj
+    })
+    // console.log("newdata:",newdata)
+    return newdata
+}
 
 export function getMaxtextwidth(arr,type = "arr"){
     if(type == "arr"){
@@ -106,44 +154,86 @@ export function getMaxtextwidth(arr,type = "arr"){
 
 export function getcolormap(plotData){
     let piecolormap = {}
-    plotData.common.celllist.forEach((item,index)=>{
-        piecolormap[item] = mapColor(item)
+    plotData.common.celllist[plotData.chosenMethod].forEach((item,index)=>{
+        piecolormap[item.split("|")[0]] = mapColor(item.split("|")[0])
     })
     return piecolormap
 }
 
 
 export function getPiedata(plotData,diff_method_data){
-    let tempData = diff_method_data[plotData["common"]["methodlist"].indexOf(plotData.chosenMethod)]["data"]
+    let tempData = diff_method_data
     let values = {}
-    plotData.common.celllist.forEach((ditem,dindex) => {
+    plotData.pieData.piePlotdata= []
+    // console.log("getPiedata plotData.chosenMethod:",plotData.chosenMethod)
+    plotData.common.celllist[plotData.chosenMethod].forEach((ditem,dindex) => {
+        // console.log("ditem:",ditem)
+        // ditem => cell name
         values[ditem] = 0
         tempData.forEach((item,index) => {
+            // item
+            delete item["sample_name"]
+            // console.log("pie data item:",item)
+            // console.log("pie item[ditem]:",item[ditem])
             values[ditem] += parseFloat(item[ditem])
         });
         plotData.pieData.piePlotdata.push({name:ditem,value:values[ditem]})
     });
-    plotData.pieData.piePlotdata = plotData.pieData.piePlotdata.slice(2)
+    // console.log("plotData.pieData.piePlotdata:",plotData.pieData.piePlotdata)
+    // plotData.pieData.piePlotdata = plotData.pieData.piePlotdata.slice(2)
 }
+
+// export function filterdiffcell(item,method,celllist){
+//     //item => { xx:xx,bb:bb}
+//     //method => 
+//     let result = {}
+//     for (const [key, value] of Object.entries(item)) {
+//         //console.log(`${key}: ${value}`);
+//         // console.log("diff key:",key.split("|")[1])
+//         // key.split("|")[1]==method? null:delete item[key]
+//         celllist[item].forEach((m,n) => {
+//             if((m+"|"+method)==key){
+//                 result[key] = value
+//             }
+//         });
+//     }
+//     // console.log("item????",item)
+//     return result
+
+// }
 
 export function getDiffdata(plotData,_data){
     const diff_method_data = plotData.common.methodlist.map(x=>new Object({"methodkey":x,"data":[]}))
+    // console.log("initial diff data:",diff_method_data)
     diff_method_data.forEach((item,index)=>{
         _data.forEach((ditem,dindex)=> {
-            if(ditem.method==item.methodkey){
-                item.data.push(ditem)
-            }
+            // if(ditem.method==item.methodkey){
+            //     item.data.push(ditem)
+            // }
+            // filteritemmethod(_data,newdata,item)
+
+            // let tempitem = filteritemmethod(_data,item.methodkey,ditem)
+            // item.data.push(tempitem)
+
+            // let filteritemmethod(_data,newdata)
+            // let tempditem = filterdiffcell(ditem,item.methodkey)
+            // item.data.push(tempditem)
+            // item.data.push(ditem)
         });
     })
+    // console.log("twice diff data:",diff_method_data)
+
     return diff_method_data
 }
 
 export function getBoxdata(plotData,diff_method_data){
     const result = []
     const means = []
-    plotData.common.celllist.forEach((item,index) => {
+    plotData.common.celllist[plotData.chosenMethod].forEach((item,index) => {
         const temp1 = []
-        diff_method_data[plotData["common"]["methodlist"].indexOf(plotData.chosenMethod)]["data"].forEach((ditem,dindex) => {
+        // console.log("boxplot item:",item)
+        diff_method_data.forEach((ditem,dindex) => {
+            // console.log("boxplot ditem:",ditem)
             isNaN(ditem[item])? ditem[item] = 0:null
             temp1.push(parseFloat(ditem[item]))
         });
@@ -151,21 +241,27 @@ export function getBoxdata(plotData,diff_method_data){
         result.push([stat._min, stat._firstQuartile, stat._median, stat._thirdQuartile, stat._max]);
         means.push(stat._mean);
     });
-    plotData.boxData.boxPlotdata =  { values: result, outliers:[], means, categories: plotData.common.celllist}
+    plotData.boxData.boxPlotdata =  { values: result, outliers:[], means, categories: plotData.common.celllist[plotData.chosenMethod]}
 
-    plotData.boxData.valueRange = range(result)
 }
 
 
-export function range(mapdata){
+export function range(mapdata,mapdata2){
     let resultMax = []
     let resultMin = []
     mapdata.forEach((item,i) => {
         resultMax.push(Math.max(...item))
         resultMin.push(Math.min(...item))
     });
-    return [parseFloat((Math.min(...resultMin)).toFixed(1))
-      ,(Math.ceil(Math.max(...resultMax))).toFixed(1)]
+    let mapdata2Higher = parseFloat(Math.max(...mapdata2).toFixed(1))
+    let mapdata2Lower = parseFloat((Math.min(...mapdata2)).toFixed(1))
+    let resultrange1 = parseFloat((Math.min(...resultMin)).toFixed(1))
+    let resultrange2 = parseFloat((Math.ceil(Math.max(...resultMax))).toFixed(1))
+
+    let returnrange1,returnrange2
+    mapdata2Higher>resultrange2? returnrange2 = mapdata2Higher: returnrange2 = resultrange2
+    mapdata2Lower<resultrange1? returnrange1 = mapdata2Lower-0.1 : returnrange1 =  resultrange1 -0.1
+    return [returnrange1, returnrange2]
 
 }
 

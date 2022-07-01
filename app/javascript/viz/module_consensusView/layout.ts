@@ -14,8 +14,6 @@ import { createCallSignature, isJSDocThisTag, isTemplateExpression } from "types
 import { currentEventContext } from "crux/src/event";
 import { NAME } from "crux/src/template/compiler/tokens";
 import * as TextSize from "crux/dist/utils/text-size";
-import { chooseMethod } from "immuneColor/mapColor";
-import { loadOriginalData } from "viz/dna/data";
 import { parseData } from "crux/dist/element";
 
 
