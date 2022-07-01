@@ -21,8 +21,9 @@ const generalTabs = {
         "labelSize"
     ],
     "tag": [
-        "title",
-        "xlabel"
+        // "title",
+        // "xlabel",
+        "ylabel"
     ],
     "Rotation": [
         "plotRotation",
@@ -30,7 +31,7 @@ const generalTabs = {
     ]
 }
 
-const generalSetting = ["startX", "startY", "width", "height", "titleSize", "labelSize", "title", "ylabel", "xlabel", "plotRotation", "xRotation", "yRotation"]
+// const generalSetting = ["startX", "startY", "width", "height", "titleSize", "labelSize", "title", "ylabel", "xlabel", "plotRotation", "xRotation", "yRotation"]
 
 export const generatePlotConfig = (v, eid): any => ({
     id: eid + "1",
@@ -47,7 +48,7 @@ export const generatePlotConfig = (v, eid): any => ({
                 value: {
                     current: v.data[item],
                     callback(d) {
-                        v.data[item] = parseInt(d);
+                        v.data[item] = isNaN(parseInt(d))? d: parseInt(d);
                         run(v);
                     }
                 }

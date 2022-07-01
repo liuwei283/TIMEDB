@@ -26,12 +26,12 @@ const generalTabs = {
         "ylabel", 
         "xlabel"
     ],
-    "Rotation": [
-        "xRotation", 
-    ]
+    // "Rotation": [
+    //     "xRotation", 
+    // ]
 }
 
-const generalSetting = ["startX", "startY", "width", "height", "titleSize", "labelSize", "title", "ylabel", "xlabel", "xRotation"]
+// const generalSetting = ["startX", "startY", "width", "height", "titleSize", "labelSize", "title", "ylabel", "xlabel", "xRotation"]
 
 export function editorConfig(v, eid): EditorDef {
     return {
@@ -50,7 +50,7 @@ export function editorConfig(v, eid): EditorDef {
                         value: {
                             current: v.data.plotData[plot][item],
                             callback(d) {
-                                v.data.plotData[plot][item] = parseInt(d);
+                                v.data.plotData[plot][item] = isNaN(parseInt(d))? d: parseInt(d);
                                 run(v);
                             }
                         }

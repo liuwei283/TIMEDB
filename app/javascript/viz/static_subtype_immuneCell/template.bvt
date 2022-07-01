@@ -33,6 +33,8 @@ svg {
                 plotSize = [width, height]
                 rotation = @rotate(plotRotation)
                 yAxis.rotation = @rotate(yRotation)
+                xlabel = xlabel
+                ylabel = ylabel
                 @props CellData
 			    @let labels = ["Min", "Q1", "Median", "Q3", "Max", "Mean"]
                 generateTooltip = (d) => {
