@@ -205,7 +205,7 @@
 
                           
         <%= form_tag make_selected_file_samples_path, class: "mb-5", multipart: true do %>  
-          <%= content_tag :table, role: :datatable, class: "display", id: "table_page", data: { url: project_path(format: :json)} do %> 
+          <%= content_tag :table, role: :datatable, class: "display", id: "table_page", data: { url: project_path(format: :json), type: 'POST'} do %> 
             <thead>
               <th>
                 <input type="checkbox" class="selectAll" name="selectAll" value="all">

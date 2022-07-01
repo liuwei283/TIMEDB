@@ -336,7 +336,6 @@ class AdminController < ApplicationController
             
             #number of samples
             project.update_attribute(:num_of_samples, project.samples.count)
-
         end
 
         #update the numnber of projets for cancers

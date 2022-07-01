@@ -23,7 +23,9 @@ Rails.application.routes.draw do
     collection { post :import}
     collection { post :download_selected_file }
     collection { post :export_selected }
-    member { post :download_inf_table} 
+    member { post :download_inf_table}
+    member { post :show, format: 'json' }
+
   end
 
   resources :samples do

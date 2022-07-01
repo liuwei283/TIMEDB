@@ -55,7 +55,7 @@ $(function () {
         },
         processing: true,
         serverSide: true,
-        ajax: $("#table_page").data('url'),
+        ajax: $("#table_page").data(),
         columnDefs: [
         {
             targets: 0,

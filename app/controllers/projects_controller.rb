@@ -1,5 +1,6 @@
 class ProjectsController < ApplicationController
     http_basic_authenticate_with name: "admin", password: "Lovelace", only: [:new, :create, :edit, :new, :update, :destroy]
+    protect_from_forgery except: [:show]
     $seq_dir = "#{Rails.root}/app/data/seq/"
     $inf_dir = "#{Rails.root}/public/data/sample_plot/"
     $tmp_dir = "#{Rails.root}/app/data/tmp/"
@@ -167,6 +168,27 @@ class ProjectsController < ApplicationController
         cancer_type: @ctype
 
     end
+
+    # def get_datatable
+        
+    #     pname = @project.project_name
+    #     sample_clinical_file_path = "#{Rails.root}/public/data/clinical/sample/Clinical_#{pname}.csv"
+    #     samples_info = CSV.parse(File.read(sample_clinical_file_path), headers: TRUE)
+        
+    #     @table_headers = ['id']
+    #     @table_headers.concat(samples_info.headers)
+
+    #     @samples_info = samples_info.map(&:to_h)
+
+    #     Rails.logger.error '----------------------'
+    #     @samples_info.each do |row_info|
+    #         cur_sname = row_info['sample_name']
+    #         Rails.logger.error cur_sname
+    #         cur_sid = Sample.find_by(sample_name:cur_sname).id
+    #         row_info['id'] = cur_sid
+    #     end
+    #     render json: ProjectSampleDatatable.new(view_context, @samples_info, @table_headers)
+    # end
 
     def overview
         @project = Project.find(params[:id])
