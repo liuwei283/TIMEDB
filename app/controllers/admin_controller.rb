@@ -285,36 +285,37 @@ class AdminController < ApplicationController
     def update_columns_cancer
         cancer = Cancer.find(params[:cancer_id])
 
-            #update the number of projects
-            cancer.update_attribute(:number_of_related_projects, cancer.projects.count)
+        #update the number of projects
+        cancer.update_attribute(:number_of_related_projects, cancer.projects.count)
 
-            projects_of_cancer = cancer.projects
+        projects_of_cancer = cancer.projects
 
-            num_samples = 0
-            subtype = []
-            projects_of_cancer.each do |project|
-                
-                file_name = project.project_name + ".csv"
-                file_path = "#{$data_dir}RNA/RNA_" + file_name
-                if File.exists?(file_path)
-                    num_gene = CSV.foreach(file_path, headers: true).count - 1
-                    project.update_attribute(:num_of_observed_genes, num_gene)
-                end
-                
-                project.update_attribute(:num_of_samples, project.samples.count)
-                num_samples += project.samples.count
+        num_samples = 0
+        subtype = []
+        projects_of_cancer.each do |project|
+            
+            file_name = project.project_name + ".csv"
+            file_path = "#{$data_dir}RNA/RNA_" + file_name
+            if File.exists?(file_path)
+                num_gene = CSV.foreach(file_path, headers: true).count - 1
+                project.update_attribute(:num_of_observed_genes, num_gene)
+            end
+            
+            project.update_attribute(:num_of_samples, project.samples.count)
+            num_samples += project.samples.count
 
-                #update the subtype from c_tumor_subtype
-                samples_of_project = project.samples
-                samples_of_project.each do |sample|
-                    s_tumor_type = sample.c_tumor_type
-                    if !subtype.include?(s_tumor_type)
-                        subtype.push(s_tumor_type)
-                    end
+            #update the subtype from c_tumor_subtype
+            samples_of_project = project.samples
+            samples_of_project.each do |sample|
+                s_tumor_type = sample.c_tumor_type
+                if !subtype.include?(s_tumor_type)
+                    subtype.push(s_tumor_type)
                 end
             end
-            cancer.update_attribute(:number_of_samples, num_samples)
-            cancer.update_attribute(:sub_cancer, subtype.join(","))
+        end
+        cancer.update_attribute(:number_of_samples, num_samples)
+        cancer.update_attribute(:sub_cancer, subtype.join(","))
+
         redirect_to '/admin', notice: "Selected cancer has been calculated!"
     end
 
@@ -328,10 +329,10 @@ class AdminController < ApplicationController
             #number of genes
             file_name = project.project_name + ".csv"
             file_path = "#{$data_dir}RNA/RNA_" + file_name
-            if File.exists?(file_path)
-                num_gene = CSV.foreach(file_path, headers: true).count - 1
-                project.update_attribute(:num_of_observed_genes, num_gene)
-            end
+            # if File.exists?(file_path)
+            #     num_gene = CSV.foreach(file_path, headers: true).count - 1
+            #     project.update_attribute(:num_of_observed_genes, num_gene)
+            # end
             
             #number of samples
             project.update_attribute(:num_of_samples, project.samples.count)

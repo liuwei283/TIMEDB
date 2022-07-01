@@ -211,7 +211,7 @@
               <h4>Project Consensus TIME Estimation Cell Fraction Landscape</h4>
             </div>
 
-            <div class="select-bar form-inline row">
+            <!-- <div class="select-bar form-inline row">
               <div class="sdiv col">
                 <div class="select-title">
                     Please choose the visualization type:
@@ -222,7 +222,7 @@
                         </option>
                 </select>
               </div>
-            </div>
+            </div> -->
 
             <div id = "fraction_landscapeBlock">
                 <div class="dropdown mb-5 mt-5">

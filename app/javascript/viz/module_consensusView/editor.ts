@@ -191,7 +191,7 @@ export const generateSelectConfig = (v):any =>  ({
                 type: "list",
                 items: [
                     {
-                        title: "Choose Clinical Type",
+                        title: "TIME Cell Estimation Tools",
                         type: "select",
                         //ref: "depthSelect",
                         options: v.data.methodselect,

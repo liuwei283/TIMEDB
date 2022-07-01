@@ -49,7 +49,7 @@ export function init(id,path,eid,plot_name, vue_name){
             console.log("this.data:",this["_data"]);
             this.size.width = this.data.plotSize[0] + 100
             this.size.height = this.data.plotSize[1] + 100 
-            registerEditorConfig(editorConfig(this,eid), vue_name, plot_name);
+            //registerEditorConfig(editorConfig(this,eid), vue_name, plot_name);
         },
     })
 }
