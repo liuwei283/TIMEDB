@@ -47,11 +47,11 @@ class ProjectsController < ApplicationController
         @sample_attrs = Sample.column_names
         @samples = @project.samples
         @invis = []
-        @sample_attrs.each_with_index do |s_attr, index|
-            if !@vis.include?(s_attr)
-                @invis.push(index+1)
-            end
-        end
+        # @sample_attrs.each_with_index do |s_attr, index|
+        #     if !@vis.include?(s_attr)
+        #         @invis.push(index+1)
+        #     end
+        # end
 
         
         id = session[:user_id]
@@ -97,10 +97,10 @@ class ProjectsController < ApplicationController
 
         @samples_info = samples_info.map(&:to_h)
 
-        logger.error '----------------------'
+        Rails.logger.error '----------------------'
         @samples_info.each do |row_info|
             cur_sname = row_info['sample_name']
-            logger.error cur_sname
+            Rails.logger.error cur_sname
             cur_sid = Sample.find_by(sample_name:cur_sname).id
             row_info['id'] = cur_sid
         end

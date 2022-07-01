@@ -8,11 +8,11 @@ class DatasetsController < ApplicationController
         
         @sample_attrs = Sample.column_names
         @invis = []
-        @sample_attrs.each_with_index do |attr, index|
-            if !@vis.include?(attr)
-                @invis.push(index+1)
-            end
-        end
+        # @sample_attrs.each_with_index do |attr, index|
+        #     if !@vis.include?(attr)
+        #         @invis.push(index+1)
+        #     end
+        # end
         gon.push invis: @invis
 
         #get all projects
@@ -58,11 +58,11 @@ class DatasetsController < ApplicationController
                 end
             end
 
-            @samples_info.each do |samp|
-                @table_headers.each do |th|
-                    logger.error samp[th]
-                end
-            end
+            # @samples_info.each do |samp|
+            #     @table_headers.each do |th|
+            #         Rails.logger.error samp[th]
+            #     end
+            # end
         end
         # user_dir = File.join($user_stor_dir, id.to_s)
         # ds_dir = File.join(user_dir, @dataset.name)

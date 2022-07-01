@@ -938,6 +938,7 @@
                         this.result_demo_id = s_ana.multiple_result_id;
 
                     }
+                    this.parameters_input = [];
                         
                     axios.get(`https://deepomics.org/api/apps/${newid}/`).then((response) => {
                         this.app = response.data.app;
@@ -946,6 +947,7 @@
                         console.log();
                         this.files = {};
                         this.parameters = {};
+                        
                         
 
                         if (this.picked_single_multiple == "single") {
@@ -1258,6 +1260,9 @@
                         },
                     },
                 ).then((response) => {
+                    console.log("response of app task submit:");
+                    console.log(response);
+
                     if (response.data.code) {
                         this.jobID = response.data.data.task_id;
                         this.submitted = true;
