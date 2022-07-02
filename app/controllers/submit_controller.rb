@@ -475,7 +475,7 @@ class SubmitController < ApplicationController
             
         
             # Rails.logger.debug datasets_selected
-            unless uploaded_file.nil? || uploaded_file == ""
+            unless uploaded_file.nil? || uploaded_file == "" || uploaded_file == []
               uploaded_files_array = Array(uploaded_file)
               Rails.logger.debug "Sucess here - 100"
               Rails.logger.debug uploaded_files_array

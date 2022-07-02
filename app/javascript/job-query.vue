@@ -6,10 +6,6 @@
         <div v-if="!submitted"> <!---->
             <b-card class="text-center query-card">
 
-                <!-- <div class="img-icon">
-                    <i class="fas fa-tasks"></i>
-                </div> -->
-
                 
 
                 <div class="row justify-content-center">
@@ -19,7 +15,7 @@
                             v-model="job_id"
                             size="lg"
                             :state="valid_name"
-                            placeholder="Enter your task ID"
+                            placeholder="Please enter your task ID"
                             class="col-md-4 text-center"
                         ></b-form-input>
 
@@ -432,7 +428,7 @@ export default {
             jobName: '',
             category: 'Regression Tools',
             all_jobs: [],
-            fields: ["index", "jobName", "jobId", "created", "status", "operation"],
+            fields: ["index", "taskName", "taskId", "created", "status", "operation"],
             showTable:  true,
             valid_name: null,
             submitted: false,
@@ -1022,6 +1018,19 @@ export default {
 	padding: 3rem;
     background-color: #f8f9fa;
     border: none;
+    .input-group {
+        input {
+            border-color: $light-theme;
+            border-radius: 30px;
+            font-weight: 500;
+            z-index: 1;
+            padding-right: 48px;
+        }
+        button {
+            z-index: 2;
+            margin-left: -40px;
+        }
+    }
     // border-radius: 30px;
     // box-shadow: 0 0 32px darken($gray-300, 5%);
 

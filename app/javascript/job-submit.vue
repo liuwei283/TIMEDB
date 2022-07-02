@@ -354,7 +354,7 @@
                                 :id="`i-${input.id}`"
                                 v-model="files[`i-${input.id}`]"
                                 :state="inputValid[`i-${input.id}`]"
-                                placeholder="Choose a file or drop it here..."
+                                :placeholder="files[`i-${input.id}`]? files[`i-${input.id}`].name:`Choose a file or drop it here...`"
                                 drop-placeholder="Drop file here..." 
                                 :name="`i-${input.id}`"
                                 :disabled="picked_single_multiple=='single' && ds_selected != ''"
@@ -391,7 +391,7 @@
                                     <label :for="`multiple-i-${input.id}-${input_idx}`" class = "row justify-content-around">
                                         <div class = "col-md-6 text-left" style="margin:auto;">
                                             {{ input.name }}
-                                            <span v-if="input.required" class="required">*</span>
+                                            <span v-if="input.required" class="required" style="color:red;">*</span>
                                         </div>
                                         <div class = "col-md-6 text-right">
                                             <button class = "btn btn-secondary">
@@ -407,6 +407,7 @@
                                         drop-placeholder="Drop file here..." 
                                         :name="`multiple-i-${input.id}-${input_idx}`"
                                         :required="input.required"
+                                        :disabled="ds_selected[input_idx - 1] != ''"
                                     >
                                     </b-form-file>
                                     <div class = "submit-container text-left" style="height:300px;overflow:scroll;">
@@ -430,6 +431,7 @@
                         <b-form-select
                             name="selected-dataset"
                             v-model="ds_selected[input_idx - 1]"
+                            :placeholder="ds_selected[input_idx - 1]"
                         >
                             <option value="" key="default">--click to select your own dataset--</option>
                             <option v-for="(option, index) in select_box_option" :key="index" :value="option.value" :disabled="option.disabled">
@@ -562,6 +564,9 @@
                 file_names: {
 
                 },
+                file_required: {
+
+                },
                 demo_id: 0,
                 result_demo_id: 0,
                 demo: false,
@@ -680,7 +685,7 @@
                             // console.log(this.files['i-' + this.app.inputs[k].id + '-' + input_idx] == null)
                             // console.log(this.files['i-' + this.app.inputs[k].id + '---' + input_idx] == null)
 
-                            if (this.files['multiple-i-' + item.id + '-' + input_idx] == null) {
+                            if (this.file_required[`i-${item.id}`] == true && this.files['multiple-i-' + item.id + '-' + input_idx] == null) {
                                 this.multiple_completed[input_idx - 1] = false;
                                 console.log(item.name + "not uploaded");
                             }
@@ -852,7 +857,7 @@
                         if (this.app.inputs[k].name != "CIBERSORT.R" && this.app.inputs[k].name != "Signature file") {
                             var input_arr = [];
                             for (var input_idx = 1; input_idx <= this.multiple_pairs_num;  input_idx++ ) {
-                                if (this.multiple_completed[input_idx - 1] == true && this.ds_selected[input_idx - 1] == "") {
+                                if (this.multiple_completed[input_idx - 1] == true && this.ds_selected[input_idx - 1] == "" && this.files['multiple-i-' + this.app.inputs[k].id + '-' + input_idx] != null) {
                                     input_arr.push(this.files['multiple-i-' + this.app.inputs[k].id + '-' + input_idx]);
                                 }
                             }
@@ -885,6 +890,11 @@
             },
 
             updateApp(s_ana, flag) {
+                this.inputValid = {}
+                this.files = {};
+                this.parameters = {};
+                this.file_names = {};
+                this.file_required = {};
                 this.started = flag;
                 let newapp;
                 if (s_ana == null) {
@@ -955,6 +965,8 @@
                             this.multiple_parameters = [];
                             this.ds_selected = "";
                             this.ds_params = this.app.params[0];
+                            this.ds_param_selected = [];
+                            this.multiple_completed = []
 
                         }
                         else {
@@ -973,6 +985,7 @@
 
                         for (var k in this.app.inputs){
                             this.file_names['i-' + this.app.inputs[k].id]  = this.app.inputs[k].name; //for later dataset merging - file matching
+                            this.file_required['i-' + this.app.inputs[k].id] = this.app.inputs[k].required;
                         }
 
                         for (var k in this.single_parameters) {
@@ -983,9 +996,9 @@
                         }
 
                         this.single_params_desc = this.single_parameters[0].description;
-
+                        this.parameters_input=[];
                         if (this.local_analysis_name == "TIMEDB Deconv CIBERSORT") {
-                            this.parameters_input=[];
+
                             for (var k in this.app.inputs) {
                                 if (this.app.inputs[k].name == "CIBERSORT.R" || this.app.inputs[k].name == "Signature file") {
                                     this.parameters_input.push(this.app.inputs[k]);
@@ -1041,8 +1054,8 @@
                     if (is_single) {
                         anyFile = true;
                         if (this.ds_selected == "") {
-                            for (var file_inputs in this.files) {
-                                if (this.files[file_inputs] == null) {
+                            for (var file_inputs in this.file_required) {
+                                if (this.file_required[file_inputs] == true && this.files[file_inputs] == null) {
                                     anyFile = false;
                                     alertCenter.add('danger', "You are under single mode, but you have not uploaded any file input or selected any single source dataset!");
                                 }
@@ -1058,27 +1071,6 @@
                             }
                         }
                     }
-                    // for (var file_inputs in this.files) {
-                    //     if (is_single) {
-                    //         anyFile = true;
-                    //         if (this.files[file_inputs] == null) {
-                    //             console.log(file_inputs)
-                    //             anyFile = false;
-                    //             alertCenter.add('danger', "You are under single mode, but you have not uploaded any file input or selected any single source dataset!");
-                    //         }
-                    //     }
-                    //     else {
-                    //         anyFile = false;
-                    //         for (var be_num in this.multiple_pairs_num) {
-                    //             if (this.multiple_completed[be_num] != null) {
-                    //                 anyFile = true;
-                    //             }
-                    //         }
-                    //         if (anyFile == false) {
-                    //             alertCenter.add('danger', "You are under multiple mode, but there is no valid input pairs!");
-                    //         }
-                    //     }
-                    // }
                     allRight = anyFile == true
                     if (!allRight) {
                         alertCenter.add('danger', "Not enough inputs with parameters.");

@@ -187,12 +187,27 @@
 
                                                 <div class = "row mt-3 mb-3" style="height:350px; overflow:scroll;">
                                                         <b-list-group>
-                                                            <b-list-group-item class="mb-2">
-                                                                <label :for="`p-${single_sync_params[0].id}`">{{ single_sync_params[0].name }}
-                                                                    <span v-if="single_sync_params[0].required" class="required">*</span>
-                                                                </label>
-                                                                <b-form-input @focus="provide_param_desc(single_sync_params[0])" :id="`p-${single_sync_params[0].id}`" :value="single_sync_params[0].default" :required="single_sync_params[0].required"
-                                                                    v-model="parameters[`p-${single_sync_params[0].id}`]" :name="`p-${single_sync_params[0].id}`" :state="inputValid[`p-${single_sync_params[0].id}`]" />
+                                                            <b-list-group-item class="mb-2" style="height:100px important!;">
+                                                                <div style="margin-bottom:10px" v-for="(params, pname) in single_sync_params" :key="pname">
+                                                                    <label :for="`p-${params[0].id}`">{{ params[0].name }}
+                                                                        <span v-if="params[0].required" class="required">*</span>
+                                                                    </label>
+                                                                    <div v-if="params[0].name === 'Protocol normalization'">
+                                                                        <select @focus="provide_param_desc(params[0])" :value="params[0].default" :required="params[0].required" class="form-control custom-select" 
+                                                                                v-model="parameters[`p-${params[0].id}`]"
+                                                                                :placeholder="parameters[`p-${params[0].id}`]"
+                                                                                >
+                                                                            <option v-for="option in protocol_options" :value="option" :key="option"
+                                                                                    selected="array_none">
+                                                                                {{ option }}
+                                                                            </option>
+                                                                        </select>
+                                                                    </div>
+                                                                    <div v-else>
+                                                                        <b-form-input @focus="provide_param_desc(params[0])" :id="`p-${params[0].id}`" :value="params[0].default" :required="params[0].required"
+                                                                            v-model="parameters[`p-${params[0].id}`]" :name="`p-${params[0].id}`" :state="inputValid[`p-${params[0].id}`]" />
+                                                                    </div>
+                                                                </div>
                                                             </b-list-group-item>
                                                             <div v-for="(value, key) in single_module_params" :key="value.id">
                                                                 <b-list-group-item href="javascript:void(0)" v-b-toggle="`m-${value.id}`" class="mb-2">
@@ -335,7 +350,7 @@
                                     :id="`i-${input.id}`"
                                     v-model="files[`i-${input.id}`]"
                                     :state="inputValid[`i-${input.id}`]"
-                                    placeholder="Choose a file or drop it here..."
+                                    :placeholder="files[`i-${input.id}`]? files[`i-${input.id}`].name:`Choose a file or drop it here...`"
                                     drop-placeholder="Drop file here..." 
                                     :name="`i-${input.id}`"
                                     :required="input.required"
@@ -364,7 +379,7 @@
                                     <label :for="`multiple-i-${input.id}-${input_idx}`" class = "row justify-content-around">
                                         <div class = "col-md-6 text-left" style="margin:auto;">
                                             {{ input.name }}
-                                            <span v-if="input.name != 'Clinical data'" class="required">*</span>
+                                            <span v-if="input.name != 'Clinical data'" class="required" style="color:red;">*</span>
                                         </div>
                                         <div class = "col-md-6 text-right">
                                             <button class = "btn btn-secondary">
@@ -403,6 +418,7 @@
                         <b-form-select
                             name="selected-dataset"
                             v-model="ds_selected[input_idx - 1]"
+                            :placeholder="ds_selected[input_idx - 1]"
                         >
                             <option value="" key="default">--click to select your own dataset--</option>
                             <option v-for="(option, index) in select_box_option" :key="index" :value="option.value" :disabled="option.disabled">
@@ -421,22 +437,37 @@
                             <div class = "col-md-6">
                                 <div style="height:350px; overflow:scroll;">
                                     <b-list-group>
-                                        <div v-if="ds_selected[input_idx - 1] == ''" style="vertical-align:center">
+                                        <div style="vertical-align:center">
                                             <b-list-group-item class="mb-2">
                                                 <div style="margin-bottom:10px" v-for="(params, pname) in multiple_sync_params" :key="pname">
-                                                    <label :for="`multiple-p-${params[0].id}-${input_idx}`">{{ params[0].name }}
-                                                        <span v-if="params[0].required" class="required" style="color:red;">*</span>
-                                                    </label>
-                                                    <div>
-                                                        <b-form-input @focus="provide_multiple_param_desc(params[0])" :id="`multiple-p-${params[0].id}-${input_idx}`" :value="params[0].default" :required="params[0].required" :placeholder="parameters[`multiple-p-${params[0].id}-${input_idx}`]"
-                                                        v-model="parameters[`multiple-p-${params[0].id}-${input_idx}`]" :name="`multiple-p-${params[0].id}-${input_idx}`" />
+                                                    <div v-if="ds_selected[input_idx - 1] == '' && params[0].name != 'Protocol normalization' ">
+                                                        <label :for="`multiple-p-${params[0].id}-${input_idx}`">{{ params[0].name }}
+                                                            <span v-if="params[0].required" class="required" style="color:red;">*</span>
+                                                        </label>
+                                                        <div>
+                                                            <b-form-input @focus="provide_multiple_param_desc(params[0])" :id="`multiple-p-${params[0].id}-${input_idx}`" :value="params[0].default" :required="params[0].required" :placeholder="parameters[`multiple-p-${params[0].id}-${input_idx}`]"
+                                                            v-model="parameters[`multiple-p-${params[0].id}-${input_idx}`]" :name="`multiple-p-${params[0].id}-${input_idx}`" />
+                                                        </div>
                                                     </div>
-                                                        
+                                                    <div v-else-if="params[0].name == 'Protocol normalization' ">
+                                                        <label :for="`multiple-p-${params[0].id}-${input_idx}`">{{ params[0].name }}
+                                                            <span v-if="params[0].required" class="required" style="color:red;">*</span>
+                                                        </label>
+                                                        <select @focus="provide_param_desc(params[0])" :value="params[0].default" :required="params[0].required" class="form-control custom-select" 
+                                                                v-model="parameters[`multiple-p-${params[0].id}-${input_idx}`]"
+                                                                :placeholder="parameters[`multiple-p-${params[0].id}-${input_idx}`]"
+                                                                >
+                                                            <option v-for="option in protocol_options" :value="option" :key="option"
+                                                                    selected="array_none">
+                                                                {{ option }}
+                                                            </option>
+                                                        </select>
+                                                    </div>   
                                                 </div>
                                             </b-list-group-item>
                                         </div>
                                     
-                                        <div v-for="(value, key) in multiple_module_params" :key="value.id">
+                                        <!-- <div v-for="(value, key) in multiple_module_params" :key="value.id">
                                             <div v-if="value.params!=null">
                                                 <b-list-group-item href="javascript:void(0)" v-b-toggle="`mm-${value.id}`" class="mb-2">
                                                     <i class="fab fa-app-store-ios"></i> {{ key }}
@@ -448,6 +479,7 @@
                                                         <div v-if="value.params.name === 'Protocol normalization'">
                                                             <select @focus="provide_param_desc(value.params)" :value="value.params.default" :required="value.params.required" class="form-control custom-select" 
                                                                     v-model="parameters[`multiple-p-${value.params.id}-${input_idx}`]"
+                                                                    :placeholder="parameters[`multiple-p-${value.params.id}-${input_idx}`]"
                                                                     >
                                                                 <option v-for="option in protocol_options" :value="option" :key="option"
                                                                         selected="array_none">
@@ -457,16 +489,16 @@
                                                         </div>
                                                         <div v-else>
                                                             <b-form-input @focus="provide_param_desc(value.params)" :value="value.params.default" :required="value.params.required"
+                                                                        :placeholder="parameters[`multiple-p-${value.params.id}-${input_idx}`]"
                                                                         v-model="parameters[`multiple-p-${value.params.id}-${input_idx}`]" :state="inputValid[`multiple-p-${value.params.id}-${input_idx}`]" />
                                                         </div> 
                                                 </b-collapse>
                                             </div>
-                                        </div>
+                                        </div> -->
                                     </b-list-group>  
                                 </div>
                             </div>
-                            <div class = "col-md-6">
-                                <h2>Parameters description</h2>
+                             <div class = "col-md-6 text-left" style="vertical-align:center; height:300px;overflow:scroll;">
                                 <div id = "multiple_params_desc" v-html="multiple_params_desc"></div>
                             </div>
                         </div>
@@ -531,6 +563,8 @@
                     //record for file names for later dataset merge files in submit controller
 
                 },
+                file_required: {
+                },
                 demo_id: 0, // demo task id for fetching task information
                 result_demo_id: 0, // demo task id for local platform for demo  visualizaition
                 demo_inputs: {}, // for submit demo task
@@ -571,9 +605,10 @@
                 multiple_module_params: {},
 
                 //syncronized paramters
-                single_sync_params: [],
+                single_sync_params: {},
                 multiple_sync_params: {},
-                multiple_sync_pnames: ["Dataset name", "Platform"],
+                multiple_sync_pnames: ["Dataset name", "Platform", 'Protocol normalization'],
+                single_sync_pnames: ["Project name", 'Protocol normalization'],
 
                 demo_setting_json: {},
                 ptype: "",
@@ -642,6 +677,8 @@
                 for (var input_idx = 1; input_idx <= this.multiple_pairs_num;  input_idx++ ) {
                     this.multiple_completed[input_idx - 1] = true;
 
+                    if(this.ds_selected[input_idx - 1] != '' && this.ds_info[this.ds_selected[input_idx - 1]][0] == 0) this.multiple_completed[input_idx - 1] = false;
+
                     //check whether input value is empty or not
                     if (this.ds_selected[input_idx - 1] == "") {
                         this.pure_inputs.forEach((item) => {
@@ -649,7 +686,7 @@
                             // console.log("priting files and status when updating status for multiple upload: " + input_idx + " - " + item.name);
                             // console.log(this.files['multiple-i-' + item.id + '-' + input_idx] == null)
                             // console.log(this.files['multiple-i-' + item.id + '-' + input_idx])
-                            if (this.files['multiple-i-' + item.id + '-' + input_idx] == null) {
+                            if (this.file_required[`i-${item.id}`] == true && this.files['multiple-i-' + item.id + '-' + input_idx] == null) {
                                 this.multiple_completed[input_idx - 1] = false;
                                 console.log(item.name + " is not uploaded");
                             }
@@ -659,7 +696,6 @@
                     //check module syncronized parameters
                     if (this.multiple_completed[input_idx - 1] == true && this.ds_selected[input_idx - 1] == '') {
                         for (let input_name in this.multiple_sync_params) {
-                            
                             var rep_input = this.multiple_sync_params[input_name][0];
                             console.log(rep_input);
                             var cur_value = this.parameters["multiple-p-" + rep_input.id + "-" + input_idx];
@@ -673,26 +709,25 @@
                             }
                         }
                     }
-
                     //check module not syncronized parameters
-                    if (this.multiple_completed[input_idx - 1] == true) {
-                        for (let k in this.multiple_module_params) {
-                            console.log("jbjhbjb", k);
-                            console.log(this.multiple_module_params[k].params);
-                            if ( this.multiple_module_params[k].params != null) {
+                    // if (this.multiple_completed[input_idx - 1] == true) {
+                    //     for (let k in this.multiple_module_params) {
+                    //         console.log("jbjhbjb", k);
+                    //         console.log(this.multiple_module_params[k].params);
+                    //         if ( this.multiple_module_params[k].params != null) {
                             
-                                var cur_value = this.parameters["multiple-p-" + this.multiple_module_params[k].params.id + "-" + input_idx];
-                                const valid = !!cur_value && !!_.trim(cur_value);
-                                //all of multipe parameters are required
-                                if (!valid) {
-                                    console.log(cur_value);
-                                    console.log("Input module parameters has problems, and the problematic value is: ");
-                                    console.log(cur_value);
-                                    this.multiple_completed[input_idx - 1] = false;
-                                }
-                            }
-                        }
-                    }
+                    //             var cur_value = this.parameters["multiple-p-" + this.multiple_module_params[k].params.id + "-" + input_idx];
+                    //             const valid = !!cur_value && !!_.trim(cur_value);
+                    //             //all of multipe parameters are required
+                    //             if (!valid) {
+                    //                 console.log(cur_value);
+                    //                 console.log("Input module parameters has problems, and the problematic value is: ");
+                    //                 console.log(cur_value);
+                    //                 this.multiple_completed[input_idx - 1] = false;
+                    //             }
+                    //         }
+                    //     }
+                    // }
                 }
                 console.log(this.multiple_completed);
                 return this.multiple_completed;
@@ -750,9 +785,15 @@
                 var formatted_params = []
 
                 //for single syncronized parameters
-                var single_sync_value = this.parameters["p-" + this.single_sync_params[0].id];
-                for (let k in this.single_sync_params) {
-                    formatted_params.push({['p-' + this.single_sync_params[k].id]: single_sync_value});
+                for (var k in this.single_sync_params) {
+                    console.log(k);
+                    var syncp = this.single_sync_params[k];
+                    console.log(syncp);
+
+                    var single_sync_value = this.parameters["p-" + syncp[0].id];
+                    for (let k in syncp) {
+                        formatted_params.push({['p-' + syncp[k].id]: single_sync_value});
+                    }
                 }
 
                 //for single module parameters
@@ -768,13 +809,13 @@
                 // improvement: considering time consuming
                 if (this.picked_single_multiple == "multiple") {
                     var multiple_sync_array = {};
-                    var multiple_module_array = {};
+                    //var multiple_module_array = {};
                     for (let msp_name in this.multiple_sync_params) {
                         multiple_sync_array[msp_name] = [];
                     }
-                    for (let module_name in this.multiple_module_params) {
-                        multiple_module_array[module_name] = [];
-                    }
+                    // for (let module_name in this.multiple_module_params) {
+                    //     multiple_module_array[module_name] = [];
+                    
                     for (let input_idx = 1; input_idx <=  this.multiple_pairs_num; input_idx++ ) {
                         if (this.multiple_completed[input_idx - 1] == true) {
                             // if this pair is from dataset merging
@@ -786,28 +827,33 @@
                                 let platform_names = this.ds_info[this.ds_selected[input_idx - 1]][1].split(',');
                                 //project source number
                                 let ps_number = this.ds_info[this.ds_selected[input_idx - 1]][0];
-                                multiple_sync_array['Dataset name'] += dataset_names;
-                                multiple_sync_array["Platform"] += platform_names;
-                                for (let module_name in this.multiple_module_params) {
-                                    if (this.multiple_module_params[module_name].params != null) {
-                                        multiple_module_array[module_name] += Array(ps_number).fill(this.parameters["multiple-p-" + this.multiple_module_params[module_name].params.id + "-" + input_idx]);
-                                    }
-                                }
+                                multiple_sync_array['Dataset name'].concat(dataset_names);
+                                multiple_sync_array["Platform"].concat(platform_names);
+                                multiple_sync_array['Protocol normalization'].concat(Array(ps_number).fill(this.parameters["multiple-p-" + this.multiple_sync_params['Protocol normalization'][0].id + "-" + input_idx]));
+                                // for (let module_name in this.multiple_module_params) {
+                                //     if (this.multiple_module_params[module_name].params != null) {
+                                //         multiple_module_array[module_name] += Array(ps_number).fill(this.parameters["multiple-p-" + this.multiple_module_params[module_name].params.id + "-" + input_idx]);
+                                //     }
+                                // }
                             }
                         }
                     }
+                    console.log(multiple_sync_array);
                     for (let input_idx = 1; input_idx <=  this.multiple_pairs_num; input_idx++ ) {
-                        if (this.multiple_completed[input_idx - 1] == true) {this.parameters["multiple-p-" + this.multiple_module_params[module_name].params.id + "-" + input_idx]
+                        if (this.multiple_completed[input_idx - 1] == true) {
+                            // this.parameters["multiple-p-" + this.multiple_module_params[module_name].params.id + "-" + input_idx]
                             // if this pair is from dataset merging
                             if (this.ds_selected[input_idx - 1] == '') {
                                 console.log("for input pair " + input_idx + " we use file uploading:");
                                 multiple_sync_array['Dataset name'].push(this.parameters["multiple-p-" + this.multiple_sync_params['Dataset name'][0].id + "-" + input_idx]);
                                 multiple_sync_array["Platform"].push(this.parameters["multiple-p-" + this.multiple_sync_params['Platform'][0].id + "-" + input_idx]);
-                                for (let module_name in this.multiple_module_params) {
-                                    if (this.multiple_module_params[module_name].params != null) {
-                                        multiple_module_array[module_name].push(this.parameters["multiple-p-" + this.multiple_module_params[module_name].params.id + "-" + input_idx]);
-                                    }
-                                }
+                                multiple_sync_array['Protocol normalization'].push(this.parameters["multiple-p-" + this.multiple_sync_params['Protocol normalization'][0].id + "-" + input_idx]);
+
+                                // for (let module_name in this.multiple_module_params) {
+                                //     if (this.multiple_module_params[module_name].params != null) {
+                                //         multiple_module_array[module_name].push(this.parameters["multiple-p-" + this.multiple_module_params[module_name].params.id + "-" + input_idx]);
+                                //     }
+                                // }
                             }
                         }
                     }
@@ -817,12 +863,12 @@
                             formatted_params.push({['p-' + this.multiple_sync_params[msp_name][k].id]: sync_pvalue});
                         }
                     }
-                    for (let module_name in this.multiple_module_params) {
-                        if (this.multiple_module_params[module_name].params != null) {
-                            let integrated_value = multiple_module_array[module_name].join(",");
-                            formatted_params.push({['p-' + this.multiple_module_params[module_name].params.id]: integrated_value});
-                        }
-                    }
+                    // for (let module_name in this.multiple_module_params) {
+                    //     if (this.multiple_module_params[module_name].params != null) {
+                    //         let integrated_value = multiple_module_array[module_name].join(",");
+                    //         formatted_params.push({['p-' + this.multiple_module_params[module_name].params.id]: integrated_value});
+                    //     }
+                    // }
                 }
                 console.log("formatted parameters:");
                 console.log(formatted_params);
@@ -835,14 +881,14 @@
                 }
                 else {
                     var formatted_files = {};
-                    for (var k in pure_inputs) {
+                    for (var k in this.pure_inputs) {
                         var input_arr = [];
                         for (var input_idx = 1; input_idx <= this.multiple_pairs_num;  input_idx++ ) {
-                            if (this.multiple_completed[input_idx - 1] == true && this.ds_selected[input_idx - 1] == "") {
-                                input_arr.push(this.files['multiple-i-' + pure_inputs[k].id + '-' + input_idx]);
+                            if (this.multiple_completed[input_idx - 1] == true && this.ds_selected[input_idx - 1] == "" && this.files['multiple-i-' + this.pure_inputs[k].id + '-' + input_idx] != null ) {
+                                input_arr.push(this.files['multiple-i-' + this.pure_inputs[k].id + '-' + input_idx]);
                             }
                         }
-                        formatted_files['i-' + pure_inputs[k].id] = input_arr;
+                        formatted_files['i-' + this.pure_inputs[k].id] = input_arr;
                     }
 
                     for (var k in this.parameters_input) {
@@ -870,6 +916,11 @@
             },
 
             updateApp(s_ana, flag) {
+                this.inputValid = {};
+                this.files = {};
+                this.parameters = {};
+                this.file_names = {};
+                this.file_required = {};
                 let newapp;
                 if (s_ana == null) {
                     newapp = {
@@ -904,10 +955,10 @@
                 else {
 
                     //clear inputs and parameters container
-                    this.single_sync_params = [];
+                    this.single_sync_params = {};
                     this.single_module_params = {};
                     this.multiple_sync_params = {};
-                    this.multiple_module_params = {};
+                    //this.multiple_module_params = {};
                     this.pure_inputs = [];
                     this.parameters_input = [];
 
@@ -956,19 +1007,19 @@
 
                                 var module_params = params_copy[k].params;
                                 this.single_module_params[k] = {};
-                                this.multiple_module_params[k] = {};
+                                //this.multiple_module_params[k] = {};
                                 this.single_module_params[k].id = params_copy[k].id
-                                this.multiple_module_params[k].id = params_copy[k].id
+                                //this.multiple_module_params[k].id = params_copy[k].id
                                 this.single_module_params[k].params = []
 
 
                                 for (let t in module_params) {
                                     var param = module_params[t];
                                     // single syncronized parameters array - Project name
-                                    if (param.name == "Project name") {
-                                        this.single_sync_params.push(param);
-                                    }
-                                    else if (this.multiple_sync_pnames.includes(param.name)) {
+                                    // if (param.name == "Project name") {
+                                    //     this.single_sync_params.push(param);
+                                    // }
+                                    if (this.picked_single_multiple == 'multiple' && this.multiple_sync_pnames.includes(param.name)) {
                                         if (this.multiple_sync_params[param.name] == null) {
                                             this.multiple_sync_params[param.name] = [param];
                                         }
@@ -976,10 +1027,13 @@
                                             this.multiple_sync_params[param.name].push(param);
                                         }
                                     }
-                                    else if (this.picked_single_multiple == "multiple" && param.name == "Protocol normalization") {
-                                        this.multiple_module_params[k].params = param;
-                                
-
+                                    else if (this.single_sync_pnames.includes(param.name)) {
+                                        if (this.single_sync_params[param.name] == null) {
+                                            this.single_sync_params[param.name] = [param];
+                                        }
+                                        else {
+                                            this.single_sync_params[param.name].push(param);
+                                        }
                                     }
                                     else {
                                         this.parameters['p-' + param.id] = param.default; //commonly only for single parameters
@@ -988,8 +1042,7 @@
                                 }
                             }
 
-                            this.single_params_desc = this.single_sync_params[0].description;
-
+                            this.single_params_desc = this.single_sync_params['Project name'][0].description;
 
                             if (this.picked_single_multiple == "multiple") {
                                 this.multiple_completed = Array(10).fill(false);
@@ -997,12 +1050,12 @@
                                 this.multiple_params_desc = this.multiple_sync_params["Dataset name"][0].description;
                                 // this.multiple_sync_params_desc = this.multiple_sync_params["Dataset name"][0].description;
                                 // this.single_module_params_desc = this.multiple_module_params[Object.keys(this.single_parameters)[0]].description;
-
                             }
                             
                             
                             for (var k in this.app.inputs){
                                 this.file_names['i-' + this.app.inputs[k].id]  = this.app.inputs[k].name; //for later dataset merging - file matching
+                                this.file_required['i-' + this.app.inputs[k].id] = this.app.inputs[k].required;
                             }
 
                             for (var k in this.app.inputs) {
@@ -1017,7 +1070,7 @@
                             console.log(this.single_sync_params);
                             console.log(this.single_module_params);
                             console.log(this.multiple_sync_params);
-                            console.log(this.multiple_module_params);
+                            //console.log(this.multiple_module_params);
 
                             this.started = flag;
                         });
@@ -1072,8 +1125,8 @@
                     if (is_single) {
                         anyFile = true;
                         if (this.ds_selected == "") {
-                            for (var file_inputs in this.files) {
-                                if (this.files[file_inputs] == null) {
+                            for (var file_inputs in this.file_required) {
+                                if (this.file_required[file_inputs] == true && this.files[file_inputs] == null) {
                                     anyFile = false;
                                     alertCenter.add('danger', "You are under single mode, but you have not uploaded any file input or selected any single source dataset!");
                                 }
