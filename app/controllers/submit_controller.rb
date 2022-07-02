@@ -186,8 +186,8 @@ class SubmitController < ApplicationController
         jobName = t.analysis_pipeline.name
       end
       parsed_jobs.push({
-        jobName: jobName,
-        jobId: t.id,
+        taskName: jobName,
+        taskId: t.id,
         created: t.created_at,
         status: t.status,
       })
@@ -224,9 +224,9 @@ class SubmitController < ApplicationController
         category = "pipeline"
       end
       parsed_jobs.push({
-        jobName: jobName,
+        taskName: jobName,
         category: category,
-        jobId: t.id,
+        taskId: t.id,
         created: t.created_at,
         status: t.status,
         isDemo: t.is_demo,

@@ -85,13 +85,13 @@
                                     class = "btn btn-1"
                                     size="sm"
                                     v-if="data.item.status == 'finished'"
-                                    @click="showAnalyses(data.item.jobId)"
+                                    @click="showAnalyses(data.item.taskId)"
                                 >
                                     <i class="fas fa-search mr-1"></i>
                                     Result
                                 </b-button>
 
-                                <b-button class = "btn btn-1" size="sm" v-else @click="showAnalyses(data.item.jobId)">
+                                <b-button class = "btn btn-1" size="sm" v-else @click="showAnalyses(data.item.taskId)">
                                     <i class="fas fa-search mr-1"></i>
                                     Check
                                 </b-button>
@@ -99,7 +99,7 @@
                                 <b-button  v-if="!isDemo"
                                     size="sm"
                                     class="ml-4 btn-3"
-                                    @click="deleteJob(data.item.jobId)"
+                                    @click="deleteJob(data.item.taskId)"
                                     :disabled="data.item.isDemo"
                                 >
                                     <i class="fas fa-trash-alt mr-1"></i>
@@ -834,7 +834,7 @@ export default {
                 this.valid_name = false;
             }else {
                 this.all_jobs.forEach(j => {
-                    if (j.jobId === parseInt(this.job_id)) {
+                    if (j.taskId === parseInt(this.job_id)) {
                         this.jobName = j.jobName;
                         this.category = j.category;
                         console.log(this.category);
