@@ -1,0 +1,4 @@
+sample_name,project_name,c_tumor_stage,c_tumor_grade,c_ajcc_pathologic_t,c_ajcc_pathologic_n,c_primary_diagnosis,year_of_diagnosis,c_synchronous_malignancy,n_cigarettes_per_day,c_alcohol_history,n_years_smoked,n_alcohol_intensity,n_weight,n_height,n_bmi,c_race,c_gender,n_age,pfs,os,pfs_status,os_status,c_tumor_type
+TCGA-FD-A3SN,TCGA_BLCA,Stage III,NA,T3b,N0,Transitional cell carcinoma,2011,No,0.273972603,NA,NA,NA,70,170,24.22145329,white,male,79,887,NA,1,0,Bladder Urothelial Carcinoma
+TCGA-FD-A43U,TCGA_BLCA,Stage IV,NA,T4a,N2,Transitional cell carcinoma,2012,No,1.095890411,NA,NA,NA,91,183,27.17310162,white,male,70,636,NA,1,0,Bladder Urothelial Carcinoma
+TCGA-XF-A9T6,TCGA_BLCA,Stage III,NA,T3b,N0,Papillary transitional cell carcinoma,2008,NA,NA,NA,NA,NA,72,157,29.21010994,white,female,88,64,NA,1,0,Bladder Urothelial Carcinoma

@@ -19,40 +19,42 @@
         <%= "samples of #{@dataset.name}" %>
     </h1>
 
-    <div id="db-toolbar" class = "mt-4 mb-4">
-        <div class="db-tool-nav">
-            <div class="btn btn-outline-dark" data-toggle="collapse" data-target="#edit_box" aria-expanded="true" aria-controls="download_box">
-                Edit Dataset <i class="fas fa-caret-down"></i>
-            </div>
-            <%= link_to download_ds_metadata_user_dataset_path, :class => "s_table_sub btn btn-outline-dark" do %>
-                Download dataset <i class='fas fa-download'></i> 
-            <%end%>
-            <%= link_to "/submit/analyses", :class => "s_table_sub btn btn-outline-dark" do %>
-                Run Analysis <i class='fas fa-search'></i> 
-            <% end %>
-        </div>
-        <div id="edit_box" class="db-toolbox collapse" data-parent="#db-toolbar">
-            <div class="p-2">
-                <%= button_tag :name => 'delete_sample', :class => "s_table_sub btn btn-primary" do %> 
-                <i class='fas fa-minus-circle'></i> Remove selected samples
-                <%end%>
-                <%= link_to edit_user_dataset_path(@dataset.user, @dataset.id),
-                :class => "s_table_sub btn btn-secondary" do %> 
-                <i class='fas fa-edit'></i> Edit dataset name
-                <%end%>
-                <%= link_to user_dataset_path(@dataset.user, @dataset), method: :delete,
-                    :class => "s_table_sub btn btn-danger",
-                    data: { comfirm: 'Are you sure to delete this dataset?'} do %>
-                    <i class="fas fa-trash-alt"></i> Delete dataset
-                <%end%>
-                <%= link_to  samples_path, :class => "s_table_sub btn btn-info" do %>
-                <i class='fas fa-plus-square'></i> Go to add samples
-                <%end%>
-            </div>
-        </div>
-    </div>
-
     <%= form_tag delete_sample_user_dataset_path, multipart: true do %>  
+        <div id="db-toolbar" class = "mt-4 mb-4">
+            <div class="db-tool-nav">
+                <div class="btn btn-outline-dark" data-toggle="collapse" data-target="#edit_box" aria-expanded="true" aria-controls="download_box">
+                    Edit Dataset <i class="fas fa-caret-down"></i>
+                </div>
+                <%= link_to download_ds_metadata_user_dataset_path, :class => "s_table_sub btn btn-outline-dark" do %>
+                    Download dataset <i class='fas fa-download'></i> 
+                <%end%>
+                <%= link_to "/submit/analyses", :class => "s_table_sub btn btn-outline-dark" do %>
+                    Run Analysis <i class='fas fa-search'></i> 
+                <% end %>
+            </div>
+            <div id="edit_box" class="db-toolbox collapse" data-parent="#db-toolbar">
+                <div class="p-2">
+                    <%= button_tag :name => 'delete_sample', :class => "s_table_sub btn btn-primary" do %> 
+                    <i class='fas fa-minus-circle'></i> Remove selected samples
+                    <%end%>
+                    <%= link_to edit_user_dataset_path(@dataset.user, @dataset.id),
+                    :class => "s_table_sub btn btn-secondary" do %> 
+                    <i class='fas fa-edit'></i> Edit dataset name
+                    <%end%>
+                    <%= link_to user_dataset_path(@dataset.user, @dataset), method: :delete,
+                        :class => "s_table_sub btn btn-danger",
+                        data: { comfirm: 'Are you sure to delete this dataset?'} do %>
+                        <i class="fas fa-trash-alt"></i> Delete dataset
+                    <%end%>
+                    <%= link_to  samples_path, :class => "s_table_sub btn btn-info" do %>
+                    <i class='fas fa-plus-square'></i> Go to add samples
+                    <%end%>
+                </div>
+            </div>
+        </div>
+    <%end%>
+
+    
         <%= content_tag :table, role: :datatable, class: "display", id: "table_page", data: { url: user_dataset_path(format: :json)} do %>
             <thead>
                 <th>
@@ -69,7 +71,7 @@
             <tbody>
             </tbody>
         <% end %>
-    <%end%>
+
 
     
    

@@ -6,6 +6,8 @@
             <div class="prepare" v-if="!submitted">
                 <div class="index-banner">
                     <div class="container">
+                        <p class="mt-5" style="color:gray;font-size:1.4em;"><i>This page needs some time to load data. Please wait for some seconds if there is no analysis available.</i></p>
+
                         <h2 class="display-2">
                             <!-- Start Analysis -->
                             <button class = "btn btn-1" style="display:inline" >
@@ -39,6 +41,7 @@
                         <p class="lead mt-2">
                             Please choose an analysis below:
                         </p>
+                        <p class="mt-2" style="color:gray;font-size:1.4em;"><i>Data loading needs some time. Please wait for seconds after you select one analysis.</i></p>
                     </div>
                 </div>
                 <div class="container-fluid container" id="analyses_list">
@@ -621,6 +624,8 @@
         },
         created() {
             this.ds_info = window.gon.select_box_option;
+            console.log("Outputing dataset information of the user:");
+            console.log(this.ds_info);
             this.ptype = window.gon.ptype;
             
             this.isConv = true;
@@ -1354,6 +1359,7 @@
                         "is_single": this.picked_single_multiple=='single',
                         "file_names": this.file_names,
                         "is_demo": false,
+                        "is_pipeline": true,
                     }),
                     {
                         headers: {

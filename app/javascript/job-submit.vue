@@ -2,6 +2,7 @@
     <!-- eslint-disable max-len -->
     <div>
         <div v-if="!isLoading">
+           
             <!-- <ul class='list d-none'>
                 <li v-for="a in analyses" :key="a.id" class='list-item'>
                 {{a.id}}: {{a.name}}
@@ -11,6 +12,8 @@
             <div class="prepare" v-if="!submitted">
                 <div class="index-banner">
                     <div class="container">
+                        <p class="mt-5" style="color:gray;font-size:1.4em;"><i>This page needs some time to load data. Please wait for some seconds if there is no analysis available.</i></p>
+
                         <h2 class="display-2">
                             <!-- Start Analysis -->
                             <button class = "btn btn-1" style="display:inline" >
@@ -664,30 +667,30 @@
             },
             displayedPairsNum() {
                 //always listen to changes of user required pairs number and update related vue parts
-                console.log(this.multiple_pairs_num)
+                //console.log(this.multiple_pairs_num)
                 return this.multiple_pairs_num;
             },
             updateUploadedStatus() {
-                console.log("updating upload status under multiple mode:");
-                console.log("multiple pairs number: " + this.multiple_pairs_num);
-                console.log("type of multiple pairs number: " + typeof(this.multiple_pairs_num));
+                // console.log("updating upload status under multiple mode:");
+                // console.log("multiple pairs number: " + this.multiple_pairs_num);
+                // console.log("type of multiple pairs number: " + typeof(this.multiple_pairs_num));
 
                 for (var input_idx = 1; input_idx <= this.multiple_pairs_num;  input_idx++ ) {
                     this.multiple_completed[input_idx - 1] = true;
 
                     if (this.ds_selected[input_idx - 1] == "") {
                         this.app.inputs.forEach((item) => {
-                            console.log(item);
-                            console.log("priting files and status when updating status for multiple upload: " + input_idx + " - " + item.name);
-                            console.log(this.files['multiple-i-' + item.id + '-' + input_idx] == null)
-                            console.log(this.files['multiple-i-' + item.id + '-' + input_idx])
+                            // console.log(item);
+                            // console.log("priting files and status when updating status for multiple upload: " + input_idx + " - " + item.name);
+                            // console.log(this.files['multiple-i-' + item.id + '-' + input_idx] == null)
+                            // console.log(this.files['multiple-i-' + item.id + '-' + input_idx])
 
                             // console.log(this.files['i-' + this.app.inputs[k].id + '-' + input_idx] == null)
                             // console.log(this.files['i-' + this.app.inputs[k].id + '---' + input_idx] == null)
 
-                            if (this.file_required[`i-${item.id}`] == true && this.files['multiple-i-' + item.id + '-' + input_idx] == null) {
+                            if (this.file_required[`i-${item.id}`] == true && this.files['multiple-i-' + item.id + '-' + input_idx] == null && item.name != "CIBERSORT.R" && item.name != "Signature file") {
                                 this.multiple_completed[input_idx - 1] = false;
-                                console.log(item.name + "not uploaded");
+                                //console.log(item.name + "not uploaded");
                             }
                         })
                     }
@@ -698,8 +701,8 @@
                             var cur_value = this.parameters["multiple-p-" + this.multiple_parameters[mp].id + "-" + input_idx];
                             const valid = !!cur_value && !!_.trim(cur_value);
                             if (!valid) {
-                                console.log(cur_value);
-                                console.log("Input parameters has problems")
+                                // console.log(cur_value);
+                                // console.log("Input parameters has problems")
                                 this.multiple_completed[input_idx - 1] = false;
                             }
                         }
@@ -729,31 +732,31 @@
             ds_selected:function(newValue) {
                 if (this.picked_single_multiple == 'single' && newValue != "") {
                     console.log(newValue);
-                    for (var k in this.app.inputs) {
-                        this.files['i-' + this.app.inputs[k].id]  = null;
-                    }
+                    this.app.inputs.forEach((item) => {
+                        if (item.name != "CIBERSORT.R" && item.name != "Signature file") this.files['i-' + item.id]  = null;
+                    })
                 }
                 if (this.picked_single_multiple == 'multiple') {
                     for (var input_idx = 1; input_idx <= this.multiple_pairs_num;  input_idx++ ) {
                         if (this.ds_selected[input_idx - 1] != '') {
                             this.app.inputs.forEach((item) => {
-                                this.files['multiple-i-' + item.id + '-' + input_idx] = null;
+                                if (item.name != "CIBERSORT.R" && item.name != "Signature file") this.files['multiple-i-' + item.id + '-' + input_idx] = null;
                             })
                         }
                     }
                 }
             },
             files:function(newValue, oldValue) {
-                console.log(newValue.size);
-                console.log(oldValue.size);
-                console.log("file changes");
+                // console.log(newValue.size);
+                // console.log(oldValue.size);
+                // console.log("file changes");
             },
             picked_supervised:function() {
                 this.started = false;
                 console.log(this.started);
             },
             multiple_pairs_num:function(newValue) {
-                console.log(newValue);
+                //console.log(newValue);
                 // this.multiple_completed = Array(newValue).fill(false);
                 // for (var k in this.app.inputs) {
                 //     this.files['i-' + this.app.inputs[k].id]  = Array(newValue).fill(null);
@@ -851,7 +854,6 @@
                     return this.files;
                 }
                 else {
-
                     var formatted_files = {};
                     for (var k in this.app.inputs) {
                         if (this.app.inputs[k].name != "CIBERSORT.R" && this.app.inputs[k].name != "Signature file") {
@@ -954,7 +956,6 @@
                         this.app = response.data.app;
                         console.log("Logging fetched input data information:")
                         console.log(response.data.app.inputs);
-                        console.log();
                         this.files = {};
                         this.parameters = {};
                         
@@ -1024,9 +1025,9 @@
                         const valid = !!input.value && !!_.trim(input.value);
                         //Vue.set(this.inputValid, input.name, valid);
                         if (!valid) {
-                            console.log(input);
-                            console.log("you missed some required parameters")
-                            console.log(input.name)
+                            // console.log(input);
+                            // console.log("you missed some required parameters")
+                            // console.log(input.name)
                             allRight = false;
                             alertCenter.add('danger', "You missed some required parameters!");
                         }
@@ -1036,7 +1037,7 @@
                 //there will be double check later
                 if (is_single && this.ds_selected != "") {
                     if (this.ds_info[this.ds_selected][0] > 1) {
-                        console.log("Selected datasets has multiple project sources!")
+                        //console.log("Selected datasets has multiple project sources!")
                         allRight = false
                         alertCenter.add('danger', "Selected dataset has multiple project sources, but you are under single mode!");
                     }
@@ -1071,16 +1072,22 @@
                             }
                         }
                     }
+                    for (var k in this.parameters_input) {
+                        if (this.files[`i-${this.parameters_input[k].id}`] == null) {
+                            anyFile = false;
+                            alertCenter.add('danger', "Please upload Signature file and CIBERSORT.R.");
+                        }
+                    }
                     allRight = anyFile == true
                     if (!allRight) {
                         alertCenter.add('danger', "Not enough inputs with parameters.");
                     }
                 }
 
-                console.log("Priting final files keys:")
-                for (var key in this.files) {
-                    console.log(this.files[key]);
-                }
+                // console.log("Priting final files keys:")
+                // for (var key in this.files) {
+                //     console.log(this.files[key]);
+                // }
 
                 console.log("Here are input files and input parameters");
                 console.log(this.formatFiles());
@@ -1142,7 +1149,7 @@
                     
                     for (var k in this.demo_inputs){
                         let input = this.demo_inputs[k];
-                        console.log(input, k);
+                        //console.log(input, k);
                         let f_arr = [];
                         for (var t in input.files) {
                             let file = input.files[t];
