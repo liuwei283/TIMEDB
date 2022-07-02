@@ -805,10 +805,10 @@
                             if(this.multiple_completed[input_idx - 1] == true && this.ds_selected[input_idx - 1] != "") {
                                 var cur_pvalue = "";
 
-                                if (this.multiple_parameters[mp].name == 'Datasets name') {
+                                if (this.multiple_parameters[mp].name == 'Dataset name') {
                                     cur_pvalue = this.ds_info[this.ds_selected[input_idx - 1]][2];
                                 }
-                                else if (this.multiple_parameters[mp].name == 'Platforms') {
+                                else if (this.multiple_parameters[mp].name == 'Platform') {
                                     cur_pvalue = this.ds_info[this.ds_selected[input_idx - 1]][1];
                                 }
                                 else {

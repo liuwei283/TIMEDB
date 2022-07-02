@@ -123,7 +123,7 @@
                                                 <div class = "row justify-content-center">
                                                     <div class="text-center" v-for="input in pure_inputs" :key="input.id">
                                                         <label :for="`i-${input.id}`">{{ input.name }}
-                                                            <span v-if="input.name != 'Clinical data'" class="required">*</span>
+                                                            <span class="required">*</span>
                                                         </label>
                                                         <div v-b-modal="'single-upload-' + input.id" class="uploadPng text-center justify-content-center container" @click="updateStepToFile()">
                                                             <img v-bind:src="require('../assets/images/big_upload.png')" style="width:90%">
@@ -379,7 +379,7 @@
                                     <label :for="`multiple-i-${input.id}-${input_idx}`" class = "row justify-content-around">
                                         <div class = "col-md-6 text-left" style="margin:auto;">
                                             {{ input.name }}
-                                            <span v-if="input.name != 'Clinical data'" class="required" style="color:red;">*</span>
+                                            <span class="required" style="color:red;">*</span>
                                         </div>
                                         <div class = "col-md-6 text-right">
                                             <button class = "btn btn-secondary">
@@ -670,9 +670,9 @@
             },
             updateUploadedStatus() {
                 // still for multiple uploading verification
-                console.log("updating upload status under multiple mode:");
-                console.log("multiple pairs number: " + this.multiple_pairs_num);
-                console.log("type of multiple pairs number: " + typeof(this.multiple_pairs_num));
+                // console.log("updating upload status under multiple mode:");
+                // console.log("multiple pairs number: " + this.multiple_pairs_num);
+                // console.log("type of multiple pairs number: " + typeof(this.multiple_pairs_num));
 
                 for (var input_idx = 1; input_idx <= this.multiple_pairs_num;  input_idx++ ) {
                     this.multiple_completed[input_idx - 1] = true;
@@ -686,9 +686,9 @@
                             // console.log("priting files and status when updating status for multiple upload: " + input_idx + " - " + item.name);
                             // console.log(this.files['multiple-i-' + item.id + '-' + input_idx] == null)
                             // console.log(this.files['multiple-i-' + item.id + '-' + input_idx])
-                            if (this.file_required[`i-${item.id}`] == true && this.files['multiple-i-' + item.id + '-' + input_idx] == null) {
+                            if (this.files['multiple-i-' + item.id + '-' + input_idx] == null) {
                                 this.multiple_completed[input_idx - 1] = false;
-                                console.log(item.name + " is not uploaded");
+                                // console.log(item.name + " is not uploaded");
                             }
                         })
                     }
@@ -697,14 +697,14 @@
                     if (this.multiple_completed[input_idx - 1] == true && this.ds_selected[input_idx - 1] == '') {
                         for (let input_name in this.multiple_sync_params) {
                             var rep_input = this.multiple_sync_params[input_name][0];
-                            console.log(rep_input);
+                            // console.log(rep_input);
                             var cur_value = this.parameters["multiple-p-" + rep_input.id + "-" + input_idx];
                             const valid = !!cur_value && !!_.trim(cur_value);
                             //all of multipe parameters are required
                             if (!valid) {
-                                console.log(cur_value);
-                                console.log("Input sync parameters has problems, and the problematic value is: ");
-                                console.log(cur_value);
+                                // console.log(cur_value);
+                                // console.log("Input sync parameters has problems, and the problematic value is: ");
+                                // console.log(cur_value);
                                 this.multiple_completed[input_idx - 1] = false;
                             }
                         }
@@ -782,6 +782,9 @@
                 }
             },
             formatParams() {
+                console.log("Parameters:");
+                console.log(this.parameters);
+
                 var formatted_params = []
 
                 //for single syncronized parameters
@@ -797,9 +800,14 @@
                 }
 
                 //for single module parameters
-                for (let module_name in this.single_module_params) {
-                    let module_params = this.single_module_params[module_name];
-                    for (let k in module_params) {
+                for (var module_name in this.single_module_params) {
+                    var module_params = this.single_module_params[module_name].params;
+                    // console.log("-----------");
+                    // console.log(module_params);
+                    for (var k in module_params) {
+                        // console.log("Format params:----");
+                        // console.log(this.parameters["p-" + module_params[k].id]);
+
                         formatted_params.push({['p-' + module_params[k].id]: this.parameters["p-" + module_params[k].id]});
                     }
                 }
@@ -820,31 +828,34 @@
                         if (this.multiple_completed[input_idx - 1] == true) {
                             // if this pair is from dataset merging
                             if (this.ds_selected[input_idx - 1] != '') {
-                                console.log("for input pair " + input_idx + " we use dataset merging");
+                                //console.log("for input pair " + input_idx + " we use dataset merging");
                                 //Dataset name
-                                let dataset_names = this.ds_info[this.ds_selected[input_idx - 1]][2].split(',');
+                                var dataset_names = this.ds_info[this.ds_selected[input_idx - 1]][2].split(',');
+                                //console.log(dataset_names);
                                 //Platform name
-                                let platform_names = this.ds_info[this.ds_selected[input_idx - 1]][1].split(',');
+                                var platform_names = this.ds_info[this.ds_selected[input_idx - 1]][1].split(',');
+                                //console.log(platform_names);
                                 //project source number
-                                let ps_number = this.ds_info[this.ds_selected[input_idx - 1]][0];
-                                multiple_sync_array['Dataset name'].concat(dataset_names);
-                                multiple_sync_array["Platform"].concat(platform_names);
-                                multiple_sync_array['Protocol normalization'].concat(Array(ps_number).fill(this.parameters["multiple-p-" + this.multiple_sync_params['Protocol normalization'][0].id + "-" + input_idx]));
+                                var ps_number = this.ds_info[this.ds_selected[input_idx - 1]][0];
+                                multiple_sync_array['Dataset name'] = multiple_sync_array['Dataset name'].concat(dataset_names);
+                                multiple_sync_array["Platform"] = multiple_sync_array["Platform"].concat(platform_names);
+                                multiple_sync_array['Protocol normalization'] = multiple_sync_array['Protocol normalization'].concat(Array(ps_number).fill(this.parameters["multiple-p-" + this.multiple_sync_params['Protocol normalization'][0].id + "-" + input_idx]));
                                 // for (let module_name in this.multiple_module_params) {
                                 //     if (this.multiple_module_params[module_name].params != null) {
                                 //         multiple_module_array[module_name] += Array(ps_number).fill(this.parameters["multiple-p-" + this.multiple_module_params[module_name].params.id + "-" + input_idx]);
                                 //     }
                                 // }
+                                //console.log(multiple_sync_array);
                             }
                         }
                     }
-                    console.log(multiple_sync_array);
+                    // console.log(multiple_sync_array);
                     for (let input_idx = 1; input_idx <=  this.multiple_pairs_num; input_idx++ ) {
                         if (this.multiple_completed[input_idx - 1] == true) {
                             // this.parameters["multiple-p-" + this.multiple_module_params[module_name].params.id + "-" + input_idx]
                             // if this pair is from dataset merging
                             if (this.ds_selected[input_idx - 1] == '') {
-                                console.log("for input pair " + input_idx + " we use file uploading:");
+                                //console.log("for input pair " + input_idx + " we use file uploading:");
                                 multiple_sync_array['Dataset name'].push(this.parameters["multiple-p-" + this.multiple_sync_params['Dataset name'][0].id + "-" + input_idx]);
                                 multiple_sync_array["Platform"].push(this.parameters["multiple-p-" + this.multiple_sync_params['Platform'][0].id + "-" + input_idx]);
                                 multiple_sync_array['Protocol normalization'].push(this.parameters["multiple-p-" + this.multiple_sync_params['Protocol normalization'][0].id + "-" + input_idx]);
@@ -1095,9 +1106,9 @@
                         const valid = !!input.value && !!_.trim(input.value);
                         //Vue.set(this.inputValid, input.name, valid);
                         if (!valid) {
-                            console.log(input);
-                            console.log("you missed some required parameters")
-                            console.log(input.name)
+                            // console.log(input);
+                            // console.log("you missed some required parameters")
+                            // console.log(input.name)
                             allRight = false;
                             alertCenter.add('danger', "You missed some required parameters!");
                         }
@@ -1107,7 +1118,7 @@
                 //there will be double check later
                 if (is_single && this.ds_selected != "") {
                     if (this.ds_info[this.ds_selected][0] > 1) {
-                        console.log("Selected datasets has multiple project sources!")
+                        // console.log("Selected datasets has multiple project sources!")
                         allRight = false
                         alertCenter.add('danger', "Selected dataset has multiple project sources, but you are under single mode!");
                     }
@@ -1126,7 +1137,7 @@
                         anyFile = true;
                         if (this.ds_selected == "") {
                             for (var file_inputs in this.file_required) {
-                                if (this.file_required[file_inputs] == true && this.files[file_inputs] == null) {
+                                if (this.files[file_inputs] == null) {
                                     anyFile = false;
                                     alertCenter.add('danger', "You are under single mode, but you have not uploaded any file input or selected any single source dataset!");
                                 }
@@ -1140,6 +1151,13 @@
                                 anyFile = true;
                                 break;
                             }
+                        }
+                    }
+
+                    for (var k in this.parameters_input) {
+                        if (this.files[`i-${this.parameters_input[k].id}`] == null) {
+                            anyFile = false;
+                            alertCenter.add('danger', "Please upload Signature file and CIBERSORT.R.");
                         }
                     }
                     // for (var file_inputs in this.files) {

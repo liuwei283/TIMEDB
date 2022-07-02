@@ -73,7 +73,7 @@
                             v-model="chosenModule"
                             :options="module_names"
                             class="tool-bar-el px-0 mb-1 col-md-3"/><!--v-if="data.outputs.length > 1"-->
-                        <p style="color:gray;font-size:1.4em;position:relative;right:30px;" v-if="job_status == 'finished' && taskOutputs.length>1" ><i>You could select different task outputs to check their visualizations.</i></p>
+                        <p style="color:gray;font-size:1.4em;position:relative;right:30px;ml-4" v-if="job_status == 'finished' && taskOutputs.length>1" ><i>You could select different task outputs to check their visualizations.</i></p>
                     </div>
                     
 
