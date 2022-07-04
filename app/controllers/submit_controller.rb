@@ -405,6 +405,8 @@ class SubmitController < ApplicationController
 
         
         if !datasets_selected.blank?
+          idx_sum = 0
+          cur_length = 0
           datasets_selected.each do |ds_name|
 
             
@@ -417,6 +419,7 @@ class SubmitController < ApplicationController
             Rails.logger.debug merged_files.keys
 
             Rails.logger.debug "Sucess here - 2"
+            cur_length = 0
         
 
             file_names.keys.each do |input_id|
@@ -431,10 +434,11 @@ class SubmitController < ApplicationController
               Rails.logger.info "Outputing the number of not existed database merged files: =======>"
               if !match_merged_files.blank?
                 Rails.logger.debug match_merged_files.length
+                cur_length = match_merged_files.length
 
                 Rails.logger.info !match_merged_files.blank?
                 match_merged_files.each_with_index do |m_file, idx|
-                  file_name = fname + "_" + idx.to_s + ".csv"
+                  file_name = fname + "_" + (idx_sum + idx).to_s + ".csv"
                   Rails.logger.debug file_name
                   file = File.new(file_name, 'w')
                   file.write(m_file)
@@ -454,6 +458,7 @@ class SubmitController < ApplicationController
             end
 
             Rails.logger.debug "Sucess here - 3"
+            idx_sum += cur_length
 
           end
         end
