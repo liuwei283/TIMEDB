@@ -6,7 +6,7 @@
             <div class="prepare" v-if="!submitted">
                 <div class="index-banner">
                     <div class="container">
-                        <p class="mt-5" style="color:gray;font-size:1.4em;"><i>This page needs some time to load data. Please wait for some seconds if there is no analysis available.</i></p>
+                        <p class="mt-5" style="color:gray;font-size:1.4em;"><i>This page may need some time to load data. Please wait for some seconds if there is no analysis available.</i></p>
 
                         <h2 class="display-2">
                             <!-- Start Analysis -->
@@ -41,7 +41,7 @@
                         <p class="lead mt-2">
                             Please choose an analysis below:
                         </p>
-                        <p class="mt-2" style="color:gray;font-size:1.4em;"><i>Data loading needs some time. Please wait for seconds after you select one analysis.</i></p>
+                        <p class="mt-2" style="color:gray;font-size:1.4em;"><i>Data loading may need some time. Please wait for seconds after you select the analysis.</i></p>
                     </div>
                 </div>
                 <div class="container-fluid container" id="analyses_list">
@@ -1218,7 +1218,7 @@
                 var demo_files = {};
                 var demo_params = {};
 
-                let submitted_pid;
+                var submitted_pid;
                 if (this.picked_single_multiple == 'multiple') {
                     submitted_pid = this.selected_analysis.multiple_pid;
                 }
@@ -1338,12 +1338,12 @@
                 const { alertCenter } = this.$refs;
                 let alertData;
        
-                let submitted_mid;
+                let submitted_pid;
                 if (this.picked_single_multiple == 'multiple') {
-                    submitted_mid = this.selected_analysis.multiple_mid;
+                    submitted_pid = this.selected_analysis.multiple_pid;
                 }
                 else {
-                    submitted_mid = this.selected_analysis.mid;
+                    submitted_pid = this.selected_analysis.pid;
                 }
                 $("#disable-fill").fadeIn(10);
                 this.isLoading = true;

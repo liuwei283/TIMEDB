@@ -23,13 +23,13 @@
         <div id="db-toolbar" class = "mt-4 mb-4">
             <div class="db-tool-nav">
                 <div class="btn btn-outline-dark" data-toggle="collapse" data-target="#edit_box" aria-expanded="true" aria-controls="download_box">
-                    Edit Dataset <i class="fas fa-caret-down"></i>
+                    Edit Dataset <i class="fas fa-caret-down pl-2"></i>
                 </div>
                 <%= link_to download_ds_metadata_user_dataset_path, :class => "s_table_sub btn btn-outline-dark" do %>
-                    Download dataset <i class='fas fa-download'></i> 
+                    Download dataset <i class='fas fa-download pl-2'></i> 
                 <%end%>
                 <%= link_to "/submit/analyses", :class => "s_table_sub btn btn-outline-dark" do %>
-                    Run Analysis <i class='fas fa-search'></i> 
+                    Run Analysis <%= image_tag 'analysis_icon.png', class: "pl-2", style:"width:20px;" %> 
                 <% end %>
             </div>
             <div id="edit_box" class="db-toolbox collapse" data-parent="#db-toolbar">
