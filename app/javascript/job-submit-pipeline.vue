@@ -41,7 +41,7 @@
                         <p class="lead mt-2">
                             Please choose an analysis below:
                         </p>
-                        <p class="mt-2" style="color:gray;font-size:1.4em;"><i>Data loading may need some time. Please wait for seconds after you select the analysis.</i></p>
+                        <p class="mt-2" style="color:gray;font-size:1.4em;"><i>Data loading may need some time. Please wait for some seconds after you select the analysis.</i></p>
                     </div>
                 </div>
                 <div class="container-fluid container" id="analyses_list">

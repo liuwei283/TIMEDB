@@ -12,7 +12,7 @@
             <div class="prepare" v-if="!submitted">
                 <div class="index-banner">
                     <div class="container">
-                        <p class="mt-5" style="color:gray;font-size:1.4em;"><i>This page needs some time to load data. Please wait for some seconds if there is no analysis available.</i></p>
+                        <p class="mt-5" style="color:gray;font-size:1.4em;"><i>This page may need some time to load data. Please wait for some seconds if there is no analysis available.</i></p>
 
                         <h2 class="display-2">
                             <!-- Start Analysis -->
