@@ -130,7 +130,7 @@
                         </b-badge>
                         <b-badge
                             pill
-                            v-if="job_status=='finished'"
+                            v-else-if="job_status=='finished'"
                             class="badge-finished"
                         >
                         Finished
@@ -836,7 +836,7 @@ export default {
             }else {
                 this.all_jobs.forEach(j => {
                     if (j.taskId === parseInt(this.job_id)) {
-                        this.jobName = j.jobName;
+                        this.jobName = j.taskName;
                         this.category = j.category;
                         console.log(this.category);
                     }
