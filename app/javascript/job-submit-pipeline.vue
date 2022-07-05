@@ -333,7 +333,7 @@
         <div id = "loadingBlock" v-else>
             <h3 class="mt-4">
                 <img v-bind:src="require('../assets/images/loading_icon.gif')">
-                We are preparing your submission. Please wait for some minutes.
+                We are preparing your submission. Please wait for some minutes and do not close this window.
             </h3>
         </div>
 
@@ -1226,7 +1226,7 @@
                     submitted_pid = this.selected_analysis.pid;
                 }
                 
-                $("#disable-fill").fadeIn(10);
+                //$("#disable-fill").fadeIn(10);
                 this.isLoading = true;
                 console.log("loading: " + this.isLoading);
 
@@ -1310,7 +1310,7 @@
                         console.log(demo_files);
 
 
-                        $("#disable-fill").fadeOut(10);
+                        //$("#disable-fill").fadeOut(10);
                         this.isLoading = false;
                         if (!!alertData) {
                             this.$refs.alertCenter.add('danger', alertData);
@@ -1345,7 +1345,7 @@
                 else {
                     submitted_pid = this.selected_analysis.pid;
                 }
-                $("#disable-fill").fadeIn(10);
+                //$("#disable-fill").fadeIn(10);
                 this.isLoading = true;
                 axios.post(
                     `/submit-app-task/`,
@@ -1379,7 +1379,7 @@
                 }).catch((reason) => {
                     alertData = reason;
                 }).finally(() => {
-                    $("#disable-fill").fadeOut(10);
+                    //$("#disable-fill").fadeOut(10);
                     this.isLoading = false;
                     if (!!alertData) {
                         this.$refs.alertCenter.add('danger', alertData);

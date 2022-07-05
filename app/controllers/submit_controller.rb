@@ -792,11 +792,13 @@ class SubmitController < ApplicationController
         end
       else
         files_to_do.each do |of1|
-          if matchPattern(of1['name'], info['outputFileName'])
-            file_paths[dataType] = {id: 0,
-                                    url: File.join('/data/outputs', of1['path'], of1['name']), 
-                                    is_demo: true}
-            # files_to_do.delete(of1)
+          if of1 != nil
+            if matchPattern(of1['name'], info['outputFileName'])
+              file_paths[dataType] = {id: 0, 
+                                      url: File.join('/data/outputs', of1['path'], of1['name']), 
+                                      is_demo: true}
+              # files_to_do.delete(of1)
+            end
           end
         end
       end

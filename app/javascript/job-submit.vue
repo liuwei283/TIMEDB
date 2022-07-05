@@ -8,313 +8,316 @@
                 {{a.id}}: {{a.name}}
                 </li>
             </ul> -->
+            <div v-if="!submitted">
 
-            <div class="prepare" v-if="!submitted">
-                <div class="index-banner">
-                    <div class="container">
-                        <p class="mt-5" style="color:gray;font-size:1.4em;"><i>This page may need some time to load data. Please wait for some seconds if there is no analysis available.</i></p>
+                <div class="prepare">
+                    <div class="index-banner">
+                        <div class="container">
+                            <p class="mt-5" style="color:gray;font-size:1.4em;"><i>This page may need some time to load data. Please wait for some seconds if there is no analysis available.</i></p>
 
-                        <h2 class="display-2">
-                            <!-- Start Analysis -->
-                            <button class = "btn btn-1" style="display:inline" >
-                            <a href= "/tutorial/analysis/2">Submission Helper</a>
+                            <h2 class="display-2">
+                                <!-- Start Analysis -->
+                                <button class = "btn btn-1" style="display:inline" >
+                                <a href= "/tutorial/analysis/2">Submission Helper</a>
+                                </button>
+                            </h2>
+                        </div>
+                    </div>
+                    <div v-if="isConv==true" id = "singleMultipleSelect">
+                        <div class="container">
+                            <h2 class="display-5">
+                                Please choose to upload single or multiple dataset(s): 
+                            </h2>
+                            <br>
+                            <button type = "button" id = "single-button" class = "btn btn-dark btn-lg btn-select" @click="updateMode('single')">
+                            Single
                             </button>
-                        </h2>
-                    </div>
-                </div>
-                <div v-if="isConv==true" id = "singleMultipleSelect">
-                    <div class="container">
-                        <h2 class="display-5">
-                            Please choose to upload single or multiple dataset(s): 
-                        </h2>
-                        <br>
-                        <button type = "button" id = "single-button" class = "btn btn-dark btn-lg btn-select" @click="updateMode('single')">
-                        Single
-                        </button>
-                        <button type = "button" id = "multiple-button" class = "btn btn-secondary btn-lg btn-select" @click="updateMode('multiple')">
-                        Multiple
-                        </button>
-                    </div>
-                </div>
-                <div class="index-banner">
-                    <div class="container">
-                        <h2 class="display-4">
-                            Analysis
-                        </h2>
-                        <p class="lead mt-2">
-                            Please choose an analysis below:
-                        </p>
-                    </div>
-                </div>
-                <div id="analyses_list" class="container">
-                    <div id="accordion" class="row" style="width:100%;">
-                        <div class="col-md-4 col-sm-4 col-lg-4 text-center" v-for="a in displayedAnalyses" :key="a.id" @click="updateApp(a, true)">
-                            <div class="card">
-                                <img v-if="a.cover_image == null" v-bind:src="require('../assets/images/module.png')" class="app_img card-img-top">
-                                <img v-else :src="a.cover_image" class="app_img card-img-top">
-                                <div v-bind:class = "selected_analysis!=null&&selected_analysis.name==a.name?'image_overlay image_overlay_blur container active':'image_overlay image_overlay_blur container'">
-                                    <div class = "image_title">
-                                        {{a.name}}
-                                    </div>
-                                    <div class = "image_decscription">
-                                        {{a.description}}
-                                    </div>
-                                </div>
-                            </div>
-                            <h4 class = "text-center">{{a.name}}</h4>
+                            <button type = "button" id = "multiple-button" class = "btn btn-secondary btn-lg btn-select" @click="updateMode('multiple')">
+                            Multiple
+                            </button>
                         </div>
                     </div>
-                </div>
-                <br><br>
-            </div>
-            <div id="jumpStart" style="height:100px;">
-            </div>
-
-            <div class = "col-md-12" id = "submit-app-back" v-if="started && !submitted ">
-                <div class = "row">
-                    <div class="col-md-2">
-                        <img v-bind:src="require('../assets/images/nav-up-blue.png')">
-                        <svg width="100px" height="1100px" version="1.1" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M40 0 v 100 l 10 10 l -10 10 v 430 l 10 10 l -10 10 v 530" fill="transparent" stroke="#253959" stroke-width = "3px"></path> 
-                        </svg>
-
-                        <div v-if="step==1" id = "timeline-file" class = "timeline-step" style="vertical-align:center">
-                            <img v-bind:src="require('../assets/images/nav-up-pink.png')" style="margin-right: 10px"> 
-                            <i class="fa fa-arrow-right"></i>  <b-btn v-b-modal.submit-helper class = "btn btn-secondary" id = "helper-trigger"> Analysis Helper </b-btn>
+                    <div class="index-banner">
+                        <div class="container">
+                            <h2 class="display-4">
+                                Analysis
+                            </h2>
+                            <p class="lead mt-2">
+                                Please choose an analysis below:
+                            </p>
                         </div>
-
-                        <div v-if="step==2" id = "timeline-parameter" class = "timeline-step" style="vertical-align:center">
-                            <img v-bind:src="require('../assets/images/timeline-param.png')" style="margin-right: 10px"> 
-                            <i class="fa fa-arrow-right"></i>  <b-btn v-b-modal.submit-helper class = "btn btn-secondary" id = "helper-trigger"> Analysis Helper </b-btn>
-                        </div>
-
-
-                        <!-- <img v-if="!submittted" v-bind:src="require('../assets/images/nav-submit-gray.png')"> -->
-                        <img v-if="submitted == true" v-bind:src="require('../assets/images/nav-submit-blue.png')">
-                        <img v-else v-bind:src="require('../assets/images/nav-submit-gray.png')">
-                        <br>                      
                     </div>
-                    <div class="col-md-10">
-                        <div id="run-app">
-                            <alert-center ref="alertCenter" />
-                            
-                            <!-- Inputs -->
-                            <div v-if="started && !submitted">
-
-                                <div class = "row">
-                                    <!-- <div class = "col-md-2">
-                                        <b-btn @click="submitDemoTask()" class="float-right mt-2 btn-lg"><i class="fa fa-caret-right fa-lg"></i>Run demo task</b-btn>
-                                    </div> -->
-                                    <!-- <div class = "col-md-3">
-                                        <h4><i class="fa fa-caret-right fa-lg"></i>Run demo task</h4>
-                                    </div> -->
-                                    <div @click="submitDemoTask()" class = "col-md-2" b-tooltip.hover :title="`Click here to run demo task for ${app.name}`">
-                                        <img class = "demoPng" id = "runDemoImage" v-bind:src="require('../assets/images/runDemo.png')" style="width:100%;">
-                                    </div>
-                                    <div @click="checkDemoTask()" class = "col-md-2" b-tooltip.hover :title="`Click here to check demo task for ${app.name}`">
-                                        <img class = "demoPng" id = "checkDemoImage" v-bind:src="require('../assets/images/checkDemo.png')" style="width:100%;">
-                                    </div>
-                                    <div class = "col-md-2">
-                                    </div>
-                                    <div class = "col-md-6">
-                                        <h6 class="text-right">{{ app.name }}</h6>
-                                        <h2 class = "text-right"> TASK SUBMISSISON </h2>
-                                    </div>
-                                </div>
-                                    
-                                <!-- <div class = "container row justify-content-around">
-                                    <div class = "col-md-6">
-                                        <h4 v-if="picked_single_multiple=='multiple'" class = "text-center">Batch effect config</h4>
-                                        <h4 v-else class = "text-center">File Submission</h4>
-                                    </div>
-                                    <div class = "col-md-6">
-                                        <h4 class = "text-center">Set Parameters</h4>
-                                    </div>
-                                </div> -->
-                                
-                                <div id = "file-upload-step" class = "row justify-content-center submit-container-lg">
-                                    <div>
-                                        <h3 v-if="picked_single_multiple=='multiple'" class = "text-center">Batch effect config</h3>
-                                        <h3 v-else class = "text-center">File Submission</h3>
-                                        <br>
-
-                                        <!-- <div class = "row submit-container justify-content-center h-100">
-                                            <div v-for="input in displayedInputs" :key="input.id" class = "text-center submit-box col-md-6">
-                                                <a :href="`/public/data/module_demo/${app.name}_demo_${input.name}.tsv`" :download=input.name >Demo {{ input.name}} </a>
-                                            </div>
-                                            <div class="col-md-5 text-center submit-box">
-                                                <a href="/public/data/module_demo/demo1.tsv" download = "testing">Download</a>
-                                                <a :href="`/public/data/module_demo/${app.name}_demo1.tsv`" download = "demo1">Download</a>
-                                            </div>
-                                            <div class="col-md-5 offset-2 text-center" style="border:solid;border-radius:20px;padding:20px">
-                                                <a :href="`/public/data/module_demo/${app.name}_demo2.tsv`" download = "demo2">Download</a>
-                                                <a href="/public/data/module_demo/test_demo2.tsv" download = "testing">Download</a>
-                                            </div> 
-                                        </div> -->
-
-                                        <div class = "row submit-box justify-content-center">
-                                            <div v-if="picked_single_multiple=='single'" class = "row justify-content-center">
-                                                <div class = "row justify-content-center">
-                                                    <div class="text-center" v-for="input in displayedInputs" :key="input.id">
-                                                        <label :for="`i-${input.id}`">{{ input.name }}
-                                                            <span v-if="input.required" class="required">*</span>
-                                                        </label>
-                                                        <div v-b-modal="'single-upload-' + input.id" class="uploadPng text-center justify-content-center container" @click="updateStepToFile()">
-                                                            <img v-bind:src="require('../assets/images/big_upload.png')" style="width:90%">
-                                                        </div>
-                                                    </div>
-                                                    
-                                                </div>
-
-                                                <div class = "row justify-content-center">
-                                                    <label>
-                                                        <span>You can select a dataset to merge: </span>
-                                                        <i class="fa fa-question-circle" v-b-tooltip.rightbottom.hover title="You may choose one dataset with single project source to upload merged files"></i>
-                                                    </label>
-                                                    <b-form-select @focus="updateStepToFile()" class="col-md-8" 
-                                                        name="selected-dataset"
-                                                        v-model="ds_selected"
-                                                    >
-                                                        <option value="" key="default">--Please select your own dataset--</option>
-                                                        <option v-for="(option, index) in select_box_option" :key="index" :value="option.value" :disabled="option.disabled">
-                                                            {{option.lable}}
-                                                        </option>
-                                                    </b-form-select>
-                                                </div>
-
-                                            </div>
-                                            <div v-else class = "row justify-content-center">
-                                                <div class = "text-center submit-container">
-                                                    <label for="pairs_num_select">Please select maximum pairs of files you want to upload:
-                                                    </label>
-                                                    <div>
-                                                        <b-form-input id="pairs_num_select" value=1 max="5" type="number" step="1" name="selected_pairs_num" v-model="multiple_pairs_num" />
-                                                    </div>
-                                                </div>
-                                                <div id = "multiple-upload-box" class = "row justify-content-center text-center" v-if="displayedPairsNum > 0">
-                                                    <div v-for="input_idx in parseInt(displayedPairsNum)" :key="input_idx" class="text-center col-md-4">
-                                                        <div v-b-modal="`batchEffect-config-${input_idx}`" class="uploadPng text-center justify-content-center container" @click="updateStepToFile()">
-                                                            <img v-bind:src="require('../assets/images/batchEffectSetting.png')" style="width:90%;">
-                                                        </div>
-                                                        <div class = "text-center" v-if="updateUploadedStatus[input_idx - 1] == true">
-                                                            <i class="fa fa-check" aria-hidden="true" style="color:green"></i>
-                                                        </div>
-                                                        <div class = "text-center" v-else>
-                                                            <i class="fa fa-times" aria-hidden="true" style="color:red"></i>
-                                                        </div>
-                                                        <br>
-                                                    </div>
-                                                </div>
-                                                <br>
-                                            </div>
+                    <div id="analyses_list" class="container">
+                        <div id="accordion" class="row" style="width:100%;">
+                            <div class="col-md-4 col-sm-4 col-lg-4 text-center" v-for="a in displayedAnalyses" :key="a.id" @click="updateApp(a, true)">
+                                <div class="card">
+                                    <img v-if="a.cover_image == null" v-bind:src="require('../assets/images/module.png')" class="app_img card-img-top">
+                                    <img v-else :src="a.cover_image" class="app_img card-img-top">
+                                    <div v-bind:class = "selected_analysis!=null&&selected_analysis.name==a.name?'image_overlay image_overlay_blur container active':'image_overlay image_overlay_blur container'">
+                                        <div class = "image_title">
+                                            {{a.name}}
+                                        </div>
+                                        <div class = "image_decscription">
+                                            {{a.description}}
                                         </div>
                                     </div>
-                                    
                                 </div>
+                                <h4 class = "text-center">{{a.name}}</h4>
+                            </div>
+                        </div>
+                    </div>
+                    <br><br>
+                </div>
+                <div id="jumpStart" style="height:100px;">
+                </div>
+                <div class = "col-md-12" id = "submit-app-back" v-if="started">
+                    <div class = "row">
+                        <div class="col-md-2">
+                            <img v-bind:src="require('../assets/images/nav-up-blue.png')">
+                            <svg width="100px" height="1100px" version="1.1" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M40 0 v 100 l 10 10 l -10 10 v 430 l 10 10 l -10 10 v 530" fill="transparent" stroke="#253959" stroke-width = "3px"></path> 
+                            </svg>
 
-                                <div id="parameter-setting-step" class = "row justify-content-center submit-container-lg" v-if="displayedSingleParams.length>0 || parameters_input.length>0">
-                                    <div class="set-param-section">
+                            <div v-if="step==1" id = "timeline-file" class = "timeline-step" style="vertical-align:center">
+                                <img v-bind:src="require('../assets/images/nav-up-pink.png')" style="margin-right: 10px"> 
+                                <i class="fa fa-arrow-right"></i>  <b-btn v-b-modal.submit-helper class = "btn btn-secondary" id = "helper-trigger"> Analysis Helper </b-btn>
+                            </div>
 
-                                        <h3 class = "text-center">Parameter setting</h3>
-                                        <br>
+                            <div v-if="step==2" id = "timeline-parameter" class = "timeline-step" style="vertical-align:center">
+                                <img v-bind:src="require('../assets/images/timeline-param.png')" style="margin-right: 10px"> 
+                                <i class="fa fa-arrow-right"></i>  <b-btn v-b-modal.submit-helper class = "btn btn-secondary" id = "helper-trigger"> Analysis Helper </b-btn>
+                            </div>
 
-                                        <div class = "row submit-box justify-content-center;">
-                                            <div v-if="displayedSingleParams.length > 0" class = "col-md-6">
 
-                                                <div class="row" style="height:350px; overflow-y:scroll; display:flex; flex-direction: row; justify-content: center; align-items:center;">
+                            <!-- <img v-if="!submittted" v-bind:src="require('../assets/images/nav-submit-gray.png')"> -->
+                            <img v-if="submitted == true" v-bind:src="require('../assets/images/nav-submit-blue.png')">
+                            <img v-else v-bind:src="require('../assets/images/nav-submit-gray.png')">
+                            <br>                      
+                        </div>
+                        <div class="col-md-10">
+                            <div id="run-app">
+                                <alert-center ref="alertCenter" />
+                                
+                                <!-- Inputs -->
+                                <div v-if="started && !submitted">
 
-                                                    <div class="col-md-10" v-for="param in displayedSingleParams" :key="param.id">
-                                                        <label :for="`p-${param.id}`">{{ param.name }}
-                                                            <span v-if="param.required" class="required">*</span>
+                                    <div class = "row">
+                                        <!-- <div class = "col-md-2">
+                                            <b-btn @click="submitDemoTask()" class="float-right mt-2 btn-lg"><i class="fa fa-caret-right fa-lg"></i>Run demo task</b-btn>
+                                        </div> -->
+                                        <!-- <div class = "col-md-3">
+                                            <h4><i class="fa fa-caret-right fa-lg"></i>Run demo task</h4>
+                                        </div> -->
+                                        <div @click="submitDemoTask()" class = "col-md-2" b-tooltip.hover :title="`Click here to run demo task for ${app.name}`">
+                                            <img class = "demoPng" id = "runDemoImage" v-bind:src="require('../assets/images/runDemo.png')" style="width:100%;">
+                                        </div>
+                                        <div @click="checkDemoTask()" class = "col-md-2" b-tooltip.hover :title="`Click here to check demo task for ${app.name}`">
+                                            <img class = "demoPng" id = "checkDemoImage" v-bind:src="require('../assets/images/checkDemo.png')" style="width:100%;">
+                                        </div>
+                                        <div class = "col-md-2">
+                                        </div>
+                                        <div class = "col-md-6">
+                                            <h6 class="text-right">{{ app.name }}</h6>
+                                            <h2 class = "text-right"> TASK SUBMISSISON </h2>
+                                        </div>
+                                    </div>
+                                        
+                                    <!-- <div class = "container row justify-content-around">
+                                        <div class = "col-md-6">
+                                            <h4 v-if="picked_single_multiple=='multiple'" class = "text-center">Batch effect config</h4>
+                                            <h4 v-else class = "text-center">File Submission</h4>
+                                        </div>
+                                        <div class = "col-md-6">
+                                            <h4 class = "text-center">Set Parameters</h4>
+                                        </div>
+                                    </div> -->
+                                    
+                                    <div id = "file-upload-step" class = "row justify-content-center submit-container-lg">
+                                        <div>
+                                            <h3 v-if="picked_single_multiple=='multiple'" class = "text-center">Batch effect config</h3>
+                                            <h3 v-else class = "text-center">File Submission</h3>
+                                            <br>
+
+                                            <!-- <div class = "row submit-container justify-content-center h-100">
+                                                <div v-for="input in displayedInputs" :key="input.id" class = "text-center submit-box col-md-6">
+                                                    <a :href="`/public/data/module_demo/${app.name}_demo_${input.name}.tsv`" :download=input.name >Demo {{ input.name}} </a>
+                                                </div>
+                                                <div class="col-md-5 text-center submit-box">
+                                                    <a href="/public/data/module_demo/demo1.tsv" download = "testing">Download</a>
+                                                    <a :href="`/public/data/module_demo/${app.name}_demo1.tsv`" download = "demo1">Download</a>
+                                                </div>
+                                                <div class="col-md-5 offset-2 text-center" style="border:solid;border-radius:20px;padding:20px">
+                                                    <a :href="`/public/data/module_demo/${app.name}_demo2.tsv`" download = "demo2">Download</a>
+                                                    <a href="/public/data/module_demo/test_demo2.tsv" download = "testing">Download</a>
+                                                </div> 
+                                            </div> -->
+
+                                            <div class = "row submit-box justify-content-center">
+                                                <div v-if="picked_single_multiple=='single'" class = "row justify-content-center">
+                                                    <div class = "row justify-content-center">
+                                                        <div class="text-center" v-for="input in displayedInputs" :key="input.id">
+                                                            <label :for="`i-${input.id}`">{{ input.name }}
+                                                                <span v-if="input.required" class="required">*</span>
+                                                            </label>
+                                                            <div v-b-modal="'single-upload-' + input.id" class="uploadPng text-center justify-content-center container" @click="updateStepToFile()">
+                                                                <img v-bind:src="require('../assets/images/big_upload.png')" style="width:90%">
+                                                            </div>
+                                                        </div>
+                                                        
+                                                    </div>
+
+                                                    <div class = "row justify-content-center">
+                                                        <label>
+                                                            <span>You can select a dataset to merge: </span>
+                                                            <i class="fa fa-question-circle" v-b-tooltip.rightbottom.hover title="You may choose one dataset with single project source to upload merged files"></i>
                                                         </label>
-                                                        <div v-if="param.param_type === 'string'">
-                                                            <b-form-input @focus="provide_param_desc(param)" :id="`p-${param.id}`" :value="param.default" :required="param.required"
-                                                                        v-model="parameters[`p-${param.id}`]" :name="`p-${param.id}`" :state="inputValid[`p-${param.id}`]" />
-                                                        </div>
-                                                        <div v-else-if="param.param_type === 'int'">
-                                                            <b-form-input @focus="provide_param_desc(param)" :id="`p-${param.id}`" :value="param.default" type="number" step="1"
-                                                                        v-model="parameters[`p-${param.id}`]" :required="param.required" :name="`p-${param.id}`"
-                                                                        :state="inputValid[`p-${param.id}`]"/>
-                                                        </div>
-                                                        <div v-else-if="param.param_type === 'float'">
-                                                            <b-form-input @focus="provide_param_desc(param)" :id="`p-${param.id}`" :value="param.default" type="number"
-                                                                        v-model="parameters[`p-${param.id}`]" step="0.01" :required="param.required"
-                                                                        :name="`p-${param.id}`" :state="inputValid[`p-${param.id}`]"/>
-                                                        </div>
-                                                        <div v-else-if="param.param_type === 'boolean'">
-                                                            <b-form-select @focus="provide_param_desc(param)" :id="`p-${param.id}`" :options="boolSelectOpt" :required="param.required"
-                                                                        v-model="parameters[`p-${param.id}`]" :name="`p-${param.id}`" :state="inputValid[`p-${param.id}`]"/>
-                                                        </div>
-                                                        <div v-else-if="param.param_type === 'enum'">
-                                                            <select @focus="provide_param_desc(param)" :id="`p-${param.id}`" class="form-control custom-select" 
-                                                                    v-model="parameters[`p-${param.id}`]" :required="param.required" :name="`p-${param.id}`" 
-                                                                    :state="inputValid[`p-${param.id}`]">
-                                                                <option v-for="option in param.options" :value="option" :key="option"
-                                                                        :selected="param.default == option ? 'selected' : ''">
-                                                                    {{ option }}
-                                                                </option>
-                                                            </select>
-                                                        </div>
-                                                        <div v-else-if="param.param_type === 'splitchr'">
-                                                            <b-form-select @focus="provide_param_desc(param)" :id="`p-${param.id}`" :options="boolSelectOpt" 
-                                                                        v-model="parameters[`p-${param.id}`]" :required="param.required" :name="`p-${param.id}`" 
-                                                                        :state="inputValid[`p-${param.id}`]" />
-                                                        </div>
+                                                        <b-form-select @focus="updateStepToFile()" class="col-md-8" 
+                                                            name="selected-dataset"
+                                                            v-model="ds_selected"
+                                                        >
+                                                            <option value="" key="default">--Please select your own dataset--</option>
+                                                            <option v-for="(option, index) in select_box_option" :key="index" :value="option.value" :disabled="option.disabled">
+                                                                {{option.lable}}
+                                                            </option>
+                                                        </b-form-select>
                                                     </div>
-                                                    <div class = "submit-container mt-4" v-if="parameters_input.length > 0"> 
-                                                        <p>
-                                                            CIBERSORT is only freely available for academic users and could not be directly included in this package.
-                                                            To use CIBERSORT with this package, you need to register on the cibersort website,
-                                                            obtain a license, and download the CIBERSORT source code.
-                                                            The source code package contains two files, that are required:
-                                                        </p>
-                                                        <ol>
-                                                            <li>CIBERSORT.R</li>
-                                                            <li>LM22.txt</li>
-                                                        </ol>
-                                                    </div>
-                                                    <div class="col-md-10" v-for="param_input in parameters_input" :key="param_input.id">
-                                                        <label :for="`p-${param_input.id}`">{{ param_input.name }}
-                                                            <span class="required">*</span>
+
+                                                </div>
+                                                <div v-else class = "row justify-content-center">
+                                                    <div class = "text-center submit-container">
+                                                        <label for="pairs_num_select">Please select maximum pairs of files you want to upload:
                                                         </label>
                                                         <div>
-                                                            <b-form-file
-                                                                :id="`i-${param_input.id}`"
-                                                                v-model="files[`i-${param_input.id}`]"
-                                                                :state="inputValid[`i-${param_input.id}`]"
-                                                                placeholder="Choose a file or drop it here..."
-                                                                drop-placeholder="Drop file here..." 
-                                                                :name="`i-${param_input.id}`"
-                                                                :required="param_input.required"
-                                                            >
-                                                            </b-form-file>  
+                                                            <b-form-input id="pairs_num_select" value=1 max="5" type="number" step="1" name="selected_pairs_num" v-model="multiple_pairs_num" />
                                                         </div>
                                                     </div>
-                                                    
+                                                    <div id = "multiple-upload-box" class = "row justify-content-center text-center" v-if="displayedPairsNum > 0">
+                                                        <div v-for="input_idx in parseInt(displayedPairsNum)" :key="input_idx" class="text-center col-md-4">
+                                                            <div v-b-modal="`batchEffect-config-${input_idx}`" class="uploadPng text-center justify-content-center container" @click="updateStepToFile()">
+                                                                <img v-bind:src="require('../assets/images/batchEffectSetting.png')" style="width:90%;">
+                                                            </div>
+                                                            <div class = "text-center" v-if="updateUploadedStatus[input_idx - 1] == true">
+                                                                <i class="fa fa-check" aria-hidden="true" style="color:green"></i>
+                                                            </div>
+                                                            <div class = "text-center" v-else>
+                                                                <i class="fa fa-times" aria-hidden="true" style="color:red"></i>
+                                                            </div>
+                                                            <br>
+                                                        </div>
+                                                    </div>
+                                                    <br>
                                                 </div>
                                             </div>
-                                            <div class = "col-md-6" style="height:350px; overflow:scroll; justify-content: center;">
-                                                <h2>Parameters description</h2>
-                                                <div id = "single_params_desc" v-html="single_params_desc"></div>
-                                            </div>
                                         </div>
-                                        <p v-if="displayedSingleParams.length == 0">No Parameters.</p>
+                                        
                                     </div>
-                                </div>
-                                <br>
-                                <br>
-                                <b-btn @click="checkInputValid()" class="float-right mt-2"><i class="fa fa-location-arrow"></i> Submit</b-btn>
 
+                                    <div id="parameter-setting-step" class = "row justify-content-center submit-container-lg" v-if="displayedSingleParams.length>0 || parameters_input.length>0">
+                                        <div class="set-param-section">
+
+                                            <h3 class = "text-center">Parameter setting</h3>
+                                            <br>
+
+                                            <div class = "row submit-box justify-content-center;">
+                                                <div v-if="displayedSingleParams.length > 0" class = "col-md-6">
+
+                                                    <div class="row" style="height:350px; overflow-y:scroll; display:flex; flex-direction: row; justify-content: center; align-items:center;">
+
+                                                        <div class="col-md-10" v-for="param in displayedSingleParams" :key="param.id">
+                                                            <label :for="`p-${param.id}`">{{ param.name }}
+                                                                <span v-if="param.required" class="required">*</span>
+                                                            </label>
+                                                            <div v-if="param.param_type === 'string'">
+                                                                <b-form-input @focus="provide_param_desc(param)" :id="`p-${param.id}`" :value="param.default" :required="param.required"
+                                                                            v-model="parameters[`p-${param.id}`]" :name="`p-${param.id}`" :state="inputValid[`p-${param.id}`]" />
+                                                            </div>
+                                                            <div v-else-if="param.param_type === 'int'">
+                                                                <b-form-input @focus="provide_param_desc(param)" :id="`p-${param.id}`" :value="param.default" type="number" step="1"
+                                                                            v-model="parameters[`p-${param.id}`]" :required="param.required" :name="`p-${param.id}`"
+                                                                            :state="inputValid[`p-${param.id}`]"/>
+                                                            </div>
+                                                            <div v-else-if="param.param_type === 'float'">
+                                                                <b-form-input @focus="provide_param_desc(param)" :id="`p-${param.id}`" :value="param.default" type="number"
+                                                                            v-model="parameters[`p-${param.id}`]" step="0.01" :required="param.required"
+                                                                            :name="`p-${param.id}`" :state="inputValid[`p-${param.id}`]"/>
+                                                            </div>
+                                                            <div v-else-if="param.param_type === 'boolean'">
+                                                                <b-form-select @focus="provide_param_desc(param)" :id="`p-${param.id}`" :options="boolSelectOpt" :required="param.required"
+                                                                            v-model="parameters[`p-${param.id}`]" :name="`p-${param.id}`" :state="inputValid[`p-${param.id}`]"/>
+                                                            </div>
+                                                            <div v-else-if="param.param_type === 'enum'">
+                                                                <select @focus="provide_param_desc(param)" :id="`p-${param.id}`" class="form-control custom-select" 
+                                                                        v-model="parameters[`p-${param.id}`]" :required="param.required" :name="`p-${param.id}`" 
+                                                                        :state="inputValid[`p-${param.id}`]">
+                                                                    <option v-for="option in param.options" :value="option" :key="option"
+                                                                            :selected="param.default == option ? 'selected' : ''">
+                                                                        {{ option }}
+                                                                    </option>
+                                                                </select>
+                                                            </div>
+                                                            <div v-else-if="param.param_type === 'splitchr'">
+                                                                <b-form-select @focus="provide_param_desc(param)" :id="`p-${param.id}`" :options="boolSelectOpt" 
+                                                                            v-model="parameters[`p-${param.id}`]" :required="param.required" :name="`p-${param.id}`" 
+                                                                            :state="inputValid[`p-${param.id}`]" />
+                                                            </div>
+                                                        </div>
+                                                        <div class = "submit-container mt-4" v-if="parameters_input.length > 0"> 
+                                                            <p>
+                                                                CIBERSORT is only freely available for academic users and could not be directly included in this package.
+                                                                To use CIBERSORT with this package, you need to register on the cibersort website,
+                                                                obtain a license, and download the CIBERSORT source code.
+                                                                The source code package contains two files, that are required:
+                                                            </p>
+                                                            <ol>
+                                                                <li>CIBERSORT.R</li>
+                                                                <li>LM22.txt</li>
+                                                            </ol>
+                                                        </div>
+                                                        <div class="col-md-10" v-for="param_input in parameters_input" :key="param_input.id">
+                                                            <label :for="`p-${param_input.id}`">{{ param_input.name }}
+                                                                <span class="required">*</span>
+                                                            </label>
+                                                            <div>
+                                                                <b-form-file
+                                                                    :id="`i-${param_input.id}`"
+                                                                    v-model="files[`i-${param_input.id}`]"
+                                                                    :state="inputValid[`i-${param_input.id}`]"
+                                                                    placeholder="Choose a file or drop it here..."
+                                                                    drop-placeholder="Drop file here..." 
+                                                                    :name="`i-${param_input.id}`"
+                                                                    :required="param_input.required"
+                                                                >
+                                                                </b-form-file>  
+                                                            </div>
+                                                        </div>
+                                                        
+                                                    </div>
+                                                </div>
+                                                <div class = "col-md-6" style="height:350px; overflow:scroll; justify-content: center;">
+                                                    <h2>Parameters description</h2>
+                                                    <div id = "single_params_desc" v-html="single_params_desc"></div>
+                                                </div>
+                                            </div>
+                                            <p v-if="displayedSingleParams.length == 0">No Parameters.</p>
+                                        </div>
+                                    </div>
+                                    <br>
+                                    <br>
+                                    <b-btn @click="checkInputValid()" class="float-right mt-2"><i class="fa fa-location-arrow"></i> Submit</b-btn>
+
+                                </div>
+                                
                             </div>
-                            
                         </div>
                     </div>
                 </div>
+                <div id="outerdiv" style="position:fixed; border-color:rgba(0,0,0,0.7);z-index:99999;display:none;overflow: scroll;">
+                    <div id="innerdiv" style="">
+                        <img id="bigimg" style="border:5px solid #fff;" src=""/>
+                    </div>
+                </div>
             </div>
-
-
-
-            <div v-else-if="submitted">
+            <div v-else>
                 <div class="text-center job-info">
                     <h1>Successfully</h1>
                     <h1>Submitted</h1>
@@ -336,7 +339,7 @@
             
             <h3 class="mt-4">
                 <img v-bind:src="require('../assets/images/loading_icon.gif')">
-                We are preparing your submission. Please wait for some minutes.
+                We are preparing your submission. Please wait for some minutes and do not close this window.
             </h3>
         </div>
 
@@ -521,11 +524,7 @@
 
         </b-modal>
 
-            <div id="outerdiv" style="position:fixed; border-color:rgba(0,0,0,0.7);z-index:99999;display:none;overflow: scroll;">
-                <div id="innerdiv" style="">
-                    <img id="bigimg" style="border:5px solid #fff;" src=""/>
-                </div>
-            </div>
+
     </div>
 </template>
 
@@ -1084,10 +1083,10 @@
                     }
                 }
 
-                // console.log("Priting final files keys:")
-                // for (var key in this.files) {
-                //     console.log(this.files[key]);
-                // }
+                console.log("Priting final files keys:")
+                for (var key in this.files) {
+                    console.log(this.files[key]);
+                }
 
                 console.log("Here are input files and input parameters");
                 console.log(this.formatFiles());
@@ -1118,7 +1117,7 @@
                     submitted_mid = this.selected_analysis.mid;
                 }
                 
-                $("#disable-fill").fadeIn(10);
+                // $("#disable-fill").fadeIn(10);
                 this.isLoading = true;
                 console.log("loading: " + this.isLoading);
 
@@ -1201,7 +1200,7 @@
                         console.log(demo_files);
 
 
-                        $("#disable-fill").fadeOut(10);
+                        //$("#disable-fill").fadeOut(10);
                         this.isLoading = false;
                         if (!!alertData) {
                             this.$refs.alertCenter.add('danger', alertData);
@@ -1235,7 +1234,7 @@
                 else {
                     submitted_mid = this.selected_analysis.mid;
                 }
-                $("#disable-fill").fadeIn(10);
+                //$("#disable-fill").fadeIn(10);
                 this.isLoading = true;
                 console.log(this.isLoading);
                 axios.post(
@@ -1272,7 +1271,7 @@
                 }).catch((reason) => {
                     alertData = reason;
                 }).finally(() => {
-                    $("#disable-fill").fadeOut(10);
+                    //$("#disable-fill").fadeOut(10);
                     this.isLoading = false;
                     if (!!alertData) {
                         this.$refs.alertCenter.add('danger', alertData);
@@ -1489,7 +1488,7 @@
     z-index: 1000;
     width: 100%;
     height: 100%;
-    opacity: 1;
+    //opacity: 1;
     //border: solid 1px;
     vertical-align: center;
 }

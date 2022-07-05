@@ -160,6 +160,10 @@ class Admin::TasksController < ApplicationController
       ofile = ofile['files'][0]
       files_to_do.push(ofile)
     end
+
+    # files_to_do = mrs['outputs'][0]['files']
+    logger.debug "===========================>Find task output information!"
+    logger.info files_to_do
     
     @analysis.files_info.each do |dataType, info|
       @viz_data_source = VizDataSource.find_by(data_type:dataType)
@@ -177,11 +181,13 @@ class Admin::TasksController < ApplicationController
         end
       else
         files_to_do.each do |of1|
-          if matchPattern(of1['name'], info['outputFileName'])
-            file_paths[dataType] = {id: 0, 
-                                    url: File.join('/data/outputs', of1['path'], of1['name']), 
-                                    is_demo: true}
-            # files_to_do.delete(of1)
+          if of1 != nil
+            if matchPattern(of1['name'], info['outputFileName'])
+              file_paths[dataType] = {id: 0, 
+                                      url: File.join('/data/outputs', of1['path'], of1['name']), 
+                                      is_demo: true}
+              # files_to_do.delete(of1)
+            end
           end
         end
       end
