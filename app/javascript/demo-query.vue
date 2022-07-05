@@ -92,7 +92,7 @@
                                 <b-collapse :id="`i-${input.id}`">
                                     <ul class="mt-3">
                                         <li v-for="file in input.files" :key="file.id">
-                                            <a :href="`https://deepomics.org/explorer/download_rel/?path=${file.path}/${file.name}`" target="_blank">{{ file.name }}</a>
+                                            <a @click="downloadFile(file.path)">{{ file.name }}</a>
                                         </li>
                                     </ul>
                                 </b-collapse>
@@ -203,7 +203,7 @@
                                     <b-collapse :id="`o-${output.id}`">
                                         <ul class="mt-3">
                                             <li v-for="file in output.files" :key="file.id">
-                                                <a :href="`https://deepomics.org/explorer/download_rel/?path=${file.path}/${file.name}`" target="_blank">{{ file.name }}</a>
+                                                <a @click="downloadFile(file.path)">{{ file.name }}</a>
                                             </li>
                                         </ul>
                                     </b-collapse>
@@ -225,7 +225,7 @@
                                                         <b-collapse :id="`o-${output.id}`">
                                                             <ul class="mt-3">
                                                                 <li v-for="file in output.files" :key="file.id">
-                                                                    <a :href="`https://deepomics.org/explorer/download_rel/?path=${file.path}/${file.name}`" target="_blank">{{ file.name }}</a>
+                                                                    <a @click="downloadFile(file.path)">{{ file.name }}</a>
                                                                 </li>
                                                             </ul>
                                                         </b-collapse>
@@ -722,6 +722,9 @@ export default {
             this.job_id = token;
             this.searchJob();
         },
+        downloadFile(path) {
+            window.open(`/api/download_target_file?file_path=/data/outputs/${path}`);
+        }
     },
     components: {
         AlertCenter,

@@ -9,6 +9,11 @@ class Api::PublicFileController < ApplicationController
             fexists2:File.exists?(fpath2),
         }
     end
+
+    def download_target_file
+        send_file File.join(Rails.root, params[:file_path])
+        return
+    end
     
   
     

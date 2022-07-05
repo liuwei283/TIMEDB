@@ -304,6 +304,8 @@ class Api::VizFilesController < ApplicationController
 
     # end
 
+    
+
     def instantiate_models
         @analysis = Analysis.find(params[:analysis_id])
         @user = User.find(session[:user_id])

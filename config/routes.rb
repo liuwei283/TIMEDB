@@ -97,6 +97,7 @@ Rails.application.routes.draw do
     get "public_file/check_file_exists", to: 'public_file#check_file_exists', as: 'json'
     get 'tabix/:url_name', to: 'tabix_apis#show', as: 'tabix_api'
     get 'public/:url_name', to: 'public_file_apis#show', as: 'public_api'
+    get "download_target_file", to: "public_file#download_target_file", as: 'download_target_file'
   end
 
   # database pages
