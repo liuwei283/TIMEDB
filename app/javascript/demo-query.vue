@@ -92,7 +92,7 @@
                                 <b-collapse :id="`i-${input.id}`">
                                     <ul class="mt-3">
                                         <li v-for="file in input.files" :key="file.id">
-                                            <a @click="downloadFile(file.path)">{{ file.name }}</a>
+                                            {{ file.name }}
                                         </li>
                                     </ul>
                                 </b-collapse>
@@ -199,11 +199,11 @@
                                 <b-list-group-item v-for="output in outputs" href="javascript:void(0)" v-b-toggle="`o-${output.id}`" :key="`o-${output.id}`">
                                     <i class="fa fa-file"></i> {{ output.name }}
                                     <i class="fa fa-question-circle" v-b-tooltip
-                                    :title="output.desc"></i>
+                                    :title="output.desc"></i><i class="fa fa-download"></i>
                                     <b-collapse :id="`o-${output.id}`">
                                         <ul class="mt-3">
                                             <li v-for="file in output.files" :key="file.id">
-                                                <a @click="downloadFile(file.path)">{{ file.name }}</a>
+                                                <a @click="downloadFile(file.path, file.name)">{{ file.name }}</a>
                                             </li>
                                         </ul>
                                     </b-collapse>
@@ -221,11 +221,11 @@
                                                     <b-list-group-item v-for="output in task_output.outputs" href="javascript:void(0)" v-b-toggle="`o-${output.id}`" :key="`o-${output.id}`" @click="$event.stopPropagation();">
                                                         <i class="fa fa-file"></i> {{ output.name }}
                                                         <i class="fa fa-question-circle" v-b-tooltip
-                                                        :title="output.desc"></i>
+                                                        :title="output.desc"></i><i class="fa fa-download"></i>
                                                         <b-collapse :id="`o-${output.id}`">
                                                             <ul class="mt-3">
                                                                 <li v-for="file in output.files" :key="file.id">
-                                                                    <a @click="downloadFile(file.path)">{{ file.name }}</a>
+                                                                    <a @click="downloadFile(file.path, file.name)">{{ file.name }}</a>
                                                                 </li>
                                                             </ul>
                                                         </b-collapse>
@@ -722,8 +722,8 @@ export default {
             this.job_id = token;
             this.searchJob();
         },
-        downloadFile(path) {
-            window.open(`/api/download_target_file?file_path=/data/outputs/${path}`);
+        downloadFile(path, name) {
+            window.open(`/api/download_target_file?file_path=/data/outputs${path}/${name}`);
         }
     },
     components: {
