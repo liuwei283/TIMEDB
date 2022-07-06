@@ -50,11 +50,20 @@ function init() {
             this.RNAData.colorMap = config["result"].colorMap
             this.RNAData.columns = config["result"].columns
             this.RNAData.boxdata = config["result"].boxdata
-            this.$v.size.height = this.cellList.length *12 + 170 + 
-                            this.cellList.length*(this.gridPlotheight) + this.gridPlotheight/2
-                            + (this.sortaddName.length-1) * this.gridPlotheight 
-                            + 30
-                            + this.tipsrow*7
+            if(this.clinicalDatashow){
+              this.$v.size.height = this.cellList.length *12 + 170 + 
+                this.cellList.length*(this.gridPlotheight) + this.gridPlotheight/2
+                + (this.sortaddName.length-1) * this.gridPlotheight 
+                + 30
+                + this.tipsrow*7
+            }else{
+              this.$v.size.height = this.cellList.length *12 + 170 + 
+                this.cellList.length*(this.gridPlotheight) + this.gridPlotheight/2
+                // + (this.sortaddName.length-1) * this.gridPlotheight 
+                + 30
+                // + this.tipsrow*7
+            }
+
           this.redraw();
           },
           updateLegendPos(ev, el, deltaPos) {
@@ -96,7 +105,8 @@ function init() {
             maxtextlength>this.$v.size.width? this.$v.size.width = maxtextlength:null
             str = Array.from(str)
             return str
-          }
+          },
+          clinicalDatashow:true,
 
         },
         loadData: {
@@ -107,10 +117,10 @@ function init() {
                 loaded:plotDataloaded
             },
             ClinicalData:{
-               fileKey: "ClinicalData",
-               type: "csv",
-               dsvHasHeader:false,
-               loaded:clinicalDataloaded
+                fileKey: "ClinicalData",
+                type: "csv",
+                dsvHasHeader:false,
+                loaded:clinicalDataloaded
             },
         },
         setup() {
@@ -122,11 +132,20 @@ function init() {
           const padding = 60; 
           this.data.padding = padding;
           this.size.width = this.data.RNAData.useData[this.data.sampleList.length-1].col*(this.data.gridPlotWidth-1) + 330 + getMaxlength(this)
-          this.size.height = this.data.cellList.length *12 + 170 + 
-                            this.data.cellList.length*(this.data.gridPlotheight) + this.data.gridPlotheight/2
-                            + (this.data.sortaddName.length-1) * this.data.gridPlotheight 
-                            + 30
-                            + this.data.tipsrow*7
+          if(this.data.clinicalDatashow){
+            this.size.height = this.data.cellList.length *12 + 170 + 
+              this.data.cellList.length*(this.data.gridPlotheight) + this.data.gridPlotheight/2
+              + (this.data.sortaddName.length-1) * this.data.gridPlotheight 
+              + 30
+              + this.data.tipsrow*7
+          }else{
+            this.size.height = this.data.cellList.length *12 + 170 + 
+              this.data.cellList.length*(this.data.gridPlotheight) + this.data.gridPlotheight/2
+              // + (this.data.sampleList.length-1) * this.data.gridPlotheight 
+              + 30
+              // + this.data.tipsrow*7
+          }
+
 
           //registerEditorConfig(editorConfig(this));
           registerEditorConfig(editorConfig(this), "getVue", "#task-output", editorRef);
@@ -137,7 +156,7 @@ function init() {
 }
 
 export function registerLandscapeHeatmap() {
-    register(MODULE_NAME, init);
+  register(MODULE_NAME, init);
 }
 
 register(MODULE_NAME, init);

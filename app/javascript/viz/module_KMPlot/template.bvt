@@ -44,6 +44,22 @@ svg {
 				}
 				
 			}
+			@if(OSDataPlotConfidence){
+				@for (d, i) in OSPlotdata.streamData {
+				// @if(i==1){
+					Polygon {
+						key = i + "line"
+						points = @scaled(d.values)
+						fill = OSPlotdata.colormap[d.key]
+						fillOpacity = 0.4
+						//stroke = "green"
+						// behavior:tooltip{
+						// 	content =  ""
+						// }
+					}
+				// }
+				}
+			}
 			Text {
 				text = "OS"
 				x = 50%; y = -common.offset-5
@@ -74,7 +90,8 @@ svg {
                 }
 				Text {
 					x = 25;y = 20
-					text = OSPlotdata.chosenClinical
+					// text = OSPlotdata.chosenClinical
+					text = OSDataShowText
 					fontSize = 12
 				}
 				@for (item, index) in OSPlotdata.groupindex {
@@ -141,6 +158,17 @@ svg {
 				}
 				
 			}
+			@if(PFSDataPlotConfidence){
+				@for (d, i) in PFSPlotdata.streamData {
+					Polygon {
+						// @expr console.log(">>>",d)
+						key = i + "line"
+						points = @scaled(d.values)
+						fill = PFSPlotdata.colormap[d.key]
+						fillOpacity = 0.4
+					}
+				}
+			}
 			Text {
 				text = "PFS"
 				x = 50%; y = -common.offset-5
@@ -173,7 +201,8 @@ svg {
                 }
 				Text {
 					x = 25;y = 20
-					text = PFSPlotdata.chosenClinical
+					// text = PFSPlotdata.chosenClinical
+					text = PFSDataShowText
 					fontSize = 12
 				}
 				@for (item, index) in PFSPlotdata.groupindex {

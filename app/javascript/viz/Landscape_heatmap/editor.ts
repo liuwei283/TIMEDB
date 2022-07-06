@@ -33,8 +33,7 @@ export const generateTestConfig = (v): any => ({
                         value: {
                             current: v.data.legendStyle,
                             callback(d) {
-                                v.data.legendStyle = d;
-                                switchStyle(v);
+                                v.data.clinicalDatashow? (v.data.legendStyle = d,switchStyle(v)):null
                                 v.forceRedraw = true;
                                 v.data._sizeUpdated = true;
                                 update(v);

@@ -20,7 +20,12 @@ function init() {
         el: "#canvas",
         template,
         components: {},
-        data: {},
+        data: {
+            OSDataPlotConfidence:false,
+            PFSDataPlotConfidence:false,
+            OSDataShowText:null,
+            PFSDataShowText:null,
+        },
         loadData: {
             OSData: {
                 fileKey: "OSData",
@@ -57,7 +62,7 @@ function init() {
             
         },
         setup(){
-            //registerEditorConfig(editorConfig(this), editorRef);
+            // registerEditorConfig(editorConfig(this), editorRef);
             registerEditorConfig(editorConfig(this), "getVue", "#task-output", editorRef);
             process(this)
         },
@@ -78,6 +83,8 @@ export function process(v){
     v.size.height = 100 + common.plotheight + common.offset
     // v.size.width = 900 + 2*common.plotwidth - 400 + 60 + 2*common.maxtextlength
     v.size.width = 420 + 2*common.plotwidth + 2*common.maxtextlength
+    v.data.OSDataShowText = (v.data.OSPlotdata.chosenClinical+"").replace(/_/g," ").slice(1)
+    v.data.PFSDataShowText = (v.data.PFSPlotdata.chosenClinical+"").replace(/_/g," ").slice(1)
 }
 
 

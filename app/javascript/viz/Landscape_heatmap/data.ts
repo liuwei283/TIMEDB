@@ -9,6 +9,7 @@ import {register} from "page/visualizers";
 import { rankDict, sortByRankKey } from "utils/bio-info";
 import { registerEditorConfig } from "utils/editor";
 import * as TextSize from "crux/dist/utils/text-size";
+import { isNullishCoalesce } from "typescript";
 
 
 const title = "Clinical Data"
@@ -20,9 +21,12 @@ export function getMaxlength(v){
   });
   let maxcolumnsTextlength = Math.max(...columnsTextlength)
   let clinicalTextlength = []
-  v.data.ClinicalData.sortaddName.forEach((item,index) => {
-    clinicalTextlength.push(TextSize.measuredTextSize(item,10).width)
-  });
+  if(v.data.clinicalDatashow){
+    v.data.ClinicalData.sortaddName.forEach((item,index) => {
+      clinicalTextlength.push(TextSize.measuredTextSize(item,10).width)
+    });
+  }
+
   let maxclinicalTextlength = Math.max(...clinicalTextlength)
   let result = 130
   maxcolumnsTextlength>maxclinicalTextlength? result = maxcolumnsTextlength:result = maxclinicalTextlength
@@ -329,7 +333,46 @@ export function showAll(_data,key){
 
 
 
-export function clinicalDataloaded(_data){
+export function clinicalDataloaded(_data){ 
+
+  // console.log("_data:",_data)
+  
+  if(_data === null){
+    console.log("Clinical data is null! Please recheck!")
+    this.data.clinicalDatashow = false
+    let bgendColor = "#00479a" 
+    let bgstartColor = 	"#dbdbdb"; 
+    let gbstartColor = "#dbdbdb" 
+    let gbendColor = "#FF0000"
+  
+    let ageStartColor = "#ee807f";
+    let ageEndColor = "#ee2422";
+    
+    let colorScheme =  Oviz.color.schemeGradient(bgstartColor,bgendColor)
+    let gbcolorScheme =  Oviz.color.schemeGradient(gbstartColor,gbendColor)
+    let ageColorScheme = Oviz.color.ColorSchemeGradient.create(ageStartColor, ageEndColor);
+    
+    this.data.bgstartColor = bgstartColor
+    this.data.bgendColor = bgendColor
+    this.data.gbstartColor = gbstartColor
+    this.data.gbendColor = gbendColor
+    this.data.ageStartColor = ageStartColor
+    this.data.ageEndColor = ageEndColor
+    this.data.gbcolorScheme = gbcolorScheme
+  
+    this.data.colorScheme = colorScheme
+    this.data.ageColorScheme = ageColorScheme
+
+    const addNames = this.data.sampleList
+    this.data.addNames = addNames
+
+    let ppp = getfixed(this.data.maxxx)
+    let textmaxxx = this.data.maxxx + 5/(10 ** (ppp+1))
+    this.data.textmaxxx = textmaxxx.toFixed(1)
+
+
+  }else{
+  
 
   const addNames = this.data.sampleList
   this.data.addNames = addNames
@@ -421,7 +464,6 @@ export function clinicalDataloaded(_data){
 
   this.data.legendLoc = legendLoc
 
-  
 
   let newcindexes = []
   addName.forEach((item,index)=>{
@@ -532,7 +574,6 @@ export function clinicalDataloaded(_data){
   })
   
   this.data.n_legendmaxlength = Math.max(...n_legendtextlength).toFixed(0)
-  console.log("?????textmaxlength::::",this.data.n_legendmaxlength)
 
   this.data.n_color = n_color
   
@@ -571,6 +612,8 @@ export function clinicalDataloaded(_data){
   }
 
   return {sortaddName,newArr,addData,addName}
+
+}
 
 }
 

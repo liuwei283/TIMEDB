@@ -339,7 +339,7 @@
             
             <h3 class="mt-4">
                 <img v-bind:src="require('../assets/images/loading_icon.gif')">
-                We are preparing your submission. Please wait for some minutes and do not close this window.
+                We are preparing your submission. Please wait for some minutes.
             </h3>
         </div>
 
@@ -516,7 +516,7 @@
             <br>
             <div class = "row justify-content-center container">
                 <div class="container infor" style="background-color: #">
-                    <i > Please Click the Image If You Want to Enlarge It</i>
+                    <i class="m-2"> Please Click the Image If You Want to Enlarge It</i>
                 </div>
                 <div id="rendered_doc" v-html="selected_analysis.rendered_doc" class = "text-left container" style="margin: 50px;">
                 </div>
@@ -1691,15 +1691,17 @@ input[type="radio"] {
 .modal.fade {
   z-index: 1000000000 !important;
 }
-.infor{
-    i{
-        font-size: 8px;
-    }
+.infor {
     background-color: #314893;
     color: #fff;
     margin-left: 50px !important;
     margin-right: 50px !important;
     padding: 10px;
     border-radius: 20px;
+}
+
+.infor i {
+    font-size: 15px !important;
+
 }
 </style>
