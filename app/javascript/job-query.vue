@@ -2,7 +2,7 @@
 <!-- eslint-disable max-len -->
 <div id="job-query">
     <alert-center ref="alertCenter" />
-    <div>
+    <div v-if="isLoading">
         <div v-if="!submitted"> <!---->
             <b-card class="text-center query-card">
 
@@ -115,8 +115,7 @@
                 </div>
             </b-card>
         </div>
-
-        <div class="viz-result mb-1" v-else> <!---->
+        <div class="viz-result mb-1" v-else-if="!reruned"> <!---->
             <b-card no-body>
                 <b-card-header v-b-modal.modalBox class="border-1 py-2">
                     <h3 class="m-4 text-center">
@@ -163,6 +162,9 @@
                     <b-button class="btn btn-1 col-md-2" disabled v-else @mouseover="visIcon=visColor" @mouseleave="visIcon=visWhite;">
                         <img v-bind:src="visIcon">
                         Visualization
+                    </b-button>
+                    <b-button class="btn btn-1 col-md-2" @click="rerunTask">
+                        Rerun Task
                     </b-button>
 
                     <b-button class="btn btn-3 float-right col-md-2" @click="searchJob" @mouseover="refreshIcon=refreshColor" @mouseleave="refreshIcon=refreshWhite;">
@@ -391,8 +393,29 @@
 
             </b-card>
         </div>
-
+        <div v-else-if="reruned">
+            <div class="text-center job-info">
+                <h1>Successfully</h1>
+                <h1>Submitted</h1>
+                <p>We are preparing your visualization,you can copy the code and check the status of your work in the <a ref = "goTo" :href = "`/submit/job-query`" id = "redirection-link">[workspace]</a>.</p>
+                <div class = "row">
+                    <div class = "col-md-2">
+                        <b-btn :id = "copyButton" @click = "copyToClipboard" type = "button" class = "btn btn-dark">Copy</b-btn>
+                    </div>
+                    <div class = "col-md-2">
+                        <button id = "jobIDButton" type = "button" class = "btn">{{rerunedJobID}}</button>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
+    <div id = "loadingBlock" v-else>
+        <h3 class="mt-4">
+            <img v-bind:src="require('../assets/images/loading_icon.gif')">
+            We are preparing your submission. Please wait for some minutes.
+        </h3>
+    </div>
+
 </div>
 </template>
 
@@ -441,11 +464,15 @@ export default {
             taskOutputs: [{value: 0, text: "Demo Files", secondaryText: ""}],
             refreshEnd: true,
             isDemo: false,
+            isLoading: false,
+            reruned: false,
             analysis: [],
 
             taskId: 5212,
+            run_id: -1,
+            search_id: -1,
             job_type: "app",
-            display:0,
+            display: 0,
             inputs: [], 
             outputs: [],
             params: [],
@@ -457,8 +484,8 @@ export default {
                 error: ''
             },
 
-            job_status: "", 
-            
+            job_status: "",
+
             taskDetails: {
                 code: "NO_CHOSEN",
                 id: null,
@@ -838,6 +865,8 @@ export default {
                     if (j.taskId === parseInt(this.job_id)) {
                         this.jobName = j.taskName;
                         this.category = j.category;
+                        this.search_id = j.analysis_id;
+                        this.run_id = j.run_id;
                         console.log(this.category);
                     }
                 })
@@ -889,6 +918,11 @@ export default {
         showAnalyses(jobId) {
             this.job_id = jobId;
             this.searchJob();
+        },
+        copyToClipboard(){
+            navigator.clipboard.writeText(this.rerunedJobID);
+            document.getElementById('copyButton').removeClass('btn-light');
+            document.getElementById('copyButton').addClass('btn-dark');
         },
         updateGon(output) {
             event.emit("GMT:reset-query", this);
@@ -996,7 +1030,112 @@ export default {
         },
         downloadFile(path, name) {
             window.open(`/api/download_target_file?file_path=/data/outputs${path}/${name}`);
-        }
+        },
+        rerunTask() {
+            const { alertCenter } = this.$refs;
+            let alertData;
+            var demo_files = {};
+            var demo_params = {};
+
+            let submitted_mid;
+
+            this.isLoading = true;
+            console.log("Task submitted: isLoading?")
+            console.log(this.isLoading);
+
+            axios.post(
+                `/query-deepomics/`,
+                objectToFormData({'id': this.taskId, 'type': this.job_type}),
+                {
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest',
+                        'X-CSRF-Token': document.head.querySelector('meta[name="csrf-token"]').content,
+                        'Content-Type': 'multipart/form-data',
+                    },
+                },
+            ).then((response) => {
+                console.log("Module query result (rerun tasks):", response);
+                this.demo_inputs = response.data.message.inputs;
+                if (this.job_type == "app") {
+                    this.demo_parameters = response.data.message.params;
+                }
+                else {
+                    this.demo_parameters = response.data.message.node_records;
+                }
+            }).catch((error) => {
+                const message = error.response && error.response.status === 404 ? "The task does not exist" : error;
+                alertCenter.add('danger', `${message}`);
+            }).finally(() => {
+
+                console.log("Fetched demo inputs and parameters: ");
+                console.log(this.demo_inputs);
+                console.log(this.demo_parameters);
+
+                for (var k in this.demo_inputs){
+                    let input = this.demo_inputs[k];
+                    let f_arr = [];
+                    for (var t in input.files) {
+                        let file = input.files[t];
+                        let f_path = file.path + "/" + file.name;
+                        f_arr.push(f_path);
+                    }
+                    demo_files[`i-${input.id}`] = f_arr.join(","); 
+                }
+
+                for (var k in this.demo_parameters) {
+                    let params = this.demo_parameters[k];
+                    demo_params[`p-${params.id}`] = params.value;
+                }
+
+                console.log("Outputing demo inputs json:");
+                console.log(demo_files);
+                console.log("Outputing demo inputs parameters:");
+                console.log(demo_params);
+
+                var is_pipeline_param;
+
+                if (this.job_type == 'app') {
+                    is_pipeline_param = false;
+                }
+                else {
+                    is_pipeline_param = true;
+                }
+
+                axios.post(
+                    `/submit-app-task/`,
+                    objectToFormData({
+                        "search_id": this.search_id,
+                        "mid": this.run_id,
+                        "is_demo": true,
+                        "inputs": demo_files,
+                        "params": demo_params,
+                        "is_pipeline": is_pipeline_param,
+                    }),
+                    {
+                        headers: {
+                            'X-Requested-With': 'XMLHttpRequest',
+                            'X-CSRF-Token': document.head.querySelector('meta[name="csrf-token"]').content,
+                            'Content-Type': 'multipart/form-data',
+                        },
+                    },
+                ).then((response) => {
+                    if (response.data.code) {
+                        this.rerunedJobID = response.data.data.task_id;
+                        this.reruned = true;
+                    } else {
+                        alertData = response.data.msg;
+                    }
+                }).catch((reason) => {
+                    alertData = reason;
+                }).finally(() => {
+                    console.log("Tasks reruned!");
+                    this.isLoading = false;
+                    if (!!alertData) {
+                        this.$refs.alertCenter.add('danger', alertData);
+                    }
+                });
+            });
+        },
     },
     components: {
         AlertCenter,
@@ -1150,5 +1289,46 @@ export default {
 .card-header img {
     width: 10%;
     margin-right: 5px;
+}
+
+#loadingBlock {
+    text-align: center;
+    color: #000;
+    z-index: 1000;
+    width: 100%;
+    height: 100%;
+    vertical-align: center;
+}
+
+#loadingBlock img {
+    width: 200px;
+    position: relative;
+    top: 10px;
+}
+
+.job-info {
+    min-height: 200px;
+    padding: 100px 20px;
+    font-size: 40px;
+    background-color: #f8f9fa;
+
+}
+
+.job-info h1 {
+    font-size: 1.5em;
+    text-align: left;
+}
+
+.job-info p {
+    text-align: left;
+}
+
+.job-info button {
+    font-size: 0.8em;
+}
+
+#jobIDButton {
+    background-color: $light_theme;
+    color: white;
 }
 </style>

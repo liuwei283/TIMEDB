@@ -30,7 +30,7 @@ class SubmitController < ApplicationController
     gon.push cname: params[:cname]
     gon.push dark: session[:dark]
 
-    logger.error (params[:cname])
+    Rails.logger.error (params[:cname])
     
     @analyses = @analysis_category.analyses.all
 
@@ -50,6 +50,10 @@ class SubmitController < ApplicationController
 
     if params[:aname]
       gon.push input_aname: params[:aname]
+    end
+
+    if params[:ds_selected]
+      gon.push ds_selected: params[:ds_selected]
     end
 
     gon.push select_box_option: data
@@ -210,17 +214,21 @@ class SubmitController < ApplicationController
       if !t.analysis.blank?
         jobName = t.analysis.name
         category = t.analysis.analysis_category.name
+        analysis_id = t.analysis.mid
       else
         jobName = t.analysis_pipeline.name
         category = "pipeline"
+        analysis_id = t.analysis_pipeline.pid
       end
       parsed_jobs.push({
         taskName: jobName,
         category: category,
         taskId: t.id,
+        run_id: t.run_id,
         created: t.created_at,
         status: t.status,
         isDemo: t.is_demo,
+        analysis_id: t.analysis_id
       })
     end
     render json:parsed_jobs
@@ -345,7 +353,6 @@ class SubmitController < ApplicationController
       data: ''
     }
 
-
     begin
       app_id = params[:mid]
       app_inputs = params[:inputs]
@@ -356,18 +363,15 @@ class SubmitController < ApplicationController
       is_single = params[:is_single]
       is_demo = params[:is_demo]
       # @analysis = Analysis.find_by mid:params[:mid]
-      if !params[:search_mid].blank?
-        @analysis = Analysis.find_by mid:params[:search_mid]
+      if is_pipeline == 'true'
+        @analysis = Analysis.find_by mid:params[:search_id]
       else
-        @pipeline = AnalysisPipeline.find_by pid:params[:search_pid]
+        @pipeline = AnalysisPipeline.find_by pid:params[:search_id]
       end
       inputs = Array.new
       params = Array.new
 
       # store selected file to user's data folder
-
-      
-      
 
 
       if is_demo == "true"
@@ -530,7 +534,7 @@ class SubmitController < ApplicationController
       if result['message']['code']
         result_json[:code] = true
         @task  = @user.tasks.new
-        if is_pipeline
+        if is_pipeline == 'true'
           @task.analysis_pipeline = @pipeline
           @task.analysis = nil
         else
@@ -542,6 +546,7 @@ class SubmitController < ApplicationController
         @task.save!
         @user.updated_at = Time.now
         @user.save!
+        @task.run_id = app_id.to_i
         result_json[:data] = {
           'msg': result['message']['data']['msg'],
           'task_id': @task.id

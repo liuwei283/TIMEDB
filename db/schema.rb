@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_06_14_023052) do
+ActiveRecord::Schema.define(version: 2022_07_08_030206) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -97,8 +97,6 @@ ActiveRecord::Schema.define(version: 2022_06_14_023052) do
 
   create_table "datasets", force: :cascade do |t|
     t.string "name"
-    t.string "description"
-    t.string "tag"
     t.bigint "user_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
@@ -154,7 +152,6 @@ ActiveRecord::Schema.define(version: 2022_06_14_023052) do
 
   create_table "samples", force: :cascade do |t|
     t.string "sample_name"
-    t.string "cancer_name"
     t.string "project_name"
     t.string "c_tumor_stage"
     t.string "c_tumor_grade"
@@ -196,6 +193,7 @@ ActiveRecord::Schema.define(version: 2022_06_14_023052) do
     t.bigint "analysis_id"
     t.bigint "analysis_pipeline_id"
     t.boolean "is_demo", default: false
+    t.integer "run_id", default: -1
     t.index ["analysis_id"], name: "index_tasks_on_analysis_id"
     t.index ["analysis_pipeline_id"], name: "index_tasks_on_analysis_pipeline_id"
     t.index ["user_id"], name: "index_tasks_on_user_id"

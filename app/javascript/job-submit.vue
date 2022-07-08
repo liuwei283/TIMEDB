@@ -556,6 +556,7 @@
                 selected_analysis : null,
                 isConv: false,
                 category_name: window.gon.cname,
+                input_ds_selected: '',
                 app: { 
                 },
                 files: {
@@ -620,6 +621,9 @@
                 oplist.push(op);
             }
             this.select_box_option = oplist;
+            if(window.gon.ds_selected) {
+                this.input_ds_selected = window.gon.ds_selected;
+            }
 
             axios.get('/submit/analysesCategory.json', { params: { cname: this.category_name}  }).then(response => {
                 this.analyses = response.data; console.log(response.data)
@@ -963,11 +967,15 @@
                         if (this.picked_single_multiple == "single") {
                             this.single_parameters = this.app.params;
                             this.multiple_parameters = [];
-                            this.ds_selected = "";
+                            if (this.input_ds_selected != '') {
+                                this.ds_selected = this.input_ds_selected;
+                            }
+                            else {
+                                this.ds_selected = "";
+                            }
                             this.ds_params = this.app.params[0];
                             this.ds_param_selected = [];
                             this.multiple_completed = []
-
                         }
                         else {
                             this.single_parameters = this.app.params.filter(x => !['Platform name', 'Platform', 'Dataset name', 'Protocol normalization'].includes(x['name']));
@@ -1172,7 +1180,7 @@
                     axios.post(
                         `/submit-app-task/`,
                         objectToFormData({
-                            "search_mid": this.selected_analysis.mid,
+                            "search_id": this.selected_analysis.mid,
                             "mid": submitted_mid,
                             "is_demo": true,
                             "inputs": demo_files,

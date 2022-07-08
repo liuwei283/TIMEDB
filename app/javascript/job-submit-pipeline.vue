@@ -1281,7 +1281,7 @@
                     axios.post(
                         `/submit-app-task/`,
                         objectToFormData({
-                            "search_pid": this.selected_analysis.pid,
+                            "search_id": this.selected_analysis.pid,
                             "mid": submitted_pid,
                             "is_demo": true,
                             "inputs": demo_files,
