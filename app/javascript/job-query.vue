@@ -2,7 +2,7 @@
 <!-- eslint-disable max-len -->
 <div id="job-query">
     <alert-center ref="alertCenter" />
-    <div v-if="isLoading">
+    <div v-if="!isLoading">
         <div v-if="!submitted"> <!---->
             <b-card class="text-center query-card">
 
