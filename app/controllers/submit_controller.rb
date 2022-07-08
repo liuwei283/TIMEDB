@@ -363,7 +363,7 @@ class SubmitController < ApplicationController
       is_single = params[:is_single]
       is_demo = params[:is_demo]
       # @analysis = Analysis.find_by mid:params[:mid]
-      if is_pipeline == 'true'
+      if is_pipeline != 'true'
         @analysis = Analysis.find_by mid:params[:search_id]
       else
         @pipeline = AnalysisPipeline.find_by pid:params[:search_id]

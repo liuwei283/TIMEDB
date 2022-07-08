@@ -1354,7 +1354,7 @@
                         "inputs": this.formatFiles(),
                         "params": this.formatParams(),
                         "datasets": this.formatDatasets(),
-                        "search_pid": this.selected_analysis.pid,
+                        "search_id": this.selected_analysis.pid,
                         "mid": submitted_pid,
                         "is_single": this.picked_single_multiple=='single',
                         "file_names": this.file_names,

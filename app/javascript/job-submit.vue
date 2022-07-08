@@ -1252,7 +1252,7 @@
                         "inputs": this.formatFiles(),
                         "params": this.formatParams(),
                         "datasets": this.formatDatasets(),
-                        "search_mid": this.selected_analysis.mid,
+                        "search_id": this.selected_analysis.mid,
                         "mid": submitted_mid,
                         "is_single": this.picked_single_multiple=='single',
                         "file_names": this.file_names,
