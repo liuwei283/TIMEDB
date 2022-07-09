@@ -333,7 +333,7 @@
         <div id = "loadingBlock" v-else>
             <h3 class="mt-4">
                 <img v-bind:src="require('../assets/images/loading_icon.gif')">
-                We are preparing your submission. Please wait for some minutes and do not close this window.
+                We are preparing your submission. Please wait for some minutes.
             </h3>
         </div>
 

@@ -57,7 +57,6 @@ class SubmitController < ApplicationController
     end
 
     gon.push select_box_option: data
-
   end
 
   def pipelines
@@ -228,7 +227,7 @@ class SubmitController < ApplicationController
         created: t.created_at,
         status: t.status,
         isDemo: t.is_demo,
-        analysis_id: t.analysis_id
+        analysis_id: analysis_id
       })
     end
     render json:parsed_jobs
@@ -543,10 +542,10 @@ class SubmitController < ApplicationController
         end
         @task.status = 'submitted'
         @task.tid = result['message']['data']['task_id']
+        @task.run_id = app_id.to_i
         @task.save!
         @user.updated_at = Time.now
         @user.save!
-        @task.run_id = app_id.to_i
         result_json[:data] = {
           'msg': result['message']['data']['msg'],
           'task_id': @task.id

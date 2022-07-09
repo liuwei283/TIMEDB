@@ -369,9 +369,9 @@
                                 <h5>
                                     Analysis Group 
                                     <span v-if="modules_relation[category].length > 1"> {{idx + 1}} </span>
-                                    <!-- <b-button class="ml-2 btn btn-3" disabled>
+                                    <b-button class="ml-2 btn btn-3">
                                         Submit All
-                                    </b-button> -->
+                                    </b-button>
                                 </h5> 
                                 <div>
                                     <div class="row m-4 text-center" v-for="(aname, idx2) in group.split(',')" :key="idx2" @click="updateApp(a, true)">
@@ -394,7 +394,7 @@
             </b-card>
         </div>
         <div v-else-if="reruned">
-            <div class="text-center job-info">
+            <div class="text-center job-info container">
                 <h1>Successfully</h1>
                 <h1>Submitted</h1>
                 <p>We are preparing your visualization,you can copy the code and check the status of your work in the <a ref = "goTo" :href = "`/submit/job-query`" id = "redirection-link">[workspace]</a>.</p>
@@ -431,6 +431,7 @@ import DropDownSelect from "page/builtin/dropdown-select.vue";
 import { event } from "crux/dist/utils";
 import {registerViz} from "viz";
 import EditText from "oviz-components/edit-text-vue.vue";
+import * as $ from "jquery";
 
 import ECharts from 'vue-echarts/components/ECharts';
 import 'echarts/lib/chart/line';
@@ -438,6 +439,7 @@ import 'echarts/lib/component/legend';
 import 'echarts/lib/component/tooltip';
 import 'echarts/lib/component/dataZoom';
 import BootstrapVue from 'bootstrap-vue';
+import { findBoundsForValues } from 'viz/testplot/maths';
 
 Vue.component('v-chart', ECharts);
 Vue.component("VApp", VApp);
@@ -455,7 +457,7 @@ export default {
             fields: ["index", "taskName", "taskId", "created", "status", "operation"],
             showTable:  true,
             valid_name: null,
-            submitted: false,
+            submitted: findBoundsForValues,
             code: false,
             data: {outputs: []},
             chosenOutput: null,
@@ -529,7 +531,7 @@ export default {
                     "TIMEDB Cell Fraction Subtyping,TIMEDB KM Estimator,Correlation Analysis", "TIMEDB C1-C6", "TIMEDB Immunoregulator"
                 ],
                 "Comparison Analysis": [
-                    "Regression Tools,Consensus Tools,Enrichment Tools"
+                    "Regression Tools,Consensus Tools"
                 ],
                 "Patient Subtyping": [
                     "TIMEDB HR OR"
@@ -545,7 +547,7 @@ export default {
         } else {
             this.refreshJobs();
         }
-        // axios.get('/submit/query.json',).then(response => {this.analyses = response.data; console.log("Fetched analyses data:"); console.log(response.data)});
+        // axios.get('/submit/job-query.json',).then(response => {this.analyses = response.data; console.log("Fetched analyses data:"); console.log(response.data)});
     },
 
     beforeMount() {
@@ -1025,8 +1027,7 @@ export default {
             this.searchJob();
         },
         submitRecommendation(aname) {
-            if(aname=="Consensus Tools") window.location.href = '/submit/pipelines';
-            else window.location.href = '/submit/analyses/?aname=' + aname;
+            window.location.href = `/submit/analyses/?aname=${aname}`;
         },
         downloadFile(path, name) {
             window.open(`/api/download_target_file?file_path=/data/outputs${path}/${name}`);

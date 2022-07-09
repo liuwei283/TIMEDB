@@ -20,9 +20,9 @@ div class=('active' if !@all_pipelines.blank? )
     p 
         = link_to "Estimation Comparison", {:controller => "submit", :action => "pipelines", :ptype => "all" }
 
-div class=('active' if !@analysis_category.blank? && @analysis_category.name == "Comparison Analysis")
+div class=('active' if !@analysis_category.blank? && @analysis_category.name == "Datasets Comparison")
     p
-        = link_to "Comparison Analysis", {:controller => "submit", :action => "analysesCategory", :cname => "Comparison Analysis"}
+        = link_to "Datasets Comparison", {:controller => "submit", :action => "analysesCategory", :cname => "Datasets Comparison"}
 
 div  class=('active' if !@analysis_category.blank? && @analysis_category.name == "Regression Tools")
     p

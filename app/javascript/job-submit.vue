@@ -604,7 +604,8 @@
                 protocol_options: [
                     "array_none", "array_quantile", "RNA-Seq_TPM", "RNA-Seq_none"
                 ],
-                test_description: "<h5>There are something testing description</h5><ul><li>The first row is for something.</li><li>The first column is for something. It should be something.</li><li>Please be noted that the uploader is for something and somethind should be...</li></ul><p>This is the end of this line.</p>"
+                test_description: "<h5>There are something testing description</h5><ul><li>The first row is for something.</li><li>The first column is for something. It should be something.</li><li>Please be noted that the uploader is for something and somethind should be...</li></ul><p>This is the end of this line.</p>",
+
             };
         },
         created() {
@@ -636,6 +637,7 @@
                     this.updateApp(input_selected, true);
                 }
             });
+
             // for (var k in this.app.inputs){
             //     this.files['i-' + this.app.inputs[k].id]  = null;
             // }
