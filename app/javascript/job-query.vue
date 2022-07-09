@@ -369,9 +369,9 @@
                                 <h5>
                                     Analysis Group 
                                     <span v-if="modules_relation[category].length > 1"> {{idx + 1}} </span>
-                                    <b-button class="ml-2 btn btn-3">
+                                    <!-- <b-button class="ml-2 btn btn-3">
                                         Submit All
-                                    </b-button>
+                                    </b-button> -->
                                 </h5> 
                                 <div>
                                     <div class="row m-4 text-center" v-for="(aname, idx2) in group.split(',')" :key="idx2" @click="updateApp(a, true)">
@@ -439,7 +439,6 @@ import 'echarts/lib/component/legend';
 import 'echarts/lib/component/tooltip';
 import 'echarts/lib/component/dataZoom';
 import BootstrapVue from 'bootstrap-vue';
-import { findBoundsForValues } from 'viz/testplot/maths';
 
 Vue.component('v-chart', ECharts);
 Vue.component("VApp", VApp);
@@ -457,7 +456,7 @@ export default {
             fields: ["index", "taskName", "taskId", "created", "status", "operation"],
             showTable:  true,
             valid_name: null,
-            submitted: findBoundsForValues,
+            submitted: false,
             code: false,
             data: {outputs: []},
             chosenOutput: null,
