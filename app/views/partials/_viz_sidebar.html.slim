@@ -5,4 +5,5 @@
         .collapse.show id="sidebar-cl-#{c.id}"
             - c.analyses.each do |a|
                 li class=('active' if @analysis == a)
-                    = link_to a.name, analysis_path(a.url)
+                    - if a.url != ''
+                        = link_to a.name, analysis_path(a.url)

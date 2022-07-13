@@ -80,7 +80,7 @@
         methods: {
             downloadSVG() {
                 const svgContainerClone = document.getElementById("canvas").cloneNode(true) as HTMLElement;
-                const svgBlob = new Blob([svgContainerClone.innerHTML], { type: "image/svg+xml;charset=utf-8" });
+                const svgBlob = new Blob([svgContainerClone.innerHTML], { type: "image/png;charset=utf-8" });
                 const svgUrl = URL.createObjectURL(svgBlob);
                 const downloadLink = document.createElement("a");
                 downloadLink.href = svgUrl;
@@ -88,6 +88,24 @@
                 document.body.appendChild(downloadLink);
                 downloadLink.click();
                 document.body.removeChild(downloadLink);
+
+                // var e;
+                // const canvasContainerClone = document.getElementById("canvas") as HTMLCanvasElement;
+                // const downloadLink = document.createElement("a");
+                // downloadLink.download = `${window.gon.analysis_name || 'demo'}.svg`;
+                // downloadLink.href = canvasContainerClone.toDataURL("image/png;base64");
+                // if (document.createEvent) {
+                //     e = document.createEvent("MouseEvents");
+                //     e.initMouseEvent("click", true, true, window,
+                //                     0, 0, 0, 0, 0, false, false, false,
+                //                     false, 0, null);
+
+                //     downloadLink.dispatchEvent(e);
+                // }
+
+
+
+
             },
             useDemoFiles() {
                 axios.get(window.gon.urls.use_demo)

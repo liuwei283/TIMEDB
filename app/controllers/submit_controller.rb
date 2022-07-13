@@ -11,11 +11,9 @@ class SubmitController < ApplicationController
         @analysis_categories = AnalysisCategory.order(:name)
         redirect_to action: "analysesCategory", cname: category1, aname: ana1
       else
-
         redirect_to action: "analysesCategory", cname: input_aname
       end
     else
-
       category1 = "Regression Tools"
       @analysis_categories = AnalysisCategory.order(:name)
       redirect_to action: "analysesCategory", cname: category1

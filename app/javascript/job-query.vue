@@ -357,7 +357,12 @@
                     <hr>
 
                     <section id="module_recommendation" v-if="modules_relation[category] != null" class="mt-4 mb-4">
-                        <h4> Recommended for you</h4>
+                        <h4> Recommended for you
+                            <b-button class="ml-2 btn btn-3" @click="window.open(window.gon.urls.download_demo_file);">
+                                Download Outputs
+                            </b-button>
+                        </h4>
+                        <p style="color:gray;font-size:1.4em;position:relative;right:30px;"><i>You could download outputs before conducting the following analyses.</i></p>
                         <!-- <ul class="container">
                             <li v-for="analysis_names in modules_relation[category]" v-bind:key="analysis_names">
                                 {{analysis_names}}
@@ -369,9 +374,9 @@
                                 <h5>
                                     Analysis Group 
                                     <span v-if="modules_relation[category].length > 1"> {{idx + 1}} </span>
-                                    <!-- <b-button class="ml-2 btn btn-3">
+                                    <b-button class="ml-2 btn btn-3" @click="submitAll">
                                         Submit All
-                                    </b-button> -->
+                                    </b-button>
                                 </h5> 
                                 <div>
                                     <div class="row m-4 text-center" v-for="(aname, idx2) in group.split(',')" :key="idx2" @click="updateApp(a, true)">
@@ -530,7 +535,7 @@ export default {
                     "TIMEDB Cell Fraction Subtyping,TIMEDB KM Estimator,Correlation Analysis", "TIMEDB C1-C6", "TIMEDB Immunoregulator"
                 ],
                 "Comparison Analysis": [
-                    "Regression Tools,Consensus Tools"
+                    "Regression Tools,Consensus Tools,Enrichment Tools,Estimation Comparison"
                 ],
                 "Patient Subtyping": [
                     "TIMEDB HR OR"
@@ -953,6 +958,11 @@ export default {
             event.emit("GMT:query-finished", this);
 
         },
+        submitAll() {
+
+            
+
+        },
         refreshJobs() {
             this.refreshEnd = false;
             axios.post(
@@ -1026,7 +1036,20 @@ export default {
             this.searchJob();
         },
         submitRecommendation(aname) {
-            window.location.href = `/submit/analyses/?aname=${aname}`;
+            // try to export files to submit
+            // var export_json = "export_paths=";
+            // var export_array = [];
+            // for (var k in this.outputs) {
+            //     var cur_file = this.outputs.files[0];
+            //     var cur_path = cur_file.path + "/" + cur_file.name;
+            //     export_array.push(this.outputs[k].name + ":" + cur_path);
+            // }
+            // export_json += export_array.join(',');
+            // //window.location.href = `/submit/analyses/?aname=${aname}&${export_json}`;
+            // window.location.href = `/submit/analyses/?aname=${aname}&export_paths=Clinical data:/dir1/file1.csv`;
+            if (aname == "Consensus Tools") window.location.href = `/submit/pipelines?ptype=consensus`;
+            else if (aname == "Estimation Comparison") window.location.href = `/submit/pipelines?ptype=all`
+            else window.location.href = `/submit/analyses/?aname=${aname}`;
         },
         downloadFile(path, name) {
             window.open(`/api/download_target_file?file_path=/data/outputs${path}/${name}`);
