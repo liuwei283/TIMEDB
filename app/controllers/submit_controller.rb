@@ -188,7 +188,7 @@ class SubmitController < ApplicationController
   end
 
   def query_all # query all tasks by user
-    @tasks = Task.where("user_id = ?", session[:user_id]).order(:id)
+    @tasks = Task.where("user_id = ?", session[:user_id]).order(:id).reverse_order
     parsed_jobs = []
     result = nil
     @tasks.each do |t|

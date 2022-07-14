@@ -559,9 +559,8 @@ export default {
 }
 
 .vizBlock {
-        overflow-y: scroll;
+        /* overflow-y: scroll; */
         overflow-x: scroll;
-        
         padding: 2em;
         margin-top: 5%;
         margin-bottom: 0px !important;
@@ -570,6 +569,7 @@ export default {
 
 #fraction-heatmapVis {
     height: 1000px;
+    overflow-y: scroll;
 }
 
     

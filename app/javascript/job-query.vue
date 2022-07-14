@@ -47,70 +47,79 @@
                     </div>
 
                     <div id="table-container">
-                        <b-table
-                            class="jobs-table"
-                            hover
-                            :items="all_jobs"
-                            :fields="fields"
-                            v-if="showTable"
-                            show-empty
-                        >
-                            <template #cell(index)="data">
-                                {{ data.index + 1 }}
-                            </template>
-                            
-                            <template #cell(status)="data">
-                                <b-badge
-                                    pill
-                                    class="badge-finished"
-                                    v-if="data.item.status == 'finished'"
-                                >Finished</b-badge>
-
-                                <span v-else-if="data.item.status == 'failed'" v-b-tooltip.rightbottom.html title="Please check the format of your file!">
+                        <template>
+                            <b-pagination
+                                v-model="currentPage"
+                                :total-rows="jobsNumber"
+                                :per-page="perPage"
+                                aria-controls="my-table"
+                            ></b-pagination>
+                            <b-table
+                                id="my-table"
+                                class="jobs-table"
+                                hover
+                                :items="all_jobs"
+                                :fields="fields"
+                                show-empty
+                                :per-page="perPage"
+                            >
+                                <template #cell(index)="data">
+                                    {{ data.index + 1 }}
+                                </template>
+                                
+                                <template #cell(status)="data">
                                     <b-badge
                                         pill
-                                        class="badge-failed"
+                                        class="badge-finished"
+                                        v-if="data.item.status == 'finished'"
+                                    >Finished</b-badge>
+
+                                    <span v-else-if="data.item.status == 'failed'" v-b-tooltip.rightbottom.html title="Please check the format of your file!">
+                                        <b-badge
+                                            pill
+                                            class="badge-failed"
+                                        >
+                                            Failed
+                                            <i class="fas fa-exclamation-circle small"></i>
+                                        </b-badge>
+                                    </span>
+
+                                    <b-badge pill class="badge-running" v-else>Running</b-badge>
+                                </template>
+
+                                <template #cell(operation)="data">
+
+                                    <b-button
+                                        class = "btn btn-1"
+                                        size="sm"
+                                        v-if="data.item.status == 'finished'"
+                                        @click="showAnalyses(data.item.taskId)"
                                     >
-                                        Failed
-                                        <i class="fas fa-exclamation-circle small"></i>
-                                    </b-badge>
-                                </span>
+                                        <i class="fas fa-search mr-1"></i>
+                                        Result
+                                    </b-button>
 
-                                <b-badge pill class="badge-running" v-else>Running</b-badge>
-                            </template>
+                                    <b-button class = "btn btn-1" size="sm" v-else @click="showAnalyses(data.item.taskId)">
+                                        <i class="fas fa-search mr-1"></i>
+                                        Check
+                                    </b-button>
 
-                            <template #cell(operation)="data">
+                                    <b-button  v-if="!isDemo"
+                                        size="sm"
+                                        class="ml-4 btn-3"
+                                        @click="deleteJob(data.item.taskId)"
+                                        :disabled="data.item.isDemo"
+                                    >
+                                        <i class="fas fa-trash-alt mr-1"></i>
+                                        Delete
+                                    </b-button>
 
-                                <b-button
-                                    class = "btn btn-1"
-                                    size="sm"
-                                    v-if="data.item.status == 'finished'"
-                                    @click="showAnalyses(data.item.taskId)"
-                                >
-                                    <i class="fas fa-search mr-1"></i>
-                                    Result
-                                </b-button>
-
-                                <b-button class = "btn btn-1" size="sm" v-else @click="showAnalyses(data.item.taskId)">
-                                    <i class="fas fa-search mr-1"></i>
-                                    Check
-                                </b-button>
-
-                                <b-button  v-if="!isDemo"
-                                    size="sm"
-                                    class="ml-4 btn-3"
-                                    @click="deleteJob(data.item.taskId)"
-                                    :disabled="data.item.isDemo"
-                                >
-                                    <i class="fas fa-trash-alt mr-1"></i>
-                                    Delete
-                                </b-button>
-
-                            </template>
-                            <template #empty>
-                                <h4 class="text-center">No task... <a href="/submit/analyses">Please submit your tasks.</a> </h4>
-                            </template>
-                        </b-table>
+                                </template>
+                                <template #empty>
+                                    <h4 class="text-center">No task... <a href="/submit/analyses">Please submit your tasks.</a> </h4>
+                                </template>
+                            </b-table>
+                        </template>
                     </div>
                 </div>
             </b-card>
@@ -454,10 +463,42 @@ Vue.component("dropdown-select", DropDownSelect);
 export default {
     data() {
         return {
+            perPage: 2,
+            currentPage: 1,
             job_id: null,
             jobName: '',
             category: 'Regression Tools',
-            all_jobs: [],
+            all_jobs: [
+                {
+                    "index": 1,
+                    "taskName": "test1",
+                    "created": "1",
+                    "status": "finished",
+                    "operation": "check"
+                },
+                {
+                    "index": 2,
+                    "taskName": "test1",
+                    "created": "1",
+                    "status": "finished",
+                    "operation": "check"
+                },
+                {
+                    "index": 3,
+                    "taskName": "test1",
+                    "created": "1",
+                    "status": "finished",
+                    "operation": "check"
+                },
+                {
+                    "index": 4,
+                    "taskName": "test1",
+                    "created": "1",
+                    "status": "finished",
+                    "operation": "check"
+                },
+
+            ],
             fields: ["index", "taskName", "taskId", "created", "status", "operation"],
             showTable:  true,
             valid_name: null,
@@ -661,6 +702,9 @@ export default {
                 
         //     }
         // }
+        jobsNumber() {
+            return this.all_jobs.length;
+        }
     },
     methods: {
         //improvement multiple charts for pipelines
@@ -964,27 +1008,27 @@ export default {
 
         },
         refreshJobs() {
-            this.refreshEnd = false;
-            axios.post(
-                `/query-all-tasks/`,
-                null,
-            {  
-                headers: {
-                    'X-Requested-With': 'XMLHttpRequest',
-                    'X-CSRF-Token': document.head.querySelector('meta[name="csrf-token"]').content,
-                    'Content-Type': 'multipart/form-data',
-                },
-            })
-            .then(r => {
-                this.all_jobs = r.data.map((d, index) => {
-                    return  {index, ...d}
-                });
-            }).finally(() => {
-                // wait 1 sec
-                 setTimeout(() => {
-                    this.refreshEnd = true;
-                    }, 1000);
-            });
+            // this.refreshEnd = false;
+            // axios.post(
+            //     `/query-all-tasks/`,
+            //     null,
+            // {  
+            //     headers: {
+            //         'X-Requested-With': 'XMLHttpRequest',
+            //         'X-CSRF-Token': document.head.querySelector('meta[name="csrf-token"]').content,
+            //         'Content-Type': 'multipart/form-data',
+            //     },
+            // })
+            // .then(r => {
+            //     this.all_jobs = r.data.map((d, index) => {
+            //         return  {index, ...d}
+            //     });
+            // }).finally(() => {
+            //     // wait 1 sec
+            //      setTimeout(() => {
+            //         this.refreshEnd = true;
+            //         }, 1000);
+            // });
         },
         getDemoJobs() {
             axios.post(
