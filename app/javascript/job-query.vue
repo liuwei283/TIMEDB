@@ -52,16 +52,16 @@
                                 v-model="currentPage"
                                 :total-rows="jobsNumber"
                                 :per-page="perPage"
-                                aria-controls="my-table"
+                                aria-controls="job-table"
                             ></b-pagination>
                             <b-table
-                                id="my-table"
-                                class="jobs-table"
+                                id="job-table"
                                 hover
                                 :items="all_jobs"
                                 :fields="fields"
                                 show-empty
                                 :per-page="perPage"
+                                :current-page="currentPage"
                             >
                                 <template #cell(index)="data">
                                     {{ data.index + 1 }}
@@ -383,9 +383,9 @@
                                 <h5>
                                     Analysis Group 
                                     <span v-if="modules_relation[category].length > 1"> {{idx + 1}} </span>
-                                    <b-button class="ml-2 btn btn-3" @click="submitAll">
+                                    <!-- <b-button class="ml-2 btn btn-3" @click="submitAll">
                                         Submit All
-                                    </b-button>
+                                    </b-button> -->
                                 </h5> 
                                 <div>
                                     <div class="row m-4 text-center" v-for="(aname, idx2) in group.split(',')" :key="idx2" @click="updateApp(a, true)">
@@ -463,42 +463,12 @@ Vue.component("dropdown-select", DropDownSelect);
 export default {
     data() {
         return {
-            perPage: 2,
+            perPage: 10,
             currentPage: 1,
             job_id: null,
             jobName: '',
             category: 'Regression Tools',
-            all_jobs: [
-                {
-                    "index": 1,
-                    "taskName": "test1",
-                    "created": "1",
-                    "status": "finished",
-                    "operation": "check"
-                },
-                {
-                    "index": 2,
-                    "taskName": "test1",
-                    "created": "1",
-                    "status": "finished",
-                    "operation": "check"
-                },
-                {
-                    "index": 3,
-                    "taskName": "test1",
-                    "created": "1",
-                    "status": "finished",
-                    "operation": "check"
-                },
-                {
-                    "index": 4,
-                    "taskName": "test1",
-                    "created": "1",
-                    "status": "finished",
-                    "operation": "check"
-                },
-
-            ],
+            all_jobs: [],
             fields: ["index", "taskName", "taskId", "created", "status", "operation"],
             showTable:  true,
             valid_name: null,
@@ -1008,27 +978,27 @@ export default {
 
         },
         refreshJobs() {
-            // this.refreshEnd = false;
-            // axios.post(
-            //     `/query-all-tasks/`,
-            //     null,
-            // {  
-            //     headers: {
-            //         'X-Requested-With': 'XMLHttpRequest',
-            //         'X-CSRF-Token': document.head.querySelector('meta[name="csrf-token"]').content,
-            //         'Content-Type': 'multipart/form-data',
-            //     },
-            // })
-            // .then(r => {
-            //     this.all_jobs = r.data.map((d, index) => {
-            //         return  {index, ...d}
-            //     });
-            // }).finally(() => {
-            //     // wait 1 sec
-            //      setTimeout(() => {
-            //         this.refreshEnd = true;
-            //         }, 1000);
-            // });
+            this.refreshEnd = false;
+            axios.post(
+                `/query-all-tasks/`,
+                null,
+            {  
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest',
+                    'X-CSRF-Token': document.head.querySelector('meta[name="csrf-token"]').content,
+                    'Content-Type': 'multipart/form-data',
+                },
+            })
+            .then(r => {
+                this.all_jobs = r.data.map((d, index) => {
+                    return  {index, ...d}
+                });
+            }).finally(() => {
+                // wait 1 sec
+                 setTimeout(() => {
+                    this.refreshEnd = true;
+                    }, 1000);
+            });
         },
         getDemoJobs() {
             axios.post(
