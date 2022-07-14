@@ -48,12 +48,6 @@
 
                     <div id="table-container">
                         <template>
-                            <b-pagination
-                                v-model="currentPage"
-                                :total-rows="jobsNumber"
-                                :per-page="perPage"
-                                aria-controls="job-table"
-                            ></b-pagination>
                             <b-table
                                 id="job-table"
                                 hover
@@ -119,6 +113,13 @@
                                     <h4 class="text-center">No task... <a href="/submit/analyses">Please submit your tasks.</a> </h4>
                                 </template>
                             </b-table>
+                            <b-pagination
+                                v-model="currentPage"
+                                :total-rows="jobsNumber"
+                                :per-page="perPage"
+                                aria-controls="job-table"
+                                align="center"
+                            ></b-pagination>
                         </template>
                     </div>
                 </div>
@@ -367,11 +368,11 @@
 
                     <section id="module_recommendation" v-if="modules_relation[category] != null" class="mt-4 mb-4">
                         <h4> Recommended for you
-                            <b-button class="ml-2 btn btn-3" @click="window.open(window.gon.urls.download_demo_file);">
+                            <b-button class="ml-2 btn btn-3" @click="downloadOutputs">
                                 Download Outputs
                             </b-button>
                         </h4>
-                        <p style="color:gray;font-size:1.4em;position:relative;right:30px;"><i>You could download outputs before conducting the following analyses.</i></p>
+                        <p style="color:gray;font-size:1.4em;"><i>You could download outputs before conducting the following analyses.</i></p>
                         <!-- <ul class="container">
                             <li v-for="analysis_names in modules_relation[category]" v-bind:key="analysis_names">
                                 {{analysis_names}}
@@ -463,7 +464,7 @@ Vue.component("dropdown-select", DropDownSelect);
 export default {
     data() {
         return {
-            perPage: 10,
+            perPage: 5,
             currentPage: 1,
             job_id: null,
             jobName: '',
@@ -1068,6 +1069,9 @@ export default {
         downloadFile(path, name) {
             window.open(`/api/download_target_file?file_path=/data/outputs${path}/${name}`);
         },
+        downloadOutputs() {
+            window.open(window.gon.urls.download_demo_file);
+        },
         rerunTask() {
             const { alertCenter } = this.$refs;
             let alertData;
@@ -1367,5 +1371,23 @@ export default {
 #jobIDButton {
     background-color: $light_theme;
     color: white;
+}
+
+#table-container li button {
+    background-color: #f8f9fa !important;
+    color: black;
+    
+}
+
+#table-container li span {
+    background-color: #f8f9fa !important;
+    color: black;
+}
+
+#table-container li.active button{
+    background-color: #bbd1de !important;
+    border: none;
+    color: black;
+    transform: scale(1.2);
 }
 </style>
