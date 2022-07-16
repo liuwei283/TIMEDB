@@ -51,7 +51,7 @@
                             <b-table
                                 id="job-table"
                                 hover
-                                :filter="tableFilter"
+                                :filter="job_id"
                                 :items="all_jobs"
                                 :fields="fields"
                                 :sort-by.sync="sortBy"
@@ -471,10 +471,9 @@ export default {
         return {
             sortBy: "index",
             sortDesc: false,
-            tableFilter: '',
             perPage: 5,
             currentPage: 1,
-            job_id: null,
+            job_id: '',
             jobName: '',
             category: 'Regression Tools',
             all_jobs: [],
