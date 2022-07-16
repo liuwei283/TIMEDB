@@ -166,12 +166,12 @@ class Admin::TasksController < ApplicationController
     logger.debug "===========================>Find task output information!"
     logger.info files_to_do
 
-    common_path = ""
+    # common_path = ""
     
     @analysis.files_info.each do |dataType, info|
       @viz_data_source = VizDataSource.find_by(data_type:dataType)
       
-      if !@viz_data_source.blank? && @viz_data_source.allow_multiple
+      if @viz_data_source.allow_multiple
         files_to_do.each do |of1|
           info['outputFileName'].each do |fName|
             if matchPattern(of1['name'], fName)
@@ -180,7 +180,7 @@ class Admin::TasksController < ApplicationController
                                       url: File.join('/data/outputs', of1['path'], of1['name']), 
                                       is_demo: true}
               # files_to_do.delete(of1)
-              common_path = of1['path']
+              # common_path = of1['path']
             end
           end
         end
@@ -192,19 +192,19 @@ class Admin::TasksController < ApplicationController
                                       url: File.join('/data/outputs', of1['path'], of1['name']),
                                       is_demo: true}
               # files_to_do.delete(of1)
-              common_path = of1['path']
+              # common_path = of1['path']
             end
           end
         end
       end
     end
     
-    if Dir[File.join(Rails.root, "/data/outputs", common_path, "*full.csv")].length > 0
-      full_file_path = Dir[File.join(Rails.root, "/data/outputs", common_path, "*full.csv")][0]
-      file_paths["RNAData"] = {id: 0, 
-        url: full_file_path[full_file_path.index("/data/outputs/")..-1],
-        is_demo: true}
-    end
+    # if Dir[File.join(Rails.root, "/data/outputs", common_path, "*full.csv")].length > 0
+    #   full_file_path = Dir[File.join(Rails.root, "/data/outputs", common_path, "*full.csv")][0]
+    #   file_paths["RNAData"] = {id: 0, 
+    #     url: full_file_path[full_file_path.index("/data/outputs/")..-1],
+    #     is_demo: true}
+    # end
 
     task_output.file_paths = file_paths
     task_output.output_id = 0

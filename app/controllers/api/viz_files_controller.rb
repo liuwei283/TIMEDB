@@ -266,7 +266,7 @@ class Api::VizFilesController < ApplicationController
         end
         compressed_filestream = Zip::OutputStream.write_buffer(::StringIO.new()) do |zos|
             all_files.each do |fpath|
-              zos.put_next_entry "#{fpath[0]}__#{File.basename(fpath[1])}"
+              zos.put_next_entry "#{File.basename(fpath[1])}"
               zos.write File.read(File.join(Rails.root, fpath[1]))
             end
         end

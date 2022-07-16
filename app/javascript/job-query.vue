@@ -26,7 +26,7 @@
                         </b-input-group-append>
 
                     </b-input-group>
-                    <p style="color:gray;font-size:1.4em;position:relative;right:30px;"><i>You could find the submitted task by Task ID.</i></p>
+                    <p style="color:gray;font-size:1.4em;position:relative;right:30px;"><i>You could check the submitted task by Task ID.</i></p>
                 </div>
 
                 <div class="local-jobs">
@@ -51,8 +51,12 @@
                             <b-table
                                 id="job-table"
                                 hover
+                                :filter="tableFilter"
                                 :items="all_jobs"
                                 :fields="fields"
+                                :sort-by.sync="sortBy"
+                                :sort-desc.sync="sortDesc"
+                                sort-icon-left
                                 show-empty
                                 :per-page="perPage"
                                 :current-page="currentPage"
@@ -173,7 +177,8 @@
                         <img v-bind:src="visIcon">
                         Visualization
                     </b-button>
-                    <b-button class="btn btn-1 col-md-2" @click="rerunTask">
+                    <b-button class="btn btn-1 col-md-2" @click="rerunTask" @mouseover="rerunIcon=rerunColor" @mouseleave="rerunIcon=rerunWhite;">
+                        <img v-bind:src="rerunIcon">
                         Rerun Task
                     </b-button>
 
@@ -464,6 +469,9 @@ Vue.component("dropdown-select", DropDownSelect);
 export default {
     data() {
         return {
+            sortBy: "index",
+            sortDesc: false,
+            tableFilter: '',
             perPage: 5,
             currentPage: 1,
             job_id: null,
@@ -535,6 +543,10 @@ export default {
             refreshIcon: require('../assets/images/query_refresh_white.png'),
             refreshWhite: require('../assets/images/query_refresh_white.png'),
             refreshColor: require('../assets/images/query_refresh_color.png'),
+
+            rerunIcon: require('../assets/images/query_rerun_white.png'),
+            rerunWhite: require('../assets/images/query_rerun_white.png'),
+            rerunColor: require('../assets/images/query_rerun_color.png'),
 
             modules_relation: {
                 "Regression Tools": [
