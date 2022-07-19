@@ -6,7 +6,7 @@
             <div class="row">
                 <div class="col-md-6 text-right">
                     <h1 class="title">Documentation</h1>
-                    <p>Welcome to TIMEBD Tutorial <br>
+                    <p>Welcome to TIMEDB tutorial <br>
                     Search for in-depth articles on TIMEDB functions</p>
                     <br>
                     <div class="test">
@@ -77,7 +77,7 @@
                                 <td>Linux</td> <td>√ </td> <td> √</td> <td> -</td> <td> - </td>
                             </tr>
                             <tr>
-                                <td>Macos</td> <td> √</td> <td>√</td> <td>√ </td> <td>√ </td>
+                                <td>macOS</td> <td> √</td> <td>√</td> <td>√ </td> <td>√ </td>
                             </tr>
                             <tr>
                                 <td>Windows</td> <td>√ </td> <td> √</td> <td>- </td> <td>√ </td>

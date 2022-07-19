@@ -157,6 +157,21 @@ class AdminController < ApplicationController
         end 
         csf.write(s)
         csf.close
+
+        #table for counting numbers of projects per cancer
+        @projects = Project.order(:project_name)
+        csf_path = "#{$data_dir}sample_num/cancer_projects.tsv"
+        csf = File.open(csf_path, "w")
+        s = "cancer_name\tproject_number"
+        @cancers.each do |cancer|
+            ct = cancer.cancer_name
+            pn = cancer.projects.count
+            s += "\n"
+            s += "#{ct}\t#{pn}"
+        end 
+        csf.write(s)
+        csf.close
+
         #generate project and their sample numbers
         @cancers.each do |cancer|
             ct = cancer.cancer_name

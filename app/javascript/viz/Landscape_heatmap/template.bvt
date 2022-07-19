@@ -1,8 +1,53 @@
 svg{
     Component{
         Container {
-            x = 40;y = 30
-            //stacked plot legend
+            x = 40;y = 30 //+ maxsamplelength
+            
+            //samplename
+            // Container {
+            //     y = 15
+            //     @if(samplenameshow){
+            //         @for(sample,index) in sampleList{
+            //             Text {
+            //                 x = (gridPlotWidth-2)*index + 260 + gridPlotWidth/2 
+            //                 text = sample
+            //                 fontSize = 10
+            //                 // style:font-weight = "bold"
+            //                 rotation = @rotate(-90)
+            //             }
+            //         }
+            //     }
+
+            // }
+            Container {
+                y = 15
+                @if(samplenameshow&&clinicalDatashow){
+                    @for(sample,index) in sampleList{
+                        Text {
+                            x = (gridPlotWidth-2)*(index+1) + 260 //+ gridPlotWidth/2 
+                            y = cellList.length *12 + 170 + cellList.length*(gridPlotheight) + gridPlotheight/2 + (ClinicalData.sortaddName.length-1) * gridPlotheight + 30 - maxsamplelength
+                            text = sample
+                            fontSize = 10
+                            // style:font-weight = "bold"
+                            rotation = @rotate(-270)
+                        }
+                    }
+                }
+                @if(samplenameshow&&!clinicalDatashow){
+                    @for(sample,index) in sampleList{
+                        Text {
+                            x = (gridPlotWidth-2)*(index+1) + 260 + gridPlotWidth/2 
+                            y = cellList.length *12 + 170 + cellList.length*(gridPlotheight) + gridPlotheight/2 + 30
+                            text = sample
+                            fontSize = 10
+                            // style:font-weight = "bold"
+                            rotation = @rotate(-270)
+                        }
+                    }
+                }
+
+            }
+            //stacked plot legend 
             Container{
                 Rect {
                     x = 20;y = 30
@@ -72,8 +117,8 @@ svg{
                                 fill = RNAData.colorMap[d.key]
                                 stroke = "white"
                                 strokeWidth = 0.5
-                                on:mouseenter = setActive(d.data.pos)
-                                on:mouseleave = setActive(null)
+                                // on:mouseenter = setActive(d.data.pos)
+                                // on:mouseleave = setActive(null)
                                 behavior:tooltip{
                                     content = `Sample Name: ${d.data.data[0]} <br> Cell:${d.key} <br> Values: ${d.data.data[1]}<br>`
                                 }
@@ -85,8 +130,9 @@ svg{
             }
         }
         
+        //middle
         Container{
-            x = 40;y = cellList.length *12 + 90
+            x = 40;y = cellList.length *12 + 90 //+ maxsamplelength
             //middle rna heatmap text
             Container {
                 x = 280 + RNAData.useData[sampleList.length-1].col*(gridPlotWidth-2)
@@ -114,8 +160,8 @@ svg{
                             width = gridPlotWidth -1
                             fill = d.data>=0? gbcolorScheme.get(d.data/maxxx):colorScheme.get(d.data/-maxxx)
                             stroke = "white"
-                            on:mouseenter = setActive(sampleList[d.col-1])
-                            on:mouseleave = setActive(null)
+                            // on:mouseenter = setActive(sampleList[d.col-1])
+                            // on:mouseleave = setActive(null)
                             behavior:tooltip{
                                 content = "Sample Name:" + sampleList[d.col-1] + "<br>" + "Cell: "+d.name +"<br>" + "Value:"+d.data + "<br>"
                             }
@@ -125,34 +171,67 @@ svg{
             }
             
         }
-        //heatmap legend
+        //middle heatmap legend
         Container {
-            x = 40;y = cellList.length *12 + 90
-            Rect{
-                x = 190;y = RNAData.useData[0].row*gridPlotheight
-                fill = @gradient("gb")
-                weidth = 50
-                height = cellList.length*gridPlotheight/2
+            x = 40;y = cellList.length *12 + 90 //+ maxsamplelength
+            @if(midheatlegend=="all"){
+                Rect{
+                    x = 190;y = RNAData.useData[0].row*gridPlotheight
+                    fill = @gradient("gb")
+                    weidth = 50
+                    height = cellList.length*gridPlotheight/2
+                }
+                Rect{
+                    x = 190;y = RNAData.useData[0].row*gridPlotheight + cellList.length*gridPlotheight/2
+                    fill = @gradient("kg")
+                    weidth = 50
+                    height = cellList.length*gridPlotheight/2
+                }
+                Axis{
+                    x = 210;y = RNAData.useData[0].row*gridPlotheight
+                    yScale = @scale-linear(0,textmaxxx, cellList.length*gridPlotheight/2, 0)
+                    orientation = "right"
+                }
+                Axis{
+                    x = 210;y = RNAData.useData[0].row*gridPlotheight + cellList.length*gridPlotheight/2
+                    yScale = @scale-linear(0, -textmaxxx, 0, cellList.length*gridPlotheight/2)
+                    orientation = "right"
+                }
             }
-            Rect{
-                x = 190;y = RNAData.useData[0].row*gridPlotheight + cellList.length*gridPlotheight/2
-                fill = @gradient("kg")
-                weidth = 50
-                height = cellList.length*gridPlotheight/2
+            @elsif(midheatlegend=="above"){
+                //<=0
+                Rect{
+                    x = 190;y = RNAData.useData[0].row*gridPlotheight
+                    fill = @gradient("gb")
+                    weidth = 50
+                    height = cellList.length*gridPlotheight
+                }
+                Axis{
+                    x = 210;y = RNAData.useData[0].row*gridPlotheight
+                    yScale = @scale-linear(0,textmaxxx, cellList.length*gridPlotheight, 0)
+                    orientation = "right"
+                }
             }
-            Axis{
-                x = 210;y = RNAData.useData[0].row*gridPlotheight
-                yScale = @scale-linear(0,textmaxxx, cellList.length*gridPlotheight/2, 0)
-                orientation = "right"
+            @elsif(midheatlegend=="below"){
+                //>0
+                Rect{
+                    x = 190;y = RNAData.useData[0].row*gridPlotheight
+                    fill = @gradient("kg")
+                    weidth = 50
+                    height = cellList.length*gridPlotheight
+                    @expr console.log("textmaxxx:",textmaxxx)
+                }
+                Axis{
+                    x = 210;y = RNAData.useData[0].row*gridPlotheight
+                    yScale = @scale-linear(0, -textmaxxx, 0, cellList.length*gridPlotheight)
+                    orientation = "right"
+                }
             }
-            Axis{
-                x = 210;y = RNAData.useData[0].row*gridPlotheight + cellList.length*gridPlotheight/2
-                yScale = @scale-linear(0, -textmaxxx, 0, cellList.length*gridPlotheight/2)
-                orientation = "right"
-            }
+
         }
         //middle left boxplot
         Container {
+            // y = maxsamplelength
             XYPlot {
                 x = 260; y = cellList.length *12 + 50
                 rotation = @rotate(90)
@@ -162,11 +241,11 @@ svg{
                 //@expr console.log("RNAData.boxdata:",RNAData.boxdata)
                 data = { boxData: RNAData.boxdata}
                 valueRange = valueRange
-                AxisBackground {
-                    orientation = "vertical"
-                    includeEndTicks = true
-                    dashArray = "1, 2"
-                }
+                // AxisBackground {
+                //     orientation = "vertical"
+                //     includeEndTicks = true
+                //     // dashArray = "1, 2"
+                // }
                 Rect{
                     width = 100%
                     height = 100%
@@ -178,20 +257,22 @@ svg{
                     data = "boxData"
                     :box (_d) {
                         Rect.full  {
-                            fill = colors[0]
+                            fill = "white"
                             stroke = "#003366"
-                            x = 33%
-                            width = 33%
+                            x = 20%
+                            width = 60%
+                            strokeWidth = 0.7
                         }
                     }
                     :median(d) {}
                     :mean(means) {
-                        Line {x1 = 33%; x2 = 66%; stroke = "#000"}
+                        Line {x1 = 20%; x2 = 80%; stroke = "#000";strokeWidth = 0.7}
                     }
                     :whiskle (d) {
-                        Line { x1 = 41.25%; x2 = 57.75%; y1 = 0; y2 = 0; stroke = "#000" }
-                        Line { x1 = 41.25%; x2 = 57.75%; y1 = 100%; y2 = 100%; stroke = "#000" }
-                        Line { x1 = 50%; x2 = 50%; y1 = 0; y2 = 100%; stroke = "#0078d7"; dashArray = "3, 2" }
+                        // Line { x1 = 41.25%; x2 = 57.75%; y1 = 0; y2 = 0; stroke = "#000" }
+                        // Line { x1 = 41.25%; x2 = 57.75%; y1 = 100%; y2 = 100%; stroke = "#000" }
+                        // Line { x1 = 50%; x2 = 50%; y1 = 0; y2 = 100%; stroke = "#0078d7"; dashArray = "3, 2" }
+                        Line { x1 = 50%; x2 = 50%; y1 = 0; y2 = 100%; stroke = "black";strokeWidth = 0.7 }
                     }
                 }
                 Axis("left");
@@ -204,7 +285,7 @@ svg{
         //clinical part
         @if(clinicalDatashow){
             Container {
-            x = 20;
+            x = 20;//y = maxsamplelength
             Container {
                 Container {
                     Component{
@@ -325,8 +406,8 @@ svg{
                                     width = gridPlotWidth-1
                                     fill = item.substring(0,2)=="c_"? d.color:(d.data=="NA"? "#C0C0C0":(item.substring(0,2) == "n_"? ageColorScheme.get((d.data-n_color[item].min)/n_color[item].max):ageColorScheme.get(d.data)))
                                     stroke = "white"
-                                    on:mouseenter = setActive(sampleList[d.col-1])
-                                    on:mouseleave = setActive(null)
+                                    // on:mouseenter = setActive(sampleList[d.col-1])
+                                    // on:mouseleave = setActive(null)
                                     behavior:tooltip{
                                         content = "Sample Name:" + sampleList[d.col-1] + "<br>" +"Clinical Indicators: " + item + "<br>"  + "Value: " + d.data + "<br>" //+ "pValue: " + d.pValue
                                     }

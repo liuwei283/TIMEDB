@@ -186,6 +186,7 @@
                         <img v-bind:src="refreshIcon">
                         Refresh Status
                     </b-button>
+                    <p style="color:gray;font-size:1.4em;"><i>You could rerun your task within 30 days.</i></p>
                     
 
                     <div class="switchBtn mt-4 mb-4">

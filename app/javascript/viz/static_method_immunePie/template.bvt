@@ -16,10 +16,11 @@ svg {
 			}
 			:children(d) {
 				Arc {
+					// @expr console.log("d.data:",d)
                     x1 = d.start; x2 = d.end; r2 = pieR
                     fill = d.data.raw.color
 					behavior:tooltip {
-					        content = "Cell: "+ d.data.name+ "</br>Value: "+ d.data.value
+					        content = "Cell: "+ d.data.name+ "</br>Value: "+ d.data.value + "</br>Proportion:" + ((d.end - d.start)*100/360).toFixed(1) + "%"
 					}  
                 }
 			}
@@ -107,15 +108,16 @@ svg {
 		Container.centered {
 			anchor = @anchor("center","bottom")
 			@let len = methodList.length
-			x = 195;y = 550
+			x = 500 - len/4 * 120
+			y = 550
 			@for(item,index) in methodList{
 				@if(index<len/2){
 					Component {
 						x = 120*(index+len/2); y = 20
 						@let disabled = buttonkey === index
-        	        	width = 80; height = 25
+        	        	width = 80; height = 25 
         	        	Rect.full {fill = disabled ?  "#485570" : "#727D91"; cornerRadius = 4}
-        	        	Text.centered(item) { x = 50%; y = 50%; fill = "#fff";fontSize = 9 }
+        	        	Text.centered(item) { x = 50%; y = 50%; fill = "#fff";fontSize = 10 }
         	        	cursor = disabled ? null:"pointer"
         	        	on:click = disabled ? null:buttonclick(index)
 					}
@@ -124,9 +126,9 @@ svg {
 					Component {
 						x = 120*(index); y = 70
 						@let disabled = buttonkey === index
-        	        	width = 80; height = 25
+        	        	width = 80; height = 25 
         	        	Rect.full {fill = disabled ? "#485570" : "#727D91"; cornerRadius = 4}
-        	        	Text.centered(item) { x = 50%; y = 50%; fill = "#fff";fontSize = 9 }
+        	        	Text.centered(item) { x = 50%; y = 50%; fill = "#fff";fontSize = 10 }
         	        	cursor = disabled ? null:"pointer"
         	        	on:click = disabled ? null:buttonclick(index)
 					}
@@ -134,6 +136,7 @@ svg {
 				
 			}
 		}
+
 	}
 
 }

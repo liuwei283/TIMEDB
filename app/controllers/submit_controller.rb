@@ -627,7 +627,7 @@ class SubmitController < ApplicationController
     begin
       @task = nil
       if params[:is_demo] == "true"
-        @task = Task.find_by! id:params[:job_id], is_demo: true
+        @task = Task.find_by! id:params[:job_id] #, is_demo: true
       else 
         @task =Task.find_by! id:params[:job_id], user_id:session[:user_id]
       end

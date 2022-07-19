@@ -41,6 +41,22 @@ export const generateTestConfig = (v,eid): any => ({
                             },
                         },
                     },
+                    {
+                        title: "Show Sample Name",
+                        type: "checkbox",
+                        value: {
+                            current: v.data.samplenameshow,
+                            callback(d) {
+                                // v.data.clinicalDatashow? (v.data.legendStyle = d,switchStyle(v)):null
+                                v.data.samplenameshow = d
+                                d? v.data.maxsamplelength = v.data.propsamplelength:v.data.maxsamplelength =0
+                                d? v.size.height = v.size.height + v.data.maxsamplelength : v.size.height = v.size.height - v.data.propsamplelength
+                                v.forceRedraw = true;
+                                v.data._sizeUpdated = true;
+                                update(v,eid);
+                            },
+                        },
+                    },
                 ]
 
             }
