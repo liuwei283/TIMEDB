@@ -1,7 +1,9 @@
 class AdminController < ApplicationController
+    
     http_basic_authenticate_with name: "admin", password: "Lovelace"
     $inf_dir = "#{Rails.root}/public/data/sample_plot/"
     $data_dir = "#{Rails.root}/public/data/"
+
     def index
         @projects = Project.order(:project_name)
         #@organs = Organ.order(:primary_site)
