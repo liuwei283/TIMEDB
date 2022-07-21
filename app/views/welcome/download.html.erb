@@ -6,6 +6,8 @@
   <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.22/css/jquery.dataTables.css">
   <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/select/1.3.1/css/select.dataTables.min.css">
   <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/fixedcolumns/3.3.2/css/fixedColumns.dataTables.min.css">
+
+  
   <%= javascript_pack_tag "download" %>
 <% end %>
 <% content_for :title, 'Download' %>
@@ -58,7 +60,10 @@
                     <% if attr =='Project'%>  
                     <th> <%= attr %> </th>
                     <% else %>
-                    <th> <%= attr %> (<%=@csv_test['number'][attr+'_full']%>)</th>
+                    <% if @csv_test['number'][attr+'_full'] > @csv_test['number'][attr] %>
+
+                    <% end %>
+                    <th> <%= attr %> (<%=@csv_test['number'][attr+'_full'] > @csv_test['number'][attr] ? @csv_test['number'][attr+'_full'] : @csv_test['number'][attr]%>)</th>
 
                     <% end %>
 
@@ -70,14 +75,26 @@
                         <td> <%=link_to("#{p.project_name}", p.original_link)%></td>
                         <% @attrs2.each do |attr| %>
                         <% if attr != 'id' and attr !='Project'%>  
-                        <td>     
-                            <%if @csv_test[p.project_name][attr+'_full']=='true'%>
-                            <%= link_to("#{p.project_name}_#{attr}.csv","/public/data/cell_data/#{attr}/#{p.project_name}_#{attr}_full.csv")%>
-                            <% else %>No data 
-                                <%if @msg_test[p.project_name+attr +'_full'] %>
-                                    <%= @msg_test[p.project_name+attr+'_full']["reason"]%>
+                        <td>
+                            <%if attr=='EPIC' || attr=='quanTIseq' %>
+                                <%if @csv_test[p.project_name][attr]=='true'%>
+                                    <%= link_to("#{p.project_name}_#{attr}.csv","/public/data/cell_data/#{attr}/#{p.project_name}_#{attr}.csv")%>
+                                
+                                <% else %>No data 
+                                    <%if @msg_test[p.project_name+attr] %>
+                                        <%= @msg_test[p.project_name+attr]["reason"]%>
+                                    <% end %>
+                                <% end %>
+                            <% else %>
+                                <%if @csv_test[p.project_name][attr+'_full']=='true'%>
+                                    <%= link_to("#{p.project_name}_#{attr+'_full'}.csv","/public/data/cell_data/#{attr}/#{p.project_name}_#{attr}_full.csv")%>
+                                <% else %>No data 
+                                    <%if @msg_test[p.project_name+attr +'_full'] %>
+                                        <%= @msg_test[p.project_name+attr+'_full']["reason"]%>
+                                    <% end %>
                                 <% end %>
                             <% end %>
+                            
                         </td>
                         <% end %>
 

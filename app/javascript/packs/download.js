@@ -11,10 +11,13 @@ $(document).ready(function() {
       "order": [[0,"desc"]],
     });
     var oTable2 = $("#table2").DataTable({
+      fixedColumns: true,
+      fixedColumns: {
+          leftColumns: 1,
+      },
       columnDefs: [
         {
           targets: 0,
-
         }
       ],
       "order": [[0,"desc"]],
@@ -22,10 +25,10 @@ $(document).ready(function() {
       scrollX: true,
     });
     var oTable3 = $("#table3").DataTable({
+      
       columnDefs: [
         {
           targets: 0,
-
         }
       ],
       "order": [[0,"desc"]],
@@ -35,7 +38,6 @@ $(document).ready(function() {
       columnDefs: [
         {
           targets: 0,
-
         }
       ],
       "order": [[0,"desc"]],
@@ -43,10 +45,13 @@ $(document).ready(function() {
     });
 
     var oTable5 = $("#table5").DataTable({
+      fixedColumns: true,
+      fixedColumns: {
+          leftColumns: 1,
+      },
       columnDefs: [
         {
           targets: 0,
-
         }
       ],
       "order": [[0,"desc"]],
