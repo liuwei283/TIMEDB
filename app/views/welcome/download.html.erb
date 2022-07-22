@@ -60,9 +60,6 @@
                     <% if attr =='Project'%>  
                     <th> <%= attr %> </th>
                     <% else %>
-                    <% if @csv_test['number'][attr+'_full'] > @csv_test['number'][attr] %>
-
-                    <% end %>
                     <th> <%= attr %> (<%=@csv_test['number'][attr+'_full'] > @csv_test['number'][attr] ? @csv_test['number'][attr+'_full'] : @csv_test['number'][attr]%>)</th>
 
                     <% end %>
