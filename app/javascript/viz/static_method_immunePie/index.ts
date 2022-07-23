@@ -50,9 +50,10 @@ export function init(id,path,config,eid,plot_name){
         },
         setup() { 
             console.log("this.data:",this["_data"]);
+            // this.data.methodList = this.data.methodList.slice(5)
+            // process(this)
             //registerEditorConfig(editorConfig(this), editorRef);
             //registerEditorConfig(editorConfig(this,eid), plot_name);
         },
     })
 }
-

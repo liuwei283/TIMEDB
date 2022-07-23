@@ -68,5 +68,6 @@ export function registerViz(moduleName) {
         case "module_consensusView":
             registerModuleConsensusView();
             break;
+       
     }
 }

@@ -18,7 +18,7 @@
                         </div>
                         <div class="sidebar-tutorial-toggle">
                             <a href="#">
-                            <p>Usage &nbsp<i class="fa fa-angle-down" id="arrow"></i>
+                            <p>Usages &nbsp<i class="fa fa-angle-down" id="arrow"></i>
                             </p>
                             </a>
                             <ul id="side-tutorial-bar" class="">

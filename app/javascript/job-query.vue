@@ -26,7 +26,7 @@
                         </b-input-group-append>
 
                     </b-input-group>
-                    <p style="color:gray;font-size:1.4em;position:relative;right:30px;"><i>You could find the submitted task by Task ID.</i></p>
+                    <p style="color:gray;font-size:1.4em;position:relative;right:30px;"><i>You could check the submitted task by Task ID.</i></p>
                 </div>
 
                 <div class="local-jobs">
@@ -47,70 +47,84 @@
                     </div>
 
                     <div id="table-container">
-                        <b-table
-                            class="jobs-table"
-                            hover
-                            :items="all_jobs"
-                            :fields="fields"
-                            v-if="showTable"
-                            show-empty
-                        >
-                            <template #cell(index)="data">
-                                {{ data.index + 1 }}
-                            </template>
-                            
-                            <template #cell(status)="data">
-                                <b-badge
-                                    pill
-                                    class="badge-finished"
-                                    v-if="data.item.status == 'finished'"
-                                >Finished</b-badge>
-
-                                <span v-else-if="data.item.status == 'failed'" v-b-tooltip.rightbottom.html title="Please check the format of your file!">
+                        <template>
+                            <b-table
+                                id="job-table"
+                                hover
+                                :filter="job_id"
+                                :items="all_jobs"
+                                :fields="fields"
+                                :sort-by.sync="sortBy"
+                                :sort-desc.sync="sortDesc"
+                                sort-icon-left
+                                show-empty
+                                :per-page="perPage"
+                                :current-page="currentPage"
+                            >
+                                <template #cell(index)="data">
+                                    {{ data.index + 1 }}
+                                </template>
+                                
+                                <template #cell(status)="data">
                                     <b-badge
                                         pill
-                                        class="badge-failed"
+                                        class="badge-finished"
+                                        v-if="data.item.status == 'finished'"
+                                    >Finished</b-badge>
+
+                                    <span v-else-if="data.item.status == 'failed'" v-b-tooltip.rightbottom.html title="Please check the format of your file!">
+                                        <b-badge
+                                            pill
+                                            class="badge-failed"
+                                        >
+                                            Failed
+                                            <i class="fas fa-exclamation-circle small"></i>
+                                        </b-badge>
+                                    </span>
+
+                                    <b-badge pill class="badge-running" v-else>Running</b-badge>
+                                </template>
+
+                                <template #cell(operation)="data">
+
+                                    <b-button
+                                        class = "btn btn-1"
+                                        size="sm"
+                                        v-if="data.item.status == 'finished'"
+                                        @click="showAnalyses(data.item.taskId)"
                                     >
-                                        Failed
-                                        <i class="fas fa-exclamation-circle small"></i>
-                                    </b-badge>
-                                </span>
+                                        <i class="fas fa-search mr-1"></i>
+                                        Result
+                                    </b-button>
 
-                                <b-badge pill class="badge-running" v-else>Running</b-badge>
-                            </template>
+                                    <b-button class = "btn btn-1" size="sm" v-else @click="showAnalyses(data.item.taskId)">
+                                        <i class="fas fa-search mr-1"></i>
+                                        Check
+                                    </b-button>
 
-                            <template #cell(operation)="data">
+                                    <b-button  v-if="!isDemo"
+                                        size="sm"
+                                        class="ml-4 btn-3"
+                                        @click="deleteJob(data.item.taskId)"
+                                        :disabled="data.item.isDemo"
+                                    >
+                                        <i class="fas fa-trash-alt mr-1"></i>
+                                        Delete
+                                    </b-button>
 
-                                <b-button
-                                    class = "btn btn-1"
-                                    size="sm"
-                                    v-if="data.item.status == 'finished'"
-                                    @click="showAnalyses(data.item.taskId)"
-                                >
-                                    <i class="fas fa-search mr-1"></i>
-                                    Result
-                                </b-button>
-
-                                <b-button class = "btn btn-1" size="sm" v-else @click="showAnalyses(data.item.taskId)">
-                                    <i class="fas fa-search mr-1"></i>
-                                    Check
-                                </b-button>
-
-                                <b-button  v-if="!isDemo"
-                                    size="sm"
-                                    class="ml-4 btn-3"
-                                    @click="deleteJob(data.item.taskId)"
-                                    :disabled="data.item.isDemo"
-                                >
-                                    <i class="fas fa-trash-alt mr-1"></i>
-                                    Delete
-                                </b-button>
-
-                            </template>
-                            <template #empty>
-                                <h4 class="text-center">No task... <a href="/submit/analyses">Please submit your tasks.</a> </h4>
-                            </template>
-                        </b-table>
+                                </template>
+                                <template #empty>
+                                    <h4 class="text-center">No task... <a href="/submit/analyses">Please submit your tasks.</a> </h4>
+                                </template>
+                            </b-table>
+                            <b-pagination
+                                v-model="currentPage"
+                                :total-rows="jobsNumber"
+                                :per-page="perPage"
+                                aria-controls="job-table"
+                                align="center"
+                            ></b-pagination>
+                        </template>
                     </div>
                 </div>
             </b-card>
@@ -163,7 +177,8 @@
                         <img v-bind:src="visIcon">
                         Visualization
                     </b-button>
-                    <b-button class="btn btn-1 col-md-2" @click="rerunTask">
+                    <b-button class="btn btn-1 col-md-2" @click="rerunTask" @mouseover="rerunIcon=rerunColor" @mouseleave="rerunIcon=rerunWhite;">
+                        <img v-bind:src="rerunIcon">
                         Rerun Task
                     </b-button>
 
@@ -171,6 +186,7 @@
                         <img v-bind:src="refreshIcon">
                         Refresh Status
                     </b-button>
+                    <p style="color:gray;font-size:1.4em;"><i>You could rerun your task within 30 days.</i></p>
                     
 
                     <div class="switchBtn mt-4 mb-4">
@@ -357,7 +373,12 @@
                     <hr>
 
                     <section id="module_recommendation" v-if="modules_relation[category] != null" class="mt-4 mb-4">
-                        <h4> Recommended for you</h4>
+                        <h4> Recommended for you
+                            <b-button class="ml-2 btn btn-3" @click="downloadOutputs">
+                                Download Outputs
+                            </b-button>
+                        </h4>
+                        <p style="color:gray;font-size:1.4em;"><i>You could download outputs before conducting the following analyses.</i></p>
                         <!-- <ul class="container">
                             <li v-for="analysis_names in modules_relation[category]" v-bind:key="analysis_names">
                                 {{analysis_names}}
@@ -369,7 +390,7 @@
                                 <h5>
                                     Analysis Group 
                                     <span v-if="modules_relation[category].length > 1"> {{idx + 1}} </span>
-                                    <!-- <b-button class="ml-2 btn btn-3">
+                                    <!-- <b-button class="ml-2 btn btn-3" @click="submitAll">
                                         Submit All
                                     </b-button> -->
                                 </h5> 
@@ -449,7 +470,11 @@ Vue.component("dropdown-select", DropDownSelect);
 export default {
     data() {
         return {
-            job_id: null,
+            sortBy: "index",
+            sortDesc: false,
+            perPage: 5,
+            currentPage: 1,
+            job_id: '',
             jobName: '',
             category: 'Regression Tools',
             all_jobs: [],
@@ -519,6 +544,10 @@ export default {
             refreshWhite: require('../assets/images/query_refresh_white.png'),
             refreshColor: require('../assets/images/query_refresh_color.png'),
 
+            rerunIcon: require('../assets/images/query_rerun_white.png'),
+            rerunWhite: require('../assets/images/query_rerun_white.png'),
+            rerunColor: require('../assets/images/query_rerun_color.png'),
+
             modules_relation: {
                 "Regression Tools": [
                     "TIMEDB Cell Fraction Subtyping,TIMEDB KM Estimator,Correlation Analysis", "TIMEDB C1-C6", "TIMEDB Immunoregulator"
@@ -530,7 +559,7 @@ export default {
                     "TIMEDB Cell Fraction Subtyping,TIMEDB KM Estimator,Correlation Analysis", "TIMEDB C1-C6", "TIMEDB Immunoregulator"
                 ],
                 "Comparison Analysis": [
-                    "Regression Tools,Consensus Tools"
+                    "Regression Tools,Consensus Tools,Enrichment Tools,Estimation Comparison"
                 ],
                 "Patient Subtyping": [
                     "TIMEDB HR OR"
@@ -656,6 +685,9 @@ export default {
                 
         //     }
         // }
+        jobsNumber() {
+            return this.all_jobs.length;
+        }
     },
     methods: {
         //improvement multiple charts for pipelines
@@ -953,6 +985,11 @@ export default {
             event.emit("GMT:query-finished", this);
 
         },
+        submitAll() {
+
+            
+
+        },
         refreshJobs() {
             this.refreshEnd = false;
             axios.post(
@@ -1026,10 +1063,26 @@ export default {
             this.searchJob();
         },
         submitRecommendation(aname) {
-            window.location.href = `/submit/analyses/?aname=${aname}`;
+            // try to export files to submit
+            // var export_json = "export_paths=";
+            // var export_array = [];
+            // for (var k in this.outputs) {
+            //     var cur_file = this.outputs.files[0];
+            //     var cur_path = cur_file.path + "/" + cur_file.name;
+            //     export_array.push(this.outputs[k].name + ":" + cur_path);
+            // }
+            // export_json += export_array.join(',');
+            // //window.location.href = `/submit/analyses/?aname=${aname}&${export_json}`;
+            // window.location.href = `/submit/analyses/?aname=${aname}&export_paths=Clinical data:/dir1/file1.csv`;
+            if (aname == "Consensus Tools") window.location.href = `/submit/pipelines?ptype=consensus`;
+            else if (aname == "Estimation Comparison") window.location.href = `/submit/pipelines?ptype=all`
+            else window.location.href = `/submit/analyses/?aname=${aname}`;
         },
         downloadFile(path, name) {
             window.open(`/api/download_target_file?file_path=/data/outputs${path}/${name}`);
+        },
+        downloadOutputs() {
+            window.open(window.gon.urls.download_demo_file);
         },
         rerunTask() {
             const { alertCenter } = this.$refs;
@@ -1330,5 +1383,23 @@ export default {
 #jobIDButton {
     background-color: $light_theme;
     color: white;
+}
+
+#table-container li button {
+    background-color: #f8f9fa !important;
+    color: black;
+    
+}
+
+#table-container li span {
+    background-color: #f8f9fa !important;
+    color: black;
+}
+
+#table-container li.active button{
+    background-color: #bbd1de !important;
+    border: none;
+    color: black;
+    transform: scale(1.2);
 }
 </style>

@@ -11,11 +11,9 @@ class SubmitController < ApplicationController
         @analysis_categories = AnalysisCategory.order(:name)
         redirect_to action: "analysesCategory", cname: category1, aname: ana1
       else
-
         redirect_to action: "analysesCategory", cname: input_aname
       end
     else
-
       category1 = "Regression Tools"
       @analysis_categories = AnalysisCategory.order(:name)
       redirect_to action: "analysesCategory", cname: category1
@@ -190,7 +188,7 @@ class SubmitController < ApplicationController
   end
 
   def query_all # query all tasks by user
-    @tasks = Task.where("user_id = ?", session[:user_id]).order(:id)
+    @tasks = Task.where("user_id = ?", session[:user_id]).order(:id).reverse_order
     parsed_jobs = []
     result = nil
     @tasks.each do |t|
@@ -629,7 +627,7 @@ class SubmitController < ApplicationController
     begin
       @task = nil
       if params[:is_demo] == "true"
-        @task = Task.find_by! id:params[:job_id], is_demo: true
+        @task = Task.find_by! id:params[:job_id] #, is_demo: true
       else 
         @task =Task.find_by! id:params[:job_id], user_id:session[:user_id]
       end
@@ -779,9 +777,12 @@ class SubmitController < ApplicationController
     # files_to_do = mrs['outputs'][0]['files']
     logger.debug "===========================>Find task output information!"
     logger.info files_to_do
+
+    # common_path = ""
     
     @analysis.files_info.each do |dataType, info|
       @viz_data_source = VizDataSource.find_by(data_type:dataType)
+       
       if @viz_data_source.allow_multiple
         files_to_do.each do |of1|
           info['outputFileName'].each do |fName|
@@ -791,6 +792,7 @@ class SubmitController < ApplicationController
                                       url: File.join('/data/outputs', of1['path'], of1['name']), 
                                       is_demo: true}
               # files_to_do.delete(of1)
+              # common_path = of1['path']
             end
           end
         end
@@ -802,11 +804,19 @@ class SubmitController < ApplicationController
                                       url: File.join('/data/outputs', of1['path'], of1['name']), 
                                       is_demo: true}
               # files_to_do.delete(of1)
+              # common_path = of1['path']
             end
           end
         end
       end
     end
+
+    # if Dir[File.join(Rails.root, "/data/outputs", common_path, "*full.csv")].length > 0
+    #   full_file_path = Dir[File.join(Rails.root, "/data/outputs", common_path, "*full.csv")][0]
+    #   file_paths["RNAData"] = {id: 0, 
+    #     url: full_file_path[full_file_path.index("/data/outputs/")..-1],
+    #     is_demo: true}
+    # end
 
     task_output.file_paths = file_paths
     task_output.output_id = 0

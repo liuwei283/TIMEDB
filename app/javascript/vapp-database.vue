@@ -9,8 +9,19 @@
                 <h4>Sample Bar Plot</h4>
             </div>
             <div class="select-bar form-inline row">
-
+                
                 <div class="sdiv col">
+                    <div class="select-title">
+                        Please choose projects or sample number:
+                    </div>
+                    <select @change='barViz' class="selectpicker form-select col" data-style="btn-secondary" data-live-search="true" v-model="ps_bar_selected">
+                        <option v-for="(option, index) in ps_bar_selector" :key="index" :value="option.value" >
+                            {{option.label}}
+                        </option>
+                    </select>
+                </div>
+
+                <div class="sdiv col" v-if= "ps_bar_selected == 'sample'">
                     <div class="select-title">
                         Please choose project or cancer type:
                     </div>
@@ -19,19 +30,18 @@
                             {{option.label}}
                         </option>
                     </select>
-                    
                 </div>
 
-                    <div v-if= "bar_selected == 'project' " class ="sdiv col">
-                        <div class="select-title">
-                        Please choose the cancer type of the projects:
-                        </div>
-                        <select @change="barViz" class="form-select col selectpicker" data-style="btn-secondary" data-live-search="true" v-model="bar_cancer_selected">
-                            <option v-for="(option, index) in cancers" :key="index" :value="option">
-                                {{option}}
-                            </option> 
-                        </select>
+                <div v-if= "ps_bar_selected == 'sample' && bar_selected == 'project'" class ="sdiv col">
+                    <div class="select-title">
+                    Please choose the cancer type of the projects:
                     </div>
+                    <select @change="barViz" class="form-select col selectpicker" data-style="btn-secondary" data-live-search="true" v-model="bar_cancer_selected">
+                        <option v-for="(option, index) in cancers" :key="index" :value="option">
+                            {{option}}
+                        </option>
+                    </select>
+                </div>
 
             </div>
             <div class="dropdown mt-3 mb-5">
@@ -349,7 +359,12 @@ export default {
                 {value: "cancer", label: "Cancer type"},
                 {value: "project", label: "Project"},
             ],
+            ps_bar_selector: [
+                {value: "project", label: "Project number"},
+                {value: "sample", label: "Sample number"},
+            ],
             bar_selected : 'cancer',
+            ps_bar_selected: 'sample',
             pieMethodSelector : [
                 {value:"quanTIseq",label:"quanTIseq"},
                 {value:"ABIS",label:"ABIS"},
@@ -452,11 +467,15 @@ export default {
         }, 
         barViz() {
             //alert(this.bar_selected)
-            if (this.bar_selected == "cancer") {
-                immunebar("#barVis", this.data_path + "/sample_num/" + "cancer_samples.tsv", "#bar-editor", "overview_bar_viz");
-            }
-            else {
-                immunebar("#barVis", this.data_path + "/sample_num/" + this.bar_cancer_selected + "_project_samples.tsv", "#bar-editor", "overview_bar_viz");
+            if (this.ps_bar_selected == 'sample') {
+                if (this.bar_selected == "cancer") {
+                    immunebar("#barVis", this.data_path + "/sample_num/" + "cancer_samples.tsv", "#bar-editor", "overview_bar_viz");
+                }
+                else {
+                    immunebar("#barVis", this.data_path + "/sample_num/" + this.bar_cancer_selected + "_project_samples.tsv", "#bar-editor", "overview_bar_viz");
+                }
+            } else {
+                immunebar("#barVis", this.data_path + "/sample_num/" + "cancer_projects.tsv", "#bar-editor", "overview_bar_viz");
             }
         },
         pieViz(){

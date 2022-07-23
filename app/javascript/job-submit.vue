@@ -638,9 +638,16 @@
                 }
             });
 
-            // for (var k in this.app.inputs){
-            //     this.files['i-' + this.app.inputs[k].id]  = null;
+            // if (window.gon.export_paths) {
+            //     console.log("Testing ~");
+            //     var export_paths = window.gon.export_paths.split(',');
+            //     for (var k in export_paths) {
+            //         var cur_info = export_paths[k].split(':');
+            //         var file = require(`../../public/data/LinSeed.csv`);
+            //         console.log(file);
+            //     }
             // }
+
             this.multiple_completed = Array(10).fill(false)
             console.log("Coming here here");
 

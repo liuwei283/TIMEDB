@@ -34,6 +34,44 @@ svg {
 				}
 			}
 		}
+		Container {
+			y = 280
+			Rows {
+				Container {
+					padding = 5
+					Text {
+						text = "P value"
+						fontSize = 15
+					}
+				}
+				@let pvals = ['<0.05', '<0.01', '<0.001']
+				@for (item, index) in pvals {
+					Container {
+						padding = 5
+						width = 20
+						height = 20
+						Rect.centered {
+							x = 50%
+							y = 50%
+							width = 19
+							height = 19
+							fill = "#f3f3f3"
+						}
+						Text.centered {
+							x = 50%
+							y = 50%
+							text = new Array(index + 1).fill('*').join('')
+						}
+						Text {
+							x = 40
+							y = 50%
+							anchor = @anchor("m", "l")
+							text = item
+						}
+					}
+				}
+			}
+		}
         Component {
             x = CorrelationData.colNames.length*squareLength
             y = CorrelationData.colNames.length*squareLength

@@ -14,147 +14,102 @@ import { isNullishCoalesce } from "typescript";
 
 const title = "Clinical Data"
 
-export function getMaxlength(v){
-  let columnsTextlength = []
-  v.data.RNAData.columns.forEach((item,index) => {
-    columnsTextlength.push(TextSize.measuredTextSize(item,10).width)
-  });
-  let maxcolumnsTextlength = Math.max(...columnsTextlength)
-  let clinicalTextlength = []
-  if(v.data.clinicalDatashow){
-    v.data.ClinicalData.sortaddName.forEach((item,index) => {
-      clinicalTextlength.push(TextSize.measuredTextSize(item,10).width)
-    });
-  }
 
-  let maxclinicalTextlength = Math.max(...clinicalTextlength)
-  let result = 130
-  maxcolumnsTextlength>maxclinicalTextlength? result = maxcolumnsTextlength:result = maxclinicalTextlength
-  return result
-}
+//celList => columns this.data.cellList => classifications
+//sampleList => sampleNames => changNames => categories
 
-export function extractWord(word,width){
-  let newword =  word.toLowerCase().replace(/( |^)[a-z]/g, (L) => L.toUpperCase());
-  let result = newword.match(/\b(\w)/g).join('.')
-  let words = ""
-  if(TextSize.measuredTextSize(result, 8).width > width*2/3){
-    let finalresult = ""
-    let i = 0
-      while(TextSize.measuredTextSize(finalresult, 8).width<width*2/3){
-        finalresult = finalresult+ result.split("")[i]
-        i += 1
-      }
-    words = finalresult
-  }else{
-    words = result
-  }
-  return words
-
-}
 
 export function plotDataloaded(_data){
 
   this.data.oridata = _data
-
-  let cellList = _data.columns.slice(2)
-
+  let cellList = _data.columns.slice(2) 
   this.data.oricelllist = _data.columns.slice(2)
   cellList = cellList.slice(0,22)
+
   if(cellList.indexOf("P-value") != -1){
     cellList.splice(cellList.indexOf("P-value"),1)
   }
 
-  let sampleList = _data.map(x=>x["sample_name"])
+  let sampleList = _data.map(x=>x["sample_name"]) 
 
   let columns = cellList; 
-  this.data.cellList = cellList;
+  this.data.cellList = cellList; 
   const sampleNames = sampleList;
   this.data.sampleList = sampleList; 
   const changeNames = sampleList;
 
-  const changeData = []
-  columns.forEach((arr) =>{
-    let temp1 = []
-    _data.forEach((d) =>{
-      d[arr]+"" == "NA"? d[arr]=0:null
-      temp1.push(parseFloat(d[arr]))
-    });
-    changeData.push(temp1)
-  });
-
-  let maxxx = MAXforArr(changeData)
-  this.data.maxxx = maxxx 
-
-  const useData = [] 
-  for(let i = 0;i < changeData.length;i++){
-    for(let j = 0;j < _data.length;j++){
-      const elem = {name:null,data: 0,pValue:0,row: 0,col: 0}
-      elem.name = columns[i] 
-      elem.data = changeData[i][j]
-      elem.row = i + 1 
-      elem.col = j + 1 
-      useData.push(elem)
-    }
-  }
+  let useData = [] 
   
-  this.data.plotSize = [250,500];
+  let testmatrix = []
+  let testmaxxx = null 
+  let testmaxarr = []
+  let testsignabove = "" 
+  let testsignbelow = "" 
+  cellList.forEach((cell,index) => {
+    _data.forEach((row,rindex) => {
+      const elem = {name:null,data:0,pValue:0,row:0,col:0}
+      elem.name = cell
+      row[cell]+"" == "NA"? elem.data = 0 : elem.data = row[cell]
+      elem.row = index + 1
+      elem.col = rindex + 1
+      testmatrix.push(elem)
+      testmaxarr.push(Math.abs(elem.data))
+      testsignabove == "" ? (elem.data>0? testsignabove = "active" :null):null
+      testsignbelow == "" ? (elem.data<0? testsignbelow = "active" :null):null
+    });
+  });
+  testmaxxx = Math.max(...testmaxarr)
+  this.data.maxxx = testmaxxx
+
+  useData = testmatrix  
+
+  testsignabove == "active" && testsignbelow == "active" ? 
+    this.data.midheatlegend = "all":(testsignabove == "active" && testsignbelow != "active" ?
+    this.data.midheatlegend = "above":(testsignabove != "active"&&testsignbelow == "active"? this.data.midheatlegend = "below":null))
+
+  this.data.plotSize = [250,500]; 
   this.data.labelFontSize = 12;
   this.data.tickFontSize = 14;
   
-  let newArr = _data;
+  let newArr = _data; 
   newArr.map(function(arr){return delete arr.method})
-  
+  let newData =  dataHandler(newArr)
 
-  let newData =  dataHandler(newArr) 
   let testrange0 = MINforArr(newData.result)
   let testrange1 = MAXforArr(newData.result)
+
+  let meanslow = Math.min(...newData.means)
+  let meanshigh = Math.max(...newData.means)
+  testrange0 > meanslow? testrange0 = meanslow:null
+  testrange1 < meanshigh? testrange1 = meanshigh:null
 
   newData.columns = newData.columns.slice(0,22)
   newData.result = newData.result.slice(0,22)
   newData.means = newData.means.slice(0,22)
   
 
-  let cout1 = getfixed(testrange0)
-  let cout2 = getfixed(testrange1)
-
-  if(testrange0<0){
-    let range0 = -(Math.abs(testrange0) + 5/(10 ** (cout1+1)))
-    if(testrange1<0){
-      let range1 = -(Math.abs(testrange1) + 5/(10 ** (cout2+1)))
-    }
-  }
-  
-  let range0 = testrange0 - 5/(10 ** (cout1+1))
-  testrange0 == 0? range0 = 0:null
-  let range1 = testrange1 + 5/(10 ** (cout2+1))
-  testrange0<0 ? (range0 = -(Math.abs(testrange0) + 5/(10 ** (cout1+1)))):null
-  testrange1<0 ? (range1 = -(Math.abs(testrange1) + 15/(10 ** (cout2+1)))):null
-
-  const colors = ["#FCE4EC"];
+  let range0 = parseFloat(testrange0.toFixed(1))
+  let range1 = parseFloat(testrange1.toFixed(1))
+  let colors = ["#FCE4EC"];
   let valueRange = [(range0-0.1).toFixed(1),(range1+0.1).toFixed(1)];
 
   this.data.columns = newData.columns;
   this.data.colors = colors;
   this.data.valueRange = valueRange;
 
-  const categoryKey = _data.columns[0];
-  const categories = sampleList
+  //statcked plot
+  const categoryKey = _data.columns[0]; 
+  const categories = sampleList 
   const classifications = cellList
   const result = {};
   let colorMap = {}
-  classifications.forEach((item,i)=>{
-    colorMap[item] = []
-  })
+
   classifications.forEach((item,i)=>{
     colorMap[item] = mapColor(item)
   })
-                    
-
-  const stackescolors = Object.values(colorMap);
-  classifications.forEach((classification, i) => {
-    result[classification] = [];
-  });
   
+  const stackescolors = Object.values(colorMap);
+
   let sumMap = new Map()
   const sum = [];
   _data.forEach(row => {
@@ -169,16 +124,28 @@ export function plotDataloaded(_data){
     sum.push(count)
   });
 
+  classifications.forEach((classification, i) => {
+    result[classification] = [];
+  });
 
+  //
   _data.forEach(d => {
     classifications.forEach((classification,k) => {
-      d[classification]=="NA"? d[classification]=0:null
+      d[classification]=="NA"? d[classification]=0:null 
       result[classification].push([d[categoryKey], Math.abs(parseFloat(d[classification]))/sumMap[d[categoryKey]]]); 
     });
   });
-  this.data.gridPlotWidth = 10;
+
+  this.data.stackedWidth = sampleList.length*this.data.gridPlotWidth 
+
+  this.data.gridPlotWidth = 12;
   this.data.gridPlotheight = 12;
-  this.data.stackedWidth = sampleList.length*this.data.gridPlotWidth
+  
+  let sampleslength = []
+  sampleList.forEach((item,index) => {
+    sampleslength.push(TextSize.measuredTextSize(item,10).width)
+  });
+  this.data.propsamplelength = Math.max(...sampleslength)
 
   return {_data,sampleNames,columns,useData,changeNames,boxdata:{ values: newData.result,means: newData.means,outliers:[], categories: newData.columns },result, categories, classifications, colorMap, stackescolors}
 
@@ -192,6 +159,7 @@ export function showAll(_data,key){
   }else if(key==1){
     cellList = _data.columns.slice(2,22)
   }
+
   if(cellList.indexOf("P-value") != -1){
     cellList.splice(cellList.indexOf("P-value"),1)
   }
@@ -230,7 +198,6 @@ export function showAll(_data,key){
       useData.push(elem)
     }
   }
-  
 
   let plotSize = [250,500];
   newConfig["plotSize"] = plotSize
@@ -247,22 +214,13 @@ export function showAll(_data,key){
   
   let testrange0 = MINforArr(newData.result)
   let testrange1 = MAXforArr(newData.result)
+  let meanslow = Math.min(...newData.means)
+  let meanshigh = Math.max(...newData.means)
+  testrange0 > meanslow? testrange0 = meanslow:null
+  testrange1 < meanshigh? testrange1 = meanshigh:null
 
-  let cout1 = getfixed(testrange0)
-  let cout2 = getfixed(testrange1) 
-
-  if(testrange0<0){
-    let range0 = -(Math.abs(testrange0) + 5/(10 ** (cout1+1)))
-    if(testrange1<0){
-      let range1 = -(Math.abs(testrange1) + 5/(10 ** (cout2+1)))
-    }
-  }
-  
-  let range0 = testrange0 - 5/(10 ** (cout1+1))
-  testrange0 == 0? range0 = 0:null
-  let range1 = testrange1 + 5/(10 ** (cout2+1))
-  testrange0<0 ? (range0 = -(Math.abs(testrange0) + 5/(10 ** (cout1+1)))):null
-  testrange1<0 ? (range1 = -(Math.abs(testrange1) + 15/(10 ** (cout2+1)))):null
+  let range0 = parseFloat(testrange0.toFixed(1))
+  let range1 = parseFloat(testrange1.toFixed(1))
 
   const colors = ["#FCE4EC"];
   let valueRange = [range0.toFixed(1),(range1+0.1).toFixed(1)];
@@ -303,7 +261,6 @@ export function showAll(_data,key){
     sum.push(count)
   });
 
-
   _data.forEach(d => {
     classifications.forEach((classification,k) => {
       d[classification]=="NA"? d[classification]=0:null
@@ -311,7 +268,7 @@ export function showAll(_data,key){
     });
   });
 
-  newConfig["gridPlotWidth"] = 10
+  newConfig["gridPlotWidth"] = 12
   newConfig["gridPlotheight"] = 12
   newConfig["stackedWidth"] = sampleList.length*newConfig["gridPlotheight"]
   newConfig["_data"] = _data
@@ -335,13 +292,12 @@ export function showAll(_data,key){
 
 export function clinicalDataloaded(_data){ 
 
-  // console.log("_data:",_data)
-  
-  if(_data === null){
+  if(_data === null){ //查看临床数据是否为空
     console.log("Clinical data is null! Please recheck!")
     this.data.clinicalDatashow = false
+
     let bgendColor = "#00479a" 
-    let bgstartColor = 	"#dbdbdb"; 
+    let bgstartColor =  "#dbdbdb"; 
     let gbstartColor = "#dbdbdb" 
     let gbendColor = "#FF0000"
   
@@ -372,19 +328,19 @@ export function clinicalDataloaded(_data){
 
 
   }else{
-  
 
-  const addNames = this.data.sampleList
-  this.data.addNames = addNames
+  
+  const addNames = this.data.sampleList 
+  this.data.addNames = addNames 
 
   let tempResult = mapCNlist(_data[0])
   let c_indexList = tempResult["c_"]
   let n_indexList = tempResult["n_"]
-  let clinicalIndexes = aryJoinAry(c_indexList, n_indexList)
+  let clinicalIndexes = aryJoinAry(c_indexList, n_indexList) 
 
-  let addName = clinicalIndexes
+  let addName = clinicalIndexes 
   let sortaddName = clinicalIndexes
-  this.data.sortaddName = sortaddName
+  this.data.sortaddName = sortaddName 
 
   let cindexes = []
 
@@ -393,6 +349,7 @@ export function clinicalDataloaded(_data){
       ditem == item? (cindexes.push(dindex)):null
     });
   })
+
 
   function mapClinicalIndex(arr,cindexes){
     let newArr = []
@@ -411,6 +368,7 @@ export function clinicalDataloaded(_data){
 
   let addData = []
   let newlist = []
+
   for(let i = 0;i < addNames.length;i++){
     let index = clinicalSamples.indexOf(addNames[i])
     if(index != -1){ 
@@ -418,11 +376,12 @@ export function clinicalDataloaded(_data){
       newlist.push(this.data.sampleList[i])
     }
   }
-  this.data.newlist = newlist
+  this.data.newlist = newlist 
 
   addData = mapClinicalIndex(addData,cindexes).slice(0)
 
   var newArr = []
+
   for(let i = 0;i < addData.length;i++){ 
     for(let j = 0; j < addName.length;j++){ 
       const elem = {data:null,row:0,col:0}
@@ -433,13 +392,13 @@ export function clinicalDataloaded(_data){
     }
   }
 
-  let legendType = {} 
+  let legendType = {}
   let tempNum = {}
   addName.forEach((item,index)=>{
     legendType[item] = []
     tempNum[item] = []
     nMCatagory(addData,legendType[item],index)
-    legendType[item] = legendType[item].slice(0).sort()
+    legendType[item] = legendType[item].slice(0).sort() 
     legendType[item].unshift("NA")
     legendType[item] = Array.from(new Set(legendType[item]))
   })
@@ -447,14 +406,11 @@ export function clinicalDataloaded(_data){
 
   addName.forEach((item,index)=>{
     item.substring(0,2)=="n_"? (tempNum[item] = tempNum[item].slice(1)[tempNum[item].length-1]):null
+    legendType[item].length>7 && item.substring(0,2) == "c_"? delete legendType[item]:null 
   });
 
-  addName.forEach((item,index)=>{
-    legendType[item].length>7 && item.substring(0,2) == "c_"? delete legendType[item]:null
-  })
-
-  addName = Object.keys(legendType)
-  sortaddName = addName
+  addName = Object.keys(legendType) 
+  sortaddName = addName 
   this.data.sortaddName = sortaddName
   let legendLoc = {}
   addName.forEach((item,index)=>{
@@ -463,7 +419,6 @@ export function clinicalDataloaded(_data){
   })
 
   this.data.legendLoc = legendLoc
-
 
   let newcindexes = []
   addName.forEach((item,index)=>{
@@ -480,7 +435,6 @@ export function clinicalDataloaded(_data){
     }
   }
 
-
   addData = mapClinicalIndex(filteraddData,newcindexes).slice(0)
 
   let filtern_indexList = []
@@ -493,7 +447,7 @@ export function clinicalDataloaded(_data){
   heatmapLoc[item] = []
     rowColumn(addData,heatmapLoc[item],index,index+23,item,legendType)
   })
-  
+
   this.data.heatmapLoc = heatmapLoc
 
   addName.forEach((item,index)=>{
@@ -510,7 +464,7 @@ export function clinicalDataloaded(_data){
   this.data.textmaxxx = textmaxxx.toFixed(1)
 
   let bgendColor = "#00479a" 
-  let bgstartColor = 	"#dbdbdb"; 
+  let bgstartColor =  "#dbdbdb"; 
   let gbstartColor = "#dbdbdb" 
   let gbendColor = "#FF0000"
 
@@ -582,8 +536,6 @@ export function clinicalDataloaded(_data){
   this.data.oriClidata = _data
   this.data.clinicalSamples = clinicalSamples
 
-
-  
   let temptips = []
   sortaddName.forEach((item,index)=>{
     legendLoc[item].forEach((d,i) => {
@@ -766,7 +718,7 @@ export function recheck(_data,newlist,newsampleList){
     });
   });
 
-  newConfig["gridPlotWidth"] = 10
+  newConfig["gridPlotWidth"] = 12
   newConfig["gridPlotheight"] = 12
   newConfig["stackedWidth"] = sampleList.length*newConfig["gridPlotheight"]
   newConfig["_data"] = _data
@@ -799,12 +751,9 @@ export function switchStyle(v){
         v.data.legendType[item].length==1? add = add -1:(ditem["newrow"] = add,newsortaddName.push(item))
       });
     })
-
     newsortaddName = Array.from(new Set(newsortaddName))
 
-  
     let newcindexes = []
-  
     newsortaddName.forEach((item,index)=>{
       v.data.oriClidata[0].forEach((ditem,dindex) => {
         ditem == item? (newcindexes.push(dindex)):null
@@ -830,9 +779,7 @@ export function switchStyle(v){
         newaddData.push(v.data.oriClidata[index])
       }
     }
-  
     newaddData = mapClinicalIndex(newaddData,newcindexes).slice(0)
-  
     var newnewArr = []
     for(let i = 0;i < newaddData.length;i++){ 
       for(let j = 0; j < newsortaddName.length;j++){ 
@@ -871,9 +818,7 @@ export function switchStyle(v){
       showLegend(newlegendType[item],newlegendLoc[item],index,item.substring(0,2),NAlen(newsortaddName,newlegendType))
     })
 
-  
     let newNAlength = NAlen(newsortaddName,newlegendType)
-  
     let newtempResult = mapCNlist(newsortaddName)
     let newc_indexList = newtempResult["c_"]
     let newn_indexList = newtempResult["n_"]
@@ -1048,7 +993,7 @@ export function MAXforArr(arr){
     result2[index] = Math.min(...item)
   })
   let final
-  Math.abs(Math.max(...result))>Math.abs(Math.min(...result))? final = Math.abs(Math.max(...result)) : final = Math.abs(Math.min(...result))
+  Math.abs(Math.max(...result))>Math.abs(Math.min(...result2))? final = Math.abs(Math.max(...result)) : final = Math.abs(Math.min(...result2))
   return final
 }
 
@@ -1592,6 +1537,7 @@ export function dataHandler(data){
   columns.forEach((arr) => {
     const temp1 = [];
     data.forEach((d) => {
+      d[arr] == "NA"? d[arr] = 0:null
       temp1.push(parseFloat(d[arr]));
     });
     const stat = new Oviz.algo.Statistics(temp1);
@@ -1605,4 +1551,105 @@ export function dataHandler(data){
     means.push(stat.mean());
   });
   return {result: result, means, columns: columns}
+}
+
+export function getUpper(text,width){
+  let final
+  TextSize.measuredTextSize(text, 8).width>width*6/7? (final = extractWord(text,width)):final = text
+  // this.tips = Array.from(this.tips)
+  return final
+}
+
+
+export function butclick(v){
+  v.buttonkey = v.buttonkey*(-1);
+  let config = showAll(v.oridata,v.buttonkey)
+  v.RNAData.stackescolors = config["result"].stackescolors
+  v.cellList = config["cellList"]
+  v.RNAData.useData = config["result"].useData
+  v.sampleList = config["sampleList"]
+  v.gridPlotWidth = config["gridPlotWidth"]
+  v.RNAData.result = config["result"].result
+  v.RNAData.classifications =  config["result"].classifications
+  v.RNAData.colorMap = config["result"].colorMap
+  v.RNAData.columns = config["result"].columns
+  v.RNAData.boxdata = config["result"].boxdata
+  if(v.clinicalDatashow){
+    v.$v.size.height = v.cellList.length *12 + 170 + 
+    v.cellList.length*(v.gridPlotheight) + v.gridPlotheight/2
+    + (v.sortaddName.length-1) * v.gridPlotheight 
+    + 30
+    + v.tipsrow*7
+  }else{
+    v.$v.size.height = v.cellList.length *12 + 170 + 
+    v.cellList.length*(v.gridPlotheight) + v.gridPlotheight/2
+    // + (this.sortaddName.length-1) * this.gridPlotheight 
+     + 30
+    // + this.tipsrow*7
+  }
+  v.redraw();
+}
+
+
+export function getPlotsize(v){
+  v.data.padding = 60
+  v.size.width = v.data.RNAData.useData[v.data.sampleList.length-1].col*(v.data.gridPlotWidth-1) + 330 + getMaxlength(v)
+  if(v.data.clinicalDatashow){
+    v.size.height = v.data.cellList.length *12 + 170 + 
+              v.data.cellList.length*(v.data.gridPlotheight) + v.data.gridPlotheight/2
+              + (v.data.sortaddName.length-1) * v.data.gridPlotheight 
+              + 30
+              + v.data.tipsrow*7
+  }else{
+    v.size.height = v.data.cellList.length *12 + 170 + 
+              v.data.cellList.length*(v.data.gridPlotheight) + v.data.gridPlotheight/2
+              // + (this.data.sampleList.length-1) * this.data.gridPlotheight 
+              + 30
+              // + this.data.tipsrow*7
+  }
+}
+
+export function getGradientcolor(v){
+  v.defineGradient("gb", "vertical", [v.data.gbendColor, v.data.gbstartColor]);
+  v.defineGradient("kg", "vertical", ["#dbdbdb", "blue"]);
+  v.defineGradient("age", "horizontal", [v.data.ageStartColor, v.data.ageEndColor]);
+}
+
+
+export function getMaxlength(v){
+  let columnsTextlength = []
+  v.data.RNAData.columns.forEach((item,index) => {
+    columnsTextlength.push(TextSize.measuredTextSize(item,10).width)
+  });
+  let maxcolumnsTextlength = Math.max(...columnsTextlength)
+  let clinicalTextlength = []
+  if(v.data.clinicalDatashow){
+    v.data.ClinicalData.sortaddName.forEach((item,index) => {
+      clinicalTextlength.push(TextSize.measuredTextSize(item,10).width)
+    });
+  }
+
+  let maxclinicalTextlength = Math.max(...clinicalTextlength)
+  let result = 130
+  maxcolumnsTextlength>maxclinicalTextlength? result = maxcolumnsTextlength:result = maxclinicalTextlength
+  return result
+}
+
+export function extractWord(word,width){
+  let newword =  word.toLowerCase().replace(/( |^)[a-z]/g, (L) => L.toUpperCase());
+  let result = newword.match(/\b(\w)/g).join('.')
+  let words = ""
+  if(TextSize.measuredTextSize(result, 8).width > width*2/3){
+    let finalresult = ""
+    let i = 0
+      while(TextSize.measuredTextSize(finalresult, 8).width<width*2/3){
+        finalresult = finalresult+ result.split("")[i]
+        i += 1
+      }
+    words = finalresult
+  }else{
+    words = result
+  }
+  return words
+
 }

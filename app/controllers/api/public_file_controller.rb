@@ -14,8 +14,6 @@ class Api::PublicFileController < ApplicationController
         send_file File.join(Rails.root, params[:file_path])
         return
     end
-    
-  
-    
+     
 end
   

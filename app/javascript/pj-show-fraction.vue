@@ -436,8 +436,16 @@ export default {
 
         heatmapViz() {
             this.heatMapisLoading = true;
-            var cellData_file_path = this.data_path + "cell_data/" + this.heatmap_selected + "/" + this.project_name + "_" + this.heatmap_selected + ".csv";
-            this.heatmap_fexists = this.file_exist[this.heatmap_selected];
+            if (this.heatmap_selected == "EPIC" || this.heatmap_selected == "quanTIseq")
+            {
+                var cellData_file_path = this.data_path + "cell_data/" + this.heatmap_selected + "/" + this.project_name + "_" + this.heatmap_selected + ".csv";
+                this.heatmap_fexists = this.file_exist[this.heatmap_selected];
+            }   
+            else
+            {
+                var cellData_file_path = this.data_path + "cell_data/" + this.heatmap_selected + "/" + this.project_name + "_" + this.heatmap_selected + "_full.csv";
+                this.heatmap_fexists = this.file_exist[this.heatmap_selected + "_full"];
+            }
             if(this.clinical_fexists=="true" && this.heatmap_fexists=='true'){
                 document.getElementById("fraction_heatmapBlock").style.display = "block";
                 fractionHeatmap("#fraction-heatmapVis", this.clinical_file_path, cellData_file_path, "#fraction-heatmap-editor", "fraction_heatmap_viz", this.vue_name);
@@ -559,9 +567,8 @@ export default {
 }
 
 .vizBlock {
-        overflow-y: scroll;
+        /* overflow-y: scroll; */
         overflow-x: scroll;
-        
         padding: 2em;
         margin-top: 5%;
         margin-bottom: 0px !important;
@@ -570,6 +577,7 @@ export default {
 
 #fraction-heatmapVis {
     height: 1000px;
+    overflow-y: scroll;
 }
 
     
