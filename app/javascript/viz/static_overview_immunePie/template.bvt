@@ -25,7 +25,7 @@ svg {
                     x1 = d.start; x2 = d.end
                     r1 = 40%
                     r2 = 90%
-                    fill = d.data.raw.color.string
+                    fill = d.data.raw.color
 					behavior:tooltip {
 					    content = "name: "+ d.data.name+ "</br>proportion: "+ (d.data.value*100).toFixed(1) + "%"
 					}

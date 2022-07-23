@@ -12,15 +12,15 @@ svg {
 			data = result
 			discreteCategory = true
 			valueRange = valueRange
-			Rect{
+			Rect {
 				width = 100%
 				height = 100%
 				stroke = "#000"
 				fill = "none"
 			}
 			Bars {
-				:children(d){
-					Rect.full{
+				:children(d) {
+					Rect.full {
 						// cornerRadius = 6
 						// stroke = groups.colors["border"]
 						fill = groups.colors["fill"]
@@ -74,7 +74,9 @@ svg {
                     }
                 }
             }
-			Axis("left");
+			Axis("left") {
+				roundEndTicks = true
+			}
 		}
 	}
 }
