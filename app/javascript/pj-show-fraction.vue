@@ -577,7 +577,7 @@ export default {
 
 #fraction-heatmapVis {
     height: 1000px;
-    overflow-y: scroll;
+    /* overflow-y: scroll; */
 }
 
     
