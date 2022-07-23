@@ -28,7 +28,7 @@ svg {
 						x = 50%
 						anchor = @anchor("top","center")
 						behavior:tooltip {
-							content = "Name: " + d.pos + "</br>Sample Number: " + d.value + "</br>Project Number: " + "to be finished"
+							content = "Name: " + d.pos + "</br>Project Number: " + d.value
 						}
 					}
 				}
