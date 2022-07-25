@@ -3,6 +3,7 @@ import template from "./template.bvt";
 import { registerEditorConfig } from "utils/editor";
 import { editorConfig } from "./editor";
 import { pieDataloaded } from "viz/static_method_immunePie/data";
+import { colorMap } from "utils/mapcolor";
 
 function Dataprocessor(v, data) {
     let categories = data.columns.slice(1);
@@ -27,9 +28,10 @@ function Dataprocessor(v, data) {
     let columns = categories; //去除后三列
     const pieData = [];
     //从去除后三列的三个样本数据得到pieData格式
-    columns.forEach((d,i) => {
+    columns.forEach((d, i) => {
         //得到它的颜色
-        const color = Oviz.color.Color.hsl((i%6)*60, 60+Math.floor((i/6))*10, 60+Math.floor((i/6))*10) ;
+        // const color = Oviz.color.Color.hsl((i%6)*60, 60+Math.floor((i/6))*10, 60+Math.floor((i/6))*10) ;
+        const color = colorMap[d];
         pieData.push({value: parseFloat(data[d]), name: d, color});
     });
     return pieData
@@ -63,12 +65,13 @@ export function init(vid, path, eid, plot_name) {
                 type: "csv",
                 dsvHasHeader: true,
                 loaded(data) {
+                    console.log(colorMap)
                     this.data.pieData = Dataprocessor(this, data)
                     this.data.groups = {
                         colors: {}
                     }
                     this.data.pieData.forEach(d=>{
-                        this.data.groups.colors[d.name] = d.color.string
+                        this.data.groups.colors[d.name] = d.color
                     })
                     console.log(this.data.groups)
                     Object.entries(this.data.groups.colors).map(d => { return {"title": d[0], "fill": d[1]}})

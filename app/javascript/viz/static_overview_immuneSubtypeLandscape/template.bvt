@@ -4,7 +4,7 @@ svg {
 	Component {
 		y = 100
 		Container {
-			x = 25; y = startY + 30
+			x = 25; y = startY
 			Legend {
 				data = data.colorMap.legendData()
 			}
