@@ -19,6 +19,7 @@ export let plotData = {
     barPlotdata: [],
     piePlotdata: [],
     BarData: [],
+    BarData2:[],
     PieData: [],
     categories: [],
     colors: {},
@@ -66,7 +67,7 @@ export function plotDataloaded(_data){
     plotData.cellpageindex [1] = generalparm(plotData.sampleList)
 
     different_method_data.forEach((ditem,dindex)=> { 
-            const barresult= eachBardata(ditem.data,dindex,plotData.cellpageindex[1],this.data.rowcolumns) 
+            const barresult= eachBardata(ditem.data,dindex,plotData.cellpageindex[1],this.data.rowcolumns,"positive") 
             plotData.BarData.push(barresult.eachBardata)
             eachmethodcells.push({"method":ditem.methodkey,"result":barresult.cellvalues})
             plotData.valuerange.push(barresult.valuerange)
@@ -77,6 +78,15 @@ export function plotDataloaded(_data){
                 this.data.barcolors= barresult.colors
             }
     })
+
+    different_method_data.forEach((ditem,dindex)=> { 
+        const barresult2 = eachBardata2(ditem.data,dindex,plotData.cellpageindex[1],this.data.rowcolumns) 
+        plotData.BarData2.push(barresult2.eachBardata)
+        plotData.valuerange.push(barresult2.valuerange)
+    })
+
+    
+
 
     let tempMaxsample = []
     different_method_data.forEach((item,index) => {
@@ -118,9 +128,10 @@ export function plotDataloaded(_data){
 
     this.data.cellpageindex = plotData.cellpageindex
 
-    
-    this.data.valuerange = findBounds(plotData.valuerange)
+    this.data.valuerange = findvaluerange(plotData.valuerange)
+
     this.data.BarData= plotData.BarData
+    this.data.BarData2 = plotData.BarData2
     this.data.PieData = plotData.PieData
     this.data.methoddata = plotData.methoddata
     this.data.rowdata = plotData.rowdata
@@ -135,8 +146,6 @@ export function plotDataloaded(_data){
     let maxsampletextlength = getMaxtextwidth(this.data.eachSamplename,"object")
     this.data.maxsampletextlength = maxsampletextlength
     this.data.maxText = Math.max(...[maxchosenMethodtextlength,maxsampletextlength,maxchosencelldatatextlength])
-    //this.data.maxTextbar = Math.max(...[maxchosencelldatatextlength,maxchosenMethodtextlength])
-
 
     this.data.gridSize = [210,92]
     
@@ -170,6 +179,15 @@ export function getMaxtextwidth(arr,type = "arr"){
     
 }
 
+export function findvaluerange(arr2){
+    let maxarr = []
+    let minarr = []
+    arr2.forEach((item,index) => {
+        minarr.push(item[0])
+        maxarr.push(item[1])
+    });
+    return [parseFloat(Math.min(...minarr).toFixed(2))-0.01,parseFloat(Math.max(...maxarr).toFixed(2))+0.1]
+}
 
 export function chooseSamples(v:any){
     plotData.BarData=[]
@@ -190,7 +208,7 @@ export function chooseSamples(v:any){
     cellpageindex[1]  = generalparm(newdata[0].data)
     let eachmethodcells = [];
     newdata.forEach((ditem,dindex)=> { 
-        const barresult = eachBardata(ditem.data,dindex,cellpageindex[1],v.data.rowcolumns) 
+        const barresult = eachBardata(ditem.data,dindex,cellpageindex[1],v.data.rowcolumns,"positive") 
         plotData.BarData.push(barresult.eachBardata)
         eachmethodcells.push({"method":ditem.methodkey,"result":barresult.cellvalues})
         plotData.valuerange.push(barresult.valuerange)
@@ -201,13 +219,21 @@ export function chooseSamples(v:any){
             v.data.barcolors= barresult.colors
         }
     })
+    newdata.forEach((ditem,dindex)=> { 
+        const barresult2 = eachBardata2(ditem.data,dindex,plotData.cellpageindex[1],this.data.rowcolumns) 
+        plotData.BarData2.push(barresult2.eachBardata)
+        plotData.valuerange.push(barresult2.valuerange)
+    })
+
 
     plotData.cellpageindex [0] = v.data.buttonkey
     plotData.chosenMethod.length == 0? plotData.chosenMethod = plotData.methoddata:null
 
     v.data.cellpageindex = plotData.cellpageindex
-    v.data.valuerange = findBounds(plotData.valuerange)
+    // v.data.valuerange = findBounds(plotData.valuerange)
+    this.data.valuerange = findvaluerange(plotData.valuerange)
     v.data.BarData= plotData.BarData
+    v.data.BarData2= plotData.BarData2
     v.data.PieData = plotData.PieData
     v.data.methoddata = plotData.methoddata
     v.data.rowdata = plotData.rowdata
@@ -632,7 +658,7 @@ export function mapColor(cell){
 
 
 
-export function eachBardata(ditem,dindex,number,cellarray){
+export function eachBardata(ditem,dindex,number,cellarray,sign){
     let eachBardata = [];
     let cells
     let columns = ditem.columns; 
@@ -652,6 +678,66 @@ export function eachBardata(ditem,dindex,number,cellarray){
             dddata.forEach((item,index)=> {
                 if(item[colitem]=="NA")
                     return null;
+                if(parseFloat(item[colitem])<0){
+                    eachcolumns.push([item["sample_name"],0]);
+                    allvalues.push(parseFloat(item[colitem]))
+                    eachcolumnvalues.values.push(item[colitem])
+                }
+                else{
+                    if(sign == "positive"){
+                            eachcolumns.push([item["sample_name"],parseFloat(item[colitem])]);
+                            allvalues.push(parseFloat(item[colitem]))
+                            eachcolumnvalues.values.push(item[colitem])
+                    }
+                }
+                plotData.categories.push([item["sample_name"]]);
+                const color = Oviz.color.Color.hsl((index%6)*60, 60+Math.floor((index/6))*10, 60+Math.floor((index/6))*10)
+                colors[item["sample_name"]] = color.string
+                if(dindex==0&&colindex==1){
+                    eachlegendata.push({type: "Custom",label:item["sample_name"],fill:color.string});
+                    sampleData.push(item["sample_name"]);
+                }
+            });
+            const ecolumnsobject ={[colitem]:eachcolumns} 
+            BarData_dindex.push(ecolumnsobject)
+            cellvalues.push(eachcolumnvalues)
+        });
+        eachBardata.push({[i]:BarData_dindex})
+        cells = columns
+        insidelegendata.push({[i]:eachlegendata})
+    };
+    
+    let valuerange = [Math.min(...allvalues),Math.max(...allvalues)]
+
+    return {eachBardata,cells,insidelegendata,sampleData,colors,cellvalues,valuerange}
+
+}
+
+export function eachBardata2(ditem,dindex,number,cellarray){
+    let eachBardata = [];
+    let cells
+    let columns = ditem.columns; 
+    let sampleData =[] 
+    let insidelegendata = [] 
+    columns = cellarray
+    let cellvalues=[];
+    let allvalues=[];
+    let colors = {};
+    for(var i=0;i<number;i++){
+        let BarData_dindex = [] 
+        let eachlegendata = [] 
+        let dddata = ditem.slice(10*i,10*(i+1)) 
+        columns.forEach((colitem,colindex) => { 
+            let eachcolumns = [];
+            let eachcolumnvalues = {"cellname":colitem,"values":[],rank:i}
+            dddata.forEach((item,index)=> {
+                if(item[colitem]=="NA")
+                    return null;
+                if(parseFloat(item[colitem])>=0){
+                    eachcolumns.push([item["sample_name"],0]);
+                    allvalues.push(parseFloat(item[colitem]))
+                    eachcolumnvalues.values.push(item[colitem])
+                }
                 else{
                     eachcolumns.push([item["sample_name"],parseFloat(item[colitem])]);
                     allvalues.push(parseFloat(item[colitem]))
@@ -674,7 +760,7 @@ export function eachBardata(ditem,dindex,number,cellarray){
         insidelegendata.push({[i]:eachlegendata})
     };
     
-    const valuerange = findBoundsForValues(allvalues,2)
+    let valuerange = [Math.min(...allvalues),Math.max(...allvalues)]
 
     return {eachBardata,cells,insidelegendata,sampleData,colors,cellvalues,valuerange}
 

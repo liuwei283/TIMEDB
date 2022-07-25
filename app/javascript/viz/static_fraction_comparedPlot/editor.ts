@@ -16,7 +16,7 @@ export const generatePieBarConfig = (v,eid):any =>  ({})
 export const generateGridConfig = (v,eid):any =>  ({
     id: eid+"1",
     title: "General Settings",
-    layout: "tabs",
+    layout: "tabs", 
     tabs: [
         {
             id: "g-common",

@@ -21,7 +21,7 @@
                     </select>
                 </div>
 
-                <div class="sdiv col" v-if= "ps_bar_selected == 'sample'">
+                <div class="sdiv col" v-if= "ps_bar_selected == 'samples'">
                     <div class="select-title">
                         Please choose project or cancer type:
                     </div>
@@ -32,7 +32,7 @@
                     </select>
                 </div>
 
-                <div v-if= "ps_bar_selected == 'sample' && bar_selected == 'project'" class ="sdiv col">
+                <div v-if= "ps_bar_selected == 'samples' && bar_selected == 'project'" class ="sdiv col">
                     <div class="select-title">
                     Please choose the cancer type of the projects:
                     </div>
@@ -62,7 +62,7 @@
                         <div id="download_box-bar" class="db-toolbox collapse" data-parent="#db-toolbar-bar">
                                 <div class="form-group p-2">
                                     <button class = "d-btn btn btn-secondary download" @click="download_bar">
-                                        <i class='fas fa-download'></i> Download sample number table
+                                        <i class='fas fa-download'></i> Download number table
                                     </button>
                                     <button class = "d-btn btn btn-pink download" id = "bar" @click="down_graph($event)">
                                         <i class='fas fa-download'></i> Download bar chart
@@ -206,7 +206,7 @@
                         <div id="download_box-landscape" class="db-toolbox collapse" data-parent="#db-toolbar-landscape">
                                 <div class="form-group p-2">
                                     <button class = "d-btn btn btn-secondary download" @click="download_landscape">
-                                        <i class='fas fa-download'></i> Download sample number table
+                                        <i class='fas fa-download'></i> Download subtype file
                                     </button>
                                     <button class = "d-btn btn btn-pink download" id = "landscape" @click="down_graph($event)">
                                         <i class='fas fa-download'></i> Download landscape chart
@@ -360,11 +360,11 @@ export default {
                 {value: "project", label: "Project"},
             ],
             ps_bar_selector: [
-                {value: "project", label: "Project number"},
-                {value: "sample", label: "Sample number"},
+                {value: "projects", label: "Project number"},
+                {value: "samples", label: "Sample number"},
             ],
             bar_selected : 'cancer',
-            ps_bar_selected: 'sample',
+            ps_bar_selected: 'samples',
             pieMethodSelector : [
                 {value:"quanTIseq",label:"quanTIseq"},
                 {value:"ABIS",label:"ABIS"},
@@ -467,7 +467,7 @@ export default {
         }, 
         barViz() {
             //alert(this.bar_selected)
-            if (this.ps_bar_selected == 'sample') {
+            if (this.ps_bar_selected == 'samples') {
                 if (this.bar_selected == "cancer") {
                     immunebar("#barVis", this.data_path + "/sample_num/" + "cancer_samples.tsv", "#bar-editor", "overview_bar_viz");
                 }
@@ -564,7 +564,8 @@ export default {
             this.regulatorViz();
         } ,
         download_bar(){
-            window.location.href = this.data_path+"/sample_num/" + this.bar_selected + "_samples.tsv";
+            
+            window.location.href = this.data_path+"/sample_num/" + this.bar_selected + "_" + this.ps_bar_selected + ".tsv";
         },
         download_pie(){
             window.location.href = this.data_path+"/sample_num/" + this.bar_selected + "_samples.tsv";
