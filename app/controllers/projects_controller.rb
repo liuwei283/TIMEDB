@@ -9,16 +9,16 @@ class ProjectsController < ApplicationController
 
     
     def index
-        @vis = ['id', 'project_name', 'cancer_name', 'num_of_samples', 'preprocessed', 'database', "original_description", "major_related_publications"]
+        #@vis = ['id', 'project_name', 'cancer_name', 'num_of_samples', 'preprocessed', 'database', "original_description", "major_related_publications"]
         @projects = Project.order(:project_name)
-        @attrs = Project.column_names
-        @invis = []
-        @attrs.each_with_index do |attr, index|
-            if !@vis.include?(attr)
-                @invis.push(index+1)
-            end
-        end
-        gon.push invis: @invis
+        @attrs = Project.column_names - ["cancer_id", "created_at", "updated_at"]
+        #@invis = []
+        # @attrs.each_with_index do |attr, index|
+        #     if !@vis.include?(attr)
+        #         @invis.push(index+1)
+        #     end
+        # end
+        #gon.push invis: @invis
         respond_to do |format|
             format.html
             format.csv { send_data @projects.to_csv }
@@ -26,18 +26,20 @@ class ProjectsController < ApplicationController
         end
         session[:first] = true
 
-        # #data processing for table filtering
-        # @attr = @attr
-        # range_cols = [["num_of_samples", 3], ["num_of_observed_genes", 8]]
-        # @col_ranges = []
-        # for col in range_cols
-        #     @col_ranges.push({n: col[1], min: Project.order("project_name").map{|pjt| pjt[col[0]].to_i}.min(), max: Project.all.map{|pjt| pjt[col[0]].to_i}.max(),})
-        # end
+        #data processing for table filtering
+        @sp_col_index = [3, 4, 5, 6, 7, 8, 10, 11, 12, 13, 14, 15, 16]
+        gon.push sp_col_index: @sp_col_index
+        @attr = @attr
+        range_cols = [["num_of_samples", 3], ["num_of_observed_genes", 7]]
+        @col_ranges = []
+        for col in range_cols
+            @col_ranges.push({n: col[1], min: Project.order("project_name").map{|pjt| pjt[col[0]].to_i}.min(), max: Project.all.map{|pjt| pjt[col[0]].to_i}.max(),})
+        end
 
-        # puts "Printing fetched column ranges"
-        # puts @col_ranges
+        puts "Printing fetched column ranges"
+        puts @col_ranges
 
-        # gon.push col_ranges: @col_ranges
+        gon.push col_ranges: @col_ranges
 
     end
   

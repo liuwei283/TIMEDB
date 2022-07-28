@@ -312,8 +312,16 @@ td
 
 
 
+.dtsp-search::placeholder
+    color: grey !important;
+    font-style: italic !important;
+    opacity: 1 !important;
 
-    
+.dtsp-searchPanes
+    width: 400%;
+
+.slider-range div.ui-slider-range
+    background: content-box radial-gradient(lightgreen, skyblue);
 
 /* for sample/project details*/
 table.detail-table
@@ -324,6 +332,11 @@ table.detail-table
   .label
     font-weight: bold
     width: 220px
+
+.table_cell
+    max-height: 100px !important
+    overflow: auto !important
+    width: 100%
 
 .popover
     width: 600px
@@ -339,4 +352,21 @@ table.detail-table
 .container-query
     margin-left: 7%;
     margin-right: 7%;
+
+#loadingOverlay 
+    position: fixed
+    z-index: 99999
+    top: 0
+    left: 0
+    bottom: 0
+    right: 0
+    background: #f8f9fa
+    transition: 1s 0.4s
+    vertical-align: center
+    text-align: center
+
+    img
+      margin-top: 20%
+      width: 400px
+      
 @import "./*"

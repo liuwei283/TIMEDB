@@ -352,7 +352,7 @@ export default {
             heatmap_fexists: null,
             clinical_file_path: "",
             heatMapisLoading: false,
-            landscapeisLoding: false,
+            landscapeisLoading: false,
         }
     },
     //设置默认值
