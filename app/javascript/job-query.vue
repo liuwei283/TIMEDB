@@ -119,7 +119,7 @@
                             </b-table>
                             <b-pagination
                                 v-model="currentPage"
-                                :total-rows="jobsNumber"
+                                :total-rows="10"
                                 :per-page="perPage"
                                 aria-controls="job-table"
                                 align="center"
@@ -1396,10 +1396,10 @@ export default {
     color: black;
 }
 
-#table-container li.active button{
+#table-container li.page-item.active button{
     background-color: #bbd1de !important;
-    border: none;
+    border: 1px solid #bbd1de;
     color: black;
-    transform: scale(1.2);
+    
 }
 </style>
