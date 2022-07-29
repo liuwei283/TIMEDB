@@ -10,7 +10,7 @@ class ProjectsController < ApplicationController
     
     def index
         #@vis = ['id', 'project_name', 'cancer_name', 'num_of_samples', 'preprocessed', 'database', "original_description", "major_related_publications"]
-        @projects = Project.order(:project_name)
+        @projects = Project.order("project_name not LIKE '%TCGA_%'").order(:id)
         @attrs = Project.column_names - ["cancer_id", "created_at", "updated_at"]
         #@invis = []
         # @attrs.each_with_index do |attr, index|
