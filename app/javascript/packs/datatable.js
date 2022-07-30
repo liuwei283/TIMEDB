@@ -111,7 +111,7 @@ $(function () {
                 $( "#value_" + num ).val( " " + ui.values[ 0 ] + " - " + ui.values[ 1 ] );
             },
             change: function( event, ui ) {
-                ttable.draw();
+                table.draw();
             }
         });
         
@@ -141,7 +141,8 @@ $(function () {
         });
     });
     
-    $(".reset-r").click(function() {
+    $(".reset-r").on('click', function() {
+        console.log("fdgfdgfdg");
         let num = $(this).attr("id").split("_")[1];
         let minv = $("#min_" + num).val();
         let maxv = $("#max_" + num).val();
@@ -159,7 +160,7 @@ $(function () {
     
     var ids = new Set();
     var invis = window.gon.invis
-    //console.log($("#table_page").data('url'));
+    console.log($("#table_page").data('url'));
     var table = $("#table_page").DataTable({
         fixedColumns: true,
         fixedColumns: {
@@ -208,7 +209,7 @@ $(function () {
         }
     }); 
 
-    var ttable = $("#filter_table").DataTable({
+    var table = $("#filter_table").DataTable({
         fixedColumns: true,
         fixedColumns: {
             leftColumns: 3,
@@ -362,12 +363,7 @@ $(function () {
         }
         $(".download.btn-select").attr('disabled', !downloadSelect);
         $(".download.btn-search").attr('disabled', !downloadSearch);
-        console.log(!downloadSelect);
-        console.log(!downloadSearch);
-
-
     }
-
 
     $('.s_table_sub').on("click", function(e){
         var form = this;

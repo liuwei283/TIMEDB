@@ -62,7 +62,7 @@ class ProjectsController < ApplicationController
         @short_attrs = [["project_name", "cancer_name", "num_of_samples", "data_type", "preprocessed", "TIMEDB_processing", ],
         ["platform", "submisson_date", "last_update_date", "database", "num_of_observed_genes"]]
         @sample_attrs = Sample.column_names
-        @samples = @project.samples
+        @samples = @project.samples.order(:sample_name)
         @invis = []
         # @sample_attrs.each_with_index do |s_attr, index|
         #     if !@vis.include?(s_attr)
