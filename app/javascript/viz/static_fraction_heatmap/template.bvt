@@ -29,7 +29,7 @@ svg{
                             text = sample
                             fontSize = 10
                             // style:font-weight = "bold"
-                            rotation = @rotate(-270)
+                            rotation = @rotate(samplenamerotation-360)
                         }
                     }
                 }
@@ -41,7 +41,7 @@ svg{
                             text = sample
                             fontSize = 10
                             // style:font-weight = "bold"
-                            rotation = @rotate(-270)
+                            rotation = @rotate(samplenamerotation-360)
                         }
                     }
                 }

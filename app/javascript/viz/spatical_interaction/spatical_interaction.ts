@@ -14,6 +14,7 @@ export class SpaticalInteraction extends Oviz.Component {
     }
 
     public willRender() {
+        //processMeta(this, [])
         processGraph(this)
     }
     

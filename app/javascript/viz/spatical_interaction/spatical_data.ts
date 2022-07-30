@@ -4,24 +4,23 @@ import { minmax } from "crux/dist/utils/math";
 import { scaleLinear } from "d3-scale";
 import { groupedColors2, rainbow1, rainbowL} from "oviz-common/palette";
 import { schemeRdPu, interpolateSpectral, schemeRdYlBu } from "d3-scale-chromatic";
+import { findBoundsForValues} from "utils/maths";
+import { parse } from "utils/newick";
 import * as d3 from "d3";
+import { registerEditorConfig } from "utils/editor";
+import { editorConfig, editorRef } from "./editor";
+
 
 const defaultScheme = groupedColors2;
 
-
 export function processGraph(v) {
-
-
 
     let newlabel = v.graphData.map(d=>d[v.graphData.columns[0]])
     newlabel = Array.from(new Set(newlabel))
-    //console.log("newlabel:",newlabel)
+
     let featureList = v.graphData.map(d=>d["Feature"])
     let groupList = v.graphData.map(d=>d["Group"])
-
     let matrixSum = {}
-
-
     matrixSum[v.selectedFeature] = {}
     matrixSum[v.selectedFeature][v.selectedGroup]=[]
     newlabel.forEach((m,t) => {
@@ -32,61 +31,49 @@ export function processGraph(v) {
         matrixSum[v.selectedFeature][v.selectedGroup].push(tempm)
     });
 
-
     v.graphData.forEach((k,n) => {
-
-        
         if(k.Feature == v.selectedFeature && k.Group == v.selectedGroup){
             let row = newlabel.indexOf(k.Row)
             let col = newlabel.indexOf(k.Col)
             k.Value == "NA"? k.Value= 0:null
             matrixSum[v.selectedFeature][v.selectedGroup][row][col] = (k.Value*1)
         }
-
     });
 
     var d = v.graphData
-
     v.graphLabel = newlabel
     var matrix = [];
     matrix = matrixSum[v.selectedFeature][v.selectedGroup]
-    v.graphMatrix = matrix  
+    v.graphMatrix = matrix 
 
-
-
-    v.graphCord = d3.chord()  
+    v.graphCord = d3.chord() 
         .padAngle(0.1)     
         (v.graphMatrix)   
+    
 
     let testgraphCord = d3.chord()  
-        .padAngle(0.05)     
-        .sortSubgroups(d3.descending) 
-        (matrix)   
+        .padAngle(0.05)   
+        .sortSubgroups(d3.descending)
+        (matrix)  
     
-
-    
-
     v.graphMatrixScheme = ColorSchemeNumeric.create([schemeRdPu[3][0], schemeRdPu[3][2]], { type: "linear", domain: minmax(v.graphMatrix.flat())});
     
-
     v.graphNode = {}
-
     v.graphCord.groups.forEach((x, i) => {
-
         var label = v.graphLabel[x.index]
-
-        if (!Object.keys(v.graphNode).includes(label)){ 
+        if (!Object.keys(v.graphNode).includes(label)){
             x.label = label
             x.innerRadius = v.graphRadius - v.nodeRadius  
-
-            x.outerRadius = v.graphRadius  
+            x.outerRadius = v.graphRadius 
             x.circleAngle = x.index * 360/v.graphLabel.length 
-            x.color = interpolateSpectral(i/v.graphLabel.length); 
-
-            v.graphNode[label] = x
+            x.color = interpolateSpectral(i/v.graphLabel.length);
+            v.graphNode[label] = x 
         }
     });
 
+    v.config.groups = v.congroup[v.selectedFeature]
+    // registerEditorConfig(editorConfig(v.$v));
+    registerEditorConfig(editorConfig(v.$v), "getVue", "#task-output", editorRef);
 }
 
 

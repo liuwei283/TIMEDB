@@ -2,23 +2,6 @@ svg{
     Component{
         Container {
             x = 40;y = 30 //+ maxsamplelength
-            
-            //samplename
-            // Container {
-            //     y = 15
-            //     @if(samplenameshow){
-            //         @for(sample,index) in sampleList{
-            //             Text {
-            //                 x = (gridPlotWidth-2)*index + 260 + gridPlotWidth/2 
-            //                 text = sample
-            //                 fontSize = 10
-            //                 // style:font-weight = "bold"
-            //                 rotation = @rotate(-90)
-            //             }
-            //         }
-            //     }
-
-            // }
             Container {
                 y = 15
                 @if(samplenameshow&&clinicalDatashow){
@@ -29,7 +12,7 @@ svg{
                             text = sample
                             fontSize = 10
                             // style:font-weight = "bold"
-                            rotation = @rotate(-270)
+                            rotation = @rotate(samplenamerotation-360)
                         }
                     }
                 }
@@ -41,7 +24,7 @@ svg{
                             text = sample
                             fontSize = 10
                             // style:font-weight = "bold"
-                            rotation = @rotate(-270)
+                            rotation = @rotate(samplenamerotation-360)
                         }
                     }
                 }

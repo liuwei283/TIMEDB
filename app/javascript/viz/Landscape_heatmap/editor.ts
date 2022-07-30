@@ -56,6 +56,21 @@ export const generateTestConfig = (v): any => ({
                             },
                         },
                     },
+                    {
+                        title:"Sample Name Rotation",
+                        type:"input",
+                        format:"float",
+                        //disabled: v.data.samplenameshow,
+                        value:{
+                            current:v.data.samplenamerotation,
+                            callback(x){
+                                v.data.samplenamerotation = x
+                                v.forceRedraw = true;
+                                v.data._sizeUpdated = true;
+                                update(v);
+                            }
+                        }
+                    },
                 ]
 
             }
