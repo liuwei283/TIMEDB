@@ -5,7 +5,7 @@ class SampleDatatable < ApplicationDatatable
       samples.map do |sample|
         [].tap do |column|
           column << ""
-          Sample.column_names.each do |attr|
+          (Sample.column_names - ['project_id', 'created_at', 'updated_at']).each do |attr|
             if attr != 'id'
               column << "<div class='table_cell'> #{sample[attr]} </div>"
             else

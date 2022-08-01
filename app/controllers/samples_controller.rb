@@ -30,12 +30,12 @@ class SamplesController < ApplicationController
         end
 
         #data processing for table filtering
-        @sp_col_index = [3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17]
-        gon.push sp_col_index: @sp_col_index
+        # @sp_col_index = [3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17]
+        # gon.push sp_col_index: @sp_col_index
         
-        @col_ranges = []
+        # @col_ranges = []
 
-        gon.push col_ranges: @col_ranges
+        # gon.push col_ranges: @col_ranges
     end
 
     def new

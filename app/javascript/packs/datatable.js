@@ -159,123 +159,206 @@ $(function () {
 
     
     var ids = new Set();
-    var invis = window.gon.invis
+    //var invis = window.gon.invis
     console.log($("#table_page").data('url'));
-    var table = $("#table_page").DataTable({
-        fixedColumns: true,
-        fixedColumns: {
-            leftColumns: 3,
-            rightColumns: 1
-        },
-        processing: true,
-        serverSide: true,
-        ajax: $("#table_page").data(),
-        dom: 'Plfrtip',
-        searchPanes: {
-            cascadePanes: true,
-            layout: 'columns-4'
-        },
-        columnDefs: [
-        {
-            targets: 0,
-            orderable: false,
-            className: 'select-checkbox',
-            checkboxes: {
-                selectRow: true,
+    if (document.getElementById('table_page')) {
+        var table = $("#table_page").DataTable({
+            fixedColumns: true,
+            fixedColumns: {
+                leftColumns: 3,
+                rightColumns: 1
             },
-        },
-        {
-            targets: -1,
-            orderable: false,
-            className: "tableLastColumn",
-        },
-        // {
-        //     targets: invis,
-        //     visible: false
-        // }
-        ],
-        searching: true,
-        select: {
-            style:    'multi',
-            selector: 'td:first-child'
-        },
-        scrollX: true,
-        rowCallback: function(row, data) {
-            $('td:eq(2)', row).css('background-color', '#e9ecef');
-            $('td:eq(3)', row).css('background-color', '#e9ecef');
-        },
-        initComplete: function(settings, json) {
-            $('#loadingSpinner').hide();
-        }
-    }); 
-
-    var table = $("#filter_table").DataTable({
-        fixedColumns: true,
-        fixedColumns: {
-            leftColumns: 3,
-            rightColumns: 1
-        },
-        //processing: true,
-        //serverSide: true,
-        //ajax: $("#table_page").data(),
-        dom: '<"#pane"P>lfrtip',
-        searchPanes: {
-            cascadePanes: true,
-            layout: 'columns-4',
-        },
-        columnDefs: [
-        {
+            processing: true,
+            serverSide: true,
+            ajax: $("#table_page").data(),
+            dom: 'Plfrtip',
             searchPanes: {
-                show: true,
-                dtOpts: {
-                    select: {
-                        style: 'multi'
-                    },
-                    dom: "tp",
-                    searching: true,
-                }
+                cascadePanes: true,
+                layout: 'columns-4'
             },
-            targets: window.gon.sp_col_index
-        },
-        {
-            targets: 0,
-            orderable: false,
-            className: 'select-checkbox',
-            checkboxes: {
-                selectRow: true,
+            columnDefs: [
+            {
+                targets: 0,
+                orderable: false,
+                className: 'select-checkbox',
+                checkboxes: {
+                    selectRow: true,
+                },
             },
-        },
-        {
-            targets: -1,
-            orderable: false,
-            className: "tableLastColumn",
-        },
-        // {
-        //     targets: invis,
-        //     visible: false
-        // }
-        ],
-        searching: true,
-        select: {
-            style:    'multi',
-            selector: 'td:first-child'
-        },
-        scrollX: true,
-        rowCallback: function(row, data) {
-            // $('td:eq(2)', row).css('background-color', '#e9ecef');
-            // $('td:eq(3)', row).css('background-color', '#e9ecef');
-        },
-        initComplete: function(settings, json) {
-            $('#loadingSpinner').hide();
+            {
+                targets: -1,
+                orderable: false,
+                className: "tableLastColumn",
+            },
+            // {
+            //     targets: invis,
+            //     visible: false
+            // }
+            ],
+            searching: true,
+            select: {
+                style:    'multi',
+                selector: 'td:first-child'
+            },
+            scrollX: true,
+            rowCallback: function(row, data) {
+                $('td:eq(2)', row).css('background-color', '#e9ecef');
+                $('td:eq(3)', row).css('background-color', '#e9ecef');
+            },
+            initComplete: function(settings, json) {
+                $('#loadingSpinner').hide();
+            }
+        }); 
+    }
 
-        }
-    });
-    table.on('change', function() {
-        //console.log("clicking");
-        // var info = table.fnSettings().aaSorting;
-        // var idx = info[0][0];
-        // alert(idx);
-    })
+    if (document.getElementById('filter_table')) {
+        var table = $("#filter_table").DataTable({
+            fixedColumns: true,
+            fixedColumns: {
+                leftColumns: 3,
+                rightColumns: 1
+            },
+            //processing: true,
+            //serverSide: true,
+            //ajax: $("#table_page").data(),
+            dom: '<"#pane"P>lfrtip',
+            searchPanes: {
+                cascadePanes: true,
+                layout: 'columns-4',
+            },
+            columnDefs: [
+            {
+                searchPanes: {
+                    show: true,
+                    dtOpts: {
+                        select: {
+                            style: 'multi'
+                        },
+                        dom: "tp",
+                        searching: true,
+                    }
+                },
+                targets: window.gon.sp_col_index
+            },
+            {
+                targets: 0,
+                orderable: false,
+                className: 'select-checkbox',
+                checkboxes: {
+                    selectRow: true,
+                },
+            },
+            {
+                targets: -1,
+                orderable: false,
+                className: "tableLastColumn",
+            },
+            // {
+            //     targets: invis,
+            //     visible: false
+            // }
+            ],
+            searching: true,
+            select: {
+                style:    'multi',
+                selector: 'td:first-child'
+            },
+            scrollX: true,
+            rowCallback: function(row, data) {
+                // $('td:eq(2)', row).css('background-color', '#e9ecef');
+                // $('td:eq(3)', row).css('background-color', '#e9ecef');
+            },
+            initComplete: function(settings, json) {
+                $('#loadingSpinner').hide();
+
+            }
+        });
+
+        $("#pane").attr("title", "Filter Column Data")
+    
+        $("#pane").dialog({
+            autoOpen: false,
+            show: {
+                effect: "blind",
+                duration: 250
+            },
+            hide: {
+                effect: "blind",
+                duration: 250
+            }
+        });
+
+        $(".rangeselect").each(function(index) {
+            $(this).dialog({
+                autoOpen: false,
+                show: {
+                    effect: "blind",
+                    duration: 250
+                },
+                hide: {
+                    effect: "blind",
+                    duration: 250
+                }
+            });
+        });
+    
+        $(".dtsp-searchPane").each(function(index) {
+            $(this).hide();
+        });
+
+        $(".dtsp-titleRow").hide();
+
+    
+        // $(".filter").each(function(index) {
+        //     $(this).wrap("<div class='dropdown-menu form-group p-2 h-50 d-none' aria-labelledby='t-"+ String(index) +"'/>");
+        // });
+        
+        $(".dropdown-menu").click(function(e){
+            e.stopPropagation();
+        });
+        
+        
+        $(".ftitle").each(function(index){
+            if (window.gon.sp_col_index.includes(index + 1)) {
+                $(this).on("click", function(){
+                    // console.log("index is", index)
+                    // $(".dtsp-searchPane").each(function(index) {
+                    //     $(this).hide();
+                    // });
+
+                    $("#pane .dtsp-searchPane").hide();
+                    if ($("#rangeselect_" + String(index)).length > 0) {
+                        $(".rangeselect").each(function(index) {
+                            $(this).dialog("close");
+                        });
+                        $("#pane").dialog("close");
+
+                        $("#rangeselect_" + String(index)).dialog("open");
+                    }
+                    else {
+                        $("#pane").dialog("open");
+                        $(".rangeselect").each(function(index) {
+                            $(this).dialog("close");
+                        });
+                    }
+                    $("#pane .dtsp-searchPane:nth-of-type(" + String(index + 2) + ")").show();
+                });
+            }
+        });
+
+    
+        $(".clearButton").attr("title", "Clear filters");
+        $(".dtsp-nameButton").attr("title", "Sort by name");
+        $(".dtsp-countButton").attr("title", "Sort by count");
+        $(".dtsp-collapseButton").attr("title", "Collapse/Show");
+
+        $(".dtsp-search").each(function() {
+            $(this).attr("placeholder", "Search data");
+        });
+
+        $('#loadingOverlay').fadeOut();
+
+    }
 
     $("th.select-checkbox").on('click',function(e) {
         if ($(".selectAll").is( ":checked" )) {
@@ -407,88 +490,5 @@ $(function () {
 
 
 
-    $("#pane").attr("title", "Filter Column Data")
     
-    $("#pane").dialog({
-        autoOpen: false,
-        show: {
-            effect: "blind",
-            duration: 250
-        },
-        hide: {
-            effect: "blind",
-            duration: 250
-        }
-    });
-
-    $(".rangeselect").each(function(index) {
-        $(this).dialog({
-            autoOpen: false,
-            show: {
-                effect: "blind",
-                duration: 250
-            },
-            hide: {
-                effect: "blind",
-                duration: 250
-            }
-        });
-    });
-    
-    $(".dtsp-searchPane").each(function(index) {
-        $(this).hide();
-    });
-
-    $(".dtsp-titleRow").hide();
-
-    
-    // $(".filter").each(function(index) {
-    //     $(this).wrap("<div class='dropdown-menu form-group p-2 h-50 d-none' aria-labelledby='t-"+ String(index) +"'/>");
-    // });
-    
-    $(".dropdown-menu").click(function(e){
-        e.stopPropagation();
-    });
-    
-    
-    $(".ftitle").each(function(index){
-        if (window.gon.sp_col_index.includes(index + 1)) {
-            $(this).on("click", function(){
-                // console.log("index is", index)
-                // $(".dtsp-searchPane").each(function(index) {
-                //     $(this).hide();
-                // });
-
-                $("#pane .dtsp-searchPane").hide();
-                if ($("#rangeselect_" + String(index)).length > 0) {
-                    $(".rangeselect").each(function(index) {
-                        $(this).dialog("close");
-                    });
-                    $("#pane").dialog("close");
-
-                    $("#rangeselect_" + String(index)).dialog("open");
-                }
-                else {
-                    $("#pane").dialog("open");
-                    $(".rangeselect").each(function(index) {
-                        $(this).dialog("close");
-                    });
-                }
-                $("#pane .dtsp-searchPane:nth-of-type(" + String(index + 2) + ")").show();
-            });
-        }
-    });
-
-    
-    $(".clearButton").attr("title", "Clear filters");
-    $(".dtsp-nameButton").attr("title", "Sort by name");
-    $(".dtsp-countButton").attr("title", "Sort by count");
-    $(".dtsp-collapseButton").attr("title", "Collapse/Show");
-
-    $(".dtsp-search").each(function() {
-        $(this).attr("placeholder", "Search data");
-    });
-
-    $('#loadingOverlay').fadeOut();
-
 } );

@@ -1,29 +1,18 @@
 <% content_for:head do%>
+
+  
   <script src="https://cdn.staticfile.org/jquery/1.10.2/jquery.min.js"></script>
   <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.22/js/jquery.dataTables.min.js"></script>
   <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/select/1.3.1/js/dataTables.select.min.js"></script>
   <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/fixedcolumns/3.3.2/js/dataTables.fixedColumns.min.js"></script>
+
   <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.22/css/jquery.dataTables.css">
   <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/select/1.3.1/css/select.dataTables.min.css">
   <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/fixedcolumns/3.3.2/css/fixedColumns.dataTables.min.css">
-
-  <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/buttons/2.2.3/js/dataTables.buttons.min.js"></script>
-  <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/buttons/2.2.3/js/buttons.html5.min.js"></script>
-  <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/buttons/2.2.3/css/buttons.dataTables.min.css">
-
-
-  <link href="https://nightly.datatables.net/searchpanes/css/searchPanes.dataTables.css?_=8054705740aed0c29e3a84ebb221cf01.css" rel="stylesheet" type="text/css" />
-  <script src="https://nightly.datatables.net/searchpanes/js/dataTables.searchPanes.js?_=8054705740aed0c29e3a84ebb221cf01"></script>
-
-  <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.1/themes/base/jquery-ui.css">
-  <link rel="stylesheet" href="https://jqueryui.com/resources/demos/style.css">
-  <script src="https://code.jquery.com/ui/1.13.1/jquery-ui.js"></script>
+  
   <%= javascript_pack_tag "datatable" %>
 <%end%>
 <% content_for :title, 'Samples' %>
-<div id="loadingOverlay">
-  <%=image_tag "loading_icon.gif"%>
-</div>
 <div class="container">
     <div class="mt-5">
       <h1>
@@ -57,7 +46,7 @@
                                                       <i class='fas fa-check-circle'></i> Selected samples
                                                     <%end%>
                                                     <%= button_tag :name => 'download_filter',
-                                                      :class => "s_table_sub btn btn-theme btn-info download", disabled: true do %>
+                                                      :class => "s_table_sub btn btn-theme btn-search btn-info download", disabled: true do %>
                                                       <i class='fas fa-filter'></i> Searched samples
                                                     <%end%>
                                                     <%= button_tag :class => "s_table_sub btn btn-pink" do %>
@@ -101,7 +90,7 @@
 
 
   <%= form_tag make_selected_file_samples_path,class:(session[:dark] ? "dark-table mb-4": "mb-4"), multipart: true do %>
-    <%= content_tag :table, role: :datatable, class: "display", id: "filter_table" do %>
+    <%= content_tag :table, role: :datatable, class: "display", id: "table_page", data: { url: samples_path(format: :json)} do %>
       <p>You can click <span style= "color: #006fff;">sample name</span> to view the original link of samples。
       You can click <span style= "color: #006fff;">details</span> to view the detailed information for samples.
       </p>
@@ -109,34 +98,14 @@
             <th>
               <input type="checkbox" class="selectAll" name="selectAll" value="all"> 
             </th>
-            <% @sample_attrs.each_with_index do |attr, idx| %>
+            <% @sample_attrs.each do |attr| %>
               <% attr = attr.gsub(/^n_/, "") %>
               <% attr = attr.gsub(/^c_/, "") %>
-              <th>
-              <% if @sp_col_index.include?(idx + 1) %>
-                <button class='ftitle btn btn-link btn-sm text-decoration-none' id= "t-<%=attr%>"><i class='fas fa-filter'></i> <%=attr%> </button>
-              <% else %>
-                <div class="ftitle">
-                  <%=attr%>
-                </div>
-              <% end %>
-              </th>
+              <th> <%= attr %> </th>
             <% end %>
             <th>details</th>
       </thead>
-      <tbody>
-      <% @samples.each do |sam| %>
-        <tr>
-          <td></td>
-          <% @sample_attrs.each do |attr| %>
-            <td><%= sam[attr] %></td>
-          <% end %>
-          <td>
-            <button class='btn btn-1'> <%= link_to('Details', sam) %> </button>
-          </td>
-        </tr>
-      <% end %>
-      </tbody>
+      <tbody></tbody>
     <% end %>
 
     
@@ -145,7 +114,3 @@
 
 
 </div>
-
-
-
-
