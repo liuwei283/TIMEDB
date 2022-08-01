@@ -43,322 +43,101 @@ function modify_set(option, id_set, new_ids){
     }
 }
 
-$.fn.dataTable.ext.search.push(
-    function( settings, searchData, index, rowData, counter ) {
-        if (settings.nTable.id !== 'filter_table'){
-            return true;
-        }
-        // if (settings.nTable.id !== 'table_meta' && settings.nTable.id !== 'table_data'){
-        //     return true;
-        // }
-        //console.log(searchData);
-        var col_ranges = window.gon.col_ranges;
-        var range_mins = [];
-        var range_maxs = [];
-        var range_values = [];
-
-        for (var k = 0; k < col_ranges.length; k++ ) {
-            range_mins.push($( "#slider-range_" + col_ranges[k].n).slider( "values", 0));
-            range_maxs.push($( "#slider-range_" + col_ranges[k].n).slider( "values", 1));
-            range_values.push(parseFloat(searchData[parseInt(col_ranges[k].n) + 1] ) || 0);
-            //console.log(parseFloat(searchData[parseInt(col_ranges[k].n)]));
-        }
-
-        for (var k = 0; k < col_ranges.length; k++ ) {
-            if (!(range_mins[k] <= range_values[k] && range_values[k] <= range_maxs[k])) return false;
-        }
-        return true;
-
-    }
-);
-
-
-
-// function prepareData() {
-//     let data_data = $('#tbody_data tr').get().map(function(row) {
-//         return $(row).find('td').get().map(function(cell) {
-//             return $(cell).html();
-//         });
-//     });
-
-//     let data_meta = $('#tbody_meta tr').get().map(function(row) {
-//         return $(row).find('td').get().map(function(cell) {
-//             return $(cell).html();
-//         });
-//     });
-
-//     $("#ddt").val(JSON.stringify(data_data));
-//     $("#dmt").val(JSON.stringify(data_meta));
-
-//     $("#dname").val($("#dname").val().trim());
-// }
-
-
-
-
 $(function () { 
-    $(".rangeselect .slider-range").each(function(index) {
-        let num = $(this).attr("id").split("_")[1];
-        let minv = Number($( "#min_" + num ).val());
-        let maxv = Number($( "#max_" + num ).val());
-        
-        $(this).slider({
-            range: true,
-            min: minv,
-            max: maxv,
-            values: [ minv, maxv ],
-            slide: function( event, ui ) {
-                $( "#value_" + num ).val( " " + ui.values[ 0 ] + " - " + ui.values[ 1 ] );
-            },
-            change: function( event, ui ) {
-                table.draw();
-            }
-        });
-        
-        $( "#value_" + num ).val( " " + $(this).slider( "values", 0 ) +
-            " - " + $(this).slider( "values", 1 ) );
-    });
-    
-    $(".umin").each(function() {
-        $(this).on('input', function() {
-            if ($(this).val() > 0) {
-                let num = $(this).attr("id").split("_")[1];
-                let slider = $("#slider-range_" + num);
-                slider.slider('values', 0, Number($(this).val()));
-                $( "#value_" + num ).val( " " + slider.slider('values', 0) + " - " + slider.slider('values', 1) );
-            }
-        });
-    });
-    
-    $(".umax").each(function() {
-        $(this).on('input', function() {
-            if ($(this).val() > 0) {
-                let num = $(this).attr("id").split("_")[1];
-                let slider = $("#slider-range_" + num);
-                slider.slider('values', 1, Number($(this).val()));
-                $( "#value_" + num ).val( " " + slider.slider('values', 0) + " - " + slider.slider('values', 1) );
-            }
-        });
-    });
-    
-    $(".reset-r").on('click', function() {
-        console.log("fdgfdgfdg");
-        let num = $(this).attr("id").split("_")[1];
-        let minv = $("#min_" + num).val();
-        let maxv = $("#max_" + num).val();
-        let slider = $("#slider-range_" + num);
-        slider.slider('values', 0, Number(minv));
-        slider.slider('values', 1, Number(maxv));
-        $( "#value_" + num ).val( " " + slider.slider('values', 0) + " - " + slider.slider('values', 1) );
-    });
-    
-
-    
-   
-    
-
-    
     var ids = new Set();
-    //var invis = window.gon.invis
-    console.log($("#table_page").data('url'));
-    if (document.getElementById('table_page')) {
-        var table = $("#table_page").DataTable({
-            fixedColumns: true,
-            fixedColumns: {
-                leftColumns: 3,
-                rightColumns: 1
+    var invis = window.gon.invis
+    //console.log($("#table_page").data('url'));
+    var table = $("#table_page").DataTable({
+        fixedColumns: true,
+        fixedColumns: {
+            leftColumns: 3,
+            rightColumns: 1
+        },
+        processing: true,
+        serverSide: true,
+        ajax: $("#table_page").data(),
+        columnDefs: [
+        {
+            targets: 0,
+            orderable: false,
+            className: 'select-checkbox',
+            checkboxes: {
+                selectRow: true,
             },
-            processing: true,
-            serverSide: true,
-            ajax: $("#table_page").data(),
-            dom: 'Plfrtip',
-            searchPanes: {
-                cascadePanes: true,
-                layout: 'columns-4'
-            },
-            columnDefs: [
-            {
-                targets: 0,
-                orderable: false,
-                className: 'select-checkbox',
-                checkboxes: {
-                    selectRow: true,
-                },
-            },
-            {
-                targets: -1,
-                orderable: false,
-                className: "tableLastColumn",
-            },
-            // {
-            //     targets: invis,
-            //     visible: false
-            // }
-            ],
-            searching: true,
-            select: {
-                style:    'multi',
-                selector: 'td:first-child'
-            },
-            scrollX: true,
-            rowCallback: function(row, data) {
-                $('td:eq(2)', row).css('background-color', '#e9ecef');
-                $('td:eq(3)', row).css('background-color', '#e9ecef');
-            },
-            initComplete: function(settings, json) {
-                $('#loadingSpinner').hide();
-            }
-        }); 
-    }
+        },
+        {
+            targets: -1,
+            orderable: false,
+            className: "tableLastColumn",
+        },
+        {
+            targets: invis,
+            visible: false
+        }
+        ],
+        searching: true,
+        select: {
+            style:    'multi',
+            selector: 'td:first-child'
+        },
+        scrollX: true,
+        rowCallback: function(row, data) {
+            $('td:eq(2)', row).css('background-color', '#e9ecef');
+            $('td:eq(3)', row).css('background-color', '#e9ecef');
+            //$('td:eq(4)', row).css('border-style', 'outset');
+        },
+        initComplete: function(settings, json) {
+            $('#loadingSpinner').hide();
+        }
 
-    if (document.getElementById('filter_table')) {
-        var table = $("#filter_table").DataTable({
-            fixedColumns: true,
-            fixedColumns: {
-                leftColumns: 3,
-                rightColumns: 1
-            },
-            //processing: true,
-            //serverSide: true,
-            //ajax: $("#table_page").data(),
-            dom: '<"#pane"P>lfrtip',
-            searchPanes: {
-                cascadePanes: true,
-                layout: 'columns-4',
-            },
-            columnDefs: [
-            {
-                searchPanes: {
-                    show: true,
-                    dtOpts: {
-                        select: {
-                            style: 'multi'
-                        },
-                        dom: "tp",
-                        searching: true,
-                    }
-                },
-                targets: window.gon.sp_col_index
-            },
-            {
-                targets: 0,
-                orderable: false,
-                className: 'select-checkbox',
-                checkboxes: {
-                    selectRow: true,
-                },
-            },
-            {
-                targets: -1,
-                orderable: false,
-                className: "tableLastColumn",
-            },
-            // {
-            //     targets: invis,
-            //     visible: false
-            // }
-            ],
-            searching: true,
-            select: {
-                style:    'multi',
-                selector: 'td:first-child'
-            },
-            scrollX: true,
-            rowCallback: function(row, data) {
-                // $('td:eq(2)', row).css('background-color', '#e9ecef');
-                // $('td:eq(3)', row).css('background-color', '#e9ecef');
-            },
-            initComplete: function(settings, json) {
-                $('#loadingSpinner').hide();
+    }); 
 
-            }
-        });
+    // var table = $("#pj_table_page").DataTable({
+    //     fixedColumns: true,
+    //     fixedColumns: {
+    //         leftColumns: 3,
+    //         rightColumns: 2
+    //     },
+    //     processing: true,
+    //     serverSide: true,
+    //     ajax: $("#pj_table_page").data('url'),
+    //     columnDefs: [
+    //     {
+    //         targets: 0,
+    //         orderable: false,
+    //         className: 'select-checkbox',
+    //         checkboxes: {
+    //             selectRow: true,
+    //         },
+    //     },
+    //     {
+    //         targets: -1,
+    //         orderable: false  
+    //     },
+    //     {
+    //         targets: -2,
+    //         orderable: false  
+    //     },
+    //     {
+    //         targets: invis,
+    //         visible: false
+    //     }
+    //     ],
+    //     searching: true,
+    //     select: {
+    //         style:    'multi',
+    //         selector: 'td:first-child'
+    //     },
+    //     scrollX: true,
+    // }); 
 
-        $("#pane").attr("title", "Filter Column Data")
-    
-        $("#pane").dialog({
-            autoOpen: false,
-            show: {
-                effect: "blind",
-                duration: 250
-            },
-            hide: {
-                effect: "blind",
-                duration: 250
-            }
-        });
 
-        $(".rangeselect").each(function(index) {
-            $(this).dialog({
-                autoOpen: false,
-                show: {
-                    effect: "blind",
-                    duration: 250
-                },
-                hide: {
-                    effect: "blind",
-                    duration: 250
-                }
-            });
-        });
-    
-        $(".dtsp-searchPane").each(function(index) {
-            $(this).hide();
-        });
-
-        $(".dtsp-titleRow").hide();
-
-    
-        // $(".filter").each(function(index) {
-        //     $(this).wrap("<div class='dropdown-menu form-group p-2 h-50 d-none' aria-labelledby='t-"+ String(index) +"'/>");
-        // });
-        
-        $(".dropdown-menu").click(function(e){
-            e.stopPropagation();
-        });
-        
-        
-        $(".ftitle").each(function(index){
-            if (window.gon.sp_col_index.includes(index + 1)) {
-                $(this).on("click", function(){
-                    // console.log("index is", index)
-                    // $(".dtsp-searchPane").each(function(index) {
-                    //     $(this).hide();
-                    // });
-
-                    $("#pane .dtsp-searchPane").hide();
-                    if ($("#rangeselect_" + String(index)).length > 0) {
-                        $(".rangeselect").each(function(index) {
-                            $(this).dialog("close");
-                        });
-                        $("#pane").dialog("close");
-
-                        $("#rangeselect_" + String(index)).dialog("open");
-                    }
-                    else {
-                        $("#pane").dialog("open");
-                        $(".rangeselect").each(function(index) {
-                            $(this).dialog("close");
-                        });
-                    }
-                    $("#pane .dtsp-searchPane:nth-of-type(" + String(index + 2) + ")").show();
-                });
-            }
-        });
-
-    
-        $(".clearButton").attr("title", "Clear filters");
-        $(".dtsp-nameButton").attr("title", "Sort by name");
-        $(".dtsp-countButton").attr("title", "Sort by count");
-        $(".dtsp-collapseButton").attr("title", "Collapse/Show");
-
-        $(".dtsp-search").each(function() {
-            $(this).attr("placeholder", "Search data");
-        });
-
-        $('#loadingOverlay').fadeOut();
-
-    }
+    table.on('change', function() {
+        //console.log("clicking");
+        // var info = table.fnSettings().aaSorting;
+        // var idx = info[0][0];
+        // alert(idx);
+    })
 
     $("th.select-checkbox").on('click',function(e) {
         if ($(".selectAll").is( ":checked" )) {
@@ -446,7 +225,12 @@ $(function () {
         }
         $(".download.btn-select").attr('disabled', !downloadSelect);
         $(".download.btn-search").attr('disabled', !downloadSearch);
+        console.log(!downloadSelect);
+        console.log(!downloadSearch);
+
+
     }
+
 
     $('.s_table_sub').on("click", function(e){
         var form = this;
@@ -485,10 +269,6 @@ $(function () {
     table.on( 'search.dt', function () {
         disableFuncButtons();
     } );
+  
 
-
-
-
-
-    
 } );

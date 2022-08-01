@@ -5,17 +5,28 @@ class SamplesController < ApplicationController
     $tmp_dir = "#{Rails.root}/app/data/tmp/"
 
     def index
-        
-        #@vis = ['id', 'sample_name', 'project_name', 'c_tumor_stage', 'c_tumor_grade', 'c_sample_histology', 'c_race', 'c_gender', 'n_age', 'pfs', 'os', 'pfs_status', 'os_status', 'c_tumor_type', 'c_tumor_subtype', 'c_source_name', 'c_treatment']
-        @samples = Sample.order(:sample_name)
-        @sample_attrs = Sample.column_names - ['project_id', 'created_at', 'updated_at']
-        # @invis = []
-        # @sample_attrs.each_with_index do |attr, index|
-        #     if !@vis.include?(attr)
-        #         @invis.push(index+1)
-        #     end
+        @projects = Project.all
+        # @all_sample_attrs = Sample.column_names
+        # @projects.each do |project|
+        #     #file_path = "#{Rails.root}/public/data/Clinical/project/" + project.project_name
+        #     file_path = "#{Rails.root}/public/data/Clinical/ClinicaldataTest.csv"
+
+        #     sub_headers = CSV.open(file_path, &:readline)
+        #     Rails.logger.info(sub_headers.class)
+        #     @all_sample_attrs = @all_sample_attrs | sub_headers
+        # #     #logger.debug "sdwdwdwdwd"
         # end
-        # gon.push invis: @invis
+        
+        @vis = ['id', 'sample_name', 'project_name', 'c_tumor_stage', 'c_tumor_grade', 'c_sample_histology', 'c_race', 'c_gender', 'n_age', 'pfs', 'os', 'pfs_status', 'os_status', 'c_tumor_type', 'c_tumor_subtype', 'c_source_name', 'c_treatment']
+        @samples = Sample.order(:sample_name)
+        @sample_attrs = Sample.column_names
+        @invis = []
+        @sample_attrs.each_with_index do |attr, index|
+            if !@vis.include?(attr)
+                @invis.push(index+1)
+            end
+        end
+        gon.push invis: @invis
         @user = User.find(session[:user_id])
         id = session[:user_id]
         @user = User.find(id)
@@ -28,14 +39,6 @@ class SamplesController < ApplicationController
                 render json: json_data
             }
         end
-
-        #data processing for table filtering
-        # @sp_col_index = [3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17]
-        # gon.push sp_col_index: @sp_col_index
-        
-        # @col_ranges = []
-
-        # gon.push col_ranges: @col_ranges
     end
 
     def new

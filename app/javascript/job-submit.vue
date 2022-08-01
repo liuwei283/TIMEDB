@@ -8,7 +8,7 @@
                 {{a.id}}: {{a.name}}
                 </li>
             </ul> -->
-            <div v-if="!submitted">
+            <div v-if="!submitted" class="mb-5">
 
                 <div class="prepare">
                     <div class="index-banner">

@@ -6,56 +6,40 @@ class CancersController < ApplicationController
 
         
     def index
-        #@vis = ['id', 'cancer_name', 'cancer_type', 'data_source', 'number_of_related_projects', 'number_of_samples', 'sub_cancer', 'primary_site']
+        @vis = ['id', 'cancer_name', 'cancer_type', 'data_source', 'number_of_related_projects', 'number_of_samples', 'sub_cancer', 'primary_site']
         @cancers = Cancer.order(:cancer_name)
-        @attrs = Cancer.column_names - ['created_at', 'updated_at']
-        #@invis = []
-        # @attrs.each_with_index do |attr, index|
-        #     if !@vis.include?(attr)
-        #         @invis.push(index+1)
-        #     end
-        # end
-        # gon.push invis: @invis
+        @attrs = Cancer.column_names
+        @invis = []
+        @attrs.each_with_index do |attr, index|
+            if !@vis.include?(attr)
+                @invis.push(index+1)
+            end
+        end
+        gon.push invis: @invis
         respond_to do |format|
             format.html
             format.csv { send_data @cancers.to_csv }
             format.json { render json: CancerDatatable.new(view_context) }
         end
-
-
-         #data processing for table filtering
-         @sp_col_index = [4, 5, 6, 7]
-         gon.push sp_col_index: @sp_col_index
-         range_cols = [["number_of_related_projects", 4], ["number_of_samples", 5]]
-         @col_ranges = []
-         for col in range_cols
-             @col_ranges.push({n: col[1], min: Cancer.order("cancer_name").map{|cac| cac[col[0]].to_i}.min(), max: Cancer.all.map{|cac| cac[col[0]].to_i}.max()})
-         end
- 
-         puts "Printing fetched column ranges"
-         puts @col_ranges
- 
-         gon.push col_ranges: @col_ranges
-         
     end
 
     
     def show
-        # @vis = ['id', 'project_name', 'cancer_name', 'num_of_samples', 'preprocessed', 'database', "original_description", "major_related_publications"]
+        @vis = ['id', 'project_name', 'cancer_name', 'num_of_samples', 'preprocessed', 'database', "original_description", "major_related_publications"]
         @short_attrs = [['cancer_name', 'cancer_type', 'data_source', 'number_of_related_projects'], ['number_of_samples', 'sub_cancer', 'primary_site']]
 
         @user = User.find(session[:user_id])
         @cancer = Cancer.find(params[:id])
         @attrs = Cancer.column_names
-        @project_attrs = Project.column_names - ["cancer_id", "created_at", "updated_at"]
-        @projects = @cancer.projects.order("project_name not LIKE '%TCGA_%'").order(:id)
-        # @invis = []
-        # @project_attrs.each_with_index do |attr, index|
-        #     if !@vis.include?(attr)
-        #         @invis.push(index+1)
-        #     end
-        # end
-        # gon.push invis: @invis
+        @project_attrs = Project.column_names - ['cancer_id', 'publications_link', 'original_link']
+        @projects = @cancer.projects
+        @invis = []
+        @project_attrs.each_with_index do |attr, index|
+            if !@vis.include?(attr)
+                @invis.push(index+1)
+            end
+        end
+        gon.push invis: @invis
         
         id = session[:user_id]
         @user = User.find(id) 
@@ -65,20 +49,6 @@ class CancersController < ApplicationController
             format.csv { send_data @cancer.projects.to_csv }
             format.json { render json: CancerProjectDatatable.new(view_context, @cancer) }
         end
-
-
-        @sp_col_index = [3, 4, 5, 6, 7, 8, 10, 11, 12, 13, 14, 15, 16]
-        gon.push sp_col_index: @sp_col_index
-        range_cols = [["num_of_samples", 3], ["num_of_observed_genes", 7]]
-        @col_ranges = []
-        for col in range_cols
-            @col_ranges.push({n: col[1], min: @projects.order("project_name").map{|pjt| pjt[col[0]].to_i}.min(), max: @projects.map{|pjt| pjt[col[0]].to_i}.max(),})
-        end
-
-        puts "Printing fetched column ranges"
-        puts @col_ranges
-
-        gon.push col_ranges: @col_ranges
     end
 
   

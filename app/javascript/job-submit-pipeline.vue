@@ -3,7 +3,7 @@
     <div>
         <div v-if="!isLoading">
 
-            <div class="prepare" v-if="!submitted">
+            <div class="prepare mb-5" v-if="!submitted">
                 <div class="index-banner">
                     <div class="container">
                         <p class="mt-5" style="color:gray;font-size:1.4em;"><i>This page may need some time to load data. Please wait for some seconds if there is no analysis available.</i></p>
