@@ -75,7 +75,7 @@
     <%end%>
   </div>
     <div id="table">
-      <table class="display" >
+      <!-- <table class="display" >
         <thead>
           
           <% @projects.column_names.each do |attr| %>
@@ -115,7 +115,7 @@
           <% end %>
         </tbody>
 
-      </table>
+      </table> -->
     </div>
     <%= link_to  "Add one project", "/projects/new" %>
 
@@ -279,20 +279,20 @@
       <%= submit_tag 'Generate'%>
     <% end %>
 
-    <%= form_tag({action: :update_columns}, multipart: true) do %>
+    <!-- <%= form_tag({action: :update_columns}, multipart: true) do %>
       <p>
         Calculate and update columns for database
       </p>
       <%= submit_tag 'Update'%>
-    <% end %>
-    <!-- <%= form_tag({action: :update_columns_cancer}, multipart: true) do %>
+    <% end %> -->
+    <%= form_tag({action: :update_columns_cancer}, multipart: true) do %>
       <p>
         Please select the cancer to update columns
       </p>
       <%= select_tag :cancer_id, options_from_collection_for_select(@cancers, :id, :cancer_name, -1) %>
       <br>
       <%= submit_tag 'Submit'%>
-    <% end %> -->
+    <% end %>
 
     <%= form_tag({action: :update_files}, multipart: true) do %>
     <p>

@@ -61,11 +61,11 @@
     </div>
     <div id='hidden_helper'  class="db-toolbox collapse p-2">
       <% i=2 %>
-      <% @attrs.each do |attr| %>
+      <% @project_attrs.each do |attr| %>
         <% if attr != 'id'%>
           <% if !@vis.include? attr%>
             <button class="toggle-vis btn btn-outline-secondary" data-column='<%=i.to_s%>'> 
-              <%= attr%>
+              <%= attr %>
             </button>
           <% end %>
           <%i += 1%>
