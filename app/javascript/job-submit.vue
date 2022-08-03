@@ -516,7 +516,7 @@
             <br>
             <div class = "row justify-content-center container">
                 <div class="container infor" style="background-color: #">
-                    <i class="m-2"> Please Click the Image If You Want to Enlarge It</i>
+                    <i class="m-2">Please click the image if you want to enlarge it.</i>
                 </div>
                 <div id="rendered_doc" v-html="selected_analysis.rendered_doc" class = "text-left container" style="margin: 50px;">
                 </div>
