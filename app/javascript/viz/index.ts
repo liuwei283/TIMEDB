@@ -8,6 +8,8 @@ import { registerHRORTable } from "./HRORTable";
 import { registerSpaticalInteraction } from "./spatical_interaction";
 import { registerstackedBarsplot} from "./stackedBars";
 import { registerUMAP } from "./UMAP";
+import { registerUMAPAfter } from "./UMAP_after";
+
 import { registerSubtype } from "./Subtype";
 import { registerimmunoRegulator} from "./immunoRegulator";
 import { registerModuleComparedPlot} from "./module_comparedPlot";
@@ -67,6 +69,9 @@ export function registerViz(moduleName) {
             break;
         case "module_consensusView":
             registerModuleConsensusView();
+            break;
+        case "UMAP_after":
+            registerUMAPAfter();
             break;
        
     }

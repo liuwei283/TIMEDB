@@ -306,7 +306,6 @@
             <div v-if="!getregulatorFexists" class = "text-center row justify-content-center">
                 <h2>No data available</h2>
             </div>
-           
         </div>
         <br>
         <br>

@@ -1,0 +1,41 @@
+svg {
+	width = 1800
+	height = 800
+	Component {
+        x = 50
+        y = 50
+        Container {
+            Container {
+                x = -25; y = 30
+                Rows {
+                    Container {
+                        padding = 4
+                        x = -4
+                        Text {
+                            text = "Projects"
+                            fontSize = 15
+                            anchor = @anchor("b", "l")
+                        }
+                    }
+                    Container {
+                        Legend {
+                            data = plotData.UMap.color.colorMap.legendData()
+                        }
+                    }
+                }
+            }
+        }
+        Container {
+            x = plotData.UMap.position.startX
+            y = plotData.UMap.position.startY
+            ComplexGroupedScatters {
+                plotSize = [600, 600]
+                @props UMAPData
+                @props plotData.UMap.color
+                @props plotData.UMap.customized
+                @props plotData.UMap.tag
+                @props plotData.UMap.plotSize
+            }
+        }
+	}
+}
