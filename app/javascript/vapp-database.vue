@@ -12,7 +12,7 @@
                 
                 <div class="sdiv col">
                     <div class="select-title">
-                        Please choose projects or sample number:
+                        Please choose datasets or samples number:
                     </div>
                     <select @change='barViz' class="selectpicker form-select col" data-style="btn-secondary" data-live-search="true" v-model="ps_bar_selected">
                         <option v-for="(option, index) in ps_bar_selector" :key="index" :value="option.value" >
@@ -23,7 +23,7 @@
 
                 <div class="sdiv col" v-if= "ps_bar_selected == 'samples'">
                     <div class="select-title">
-                        Please choose project or cancer type:
+                        Please choose dataset or cancer type:
                     </div>
                     <select @change='barViz' class="selectpicker form-select col" data-style="btn-secondary" data-live-search="true" v-model="bar_selected">
                         <option v-for="(option, index) in bar_selector" :key="index" :value="option.value" >
@@ -32,9 +32,9 @@
                     </select>
                 </div>
 
-                <div v-if= "ps_bar_selected == 'samples' && bar_selected == 'project'" class ="sdiv col">
+                <div v-if= "ps_bar_selected == 'samples' && bar_selected == 'dataset'" class ="sdiv col">
                     <div class="select-title">
-                    Please choose the cancer type of the projects:
+                    Please choose the cancer type of the datasets:
                     </div>
                     <select @change="barViz" class="form-select col selectpicker" data-style="btn-secondary" data-live-search="true" v-model="bar_cancer_selected">
                         <option v-for="(option, index) in cancers" :key="index" :value="option">
@@ -86,7 +86,7 @@
 
         <div id = "piePlot" class = "container Block">
             <div id="pieDescription" class="row description">
-                <h4>Project Immune Cell Fraction Piechart</h4>
+                <h4>Dataset Immune Cell Fraction Piechart</h4>
             </div>
 
             <div class="select-bar form-inline row">
@@ -115,7 +115,7 @@
 
                 <div class="sdiv col">
                     <div class="select-title">
-                        Please choose the project:
+                        Please choose the dataset:
                     </div>
                     <select @change='pieViz' class="form-select col selectpicker pie_react" data-style="btn-secondary" data-live-search="true" v-model="pieProjectSelected">
                         <option v-for="(option, index) in pie_projects" :key="index" :value="option">
@@ -251,7 +251,7 @@
 
                 <div class="sdiv col">
                     <div class="select-title">
-                    Please choose the project:
+                    Please choose the dataset:
                     </div>
                     <select @change='regulatorViz' class="selectpicker form-select col " data-style="btn-secondary" data-live-search="true" v-model="regulatorProjectSelected">
                         <option v-for="(option, index) in regulatorProjects" :key="index" :value="option">
@@ -356,11 +356,11 @@ export default {
             data_path : "/public/data",
             bar_selector: [
                 {value: "cancer", label: "Cancer type"},
-                {value: "project", label: "Project"},
+                {value: "dataset", label: "Dataset"},
             ],
             ps_bar_selector: [
-                {value: "projects", label: "Project number"},
-                {value: "samples", label: "Sample number"},
+                {value: "datasets", label: "Datasets number"},
+                {value: "samples", label: "Samples number"},
             ],
             bar_selected : 'cancer',
             ps_bar_selected: 'samples',
@@ -471,10 +471,10 @@ export default {
                     immunebar("#barVis", this.data_path + "/sample_num/" + "cancer_samples.tsv", "#bar-editor", "overview_bar_viz");
                 }
                 else {
-                    immunebar("#barVis", this.data_path + "/sample_num/" + this.bar_cancer_selected + "_project_samples.tsv", "#bar-editor", "overview_bar_viz");
+                    immunebar("#barVis", this.data_path + "/sample_num/" + this.bar_cancer_selected + "_dataset_samples.tsv", "#bar-editor", "overview_bar_viz");
                 }
             } else {
-                immunebar("#barVis", this.data_path + "/sample_num/" + "cancer_projects.tsv", "#bar-editor", "overview_bar_viz");
+                immunebar("#barVis", this.data_path + "/sample_num/" + "cancer_datasets.tsv", "#bar-editor", "overview_bar_viz");
             }
         },
         pieViz(){
@@ -563,11 +563,9 @@ export default {
             this.regulatorViz();
         } ,
         download_bar(){
-            
             window.location.href = this.data_path+"/sample_num/" + this.bar_selected + "_" + this.ps_bar_selected + ".tsv";
         },
         download_pie(){
-            window.location.href = this.data_path+"/sample_num/" + this.bar_selected + "_samples.tsv";
             var file_name = this.pieProjectSelected + "_" + this.pieMethodSelected + ".csv";
             var file_path = this.data_path + "/cell_data/" + this.pieMethodSelected + "/" + file_name;
             window.location.href = file_path;

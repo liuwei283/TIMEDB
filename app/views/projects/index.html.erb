@@ -9,7 +9,7 @@
   <%= javascript_pack_tag "datatable" %>
 <% end %>
 
-<% content_for :title, 'Projects' %>
+<% content_for :title, 'Datasets' %>
 <div class="container">
     <div class="mt-5">
       <h1>
@@ -45,10 +45,10 @@
       <div id="download_box" class="db-toolbox collapse" data-parent="#db-toolbar">
         <div class="form-group p-2">
           <%= button_tag :class => "s_table_sub btn btn-select btn-theme btn-info download" do %>
-            <i class='fas fa-check-circle'></i> Selected projects
+            <i class='fas fa-check-circle'></i> Selected datasets
           <%end%>
           <%= link_to projects_path(format: "csv"), disabled: true, :class => "s_table_sub btn btn-pink float-right" do %>
-            <i class='fas fa-download'></i> All projects
+            <i class='fas fa-download'></i> All datasets
           <%end%>
         </div>
       </div>
@@ -60,7 +60,7 @@
 
   <%= form_tag export_selected_projects_path(format: "csv"),class:(session[:dark] ? "dark-table mb-5": "mb-5"), multipart: true do %> 
     <%= content_tag :table, role: :datatable, class: "display", id: "table_page", data: { url: projects_path(format: :json)} do %>
-      <p>You can click <span style= "color: #006fff;">project name</span> to view the original link of project.
+      <p>You can click <span style= "color: #006fff;">dataset name</span> to view the original link of dataset.
         You can click <span style= "color: #006fff;">details</span> to view the Sample Details, C1-C6 Subtyping, TIME Estimation.
       </p>
       <thead>
@@ -68,8 +68,11 @@
               <input type="checkbox" class="selectAll" name="selectAll" value="all">
             </th>
             <% @attrs.each do |attr| %>
-              
-              <th> <%= attr %> </th>
+              <% if attr=='project_name' %>
+                <th>dataset_name</th>
+              <% else %>
+                <th> <%= attr %> </th>
+              <% end %>
               
             <% end %>
             <th>details</th>

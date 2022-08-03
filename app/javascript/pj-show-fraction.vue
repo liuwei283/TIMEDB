@@ -7,7 +7,7 @@
 
         <div id = "fraction-pie" class = "container Block">
             <div class="row description">
-              <h4>Project Clinical Feature Piechart</h4>
+              <h4>Dataset Clinical Feature Piechart</h4>
             </div>
 
             <div class="select-bar form-inline row">
@@ -135,7 +135,7 @@
 
         <div id = "fraction-heatmap" class = "container Block">
             <div class="row description">
-              <h4>Project Immunce Cell Fraction Landscape</h4>
+              <h4>Dataset Immunce Cell Fraction Landscape</h4>
             </div>
 
             <div class="select-bar form-inline row">
@@ -208,7 +208,7 @@
 
         <div id = "fraction-landscape" class = "container Block">
             <div class="row description">
-              <h4>Project Consensus TIME Estimation Cell Fraction Landscape</h4>
+              <h4>Dataset Consensus TIME Estimation Cell Fraction Landscape</h4>
             </div>
 
             <div class="select-bar form-inline row">

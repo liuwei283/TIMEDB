@@ -9,13 +9,13 @@
   <%= javascript_pack_tag "datatable" %>
 <%end%>
 
-<% content_for :title, 'Project '+ @project.project_name  %>
+<% content_for :title, 'Dataset '+ @project.project_name  %>
 
 <div class="container mt-5 mb-8">
   <div class='d-flex'>
     
     <h1>
-      Project Information
+      Dataset Information
     </h1>
     <div> 
       <button class="ml-2 btn btn-outline-secondary" data-toggle="collapse" data-target="#detail_box" aria-expanded="true" aria-controls="detail_box">
@@ -135,7 +135,8 @@
                 <a  class="dropdown-item" href="#">Download Deconvolution Result</a>
                 <ul class="dropdown-menu">
                   <% if @rows['ABIS'] == 'true'%> 
-                  <li class="dropdown-item"><a class="navitem" href="/public/data/cell_data/ABIS/<%= @project.project_name%>_ABIS.csv">Download ABIS data</a></li>
+                  <li class="dropdown-item"><a class="navitem" href="/public/data/cell_data/ABIS/<%= @project.
+                  _name%>_ABIS.csv">Download ABIS data</a></li>
                   <% end %>
                   <% if @rows['CIBERSORT'] == 'true'%> 
                   <li class="dropdown-item"><a class="navitem" href="/public/data/cell_data/CIBERSORT/<%= @project.project_name%>_CIBERSORT.csv">Download CIBERSORT data</a></li>
