@@ -1294,7 +1294,7 @@ export default {
     border-radius: 10px;
     thead tr th {
         border: 0;
-        background-color: #c5d4dd;
+        background-color: #c5d4dd !important;
     }
     thead tr {
         background: #28ab74 !important;
