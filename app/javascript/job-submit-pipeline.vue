@@ -765,8 +765,8 @@
                 console.log("parameter changes");
             },
             multiple_pairs_num:function(newValue) {
-                console.log("new multiple pairs number is: ");
-                console.log(newValue);
+                // console.log("new multiple pairs number is: ");
+                // console.log(newValue);
             },
         },
         methods: {

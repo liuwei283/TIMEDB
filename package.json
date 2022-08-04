@@ -15,12 +15,14 @@
     "babel-preset-typescript-vue": "^1.1.1",
     "bootstrap": "^4.5.0",
     "bootstrap-vue": "^2.15.0",
-    "cookies-eu-banner": "^2.0.1",
     "crux": "../crux",
     "datatables.net": "^1.10.22",
     "datatables.net-dt": "^1.10.22",
+    "file-saver": "^2.0.5",
     "filesize": "^6.1.0",
     "jquery": "^3.3.1",
+    "jquery-csv": "^1.0.21",
+    "jszip": "^3.10.0",
     "object-to-formdata": "lhc70000/object-to-formdata",
     "oviz-editor": "file:../oviz-editor-v0.1.0.tgz",
     "raw-loader": "^0.5.1",
@@ -38,7 +40,6 @@
     "vue-simple-uploader": "^0.5.4",
     "vue-slider-component": "^3.2.11",
     "vue-template-compiler": "^2.6.11",
-    "vue-timeago": "^5.1.3",
     "vue-turbolinks": "^2.0.3",
     "vuedraggable": "^2.24.3"
   },
@@ -47,4 +48,3 @@
     "webpack-dev-server": "^3.11.0"
   }
 }
-
