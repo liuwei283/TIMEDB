@@ -135,8 +135,7 @@
                 <a  class="dropdown-item" href="#">Download Deconvolution Result</a>
                 <ul class="dropdown-menu">
                   <% if @rows['ABIS'] == 'true'%> 
-                  <li class="dropdown-item"><a class="navitem" href="/public/data/cell_data/ABIS/<%= @project.
-                  _name%>_ABIS.csv">Download ABIS data</a></li>
+                  <li class="dropdown-item"><a class="navitem" href="/public/data/cell_data/ABIS/<%= @project.project_name%>_ABIS.csv">Download ABIS data</a></li>
                   <% end %>
                   <% if @rows['CIBERSORT'] == 'true'%> 
                   <li class="dropdown-item"><a class="navitem" href="/public/data/cell_data/CIBERSORT/<%= @project.project_name%>_CIBERSORT.csv">Download CIBERSORT data</a></li>

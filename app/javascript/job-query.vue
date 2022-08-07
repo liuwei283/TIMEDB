@@ -119,7 +119,7 @@
                             </b-table>
                             <b-pagination
                                 v-model="currentPage"
-                                :total-rows="10"
+                                :total-rows="jobsNumber"
                                 :per-page="perPage"
                                 aria-controls="job-table"
                                 align="center"
