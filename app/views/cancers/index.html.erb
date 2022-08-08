@@ -19,12 +19,29 @@
     </button>
     </h1>
   </div>
+
+
+
+  <div id="db-toolbar">
+    <div class="db-tool-nav">
+      <div class="btn btn-outline-dark" data-toggle="collapse" data-target="#download_box" aria-expanded="true" aria-controls="download_box">
+        Download Data <i class="fas fa-caret-down"></i>
+      </div>
+    </div>
+    <%= form_tag export_selected_cancers_path(format: "csv"), multipart: true do %> 
+      <div id="download_box" class="db-toolbox collapse" data-parent="#db-toolbar">
+        <div class="form-group p-2">
+          <%= button_tag :class => "s_table_sub btn btn-select btn-theme btn-info download" do %>
+            <i class='fas fa-check-circle'></i> Selected cancer
+          <%end%>
+          <%= link_to cancers_path(format: "csv"), disabled: true, :class => "s_table_sub btn btn-pink float-right" do %>
+            <i class='fas fa-download'></i> All cancers
+          <%end%>
+        </div>
+      </div>
+    <%end%>
+  </div>
   
-
-
-  <button class = "btn btn-outline-dark btn-6">
-    <%= link_to "Download cancers list", cancers_path(format: "csv") %>
-  </button>
 
   <%= form_tag export_selected_cancers_path(format: "csv"), class:(session[:dark] ? "dark-table mb-4 mt-4" : "mb-4 mt-4"),multipart: true do %> 
     <%= content_tag :table, role: :datatable, class: "display", id: "table_page", data: { url: cancers_path(format: :json)} do %>

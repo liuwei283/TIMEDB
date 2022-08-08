@@ -47,7 +47,9 @@ export function plotDataloaded(_data){
     
     this.data.titleFontsize = 14 
     this.data.plotSize = [1000,500] 
-    this.data.colorMap = {box:"orange",means:"red",whiskle:"#0078d7"} 
+    // this.data.colorMap = {box:"#fddd16",means:"#fda716",whiskle:"#b9c9ff"}  
+    // this.data.colorMap = {box:"#feaab7",means:"#d02152",whiskle:"#ffd855"}
+    this.data.colorMap = {box:"#dd5c82",means:"#e98d86",whiskle:"#5f7cda"}
 
 }
 

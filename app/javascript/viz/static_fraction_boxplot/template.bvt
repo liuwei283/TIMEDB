@@ -16,10 +16,20 @@ svg {
 			data = "boxData"
 			:box (_d) {
 				Rect.full  {
-                    fill = colors.box
+                    fill = colorMap.box
 					stroke = colorMap.box
 					x = 33%
 					width = 33%
+					behavior:tooltip {
+						content = (`
+						Pos: ${_d.pos}<br>
+						Cell name: ${boxdata.categories[_d.pos]} <br>
+                        Min: ${_d.data[0].toFixed(2)} <br>
+						First quartile: ${_d.data[1].toFixed(2)} <br>
+						Median: ${_d.data[2].toFixed(2)} <br>
+						Third quartile: ${_d.data[3].toFixed(2)} <br>
+						Max: ${_d.data[4].toFixed(2)} <br>`)
+                    }
 				}
 			}
 			:median(d) {}
@@ -29,7 +39,9 @@ svg {
 			:whiskle (d) {
 				Line { x1 = 41.25%; x2 = 57.75%; y1 = 0; y2 = 0; stroke = colorMap.whiskle }
 				Line { x1 = 41.25%; x2 = 57.75%; y1 = 100%; y2 = 100%; stroke = colorMap.whiskle }
-				Line { x1 = 50%; x2 = 50%; y1 = 0; y2 = 100%; stroke = colorMap.whiskle; dashArray = "3, 2" }
+				Line { x1 = 50%; x2 = 50%; y1 = 0; y2 = 100%; stroke = colorMap.whiskle; 
+				// dashArray = "3, 2" 
+				}
 			}
 		}
 		Axis("left");

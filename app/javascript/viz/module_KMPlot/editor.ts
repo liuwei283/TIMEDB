@@ -82,17 +82,13 @@ export const generateCustomizedConfig = (v): any => ({
                         },
                     },
                     {
-                        title: "Show Confidence Interval",
+                        title: "Hide Confidence Interval",
                         type: "checkbox",
                         Option:v.data.OSDataPlotConfidence,
                         value:{
                             callback(d){
-                                // v.data.plotType = "bar"
-                                // console.log("v.data.plotType:",v.data.plotType)
-                                // console.log("check box:",d)
-                                v.data.OSDataPlotConfidence = d
-                                // v.data.PFSDataPlotConfidence = !d
 
+                                v.data.OSDataPlotConfidence = !d
                                 v.root._sizeUpdated = true;
                                 v.forceRedraw = true;
                                 run(v); 
@@ -128,16 +124,12 @@ export const generateCustomizedConfig = (v): any => ({
                         },
                     },
                     {
-                        title: "Show Confidence Interval",
+                        title: "Hide Confidence Interval",
                         type: "checkbox",
                         Option:v.data.OSDataPlotConfidence,
                         value:{
                             callback(d){
-                                // v.data.plotType = "bar"
-                                // console.log("v.data.plotType:",v.data.plotType)
-                                // console.log("check box:",d)
-                                // v.data.OSDataPlotConfidence = d
-                                v.data.PFSDataPlotConfidence = d
+                                v.data.PFSDataPlotConfidence = !d
 
                                 v.root._sizeUpdated = true;
                                 v.forceRedraw = true;

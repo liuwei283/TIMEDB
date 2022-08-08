@@ -8,7 +8,8 @@ function run(v) {
     v.forceRedraw = true;
     v.run();
 }
-export const editorRef = {} as any;
+export let editorRef = {} as any;
+
 
 function update(v) {
     v.forceRedraw = true;
@@ -33,10 +34,9 @@ export const generateTestConfig = (v): any => ({
                         value: {
                             current: v.data.graphRadius,
                             callback(x) {
-                                //v.data.gridPlotWidth = parseFloat(x);
                                 v.data.graphRadius = parseFloat(x);
-                                v.size.height = (v.data.graphRadius-150)*2 + 700
-                                v.size.width = (v.data.graphRadius-150)*5 + 1300
+                                v.size.height = (v.data.graphRadius-150)*2 + 700 + v.data.nodeRadius -5 + (this.data.maxlabellength -93)*2
+                                v.size.width = (v.data.graphRadius-150)*5 + 1300 + v.data.nodeRadius -5 + (this.data.maxlabellength -93)*2
                                 v.data._sizeUpdated = true;
                                 update(v);
                             },
@@ -49,8 +49,9 @@ export const generateTestConfig = (v): any => ({
                         value: {
                             current: v.data.nodeRadius,
                             callback(x) {
-                                //v.data.gridPlotWidth = parseFloat(x);
                                 v.data.nodeRadius = parseFloat(x);
+                                v.size.height = (v.data.graphRadius-150)*2 + 700 + v.data.nodeRadius -5 + (this.data.maxlabellength -93)*2
+                                v.size.width = (v.data.graphRadius-150)*5 + 1300 + v.data.nodeRadius -5 + (this.data.maxlabellength -93)*2
                                 v.data._sizeUpdated = true;
                                 update(v);
                             },
@@ -81,10 +82,10 @@ export const generateColorConfig = (v): any => ({
                         component: "color-picker",
                         data: {
                             title: "Node Color",
-                            scheme: copyObject(v.data.colorMap), //0515
+                            scheme: copyObject(v.data.colorMap),
                             id: "pwcolor",
                             callback(colors) {
-                                v.data.colorMap = colors; //0515
+                                v.data.colorMap = colors;
                                 v.data._sizeUpdated = true;
                                 v.forceRedraw = true;
                                 run(v);
@@ -112,49 +113,30 @@ export const generateChooseConfig = (v): any => ({
                 type: "list",
                 items:[
                     {
-                        type:"vue",
-                        component: "filter-samples",
-                        title:null,
-                        //ref:"highlightSpecies",
-                        data:{
-                            get samples() {
-                                return Array.from(v.data.features);
-                            },
-                            get defaultValue() {
-                                return false;
-                            },
-                            get title() {
-                                return "Choose Feature";
-                            },
-                            callback(choosesample) {
-                                v.data.selectedFeature = choosesample[0]
+                        title: "Feature",
+                        type: "select",
+                        options: v.data.config.features,
+                        value:{
+                            current:v.data.config.features,
+                            callback(d){
+                                v.data.selectedFeature = d
                                 v.data.selectedGroup = v.data.feaMapgroup[v.data.selectedFeature][0]
-                                v.root._sizeUpdated = true;
-                                run(v);
-                            },
+                                editorRef.config = v.data.congroup[v.data.selectedFeature]
+                                v.run();
+                            }
                         }
+
                     },
                     {
-                        type:"vue",
-                        component: "filter-samples",
-                        title:null,
-                        //ref:"highlightSpecies",
-                        data:{
-                            get samples() {
-                                return Array.from(v.data.feaMapgroup[v.data.selectedFeature]);
-                            },
-                            get defaultValue() {
-                                return false;
-                            },
-                            get title() {
-                                return "Choose Group";
-                            },
-                            callback(choosesample) {
-                                v.data.selectedGroup = choosesample[0]
-                                v.root._sizeUpdated = true;
-                                run(v);
-                            },
-                        }
+                        title: "Group",
+                        type: "select",
+                        options: v.data.config.groups,
+                        value:{
+                            callback(d){
+                                v.data.selectedGroup = d
+                                v.run();
+                            }
+                        },
                     },
                 ]
 
@@ -164,14 +146,9 @@ export const generateChooseConfig = (v): any => ({
     ]
 })
 
-
-
 export function editorConfig(v): EditorDef {
-
-    //const d = v.data;
     return {
         sections: [
-            //generateTestConfig(v)
             generateTestConfig(v),
             generateColorConfig(v),
             generateChooseConfig(v),

@@ -19,7 +19,7 @@ svg{
                             Component {
                                 Rect {
                                     x = 2.5;y = 2.5
-                                    stroke = "#666" ; strokeWidth = 0.8
+                                    // stroke = "#666" ; strokeWidth = 0.8
                                     height = 8;width = 10
                                     fill = d.fill
                                 }
@@ -27,8 +27,9 @@ svg{
                         }
                     }          
                 }
+                //method
                 Container{
-                    x = 140 + maxsampletextlength - 77.77
+                    x = 140 + maxsampletextlength - 77.77 + 16.6
                     Columns{
                         //y = -config.gridheight/2
                         y = -45
@@ -52,15 +53,14 @@ svg{
                         }
                     }                
                 }
+                //cell data
                 Container{
-                    x = 140 + maxsampletextlength - 77.77
+                    x = 140 + maxsampletextlength - 77.77   + 16.6 - 45
                     Rows{
-                        x = -23-(config.gridwidth-94)/2
                         @for (citem,cindex) in celldata{
                             Container{
                                 padding = config.padding
                                 Rect {
-                                    //width = config.gridwidth/2 - config.padding - 4.5
                                     width = 45
                                     height = config.gridheight - 2*config.padding 
                                     stroke = "#000"
@@ -82,27 +82,39 @@ svg{
                 }
 
                 Columns {
-                    x = 140 + maxsampletextlength - 77.77
+                    x = 140 + maxsampletextlength - 77.77   + 16.6
                     Columns{
                         @for (item,index) in BarData{
                             @let ditem = item[buttonkey-1]
+                            @let ditem2 = BarData2[index][buttonkey-1]
                             @let pitem = Object.values(ditem)[0] 
+                            @let pitem2 = Object.values(ditem2)[0]
                             @if index != (methoddata.length-1){
                                 Container{
                                     Rows {
-                                        @for (i,index) in pitem{
+                                        @for (i,indexp) in pitem{
                                             XYPlot {
                                                 padding = config.padding
                                                 height =config.gridheight; width = config.gridwidth;
                                                 @let data = Object.values(i)[0]
-                                                data = data
+                                                @let data2 = Object.values(pitem2[indexp])[0]
+                                                data = {
+                                                    data1:data,
+                                                    data2:data2
+                                                }
+                                            
                                                 flip = false
                                                 discreteCategory = true
                                                 valueRange = valuerange
                                                 dataHandler = {
-                                                    default: {
+                                                    data1: {
                                                         value: d => d[1],
                                                         pos: d => d[0],
+                                                    },
+                                                    data2:{
+                                                        pos:d => d[0],
+                                                        value:d => 0,
+                                                        min:d => d[1]
                                                     }
                                                 }
                                                 Rect{
@@ -112,6 +124,85 @@ svg{
                                                     fill = "none"
                                                 }
                                                 Bars{
+                                                    data = "data1"
+                                                    :children(d){
+                                                        Rect.full {
+                                                            @let cat = d.pos
+                                                            fill = barcolors[cat]
+                                                            behavior:tooltip {
+                                                                content = `Sample name: ${d.data[0]}<br>Values: ${d.data[1]}<br>`
+                                                            }
+                                                            // rotation = @rotate(-180)
+                                                        }
+                                                    }
+                                                }
+                                                Bars{
+                                                    data = "data2"
+                                                    :children(d){
+                                                        Rect.full {
+                                                            @let cat = d.pos
+                                                            fill = barcolors[cat]
+                                                            behavior:tooltip {
+                                                                content = `Sample name: ${d.data[0]}<br>Values: ${d.data[1]}<br>`
+                                                            }
+                                                            // rotation = @rotate(-180)
+                                                        }
+                                                    }
+                                                }
+
+                                            }
+                                        }
+                                    }
+                            
+                                }
+                            }
+                            @if index == (methoddata.length-1) {
+                                Container{
+                                    Rows {
+                                        @for (i,indexp) in pitem{
+                                            XYPlot {
+                                                padding = config.padding
+                                                height = config.gridheight ;width = config.gridwidth;
+                                                @let data = Object.values(i)[0]
+                                                @let data2 = Object.values(pitem2[indexp])[0]
+                                                data = {
+                                                    data1:data,
+                                                    data2:data2
+                                                }
+                                                discreteCategory = true 
+                                                valueRange = valuerange
+                                                dataHandler = {
+                                                    data1: {
+                                                        value: d => d[1],
+                                                        pos: d => d[0],
+                                                    },
+                                                    data2:{
+                                                        value:d=>0,
+                                                        pos:d=>d[0],
+                                                        min:d=>d[1]
+                                                    }
+                                                }
+			                                    Axis("right") {x=100%;includeEndTicks = true}
+                                                Rect{
+                                                    width = 100%
+                                                    height = 100%
+                                                    stroke = "#000"
+                                                    fill = "none"
+                                                } 
+                                                Bars{
+                                                    data = "data1"
+                                                    :children(d){
+                                                        Rect.full {
+                                                            @let cat = d.pos
+                                                            fill = barcolors[cat]
+                                                            behavior:tooltip {
+                                                                content = `Sample name: ${d.data[0]}<br>Values: ${d.data[1]}<br>`
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                                Bars{
+                                                    data = "data2"
                                                     :children(d){
                                                         Rect.full {
                                                             @let cat = d.pos
@@ -125,50 +216,9 @@ svg{
                                             }
                                         }
                                     }
-                            
-                                }
-                            }
-                            @if index == (methoddata.length-1) {
-                            Container{
-                                Rows {
-                                    @for i in pitem{
-                                        XYPlot {
-                                            padding = config.padding
-                                            height = config.gridheight ;width = config.gridwidth;
-                                            @let data= Object.values(i)[0]
-                                            data = data
-                                            discreteCategory = true 
-                                            valueRange = valuerange
-                                            dataHandler = {
-                                                default: {
-                                                    value: d => d[1],
-                                                    pos: d => d[0],
-                                                }
-                                            }
-			                                Axis("right") {x=100%;includeEndTicks = true}
-                                            Rect{
-                                                width = 100%
-                                                height = 100%
-                                                stroke = "#000"
-                                                fill = "none"
-                                            } 
-                                            Bars{
-                                                :children(d){
-                                                    Rect.full {
-                                                        @let cat = d.pos
-                                                        fill = barcolors[cat]
-                                                        behavior:tooltip {
-                                                            content = `sample ID: ${d.data[0]}<br>values: ${d.data[1].toFixed(3)}<br>`
-                                                        }
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
                                 
-                            }  
-                        }
+                                }  
+                            }
                     }
                 }
             }
@@ -350,7 +400,7 @@ svg{
                 anchor = @anchor("center","top")
                 
                 x = (chosenMethod.length*config.gridwidth-50)/2 + 150;
-                y = config.gridheight*11
+                y = config.gridheight*(eachSamplename[buttonkey-1].i.length+1)
 
                 Component {
                     @let disabled = buttonkey === 1

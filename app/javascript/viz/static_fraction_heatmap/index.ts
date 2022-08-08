@@ -41,6 +41,7 @@ export function init(id,clinical_file_path,cellData_file_path,eid,plot_name,vue_
           samplenameshow:false,
           samplewidth:null,
           maxsamplelength:0,
+          samplenamerotation:45,
           buttonclick(d){
             butclick(this);
             this.redraw();

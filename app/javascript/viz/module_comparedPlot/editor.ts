@@ -185,12 +185,14 @@ export const generateCusConfig = (v):any =>  ({
                                 // console.log("v.data.plotType:",v.data.plotType)
                                 if(v.data.plotType=="pie"){
                                     v.size.height = v.data.config.gridheight*12 + 100
-                                    v.size.width = v.data.config.gridwidth * (v.data.chosenMethod.length+1) + 300 + v.data.maxchosencelldatatextlength - 95.6
+                                    v.size.width = v.data.config.gridwidth * (v.data.chosenMethod.length+3) + 300 + v.data.maxchosencelldatatextlength - 95.6
                                 }else{
                                     v.size.height = v.data.config.gridheight* (v.data.celldata.length+2) + 100
-                                    v.size.width = v.data.config.gridwidth * (v.data.chosenMethod.length+1) + 300 + v.data.maxsampletextlength - 77.77
+                                    v.size.width = v.data.config.gridwidth * (v.data.chosenMethod.length+3) + 300 + v.data.maxsampletextlength - 77.77
                                 }
-                                v.root._sizeUpdated = true; //更新画布大小
+                                v.data.BarData = v.data.BarData.slice(0,v.data.chosenMethod.length)
+                                v.data.PieData = v.data.PieData.slice(0,v.data.chosenMethod.length)
+                                v.root._sizeUpdated = true; 
                                 v.forceRedraw = true;
                                 run(v);
                             }
@@ -208,11 +210,13 @@ export const generateCusConfig = (v):any =>  ({
                                 // console.log("v.data.plotType:",v.data.plotType)
                                 if(v.data.plotType=="pie"){
                                     v.size.height = v.data.config.gridheight*12 + 100
-                                    v.size.width = v.data.config.gridwidth * (v.data.chosenMethod.length+1) + 300 + v.data.maxchosencelldatatextlength - 95.6
+                                    v.size.width = v.data.config.gridwidth * (v.data.chosenMethod.length+3) + 300 + v.data.maxchosencelldatatextlength - 95.6
                                 }else{
                                     v.size.height = v.data.config.gridheight* (v.data.celldata.length+2) + 100
-                                    v.size.width = v.data.config.gridwidth * (v.data.chosenMethod.length+1) + 300 + v.data.maxsampletextlength - 77.77
+                                    v.size.width = v.data.config.gridwidth * (v.data.chosenMethod.length+3) + 300 + v.data.maxsampletextlength - 77.77
                                 }
+                                v.data.BarData = v.data.BarData.slice(0,v.data.chosenMethod.length)
+                                v.data.PieData = v.data.PieData.slice(0,v.data.chosenMethod.length)
                                 v.root._sizeUpdated = true;
                                 v.forceRedraw = true;
                                 run(v); 

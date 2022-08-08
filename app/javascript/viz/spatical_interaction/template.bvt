@@ -1,18 +1,31 @@
 Component {
     Container {
-        x = 300 + (graphRadius)*1;y = 50
+        x = 300 + (graphRadius)*1 + nodeRadius -5;y = 50
         Text {
-            text = "Selected Feature:"+selectedFeature + "    Selected Group:"+selectedGroup
+            text = "Selected Feature:"+selectedFeature.substring(1,selectedFeature.length).replace(/_/g," ") + "    Selected Group:"+selectedGroup
             fontSize = 14
         }
     }
-
     Component{
-        x = 750 + (graphRadius - 150)*3; y = 400 + graphRadius - 150
+        x = 750 + (graphRadius - 150)*3 + nodeRadius -5; y = 400 + graphRadius - 150 + nodeRadius -5
         width = 200; height = 200
         Component{
             coord = 'polar'
-            @for (label, i) in graphLabel{           
+            @for (source, i) in graphLabel{
+                @for (target, j) in graphLabel{
+                    @if(parseFloat(graphMatrix[i][j]) != 0){
+                        Path{
+                            d = getRibbonPathForNode(graphNode[source], graphNode[target], graphRadius)
+                            fill = graphMatrixScheme.get(parseFloat(graphMatrix[i][j]))
+                            stroke = graphMatrixScheme.get(parseFloat(graphMatrix[i][j]))
+                            behavior:tooltip{
+                                content = `Source: ${graphLabel[graphNode[source].index]}<br>Target: ${graphLabel[graphNode[target].index]}<br>Interaction: ${graphMatrix[i][j]}`
+                            }  
+                        } 
+                    }
+                }
+            }
+            @for (label, i) in graphLabel{         
                 Circle.centered{
                     x = graphNode[label].circleAngle
                     y = graphRadius
@@ -26,67 +39,40 @@ Component {
                     text = label
                     x = graphNode[label].circleAngle
                     y = graphRadius + 10 + getR(label)
-                }
-            }
-            @for (source, i) in graphLabel{
-                @for (target, j) in graphLabel{
-                    @if(parseFloat(graphMatrix[i][j]) != 0){ 
-                        Path{
-                            d = getRibbonPathForNode(graphNode[source], graphNode[target], graphRadius) 
-                            fill = graphMatrixScheme.get(parseFloat(graphMatrix[i][j])) 
-                            stroke = graphMatrixScheme.get(parseFloat(graphMatrix[i][j])) 
-                            behavior:tooltip{
-                                content = `Source: ${graphLabel[graphNode[source].index]}<br>Target: ${graphLabel[graphNode[target].index]}<br>Interaction: ${graphMatrix[i][j]}`
-                            }  
-                        } 
-                    }
+                    fontSize = 12
                 }
             }
         }    
     }
     
     Component{
-        x = 250 + (graphRadius - 150)*1; y = 400 + graphRadius - 150
+        x = 250 + (graphRadius - 150)*1 + nodeRadius -5; y = 400 + graphRadius - 150 + nodeRadius -5 + maxlabellength - 93
         width = 200; height = 200
-
         Component{
-  
             coord = 'polar'
-
             @for (pair, i) in graphCord{
-
                 Path{
                     d = getRibbonPath(pair, graphRadius - nodeRadius)
                     fill= graphMatrixScheme.get(pair.source.value)
-                    // pathOptions = {
-                    //     fillOpacity: 0.1
-                    // }
                     behavior:tooltip{
                         content = `Source: ${graphLabel[pair.source.index]}<br>Target: ${graphLabel[pair.target.index]}<br>Interaction: ${pair.source.value}`
                     }            
                 }
             } 
             @for (x, i) in graphNode{
-
                 Path {
-
                     d = getArcPath(x)
                     fill=colorMap[x.label] || 'grey'
                     behavior:tooltip{
                         content = `${x.label}`
                     }
-                    
                 }
-                //文字标签
                 @if (x.startAngle != x.endAngle){
-                    
-                        Text.centered{
-                            text = x.label
-                            x = (x.startAngle + x.endAngle)/2/Math.PI * 180
-                            //@expr console.log("angle:",x.label,(x.startAngle + x.endAngle)/2/Math.PI * 180)
-                            y = graphRadius + 10 + getR(x.label)
-                        }
-                    
+                    Text.centered{
+                        text = x.label
+                        x = (x.startAngle + x.endAngle)/2/Math.PI * 180
+                        y = graphRadius + 10 + getR(x.label)
+                    }
                 }
             }
             

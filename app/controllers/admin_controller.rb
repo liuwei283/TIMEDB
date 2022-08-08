@@ -160,9 +160,9 @@ class AdminController < ApplicationController
 
         #table for counting numbers of projects per cancer
         @projects = Project.order(:project_name)
-        csf_path = "#{$data_dir}sample_num/cancer_projects.tsv"
+        csf_path = "#{$data_dir}sample_num/cancer_datasets.tsv"
         csf = File.open(csf_path, "w")
-        s = "cancer_name\tproject_number"
+        s = "cancer_name\tdatasets_number"
         @cancers.each do |cancer|
             ct = cancer.cancer_name
             pn = cancer.projects.count
@@ -176,9 +176,9 @@ class AdminController < ApplicationController
         @cancers.each do |cancer|
             ct = cancer.cancer_name
             cprojects = cancer.projects.order(:project_name)
-            psf_path = "#{$data_dir}sample_num/#{ct}_project_samples.tsv"
+            psf_path = "#{$data_dir}sample_num/#{ct}_dataset_samples.tsv"
             psf = File.open(psf_path, "w")
-            s = "project\tsample_number"
+            s = "dataset\tsample_number"
             cprojects.each do |cp|
                 pn = cp.project_name
                 sn = cp.samples.count
@@ -188,18 +188,18 @@ class AdminController < ApplicationController
             psf.write(s)
             psf.close
         end
-        # @projects = Project.order(:project_name)
-        # psf_path = "#{$data_dir}sample_num/project_samples.tsv"
-        # psf = File.open(psf_path, "w")
-        # s = "project\tsample_number"
-        # @projects.each do |project|
-        #     pn = project.project_name
-        #     sn = project.samples.count
-        #     s += "\n"
-        #     s += "#{pn}\t#{sn}"
-        # end
-        # psf.write(s)
-        # psf.close
+        @projects = Project.order(:project_name)
+        psf_path = "#{$data_dir}sample_num/dataset_samples.tsv"
+        psf = File.open(psf_path, "w")
+        s = "dataset\tsamples_number"
+        @projects.each do |project|
+            pn = project.project_name
+            sn = project.samples.count
+            s += "\n"
+            s += "#{pn}\t#{sn}"
+        end
+        psf.write(s)
+        psf.close
 
         redirect_to '/admin', notice: "ALL Projects/Cancer types with samples number files updated."
     end 

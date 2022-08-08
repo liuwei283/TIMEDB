@@ -236,6 +236,7 @@ $(function () {
         var form = this;
         var selected_ids = Array.from(ids)
         // Iterate over all selected checkboxes
+        $(form).find('input').remove();
         $.each(selected_ids, function(index, id){
            // Create a hidden element
            $(form).append(
@@ -271,6 +272,3 @@ $(function () {
   
 
 } );
-
-
-

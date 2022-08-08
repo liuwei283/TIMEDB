@@ -21,8 +21,8 @@ function init() {
         template,
         components: {},
         data: {
-            OSDataPlotConfidence:false,
-            PFSDataPlotConfidence:false,
+            OSDataPlotConfidence:true,
+            PFSDataPlotConfidence:true,
             OSDataShowText:null,
             PFSDataShowText:null,
         },
@@ -62,7 +62,7 @@ function init() {
             
         },
         setup(){
-            // registerEditorConfig(editorConfig(this), editorRef);
+            registerEditorConfig(editorConfig(this), editorRef);
             registerEditorConfig(editorConfig(this), "getVue", "#task-output", editorRef);
             process(this)
         },
@@ -78,13 +78,12 @@ register(MODULE_NAME, init);
 
 export function process(v){
     v.data.OSPlotdata.maxlength>v.data.PFSPlotdata.maxlength? v.data.common.maxtextlength = v.data.OSPlotdata.maxlength : v.data.common.maxtextlength = v.data.PFSPlotdata.maxlength
-    // v.size.height = 620 + 2*common.plotheight -400 + common.offset -10
-    // v.size.width = 900 + common.plotwidth - 600 + 30 + common.maxtextlength
-    v.size.height = 100 + common.plotheight + common.offset
-    // v.size.width = 900 + 2*common.plotwidth - 400 + 60 + 2*common.maxtextlength
+    v.data.titleheight = TextSize.measuredTextSize("OS",v.data.common.titlesize).height
+    v.size.height = 100 + common.plotheight + common.offset + v.data.titleheight
     v.size.width = 420 + 2*common.plotwidth + 2*common.maxtextlength
     v.data.OSDataShowText = (v.data.OSPlotdata.chosenClinical+"").replace(/_/g," ").slice(1)
     v.data.PFSDataShowText = (v.data.PFSPlotdata.chosenClinical+"").replace(/_/g," ").slice(1)
+    
 }
 
 
@@ -117,9 +116,9 @@ export function mergeDots(OSPlotdata){
 }
 
 export const common = {
-    plotwidth:400,
-    plotheight:400,
-    titlesize:12,
+    plotwidth:500,
+    plotheight:500,
+    titlesize:14,
     offset:null,
     maxtextlength:null,
 }

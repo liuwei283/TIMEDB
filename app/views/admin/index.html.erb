@@ -15,7 +15,7 @@
       <%=link_to 'Admin home', '/admin' %>
     </li> 
     <li class="breadcrumb-item">
-      <%=link_to 'Projects', '#project_admin' %>
+      <%=link_to 'Datasets', '#project_admin' %>
     </li> 
     <li class="breadcrumb-item">
       <%=link_to 'Samples', '#sample_admin' %>
@@ -75,7 +75,7 @@
     <%end%>
   </div>
     <div id="table">
-      <table class="display" >
+      <!-- <table class="display" >
         <thead>
           
           <% @projects.column_names.each do |attr| %>
@@ -115,7 +115,7 @@
           <% end %>
         </tbody>
 
-      </table>
+      </table> -->
     </div>
     <%= link_to  "Add one project", "/projects/new" %>
 

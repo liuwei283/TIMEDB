@@ -31,7 +31,7 @@ class CancersController < ApplicationController
         @user = User.find(session[:user_id])
         @cancer = Cancer.find(params[:id])
         @attrs = Cancer.column_names
-        @project_attrs = Project.column_names
+        @project_attrs = Project.column_names - ['cancer_id', 'publications_link', 'original_link']
         @projects = @cancer.projects
         @invis = []
         @project_attrs.each_with_index do |attr, index|

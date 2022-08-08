@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_07_08_030206) do
+ActiveRecord::Schema.define(version: 2022_08_02_093002) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -138,7 +138,7 @@ ActiveRecord::Schema.define(version: 2022_07_08_030206) do
     t.integer "num_of_observed_genes"
     t.text "original_description"
     t.string "platform"
-    t.string "submisson_date"
+    t.string "submission_date"
     t.string "last_update_date"
     t.string "database"
     t.string "original_link"

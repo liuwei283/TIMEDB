@@ -1,5 +1,4 @@
 import Oviz from "crux";
-
 import { editorConfig, editorRef } from "./editor";
 import { SpaticalInteraction } from "./spatical_interaction";
 import * as d3 from "d3";
@@ -14,8 +13,6 @@ import DataUtils from "utils/data";
 import { registerEditorConfig } from "utils/editor";
 import { findBoundsForValues } from "utils/maths";
 import * as TextSize from "crux/dist/utils/text-size";
-
-//import { minmax } from "crux/dist/utils/math";
 import { Rows } from "crux/dist/element";
 import { mapColor } from "./spatical_data";
 
@@ -27,21 +24,18 @@ function init() {
     if (!window.gon || window.gon.module_name !== MODULE_NAME) return;
     const {visualizer} = Oviz.visualize({
         el: "#canvas",
-        //root:new SpatialInteraction(),
         root: new SpaticalInteraction(),
-        //template,
         components: {GridPlot, EditText},
         renderer: "svg",
         width: 1300,
         height: 800,
-        
         data: {
             hiddenSamples: new Set(),
             gridSize: [4, 12],
             tempFeature:"c_tumor_stage",
             colors: {
-                na: "#999", //"#777",
-                abd0: "#999", // "#333",
+                na: "#999",
+                abd0: "#999", 
                 start: "#800000",
                 org: "#FF5050",
                 end: "#FFFF00",
@@ -49,7 +43,7 @@ function init() {
             drawTree: false,
             getR(text){
                 let textlength = TextSize.measuredTextSize(text, 8).width;
-                return textlength*5/8
+                return textlength*5/8 + 5 + this.nodeRadius
             }
         },
         loadData: {
@@ -64,16 +58,16 @@ function init() {
                     this.data.nodeRadius = 5
                     this.data.graphRadius = 150
                     
-                    
                     let newlabel = data.map(d=>d.Row)
                     let featurelist = getCol(data,"Feature")
 
-
-
-
                     newlabel = Array.from(new Set(newlabel))
-                    
-                    this.data.newlabel=newlabel
+                    this.data.newlabel=newlabel //cell data
+                    let textlabellength = []
+                    this.data.newlabel.forEach((item,index) => {
+                        textlabellength.push(TextSize.measuredTextSize(item,12).width)
+                    });
+                    this.data.maxlabellength = Math.max(...textlabellength)
                     this.data.colorMap = {}
                     this.data.features = []
                     this.data.feaMapgroup = {}
@@ -98,7 +92,6 @@ function init() {
                         });
                     });
 
-
                     this.data.selectedFeature = "c_tumor_stage"
                     this.data.selectedGroup = "Stage I"
                     
@@ -110,20 +103,15 @@ function init() {
                         temp:null,
                     }
                     this.data.text = "groups"
-
-                    
                     this.data.config = config
-                    
-
-
                     
                 }
             }
         },
         setup() {
             console.log("this.data",this["_data"]); 
+            this.size.width = (this.data.maxlabellength -93)*2 + this.size.width
             registerEditorConfig(editorConfig(this), "getVue", "#task-output", editorRef);
-            //registerEditorConfig(editorConfig(this), "getVue", "#task-output", editorRef);
 
         },
     });

@@ -11,7 +11,7 @@ class ProjectsController < ApplicationController
     def index
         @vis = ['id', 'project_name', 'cancer_name', 'num_of_samples', 'preprocessed', 'database', "original_description", "major_related_publications"]
         @projects = Project.order(:project_name)
-        @attrs = Project.column_names
+        @attrs = Project.column_names - ['cancer_id', 'publications_link', 'original_link']
         @invis = []
         @attrs.each_with_index do |attr, index|
             if !@vis.include?(attr)
@@ -25,6 +25,20 @@ class ProjectsController < ApplicationController
             format.json { render json: ProjectDatatable.new(view_context) }
         end
         session[:first] = true
+
+        # #data processing for table filtering
+        # @attr = @attr
+        # range_cols = [["num_of_samples", 3], ["num_of_observed_genes", 8]]
+        # @col_ranges = []
+        # for col in range_cols
+        #     @col_ranges.push({n: col[1], min: Project.order("project_name").map{|pjt| pjt[col[0]].to_i}.min(), max: Project.all.map{|pjt| pjt[col[0]].to_i}.max(),})
+        # end
+
+        # puts "Printing fetched column ranges"
+        # puts @col_ranges
+
+        # gon.push col_ranges: @col_ranges
+
     end
   
     def show
@@ -105,7 +119,6 @@ class ProjectsController < ApplicationController
             cur_sid = Sample.find_by(sample_name:cur_sname).id
             row_info['id'] = cur_sid
         end
-
 
 
 

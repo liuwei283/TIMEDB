@@ -7,7 +7,7 @@
 
         <div id = "subtype-landscape" class = "container Block">
             <div id="landscapeDescription" class="row description">
-                <h4>Project C1-C6 Landscape</h4>
+                <h4>Dataset C1-C6 Landscape</h4>
             </div>
             <div id = "subtype-landscapeBlock">
                 <div class="dropdown mb-5 mt-5">
@@ -68,7 +68,7 @@
         <div id = "subtype-boxplot" class = "container Block">
 
             <div id="boxplotDescription" class="row description">
-                <h4>Project C1-C6 Immune Cell Fraction Boxplot</h4>
+                <h4>Dataset C1-C6 Immune Cell Fraction Boxplot</h4>
             </div>
                 
             <div class="select-bar form-inline row">
@@ -139,7 +139,7 @@
 
         <div id = "subtype-curve" class = "container Block">
             <div id="curveDescription" class="row description">
-                <h4>Project C1-C6 KM Curve</h4>
+                <h4>Dataset C1-C6 KM Curve</h4>
             </div>
             <div id = "subtype-curveBlock" >
                 <div class="dropdown mb-5 mt-3">
@@ -190,7 +190,7 @@
 
         <div id = "subtype-regulator" class = "container Block">
             <div id="regulatorDescription" class="row description">
-            <h4>Project C1-C6 Immunoregulator Expression</h4>
+            <h4>Dataset C1-C6 Immunoregulator Expression</h4>
             </div>
 
             <div id = "subtype-regulatorBlock" >
@@ -477,9 +477,9 @@ export default {
 }
 
 .vizBlock {
-        overflow-y: scroll;
+        /* overflow-y: scroll; */
         overflow-x: scroll;
-        //padding: 2em;
+        padding: 2em;
         margin-top: 5%;
         margin-bottom: 0px !important;
 }

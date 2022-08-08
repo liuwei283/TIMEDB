@@ -1294,7 +1294,7 @@ export default {
     border-radius: 10px;
     thead tr th {
         border: 0;
-        background-color: #c5d4dd;
+        background-color: #c5d4dd !important;
     }
     thead tr {
         background: #28ab74 !important;
@@ -1396,10 +1396,10 @@ export default {
     color: black;
 }
 
-#table-container li.active button{
+#table-container li.page-item.active button{
     background-color: #bbd1de !important;
-    border: none;
+    border: 1px solid #bbd1de;
     color: black;
-    transform: scale(1.2);
+    
 }
 </style>

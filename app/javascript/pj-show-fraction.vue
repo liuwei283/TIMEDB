@@ -7,7 +7,7 @@
 
         <div id = "fraction-pie" class = "container Block">
             <div class="row description">
-              <h4>Project Clinical Feature Piechart</h4>
+              <h4>Dataset Clinical Feature Piechart</h4>
             </div>
 
             <div class="select-bar form-inline row">
@@ -135,7 +135,7 @@
 
         <div id = "fraction-heatmap" class = "container Block">
             <div class="row description">
-              <h4>Project Immunce Cell Fraction Landscape</h4>
+              <h4>Dataset Immunce Cell Fraction Landscape</h4>
             </div>
 
             <div class="select-bar form-inline row">
@@ -208,10 +208,10 @@
 
         <div id = "fraction-landscape" class = "container Block">
             <div class="row description">
-              <h4>Project Consensus TIME Estimation Cell Fraction Landscape</h4>
+              <h4>Dataset Consensus TIME Estimation Cell Fraction Landscape</h4>
             </div>
 
-            <!-- <div class="select-bar form-inline row">
+            <div class="select-bar form-inline row">
               <div class="sdiv col">
                 <div class="select-title">
                     Please choose the visualization type:
@@ -222,7 +222,7 @@
                         </option>
                 </select>
               </div>
-            </div> -->
+            </div>
 
             <div id = "fraction_landscapeBlock">
                 <div class="dropdown mb-5 mt-5">
@@ -352,7 +352,7 @@ export default {
             heatmap_fexists: null,
             clinical_file_path: "",
             heatMapisLoading: false,
-            landscapeisLoding: false,
+            landscapeisLoading: false,
         }
     },
     //设置默认值
@@ -577,7 +577,7 @@ export default {
 
 #fraction-heatmapVis {
     height: 1000px;
-    overflow-y: scroll;
+    /* overflow-y: scroll; */
 }
 
     

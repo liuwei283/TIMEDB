@@ -9,13 +9,13 @@
   <%= javascript_pack_tag "datatable" %>
 <%end%>
 
-<% content_for :title, 'Project '+ @project.project_name  %>
+<% content_for :title, 'Dataset '+ @project.project_name  %>
 
 <div class="container mt-5 mb-8">
   <div class='d-flex'>
     
     <h1>
-      Project Information
+      Dataset Information
     </h1>
     <div> 
       <button class="ml-2 btn btn-outline-secondary" data-toggle="collapse" data-target="#detail_box" aria-expanded="true" aria-controls="detail_box">
@@ -121,62 +121,59 @@
       </li>
       <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Download</a>
-            <div class="dropdown-menu navdiv">
+            <ul class="dropdown-menu navdiv multi-level">
               <% if @rows['RNA'] == 'true'%> 
-              <a class="dropdown-item navitem" href="/public/data/RNA/RNA_<%= @project.project_name%>.csv">Download original gene expresson data</a>
+              <li class="dropdown-item"><a class="navitem" href="/public/data/RNA/RNA_<%= @project.project_name%>.csv">Download original gene expresson data</a></li>
               <% end %>
               <% if @rows['clinical'] == 'true' %>
-              <a class="dropdown-item navitem" href="/public/data/clinical/sample/Clinical_<%= @project.project_name%>.csv">Download clinical data</a>
+              <li class="dropdown-item"><a class="navitem" href="/public/data/clinical/sample/Clinical_<%= @project.project_name%>.csv">Download clinical data</a></li>
               <% end %>
               <% if @rows['rna_immu'] == 'true' %>
-              <a class="dropdown-item navitem" href="/public/data/immuneRegulator/immuReg_<%= @project.project_name%>.csv">Download scaled gene expression data</a>
+              <li class="dropdown-item"><a class=" navitem" href="/public/data/immuneRegulator/immuReg_<%= @project.project_name%>.csv">Download scaled gene expression data</a></li>
               <% end %>
-              <!--<a class="dropdown-item navitem" href="#">Download deconvolution results</a>-->
+              <li class="dropdown-submenu">
+                <a  class="dropdown-item" href="#">Download Deconvolution Result</a>
+                <ul class="dropdown-menu">
+                  <% if @rows['ABIS'] == 'true'%> 
+                  <li class="dropdown-item"><a class="navitem" href="/public/data/cell_data/ABIS/<%= @project.project_name%>_ABIS.csv">Download ABIS data</a></li>
+                  <% end %>
+                  <% if @rows['CIBERSORT'] == 'true'%> 
+                  <li class="dropdown-item"><a class="navitem" href="/public/data/cell_data/CIBERSORT/<%= @project.project_name%>_CIBERSORT.csv">Download CIBERSORT data</a></li>
+                  <% end %>
+                  <% if @rows['CIBERSORTX'] == 'true'%> 
+                  <li class="dropdown-item"><a class="navitem" href="/public/data/cell_data/CIBERSORTX/<%= @project.project_name%>_CIBERSORTX.csv">Download CIBERSORTX data</a></li>
+                  <% end %>
+                  <% if @rows['Consensus'] == 'true'%> 
+                  <li class="dropdown-item"><a class="navitem" href="/public/data/cell_data/Consensus/<%= @project.project_name%>_Consensus.csv">Download Consensus data</a></li>
+                  <% end %>
+                  <% if @rows['ConsensusTME'] == 'true'%> 
+                  <li class="dropdown-item"><a class="navitem" href="/public/data/cell_data/ConsensusTME/<%= @project.project_name%>_ConsensusTME.csv">Download ConsensusTME data</a></li>
+                  <% end %>
+                  <% if @rows['EPIC'] == 'true'%> 
+                  <li class="dropdown-item"><a class="navitem" href="/public/data/cell_data/EPIC/<%= @project.project_name%>_EPIC.csv">Download EPIC data</a></li>
+                  <% end %>
+                  <% if @rows['ImmuCellAI'] == 'true'%> 
+                  <li class="dropdown-item"><a class="navitem" href="/public/data/cell_data/ImmuCellAI/<%= @project.project_name%>_ImmuCellAI.csv">Download ImmuCellAI data</a></li>
+                  <% end %>
+                  <% if @rows['MCPcounter'] == 'true'%> 
+                  <li class="dropdown-item"><a class="navitem" href="/public/data/cell_data/MCPcounter/<%= @project.project_name%>_MCPcounter.csv">Download MCPcounter data</a></li>
+                  <% end %>
+                  <% if @rows['quanTIseq'] == 'true'%> 
+                  <li class="dropdown-item"><a class="navitem" href="/public/data/cell_data/quanTIseq/<%= @project.project_name%>_quanTIseq.csv">Download quanTIseq data</a></li>
+                  <% end %>
+                  <% if @rows['TIMER'] == 'true'%> 
+                  <li class="dropdown-item"><a class="navitem" href="/public/data/cell_data/TIMER/<%= @project.project_name%>_TIMER.csv">Download TIMER data</a></li>
+                  <% end %>
+                  <% if @rows['xCell'] == 'true'%> 
+                  <li class="dropdown-item"><a class="navitem" href="/public/data/cell_data/xCell/<%= @project.project_name%>_xCell.csv">Download xCell data</a></li>
+                  <% end %>
+                </ul>
+              </li>
               <% if @rows['subtype'] == 'true' %>
-              <a class="dropdown-item navitem" href="/public/data/subtype/c1_c6/project/<%= @project.project_name%>_c1_c6.csv">Download C1-C6 subtype result</a>
+              <li class="dropdown-item"><a class="navitem" href="/public/data/subtype/c1_c6/project/<%= @project.project_name%>_c1_c6.csv">Download C1-C6 subtype result</a></li>
               <% end %>
 
-
-            </div>
-      </li>
-
-      <li class="nav-item dropdown">
-        <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Download Deconvolution Result</a>
-            <div class="dropdown-menu navdiv">
-              <% if @rows['ABIS'] == 'true'%> 
-              <a class="dropdown-item navitem" href="/public/data/cell_data/ABIS/<%= @project.project_name%>_ABIS.csv">Download ABIS data</a>
-              <% end %>
-              <% if @rows['CIBERSORT'] == 'true'%> 
-              <a class="dropdown-item navitem" href="/public/data/cell_data/CIBERSORT/<%= @project.project_name%>_CIBERSORT.csv">Download CIBERSORT data</a>
-              <% end %>
-              <% if @rows['CIBERSORTX'] == 'true'%> 
-              <a class="dropdown-item navitem" href="/public/data/cell_data/CIBERSORTX/<%= @project.project_name%>_CIBERSORTX.csv">Download CIBERSORTX data</a>
-              <% end %>
-              <% if @rows['Consensus'] == 'true'%> 
-              <a class="dropdown-item navitem" href="/public/data/cell_data/Consensus/<%= @project.project_name%>_Consensus.csv">Download Consensus data</a>
-              <% end %>
-              <% if @rows['ConsensusTME'] == 'true'%> 
-              <a class="dropdown-item navitem" href="/public/data/cell_data/ConsensusTME/<%= @project.project_name%>_ConsensusTME.csv">Download ConsensusTME data</a>
-              <% end %>
-              <% if @rows['EPIC'] == 'true'%> 
-              <a class="dropdown-item navitem" href="/public/data/cell_data/EPIC/<%= @project.project_name%>_EPIC.csv">Download EPIC data</a>
-              <% end %>
-              <% if @rows['ImmuCellAI'] == 'true'%> 
-              <a class="dropdown-item navitem" href="/public/data/cell_data/ImmuCellAI/<%= @project.project_name%>_ImmuCellAI.csv">Download ImmuCellAI data</a>
-              <% end %>
-              <% if @rows['MCPcounter'] == 'true'%> 
-              <a class="dropdown-item navitem" href="/public/data/cell_data/MCPcounter/<%= @project.project_name%>_MCPcounter.csv">Download MCPcounter data</a>
-              <% end %>
-              <% if @rows['quanTIseq'] == 'true'%> 
-              <a class="dropdown-item navitem" href="/public/data/cell_data/quanTIseq/<%= @project.project_name%>_quanTIseq.csv">Download quanTIseq data</a>
-              <% end %>
-              <% if @rows['TIMER'] == 'true'%> 
-              <a class="dropdown-item navitem" href="/public/data/cell_data/TIMER/<%= @project.project_name%>_TIMER.csv">Download TIMER data</a>
-              <% end %>
-              <% if @rows['xCell'] == 'true'%> 
-              <a class="dropdown-item navitem" href="/public/data/cell_data/xCell/<%= @project.project_name%>_xCell.csv">Download xCell data</a>
-              <% end %>
-            </div>
+            </ul>
       </li>
 
     </ul>

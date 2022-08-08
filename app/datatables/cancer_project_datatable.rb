@@ -5,13 +5,21 @@ class CancerProjectDatatable < ApplicationDatatable
       projects.map do |project|
         [].tap do |column|
           column << ""
-          Project.column_names.each do |attr|
+
+          (Project.column_names - ['cancer_id', 'publications_link', 'original_link']).each do |attr|
             if attr != 'id'
+              if attr == 'project_name'
+                column << link_to("#{project[attr]}", project.original_link)
+              elsif attr == 'major_related_publications'
+                column << link_to("#{project[attr]}", project.publications_link)
+              else
                 column << "<div class='table_cell'> #{project[attr]} </div>"
+              end
             else
-                column << project[attr]
+              column << project[attr]
             end
           end
+
           column << "<button class='btn btn-1'> #{link_to('Details', project)} </button>"
         end
       end

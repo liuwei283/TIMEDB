@@ -1,7 +1,7 @@
 svg {
 	Component {
 		XYPlot {
-			x = 100;y = 40
+			x = 100;y = 40 + titleheight
 			height = common.plotheight
 			width = common.plotwidth
 			hasPadding = false
@@ -52,10 +52,6 @@ svg {
 						points = @scaled(d.values)
 						fill = OSPlotdata.colormap[d.key]
 						fillOpacity = 0.4
-						//stroke = "green"
-						// behavior:tooltip{
-						// 	content =  ""
-						// }
 					}
 				// }
 				}
@@ -115,7 +111,7 @@ svg {
 		}
 		XYPlot {
 			x = 220 + common.plotwidth + common.maxtextlength ;
-			y = 40
+			y = 40 + titleheight
 			height = common.plotheight
 			width = common.plotwidth
 			hasPadding = false
@@ -161,7 +157,6 @@ svg {
 			@if(PFSDataPlotConfidence){
 				@for (d, i) in PFSPlotdata.streamData {
 					Polygon {
-						// @expr console.log(">>>",d)
 						key = i + "line"
 						points = @scaled(d.values)
 						fill = PFSPlotdata.colormap[d.key]
