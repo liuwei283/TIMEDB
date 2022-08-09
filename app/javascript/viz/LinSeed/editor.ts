@@ -1,4 +1,3 @@
-import { generateGridPlotConfig } from "oviz-components/grid-plot";
 import { EditorDef } from "utils/editor";
 import { copyObject } from "utils/object";
 
@@ -6,10 +5,11 @@ function run(v) {
     v.forceRedraw = true;
     v.run();
 }
+
 export const editorRef = {} as any;
 
 export const generateImmuneConfig = (v): any => ({
-    id: "setting-bc",
+    id: "setting-color",
     title: "Color Settings",
     layout: "single-page",
     view: {
@@ -29,18 +29,18 @@ export const generateImmuneConfig = (v): any => ({
                         run(v);
                     },
                 },
-            },
-            {
-                title: "show dots",
-                type: "checkbox",
-                value: {
-                    current: v.data.showDots,
-                    callback(value) {
-                        v.data.showDots = value
-                        run(v);
-                    },
-                },
-            },
+            }
+        ],
+    },
+});
+
+export const generateGeneralConfig = (v): any => ({
+    id: "setting-gen",
+    title: "General Settings",
+    layout: "single-page",
+    view: {
+        type: "list",
+        items: [
             {
                 title: "label rotation",
                 type: "input",
@@ -100,13 +100,36 @@ export const generateImmuneConfig = (v): any => ({
     },
 });
 
+export const generateCustomizedConfig = (v): any => ({
+    id: "setting-cus",
+    title: "Customized Settings",
+    layout: "single-page",
+    view: {
+        type: "list",
+        items: [
+            {
+                title: "show dots",
+                type: "checkbox",
+                value: {
+                    current: v.data.showDots,
+                    callback(value) {
+                        v.data.showDots = value
+                        run(v);
+                    },
+                },
+            },
+        ],
+    },
+});
+
 //生成对应的配置文件
 //与index.ts连接
 export function editorConfig(v): EditorDef {
     return {
         sections: [
+            generateGeneralConfig(v),
             generateImmuneConfig(v),
-            // generateMethod(v),
+            generateCustomizedConfig(v)
         ],
     };
 }

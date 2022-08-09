@@ -5,10 +5,11 @@ svg {
 		DraggableContainer {
 			y = 50
 			x = 80
-			Columns {
+			Rows {
 				@for (project, pname) in projectData {
 					Container {
 						x = -30
+						y = 70
 						Text.detached {
 							y = -20
 							text = pname
@@ -47,8 +48,17 @@ svg {
 												}
 												@if showDots {
 													Dots {
-														dots.r = 5
-														dots.fill = color[pname]
+														// dots.r = 5
+														// dots.fill = color[pname]
+														:children(d) {
+															Circle.centered {
+																r = 5; fill = color[pname]
+																@expr console.log(d.value)
+																behavior:tooltip {
+																	content = "Proportions: " + (d.value*100).toFixed(3) + "%"
+																}
+															}
+														}
 													}
 												}
 												@if index == Object.keys(LinSeedData).slice(-1)[0] {

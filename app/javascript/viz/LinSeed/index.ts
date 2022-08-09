@@ -23,10 +23,6 @@ function init() {
             labelSize: 10,
             showDots: true,
             labelRotation: 90,
-            // color: {
-            //     // lineColor: "red",
-            //     // dotColor: "red"
-            // }
         },
         loadData: {
             LinSeedData: {
@@ -69,7 +65,7 @@ function init() {
         },
         setup() {
             console.log(this)
-            this.size = {height: 200+200*this.data.le, width: 200+900*Object.keys(this.data.color).length}
+            this.size = {height: 200+270*this.data.le*Object.keys(this.data.color).length, width: 200+900}
             registerEditorConfig(editorConfig(this), "getVue", "#task-output");
         }
     });
