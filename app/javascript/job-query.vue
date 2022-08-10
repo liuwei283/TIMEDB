@@ -646,8 +646,8 @@ export default {
         // });
 
 
-        this.stderr = "Updating...";
-        this.stdout = "Updating...";
+        this.stderr = "Updating ERR...";
+        this.stdout = "Updating STD...";
     },
     watch: {
         chosenOutput:function() {
