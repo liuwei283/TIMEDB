@@ -13,17 +13,24 @@
                 | Team
                 br
               .content
-                |   Based at the City University of Hong Kong and led by Dr. Shuaicheng LI, we are a multidisciplinary group of first-class, aspiring undergraduate and Ph.D. Most of our members have a strong knowledge base in bioinformatics and computer science, and through our tireless efforts, we have built the TIMEDB immune infiltration platform. This platform provides you with a wealth of standardized immune data and related data analysis for free, making it a valuable aid to your immune research, making it easier to conduct research and empowers your journey of discovery.
+                | Based at the City University of Hong Kong and led by Dr. Shuaicheng LI, we are a multidisciplinary group of first-class, aspiring undergraduate and Ph.D. Most of our members have a strong knowledge base in bioinformatics, computer science and clinical pathology, and through our tireless efforts, we have built the TIMEDB immune infiltration platform. This platform provides you with a wealth of standardized immune data and related data analysis for free, making it a valuable aid to your immune research, making it easier to conduct research and empowers your journey of discovery.
           #lscDetails.memberDetails.circle
             .cardDetails
               .title
                 | Dr. LI Shuaicheng
               .content
-                | Associate Professor
-                br 
-                | Department of Computer Science
+                h6 
+                  i Associate Professor
+                h6
+                  i Department of Computer Science
+                h6
+                  i Department of Biomedical Engineering
+                
                 br
-                | Research Interests: Bioinformatics, algorithms, machine learning, omics data analysis.
+                | Focus on:
+                br
+                | Clinically applicable software on omics data analysis, interactive visualization of human sequencing data, user-friendly databases of cancer-related omics data
+                | Computer algorithms on single-cell clustering, cell-type composition, immune editing and so on.
 
           
           #wyxDetails.memberDetails.circle
@@ -31,42 +38,55 @@
               .title
                 | Dr. WANG Xueying
               .content
-                | PhD in Computer science,
-                br
-                | City University of Hong Kong
+                h6
+                  i PhD in Computer science,
+                h6
+                  i City University of Hong Kong
                 br
                 | In charge of the TIMEDB immune infiltration platform.
 
           #clxDetails.memberDetails.circle
             .cardDetails
               .title
-                |Dr. CHEN Lingxi
+                | Dr. CHEN Lingxi
               .content
-                | PostDoc
-                br
-                | Works in computational biology and cancer study.   
+                h6 
+                  i PostDoc
+                h6 
+                  i Works in computational biology and cancer study.   
                 br
                 | Contact: chanlingxi@gmail.com  
+          #chyDetails.memberDetails.circle
+            .cardDetails            
+              .title
+                | CHEN Haoyue
+              .content
+                h6 
+                  i Department of Clinical Pathology
+                h6
+                  i Capital Medical University
+                br
+                | Curated the clinical information.
           #lwDetails.memberDetails.circle
             .cardDetails            
               .title
                 | LIU Wei
               .content
-                | Computer Science
-                br 
-                | City University of Hong Kong
+                h6 
+                  i Department of Computer Science
+                h6 
+                  i City University of Hong Kong
+                br
+                | Platform development
           #zyzDetails.memberDetails.circle
             .cardDetails
               .title
                 | ZHANG Yuanzheng
               .content
-                | Bachelor of Engineering
-                br
-                | Biomedical Engineering
-                br
-                | College of Medicine and Biological Information Engineering
-                br
-                | Northeastern University
+                h6 
+                  i College of Medicine and Biological Information Engineering
+                h6
+                  i Northeastern University
                 br
                 | Developed the visualization framework and several visualization analyses.
 
@@ -75,9 +95,10 @@
               .title
                 | LIU Dawei
               .content
-                | Majoring in Software Engineering
-                br
-                | Software College of Northeastern University
+                h6
+                  i College of Medicine and Biological Information Engineering
+                h6 
+                  i Northeastern University
                 br
                 | Developed the visualization framework and several visualization analyses.
 
@@ -86,9 +107,10 @@
               .title
                 | ZHOU Chenxin
               .content
-                | School of Business Administration
-                br
-                | Northeastern University
+                h6 
+                  i College of Medicine and Biological Information Engineering
+                h6
+                  i Northeastern University
                 br
                 | Collecting and collating immunization data
 
@@ -97,9 +119,10 @@
               .title
                 | SHI Shuai
               .content
-                | School of Creative Media
-                br
-                | City University of Hong Kong
+                h6 
+                  i Creative Media
+                h6 
+                  i City University of Hong Kong
                 br
                 | Lover of UXUI and graphic design,responsible for the web design of the platform
           #djjDetails.memberDetails.circle
@@ -107,9 +130,12 @@
               .title
                 | DONG Jiajie
               .content
-                | Computer Science
-                br 
-                | City University of Hong Kong
+                h6 
+                  i Computer Science
+                h6 
+                  i City University of Hong Kong
+                br
+                | Platform development
 
         .flip-card-back
           #teamDetailsBack
@@ -138,18 +164,27 @@
 
 
     .col-md-7.col-lg-7.G
-      .row.h-100 
+      .row.h-100.justify-content-center
         .col-md-4.col-lg-4.B.h-30.pb-3.member_photo
         #lsc.col-md-4.col-lg-4.B.h-30.pb-3.member_photo
           =image_tag "lishuaicheng.jpg", class: "rounded-circle"
           h6 LI Shuaicheng
         .col-md-4.col-lg-4.B.h-30.pb-3.member_photo
+        
+        
         #wyx.col-md-3.col-lg-3.B.h-30.pb-3.member_photo
           =image_tag "wangxueying.jpg", class: "rounded-circle"
           h6 WANG Xueying
         #clx.col-md-3.col-lg-3.B.h-30.pb-3.member_photo
           =image_tag "chenlingxi.jpg", class: "rounded-circle"
           h6 CHEN Lingxi
+        #chy.col-md-3.col-lg-3.B.h-30.pb-3.member_photo
+          =image_tag "chenhaoyue.jpg", class: "rounded-circle"
+          h6 WANG Haoyue
+        
+        .col-md-12.col-lg-12.B.h-30.pb-3.member_photo
+
+        
         #lw.col-md-3.col-lg-3.B.h-30.pb-3.member_photo
           =image_tag "liuwei.jpg", class: "rounded-circle"
           h6 LIU Wei
@@ -159,6 +194,11 @@
         #ldw.col-md-3.col-lg-3.B.h-30.pb-3.member_photo
           =image_tag "liudawei.jpg", class: "rounded-circle"
           h6 LIU Dawei
+       
+       
+        .col-md-12.col-lg-12.B.h-30.pb-3.member_photo
+
+        
         #zcx.col-md-3.col-lg-3.B.h-30.pb-3.member_photo
           =image_tag "zhouchenxin.jpg", class: "rounded-circle"
           h6 ZHOU Chenxin
@@ -168,6 +208,7 @@
         #djj.col-md-3.col-lg-3.B.h-30.pb-3.member_photo
           =image_tag "jiajie.png", class: "rounded-circle"
           h6 DONG Jiajie
+       
 =javascript_pack_tag 'contact_info'
 
 #visitor_stats.container-fluid.container

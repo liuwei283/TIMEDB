@@ -22,7 +22,7 @@ link rel='stylesheet' href="https://fonts.googleapis.com/css?family=Oswald&subse
         span.em TIMEDB
       br
       h2 
-        i Tumor Immune MicroEnvironment cell-type composition DataBase
+        i Tumor Immune MicroEnvironment cell composition DataBase
       br
       p
         | TIMEDB is an online human tumor immune micro-environment (TIME) cell-type composition database. TIMEDB provides TIME cell-type composition data estimated from bulk expression profiles, with automate analysis and interactive visualization.
@@ -152,5 +152,215 @@ link rel='stylesheet' href="https://fonts.googleapis.com/css?family=Oswald&subse
                 =link_to '/submit/analyses'
                   =image_tag (use_dark ? 'icons darkmode42.png' : 'icons brightmode42.png'), :alt=>"Human Gut Metagenomics.png"
 
-  #word-cloud.text-center
+  .row.justify-content-center
+    #word-cloud.text-center.col-md-6 
+    #version-update.col-md-4
+      h2.mt-5 NEWS
+
+
+      .news_and_media
+        h4
+          =image_tag 'merge.png'
+          | V1.1.6 update
+        hr
+        .news_content
+          p.text-muted
+            | Aug. 6, 2022, 12:50 a.m.
+          p
+            | We fixed know bugs and improved tutorial pages.
+
+      .news_and_media
+        h4
+          =image_tag 'merge.png'
+          | V1.1.5 update
+        hr
+        .news_content
+          p.text-muted
+            | July. 25, 2022, 5:45 p.m.
+          p
+            | More pipelines have passed testing and been put into production.
+
+      .news_and_media
+        h4
+          =image_tag 'merge.png'
+          | V1.1.4 update
+        hr
+        .news_content
+          p.text-muted
+            | June. 30, 2022, 7:50 p.m.
+          p
+            | We improved the database schema. It is possible for users to check more than one data visualization for a single analysis task. 
+
+      .news_and_media
+        h4
+          =image_tag 'merge.png'
+          | V1.1.3 update
+        hr
+        .news_content
+          p.text-muted
+            | May. 15, 2022, 3:10 p.m.
+          p
+            | We rewrited the back-end logic for task results checking and beutified the workspace page.
+
+      .news_and_media
+        h4
+          =image_tag 'merge.png'
+          | V1.1.2 update
+        hr
+        .news_content
+          p.text-muted
+            | Apr. 30, 2022, 12:50 a.m.
+          p
+            | We added API to track website visiting statistics.
+
+      .news_and_media
+        h4
+          =image_tag 'merge.png'
+          | V1.1.1 update
+        hr
+        .news_content
+          p.text-muted
+            | Mar. 30, 2022, 9:30 a.m.
+          p
+            | We created download page. Now users can easily find and download all data files available in a single page.
+      
+      .news_and_media
+        h4
+          =image_tag 'merge.png'
+          | V1.1.0 update
+        hr
+        .news_content
+          p.text-muted
+            | Feb. 26, 2022, 4:10 p.m.
+          p
+            | we uploaded more data after rechecking the accuracy and validation of our database.
+
+      .news_and_media
+        h4
+          =image_tag 'merge.png'
+          | V1.0.9 update
+        hr
+        .news_content
+          p.text-muted
+            | Feb. 15, 2022, 8: 30 p.m.
+          p
+            | We added new functions that users can submit the demo tasks or check the analysis results of demo tasks to get familiar with the task submission procedure.
+
+
+      .news_and_media
+        h4
+          =image_tag 'merge.png'
+          | V1.0.8 update
+        hr
+        .news_content
+          p.text-muted
+            | Jan. 30, 2022, 9:20 a.m.
+          p
+            | We created tutorial page.
+
+
+      .news_and_media
+        h4
+          =image_tag 'merge.png'
+          | V1.0.7 update
+        hr
+        .news_content
+          p.text-muted
+            | Dec. 28, 2021, 12:30 p.m.
+          p
+            | Analysis Module caegorization & Submit page logic rewritting.
+
+
+      .news_and_media
+        h4
+          =image_tag 'merge.png'
+          | V1.0.6 update
+        hr
+        .news_content
+          p.text-muted
+            | Dec. 1, 2021, 11:25 p.m.
+          p
+            | We fixed know bugs.
+
+      .news_and_media
+        h4
+          =image_tag 'merge.png'
+          | V1.0.5 update
+        hr
+        .news_content
+          p.text-muted
+            | Nov. 5, 2021, 10:20 p.m.
+          p
+            | We added new functions. Users are allowed to create their own datasets using our database.
+      .news_and_media
+        h4
+          =image_tag 'merge.png'
+          | V1.0.4 update
+        hr
+        .news_content
+          p.text-muted
+            | Nov. 2, 2021, 5:30 p.m.
+          p
+            | More analysis modules have passed testing.
+
+      .news_and_media
+        h4
+          =image_tag 'merge.png'
+          | V1.0.3 update
+        hr
+        .news_content
+          p.text-muted
+            | Oct. 15, 2021, 9:00 p.m.
+          p
+            | We completed several analysis modules with data visualizations available. 
+
+      .news_and_media
+        h4
+          =image_tag 'merge.png'
+          | V1.0.2 update
+        hr
+        .news_content
+          p.text-muted
+            | Seq. 18, 2021, 10:00 p.m.
+          p
+            | Clinical data and RNA data uploading & Database recheck.
+      .news_and_media
+        h4
+          =image_tag 'merge.png'
+          | V1.0.1 update
+        hr
+        .news_content
+          p.text-muted
+            | Sep. 1, 2021, 9:30 p.m.
+          p
+            | we beutified home page and added contact page and privacy terms page.
+
+      .news_and_media
+        h4
+          =image_tag 'merge.png'
+          | Add database pages
+        hr
+        .news_content
+          p.text-muted
+            | Aug. 5, 2021, 6:05 p.m.
+          p
+            | Cancers, Datasets and samples tables are ready to display.
+      
+      .news_and_media
+        h4
+          =image_tag 'merge.png'
+          | Project initialization
+        hr
+        .news_content
+          p.text-muted
+            | July. 1, 2021, 12:30 p.m.
+          p
+            | Main frame completion & Platform deployment.
+
+
+
+
+
+
+
   =javascript_pack_tag 'word_cloud'
