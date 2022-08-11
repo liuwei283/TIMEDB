@@ -2,7 +2,11 @@
      <div id = "vapp" :class= "{'ana': isAnalysis, 'task': !isAnalysis}"> 
         <div id="tool-bar">
             <div v-if= "isAnalysis">
-                <b-button @click="downloadSVG" class="tool-bar-el" variant="outline-secondary"><i class="fa fa-download"></i>Download Chart</b-button>
+                <b-button class="tool-bar-el" type="button" id="downloadChartDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" variant="outline-secondary"><i class="far fa-file-archive"></i>Download Chart</b-button>
+                <div class="dropdown-menu" aria-labelledby="downloadChartDropdown">
+                    <a class="dropdown-item" href="#" @click="downloadSVG">SVG</a>
+                    <a class="dropdown-item" href="#" @click="downloadPNG">PNG</a>
+                </div>
                 <b-button @click="useDemoFiles" class="tool-bar-el">Use Demo</b-button>
                 <dropdown-select
                     right
@@ -14,7 +18,11 @@
                 <b-button id="editor-conf" @click="toggleEditor" variant="outline-secondary">Editor</b-button>
             </div>
             <div v-else>
-                <b-button @click="downloadSVG" class="tool-bar-el btn-5"><i class="fa fa-download"/>Download Chart</b-button>
+                <b-button class="tool-bar-el btn-5 dropdown-toggle" type="button" id="downloadChartDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fa fa-download"/>Download Chart</b-button>
+                <div class="dropdown-menu" aria-labelledby="downloadChartDropdown">
+                    <a class="dropdown-item" href="#" @click="downloadSVG">SVG</a>
+                    <a class="dropdown-item" href="#" @click="downloadPNG">PNG</a>
+                </div>
                 <b-button @click="downloadDemoFiles" class="tool-bar-el btn-5"><i class="far fa-file-archive"></i>Download Data</b-button>
                 <b-button id="editor-conf" class = btn-5 @click="toggleEditor">Editor</b-button>
             </div>
@@ -78,19 +86,7 @@
             }
         },
         methods: {
-            downloadSVG() {
-                // const svgContainerClone = document.getElementById("canvas").cloneNode(true) as HTMLElement;
-                // const svgBlob = new Blob([svgContainerClone.innerHTML], { type: "image/png;charset=utf-8" });
-                // const svgUrl = URL.createObjectURL(svgBlob);
-                // const downloadLink = document.createElement("a");
-                // downloadLink.href = svgUrl;
-                // downloadLink.download = `${window.gon.analysis_name || 'demo'}.svg`;
-                // document.body.appendChild(downloadLink);
-                // downloadLink.click();
-                // document.body.removeChild(downloadLink);
-
-
-
+            downloadPNG() {
                 const canvas = document.createElement("canvas");
                 const svg = document.querySelector('svg');
                 const base64doc = btoa(unescape(encodeURIComponent(svg.outerHTML)));
@@ -108,7 +104,7 @@
                     context.drawImage(img_to_download,0,0,w,h);
                     const dataURL = canvas.toDataURL('image/png');
                     if (window.navigator.msSaveBlob) {
-                        window.navigator.msSaveBlob(canvas.msToBlob(), "download.png");
+                        window.navigator.msSaveBlob(canvas.msToBlob(), `${window.gon.analysis_name || 'demo'}.svg`);
                         //e.preventDefault();
                     } else {
                         const a = document.createElement('a');
@@ -119,24 +115,17 @@
                     }
                     //canvas.parentNode.removeChild(canvas);
                 }  
-
-                // var e;
-                // const canvasContainerClone = document.getElementById("canvas") as HTMLCanvasElement;
-                // const downloadLink = document.createElement("a");
-                // downloadLink.download = `${window.gon.analysis_name || 'demo'}.svg`;
-                // downloadLink.href = canvasContainerClone.toDataURL("image/png;base64");
-                // if (document.createEvent) {
-                //     e = document.createEvent("MouseEvents");
-                //     e.initMouseEvent("click", true, true, window,
-                //                     0, 0, 0, 0, 0, false, false, false,
-                //                     false, 0, null);
-
-                //     downloadLink.dispatchEvent(e);
-                // }
-
-
-
-
+            },
+            downloadSVG() {
+                const svgContainerClone = document.getElementById("canvas").cloneNode(true) as HTMLElement;
+                const svgBlob = new Blob([svgContainerClone.innerHTML], { type: "image/svg;charset=utf-8" });
+                const svgUrl = URL.createObjectURL(svgBlob);
+                const downloadLink = document.createElement("a");
+                downloadLink.href = svgUrl;
+                downloadLink.download = `${window.gon.analysis_name || 'demo'}.svg`;
+                document.body.appendChild(downloadLink);
+                downloadLink.click();
+                document.body.removeChild(downloadLink);
             },
             useDemoFiles() {
                 axios.get(window.gon.urls.use_demo)
