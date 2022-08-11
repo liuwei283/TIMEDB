@@ -12,7 +12,6 @@ svg {
 			height = @geo(100, -100); width  = @geo(100, -100); padding = 20 
 			x = 530;y = 300
 			data = plot["c_"+chosenColumn]
-			@expr console.log("plot[chosenColumn]:",plot["c_"+chosenColumn])
 			//data = plot["c_tumor_grade"]
 			pieProps = {
 				stroke: "white"
@@ -22,7 +21,6 @@ svg {
                     x1 = d.start; x2 = d.end; r2 = pieR
                     //fill = d.data.raw.color
 					fill = colorMap["c_"+ chosenColumn][d.data.raw.name]
-					@expr console.log("d:",d)
 					behavior:tooltip {
 						content = "Category: "+ d.data.name + "</br>Sample size: "+ d.data.value + "</br>Proportion: "+ d.data.raw.proportion +"%"
 					}
@@ -32,7 +30,6 @@ svg {
 		Legend{
 			@props legendPos
 			data = legend["c_"+chosenColumn]
-			@expr console.log("legend data:",legend["c_"+chosenColumn])
 			//fill = colorMap["c_"+ chosenColumn][d.data.raw.name]
 			padding = 4
 			lineHeight = 13

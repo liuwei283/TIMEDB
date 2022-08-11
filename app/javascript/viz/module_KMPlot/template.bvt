@@ -33,6 +33,16 @@ svg {
 					strokeWidth = 2
 				}
 			}
+			@if(OSDataPlotConfidence){
+				@for (d, i) in OSPlotdata.streamData {
+					Polygon {
+						key = i + "line"
+						points = @scaled(d.values)
+						fill = OSPlotdata.colormap[d.key]
+						fillOpacity = 0.4
+					}
+				}
+			}
 			@for (d,i) in OSDotsdata{
 				@for (k,n) in d.values{
 					Text.centered {
@@ -40,21 +50,12 @@ svg {
 						text = "+"
 						fill = OSPlotdata.colormap[d.key]
 						fontSize = 12
+						behavior:tooltip{
+							content = "OS time: " + k[0] + "<br>" + "Number_at_risk: " + k[2]
+						}
 					}
 				}
 				
-			}
-			@if(OSDataPlotConfidence){
-				@for (d, i) in OSPlotdata.streamData {
-				// @if(i==1){
-					Polygon {
-						key = i + "line"
-						points = @scaled(d.values)
-						fill = OSPlotdata.colormap[d.key]
-						fillOpacity = 0.4
-					}
-				// }
-				}
 			}
 			Text {
 				text = "OS"
@@ -86,7 +87,6 @@ svg {
                 }
 				Text {
 					x = 25;y = 20
-					// text = OSPlotdata.chosenClinical
 					text = OSDataShowText
 					fontSize = 12
 				}
@@ -143,17 +143,6 @@ svg {
 					strokeWidth = 2
 				}
 			}
-			@for (d,i) in PFSDotsdata{
-				@for (k,n) in d.values{
-					Text.centered {
-						x = @scaled-x(k[0]); y = @scaled-y(k[1])
-						text = "+"
-						fill = PFSPlotdata.colormap[d.key]
-						fontSize = 12
-					}
-				}
-				
-			}
 			@if(PFSDataPlotConfidence){
 				@for (d, i) in PFSPlotdata.streamData {
 					Polygon {
@@ -163,6 +152,20 @@ svg {
 						fillOpacity = 0.4
 					}
 				}
+			}
+			@for (d,i) in PFSDotsdata{
+				@for (k,n) in d.values{
+					Text.centered {
+						x = @scaled-x(k[0]); y = @scaled-y(k[1])
+						text = "+"
+						fill = PFSPlotdata.colormap[d.key]
+						fontSize = 12
+						behavior:tooltip{
+							content = "PFS time: " + k[0] + "<br>" + "Number at risk: " + k[2]
+						}
+					}
+				}
+				
 			}
 			Text {
 				text = "PFS"
@@ -196,7 +199,6 @@ svg {
                 }
 				Text {
 					x = 25;y = 20
-					// text = PFSPlotdata.chosenClinical
 					text = PFSDataShowText
 					fontSize = 12
 				}

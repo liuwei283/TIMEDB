@@ -52,6 +52,12 @@ export function init(id,clinical_file_path,cellData_file_path,eid,plot_name,vue_
             return final
           },
           clinicalDatashow:true,
+          cacutextPos(text,fontsize,angle,x0,y0){
+            let len = TextSize.measuredTextSize(text,fontsize).width
+            let x1 = x0 - len*Math.cos((angle/180)*Math.PI)
+            let y1 = y0 + len*Math.sin((angle/180)*Math.PI)
+            return {x1:x1,y1:y1}
+          },
         },
         loadData: {
           RNAData: {

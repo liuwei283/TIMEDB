@@ -16,7 +16,6 @@ const MODULE_NAME = "static_fraction_pie";
 
 export function plotDataloaded(_data){
     //console.log("staic fraction pie___________________")
-    //console.log("_data:",_data)
     let quotaList = []
     let plotData = {}
     _data.columns.slice(2).forEach(item => {
@@ -40,20 +39,17 @@ export function plotDataloaded(_data){
             maxLegendtext.push(item.length)
         })
     }
-    //console.log("newPlotdata:",newPlotdata)
 
     let maxLegend = Math.max(...maxLegendtext)
 
     plotData = newPlotdata
 
-    // console.log("maxLegend:",maxLegend)
     this.data.maxLegend = maxLegend
     
 
     let temp = {}
     let legend = {}
     let colorMap = {}
-    //console.log("sort???",quotaList.sort())
 
     quotaList.sort().forEach((ditem,d)=>{
         let each = _data.map(d=>d[ditem])
@@ -65,7 +61,8 @@ export function plotDataloaded(_data){
             index = index+1
             plotData[ditem][key] = count(each,key)
             let lecolor,piecolor
-            let color = Oviz.color.Color.hsl((index%6)*60, 60+Math.floor((index/6))*10, 60+Math.floor((index/6))*10).string
+            //let color = Oviz.color.Color.hsl((index%6)*60, 60+Math.floor((index/6))*10, 60+Math.floor((index/6))*10).string
+            let color = getColor(index)
             key == "NA"? piecolor = "grey":piecolor = color
             temp[ditem].push({value:count(each,key),name:key,color:piecolor,proportion:((count(each,key)/_data.length)*100).toFixed(2)})
             key == "NA"? lecolor = "grey":lecolor = color
@@ -81,7 +78,7 @@ export function plotDataloaded(_data){
     this.data.pieR = 120
     this.data.tickFontSize = 16
     this.data.colorMap = colorMap
-    // console.log("this.data.colorMap:",this.data.colorMap)
+    
 }
 
 export function buttonFunc(result,buttonkey){
@@ -95,3 +92,13 @@ export function count(arr,element){
     });
     return result
 }
+
+export function getColor(index){
+    let colorlist = ["#031219","#045f72","#0a9496","#90d3c1","#ecd8a6","#ed9d00","#cc6601","#bb3f01","#ae1f11","#9f2027",
+                    "#878576","#305659","#32202c","#9d382e","#a34f37","#a86344","#af9d85"]
+    if(index>colorlist.length-1){
+        index = index % colorlist.length
+    }
+    return colorlist[index]
+}
+

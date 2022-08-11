@@ -214,12 +214,12 @@ export function getplotdata(groupindex,preplotData,sign){
         let time
         if(sign=="OS"){
             preplotData.forEach((ditem,dindex)=>{
-                ditem["Group"] == item? (ditem["OS_Time"]!="NA"&&ditem["OS_Survival"]!="NA" ?(pre2plotdata[item].values.push([ditem["OS_Time"]*1,ditem["OS_Survival"]*1]),sum+=1,time = ditem["OS_Time"]*1):null):null
+                ditem["Group"] == item? (ditem["OS_Time"]!="NA"&&ditem["OS_Survival"]!="NA" ?(pre2plotdata[item].values.push([ditem["OS_Time"]*1,ditem["OS_Survival"]*1,ditem["Number_at_risk"]]),sum+=1,time = ditem["OS_Time"]*1):null):null
             })
         }
         else if(sign=="PFS"){
             preplotData.forEach((ditem,dindex)=>{
-                ditem["Group"] == item? (ditem["PFS_Time"]!="NA"&&ditem["PFS_Survival"]!="NA" ?(pre2plotdata[item].values.push([ditem["PFS_Time"]*1,ditem["PFS_Survival"]*1]),sum+=1,time = ditem["PFS_Time"]*1):null):null
+                ditem["Group"] == item? (ditem["PFS_Time"]!="NA"&&ditem["PFS_Survival"]!="NA" ?(pre2plotdata[item].values.push([ditem["PFS_Time"]*1,ditem["PFS_Survival"]*1,ditem["Number_at_risk"]]),sum+=1,time = ditem["PFS_Time"]*1):null):null
             })
         }
         

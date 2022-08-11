@@ -2,46 +2,36 @@ svg{
     Component{
         Container {
             x = 40;y = 30 //+ maxsamplelength
-            
-            //samplename
-            // Container {
-            //     y = 15
-            //     @if(samplenameshow){
-            //         @for(sample,index) in sampleList{
-            //             Text {
-            //                 x = (gridPlotWidth-2)*index + 260 + gridPlotWidth/2 
-            //                 text = sample
-            //                 fontSize = 10
-            //                 // style:font-weight = "bold"
-            //                 rotation = @rotate(-90)
-            //             }
-            //         }
-            //     }
-
-            // }
             Container {
                 y = 15
                 @if(samplenameshow&&clinicalDatashow){
                     @for(sample,index) in sampleList{
                         Text {
-                            x = (gridPlotWidth-2)*(index+1) + 260 //+ gridPlotWidth/2 
-                            y = cellList.length *12 + 170 + cellList.length*(gridPlotheight) + gridPlotheight/2 + (ClinicalData.sortaddName.length-1) * gridPlotheight + 30 - maxsamplelength
+                            @let x0 = (gridPlotWidth-2)*(index) + 260 
+                            @let y0 = cellList.length *12 + 170 + cellList.length*(gridPlotheight) + gridPlotheight/2 + (ClinicalData.sortaddName.length-1) * gridPlotheight + 30 - maxsamplelength
+                            @let pos = cacutextPos(sample,9,samplenamerotation,x0,y0)
+                            x = pos.x1
+                            y = pos.y1
                             text = sample
-                            fontSize = 10
+                            fontSize = 9
                             // style:font-weight = "bold"
-                            rotation = @rotate(samplenamerotation-360)
+                            rotation = @rotate(-samplenamerotation)
                         }
+
                     }
                 }
                 @if(samplenameshow&&!clinicalDatashow){
                     @for(sample,index) in sampleList{
                         Text {
-                            x = (gridPlotWidth-2)*(index+1) + 260 + gridPlotWidth/2 
-                            y = cellList.length *12 + 170 + cellList.length*(gridPlotheight) + gridPlotheight/2 + 30
+                            @let x0 = (gridPlotWidth-2)*(index) + 260
+                            @let y0 = cellList.length *12 + 70 + cellList.length*(gridPlotheight) + gridPlotheight/2
+                            @let pos = cacutextPos(sample,9,samplenamerotation,x0,y0)
+                            x = pos.x1
+                            y = pos.y1
                             text = sample
-                            fontSize = 10
+                            fontSize = 9
                             // style:font-weight = "bold"
-                            rotation = @rotate(samplenamerotation-360)
+                            rotation = @rotate(-samplenamerotation)
                         }
                     }
                 }
@@ -219,7 +209,6 @@ svg{
                     fill = @gradient("kg")
                     weidth = 50
                     height = cellList.length*gridPlotheight
-                    @expr console.log("textmaxxx:",textmaxxx)
                 }
                 Axis{
                     x = 210;y = RNAData.useData[0].row*gridPlotheight

@@ -41,10 +41,6 @@ function init() {
                 multiple: false,
                 loaded(data) {
                     this.data.oridata = data
-                    // Variable 细胞种类
-                    // Survival 分组
-                    // pretty_p p值
-                    // Metric 矩阵类型
                     let cells = []
                     let methoddata = []
                     let stage = []
@@ -54,18 +50,12 @@ function init() {
                         methoddata.includes(item.Metric)? null:methoddata.push(item.Metric)  //对应editor需要选择的方法
                         stage.includes(item.Survival)? null:stage.push(item.Survival)  //横坐标 对应的阶段
                     });
-                    
-                    
-
-                    //这里对cell进行排序
 
                     cells = sortsubtype(data,cells,"1")
-
 
                     this.data.cells = cells //
                     this.data.tempcells = cells  //
                     this.data.methoddata = methoddata //
-                    
                     
                     let pdata = []
                     data.forEach(item => {
@@ -80,7 +70,6 @@ function init() {
                     //pcells = pcells.sort()
                     this.data.pcells = pcells //
 
-
                     let hrdata = []
                     data.forEach(item => {
                         hrdata.push({pretty_R:item.pretty_R,Variable:item.Variable})
@@ -91,10 +80,7 @@ function init() {
                     hrcells = Array.from(new Set(hrcells))
                     //hrcells = hrcells.sort()
                     this.data.hrcells = hrcells //
-
-
                     this.data.sortsign = "hrsort" //"psort"
-
                     this.data.config = {
                         sign:[
                             {value:"nosort",text:"Sort by Subtype"},
@@ -102,7 +88,6 @@ function init() {
                             {value:"hrsort",text:"Sort by HR Value"},
                         ]
                     }
-
                     
                     switch(this.data.sortsign){
                         case "hrsort":
@@ -186,16 +171,18 @@ function init() {
                     this.data.stage = stage
                     this.data.maxtextcell = maxtextcell
                     this.data.maxtextPRC = maxtextPRC
+                    let plotheight = 25
+                    this.data.plotheight = plotheight
                     chosenMethod[0] == "HR"? this.data.title = "Hazard Radio":this.data.title = "Odds Radio"
 
-                    return {maxtextcell,maxtextPRC}
+                    return {maxtextcell,maxtextPRC,plotheight}
                 },
             },
         },
         setup() {
             console.log(this["_data"]);
+            this.size.height = this.data.cell.length*this.data.plotheight + 300
             registerEditorConfig(editorConfig(this), "getVue", "#task-output", editorRef);
-            this.size.height = this.data.cell.length*15 + 400
             //this.size.width = this.data.maxtextPRC + 150 + 150
         },
         

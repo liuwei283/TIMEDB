@@ -8,7 +8,7 @@ function run(v) {
 }
 export const editorRef = {} as any;
 
-export const generateTextconfig = (v): any => (            {
+export const generateTextconfig = (v): any => ({
     id: "setting-bcg",
     title: "General Setting",
     layout: "tabs",
@@ -20,14 +20,14 @@ export const generateTextconfig = (v): any => (            {
                 type: "list",
                 items:[
                     {
-                        title: "Width",
+                        title: "Plot width",
                         type: "input",
                         format: "int",
                         value: {
                             current: v.data.gridwidth,
                             callback(x) {
                                 v.data.gridwidth = parseFloat(x);
-                                v.size.height = v.data.height + 300
+                                v.size.height = v.data.height + 220 + v.data.maxsamplelen
                                 v.size.width = v.data.data.classifications.length*v.data.gridwidth  + 200
                                 v.data._sizeUpdated = true;
                                 run(v);
@@ -35,14 +35,14 @@ export const generateTextconfig = (v): any => (            {
                         },
                     },
                     {
-                        title: "Height",
+                        title: "Plot height",
                         type: "input",
                         format: "int",
                         value: {
                             current:  v.data.height ,
                             callback(x) {
                                 v.data.height = parseFloat(x);
-                                v.size.height = v.data.height + 300
+                                v.size.height = v.data.height + 220 + v.data.maxsamplelen
                                 v.size.width = v.data.data.classifications.length*v.data.gridwidth  + 200
                                 v.data._sizeUpdated = true;
                                 run(v);
@@ -57,7 +57,46 @@ export const generateTextconfig = (v): any => (            {
                             current:  v.data.padding,
                             callback(x) {
                                 v.data.padding = parseFloat(x);
-                                v.size.height = v.data.height + 300
+                                v.size.height = v.data.height + 220 + v.data.maxsamplelen
+                                v.size.width = v.data.data.classifications.length*v.data.gridwidth  + 200
+                                v.data._sizeUpdated = true;
+                                run(v);
+                            },
+                        },
+                    },
+                ]
+            }
+        },
+        {
+            id:"gm-common",
+            name:"Other Setting",
+            view:{
+                type: "list",
+                items:[
+                    {
+                        title: "Rotation angle",
+                        type: "input",
+                        format: "int",
+                        value: {
+                            current: v.data.angle,
+                            callback(x) {
+                                v.data.angle = parseFloat(x);
+                                v.size.height = v.data.height + 220 + v.data.maxsamplelen
+                                v.size.width = v.data.data.classifications.length*v.data.gridwidth  + 200
+                                v.data._sizeUpdated = true;
+                                run(v);
+                            },
+                        },
+                    },
+                    {
+                        title: "Sample name font size",
+                        type: "input",
+                        format: "int",
+                        value: {
+                            current:  v.data.bottomfontsize,
+                            callback(x) {
+                                v.data.bottomfontsize = parseFloat(x);
+                                v.size.height = v.data.height + 220 + v.data.maxsamplelen
                                 v.size.width = v.data.data.classifications.length*v.data.gridwidth  + 200
                                 v.data._sizeUpdated = true;
                                 run(v);

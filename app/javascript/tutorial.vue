@@ -96,9 +96,32 @@
                             
                             </div>
                     </div>
-
                 </div>
-
+                <hr>
+                <br>
+                <div id="maintain-update" class="row text-left justify-content-left">
+                    <div class="container col-md-12">
+                        <h2>Maintain and update TIMEDB</h2>
+                        <p>We have developed admin pages to help maintain and update TIMEDB platform.
+                        <ul>
+                            <li>
+                                <p>Permissions has been granted to administration accounts to perform muliple database operations, inlcluding but not limited to new projects and samples records insertion, clinical data uploading, data file integration and reprocessing.</p>
+                                <img v-bind:src="require('../assets/images/admin_f1.png')">
+                            </li>
+                            <li>
+                                <p>New analysis modules and pipelines which have passed testing can be integrated with the platform easily to provide servies.</p>
+                                <img v-bind:src="require('../assets/images/admin_f2.png')">
+                                <img v-bind:src="require('../assets/images/admin_f3.png')">
+                            </li>
+                            <li>
+                                <p>We have task monitor admin pages to check, debug and guarantee the normal function of task submission procedure.</p>
+                                <img v-bind:src="require('../assets/images/admin_f4.png')">
+                                <img v-bind:src="require('../assets/images/admin_f5.png')">
+                            </li>
+                        </ul>
+                        <p>After fixing reported bugs, we will release new versions everage 20 ~ 30 days. Detailed platform update information can be found in the home page.</p>
+                    </div>
+                </div>
                 <br><br>
             </div>
             <div v-if="this.found == true">

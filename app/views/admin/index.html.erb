@@ -61,19 +61,7 @@
     Project management:
     </h4>
 
-    <div id='hidden_helper'>
-    Hide columns: 
-    <br />
-    <% i=0 %>
-    <% @projects.column_names.each do |attr| %>
-      
-      <button class="toggle-vis" data-column='<%=i.to_s%>'> 
-        <%= attr.capitalize %>
-      </button>
-      <%i += 1%>
-      
-    <%end%>
-  </div>
+    
     <div id="table">
       <!-- <table class="display" >
         <thead>

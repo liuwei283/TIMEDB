@@ -36,7 +36,7 @@ export function init(id,path,config,eid,plot_name,vue_name){
             },
         },
         setup() { 
-            console.log("this.data:",this["_data"]);
+            console.log("fraction bar this.data:",this["_data"]);
             registerEditorConfig(editorConfig(this,eid), vue_name, plot_name);
             this.size.height = 600
             this.size.width = 900 + this.data.maxLegend + 5

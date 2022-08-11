@@ -9,6 +9,35 @@ function run(v) {
 }
 export const editorRef = {} as any;
 
+export const generateGridConfig = (v):any =>  ({
+    id: "stg"+"1",
+    title: "General Settings",
+    layout: "tabs",
+    tabs: [
+        {
+            id: "g-common",
+            name: "Plot Size",
+            view: {
+                type: "list",
+                items: [
+                    {
+                        title: "Grid height",
+                        type: "input",
+                        value: {
+                            current: v.data.plotheight,
+                            callback(d) {
+                                v.data.plotheight = parseFloat(d);
+                                v.data.data.plotheight = parseFloat(d);
+                                v.size.height = v.data.cell.length*v.data.plotheight + 300
+                                run(v);
+                            },
+                        },
+                    },
+                ],
+            },
+        },
+    ]
+});
 
 export const generateColorConfig = (v): any => (            {
     id: "setting-bc",
@@ -75,6 +104,7 @@ export const generateChooseConfig = (v): any => ({
 export function editorConfig(v): EditorDef {
     return {
         sections: [
+            generateGridConfig(v),
             generateColorConfig(v),
             generateChooseConfig(v),
         ],

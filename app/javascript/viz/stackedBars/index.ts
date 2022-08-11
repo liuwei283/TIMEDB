@@ -9,6 +9,7 @@ import { GridPlot } from "oviz-components/grid-plot";
 import {register} from "page/visualizers";
 import { rankDict, sortByRankKey } from "utils/bio-info";
 import { registerEditorConfig } from "utils/editor";
+import * as TextSize from "crux/dist/utils/text-size";
 
 //const pDict = "";
 const xlabel = "gene type";
@@ -81,7 +82,13 @@ function init() {
                     this.data.height = 500
                     this.data.gridwidth = 12
                     this.data.padding = 2
-
+                    this.data.angle = 45 
+                    this.data.bottomfontsize = 10 
+                    let tmplenlist = []
+                    classifications.forEach(element => {
+                        tmplenlist.push(TextSize.measuredTextSize(element,this.data.bottomfontsize).width)
+                    });
+                    this.data.maxsamplelen = Math.max(...tmplenlist)
                     
                     
                     return {result, classifications, colorMap, colors, categories};
@@ -91,7 +98,7 @@ function init() {
         },
         setup() {
             console.log(this["_data"]);
-            this.size.height = this.data.height+300
+            this.size.height = this.data.height + 220 + this.data.maxsamplelen
             this.size.width = this.data.data.classifications.length*this.data.gridwidth  + 200
             registerEditorConfig(editorConfig(this), "getVue", "#task-output", editorRef);
             //registerEditorConfig(editorConfig(this), "getVue", "#task-output", editorRef);

@@ -34,7 +34,7 @@ link rel='stylesheet' href="https://fonts.googleapis.com/css?family=Oswald&subse
           li 
             | Curated TIME 
             =link_to "database", "/database/overview"
-            |  of more than 
+            |  of  
             strong.number_text =@samples_num
             span.noun_text  samples 
             |  and 
@@ -43,17 +43,17 @@ link rel='stylesheet' href="https://fonts.googleapis.com/css?family=Oswald&subse
             |  across 
             strong.number_text =@cancers_num
             span.noun_text  cancers
-            | , including gene expression data, clinical data, TIME estimation result data of 
+            | , including bulk RNA data, clinical data, TIME cell-type composition estimated by 
             strong.number_text 10
-            |  state-of-the-art tools, C1-C6 subtyping data, etc.
+            |  state-of-the-art tools, C1-C6 subtyping data, immunomodulatory gene expression profiles, etc.
           li 
             | Automatic interfaces of 
             strong.number_text =21
             span.noun_text  tumor immune microenvironment 
-            =link_to "analyses.", "/submit/analyses"
-            | , including estimation of TIME, survival, etc.
+            =link_to "analyses", "/submit/analyses"
+            | , including TIME cell-type composition estimation, subtyping, survival, correlation, etc.
           li
-            | Interactive visualizations of RNA expression, TIME cell fraction estimation, patient subtyping, survival, and correlation data from the database or analysis.
+            | Interactive visualizations of clinical features, TIME cell-type composition, patient subtyping, survival, and correlation profile from the database or analysis.
               
         
 

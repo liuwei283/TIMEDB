@@ -7,24 +7,31 @@ svg{
                 @if(samplenameshow&&clinicalDatashow){
                     @for(sample,index) in sampleList{
                         Text {
-                            x = (gridPlotWidth-2)*(index+1) + 260 //+ gridPlotWidth/2 
-                            y = cellList.length *12 + 170 + cellList.length*(gridPlotheight) + gridPlotheight/2 + (ClinicalData.sortaddName.length-1) * gridPlotheight + 30 - maxsamplelength
+                            @let x0 = (gridPlotWidth-2)*(index) + 260
+                            @let y0 = cellList.length *12 + 170 + cellList.length*(gridPlotheight) + gridPlotheight/2 + (ClinicalData.sortaddName.length-1) * gridPlotheight + 30 - maxsamplelength
+                            @let pos = cacutextPos(sample,9,samplenamerotation,x0,y0)
+                            x = pos.x1
+                            y = pos.y1
                             text = sample
-                            fontSize = 10
+                            fontSize = 9
                             // style:font-weight = "bold"
-                            rotation = @rotate(samplenamerotation-360)
+                            rotation = @rotate(-samplenamerotation)
                         }
+
                     }
                 }
                 @if(samplenameshow&&!clinicalDatashow){
                     @for(sample,index) in sampleList{
                         Text {
-                            x = (gridPlotWidth-2)*(index+1) + 260 + gridPlotWidth/2 
-                            y = cellList.length *12 + 170 + cellList.length*(gridPlotheight) + gridPlotheight/2 + 30
+                            @let x0 = (gridPlotWidth-2)*(index) + 260
+                            @let y0 = cellList.length *12 + 70 + cellList.length*(gridPlotheight) + gridPlotheight/2
+                            @let pos = cacutextPos(sample,9,samplenamerotation,x0,y0)
+                            x = pos.x1
+                            y = pos.y1
                             text = sample
-                            fontSize = 10
+                            fontSize = 9
                             // style:font-weight = "bold"
-                            rotation = @rotate(samplenamerotation-360)
+                            rotation = @rotate(-samplenamerotation)
                         }
                     }
                 }
@@ -96,7 +103,6 @@ svg{
                         data = "stacked"   
                         :children(d){
                             Rect.full{
-                                //@expr console.log("d???:",d)
                                 fill = RNAData.colorMap[d.key]
                                 stroke = "white"
                                 strokeWidth = 0.5
@@ -202,7 +208,6 @@ svg{
                     fill = @gradient("kg")
                     weidth = 50
                     height = cellList.length*gridPlotheight
-                    @expr console.log("textmaxxx:",textmaxxx)
                 }
                 Axis{
                     x = 210;y = RNAData.useData[0].row*gridPlotheight
@@ -221,7 +226,6 @@ svg{
                 height = plotSize[0] + 10
                 width = RNAData.useData[0].row*gridPlotheight + cellList.length*gridPlotheight + 100
                 padding = padding
-                //@expr console.log("RNAData.boxdata:",RNAData.boxdata)
                 data = { boxData: RNAData.boxdata}
                 valueRange = valueRange
                 // AxisBackground {
@@ -433,7 +437,6 @@ svg{
         //             y = (cellList.length-1) * gridPlotheight + cellList.length *12 + 150 + 12.2
         //             // height = (cellList.length-1) *12 + 10
         //             height = ClinicalData.sortaddName.length*12
-        //             //@expr console.log("ClinicalData.sortaddName:",ClinicalData.sortaddName.length)
         //             width = gridPlotWidth-2
         //             stroke = "#000"
         //             strokeWidth = 2

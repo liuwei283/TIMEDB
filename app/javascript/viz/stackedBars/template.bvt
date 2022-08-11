@@ -7,7 +7,7 @@ svg {
 	Component {
 		XYPlot {
 			x = 140;y = 60
-			height = height; width = data.classifications.length*gridwidth 
+			width = data.classifications.length*gridwidth ;height = height; 
 			discreteCategory = true
 			valueRange = [0,1]
 			data = data.result
@@ -23,7 +23,6 @@ svg {
 						//x = 50%
 						stroke = "white"
 						anchor = @anchor("top","center")
-						@expr console.log("d:",d)
 						behavior:tooltip{
                             content = `Sample Name: ${d.data.pos} <br> Category: ${"C"+d.key} <br> Value: ${d.data.value} <br>`
                         }
@@ -34,8 +33,8 @@ svg {
 				// stroke = "none"
 				// fill = "none"
 			}
-			Text{
-				x = 50%; y = 100%+100
+			Text.centered{
+				x = 50%; y = height + 60 + maxsamplelen
 				anchor = @anchor("middle","center")
 				text = "Sample Name"
 				fill = "#000"
@@ -73,9 +72,10 @@ svg {
             			@let tickX = @scaled-x(tick.value)
             			@let tickY = 5
             			y = 10
+						x = -gridwidth/2
             			anchor = @anchor("r", "m")
-            			rotation = @rotate(-45)
-        				fontSize = 10
+            			rotation = @rotate(-angle) //旋转的角度
+        				fontSize = bottomfontsize
             		}
                 }
             }
@@ -99,7 +99,8 @@ svg {
 						height = 5
 						width = 20
 						anchor = @anchor("middle","left")
-						fill = data.colors[index]
+						// fill = color["C"+item]
+						fill = color["C"+item]
 					}
 					Text{
 						key = index
