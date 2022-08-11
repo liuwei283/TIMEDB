@@ -12,23 +12,23 @@
                         </div>
                         <div>
                             <a href="/tutorial/analysis/1">
-                            <p>Introduction
+                            <p style="color: #cc4f78">Introduction
                             </p>
                             </a>
                         </div>
                         <div class="sidebar-tutorial-toggle">
                             <a href="#">
-                            <p>Usages &nbsp<i class="fa fa-angle-down" id="arrow"></i>
+                            <p style="color: #cc4f78">Usages &nbsp<i class="fa fa-angle-down" id="arrow"></i>
                             </p>
                             </a>
                             <ul id="side-tutorial-bar" class="">
-                                <a href="/tutorial/analysis/2"><li>How to Complete Analysis</li></a>
-                                <a href="/tutorial/analysis/3"><li class="active1">What Analysis We Have</li></a>
+                                <a href="/tutorial/analysis/2"><li style="color: #cc4f78">How to Complete Analysis</li></a>
+                                <a href="/tutorial/analysis/3"><li class="active1" style="color: #cc4f78">What Analysis We Have</li></a>
                             </ul>
                         </div>
                         <div class="">
                             <a href="/tutorial/database/1">
-                            <p>Database documentation
+                            <p style="color: #1cb0b6">Database documentation
                             </p>
                             </a>
                         </div>
