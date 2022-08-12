@@ -68,7 +68,7 @@
         <div id = "subtype-boxplot" class = "container Block">
 
             <div id="boxplotDescription" class="row description">
-                <h4>Dataset C1-C6 Immune Cell Fraction Boxplot</h4>
+                <h4>Dataset C1-C6 TIMEDB Cell-type Composition Boxplot</h4>
             </div>
                 
             <div class="select-bar form-inline row">

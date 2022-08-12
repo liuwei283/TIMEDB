@@ -104,7 +104,7 @@
                     context.drawImage(img_to_download,0,0,w,h);
                     const dataURL = canvas.toDataURL('image/png');
                     if (window.navigator.msSaveBlob) {
-                        window.navigator.msSaveBlob(canvas.msToBlob(), `${window.gon.analysis_name || 'demo'}.svg`);
+                        window.navigator.msSaveBlob(canvas.msToBlob(), `${window.gon.analysis_name || 'download'}.png`);
                         //e.preventDefault();
                     } else {
                         const a = document.createElement('a');
@@ -122,7 +122,7 @@
                 const svgUrl = URL.createObjectURL(svgBlob);
                 const downloadLink = document.createElement("a");
                 downloadLink.href = svgUrl;
-                downloadLink.download = `${window.gon.analysis_name || 'demo'}.svg`;
+                downloadLink.download = `${window.gon.analysis_name || 'download'}.svg`;
                 document.body.appendChild(downloadLink);
                 downloadLink.click();
                 document.body.removeChild(downloadLink);
