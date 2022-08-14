@@ -86,7 +86,7 @@
 
         <div id = "piePlot" class = "container Block">
             <div id="pieDescription" class="row description">
-                <h4>Dataset TIMEDB Cell-type Composition Pie Chart</h4>
+                <h4>Dataset TIME Cell-type Composition Pie Chart</h4>
             </div>
 
             <div class="select-bar form-inline row">
