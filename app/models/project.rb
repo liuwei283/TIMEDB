@@ -9,7 +9,9 @@ class Project < ApplicationRecord
   def self.import(file)
     CSV.foreach(file.path, headers: true, encoding: 'bom|utf-8') do |row|
       project = find_by_project_name(row['project_name'])|| new
+      old_gn = project.num_of_observed_genes
       project.attributes = row.to_hash.slice(*column_names)
+      project.num_of_observed_genes = old_gn
       #site = project.primary_site
       ctype = project.cancer_name
       #organ = Organ.find_by(primary_site: site)

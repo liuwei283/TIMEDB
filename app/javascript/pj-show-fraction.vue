@@ -69,6 +69,9 @@
 
         </div>
 
+        <hr/>
+        <br/>
+
 
         <div id = "fraction-boxplot" class = "container Block">
             <div class="row description">
@@ -132,6 +135,9 @@
             </div>
 
         </div>
+
+        <hr/>
+        <br/>
 
         <div id = "fraction-heatmap" class = "container Block">
             <div class="row description">
@@ -205,6 +211,9 @@
                 <h2>No data available <br><span v-if="msg[project_name+boxplot_selected]">{{msg[project_name+boxplot_selected]['reason']}}</span></h2>
             </div>
         </div>
+
+        <hr/>
+        <br/>
 
         <div id = "fraction-landscape" class = "container Block">
             <div class="row description">
@@ -469,7 +478,6 @@ export default {
         },
         download_fraction_heatmap_cellData(){
             window.location.href = this.data_path + "cell_data/" + this.heatmap_selected + "/" + this.project_name + "_" + this.heatmap_selected + ".csv";
-
         },
         down_graph(e){
             var clicked_id = e.target.id.replace("_viz_download", "");

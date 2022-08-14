@@ -279,7 +279,8 @@ class ProjectsController < ApplicationController
   
     private 
         def project_params
-            params.require(:project).permit(:project_name, :cancer_name, :num_of_samples, :cancer_id, :platform, :data_type)
+            params.require(:project).permit(:project_name, :cancer_name, :num_of_samples, :cancer_id, :platform, :data_type, :preprocessed, :TIMEDB_processing, :num_of_observed_genes, 
+                :original_description, :submisson_date, :last_update_date, :database, :original_link, :major_related_publications, :publications_link)
         end
   
 end

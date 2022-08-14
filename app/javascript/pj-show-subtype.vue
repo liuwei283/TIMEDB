@@ -64,6 +64,7 @@
         </div>
 
         <hr />
+        <br/>
 
         <div id = "subtype-boxplot" class = "container Block">
 
@@ -136,6 +137,7 @@
         </div>
 
         <hr />
+        <br/>
 
         <div id = "subtype-curve" class = "container Block">
             <div id="curveDescription" class="row description">
