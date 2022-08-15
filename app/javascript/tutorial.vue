@@ -105,11 +105,11 @@
                         <p>We have developed admin pages to help maintain and update TIMEDB platform.
                         <ul>
                             <li>
-                                <p>Permissions has been granted to administration accounts to perform muliple database operations, inlcluding but not limited to new projects and samples records insertion, clinical data uploading, data file integration and reprocessing.</p>
+                                <p>Permissions have been granted to administration accounts to perform multiple database operations, including but not limited to new project and sample records insertion, clinical data uploading, data file integration and reprocessing.</p>
                                 <img v-bind:src="require('../assets/images/admin_f1.png')">
                             </li>
                             <li>
-                                <p>New analysis modules and pipelines which have passed testing can be integrated with the platform easily to provide servies.</p>
+                                <p>New analysis modules and pipelines which have passed testing can be integrated with our platform easily to provide servies.</p>
                                 <img v-bind:src="require('../assets/images/admin_f2.png')">
                                 <img v-bind:src="require('../assets/images/admin_f3.png')">
                             </li>
@@ -119,7 +119,7 @@
                                 <img v-bind:src="require('../assets/images/admin_f5.png')">
                             </li>
                         </ul>
-                        <p>After fixing reported bugs, we will release new versions average 20 ~ 30 days. Detailed platform update information can be found in the home page.</p>
+                        <p>After fixing reported bugs, we will release new versions every 20 ~ 30 days. Detailed platform update information can be found in the home page.</p>
                     </div>
                 </div>
                 <br><br>
