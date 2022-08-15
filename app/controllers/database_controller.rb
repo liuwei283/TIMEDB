@@ -4,7 +4,7 @@ class DatabaseController < ApplicationController
     def overview
         @cancers = Cancer.order(:cancer_name)
         @kidneyIcon = ["Kidney Chromophobe", "Kidney Renal Clear Cell Carcinoma", "Wilms Tumor", "Clear Cell Sarconma of the Kidney", "Kidney Renal Papillary Cell Carcinoma"]
-        @leukemiaIcon = ["Acute Myeloid Leukemia", "Chronic Myelogenous Leukemia", "Acute lymphocytic leukemia", "Acute lymphocytic leukemia"]
+        @leukemiaIcon = ["Acute Myeloid Leukemia", "Chronic Myelogenous Leukemia", "Acute lymphocytic leukemia", "Chronic lymphocytic leukemia"]
         #@singleIcon = []
         #@groupedCancers = []
         @kidneyCancers = []

@@ -477,12 +477,11 @@ class SubmitController < ApplicationController
               Rails.logger.debug "Sucess here - 100"
               Rails.logger.debug uploaded_files_array
 
-
               uploaded_files_array.each do |up_file|
                 uploader = JobInputUploader.new(giveFilePrefix())
                 uploader.store!(up_file)
                 combine_inputs_array[input_id].push('/data/' + uploader.filename)
-              end   
+              end
             end
           end
         end

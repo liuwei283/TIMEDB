@@ -188,9 +188,10 @@
                                                         <label for="pairs_num_select">Please select maximum pairs of files you want to upload:
                                                         </label>
                                                         <div>
-                                                            <b-form-input id="pairs_num_select" value=1 max="5" type="number" step="1" name="selected_pairs_num" v-model="multiple_pairs_num" />
+                                                            <b-form-input id="pairs_num_select" value=1 max="3" type="number" step="1" name="selected_pairs_num" v-model="multiple_pairs_num" />
                                                         </div>
                                                     </div>
+                                                    <p class="text-left" style="color:gray;font-size:1em;"><i>Please do not do batch effect for two datasets both from the TCGA platform.</i></p>
                                                     <div id = "multiple-upload-box" class = "row justify-content-center text-center" v-if="displayedPairsNum > 0">
                                                         <div v-for="input_idx in parseInt(displayedPairsNum)" :key="input_idx" class="text-center col-md-4">
                                                             <div v-b-modal="`batchEffect-config-${input_idx}`" class="uploadPng text-center justify-content-center container" @click="updateStepToFile()">
@@ -390,6 +391,7 @@
 
                     <div class = "col-md-10 text-center">
                         <h4 class = "mb-4"> File submission </h4>
+                        <p class="text-left" style="color:gray;font-size:1.4em;"><i>Please limit your uploaded file size less than 100MB.</i></p>
                         <div class = "row justify-content-center">
                             <div id = "be-file-submit" class = "col-md-6 text-center" v-for="input in displayedInputs" :key="input.id">
                                 

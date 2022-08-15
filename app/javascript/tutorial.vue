@@ -119,7 +119,7 @@
                                 <img v-bind:src="require('../assets/images/admin_f5.png')">
                             </li>
                         </ul>
-                        <p>After fixing reported bugs, we will release new versions everage 20 ~ 30 days. Detailed platform update information can be found in the home page.</p>
+                        <p>After fixing reported bugs, we will release new versions average 20 ~ 30 days. Detailed platform update information can be found in the home page.</p>
                     </div>
                 </div>
                 <br><br>
