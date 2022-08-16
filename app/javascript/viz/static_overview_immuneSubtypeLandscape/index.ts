@@ -79,7 +79,7 @@ function staticDataProcessor(data) {
             if(d[1] != null) categories.add("C"+d[1]);
         }
     })
-    let cat = Array.from(categories);
+    let cat = Array.from(categories).sort();;
     let temp = {};
     let result = {}
     cat.forEach(c=>{
@@ -119,7 +119,7 @@ function staticDataProcessor(data) {
         // let sum = Object.entries(result[c]).reduce((pre, cur) =>  pre + parseFloat(cur[1]), 0);
         ret[c] = Object.entries(result[c]).map((d: [string, number]) => [d[0], d[1]/widMap[d[0]]]);
     })
-    let classifications = cat;
+    let classifications = cat.sort();
     const colorMap = Oviz.color.schemeCategory("dark", cat);
     return {data: ret, classifications, widMap, colorMap, baseWidth: Math.min(1100/Object.keys(widMap).length, 40)}
 }
