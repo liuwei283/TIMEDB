@@ -28,7 +28,7 @@ export function init(vid, path, eid, plot_name) {
             plotSize: [1100, 500],
             startX: 150, 
             startY: 20, 
-            width: 1100, 
+            width: 1500, 
             height: 500, 
             titleSize: 11, 
             labelSize: 11, 
@@ -46,16 +46,16 @@ export function init(vid, path, eid, plot_name) {
                 dsvHasHeader: false,
                 loaded(data) {
                     this.data.data = staticDataProcessor(data)
-                    this.data.width = 100*Object.keys(this.data.data.widMap).length
+                    // this.data.width = 100*Object.keys(this.data.data.widMap).length
                 },
             },
         },
         setup() {
             console.log(this)
             this.data.groups = this.data.data.colorMap
-            this.size = {height: 700, width: 200+100*Object.keys(this.data.data.widMap).length};
+            // this.size = {height: 700, width: 200+100*Object.keys(this.data.data.widMap).length};
+            this.size = {height: 700, width: 1600};
             registerEditorConfig(editorConfig(this, eid), "getVue", plot_name);
-
         }
     });
     return visualizer;
