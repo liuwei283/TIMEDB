@@ -1,6 +1,7 @@
 <% content_for :head do %>
     <link rel="stylesheet" href="http://github.hubspot.com/odometer/themes/odometer-theme-default.css" />
-    <script src="http://github.hubspot.com/odometer/odometer.js"></script>
+    <%# <script type="text/javascript" charset="utf8" src="http://github.hubspot.com/odometer/odometer.js"></script> %>
+    
 <%end%>
 
 <% content_for :title, "Overview" %>
@@ -23,7 +24,7 @@
     <div class="row">
         <div class="col">
             <div id="odometer1" class="ov-number odometer">
-                <%= @cnum - 10 %>
+                <%= @cnum-10 %>
             </div>
             <div class="ov-type">
                 Cancer types
@@ -33,7 +34,7 @@
         </div>
         <div class="col">
             <div id="odometer2" class="ov-number odometer">
-                <%= @pnum - 10 %>
+                <%= @pnum-10 %>
             </div>
             <div class="ov-type">
                 Datasets
@@ -44,7 +45,7 @@
 
         <div class="col">
             <div id="odometer3" class="ov-number odometer">
-                <%= @snum - 10 %>
+                <%= @snum-10 %>
             </div>
             <div class="ov-type">
                 Samples
