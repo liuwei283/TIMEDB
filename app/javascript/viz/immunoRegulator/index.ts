@@ -21,7 +21,7 @@ const chosenIndexName = ["rhesus_brain", "mouse_liver"];
 const chosenIndex = [null, null];
 const chosenValue = 0.39;
 const radius = 5;
-const pivot = 0.5;
+const pivot = 0;
 
 function init() {
 
@@ -144,6 +144,7 @@ function init() {
             registerEditorConfig(editorConfig(this, 1), "getVue", "#task-output");
         },
     });
+
     return visualizer;
 }
 

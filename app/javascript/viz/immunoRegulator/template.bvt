@@ -159,7 +159,7 @@ svg {
 										}
 										@if index == first {
 											Axis("left") {
-												yScale = @scale-linear(10, 0)
+												// yScale = @scale-linear(10, 0)
 											}
 										}
 									}
