@@ -362,6 +362,7 @@ export default {
             clinical_file_path: "",
             heatMapisLoading: false,
             landscapeisLoading: false,
+            subtype_file_exist: false
         }
     },
     //设置默认值
@@ -371,6 +372,7 @@ export default {
         this.heatmap_selected="quanTIseq";
         this.landscape_selected="pie";
         this.clinical_fexists = this.file_exist['clinical'];
+        this.subtype_file_exist = window.gon.subtype_file_exist;
 
         event.on(
             event.DATA_LOADING_FINISHED,
@@ -434,7 +436,7 @@ export default {
             var cellData_file_path = this.data_path + "cell_data/Consensus/" + this.project_name + "_Consensus.csv";
             this.landscape_cell_fexists = this.file_exist['Consensus'];
             
-            if (this.landscape_cell_fexists == 'true') {
+            if (this.landscape_cell_fexists == 'true' && this.landscape_cell_fexists == true) {
                 document.getElementById("fraction_landscapeBlock").style.display = "block";
                 fractionLandscape("#fraction-landscapeVis", cellData_file_path, this.landscape_selected, "#fraction-landscape-editor", "fraction_landscape_viz", this.vue_name);
             }
@@ -550,7 +552,7 @@ export default {
             return this.boxplot_fexiests == 'true';
         },
         getlandscapeFexists() {
-            return this.landscape_cell_fexists == 'true';
+            return this.landscape_cell_fexists == 'true' && this.subtype_file_exist == true;
         },
         getheatmapFexists() {
             return this.clinical_fexists=="true" && this.heatmap_fexists=='true'

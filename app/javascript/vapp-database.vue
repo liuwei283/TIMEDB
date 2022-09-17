@@ -173,7 +173,7 @@
             <div id="landscapeDescription" class="row description">
                 <h4>C1-C6 Landscape</h4>
             </div>
-            <div class="select-bar form-inline row">
+            <!--<div class="select-bar form-inline row">
                 <div class="sdiv col">
                     <div class="select-title">
                         Please choose the cancer name:
@@ -186,7 +186,7 @@
                     </select>
 
                 </div>
-            </div>
+            </div>-->
             <div id = "landscapeBlock">
                 <div class="dropdown mt-3 mb-5">
                     <!-- <button class="btn btn-secondary dropdown-toggle" type="button" id="landscape_download_dropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">

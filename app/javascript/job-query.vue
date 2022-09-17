@@ -45,6 +45,7 @@
                             <i v-if="!refreshEnd" class="fas fa-spinner fa-spin" style="font-size:24px"> </i> 
                         </div>
                     </div>
+                    <p style="color:gray;font-size:1.4em;"><i> You can click refresh button to refresh task status.</i></p>
 
                     <div id="table-container">
                         <template>

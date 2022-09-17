@@ -163,6 +163,7 @@ class ProjectsController < ApplicationController
         #check related files existed or not
         subtype_fpath = $data_dir + "subtype/c1_c6/project/" + @pname + "_c1_c6.csv"
         @subtype_file_exist = File.file?(subtype_fpath)
+        gon.push subtype_file_exist: @subtype_file_exist
         
         # clinical_fpath = $data_dir + "clinical/sample/" + "Clinical_" + @pname + ".csv"
         # @clinical_file_exist = File.file?(clinical_fpath)
