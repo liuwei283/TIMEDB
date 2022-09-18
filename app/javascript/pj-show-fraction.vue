@@ -196,7 +196,7 @@
                     </div>
                 </div>
                 <div class="row veBlock">
-                    <div class="need-upload w-100 text-center container" v-if="heatMapisLoading">
+                    <div class="need-upload w-100 text-center container md-col-12" v-if="heatMapisLoading">
                         <img v-bind:src="require('../assets/images/loading_icon.gif')" style="width:50%;">
                     </div>
                     <div class="md-col-9 vis vizBlock" id = "fraction-heatmapVis">
@@ -576,19 +576,22 @@ export default {
     box-shadow: 0 0 64px darken(#dee2e6, 5%)
 }
 
+#fraction-heatmapVis {
+    height: 1000px;
+    overflow-y: hidden;
+}
+
 .vizBlock {
         /* overflow-y: scroll; */
         overflow-x: scroll;
+        
         padding: 2em;
         margin-top: 5%;
         margin-bottom: 0px !important;
         padding-bottom: 0px;
 }
 
-#fraction-heatmapVis {
-    height: 1000px;
-    /* overflow-y: scroll; */
-}
+
 
     
 /* .v-editor {
