@@ -196,7 +196,7 @@
                     </div>
                 </div>
                 <div class="row veBlock">
-                    <div class="need-upload w-100 text-center container md-col-12" v-if="heatMapisLoading">
+                    <div class="need-upload w-100 text-center container" v-if="heatMapisLoading">
                         <img v-bind:src="require('../assets/images/loading_icon.gif')" style="width:50%;">
                     </div>
                     <div class="md-col-9 vis vizBlock" id = "fraction-heatmapVis">
@@ -479,7 +479,12 @@ export default {
 
         },
         download_fraction_heatmap_cellData(){
-            window.location.href = this.data_path + "cell_data/" + this.heatmap_selected + "/" + this.project_name + "_" + this.heatmap_selected + ".csv";
+            if (this.heatmap_selected == 'EPIC' ||this.heatmap_selected == 'quanTIseq') {
+                window.location.href = this.data_path + "cell_data/" + this.heatmap_selected + "/" + this.project_name + "_" + this.heatmap_selected + ".csv";
+            }
+            else {
+                window.location.href = this.data_path + "cell_data/" + this.heatmap_selected + "/" + this.project_name + "_" + this.heatmap_selected + "_full.csv";
+            }
         },
         down_graph(e){
             var clicked_id = e.target.id.replace("_viz_download", "");

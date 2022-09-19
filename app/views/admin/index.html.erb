@@ -288,6 +288,14 @@
     </p>
     <%= submit_tag 'Update'%>
     <% end %>
+
+    <%= form_tag({action: :count_rna_samples}, multipart: true) do %>
+    <p>
+        count rna samples number (do not click)
+    </p>
+    <%= submit_tag 'Update'%>
+    <% end %>
+
     </section>
 
   <hr>

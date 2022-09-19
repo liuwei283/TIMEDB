@@ -9,7 +9,7 @@ import { EditText } from "oviz-components/edit-text";
 import {register} from "page/visualizers";
 import { rankDict, sortByRankKey } from "utils/bio-info";
 import { registerEditorConfig } from "utils/editor";
-import{ plotDataloaded,clinicalDataloaded,extractWord, showAll, getMaxlength, butclick, getUpper, getGradientcolor, getPlotsize } from "./data"
+import{ plotDataloaded,clinicalDataloaded,extractWord, showAll, getMaxlength, getGradientcolor, getPlotsize, butclick, getUpper } from "./data"
 import * as TextSize from "crux/dist/utils/text-size";
 
 import { registerDefaultBioInfoComponents } from "crux/dist/element/global";
@@ -58,6 +58,7 @@ export function init(id,clinical_file_path,cellData_file_path,eid,plot_name,vue_
             let y1 = y0 + len*Math.sin((angle/180)*Math.PI)
             return {x1:x1,y1:y1}
           },
+
         },
         loadData: {
           RNAData: {

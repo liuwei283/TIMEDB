@@ -18,6 +18,16 @@ const title = "Clinical Data"
 //celList => columns this.data.cellList => classifications
 //sampleList => sampleNames => changNames => categories
 
+//filter other index
+
+export function filterother(cellList,oricelllist){
+
+  cellList.indexOf("P-value") != -1? (cellList.splice(cellList.indexOf("P-value"),1),oricelllist.splice(oricelllist.indexOf("P-value"),1)):null
+  cellList.indexOf("Correlation") != -1? (cellList.splice(cellList.indexOf("Correlation"),1),oricelllist.splice(oricelllist.indexOf("Correlation"),1)):null
+  cellList.indexOf("RMSE") != -1? (cellList.splice(cellList.indexOf("RMSE"),1),oricelllist.splice(oricelllist.indexOf("RMSE"),1)):null
+  cellList.indexOf("Absolute score (sig.score)") != -1? (cellList.splice(cellList.indexOf("Absolute score (sig.score)"),1),oricelllist.splice(oricelllist.indexOf("Absolute score (sig.score)"),1)):null
+
+}
 
 export function plotDataloaded(_data){
 
@@ -26,9 +36,10 @@ export function plotDataloaded(_data){
   this.data.oricelllist = _data.columns.slice(2)
   cellList = cellList.slice(0,22)
 
-  if(cellList.indexOf("P-value") != -1){
-    cellList.splice(cellList.indexOf("P-value"),1)
-  }
+  // if(cellList.indexOf("P-value") != -1){
+  //   cellList.splice(cellList.indexOf("P-value"),1)
+  // }
+  filterother(cellList,this.data.oricelllist)
 
   let sampleList = _data.map(x=>x["sample_name"]) 
 
@@ -72,7 +83,17 @@ export function plotDataloaded(_data){
   this.data.tickFontSize = 14;
   
   let newArr = _data; 
-  newArr.map(function(arr){return delete arr.method})
+  // newArr.map(function(arr){return delete arr.method})
+  newArr.map(function(arr){
+    delete arr.method 
+    delete arr["P-value"]
+    delete arr["Correlation"]
+    delete arr["RMSE"]
+    delete arr["Absolute score (sig.score)"]
+    return arr
+  })
+  filterother(newArr.columns,[])
+  console.log("newArr:",newArr)
   let newData =  dataHandler(newArr)
 
   let testrange0 = MINforArr(newData.result)
@@ -112,6 +133,16 @@ export function plotDataloaded(_data){
 
   let sumMap = new Map()
   const sum = [];
+  let fil_stacked = newArr.map(function(arr){
+    delete arr.method 
+    delete arr["P-value"]
+    delete arr["Correlation"]
+    delete arr["RMSE"]
+    delete arr["Absolute score (sig.score)"]
+    return arr
+  })
+  console.log("fil_stacked:",fil_stacked)
+
   _data.forEach(row => {
     let count = 0,key,value;
     for ([key, value] of Object.entries(row).slice(1)) {
@@ -160,9 +191,10 @@ export function showAll(_data,key){
     cellList = _data.columns.slice(2,22)
   }
 
-  if(cellList.indexOf("P-value") != -1){
-    cellList.splice(cellList.indexOf("P-value"),1)
-  }
+  // if(cellList.indexOf("P-value") != -1){
+  //   cellList.splice(cellList.indexOf("P-value"),1)
+  // }
+  filterother(cellList,[])
 
   let sampleList = []
   for(let i = 0;i < _data.length;i++){
@@ -204,7 +236,16 @@ export function showAll(_data,key){
   newConfig["labelFontSize"] = 12
   newConfig["tickFontSize"] = 14
   let newArr = _data;
-  newArr.map(function(arr){return delete arr.method})
+  // newArr.map(function(arr){return delete arr.method})
+  newArr.map(function(arr){
+    delete arr.method 
+    delete arr["P-value"]
+    delete arr["Correlation"]
+    delete arr["RMSE"]
+    delete arr["Absolute score (sig.score)"]
+    return arr
+  })
+  filterother(newArr.columns,[])
   let newData =  dataHandler(newArr)
   if(key==1){
     newData.columns = newData.columns.slice(0,22)
@@ -297,7 +338,7 @@ export function clinicalDataloaded(_data){
     this.data.clinicalDatashow = false
 
     let bgendColor = "#00479a" 
-    let bgstartColor =  "#dbdbdb"; 
+    let bgstartColor = 	"#dbdbdb"; 
     let gbstartColor = "#dbdbdb" 
     let gbendColor = "#FF0000"
   
@@ -464,7 +505,7 @@ export function clinicalDataloaded(_data){
   this.data.textmaxxx = textmaxxx.toFixed(1)
 
   let bgendColor = "#00479a" 
-  let bgstartColor =  "#dbdbdb"; 
+  let bgstartColor = 	"#dbdbdb"; 
   let gbstartColor = "#dbdbdb" 
   let gbendColor = "#FF0000"
 
@@ -521,6 +562,7 @@ export function clinicalDataloaded(_data){
     n_legendData.push({label:item,row:n_crow[index],min: min,max: max})
   })
   let n_color = {}
+  console.log("n_legendData:",n_legendData)
   n_legendData.forEach((item,index)=>{
     if(item.min!=" "&&item.max!=" "){
       n_color[item.label] = {min:item.min,max:item.max}
@@ -593,9 +635,10 @@ export function recheck(_data,newlist,newsampleList){
   }else if(key==1){
     cellList = _data.columns.slice(2,22)
   }
-  if(cellList.indexOf("P-value") != -1){
-    cellList.splice(cellList.indexOf("P-value"),1)
-  }
+  // if(cellList.indexOf("P-value") != -1){
+  //   cellList.splice(cellList.indexOf("P-value"),1)
+  // }
+  filterother(cellList,[])
 
   let sampleList = []
   for(let i = 0;i < _data.length;i++){
@@ -638,7 +681,16 @@ export function recheck(_data,newlist,newsampleList){
   newConfig["labelFontSize"] = 12
   newConfig["tickFontSize"] = 14
   let newArr = _data;
-  newArr.map(function(arr){return delete arr.method})
+  // newArr.map(function(arr){return delete arr.method})
+  newArr.map(function(arr){
+    delete arr.method 
+    delete arr["P-value"]
+    delete arr["Correlation"]
+    delete arr["RMSE"]
+    delete arr["Absolute score (sig.score)"]
+    return arr
+  })
+  filterother(newArr.columns,[])
   let newData =  dataHandler(newArr)
   if(key==1){
     newData.columns = newData.columns.slice(0,22)
@@ -1537,7 +1589,6 @@ export function dataHandler(data){
   columns.forEach((arr) => {
     const temp1 = [];
     data.forEach((d) => {
-      d[arr] == "NA"? d[arr] = 0:null
       temp1.push(parseFloat(d[arr]));
     });
     const stat = new Oviz.algo.Statistics(temp1);

@@ -384,6 +384,45 @@ class AdminController < ApplicationController
 
     end
 
+    def count_rna_samples
+        projects = Project.all
+        csf_path = "#{$data_dir}sample_num/rna_clinical_samples.tsv"
+        csf = File.open(csf_path, "w")
+        s = "project_name\tclincial_number\trna_number"
+        # @cancers.each do |cancer|
+        #     ct = cancer.cancer_name
+        #     sn = cancer.number_of_samples
+        #     s += "\n"
+        #     s += "#{ct}\t#{sn}"
+        # end 
+        # csf.write(s)
+        # csf.close
+        projects.each do |project|
+            s += "\n"
+            pname = project.project_name
+            file_name = pname + ".csv"
+            file_path = "#{$data_dir}RNA/RNA_" + file_name
+            if File.exists?(file_path)
+                headers = CSV.open(file_path, 'r') { |csv| csv.first }.count
+                rna_snum = headers - 1
+            else
+                rna_sum = 0
+            end
+
+            # clinical_fpath = "#{$data_dir}clinical/sample/Clinical_" + file_name
+            # if File.exists?(clinical_fpath)
+            #     clinical_snum = CSV.read(clinical_fpath, headers: true).headers.count - 1
+            # else
+            #     clinical_sum = 0
+            # end
+            clinical_snum = project.samples.count
+            s += "#{pname}\t#{clinical_snum}\t#{rna_snum}"
+        end
+        csf.write(s)
+        csf.close
+        redirect_to '/admin', notice: "rna samples counted!"
+    end
+
     # def split_processed_columns_file
     #     #redirect_to import_inf_table_project_samples_path(:project_id=>params[:project_id], :file=>params[:file])
     #     up_file = params[:file]

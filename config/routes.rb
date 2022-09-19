@@ -152,6 +152,7 @@ Rails.application.routes.draw do
   post "admin/make_subtype_cancer_files" => "admin#make_subtype_cancer_files", :as => "admin/make_subtype_cancer_files"
   post "admin/update_columns" => "admin#update_columns", :as => "admin/update_columns"
   post "admin/update_files" => "admin#update_files", :as =>"admin/update_files"
+  post "admin/count_rna_samples" => "admin#count_rna_samples", :as =>"admin/count_rna_samples"
   post "admin/update_columns_cancer" => "admin#update_columns_cancer", :as => "admin/update_columns_cancer"
 
   post "admin/modify_viz" => "admin#modify_viz", :as => "admin/modify_viz"

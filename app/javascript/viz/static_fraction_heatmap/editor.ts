@@ -9,7 +9,9 @@ function run(v) {
     v.forceRedraw = true;
     v.run();
 }
-export const editorRef = {} as any;
+export const editorRef = {
+    rotation:false
+} as any;
 
 function update(v,eid) {
     v.forceRedraw = true;
@@ -33,8 +35,7 @@ export const generateTestConfig = (v,eid): any => ({
                         value: {
                             current: v.data.legendStyle,
                             callback(d) {
-                                v.data.legendStyle = d;
-                                switchStyle(v);
+                                v.data.clinicalDatashow? (v.data.legendStyle = d,switchStyle(v)):null
                                 v.forceRedraw = true;
                                 v.data._sizeUpdated = true;
                                 update(v,eid);
@@ -49,6 +50,7 @@ export const generateTestConfig = (v,eid): any => ({
                             callback(d) {
                                 // v.data.clinicalDatashow? (v.data.legendStyle = d,switchStyle(v)):null
                                 v.data.samplenameshow = d
+                                editorRef.rotation = d
                                 d? v.data.maxsamplelength = v.data.propsamplelength:v.data.maxsamplelength =0
                                 d? v.size.height = v.size.height + v.data.maxsamplelength : v.size.height = v.size.height - v.data.propsamplelength
                                 v.forceRedraw = true;
@@ -68,7 +70,7 @@ export const generateTestConfig = (v,eid): any => ({
                                 v.data.samplenamerotation = x
                                 v.forceRedraw = true;
                                 v.data._sizeUpdated = true;
-                                update(v,eid);
+                                update(v);
                             }
                         }
                     },
@@ -114,7 +116,6 @@ export function editorConfig(v,eid): EditorDef {
                                                             + v.data.tipsrow*7
                                             v.data._sizeUpdated = true;
                                             v.forceRedraw = true;
-                                            v.data._sizeUpdated = true;
                                             update(v,eid);
                                         },
                                     },
