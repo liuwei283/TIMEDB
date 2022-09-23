@@ -9,30 +9,30 @@
       | save analyis results 
     | before closing the current browser session.
 .index-banner
-  .wide-container#workspace_dataset
-    section#dataset_list
-      h2.display-4.font-weight-bold.text-center
-        | My dataset
-      p.text-center
-        i style="color:gray;font-size:1.4em;" You could create a dataset by selecting tumor samples from TIMEDB database and run the analysis.
-      .text-center
-        button class = "btn btn-1 ml-4" style="display:inline" 
-          = link_to "Dataset Helper", "/tutorial/database/3"
-      br
-      .element_wrapper
-        - @dataset_list.each do |dataset|
-          span.ds
-            = link_to dataset.name, user_dataset_path(:user_id=>@user.id, :id => dataset.id)
-        span#add_folder_icon
-          = link_to new_user_dataset_path(:user_id=>@user.id) do
-            = image_tag 'folder-plus.svg'
-    br
-    br
+  / .wide-container#workspace_dataset
+  /   section#dataset_list
+  /     h2.display-4.font-weight-bold.text-center
+  /       | My dataset
+  /     p.text-center
+  /       i style="color:gray;font-size:1.4em;" You could create a dataset by selecting tumor samples from TIMEDB database and run the analysis.
+  /     .text-center
+  /       button class = "btn btn-1 ml-4" style="display:inline" 
+  /         = link_to "Dataset Helper", "/tutorial/database/3"
+  /     br
+  /     .element_wrapper
+  /       - @dataset_list.each do |dataset|
+  /         span.ds
+  /           = link_to dataset.name, user_dataset_path(:user_id=>@user.id, :id => dataset.id)
+  /       span#add_folder_icon
+  /         = link_to new_user_dataset_path(:user_id=>@user.id) do
+  /           = image_tag 'folder-plus.svg'
+  /   br
+  /   br
     
-    br
-    br
-    br
-    hr
+  /   br
+  /   br
+  /   br
+  /   hr
   .wide-container
     h2.mt-5.display-4.font-weight-bold.text-center
       | Task Query

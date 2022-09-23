@@ -28,22 +28,22 @@ class SubmitController < ApplicationController
     gon.push cname: params[:cname]
     gon.push dark: session[:dark]
 
-    Rails.logger.error (params[:cname])
+    # Rails.logger.error (params[:cname])
     
     @analyses = @analysis_category.analyses.all
 
-    uid = session[:user_id]
-    @user = User.find(uid)
-    # user_dir = File.join($user_stor_dir, uid.to_s)
-    @datasets = @user.datasets
+    # uid = session[:user_id]
+    # @user = User.find(uid)
+    # @datasets = @user.datasets
+    @datasets = Project.all.order(:project_name)
     data = {}
     @datasets.each do |ds|
-      ds_name = ds.name
-      ps_num = ds.getProjectSources(ds_name).length
-      platform_names, project_names = ds.getProjectsPlatforms(ds_name)
+      ds_name = ds.project_name
+      # ps_num = ds.getProjectSources(ds_name).length
+      platform_name = ds.platform
       # ds_dir = File.join(user_dir, ds_name)
       # file_list = Dir.entries(ds_dir)[2..-1]
-      data[ds_name] = [ps_num, platform_names, project_names] 
+      data[ds_name] = platform_name
     end
 
     if params[:aname]
@@ -68,19 +68,30 @@ class SubmitController < ApplicationController
     end
     @analysis_categories = AnalysisCategory.order(:name) #no sense, just for sidebar
 
-    uid = session[:user_id]
-    @user = User.find(uid)
-    # user_dir = File.join($user_stor_dir, uid.to_s)
-    @datasets = @user.datasets
+    @datasets = Project.all.order(:project_name)
     data = {}
     @datasets.each do |ds|
-      ds_name = ds.name
-      ps_num = ds.getProjectSources(ds_name).length
-      platform_names, project_names = ds.getProjectsPlatforms(ds_name)
+      ds_name = ds.project_name
+      # ps_num = ds.getProjectSources(ds_name).length
+      platform_name = ds.platform
       # ds_dir = File.join(user_dir, ds_name)
       # file_list = Dir.entries(ds_dir)[2..-1]
-      data[ds_name] = [ps_num, platform_names, project_names] 
+      data[ds_name] = platform_name
     end
+
+    # uid = session[:user_id]
+    # @user = User.find(uid)
+    # # user_dir = File.join($user_stor_dir, uid.to_s)
+    # @datasets = @user.datasets
+    # data = {}
+    # @datasets.each do |ds|
+    #   ds_name = ds.name
+    #   ps_num = ds.getProjectSources(ds_name).length
+    #   platform_names, project_names = ds.getProjectsPlatforms(ds_name)
+    #   # ds_dir = File.join(user_dir, ds_name)
+    #   # file_list = Dir.entries(ds_dir)[2..-1]
+    #   data[ds_name] = [ps_num, platform_names, project_names] 
+    # end
     gon.push select_box_option: data
     gon.push ptype: type
 
@@ -411,55 +422,58 @@ class SubmitController < ApplicationController
           datasets_selected.each do |ds_name|
 
             
-            @dataset = @user.datasets.find_by(name: ds_name)
+            @dataset = Project.find_by(project_name: ds_name)
+            
+            combine_inputs_array[file_names['Clinical data']].push("/data/clinical_data/Clinical_#{ds_name}.csv")
+            combine_inputs_array[file_names['Gene expression data']].push("/data/RNA_data/RNA_#{ds_name}.csv")
 
-            Rails.logger.debug "Sucess here - 1"
-            Rails.logger.debug ds_name
+            # Rails.logger.debug "Sucess here - 1"
+            # Rails.logger.debug ds_name
 
-            merged_files = @dataset.mergeFile(ds_name)
-            Rails.logger.debug merged_files.keys
+            # merged_files = @dataset.mergeFile(ds_name)
+            # Rails.logger.debug merged_files.keys
 
-            Rails.logger.debug "Sucess here - 2"
-            cur_length = 0
+            # Rails.logger.debug "Sucess here - 2"
+            # cur_length = 0
         
 
-            file_names.keys.each do |input_id|
-              cur_file_paths = []
-              fname = file_names[input_id]
-              Rails.logger.debug fname
-              match_merged_files = merged_files[fname]
-              Rails.logger.info "Outputing not existed database merged files: =======>"
-              Rails.logger.info match_merged_files.class
-              Rails.logger.info match_merged_files.blank?
+            # file_names.keys.each do |input_id|
+            #   cur_file_paths = []
+            #   fname = file_names[input_id]
+            #   Rails.logger.debug fname
+            #   match_merged_files = merged_files[fname]
+            #   Rails.logger.info "Outputing not existed database merged files: =======>"
+            #   Rails.logger.info match_merged_files.class
+            #   Rails.logger.info match_merged_files.blank?
 
-              Rails.logger.info "Outputing the number of not existed database merged files: =======>"
-              if !match_merged_files.blank?
-                Rails.logger.debug match_merged_files.length
-                cur_length = match_merged_files.length
+            #   Rails.logger.info "Outputing the number of not existed database merged files: =======>"
+            #   if !match_merged_files.blank?
+            #     Rails.logger.debug match_merged_files.length
+            #     cur_length = match_merged_files.length
 
-                Rails.logger.info !match_merged_files.blank?
-                match_merged_files.each_with_index do |m_file, idx|
-                  file_name = fname + "_" + (idx_sum + idx).to_s + ".csv"
-                  Rails.logger.debug file_name
-                  file = File.new(file_name, 'w')
-                  file.write(m_file)
-                  Rails.logger.debug "make files"
-                  uploader = JobInputUploader.new(giveFilePrefix())
+            #     Rails.logger.info !match_merged_files.blank?
+            #     match_merged_files.each_with_index do |m_file, idx|
+            #       file_name = fname + "_" + (idx_sum + idx).to_s + ".csv"
+            #       Rails.logger.debug file_name
+            #       file = File.new(file_name, 'w')
+            #       file.write(m_file)
+            #       Rails.logger.debug "make files"
+            #       uploader = JobInputUploader.new(giveFilePrefix())
             
-                  uploader.store!(file)
-                  Rails.logger.debug "make files success"
+            #       uploader.store!(file)
+            #       Rails.logger.debug "make files success"
 
-                  Rails.logger.debug "upload files" + uploader.filename
+            #       Rails.logger.debug "upload files" + uploader.filename
 
-                  cur_file_paths.push('/data/' + uploader.filename)
-                  file.close
-                end
-                combine_inputs_array[input_id] += cur_file_paths
-              end
-            end
+            #       cur_file_paths.push('/data/' + uploader.filename)
+            #       file.close
+            #     end
+            #     combine_inputs_array[input_id] += cur_file_paths
+            #   end
+            # end
 
-            Rails.logger.debug "Sucess here - 3"
-            idx_sum += cur_length
+            # Rails.logger.debug "Sucess here - 3"
+            # idx_sum += cur_length
 
           end
         end

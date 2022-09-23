@@ -174,7 +174,7 @@
                 <h4>C1-C6 Landscape</h4>
             </div>
 
-            <!--<div class="select-bar form-inline row">
+            <div class="select-bar form-inline row">
                 <div class="sdiv col">
                     <div class="select-title">
                         Please choose the cancer name:
@@ -187,7 +187,7 @@
                     </select>
 
                 </div>
-            </div>-->
+            </div>
             
             <div id = "landscapeBlock">
                 <div class="dropdown mt-3 mb-5">

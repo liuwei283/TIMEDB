@@ -823,13 +823,13 @@
                                 var cur_pvalue = "";
 
                                 if (this.multiple_parameters[mp].name == 'Dataset name') {
-                                    cur_pvalue = this.ds_info[this.ds_selected[input_idx - 1]][2];
+                                    cur_pvalue = this.ds_selected[input_idx - 1];
                                 }
                                 else if (this.multiple_parameters[mp].name == 'Platform') {
-                                    cur_pvalue = this.ds_info[this.ds_selected[input_idx - 1]][1];
+                                    cur_pvalue = this.ds_info[this.ds_selected[input_idx - 1]];
                                 }
                                 else {
-                                    cur_pvalue =  Array(this.ds_info[this.ds_selected[input_idx - 1]][0]).fill(this.ds_param_selected[input_idx - 1]).join(',');
+                                    cur_pvalue =  this.ds_param_selected[input_idx - 1];
                                 }
 
                                 if (pvalue == "") {
@@ -838,7 +838,6 @@
                                 else {
                                     pvalue = pvalue + "," + cur_pvalue;
                                 }
-
                             }
                             // pvalue_arr.push(this.parameters['multiple-p-' + this.multiple_parameters[mp].id + '-' + input_idx]);
                         }
@@ -1053,19 +1052,19 @@
                 })
 
                 //there will be double check later
-                if (is_single && this.ds_selected != "") {
-                    if (this.ds_info[this.ds_selected][0] > 1) {
-                        //console.log("Selected datasets has multiple project sources!")
-                        allRight = false
-                        alertCenter.add('danger', "Selected dataset has multiple project sources, but you are under single mode!");
-                    }
-                    // for (var file_inputs in this.files) {
-                    //     if (this.files[file_inputs] != null) {
-                    //         console.log("You should not upload any files if you select datsets under single mode.")
-                    //         allRight = false;
-                    //     }
-                    // }
-                }
+                // if (is_single && this.ds_selected != "") {
+                //     if (this.ds_info[this.ds_selected][0] > 1) {
+                //         //console.log("Selected datasets has multiple project sources!")
+                //         allRight = false
+                //         alertCenter.add('danger', "Selected dataset has multiple project sources, but you are under single mode!");
+                //     }
+                //     // for (var file_inputs in this.files) {
+                //     //     if (this.files[file_inputs] != null) {
+                //     //         console.log("You should not upload any files if you select datsets under single mode.")
+                //     //         allRight = false;
+                //     //     }
+                //     // }
+                // }
 
                 if (allRight == true) {
                     var anyFile;

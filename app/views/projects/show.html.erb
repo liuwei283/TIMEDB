@@ -190,6 +190,9 @@
             <div class="btn btn-outline-dark" data-toggle="collapse" data-target="#export_box" aria-expanded="true" aria-controls="export_box">
               Export samples to Dataset <i class="fas fa-caret-down"></i>
             </div>
+            <%= link_to submit_analysesCategory_path(ds_selected: @project.project_name, cname: "Regression Tools"), :class => "s_table_sub btn btn-outline-dark" do %>
+                Run Analysis <%= image_tag 'analysis_icon.png', class: "pl-2", style:"width:20px;" %>
+            <% end %>
           </div>
 
           <%= form_tag make_selected_file_samples_path, multipart: true do %>

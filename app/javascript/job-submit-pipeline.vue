@@ -837,16 +837,16 @@
                             if (this.ds_selected[input_idx - 1] != '') {
                                 //console.log("for input pair " + input_idx + " we use dataset merging");
                                 //Dataset name
-                                var dataset_names = this.ds_info[this.ds_selected[input_idx - 1]][2].split(',');
+                                var dataset_names = this.ds_selected[input_idx - 1];
                                 //console.log(dataset_names);
                                 //Platform name
-                                var platform_names = this.ds_info[this.ds_selected[input_idx - 1]][1].split(',');
+                                var platform_names = this.ds_info[this.ds_selected[input_idx - 1]];
                                 //console.log(platform_names);
                                 //project source number
                                 var ps_number = this.ds_info[this.ds_selected[input_idx - 1]][0];
-                                multiple_sync_array['Dataset name'] = multiple_sync_array['Dataset name'].concat(dataset_names);
-                                multiple_sync_array["Platform"] = multiple_sync_array["Platform"].concat(platform_names);
-                                multiple_sync_array['Protocol normalization'] = multiple_sync_array['Protocol normalization'].concat(Array(ps_number).fill(this.parameters["multiple-p-" + this.multiple_sync_params['Protocol normalization'][0].id + "-" + input_idx]));
+                                multiple_sync_array['Dataset name'] = multiple_sync_array['Dataset name'].push(dataset_names);
+                                multiple_sync_array["Platform"] = multiple_sync_array["Platform"].push(platform_names);
+                                multiple_sync_array['Protocol normalization'] = multiple_sync_array['Protocol normalization'].push(this.parameters["multiple-p-" + this.multiple_sync_params['Protocol normalization'][0].id + "-" + input_idx]);
                                 // for (let module_name in this.multiple_module_params) {
                                 //     if (this.multiple_module_params[module_name].params != null) {
                                 //         multiple_module_array[module_name] += Array(ps_number).fill(this.parameters["multiple-p-" + this.multiple_module_params[module_name].params.id + "-" + input_idx]);
@@ -1070,7 +1070,6 @@
                                 // this.single_module_params_desc = this.multiple_module_params[Object.keys(this.single_parameters)[0]].description;
                             }
                             
-                            
                             for (var k in this.app.inputs){
                                 this.file_names['i-' + this.app.inputs[k].id]  = this.app.inputs[k].name; //for later dataset merging - file matching
                                 this.file_required['i-' + this.app.inputs[k].id] = this.app.inputs[k].required;
@@ -1123,19 +1122,19 @@
                 })
 
                 //there will be double check later
-                if (is_single && this.ds_selected != "") {
-                    if (this.ds_info[this.ds_selected][0] > 1) {
-                        // console.log("Selected datasets has multiple project sources!")
-                        allRight = false
-                        alertCenter.add('danger', "Selected dataset has multiple project sources, but you are under single mode!");
-                    }
-                    // for (var file_inputs in this.files) {
-                    //     if (this.files[file_inputs] != null) {
-                    //         console.log("You should not upload any files if you select datsets under single mode.")
-                    //         allRight = false;
-                    //     }
-                    // }
-                }
+                // if (is_single && this.ds_selected != "") {
+                //     if (this.ds_info[this.ds_selected][0] > 1) {
+                //         // console.log("Selected datasets has multiple project sources!")
+                //         allRight = false
+                //         alertCenter.add('danger', "Selected dataset has multiple project sources, but you are under single mode!");
+                //     }
+                //     // for (var file_inputs in this.files) {
+                //     //     if (this.files[file_inputs] != null) {
+                //     //         console.log("You should not upload any files if you select datsets under single mode.")
+                //     //         allRight = false;
+                //     //     }
+                //     // }
+                // }
 
                 if (allRight == true) {
                     var anyFile;

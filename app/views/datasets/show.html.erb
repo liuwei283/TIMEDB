@@ -28,9 +28,6 @@
                 <%= link_to download_ds_metadata_user_dataset_path, :class => "s_table_sub btn btn-outline-dark" do %>
                     Download dataset <i class='fas fa-download pl-2'></i> 
                 <%end%>
-                <%= link_to submit_analysesCategory_path(ds_selected: @dataset.name, cname: "Regression Tools"), :class => "s_table_sub btn btn-outline-dark" do %>
-                    Run Analysis <%= image_tag 'analysis_icon.png', class: "pl-2", style:"width:20px;" %> 
-                <% end %>
             </div>
             <div id="edit_box" class="db-toolbox collapse" data-parent="#db-toolbar">
                 <div class="p-2">
