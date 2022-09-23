@@ -161,7 +161,7 @@ export default {
         return {
                 details: 0,
                 articles:[
-                    {title:"Introduction", id:"1",key:["database","intro"]},
+                    {title:"Database Introduction", id:"1",key:["database","intro"]},
                     {title:"How to View Database Information", id:"2",key:["database","information","data"]},
                     {title:"How to Add Data to Your Workspace", id:"3",key:["database","workspace","dataset","data"]},
                     {title:"How to Download Database Data", id:"4",key:["database","download","data"]},
@@ -169,7 +169,7 @@ export default {
                     {title:"How to Download the Visualizations", id:"6",key:["database","visualization","download"]},
                 ],
                 articles2:[
-                    {title:"Introduction", id:"1",key:["anaylsis","intro"]},
+                    {title:"Analyses Introduction", id:"1",key:["anaylsis","intro"]},
                     {title:"How to Complete an Analysis", id:"2",key:["analysis","step","complete"]},
                     {title:"What Analysis We Have", id:"3",key:["analysis","helper","kind"]},
 
