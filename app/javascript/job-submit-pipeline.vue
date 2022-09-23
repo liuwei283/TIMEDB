@@ -844,9 +844,9 @@
                                 //console.log(platform_names);
                                 //project source number
                                 var ps_number = this.ds_info[this.ds_selected[input_idx - 1]][0];
-                                multiple_sync_array['Dataset name'] = multiple_sync_array['Dataset name'].push(dataset_names);
-                                multiple_sync_array["Platform"] = multiple_sync_array["Platform"].push(platform_names);
-                                multiple_sync_array['Protocol normalization'] = multiple_sync_array['Protocol normalization'].push(this.parameters["multiple-p-" + this.multiple_sync_params['Protocol normalization'][0].id + "-" + input_idx]);
+                                multiple_sync_array['Dataset name'].push(dataset_names);
+                                multiple_sync_array["Platform"].push(platform_names);
+                                multiple_sync_array['Protocol normalization'].push(this.parameters["multiple-p-" + this.multiple_sync_params['Protocol normalization'][0].id + "-" + input_idx]);
                                 // for (let module_name in this.multiple_module_params) {
                                 //     if (this.multiple_module_params[module_name].params != null) {
                                 //         multiple_module_array[module_name] += Array(ps_number).fill(this.parameters["multiple-p-" + this.multiple_module_params[module_name].params.id + "-" + input_idx]);
