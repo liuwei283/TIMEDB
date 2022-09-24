@@ -1,6 +1,8 @@
 <template>
     <!-- eslint-disable max-len -->
     <div>
+        <alert-center ref="alertCenter" />
+
         <div v-if="!isLoading">
 
             <div class="prepare mb-5" v-if="!submitted">
@@ -95,7 +97,6 @@
                     </div>
                     <div class="col-md-10">
                         <div id="run-app">
-                            <alert-center ref="alertCenter" />
                             
                             <!-- Inputs -->
                             <div v-if="started && !submitted">
@@ -159,7 +160,7 @@
                                                         <b-form-input id="pairs_num_select" value=1 max="3" type="number" step="1" name="selected_pairs_num" v-model="multiple_pairs_num" />
                                                     </div>
                                                 </div>
-                                                <p class="text-left" style="color:gray;font-size:1em;"><i>Please do not do batch effect for two datasets both from the TCGA platform.</i></p>
+                                                <p class="text-left" style="color:gray;font-size:1em;"><i>The total number of samples after integration should be less than 500.</i></p>
                                                 <div id = "multiple-upload-box" class = "row justify-content-center text-center" v-if="displayedPairsNum > 0">
                                                     <div v-for="input_idx in parseInt(displayedPairsNum)" :key="input_idx" class="text-center col-md-4">
                                                         <div v-b-modal="`batchEffect-config-${input_idx}`" class="uploadPng text-center justify-content-center container" @click="updateStepToFile()">
@@ -1302,7 +1303,7 @@
                             this.submitted = true;
                             
                         } else {
-                            alertData = response.data.msg;
+                            alertData = response.data.data;
                         }
                     }).catch((reason) => {
                         alertData = reason;
@@ -1314,7 +1315,7 @@
                         //$("#disable-fill").fadeOut(10);
                         this.isLoading = false;
                         if (!!alertData) {
-                            this.$refs.alertCenter.add('danger', alertData);
+                            alertCenter.add('danger', alertData);
                         }
                         // if (this.submitted) {
                         //     setTimeout(() => {
@@ -1375,15 +1376,17 @@
                         this.submitted = true;
                         
                     } else {
-                        alertData = response.data.msg;
+                        alertData = response.data.data;
                     }
-                }).catch((reason) => {
+                }).catch((reason) => { 
                     alertData = reason;
                 }).finally(() => {
                     //$("#disable-fill").fadeOut(10);
                     this.isLoading = false;
                     if (!!alertData) {
-                        this.$refs.alertCenter.add('danger', alertData);
+                        console.log(alertData);
+
+                        alertCenter.add('danger', alertData);
                     }
                     // if (this.submitted) {
                     //     setTimeout(() => {

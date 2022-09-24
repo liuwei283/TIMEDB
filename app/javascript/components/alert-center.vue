@@ -59,6 +59,7 @@ export default {
 <style lang="scss">
 #alert-center {
 	position: fixed;
+    z-index: 1000000000 !important;
 	top: 80px;
 	right: 50px;
 	width: 360px;

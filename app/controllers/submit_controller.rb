@@ -379,7 +379,6 @@ class SubmitController < ApplicationController
       inputs = Array.new
       params = Array.new
 
-      # store selected file to user's data folder
 
 
       if is_demo == "true"
@@ -398,6 +397,71 @@ class SubmitController < ApplicationController
         end
       else
 
+        # limit the number of samples for pipelines under multiple mode
+        if is_pipeline == "true"
+          total_samples = 0
+          if !datasets_selected.blank?
+            datasets_selected.each do |ds_name|
+              total_samples += Project.find_by(project_name: ds_name).samples.count
+            end
+          end
+
+          if !app_inputs.blank?
+            app_inputs&.each do |input_id, uploaded_file|
+              Rails.logger.info file_names[input_id]
+              if file_names[input_id] == "Gene expression data"
+                File.open(uploaded_file.tempfile, 'r') do |tmpfile|
+                  Rails.logger.info tmpfile
+                  tmpfile.each do |line|
+                    total_samples += line.split(",").count - 1
+                    break
+                  end
+                end
+              end
+            end
+          end
+          
+          if total_samples > 500
+            result_json[:code] = false
+            result_json[:data] = "The sample number is larger than 500."
+            render json: result_json
+            return
+          end
+        end
+
+        # check the file type
+        app_inputs&.each do |input_id, uploaded_file|
+          Rails.logger.info file_names[input_id]
+          if file_names[input_id] == "Gene expression data"
+            File.open(uploaded_file.tempfile, 'r') do |tmpfile|
+              Rails.logger.info tmpfile
+              tmpfile.each do |line|
+                if !line.split(",").include?("GeneSymbol")
+                  result_json[:code] = false
+                  result_json[:data] = "Problematic input format for gene expression data."
+                  render json: result_json
+                  return
+                end
+                break
+              end
+            end
+          elsif file_names[input_id] == "Clinical data"
+            File.open(uploaded_file.tempfile, 'r') do |tmpfile|
+              Rails.logger.info tmpfile
+              tmpfile.each do |line|
+                if !line.split(",").include?("sample_name")
+                  result_json[:code] = false
+                  result_json[:data] = "Problematic input format for clinical data."
+                  render json: result_json
+                  return
+                end
+                break
+              end
+            end
+          end
+        end
+
+
         Rails.logger.debug "coming here"
         
 
@@ -407,8 +471,11 @@ class SubmitController < ApplicationController
         Rails.logger.error app_inputs.class
         Rails.logger.error file_names
 
+        file_names_revert = {}
+
         file_names.keys.each do |input_id|
           combine_inputs_array[input_id] = []
+          file_names_revert[file_names[input_id]] = input_id
         end
         
         Rails.logger.debug "Sucess here - 110"
@@ -417,15 +484,16 @@ class SubmitController < ApplicationController
 
         
         if !datasets_selected.blank?
-          idx_sum = 0
-          cur_length = 0
+          # idx_sum = 0
+          # cur_length = 0
           datasets_selected.each do |ds_name|
 
-            
+
             @dataset = Project.find_by(project_name: ds_name)
+
             
-            combine_inputs_array[file_names['Clinical data']].push("/data/clinical_data/Clinical_#{ds_name}.csv")
-            combine_inputs_array[file_names['Gene expression data']].push("/data/RNA_data/RNA_#{ds_name}.csv")
+            combine_inputs_array[file_names_revert['Clinical data']].push("/data/clinical/Clinical_#{ds_name}.csv")
+            combine_inputs_array[file_names_revert['Gene expression data']].push("/data/rna/RNA_#{ds_name}.csv")
 
             # Rails.logger.debug "Sucess here - 1"
             # Rails.logger.debug ds_name
@@ -570,7 +638,7 @@ class SubmitController < ApplicationController
       end
     rescue StandardError => e
       result_json[:code] = false
-      result_json[:data] = e.message + "\nWe do not have corrosponding rna file."
+      result_json[:data] = e.message + "\nSomething wrong with your inputs."
     end
     render json: result_json
   end

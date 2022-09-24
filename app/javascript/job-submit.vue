@@ -1,7 +1,10 @@
 <template>
     <!-- eslint-disable max-len -->
     <div>
+        <alert-center ref="alertCenter" />
+
         <div v-if="!isLoading">
+
            
             <!-- <ul class='list d-none'>
                 <li v-for="a in analyses" :key="a.id" class='list-item'>
@@ -96,7 +99,6 @@
                         </div>
                         <div class="col-md-10">
                             <div id="run-app">
-                                <alert-center ref="alertCenter" />
                                 
                                 <!-- Inputs -->
                                 <div v-if="started && !submitted">
@@ -1209,7 +1211,7 @@
                             this.submitted = true;
                             
                         } else {
-                            alertData = response.data.msg;
+                            alertData = response.data.data;
                         }
                     }).catch((reason) => {
                         alertData = reason;
@@ -1255,6 +1257,7 @@
                 //$("#disable-fill").fadeIn(10);
                 this.isLoading = true;
                 console.log(this.isLoading);
+
                 axios.post(
                     `/submit-app-task/`,
                     
@@ -1284,15 +1287,17 @@
                         this.submitted = true;
                         
                     } else {
-                        alertData = response.data.msg;
+                        alertData = response.data.data;
                     }
                 }).catch((reason) => {
                     alertData = reason;
                 }).finally(() => {
                     //$("#disable-fill").fadeOut(10);
                     this.isLoading = false;
+                    console.log(alertData);
                     if (!!alertData) {
-                        this.$refs.alertCenter.add('danger', alertData);
+                        console.log(alertData);
+                        alertCenter.add('danger', alertData);
                     }
                     // if (this.submitted) {
                     //     setTimeout(() => {
