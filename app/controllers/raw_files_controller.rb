@@ -1,5 +1,7 @@
 class RawFilesController < ApplicationController
   # protect_from_forgery :only => [:update, :destroy, :create]
+    protect_from_forgery except: :public_file
+
     def index
       path = Base64.decode64(params[:path])
       absPath = File.join Rails.root, 'data', path
