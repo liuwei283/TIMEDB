@@ -16,9 +16,6 @@
                             <a href= "/tutorial/analysis/2">Submission Helper</a>
                             </button>
                         </h2>
-                        <!-- <p style="font-size:1.2em;">
-                            TIMEDB provides state-of-the-arts tools of immune micro-enviroment deconvolution analysis. Official tutorial is available at Tutorial (link). You may try submit the tasks with our demo input files, or view the ideal demo results.
-                        </p> -->
                     </div>
                 </div>
                 <div v-if="isConv==true" id = "singleMultipleSelect">

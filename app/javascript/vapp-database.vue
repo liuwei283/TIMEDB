@@ -191,13 +191,6 @@
             
             <div id = "landscapeBlock">
                 <div class="dropdown mt-3 mb-5">
-                    <!-- <button class="btn btn-secondary dropdown-toggle" type="button" id="landscape_download_dropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        Download
-                    </button>
-                    <div class="dropdown-menu" aria-labelledby="bar_download_dropdwon">
-                        <a class="dropdown-item" id = "landscape_download" @click="download_landscape" >Download sample number table</a> 
-                        <a class="dropdown-item viz_download" id = "landscape" @click="down_graph($event)">Download landscape chart </a>
-                    </div> -->
                     <div id="db-toolbar-landscape" class="mb-5">
                         <div class="db-tool-nav">
                             <div class="btn btn-outline-dark" data-toggle="collapse" data-target="#download_box-landscape" aria-expanded="true" aria-controls="download_box-landscape">

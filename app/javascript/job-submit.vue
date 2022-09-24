@@ -385,12 +385,6 @@
                 
                 <div class = "row justify-content-center">
 
-                    <!-- <div class = "col-md-2">
-                        <b-btn @click="resetMultipleUpload(input_idx)" class="float-right mt-2 btn-lg">Reset</b-btn>
-                    </div>
-                    <div class = "col-md-10">
-                    </div> -->
-
                     <div class = "col-md-10 text-center">
                         <h4 class = "mb-4"> File submission </h4>
                         <p class="text-left" style="color:gray;font-size:1.4em;"><i>Please limit your uploaded file size less than 100MB.</i></p>
