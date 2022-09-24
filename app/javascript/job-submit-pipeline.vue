@@ -423,7 +423,7 @@
                             v-model="ds_selected[input_idx - 1]"
                             :placeholder="ds_selected[input_idx - 1]"
                         >
-                            <option value="" key="default">--click to select your own dataset--</option>
+                            <option value="" key="default">--click to select TIMEDB datasets--</option>
                             <option v-for="(option, index) in select_box_option" :key="index" :value="option.value" :disabled="option.disabled">
                                 {{option.lable}}
                             </option>

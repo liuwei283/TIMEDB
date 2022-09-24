@@ -437,7 +437,7 @@
                             v-model="ds_selected[input_idx - 1]"
                             :placeholder="ds_selected[input_idx - 1]"
                         >
-                            <option value="" key="default">--click to select your own dataset--</option>
+                            <option value="" key="default">--click to select TIMEDB datasets--</option>
                             <option v-for="(option, index) in select_box_option" :key="index" :value="option.value" :disabled="option.disabled">
                                 {{option.lable}}
                             </option>
@@ -540,6 +540,10 @@
     import { ModalPlugin } from 'bootstrap-vue'
     import 'bootstrap/dist/css/bootstrap.css'
     import 'bootstrap-vue/dist/bootstrap-vue.css'
+    import vSelect from 'vue-select'
+    import 'vue-select/dist/vue-select.css';
+
+    Vue.component('v-select', vSelect)
 
     Vue.use(ModalPlugin)
     Vue.use(BootstrapVue);

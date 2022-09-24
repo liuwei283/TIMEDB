@@ -450,7 +450,7 @@ class SubmitController < ApplicationController
                 File.open(up_file.tempfile, 'r') do |tmpfile|
                   Rails.logger.info tmpfile
                   tmpfile.each do |line|
-                    if !line.split(",").include?("GeneSymbol")
+                    if !(line.split(",").include?("GeneSymbol") || line.split(",").include?("\"GeneSymbol\"") )
                       result_json[:code] = false
                       result_json[:data] = "Problematic input format for gene expression data."
                       render json: result_json
@@ -469,7 +469,7 @@ class SubmitController < ApplicationController
                 File.open(up_file.tempfile, 'r') do |tmpfile|
                   Rails.logger.info tmpfile
                   tmpfile.each do |line|
-                    if !line.split(",").include?("sample_name")
+                    if !(line.split(",").include?("sample_name") || line.split(",").include?("\"sample_name\"") )
                       result_json[:code] = false
                       result_json[:data] = "Problematic input format for clinical data."
                       render json: result_json
