@@ -408,15 +408,26 @@ class SubmitController < ApplicationController
 
           if !app_inputs.blank?
             app_inputs&.each do |input_id, uploaded_file|
-              Rails.logger.info file_names[input_id]
               if file_names[input_id] == "Gene expression data"
-                File.open(uploaded_file.tempfile, 'r') do |tmpfile|
-                  Rails.logger.info tmpfile
-                  tmpfile.each do |line|
-                    total_samples += line.split(",").count - 1
-                    break
+                unless uploaded_file.nil? || uploaded_file == "" || uploaded_file == []
+                  uploaded_files_array = Array(uploaded_file)
+                  
+    
+                  uploaded_files_array.each do |up_file|
+                    File.open(up_file.tempfile, 'r') do |tmpfile|
+                      Rails.logger.info tmpfile
+                      tmpfile.each do |line|
+                        total_samples += line.split(",").count - 1
+                        break
+                      end
+                    end
                   end
                 end
+              end
+
+              Rails.logger.info file_names[input_id]
+              if file_names[input_id] == "Gene expression data"
+                
               end
             end
           end
@@ -433,31 +444,43 @@ class SubmitController < ApplicationController
         app_inputs&.each do |input_id, uploaded_file|
           Rails.logger.info file_names[input_id]
           if file_names[input_id] == "Gene expression data"
-            File.open(uploaded_file.tempfile, 'r') do |tmpfile|
-              Rails.logger.info tmpfile
-              tmpfile.each do |line|
-                if !line.split(",").include?("GeneSymbol")
-                  result_json[:code] = false
-                  result_json[:data] = "Problematic input format for gene expression data."
-                  render json: result_json
-                  return
+            unless uploaded_file.nil? || uploaded_file == "" || uploaded_file == []
+              uploaded_files_array = Array(uploaded_file)
+              uploaded_files_array.each do |up_file|
+                File.open(up_file.tempfile, 'r') do |tmpfile|
+                  Rails.logger.info tmpfile
+                  tmpfile.each do |line|
+                    if !line.split(",").include?("GeneSymbol")
+                      result_json[:code] = false
+                      result_json[:data] = "Problematic input format for gene expression data."
+                      render json: result_json
+                      return
+                    end
+                    break
+                  end
                 end
-                break
               end
-            end
+
+            end    
           elsif file_names[input_id] == "Clinical data"
-            File.open(uploaded_file.tempfile, 'r') do |tmpfile|
-              Rails.logger.info tmpfile
-              tmpfile.each do |line|
-                if !line.split(",").include?("sample_name")
-                  result_json[:code] = false
-                  result_json[:data] = "Problematic input format for clinical data."
-                  render json: result_json
-                  return
+            unless uploaded_file.nil? || uploaded_file == "" || uploaded_file == []
+              uploaded_files_array = Array(uploaded_file)
+              uploaded_files_array.each do |up_file|
+                File.open(up_file.tempfile, 'r') do |tmpfile|
+                  Rails.logger.info tmpfile
+                  tmpfile.each do |line|
+                    if !line.split(",").include?("sample_name")
+                      result_json[:code] = false
+                      result_json[:data] = "Problematic input format for clinical data."
+                      render json: result_json
+                      return
+                    end
+                    break
+                  end
                 end
-                break
               end
-            end
+
+            end    
           end
         end
 
