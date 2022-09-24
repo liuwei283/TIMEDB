@@ -169,7 +169,7 @@ export default {
                     {title:"How to Download the Visualizations", id:"6",key:["database","visualization","download"]},
                 ],
                 articles2:[
-                    {title:"Analyses Introduction", id:"1",key:["anaylsis","intro"]},
+                    {title:"Analysis Introduction", id:"1",key:["anaylsis","intro"]},
                     {title:"How to Complete an Analysis", id:"2",key:["analysis","step","complete"]},
                     {title:"What Analysis We Have", id:"3",key:["analysis","helper","kind"]},
 
@@ -242,7 +242,7 @@ export default {
             }
             var doc7 = {
                 "id": 7,
-                "title": "Analyses Introduction",
+                "title": "Analysis Introduction",
                 "body": "Welcome to TIMEDB AnalysisTIMEDB provides 18 online tumor immune microenvironment analyses,details are shown in the following table:Analysis Category	AnalysisRegression Tools.TIMEDB Decov CIBERSORTTIMEDB Decov TIMERTIMEDB Decov EPICTIMEDB Decov ABISTIMEDB Decov quanTIseqEnrichment Tools.TIMEDB Decov xCellTIMEDB Decov MCPcounterTIMEDB Decov ConsensusTMEUnsupervised Tools	TIMEDB Decov LinseedConsensus Tools	TIMEDB Consensus arrayTIMEDB Consensus RNA-SeqDatasets Comparison	TIMEDB Batch EffectTIME Estimation Comparsion	TIMEDB Comparison arrayTIMEDB Comparison RNA-SeqPatient Subtyping	TIMEDB Cell Fraction SubtypingTIMEDB C1-C6 SubtypingSurvival Analysis	TIMEDB HR ORTIMEDB KM EstimatorColrrelation Analysis	TIMEDB Cell InteractionTIMEDB Cell CorrelationDifferent Expression	TIMEDB ImmunoregulatorAnalysis submit and checkTIMEDB provides a friendly submission page that guides users through analysis step by step.Users could view analysis detailed tutorial, run demo and view demo results with one click.During the submission process, the file format and parameters are explained in detail.For results, TIMEDB provides results downloads, as well as interactive visualization.Contact with us if you meet some problemsYou may contact us:Dr LI, ShuaichengEmail: shuaicli@cityu.edu.hk"
             }
             var doc8 = {
@@ -307,7 +307,7 @@ export default {
 
             for(var i=0;i<this.articles.length;i++){
                 for (var j=0;j<temp.length;j++){
-                    if(i == temp[j].ref && temp[j].score >= this.filter){
+                    if(i +1 == temp[j].ref && temp[j].score >= this.filter){
                         this.results.push(this.articles[i]);
                         break;
                     }
