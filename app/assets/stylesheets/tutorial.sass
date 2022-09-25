@@ -5,7 +5,7 @@
 @import "partials/variables"
 
 .title
-    font-size: 5rem
+    font-size: 4rem
     color: #314893 !important
     font-weight: bold
 img
@@ -153,8 +153,8 @@ body.tutorial
 
 
         &.active //use button to toggle this class
-            min-width: 350px
-            max-width: 350px
+            min-width: 320px
+            max-width: 320px
             margin-left: 0
             & + #main
                 transition: .5s
@@ -205,11 +205,23 @@ body.tutorial
         list-style: none
         li
             padding-left: 70px;
+    #side-tutorial-bar-1
+        // margin-left: 20px !important;
+        padding-left: 0;
+        list-style: none
+        li
+            padding-left: 70px;
 
 
     // .sidebar-nav
     //     position: relative !important;
     .sidebar-tutorial-toggle
+        .active 
+            display: none;
+        .active1
+            border-right: .5em solid $light-theme
+            background-color: #bec2c9
+    .sidebar-tutorial-toggle-1
         .active 
             display: none;
         .active1

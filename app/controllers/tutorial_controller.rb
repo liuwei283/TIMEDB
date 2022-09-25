@@ -34,7 +34,10 @@ class TutorialController < ApplicationController
             end
         end
         gon.push text: @list
-
+        if(@list.length !=0)
+        gon.push first: @list[0]
+        end
+        
     end
     def analysis4
     end

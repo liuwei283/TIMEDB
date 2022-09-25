@@ -6,31 +6,34 @@
                         <div>
                             <a href="/tutorial">
                             <p>
-                            <i class="fa fa-arrow-left"></i>Back
-                            </p>
-                            </a>
-                        </div>
-                        <div>
-                            <a href="/tutorial/analysis/1">
-                            <p style="color: #cc4f78">Introduction
+                            <i class="fa fa-arrow-left"></i>Back to TIMEDB
                             </p>
                             </a>
                         </div>
                         <div class="sidebar-tutorial-toggle">
                             <a href="#">
-                            <p style="color: #cc4f78">Usages &nbsp<i class="fa fa-angle-down" id="arrow"></i>
+                            <p style="color: #35478E">Database &nbsp<i class="fa fa-angle-down" id="arrow"></i>
                             </p>
                             </a>
                             <ul id="side-tutorial-bar" class="">
-                                <a href="/tutorial/analysis/2"><li style="color: #cc4f78">How to Complete Analysis</li></a>
-                                <a href="/tutorial/analysis/3"><li class="active1" style="color: #cc4f78">What Analysis We Have</li></a>
+                                <a href="/tutorial/database/1" ><li style="color: #35478E">Database Introduction</li></a>
+                                <a href="/tutorial/database/2" ><li style="color: #35478E">How to View Database Information</li></a>
+                                <a href="/tutorial/database/3"><li style="color: #35478E">How to Add Data to Your Workspace</li></a>
+                                <a href="/tutorial/database/4"><li style="color: #35478E">How to Download Database Data</li></a>
+                                <a href="/tutorial/database/5"><li style="color: #35478E">How to View the Visualizations</li></a>
+                                <a href="/tutorial/database/6"><li style="color: #35478E">How to Download the Visualizations</li></a>
                             </ul>
                         </div>
-                        <div class="">
-                            <a href="/tutorial/database/1">
-                            <p style="color: #35478E">Database documentation
+                        <div class="sidebar-tutorial-toggle-1">
+                            <a href="#">
+                            <p style="color: #cc4f78">Analysis &nbsp<i class="fa fa-angle-down" id="arrow-1"></i>
                             </p>
                             </a>
+                            <ul id="side-tutorial-bar-1" class="">
+                                <a href="/tutorial/analysis/1"><li style="color: #cc4f78">Analysis Introduction</li></a>
+                                <a href="/tutorial/analysis/2" ><li style="color: #cc4f78">How to Complete an Analysis</li></a>
+                                <a href="/tutorial/analysis/3"><li style="color: #cc4f78" class="active1">What Analysis We Have</li></a>
+                            </ul>
                         </div>
                         <div class="">
                             <a href="/tutorial/analysis/4">
@@ -54,17 +57,11 @@
                             <h1>
                                 Please choose the helper:
                             </h1>
-                            <!-- <select @change="helperchange" v-model="now">
-                                <option v-for="(option, index) in analysis_list" :key="index" :value="option.value" >
-                                    {{option.label}}
-                                </option>
-                            </select> -->
-                            <!-- <select @change="helperchange" v-model="analysis">
-                                <option v-for="(option, index) in list" :key="index" :value="option" >
-                                    {{option.name}}
-                                </option>
-                            </select> -->
-
+                            <!-- <b-dropdown class="tool-bar-el px-0 mb-1 select btn-1 sl-dropdown" data-style="btn-secondary" data-live-search="true" v-model="analysis">
+                                <b-dropdown-item  v-for="(option, index) in test" :key="index" :value="option.value">
+                                    {{option.text}}
+                                </b-dropdown-item >
+                            </b-dropdown> -->
                             <dropdown-select
                                 left
                                 v-model="analysis"
@@ -95,7 +92,7 @@ export default {
             now: null,
             test: window.gon.text,
             content: "",
-            analysis: "",
+            analysis: window.gon.first.value,
         }
     },
     created() {
@@ -105,7 +102,6 @@ export default {
 
     },
     mounted() {
-
     },
     computed: {
 
@@ -113,14 +109,13 @@ export default {
     watch:{
         analysis:function(){
             this.content = this.analysis.rendered_doc;
-
         }
     },
     methods: {
-        helperchange(){
-            this.now = this.analysis.name;
-            this.content = this.analysis.rendered_doc;
-        }
+        // helperchange(){
+        //     this.now = this.analysis.name;
+        //     this.content = this.analysis.rendered_doc;
+        // }
     },
     updated(){
         $('.doc').find('img').css('width','100%');

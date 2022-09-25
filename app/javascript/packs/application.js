@@ -116,6 +116,11 @@ document.addEventListener('DOMContentLoaded', (event) =>  {
         $("#arrow").toggleClass('fa-angle-up fa-angle-down');
 
     });
+    $('.sidebar-tutorial-toggle-1').on('click', () => {
+        $("#side-tutorial-bar-1").toggleClass('active');
+        $("#arrow-1").toggleClass('fa-angle-up fa-angle-down');
+
+    });
     $('#alerts .alert-group').each((i, el) => {
         const alertGroup = $(el);
         const bar = alertGroup.find('.progress-bar');

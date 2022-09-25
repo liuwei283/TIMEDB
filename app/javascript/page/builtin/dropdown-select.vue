@@ -39,6 +39,9 @@
                 this.chosenOption = opt;
                 return opt.text;
             } else {
+                if(this.realValue.name ==="TIMEDB Deconv ABIS"){
+                    return "TIMEDB Deconv ABIS"
+                }
                 return "--- Please choose ---";
             }
         }
