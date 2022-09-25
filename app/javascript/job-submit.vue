@@ -20,8 +20,15 @@
 
                             <h2 class="display-2">
                                 <!-- Start Analysis -->
-                                <button class = "btn btn-1" style="display:inline" >
-                                <a href= "/tutorial/analysis/2">Submission Helper</a>
+                                <button class = "btn btn-1" style="display:inline;" >
+                                <a href= "/tutorial/analysis/2">
+                                <i class="fas fa-cog"></i>Submission Helper</a>
+                                </button>
+                                <button class = "btn btn-1" style="display:inline;" >
+                                <a href= "https://github.com/deepomicslab/TIMEDB/issues">
+                                <!-- <img v-bind:src="require('../assets/images/web-coding.png')" style="width:20px;color: white;"> -->
+                                <i class="fas fa-file"></i>
+                                Report bug</a>
                                 </button>
                             </h2>
                         </div>
@@ -361,7 +368,9 @@
                         </button>
                     </div>
 
-                    <h6 style="color: gray;" class="p-2"><i>Please upload .csv files for analysis</i></h6>
+                    <h6 v-if="input.name=='Clinical data'" style="color: gray;" class="p-2"><i>Please upload Clinical_*.csv if you use demo files for analysis</i></h6>
+                    <h6 v-if="input.name=='Gene expression data'" style="color: gray;" class="p-2"><i>Please upload RNA_*.csv if you use demo files for analysis</i></h6>
+
                     
                     <div class = "col-md-12 text-center">
                         <div>
@@ -409,7 +418,8 @@
                                             </button>
                                         </div>
                                     </label>
-                                    <h6 style="color: gray;" class="p-2"><i>Please upload .csv files for analysis</i></h6>
+                                    <h6 v-if="input.name=='Clinical data'" style="color: gray;" class="p-2"><i>Please upload Clinical_*.csv if you use demo files for analysis</i></h6>
+                                    <h6 v-if="input.name=='Gene expression data'" style="color: gray;" class="p-2"><i>Please upload RNA_*.csv if you use demo files for analysis</i></h6>
                                     <b-form-file
                                         :id="`multiple-i-${input.id}-${input_idx}`"
                                         v-model="files[`multiple-i-${input.id}-${input_idx}`]"

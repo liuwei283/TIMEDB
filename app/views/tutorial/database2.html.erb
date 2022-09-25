@@ -18,10 +18,10 @@
                             <ul id="side-tutorial-bar" class="">
                                 <a href="/tutorial/database/1" ><li style="color: #35478E">Database Introduction</li></a>
                                 <a href="/tutorial/database/2" ><li style="color: #35478E" class="active1">How to View Database Information</li></a>
-                                <a href="/tutorial/database/3"><li style="color: #35478E">How to Add Data to Your Workspace</li></a>
+                                <%# <a href="/tutorial/database/3"><li style="color: #35478E">How to Add Data to Your Workspace</li></a> %>
                                 <a href="/tutorial/database/4"><li style="color: #35478E">How to Download Database Data</li></a>
-                                <a href="/tutorial/database/5"><li style="color: #35478E">How to View the Visualizations</li></a>
-                                <a href="/tutorial/database/6"><li style="color: #35478E">How to Download the Visualizations</li></a>
+                                <%# <a href="/tutorial/database/5"><li style="color: #35478E">How to View the Visualizations</li></a> %>
+                                <a href="/tutorial/database/6"><li style="color: #35478E">Visualizations in the Database</li></a>
                             </ul>
                         </div>
                         <div class="sidebar-tutorial-toggle-1">
@@ -54,15 +54,25 @@
                         <div class="page">
                             <div>
                                 <div class="headers">
-                                    <h1>Database Information</h1>
-                                    <h2>We have <b>43</b> Type, <b>545</b> Datasets, <b>39678</b> Samples.</h2>
+                                    <h1>1. Overview Information</h1>
+                                    <br>
+                                    <p>We have <b>43</b> cancer types, <b>545</b> datasets, and <b> 39678</b> samples in total.
+                                    Users can click the <a href="/database/overview">database overview</a> page to check the panorama of TIMEDB database with visualizations available.</p>
+                                    <img src="/public/data/image/tutorial/1-1ppt.gif" class="page-image">
                                     <img src="/public/data/image/tutorial/2-1ppt.png" class="page-image">
                                     <img src="/public/data/image/tutorial/2-2ppt.png" class="page-image">
+                                    <br>
+                                    <br>
                                     <hr>
-                                    <h1>Detail Information</h1>
-                                    <p>You can view the detail information and the data visualization for each cancer type, dataset or sample.</p>
-                                    <p>Let's take Dataset as an example:</p>
-                                    <p>Click Filter to select information and Click Details to view Dataset's samples and charts.</p>
+                                    <br>
+                                    <h1>2. Detailed Information</h1>
+                                    <br>
+                                    <p>Users can view detailed information with various visualizations for individual cancer types, datasets and samples.
+                                    Taking one dataset - TCGA_ACC as an example, you can enter its showing page from the ACC cancers showing page, or from the datasets index page which stores overall databsets records.</p>
+                                    
+                                    <p>Project showing pages contains three parts, detailed sample records table, C1-C6 subtyping visualizations and cell fraction visualizations. Users can download interested sample records from our databse into CSV files, as well as get access to fruitful related documents incuding cell composition files, gene expression profiles, clinical data, subtyping files, etc.
+                                    Moreover, various visualizations, including landscape heatmap, surival line chart, etc, help users conduct deeper investigation for this dataset. 
+                                    </p>
                                     <img src="/public/data/image/tutorial/1-6ppt.gif" class="page-image">
                                     <img src="/public/data/image/tutorial/5-2ppt.png" class="page-image">
                                     <img src="/public/data/image/tutorial/5-4ppt.png" class="page-image">

@@ -163,10 +163,10 @@ export default {
                 articles:[
                     {title:"Database Introduction", id:"1",key:["database","intro"]},
                     {title:"How to View Database Information", id:"2",key:["database","information","data"]},
-                    {title:"How to Add Data to Your Workspace", id:"3",key:["database","workspace","dataset","data"]},
+                    // {title:"How to Add Data to Your Workspace", id:"3",key:["database","workspace","dataset","data"]},
                     {title:"How to Download Database Data", id:"4",key:["database","download","data"]},
-                    {title:"How to View the  Visualizations", id:"5",key:["database","visualization"]},
-                    {title:"How to Download the Visualizations", id:"6",key:["database","visualization","download"]},
+                    // {title:"How to View the  Visualizations", id:"5",key:["database","visualization"]},
+                    {title:"Visualizations in the Database", id:"6",key:["database","visualization","download"]},
                 ],
                 articles2:[
                     {title:"Analysis Introduction", id:"1",key:["anaylsis","intro"]},
@@ -220,21 +220,21 @@ export default {
                 "title": "How to View Database Information",
                 "body": "Database InformationWe have 43 Type, 545 Projects, 39678 Samples.Detail InformationYou can view the detail information and the data visualization for each cancer type, project or sample.Let's take Project as an example:Click Filter to select information and Click Details to view Project's samples and charts."
             }
-            var doc3 = {
-                "id": 3,
-                "title": "How to Add Data to Your Workspace",
-                "body": "You can check your dataset in workspaceTIMEDB provides function that user can create their own dataset from multiple projects.User may upload their dataset data for analysis.Add samples to your datasetDirectly add samples from the dataset page.Click Edit Dataset and Go add samples, it will jump to Samples page.Then, select samples and export them to your dataset.Also, you can add samples from a specify project."
-            }
+            // var doc3 = {
+            //     "id": 3,
+            //     "title": "How to Add Data to Your Workspace",
+            //     "body": "You can check your dataset in workspaceTIMEDB provides function that user can create their own dataset from multiple projects.User may upload their dataset data for analysis.Add samples to your datasetDirectly add samples from the dataset page.Click Edit Dataset and Go add samples, it will jump to Samples page.Then, select samples and export them to your dataset.Also, you can add samples from a specify project."
+            // }
             var doc4 = {
                 "id": 4,
                 "title": "How to Download Database Data",
                 "body": "Download data from Download PageThe Download page contains the relative files of all projects.Download the data from the datasetDownload data from projectsDownload data from samples?"
             }
-            var doc5 = {
-                "id": 5,
-                "title": "How to View the Visualization Plot",
-                "body": 'You can view the visualizations plot of each ProjectThe visualizations we provide are interactive, you can use the editor to do some personal change."C1_C6 subtyping overview": visualization about immune subtype of tumor samples."TIME estimation overview": visualization about TIME estimation.'
-            }
+            // var doc5 = {
+            //     "id": 5,
+            //     "title": "How to View the Visualization Plot",
+            //     "body": 'You can view the visualizations plot of each ProjectThe visualizations we provide are interactive, you can use the editor to do some personal change."C1_C6 subtyping overview": visualization about immune subtype of tumor samples."TIME estimation overview": visualization about TIME estimation.'
+            // }
             var doc6 = {
                 "id": 6,
                 "title": "How to Download the Visualization Plots",

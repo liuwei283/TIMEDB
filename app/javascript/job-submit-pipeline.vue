@@ -348,7 +348,8 @@
                             <a :href="`/public/data/module_demo/${input.name}_demo.csv`" :download="input.name">Download demo file</a>
                         </button>
                     </div>
-                    <h6 style="color: gray;" class="p-2"><i>Please upload .csv files for analysis</i></h6>
+                    <h6 v-if="input.name=='Clinical data'" style="color: gray;" class="p-2"><i>Please upload Clinical_*.csv if you use demo files for analysis</i></h6>
+                    <h6 v-if="input.name=='Gene expression data'" style="color: gray;" class="p-2"><i>Please upload RNA_*.csv if you use demo files for analysis</i></h6>
                     <div class = "col-md-12 text-center">
                         <div>
                             <div>
@@ -394,7 +395,8 @@
                                             </button>
                                         </div>
                                     </label>
-                                    <h6 style="color: gray;" class="p-2"><i>Please upload .csv files for analysis</i></h6>
+                                    <h6 v-if="input.name=='Clinical data'" style="color: gray;" class="p-2"><i>Please upload Clinical_*.csv if you use demo files for analysis</i></h6>
+                                    <h6 v-if="input.name=='Gene expression data'" style="color: gray;" class="p-2"><i>Please upload RNA_*.csv if you use demo files for analysis</i></h6>
                                     <b-form-file
                                         :id="`multiple-i-${input.id}-${input_idx}`"
                                         v-model="files[`multiple-i-${input.id}-${input_idx}`]"

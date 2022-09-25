@@ -18,10 +18,10 @@
                             <ul id="side-tutorial-bar" class="">
                                 <a href="/tutorial/database/1" ><li style="color: #35478E" class="active1">Database Introduction</li></a>
                                 <a href="/tutorial/database/2" ><li style="color: #35478E">How to View Database Information</li></a>
-                                <a href="/tutorial/database/3"><li style="color: #35478E">How to Add Data to Your Workspace</li></a>
+                                <%# <a href="/tutorial/database/3"><li style="color: #35478E">How to Add Data to Your Workspace</li></a> %>
                                 <a href="/tutorial/database/4"><li style="color: #35478E">How to Download Database Data</li></a>
-                                <a href="/tutorial/database/5"><li style="color: #35478E">How to View the Visualizations</li></a>
-                                <a href="/tutorial/database/6"><li style="color: #35478E">How to Download the Visualizations</li></a>
+                                <%# <a href="/tutorial/database/5"><li style="color: #35478E">How to View the Visualizations</li></a> %>
+                                <a href="/tutorial/database/6"><li style="color: #35478E">Visualizations in the Database</li></a>
                             </ul>
                         </div>
                         <div class="sidebar-tutorial-toggle-1">
@@ -55,25 +55,33 @@
                         <div class="page">
                             <div>
                                 <div class="headers">
-                                    <h1>Welcome to TIMEDB Database</h1>
-                                    <p>TIMEDB provides the tumor immune micro-enviornment (TIME) cell proportions from bulk expression profiles of <b>35,000 + samples</b> and <b>500+ datasets</b> across <b>43 cancer types</b>. Users can download the following files directly with TIMEDB:
+                                <br>
+                                    <hr>
+                                    <br>
+                                    <h1>Welcome to TIMEDB database</h1>
+                                    <br>
+                                    <p>TIMEDB provides the tumor immune micro-enviornment (TIME) cell proportions from bulk expression profiles of <b>35,000 + samples</b> and <b>500+ datasets</b> across <b>43 cancer types</b>.
+                                    Users can download the following files directly from TIMEDB:
                                     </p>
                                     <br>
                                 </div>
-                                <img src="/public/data/image/tutorial/1ppt.png" class="page-image">
+                                <%# <img src="/public/data/image/tutorial/1ppt.png" class="page-image"> %>
                             </div>
                             <div>
                                 <div class="headers">
                                     <br>
-                                    <h2>Gene expression file and meta file</h2>
+                                    <h3>1. Gene expression file and meta file</h3>
+                                    <br>
                                     <ul>
                                         <li><code>Gene expression file</code>: The gene expression file stores the bulk gene expression of tumor samples, with sample as column and gene as row.</li>
                                         <li><code>Clinical file</code>: The clinical file stores the manually curated clinical information of the sample, such as age, gender, etc. Each row is a sample and each column is a clinical feature.</li>
                                         <li><code>Scaled immmunoregulator expression file</code>: The scaled gene expression profiles of seventy-nine immunoregular genes. <sup>[1]</sup></li>
                                     </ul>
                                     <br>
-                                    <h2>TIME cell estimation result file</h2>
-                                    <p>TIMEDB uses <strong>ABIS, CIBERSORT, CIBERSORTX, ConsensusTME, EPIC, ImmucellAI, Mcpcounter, quanTIseq and TIMER</strong> to quantify the cells in tumor microenvironment.  Users can download the following TIME estimation results. </p>
+                                    <br>
+                                    <h3>2. TIME cell estimation result file</h3>
+                                    <br>
+                                    <p style="margin-left:20px;">TIMEDB uses <strong>ABIS, CIBERSORT, CIBERSORTX, ConsensusTME, EPIC, ImmucellAI, Mcpcounter, quanTIseq and TIMER</strong> to quantify the cells in tumor microenvironment.  Users can download the following TIME estimation results. </p>
                                     <ul>
                                         <li><code>ABIS estimation result file</code>: TIME estimation result from ABIS. <sup>[2]</sup></li>
                                         <li><code>CIBERSORT estimation result file</code>: TIME estimation result from CIBERSORT. <sup>[3]</sup></li>
@@ -89,36 +97,49 @@
                                         <li> <code>TIME All estimation result file</code>: This file stores the TIME estimation result of all cell types from nine estimation tools. <sup>[2-11]</sup> </li>
                                     </ul>
                                     <br>
-                                    <h2>C1-C6 subtyping result file</h2>
-                                        <p>TIMEDB adopts <strong>ImmuneSubtypeClassifier</strong> <sup>[12, 13]</sup>  to catelogue the immune subtype of tumor samples based on gene expression levels. Users can download the result file which shows the probability of sample being six immune status, including C1 (wound healing), C2 (IFN-γ dominant),C3 (inflammatory), C4 (lymphocyte depleted), C5 (immuno-logically quiet), and C6 (TGF-β dominant). </p>
+                                    <br>
+                                    <h3>3. C1-C6 subtyping result file</h3>
+                                        <br>
+                                        <p style="margin-left:20px;">TIMEDB adopts <strong>ImmuneSubtypeClassifier</strong> <sup>[12, 13]</sup>  to catelogue the immune subtype of tumor samples based on gene expression levels. Users can download the result file which shows the probability of sample being six immune status, including C1 (wound healing), C2 (IFN-γ dominant),C3 (inflammatory), C4 (lymphocyte depleted), C5 (immuno-logically quiet), and C6 (TGF-β dominant). </p>
+                                    <br>
+                                    <br>
                                     <hr>
                                     <br>
-                                    <h2>Database usage</h2>
-                                    <p>TIMEDB provides four pages to show data: "Overview","Cancer","Dataset" and "Sample".</p>
-                                    <img src="/public/data/image/tutorial/2-1ppt.png" class="page-image">
                                     <br>
-                                    <h3>Overview</h3>
-                                    <p>If users are interested in database summary, they can look through the <a href="/database/overview">''Overview''</a> page. </p>
+                                    <h1>Database usage</h1>
+                                    <br>
+                                    <p>TIMEDB provides four parts to show data with visualizations available: "Database overview", "Cancers", "Datasets" and "Samples".</p>
+                                    <%# <img src="/public/data/image/tutorial/2-1ppt.png" class="page-image"> %>
+                                    <br>
+                                    <h3>1. Overview</h3>
+                                    <br>
+                                    <p>Users can look through the <a href="/database/overview">"Overview"</a> page to check a comprehensive panorama of the TIMEDB database. </p>
                                     <ul>
-                                        <li>Click the anatomy icons to query the related datasets.</li>
-                                        <img src="/public/data/image/tutorial/1-1ppt.gif" class="page-image">
-                                        <br><br>
-                                        <li>See the visualization.
-                                        <img src="/public/data/image/tutorial/1-2ppt.gif" class="page-image">
-                                        <img src="/public/data/image/tutorial/1-3ppt.gif" class="page-image">
-                                        <img src="/public/data/image/tutorial/1-4ppt.gif" class="page-image">
+                                        <li>Users can click anatomy icons to query one specific cancer in detail.</li>
+                                            
+                                            <img src="/public/data/image/tutorial/1-1ppt.gif" class="page-image">
+                                            
+                                            <br><br>
+                                            <li>Users can explore various visualizations.
+                                                <br>
+                                                <img src="/public/data/image/tutorial/1-2ppt.gif" class="page-image">
+                                                <img src="/public/data/image/tutorial/1-3ppt.gif" class="page-image">
+                                                <img src="/public/data/image/tutorial/1-4ppt.gif" class="page-image">
+                                            </li>
 
-                                        <br><br>
-                                        <h2 id="cancer">Cancer</h2>
-                                        If users are interested in one cancer type, they can click the details in <a href="/cancers">''Cancer''</a> page to query the related datasets. <br>
-                                        <img src="/public/data/image/tutorial/1-5ppt.gif" class="page-image">
-                                        <br><br>
-                                        <h2 id="project">Dataset</h2>
-                                        If users are interested in specific dataset, they can choose the dataset in <a href="/projects">''Dataset''</a> page to query the dataset.
-                                        <img src="/public/data/image/tutorial/1-6ppt.gif" class="page-image">
-                                        </li>
                                     </ul>
-                                    <p>The dataset table show the clinical information, each dataset may contains serveral samples. The basic information of sample includes:</p>
+                                    
+                                    <h3 id="cancer">2. Cancers</h3>
+                                    <br>
+                                    <p>Users can click <button class="btn btn-1"> details </button> button in the <a href="/cancers">"Cancers"</a> showing page to query one specific dataset. <br><p>
+                                    <img src="/public/data/image/tutorial/1-5ppt.gif" class="page-image">
+
+                                    <h3 id="project">3. Datasets</h3>
+                                    <br>
+                                    <p>Users can also explore one specific datasets from the <a href="/projects">"Dataset"</a> index page.</p>
+                                    <img src="/public/data/image/tutorial/1-6ppt.gif" class="page-image">
+
+                                    <p>Dataset tables show detailed clinical information from different datasets, which may contains serveral samples individually. Basic samples information will includes:</p>
                                     <ul>
                                         <li><code>sample_name</code>: the name of donor.</li>
                                         <li><code>dataset_name</code>: the name of dataset.</li>
@@ -137,35 +158,37 @@
                                         <li><code>pfs</code>: available for cancer or diease donor, progression-free survival, the length of days during and after the treatment, that a patient lives with the disease but it does not get worse.</li>
                                         <li><code>pfs_status</code>: available for cancer donor, the pfs outcome, binary, value of 1 for pregression or recurrence, 0 for otherwise.</li>
                                     </ul>
-                                    <p>The dataset visulization has two parts:</p>
+                                    <p>The Dataset visulization part has two sub-parts:</p>
                                     <ul>
-                                        <li>"C1_C6 subtyping overview": visualization about immune subtype of tumor samples.</li>
+                                        <li>C1_C6 subtyping overview: visualizations about immune subtype for tumor samples.</li>
                                         <img src="/public/data/image/tutorial/5-2ppt.png" class="page-image">
-                                        <li>"TIME estimation overview": visualization about TIME estimation.</li>
+                                        <li>TIME estimation overview: visualizations about TIME estimation.</li>
                                         <img src="/public/data/image/tutorial/5-4ppt.png" class="page-image">
 
                                     </ul>
                                     <br><br>
 
-                                    <h2>Sample</h2>
-                                    <p>If users are interested in specific sample, they can choose the sample in <a href="/samples">"sample"</a> a page to see the sample information.</p>
-                                    <p>In this sample visulization, users could click the button to change the TIME estimation method.</p>
+                                    <h3>4. Sample</h3>
+                                    <br>
+                                    <p>Users can click and check detailed samples information in <a href="/samples">"sample"</a> index page. For most samples, we provide visualizations for its immune cell type compositions estimated from different methods.</p>
+                                    <br>
                                     <hr>
-                                    <h1>The visualizations we provide are interactive:</h1>
-
-                                    <!-- <div class="focus"> -->
-                                        <ul>
-                                            <br>
-                                            <li>change the color.</li><br>
-                                            <img src="/public/data/image/tutorial/1-8ppt.gif" class="page-image"><br>
-                                            <li>change the text size.</li><br>
-                                            <img src="/public/data/image/tutorial/1-9ppt.gif" class="page-image"><br>
-                                            <li>rotate the label.</li><br>
-                                            <img src="/public/data/image/tutorial/1-10ppt.gif" class="page-image"><br>
-                                            <li>and multiple online adjustments options, contains but not all listed.</li>
-                                        </ul>
-                                    <!-- </div> -->
-                                    <h2>Citation</h2>
+                                    <br>
+                                    <h1>Interactive visualizations</h1>
+                                    <p>The visualizations provided are interactive, whose features include changeing color and text size, rotating labels and multiple online adjustment options contained but not all listed.</p>
+                                    <img src="/public/data/image/tutorial/1-8ppt.gif" class="page-image">
+                                    <img src="/public/data/image/tutorial/1-9ppt.gif" class="page-image">
+                                    <img src="/public/data/image/tutorial/1-10ppt.gif" class="page-image">
+                                    <br>
+                                    <br>
+                                    <h1>
+                                        Citations
+                                        <button class="ml-2 btn btn-outline-secondary" data-toggle="collapse" data-target="#detailed_citations" aria-expanded="true" aria-controls="detailed_citations">
+                                            <i class="fas fa-eye"></i>Details
+                                        </button>
+                                    </h1>
+                                    <div id="detailed_citations" class="collapse">
+                                    <br>
                                     <em>[1] Vésteinn Thorsson, David L Gibbs, Scott D Brown, Denise Wolf, Dante S Bortone, TaiHsien Ou Yang, Eduard Porta-Pardo, Galen F Gao, Christopher L Plaisier, James A Eddy,et al. The immune landscape of cancer. Immunity, 51(2):411–412, 2019.</em><br>
                                     <em>[2] Gianni Monaco, Bernett Lee, Weili Xu, Seri Mustafah, You Yi Hwang, Christophe Carré,Nicolas Burdin, Lucian Visan, Michele Ceccarelli, Michael Poidinger, et al. Rna-seq signatures normalized by mrna abundance allow absolute deconvolution of human immune cell types. Cell reports, 26(6):1627–1640, 2019.</em><br>
                                     <em>[3] Aaron M Newman, Chih Long Liu, Michael R Green, Andrew J Gentles, Weiguo Feng, Yue Xu, Chuong D Hoang, Maximilian Diehn, and Ash A Alizadeh. Robust enumeration of cell subsets from tissue expression profiles. Nature methods, 12(5):453–457, 2015.</em><br>
@@ -179,6 +202,7 @@
                                     <em>[11] D. Aran, Z. Hu, and A. J. Butte. xcell: digitally portraying the tissue cellular heterogeneity landscape. Genome Biology, 18(1):220, 2017.</em><br>
                                     <em>[12] David L Gibbs. Robust classification of immune subtypes in cancer. bioRxiv, 2020.</em><br>
                                     <em>[13] James A Eddy, Vésteinn Thorsson, Andrew E Lamb, David L Gibbs, Carolina Heimann, Jia Xin Yu, Verena Chung, Yooree Chae, Kristen Dang, Benjamin G Vincent, et al. Criiatlas: an interactive portal for immuno-oncology research. F1000Research, 9, 2020.</em><br>
+                                    </div>
                                 </div>
 
                             </div>

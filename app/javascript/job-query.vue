@@ -37,9 +37,13 @@
                             <h3 class="font-weight-bold" style="margin:auto;">Submitted Tasks</h3>
                         </div>
                         <div class="col-md-3 text-left">
-                            <b-button
-                                class="btn-1" @click="refreshJobs()">Refresh
+                            <b-button class="btn btn-3" style="width: 180px;" @click="refreshJobs()" @mouseover="refreshIcon=refreshColor" @mouseleave="refreshIcon=refreshWhite;">
+                                <img v-bind:src="refreshIcon" style="width:20px; margin-right:10px;">
+                                Refresh Status
                             </b-button>
+                            <!-- <b-button
+                                class="btn-1" @click="refreshJobs()">Refresh
+                            </b-button> -->
                         </div>
                         <div class="col-md-1">
                             <i v-if="!refreshEnd" class="fas fa-spinner fa-spin" style="font-size:24px"> </i> 

@@ -18,10 +18,10 @@
                             <ul id="side-tutorial-bar" class="">
                                 <a href="/tutorial/database/1" ><li style="color: #35478E">Database Introduction</li></a>
                                 <a href="/tutorial/database/2" ><li style="color: #35478E">How to View Database Information</li></a>
-                                <a href="/tutorial/database/3"><li style="color: #35478E">How to Add Data to Your Workspace</li></a>
+                                <%# <a href="/tutorial/database/3"><li style="color: #35478E">How to Add Data to Your Workspace</li></a> %>
                                 <a href="/tutorial/database/4"><li style="color: #35478E">How to Download Database Data</li></a>
-                                <a href="/tutorial/database/5"><li style="color: #35478E">How to View the Visualizations</li></a>
-                                <a href="/tutorial/database/6"><li style="color: #35478E" class="active1">How to Download the Visualizations</li></a>
+                                <%# <a href="/tutorial/database/5"><li style="color: #35478E">How to View the Visualizations</li></a> %>
+                                <a href="/tutorial/database/6"><li style="color: #35478E" class="active1">Visualizations in the Database</li></a>
                             </ul>
                         </div>
                         <div class="sidebar-tutorial-toggle-1">
@@ -50,16 +50,47 @@
                     <div>
 
                         <h1 class ="title">
-                            <a href="/tutorial"><i class="fa fa-backward"></i></a>  How to download the visualization plots
+                            <a href="/tutorial"><i class="fa fa-backward"></i></a>  Visualizations in the Database
                         </h1><br>
                         <div class="page">
                             <div>
                                 <div class="headers">
-                                    <ul>
-                                    <li>Click the Download all charts button to download all Charts. </li>
-                                    <li>Click the Download button to download chart and relative data files.</li>
-                                    </ul>
-                                    <img src="/public/data/image/tutorial/6-1ppt.png" class="page-image">
+                                    <h2>1. Database Overview</h2>
+                                    <br>
+                                    <p> We provide several visualizations for the whole databse overview, including, bar charts for datasets and samples statistics, pie charts for cell composition estimation of each dataset and each state-of-art tool, C1-C6 landscape for subtyping data, and heatmaps for scaled gene expression profiles.
+                                    </p>
+                                    <img src="/public/data/image/tutorial/database-viz1.png" class="page-image">
+                                    <img src="/public/data/image/tutorial/database-viz2.png" class="page-image">
+                                    <img src="/public/data/image/tutorial/database-viz3.png" class="page-image">
+                                    <br>
+                                    <hr>
+                                    <br>
+                                    <h2>2. Dataset details</h2>
+                                    <p>
+                                    Visualizations in dataset detailed pages fall into two categories, C1-C6 subtyping vizs and cell fraction plots.
+                                    </p>
+                                    <p> "C1_C6 subtyping overview": visualization about immune subtype of tumor samples.</p>
+                                    <img src="/public/data/image/tutorial/5-2ppt.png" class="flat-image">
+                                    <img src="/public/data/image/tutorial/5-4ppt.png" class="flat-image">
+
+                                    <%# <br>
+                                    <p>"TIME estimation overview": visualization about TIME estimation.</p>
+                                    <img src="/public/data/image/tutorial/5-3ppt.png" class="flat-image"> %>
+                                    <br>
+                                    <hr>
+                                    <br>
+                                    <h2>3. Samples cell Fraction</h2>
+                                    <p>For each samples, we provid pie plots for TIC composition estimated from 10 state-of-art tools. Users can use selector to change different estimation results for horizontal comparisons.
+                                    </p>
+                                    <img src="/public/data/image/tutorial/sample-viz.png" class="middle-image">
+                                    <br>
+                                    <hr>
+                                    <br>
+                                    <h2>3. Visualizations downloading</h2>
+                                    <br>
+
+                                    <p>All visualizations we provided are allowed to download. Users can click the button next to plot itself to easily download the corresponding visualizations. Specifically for individual dataset showing pages, user can download all visualizations together for futhur exploration.</p>
+                                    <img src="/public/data/image/tutorial/6-1ppt.png" class="middle-image">
 
                                 </div>
                             </div>
