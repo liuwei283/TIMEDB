@@ -369,7 +369,7 @@
                                 :id="`i-${input.id}`"
                                 v-model="files[`i-${input.id}`]"
                                 :state="inputValid[`i-${input.id}`]"
-                                :placeholder="files[`i-${input.id}`]? files[`i-${input.id}`].name:`Choose a file or drop it here...`"
+                                :placeholder="files[`i-${input.id}`]? files[`i-${input.id}`]:`Choose a file or drop it here...`"
                                 drop-placeholder="Drop file here..." 
                                 :name="`i-${input.id}`"
                                 :disabled="picked_single_multiple=='single' && ds_selected != ''"
@@ -524,9 +524,9 @@
         <b-modal v-if="started" ref="submit-helper" v-model="showhelper" id = "submit-helper" size="xl" scrollable title="Analysis Helper" centered @ok="jumpToUpload">
             <br>
             <div class = "row justify-content-center container">
-                <div class="container infor" style="background-color: #">
+                <!-- <div class="container infor" style="background-color: #">
                     <i class="m-2">Please click the image if you want to enlarge it.</i>
-                </div>
+                </div> -->
                 <div id="rendered_doc" v-html="selected_analysis.rendered_doc" class = "text-left container" style="margin: 50px;">
                 </div>
             </div>
