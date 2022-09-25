@@ -173,7 +173,13 @@
                                                             <span>You can select a dataset to merge: </span>
                                                             <i class="fa fa-question-circle" v-b-tooltip.rightbottom.hover title="You may choose one dataset with single project source to upload merged files"></i>
                                                         </label>
-                                                        <b-form-select @focus="updateStepToFile()" class="col-md-8" 
+
+                                                        <model-select :options="select_box_option"
+                                                                                v-model="ds_selected"
+                                                                                >
+                                                        </model-select>
+
+                                                        <!-- <b-form-select @focus="updateStepToFile()" class="col-md-8" 
                                                             name="selected-dataset"
                                                             v-model="ds_selected"
                                                         >
@@ -181,7 +187,7 @@
                                                             <option v-for="(option, index) in select_box_option" :key="index" :value="option.value" :disabled="option.disabled">
                                                                 {{option.lable}}
                                                             </option>
-                                                        </b-form-select>
+                                                        </b-form-select> -->
                                                     </div>
 
                                                 </div>
@@ -432,7 +438,12 @@
                         <h4>
                             Or you can select a dataset to merge:
                         </h4>
-                        <b-form-select
+
+                        <model-select :options="select_box_option"
+                                v-model="ds_selected[input_idx - 1]"
+                                >
+                        </model-select>
+                        <!-- <b-form-select
                             name="selected-dataset"
                             v-model="ds_selected[input_idx - 1]"
                             :placeholder="ds_selected[input_idx - 1]"
@@ -441,7 +452,7 @@
                             <option v-for="(option, index) in select_box_option" :key="index" :value="option.value" :disabled="option.disabled">
                                 {{option.lable}}
                             </option>
-                        </b-form-select>
+                        </b-form-select> -->
                     </div>
 
                     <br>
@@ -540,10 +551,9 @@
     import { ModalPlugin } from 'bootstrap-vue'
     import 'bootstrap/dist/css/bootstrap.css'
     import 'bootstrap-vue/dist/bootstrap-vue.css'
-    import vSelect from 'vue-select'
-    import 'vue-select/dist/vue-select.css';
 
-    Vue.component('v-select', vSelect)
+    import 'vue-search-select/dist/VueSearchSelect.css'
+    import { ModelSelect } from 'vue-search-select'
 
     Vue.use(ModalPlugin)
     Vue.use(BootstrapVue);
@@ -577,7 +587,7 @@
                 demo: false,
                 demo_inputs: {},
                 demo_parameters: {},
-                ds_selected: [],
+                ds_selected: "",
                 ds_param_selected: [],
                 ds_params: {},
                 boolSelectOpt: [
@@ -620,9 +630,12 @@
 
             var oplist = [];
             for (var key in this.ds_info){
-                var op = {value: key, lable: key};
+                var op = {value: key, text: key};
                 oplist.push(op);
             }
+            console.log("select dataset options:");
+            console.log(oplist);
+
             this.select_box_option = oplist;
             if(window.gon.ds_selected) {
                 this.input_ds_selected = window.gon.ds_selected;
@@ -744,18 +757,28 @@
         },
         watch: {
             ds_selected:function(newValue) {
-                if (this.picked_single_multiple == 'single' && newValue != "") {
-                    console.log(newValue);
-                    this.app.inputs.forEach((item) => {
-                        if (item.name != "CIBERSORT.R" && item.name != "Signature file") this.files['i-' + item.id]  = null;
-                    })
+                
+                if (this.picked_single_multiple == 'single') {
+                    if (!newValue) {
+                        console.log("not newvalue");
+                        this.ds_selected = "";
+                    }
+                    else {
+                        console.log(newValue);
+                        this.app.inputs.forEach((item) => {
+                            if (item.name != "CIBERSORT.R" && item.name != "Signature file") this.files['i-' + item.id]  = null;
+                        })
+                    }
                 }
                 if (this.picked_single_multiple == 'multiple') {
                     for (var input_idx = 1; input_idx <= this.multiple_pairs_num;  input_idx++ ) {
-                        if (this.ds_selected[input_idx - 1] != '') {
+                        if (this.ds_selected[input_idx - 1]) {
                             this.app.inputs.forEach((item) => {
                                 if (item.name != "CIBERSORT.R" && item.name != "Signature file") this.files['multiple-i-' + item.id + '-' + input_idx] = null;
                             })
+                        }
+                        else {
+                            this.ds_selected[input_idx - 1] = "";
                         }
                     }
                 }
@@ -1255,6 +1278,8 @@
                 //$("#disable-fill").fadeIn(10);
                 this.isLoading = true;
                 console.log(this.isLoading);
+                console.log("Selected datasets:");
+                console.log(this.formatDatasets());
 
                 axios.post(
                     `/submit-app-task/`,
@@ -1308,9 +1333,11 @@
                 this.started = false;
                 if (type == 'single') {
                     this.picked_single_multiple = "single";
+                    this.ds_selected = "";
                 }
                 else {
                     this.picked_single_multiple = "multiple";
+                    this.ds_selected = Array(10).fill("");
                 }
                 document.getElementById("single-button").classList.toggle("btn-secondary");
                 document.getElementById("single-button").classList.toggle("btn-dark");
@@ -1367,49 +1394,49 @@
 
         },
         components: {
-            VueTagsInput, AlertCenter, GlobalSaveButton
+            VueTagsInput, AlertCenter, GlobalSaveButton, ModelSelect
         },
-        updated(){
+        // updated(){
 
-            $("#rendered_doc").find('img').on('click', function() {
-                var _this = $(this);
-                imgShow("#outerdiv", "#innerdiv", "#bigimg", _this);
-            });
-            function imgShow(outerdiv, innerdiv, bigimg, _this) {
-                var src = _this.attr("src");
-                $(bigimg).attr("src", src);
+        //     $("#rendered_doc").find('img').on('click', function() {
+        //         var _this = $(this);
+        //         imgShow("#outerdiv", "#innerdiv", "#bigimg", _this);
+        //     });
+        //     function imgShow(outerdiv, innerdiv, bigimg, _this) {
+        //         var src = _this.attr("src");
+        //         $(bigimg).attr("src", src);
 
-                $("<img/>").attr("src", src).on('load', function() {
-                    var windowW = $(window).width();
-                    var windowH = $(window).height();
-                    var realWidth = this.width;
-                    var realHeight = this.height;
-                    var imgWidth, imgHeight;
-                    var scale = 0.9;
+        //         $("<img/>").attr("src", src).on('load', function() {
+        //             var windowW = $(window).width();
+        //             var windowH = $(window).height();
+        //             var realWidth = this.width;
+        //             var realHeight = this.height;
+        //             var imgWidth, imgHeight;
+        //             var scale = 0.9;
 
-                    if(realWidth > windowW * scale) {
-                        imgWidth = windowW * scale;
-                        imgHeight = imgWidth / realWidth * realHeight;
-                    }else{
-                        imgWidth = realWidth;
-                        imgHeight = imgHeight;
-                    }
+        //             if(realWidth > windowW * scale) {
+        //                 imgWidth = windowW * scale;
+        //                 imgHeight = imgWidth / realWidth * realHeight;
+        //             }else{
+        //                 imgWidth = realWidth;
+        //                 imgHeight = imgHeight;
+        //             }
 
-                    $(bigimg).css("width", imgWidth);
+        //             $(bigimg).css("width", imgWidth);
 
-                    var w = (windowW - imgWidth) / 2;
-                    var h = (windowH - imgHeight) / 2;
-                    $(outerdiv).css({"top": 100, "left":w});
-                    $(outerdiv).css({"height":windowH* scale, "width":imgWidth});
+        //             var w = (windowW - imgWidth) / 2;
+        //             var h = (windowH - imgHeight) / 2;
+        //             $(outerdiv).css({"top": 100, "left":w});
+        //             $(outerdiv).css({"height":windowH* scale, "width":imgWidth});
 
-                    $(outerdiv).fadeIn("fast");
-                });
-                window.addEventListener("click", function(e){
-                   $(outerdiv).fadeOut("fast");
-                });
+        //             $(outerdiv).fadeIn("fast");
+        //         });
+        //         window.addEventListener("click", function(e){
+        //            $(outerdiv).fadeOut("fast");
+        //         });
 
-            }
-        }
+        //     }
+        // }
     };
 </script>
 

@@ -594,12 +594,12 @@ class SubmitController < ApplicationController
 
 
         if is_single == "true"
-          app_inputs.keys.each do |input_id|
+          file_names.keys.each do |input_id|
             combine_inputs_array[input_id] = combine_inputs_array[input_id][0, 1]
           end
         end
 
-        app_inputs.keys.each do |input_id|
+        file_names.keys.each do |input_id|
           inputs.push({
             # k => '/data/' + v.original_filename,
             input_id => combine_inputs_array[input_id].join(',')
