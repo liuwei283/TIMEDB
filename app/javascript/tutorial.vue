@@ -302,7 +302,7 @@ export default {
             //     }
             // }
             this.found = true;
-            var temp=this.index.search(this.search_value);
+            var temp=this.index.search(this.search_value,{expand:true});
             console.log(temp)
 
             for(var i=0;i<this.articles.length;i++){
