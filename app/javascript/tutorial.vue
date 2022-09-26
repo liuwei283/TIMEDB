@@ -126,7 +126,7 @@
                 <br><br>
             </div>
             <div v-if="this.found == true">
-                <h1 class="title" style="text-align: left;"><i class="fa fa-caret-left" @click="backsearch"></i>There are the search results</h1>
+                <h2 class="title-search" style="text-align: left;"><i class="fa fa-caret-left" @click="backsearch"></i>The searched fields can be found in the following tutorials</h2>
 
                 <div class="row" style="margin-left:15%">
                     <div v-for="a in results" :id="a.id" @click="showdetail($event)" class="col-md-5 tutorial-items text-center" :key="a.id">
@@ -139,12 +139,10 @@
                         {{a.title}}
                     </div>
                 </div>
-                <div v-if="results.length + results2.length + results3.length ==0" class="title" style="margin-botton:15%">
+                <div v-if="results.length + results2.length + results3.length ==0" class="title" style="margin-top:2%;margin-bottom:2%">
                     <h2>No page found. Please change your word for searching</h2>
                 </div>
-                <div class="row" style="margin-left:15%">
 
-                </div>
             </div>
         </div>
 
@@ -164,10 +162,8 @@ export default {
                 articles:[
                     {title:"Database Introduction", id:"1",key:["database","intro"]},
                     {title:"How to View Database Information", id:"2",key:["database","information","data"]},
-                    // {title:"How to Add Data to Your Workspace", id:"3",key:["database","workspace","dataset","data"]},
-                    {title:"How to Download Database Data", id:"4",key:["database","download","data"]},
-                    // {title:"How to View the  Visualizations", id:"5",key:["database","visualization"]},
-                    {title:"Visualizations in the Database", id:"6",key:["database","visualization","download"]},
+                    {title:"How to Download Database Data", id:"3",key:["database","download","data"]},
+                    {title:"Visualizations in the Database", id:"4",key:["database","visualization","download"]},
                 ],
                 articles2:[
                     {title:"Analysis Introduction", id:"1",key:["anaylsis","intro"]},
@@ -221,35 +217,27 @@ export default {
                 "title": "How to View Database Information",
                 "body": "Database InformationWe have 43 Type, 545 Projects, 39678 Samples.Detail InformationYou can view the detail information and the data visualization for each cancer type, project or sample.Let's take Project as an example:Click Filter to select information and Click Details to view Project's samples and charts."
             }
-            // var doc3 = {
-            //     "id": 3,
-            //     "title": "How to Add Data to Your Workspace",
-            //     "body": "You can check your dataset in workspaceTIMEDB provides function that user can create their own dataset from multiple projects.User may upload their dataset data for analysis.Add samples to your datasetDirectly add samples from the dataset page.Click Edit Dataset and Go add samples, it will jump to Samples page.Then, select samples and export them to your dataset.Also, you can add samples from a specify project."
-            // }
+
             var doc4 = {
-                "id": 4,
+                "id": 3,
                 "title": "How to Download Database Data",
-                "body": "Download data from Download PageThe Download page contains the relative files of all projects.Download the data from the datasetDownload data from projectsDownload data from samples?"
+                "body": "Download data from Download Page The Download page contains the relative files of all projects.Download the data from the dataset Download data from projects Download data from samples?"
             }
-            // var doc5 = {
-            //     "id": 5,
-            //     "title": "How to View the Visualization Plot",
-            //     "body": 'You can view the visualizations plot of each ProjectThe visualizations we provide are interactive, you can use the editor to do some personal change."C1_C6 subtyping overview": visualization about immune subtype of tumor samples."TIME estimation overview": visualization about TIME estimation.'
-            // }
             var doc6 = {
-                "id": 6,
-                "title": "How to Download the Visualization Plots, vis,viz",
-                "body": 'Click the Download all charts button to download all Charts.Click the Download button to download chart and relative data files.'
+                "id": 4,
+                "title": "Visualizations in the Database, vis,viz",
+                "body": "We provide several visualizations for the whole databse overview, including, bar charts for datasets and samples statistics, pie charts for cell composition estimation of each dataset and each state-of-art tool, C1-C6 landscape for subtyping data, and heatmaps for scaled gene expression profiles. Visualizations in dataset detailed pages fall into two categories, C1-C6 subtyping vizs and cell fraction plots. C1_C6 subtyping overview : visualization about immune subtype of tumor samples. For each samples, we provid pie plots for TIC composition estimated from 10 state-of-art tools. Users can use selector to change different estimation results for horizontal comparisons. All visualizations we provided are allowed to download. Users can click the button next to plot itself to easily download the corresponding visualizations. Specifically for individual dataset showing pages, user can download all visualizations together for futhur exploration."
             }
+
             var doc7 = {
                 "id": 21,
                 "title": "Analysis Introduction",
-                "body": "Welcome to TIMEDB AnalysisTIMEDB provides 18 online tumor immune microenvironment analyses,details are shown in the following table:Analysis Category	AnalysisRegression Tools.TIMEDB Decov CIBERSORTTIMEDB Decov TIMERTIMEDB Decov EPICTIMEDB Decov ABISTIMEDB Decov quanTIseqEnrichment Tools.TIMEDB Decov xCellTIMEDB Decov MCPcounterTIMEDB Decov ConsensusTMEUnsupervised Tools	TIMEDB Decov LinseedConsensus Tools	TIMEDB Consensus arrayTIMEDB Consensus RNA-SeqDatasets Comparison	TIMEDB Batch EffectTIME Estimation Comparsion	TIMEDB Comparison arrayTIMEDB Comparison RNA-SeqPatient Subtyping	TIMEDB Cell Fraction SubtypingTIMEDB C1-C6 SubtypingSurvival Analysis	TIMEDB HR ORTIMEDB KM EstimatorColrrelation Analysis	TIMEDB Cell InteractionTIMEDB Cell CorrelationDifferent Expression	TIMEDB ImmunoregulatorAnalysis submit and checkTIMEDB provides a friendly submission page that guides users through analysis step by step.Users could view analysis detailed tutorial, run demo and view demo results with one click.During the submission process, the file format and parameters are explained in detail.For results, TIMEDB provides results downloads, as well as interactive visualization.Contact with us if you meet some problemsYou may contact us:Dr LI, ShuaichengEmail: shuaicli@cityu.edu.hk"
+                "body": "Welcome to TIMEDB Analysis TIMEDB provides 18 online tumor immune microenvironment analyses,details are shown in the following table:Analysis Category	Analysis Regression Tools.TIMEDB Decov CIBERSORT TIMEDB Decov TIMER TIMEDB Decov EPIC TIMEDB Decov ABIS TIMEDB Decov quanTIseq Enrichment Tools. TIMEDB Decov xCell TIMEDB Decov MCPcounter TIMEDB Decov ConsensusTME Unsupervised Tools TIMEDB Decov Linseed Consensus Tools TIMEDB Consensus array TIMEDB Consensus RNA-Seq Datasets Comparison	TIMEDB Batch Effect TIME Estimation Comparsion	TIMEDB Comparison array TIMEDB Comparison RNA-Seq Patient Subtyping	TIMEDB Cell Fraction Subtyping TIMEDB C1-C6 Subtyping Survival Analysis	TIMEDB HR OR TIMEDB KM Estimator Colrrelation Analysis	TIMEDB Cell Interaction TIMEDB Cell Correlation Different Expression	TIMEDB Immunoregulator Analysis submit and check TIMEDB provides a friendly submission page that guides users through analysis step by step.Users could view analysis detailed tutorial, run demo and view demo results with one click.During the submission process, the file format and parameters are explained in detail.For results, TIMEDB provides results downloads, as well as interactive visualization.Contact with us if you meet some problemsYou may contact us:Dr LI, ShuaichengEmail: shuaicli@cityu.edu.hk"
             }
             var doc8 = {
                 "id": 22,
                 "title": "How to Complete an Analysis",
-                "body": "Analysis stepsTIMEDB analyses are used in much the same way.Step one: choose the analysis.In TIMEDB, Regression tools include ABIS, quanTIseq, CIBERSORT and other analyses. Users can select the analysis according to the number of datasets they upload and the analysis method.Step 2 (optional): read the analysis helper, run the demo file.After selecting one analysis, the user entering for the first time will directly see the analysis helper, where the file format and parameters will be explained in detail.In each anlaysis, TIMEDB provides a RUN DEMO button. Users can run the demo task with one just click.Step three: upload the fileUsers can prepare their own files or select their own DataSets directly from the workspace for uploading. (how to add datasets in workspace)Users can check the file format and download the demo file in upload page.In the document submission section, all submitted file should be CSV format.Step four: set parametersUsers can fill the desired analysis paramters guided by detailed paramter explaination.Step five: submit and view the resultsAfter the task is submitted, the user gets a task id, which is automatically added to the user's workspace.In the workspace section, you can view the status of task. There are three task status: running, finished, and failed, which respectively indicate that the task is in progress, the task is completed and the task is failed. Click check to view the task results and interactive visualization."
+                "body": "Analysis steps TIMEDB analyses are used in much the same way.Step one: choose the analysis.In TIMEDB, Regression tools include ABIS, quanTIseq, CIBERSORT and other analyses. Users can select the analysis according to the number of datasets they upload and the analysis method.Step 2 (optional): read the analysis helper, run the demo file.After selecting one analysis, the user entering for the first time will directly see the analysis helper, where the file format and parameters will be explained in detail.In each anlaysis, TIMEDB provides a RUN DEMO button. Users can run the demo task with one just click.Step three: upload the fileUsers can prepare their own files or select their own DataSets directly from the workspace for uploading. (how to add datasets in workspace)Users can check the file format and download the demo file in upload page.In the document submission section, all submitted file should be CSV format.Step four: set parametersUsers can fill the desired analysis paramters guided by detailed paramter explaination.Step five: submit and view the resultsAfter the task is submitted, the user gets a task id, which is automatically added to the user's workspace.In the workspace section, you can view the status of task. There are three task status: running, finished, and failed, which respectively indicate that the task is in progress, the task is completed and the task is failed. Click check to view the task results and interactive visualization."
             }
             var doc9 = {
                 "id": 23,
@@ -259,7 +247,7 @@ export default {
             var doc10 = {
                 "id": 24,
                 "title": "How to Ask Us for Help",
-                "body": "Team.Based in City University of Hong Kong, led by Dr. Shuaicheng LI, we are a multidisciplinary group of top-ranking and aspiring undergraduates, research assistants and Ph.D. students working tirelessly to bring you a brand-new experience in bioinformatics research that frees you from all the chores and empowers your journey of discovery.Dr. LI Shuaicheng.Supervisor.Contact Us.Dr LI, Shuaicheng.Tat Chee Avenue, Kowloon, Hong Kong.Email: shuaicli@cityu.edu.hk.About Us.Creating An Integrated Cloud-based System for Bioinformatics Visualization is our passion.Privacy Policy."
+                "body": "Team Based in City University of Hong Kong, led by Dr. Shuaicheng LI, we are a multidisciplinary group of top-ranking and aspiring undergraduates, research assistants and Ph.D. students working tirelessly to bring you a brand-new experience in bioinformatics research that frees you from all the chores and empowers your journey of discovery.Dr. LI Shuaicheng.Supervisor.Contact Us.Dr LI, Shuaicheng.Tat Chee Avenue, Kowloon, Hong Kong.Email: shuaicli@cityu.edu.hk.About Us.Creating An Integrated Cloud-based System for Bioinformatics Visualization is our passion.Privacy Policy."
             }
             this.index.addDoc(doc1);
             this.index.addDoc(doc2);
@@ -347,6 +335,11 @@ export default {
 
 .title{
     font-size: 5rem;
+    color: #314893;
+    font-weight: bold;
+}
+.title-search{
+    font-size: 3.5rem;
     color: #314893;
     font-weight: bold;
 }
