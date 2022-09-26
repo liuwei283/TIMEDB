@@ -102,6 +102,7 @@ export default {
 
     },
     mounted() {
+        $('.doc').find('img').css('width','100%');
     },
     computed: {
 
