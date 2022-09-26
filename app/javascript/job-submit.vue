@@ -177,7 +177,7 @@
 
                                                     <div class = "row justify-content-center">
                                                         <label>
-                                                            <span>You can select a dataset to merge: </span>
+                                                            <span>You can select a dataset: </span>
                                                             <i class="fa fa-question-circle" v-b-tooltip.rightbottom.hover title="You may choose one dataset with single project source to upload merged files"></i>
                                                         </label>
 
@@ -364,17 +364,17 @@
                 <div class = "row justify-content-center submit-container">
                     <div class="col-md-12 text-left mb-4">
                         <button class = "btn btn-secondary">
-                            <a :href="`/public/data/module_demo/${input.name}_demo.csv`" :download="input.name">Download demo file</a>
+                            <a :href="`/public/data/module_demo/${app.url}/${input.name}.csv`" :download="input.name">Download demo file</a>
                         </button>
                     </div>
 
                     <h6 v-if="input.name=='Clinical data'" style="color: gray;" class="p-2"><i>Please upload Clinical_*.csv if you use demo files for analysis</i></h6>
                     <h6 v-if="input.name=='Gene expression data'" style="color: gray;" class="p-2"><i>Please upload RNA_*.csv if you use demo files for analysis</i></h6>
 
-                    
                     <div class = "col-md-12 text-center">
                         <div>
                             <b-form-file
+                                accept=".csv"
                                 :id="`i-${input.id}`"
                                 v-model="files[`i-${input.id}`]"
                                 :state="inputValid[`i-${input.id}`]"
@@ -402,7 +402,8 @@
 
                     <div class = "col-md-10 text-center">
                         <h4 class = "mb-4"> File submission </h4>
-                        <p class="text-left" style="color:gray;font-size:1.4em;"><i>Please limit your uploaded file size less than 100MB.</i></p>
+                        <p class="text-left" style="color:gray;font-size:1.4em;"><i>Please check "Helper" or tutorial to download demo files for multiple datasets analysis. Demo files provided here are only for format checking.</i></p>
+                        <br>
                         <div class = "row justify-content-center">
                             <div id = "be-file-submit" class = "col-md-6 text-center" v-for="input in displayedInputs" :key="input.id">
                                 
@@ -414,13 +415,14 @@
                                         </div>
                                         <div class = "col-md-6 text-right">
                                             <button class = "btn btn-secondary">
-                                                <a :href="`/public/data/module_demo/${input.name}_demo.csv`" :download="input.name">Download demo file</a>
+                                                <a :href="`/public/data/module_demo/${app.url}/${input.name}.csv`" :download="input.name">Download demo file</a>
                                             </button>
                                         </div>
                                     </label>
                                     <h6 v-if="input.name=='Clinical data'" style="color: gray;" class="p-2"><i>Please upload Clinical_*.csv if you use demo files for analysis</i></h6>
                                     <h6 v-if="input.name=='Gene expression data'" style="color: gray;" class="p-2"><i>Please upload RNA_*.csv if you use demo files for analysis</i></h6>
                                     <b-form-file
+                                        accept=".csv"
                                         :id="`multiple-i-${input.id}-${input_idx}`"
                                         v-model="files[`multiple-i-${input.id}-${input_idx}`]"
                                         :placeholder="files[`multiple-i-${input.id}-${input_idx}`] ? files[`multiple-i-${input.id}-${input_idx}`].name : 'no file uploaded'"
@@ -446,7 +448,7 @@
 
                     <div class = "col-md-8 justify-content-center submit-container">
                         <h4>
-                            Or you can select a dataset to merge:
+                            Or you can select a dataset:
                         </h4>
 
                         <model-select :options="select_box_option"
@@ -521,7 +523,7 @@
                                 </div>
                             </div>
 
-                            <div class = "col-md-6 text-left" style="vertical-align:center; height:300px;overflow:scroll;">
+                            <div class = "col-md-6 text-left" style="vertical-align:center;height:300px;overflow:scroll;">
                                 <!-- <h2>Parameters description</h2> -->
                                 <div id = "multiple_params_desc" v-html="multiple_params_desc"></div>
                             </div>
@@ -1000,6 +1002,7 @@
                         
                     axios.get(`https://deepomics.org/api/apps/${newid}/`).then((response) => {
                         this.app = response.data.app;
+                        this.app.url = s_ana.url;
                         console.log("Logging fetched input data information:")
                         console.log(response.data.app.inputs);
                         this.files = {};

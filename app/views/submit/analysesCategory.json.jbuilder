@@ -9,6 +9,7 @@ json.array! @analyses do |analysis|
     json.multiple_demo_id analysis.multiple_demo_id
     json.single_result_id analysis.single_result_id
     json.multiple_result_id analysis.multiple_result_id
+    json.url analysis.url
 
     json.rendered_doc analysis.rendered_doc
 end

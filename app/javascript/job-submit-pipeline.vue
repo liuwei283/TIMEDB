@@ -135,7 +135,7 @@
 
                                                 <div class = "row justify-content-center">
                                                     <label>
-                                                        <span>You can select a dataset to merge: </span>
+                                                        <span>You can select a dataset: </span>
                                                         <i class="fa fa-question-circle" v-b-tooltip.rightbottom.hover title="You may choose one dataset with single project source to automatically upload merged files"></i>
                                                     </label>
                                                     <model-select :options="select_box_option" @focus="updateStepToFile()" class="col-md-8" 
@@ -354,6 +354,7 @@
                         <div>
                             <div>
                                 <b-form-file
+                                    accept=".csv"
                                     :id="`i-${input.id}`"
                                     v-model="files[`i-${input.id}`]"
                                     :state="inputValid[`i-${input.id}`]"
@@ -380,7 +381,8 @@
 
                     <div class = "col-md-10 text-center">
                         <h4 class = "mb-4"> File submission </h4>
-                        <p class="text-left" style="color:gray;font-size:1.4em;"><i>Please limit your uploaded file size less than 100MB.</i></p>
+                        <p class="text-left" style="color:gray;font-size:1.4em;"><i>Please check "Helper" or tutorial to download demo files for multiple datasets analysis. Demo files provided here are only for format checking.</i></p>
+                        <br>
                         <div class = "row">
                             <div id = "be-file-submit" class = "col-md-6 text-center" v-for="input in pure_inputs" :key="input.id">
                                 <div>
@@ -398,6 +400,7 @@
                                     <h6 v-if="input.name=='Clinical data'" style="color: gray;" class="p-2"><i>Please upload Clinical_*.csv if you use demo files for analysis</i></h6>
                                     <h6 v-if="input.name=='Gene expression data'" style="color: gray;" class="p-2"><i>Please upload RNA_*.csv if you use demo files for analysis</i></h6>
                                     <b-form-file
+                                        accept=".csv"
                                         :id="`multiple-i-${input.id}-${input_idx}`"
                                         v-model="files[`multiple-i-${input.id}-${input_idx}`]"
                                         :placeholder="files[`multiple-i-${input.id}-${input_idx}`] ? files[`multiple-i-${input.id}-${input_idx}`].name : 'no file uploaded'"
