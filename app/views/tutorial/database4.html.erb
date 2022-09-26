@@ -1,4 +1,3 @@
-
 <% content_for :title, 'Tutorial Database' %>
 
             <div class="row">
@@ -17,12 +16,12 @@
                             </p>
                             </a>
                             <ul id="side-tutorial-bar" class="">
-                                <a href="/tutorial/database/1" ><li style="color: #35478E" >Database Introduction</li></a>
+                                <a href="/tutorial/database/1" ><li style="color: #35478E">Database Introduction</li></a>
                                 <a href="/tutorial/database/2" ><li style="color: #35478E">How to View Database Information</li></a>
                                 <%# <a href="/tutorial/database/3"><li style="color: #35478E">How to Add Data to Your Workspace</li></a> %>
-                                <a href="/tutorial/database/4"><li style="color: #35478E" class="active1">How to Download Database Data</li></a>
+                                <a href="/tutorial/database/3"><li style="color: #35478E">How to Download Database Data</li></a>
                                 <%# <a href="/tutorial/database/5"><li style="color: #35478E">How to View the Visualizations</li></a> %>
-                                <a href="/tutorial/database/6"><li style="color: #35478E">Visualizations in the Database</li></a>
+                                <a href="/tutorial/database/4"><li style="color: #35478E" class="active1">Visualizations in the Database</li></a>
                             </ul>
                         </div>
                         <div class="sidebar-tutorial-toggle-1">
@@ -51,102 +50,62 @@
                     <div>
 
                         <h1 class ="title">
-                            <a href="/tutorial"><i class="fa fa-backward"></i></a> How to Download Database Data
+                            <a href="/tutorial"><i class="fa fa-backward"></i></a>  Visualizations in the Database
                         </h1><br>
                         <div class="page">
                             <div>
                                 <div class="headers">
-                                    <h3>1. Summarized downloading page</h1>
-                                        <br>
-                                        <p>This page provides downloading interfaces for all files available in TIMEDB database, including clinical data, gene expression profiles, cell composition files from 10 estimation methods, subtyping files, etc. All data are categorized according to files types and listed in the table.</p>
-                                        <div class="row">
-                                            <div class="col-md-4">
-                                                <img src="/public/data/image/tutorial/download2.png" class="border-image" style="width:420px; height: 280px;">
-                                            </div>
-                                            <div class="col-md-2">
-                                                
-                                            </div>
-                                            <div class="col-md-4">
-                                                <img src="/public/data/image/tutorial/download.png" class="border-image" style="width:420px; height: 280px;">
-                                            </div>
-                                            
-                                        </div>
-                                        
+                                    <h2>1. Database Overview</h2>
+                                    <br>
+                                    <p> We provide several visualizations for the whole databse overview, including, bar charts for datasets and samples statistics, pie charts for cell composition estimation of each dataset and each state-of-art tool, C1-C6 landscape for subtyping data, and heatmaps for scaled gene expression profiles.
+                                    </p>
+                                    <img src="/public/data/image/tutorial/database-viz1.png" class="border-image" style="width:300px; height: 220px;">
+                                    <img src="/public/data/image/tutorial/database-viz2.png" class="border-image" style="width:300px; height: 220px;">
+                                    <img src="/public/data/image/tutorial/database-viz3.png" class="border-image" style="width:300px; height: 220px;">
+                                    <br>
                                     <hr>
                                     <br>
-                                    <h3>2. Database pages</h3>
-                                        <br>
-                                        <p>We provide downloading links for files required in each visualization plot. For example, users can download cell fraction files estimated from 10 state-of-art tools required by "Dataset TIME Cell-type Composition Pie Chart" in the database overview page.</p>
-                                        <div class="row">
-                                            <div class="col-md-4">
-                                                <img src="/public/data/image/tutorial/database-viz-download.png" class="border-image" style="width:420px; height: 300px;">
-                                            </div>
-                                            <div class="col-md-2">
-                                                
-                                            </div>
-                                            <div class="col-md-4">
-                                                <img src="/public/data/image/tutorial/database-viz-download_1.png"  class="border-image" style="width:420px; height: 300px;">
-                                            </div>
+                                    <h2>2. Dataset details</h2>
+                                    <p>
+                                    Visualizations in dataset detailed pages fall into two categories, C1-C6 subtyping vizs and cell fraction plots.
+                                    </p>
+                                    <p> "C1_C6 subtyping overview": visualization about immune subtype of tumor samples.</p>
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <img src="/public/data/image/tutorial/5-2ppt.png" class="border-image" style="width:420px; height: 220px;">
+                                        </div>
+                                        <div class="col-md-2">
                                             
                                         </div>
+                                        <div class="col-md-4">
+                                            <img src="/public/data/image/tutorial/5-4ppt.png" class="border-image" style="width:420px; height: 220px;">
+                                        </div>
                                         
-                                        
+                                    </div>
 
-                                        <br><br>
-                                        <p>Users can also download overview data records from cancers, datasets, samples index pages, i.e. detailed attributes for datasets and clinical samples data. Specifically, for individual datasets, we provide downloading interfaces of all related files for the very project.</p>
-                                        <div class="row">
-                                            <div class="col-md-4">
-                                                <img src="/public/data/image/tutorial/dataset-download_1.png" class="border-image" style="width:420px; height: 250px;">
-                                            </div>
-                                            <div class="col-md-2">
-                                                
-                                            </div>
-                                            <div class="col-md-4">
-                                                <img src="/public/data/image/tutorial/dataset-download_2.png" class="border-image" style="width:420px; height: 250px;">
-                                            </div>
-                                            
-                                        </div>
-                                        
-                                         
+                                    <%# <br>
+                                    <p>"TIME estimation overview": visualization about TIME estimation.</p>
+                                    <img src="/public/data/image/tutorial/5-3ppt.png" class="flat-image"> %>
                                     <br>
                                     <hr>
                                     <br>
-                                    <h3>3. Task sumission pages</h3>
-                                        <p>To facilitate users' convenient task submission, we provide abundant demo files for each analysis and pipelines. Users can download them both from tutorial helpers and file uploading modals. Those demo files will give users a general concept about required data format.<p>
-                                        <div class="row">
-                                            <div class="col-md-4">
-                                                <img src="/public/data/image/tutorial/analysis-download.png" class="border-image" style="width:420px; height: 250px;">
-                                            </div>
-                                            <div class="col-md-2">
-                                                
-                                            </div>
-                                            <div class="col-md-4">
-                                                <img src="/public/data/image/tutorial/analysis-download_1.png" class="border-image" style="width:420px; height: 250px;">
-                                            </div>
-                                            
-                                        </div>
+                                    <h2>3. Samples cell Fraction</h2>
+                                    <p>For each samples, we provid pie plots for TIC composition estimated from 10 state-of-art tools. Users can use selector to change different estimation results for horizontal comparisons.
+                                    </p>
+                                    <img src="/public/data/image/tutorial/sample-viz.png" class="border-image"  style="width: 500px; height: 340px;">
                                     <br>
                                     <hr>
                                     <br>
-                                    <h3>4. Workspace</h3>
-                                        <p> Within workspace page, where users can check status and results of submitted tasks, we also provide downloading interfaces of task outputs. Users can easily download those files and explore in deeper detail about the corresponding analysis result.</p>
-                                        <div class="row">
-                                            <div class="col-md-4">
-                                                <img src="/public/data/image/tutorial/workspace-download_1.png" class="border-image" style="width:420px; height: 250px;">
-                                            </div>
-                                            <div class="col-md-2">
-                                                
-                                            </div>
-                                            <div class="col-md-4">
-                                                <img src="/public/data/image/tutorial/workspace-download_2.png" class="border-image" style="width:420px; height: 250px;">
-                                            </div>
-                                            
-                                        </div>
+                                    <h2>4. Visualizations downloading</h2>
+                                    <br>
+
+                                    <p>All visualizations we provided are allowed to download. Users can click the button next to plot itself to easily download the corresponding visualizations. Specifically for individual dataset showing pages, user can download all visualizations together for futhur exploration.</p>
+                                    <img src="/public/data/image/tutorial/6-1ppt.png" class="border-image"  style="width: 500px; height: 340px;">
+
                                 </div>
                             </div>
                             <br><br>
-
-                        </div>      
+                        </div> 
 
                     </div>
                 </div>
