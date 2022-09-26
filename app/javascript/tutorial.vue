@@ -3,6 +3,7 @@
         <link rel="stylesheet" type="text/css" href="chrome-extension://ckkdlimhmcjmikdlpkmbgfkaikojcbjk/themes/github.css" id="_theme">
         <div class="container text-center tutorial" v-if="this.details == false">
             <br>
+            
             <div class="row">
                 <div class="col-md-6 text-right">
                     <h1 class="title">Documentation</h1>
@@ -102,7 +103,7 @@
                 <div id="maintain-update" class="row text-left justify-content-left">
                     <div class="container col-md-12">
                         <h2>Maintain and update TIMEDB</h2>
-                        <p>We have developed admin pages to help maintain and update TIMEDB platform.
+                        <p>We have developed admin pages to help maintain and update TIMEDB platform.</p>
                         <ul>
                             <li>
                                 <p>Permissions have been granted to administration accounts to perform multiple database operations, including but not limited to new project and sample records insertion, clinical data uploading, data file integration and reprocessing.</p>
@@ -237,34 +238,34 @@ export default {
             // }
             var doc6 = {
                 "id": 6,
-                "title": "How to Download the Visualization Plots",
+                "title": "How to Download the Visualization Plots, vis,viz",
                 "body": 'Click the Download all charts button to download all Charts.Click the Download button to download chart and relative data files.'
             }
             var doc7 = {
-                "id": 7,
+                "id": 21,
                 "title": "Analysis Introduction",
                 "body": "Welcome to TIMEDB AnalysisTIMEDB provides 18 online tumor immune microenvironment analyses,details are shown in the following table:Analysis Category	AnalysisRegression Tools.TIMEDB Decov CIBERSORTTIMEDB Decov TIMERTIMEDB Decov EPICTIMEDB Decov ABISTIMEDB Decov quanTIseqEnrichment Tools.TIMEDB Decov xCellTIMEDB Decov MCPcounterTIMEDB Decov ConsensusTMEUnsupervised Tools	TIMEDB Decov LinseedConsensus Tools	TIMEDB Consensus arrayTIMEDB Consensus RNA-SeqDatasets Comparison	TIMEDB Batch EffectTIME Estimation Comparsion	TIMEDB Comparison arrayTIMEDB Comparison RNA-SeqPatient Subtyping	TIMEDB Cell Fraction SubtypingTIMEDB C1-C6 SubtypingSurvival Analysis	TIMEDB HR ORTIMEDB KM EstimatorColrrelation Analysis	TIMEDB Cell InteractionTIMEDB Cell CorrelationDifferent Expression	TIMEDB ImmunoregulatorAnalysis submit and checkTIMEDB provides a friendly submission page that guides users through analysis step by step.Users could view analysis detailed tutorial, run demo and view demo results with one click.During the submission process, the file format and parameters are explained in detail.For results, TIMEDB provides results downloads, as well as interactive visualization.Contact with us if you meet some problemsYou may contact us:Dr LI, ShuaichengEmail: shuaicli@cityu.edu.hk"
             }
             var doc8 = {
-                "id": 8,
+                "id": 22,
                 "title": "How to Complete an Analysis",
                 "body": "Analysis stepsTIMEDB analyses are used in much the same way.Step one: choose the analysis.In TIMEDB, Regression tools include ABIS, quanTIseq, CIBERSORT and other analyses. Users can select the analysis according to the number of datasets they upload and the analysis method.Step 2 (optional): read the analysis helper, run the demo file.After selecting one analysis, the user entering for the first time will directly see the analysis helper, where the file format and parameters will be explained in detail.In each anlaysis, TIMEDB provides a RUN DEMO button. Users can run the demo task with one just click.Step three: upload the fileUsers can prepare their own files or select their own DataSets directly from the workspace for uploading. (how to add datasets in workspace)Users can check the file format and download the demo file in upload page.In the document submission section, all submitted file should be CSV format.Step four: set parametersUsers can fill the desired analysis paramters guided by detailed paramter explaination.Step five: submit and view the resultsAfter the task is submitted, the user gets a task id, which is automatically added to the user's workspace.In the workspace section, you can view the status of task. There are three task status: running, finished, and failed, which respectively indicate that the task is in progress, the task is completed and the task is failed. Click check to view the task results and interactive visualization."
             }
             var doc9 = {
-                "id": 9,
+                "id": 23,
                 "title": "What Analysis We Have",
                 "body": "TIMEDB Deconv ABIS TIMEDB Deconv xCell TIMEDB Deconv ConsensusTME TIMEDB Deconv MCPcounter TIMEDB Batch Effect TIMEDB Deconv quanTIseq TIMEDB Immunoregulator TIMEDB Deconv TIMER TIMEDB HR OR TIMEDB Deconv EPIC TIMEDB Deconv CIBERSORT TIMEDB C1-C6 TIMEDB Deconv LinSeed TIMEDB Cell Fraction Subtyping TIMEDB Cell Correlation TIMEDB Cell Interaction TIMEDB KM Estimator TIMEDB Consensus Array TIMEDB Consensus RNA-Seq"
             }
             var doc10 = {
-                "id": 10,
+                "id": 24,
                 "title": "How to Ask Us for Help",
                 "body": "Team.Based in City University of Hong Kong, led by Dr. Shuaicheng LI, we are a multidisciplinary group of top-ranking and aspiring undergraduates, research assistants and Ph.D. students working tirelessly to bring you a brand-new experience in bioinformatics research that frees you from all the chores and empowers your journey of discovery.Dr. LI Shuaicheng.Supervisor.Contact Us.Dr LI, Shuaicheng.Tat Chee Avenue, Kowloon, Hong Kong.Email: shuaicli@cityu.edu.hk.About Us.Creating An Integrated Cloud-based System for Bioinformatics Visualization is our passion.Privacy Policy."
             }
             this.index.addDoc(doc1);
             this.index.addDoc(doc2);
-            this.index.addDoc(doc3);
+            // this.index.addDoc(doc3);
             this.index.addDoc(doc4);
-            this.index.addDoc(doc5);
+            // this.index.addDoc(doc5);
             this.index.addDoc(doc6);
             this.index.addDoc(doc7);
             this.index.addDoc(doc8);
@@ -307,16 +308,17 @@ export default {
 
             for(var i=0;i<this.articles.length;i++){
                 for (var j=0;j<temp.length;j++){
-                    if(i +1 == temp[j].ref && temp[j].score >= this.filter){
+                    if(this.articles[i].id  == temp[j].ref && temp[j].score >= this.filter){
                         this.results.push(this.articles[i]);
                         break;
                     }
                 }
 
             }
+
             for(var i=0;i<this.articles2.length;i++){
                 for (var j=0;j<temp.length;j++){
-                    if(i+7 == temp[j].ref && temp[j].score >= this.filter){
+                    if(parseInt(this.articles2[i].id)+20  == temp[j].ref && temp[j].score >= this.filter){
                         this.results2.push(this.articles2[i]);
                         break;
                     }
@@ -325,7 +327,7 @@ export default {
             }
             for(var i=0;i<this.articles3.length;i++){
                 for (var j=0;j<temp.length;j++){
-                    if(i+10== temp[j].ref && temp[j].score >= this.filter){
+                    if(parseInt(this.articles3[i].id) +20 == temp[j].ref && temp[j].score >= this.filter){
                         this.results3.push(this.articles3[i]);
                         break;
                     }
