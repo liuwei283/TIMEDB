@@ -53,8 +53,8 @@ function init() {
                                 height: 600
                             },
                             tag: {
-                                xLabel: "X",
-                                yLabel: "Y",
+                                xLabel: "UMAP1",
+                                yLabel: "UMAP2",
                             },
                             color: {
                                 colorMap: colorMap
