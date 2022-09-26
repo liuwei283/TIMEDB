@@ -452,7 +452,7 @@ class SubmitController < ApplicationController
                   tmpfile.each do |line|
                     if !(line.split(",").include?("GeneSymbol") || line.split(",").include?("\"GeneSymbol\"") )
                       result_json[:code] = false
-                      result_json[:data] = "Problematic input format for gene expression data (missing geneSymbol)."
+                      result_json[:data] = "There is no 'GeneSymbol' column in your gene expression file"
                       render json: result_json
                       return
                     end
@@ -471,7 +471,7 @@ class SubmitController < ApplicationController
                   tmpfile.each do |line|
                     if !(line.split(",").include?("sample_name") || line.split(",").include?("\"sample_name\"") )
                       result_json[:code] = false
-                      result_json[:data] = "Problematic input format for clinical data (missing sample name)."
+                      result_json[:data] = "There is no 'sample_name' column in your clinical file."
                       render json: result_json
                       return
                     end

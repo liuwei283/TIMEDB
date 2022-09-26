@@ -1108,7 +1108,7 @@
                             for (var file_inputs in this.file_required) {
                                 if (this.file_required[file_inputs] == true && this.files[file_inputs] == null) {
                                     anyFile = false;
-                                    alertCenter.add('danger', "You are under single mode, but you have not uploaded any file input or selected any single source dataset!");
+                                    alertCenter.add('danger', "You have not uploaded any file or selected any dataset!");
                                 }
                             }
                         }
@@ -1130,7 +1130,7 @@
                     }
                     allRight = anyFile == true
                     if (!allRight) {
-                        alertCenter.add('danger', "Not enough inputs with parameters.");
+                        alertCenter.add('danger', "Not enough inputs.");
                     }
                 }
 
@@ -1148,9 +1148,9 @@
                 if (allRight) {
                     this.submitTask();
                 }
-                else {
-                    alertCenter.add('danger', "Please recheck your inputs. Something error here!");
-                }
+                // else {
+                //     alertCenter.add('danger', "Please recheck your inputs. Something error here!");
+                // }
 
             },
 
