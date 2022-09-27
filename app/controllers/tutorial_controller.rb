@@ -41,4 +41,6 @@ class TutorialController < ApplicationController
     end
     def analysis4
     end
+    def mub
+    end
 end

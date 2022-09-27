@@ -28,7 +28,7 @@
                                 <a href= "https://github.com/deepomicslab/TIMEDB/issues">
                                 <!-- <img v-bind:src="require('../assets/images/web-coding.png')" style="width:20px;color: white;"> -->
                                 <i class="fas fa-file"></i>
-                                Report bug</a>
+                                Report Bug</a>
                                 </button>
                             </h2>
                         </div>

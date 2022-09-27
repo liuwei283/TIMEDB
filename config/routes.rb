@@ -67,6 +67,8 @@ Rails.application.routes.draw do
   get '/tutorial/analysis/2', to: "tutorial#analysis2"
   get '/tutorial/analysis/3', to: "tutorial#analysis3"
   get '/tutorial/analysis/4', to: "tutorial#analysis4"
+  get '/tutorial/mub', to: "tutorial#mub"
+
 
 
 

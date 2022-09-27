@@ -1,0 +1,115 @@
+<% content_for :title, 'Tutorial Database' %>
+
+            <div class="row">
+                <nav id="sidebar" class="active">
+                    <div class="sidebar-content">
+                        <div>
+                            <a href="/tutorial">
+                            <p>
+                            <i class="fa fa-arrow-left"></i>Back to TIMEDB
+                            </p>
+                            </a>
+                        </div>
+                        <div class="sidebar-tutorial-toggle">
+                            <a href="#">
+                            <p style="color: #35478E">Database &nbsp<i class="fa fa-angle-down" id="arrow"></i>
+                            </p>
+                            </a>
+                            <ul id="side-tutorial-bar" class="">
+                                <a href="/tutorial/database/1" ><li style="color: #35478E">Database Introduction</li></a>
+                                <a href="/tutorial/database/2" ><li style="color: #35478E">How to View Database Information</li></a>
+                                <%# <a href="/tutorial/database/3"><li style="color: #35478E">How to Add Data to Your Workspace</li></a> %>
+                                <a href="/tutorial/database/3"><li style="color: #35478E">How to Download Database Data</li></a>
+                                <%# <a href="/tutorial/database/5"><li style="color: #35478E">How to View the Visualizations</li></a> %>
+                                <a href="/tutorial/database/4"><li style="color: #35478E" class="active1">Visualizations in the Database</li></a>
+                            </ul>
+                        </div>
+                        <div class="sidebar-tutorial-toggle-1">
+                            <a href="#">
+                            <p style="color: #cc4f78">Analysis &nbsp<i class="fa fa-angle-down" id="arrow-1"></i>
+                            </p>
+                            </a>
+                            <ul id="side-tutorial-bar-1" class="">
+                                <a href="/tutorial/analysis/1"><li style="color: #cc4f78">Analysis Introduction</li></a>
+                                <a href="/tutorial/analysis/2" ><li style="color: #cc4f78">How to Complete an Analysis</li></a>
+                                <a href="/tutorial/analysis/3"><li style="color: #cc4f78">What Analysis We Have</li></a>
+                            </ul>
+                        </div>
+                        <div class="">
+                            <a href="/tutorial/analysis/4">
+                            <p>Help
+                            </p>
+                            </a>
+                            <a href="/tutorial/mub">
+                            <p>Maintainance
+                            </p>
+                            </a>
+                        </div>
+                    </div>
+                </nav>
+
+                <div class="col-md-8 offset-1">
+                    <br><br>
+
+                    <div>
+
+                        <h1 class ="title">
+                            <a href="/tutorial"><i class="fa fa-backward"></i></a> Maintainance and Update
+                        </h1><br>
+                        <div class="page">
+                            <div>
+                                <div class="headers">
+                                    <br>
+                                    <hr>
+                                    <br>
+                                    <div id="maintain-update" class="row text-left justify-content-left">
+                                        <div class="container col-md-12">
+                                            <h2>Maintain and update TIMEDB</h2>
+                                            <p>We have developed admin pages to help maintain and update TIMEDB platform.</p>
+                                            <ol>
+                                                <li>
+                                                    <p>Permissions have been granted to administration accounts to perform multiple database operations, including but not limited to new project and sample records insertion, clinical data uploading, data file integration and reprocessing.</p>
+                                                    <%= image_tag("admin_f1.png", class: "border-image", style: "width: 600px; height: 300px;") %>
+                                                </li>
+                                                <li>
+                                                    <p>New analysis modules and pipelines which have passed testing can be integrated with our platform easily to provide servies.</p>
+                                                    <%= image_tag("admin_f2.png", class: "border-image", style: "width: 600px; height: 300px; margin-right:150px;") %>
+                                                    <%= image_tag("admin_f3.png", class: "border-image", style: "width: 600px; height: 300px;") %>
+                                                    
+                                                </li>
+                                                <li>
+                                                    <p>We have task monitor admin pages to check, debug and guarantee the normal function of task submission procedure.</p>
+
+
+                                                    <%= image_tag("admin_f4.png", class: "border-image", style: "width: 600px; height: 300px; margin-right:150px;") %>
+                                                    <%= image_tag("admin_f5.png", class: "border-image", style: "width: 600px; height: 300px;") %>
+                                                </li>
+                                            </ol>
+                                            <p>After fixing reported bugs, we will release new versions every 20 ~ 30 days. Detailed platform update information can be found in the home page.</p>
+                                        </div>
+                                    </div>
+                                    <br>
+                                    <hr>
+                                    <br>
+                                    <div id="bug-reporter"  class="row text-left justify-content-left">
+                                        <div class="container col-md-12">
+                                            <h2> Report Bugs </h2>
+                                            <p>We allow users to report bugs through <a href="https://github.com/deepomicslab/TIMEDB/issues">TIMEDB Issues</a>.</p>
+                                            <img src="/public/data/image/tutorial/github-issues.png" class="border-image" style="width: 400px; height: 250px;  margin-right:140px;">
+
+                                            <p>Users can also click the "Report Bug" button available in the datasets index page and the analysis submission page for redirection. We will deal with user feedback promply.</p>
+                                            <img src="/public/data/image/tutorial/bug-interface1.jpg" class="border-image" style="width: 400px; height: 250px;  margin-right:140px;">
+                                            <img src="/public/data/image/tutorial/bug-interface2.jpg" class="border-image" style="width: 400px; height: 250px;">
+                                        </div>
+
+
+                                    </div>
+
+                                </div>
+                            </div>
+                            <br><br>
+                        </div> 
+
+                    </div>
+                </div>
+            </div>
