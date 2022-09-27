@@ -243,7 +243,7 @@ export default {
 
             for(let i=0;i<a.length;i++){
                 if(i==index){
-                    str+=`<span style="background-color:#FFFF00; color:#9F2B68" > `+a[i];
+                    str+=`<span style="background-color:#FFFF00; color:#9F2B68" >`+a[i];
                 }else{
                     str+=a[i];
                 }
