@@ -131,13 +131,10 @@
 
                     <div class="row" style="margin-left:15%">
                         <div v-for="a in results" :id="a.id" @click="showdetail($event)" class="col-md-5 tutorial-items text-center" :key="a.id" v-html="highlight(a.title)">
-                            
                         </div>
-                        <div v-for="a in results2" :id="a.id" @click="showdetail2($event)" class="col-md-5 tutorial-items-red text-center" :key="a.id">
-                            <b>{{a.title}}</b>
+                        <div v-for="a in results2" :id="a.id" @click="showdetail2($event)" class="col-md-5 tutorial-items-red text-center" :key="a.id"  v-html="highlight(a.title)">
                         </div>
-                        <div v-for="a in results3" :id="a.id" @click="showdetail2($event)" class="col-md-5 tutorial-items-3 text-center" :key="a.id">
-                            <b>{{a.title}}</b>
+                        <div v-for="a in results3" :id="a.id" @click="showdetail2($event)" class="col-md-5 tutorial-items-3 text-center" :key="a.id"  v-html="highlight(a.title)">
                         </div>
                     </div>
                 </div>
@@ -221,15 +218,15 @@ export default {
                     
                 }
             }
-            for (var i=0; i<this.articles3.length;i++){
-                if(this.articles3[i].title.toLowerCase().indexOf(this.search_value_down_case)!=-1&&this.search_value_down_case!=""){
-                    this.results.push(this.articles3[i]);
+            for (var i=0; i<this.articles2.length;i++){
+                if(this.articles2[i].title.toLowerCase().indexOf(this.search_value_down_case)!=-1&&this.search_value_down_case!=""){
+                    this.results2.push(this.articles2[i]);
                     
                 }
             }
             for (var i=0; i<this.articles3.length;i++){
                 if(this.articles3[i].title.toLowerCase().indexOf(this.search_value_down_case)!=-1&&this.search_value_down_case!=""){
-                    this.results.push(this.articles3[i]);
+                    this.results3.push(this.articles3[i]);
                     
                 }
             }
