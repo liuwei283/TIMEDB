@@ -9,7 +9,7 @@ class User < ApplicationRecord
         @users = User.where "updated_at < ?", 2.weeks.ago
         cleaned_user = []
         @users.each do |user|
-            if (user.id != 428 && user.id != 459)
+            if (user.id != 428 && user.id != 459 && user.id != 575)
                 FileUtils.rm_rf "#{Rails.root}/data/user/#{user.id}" if Dir.exist? "#{Rails.root}/data/user/#{user.id}"
                 cleaned_user << user.id
                 user.destroy

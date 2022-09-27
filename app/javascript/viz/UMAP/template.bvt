@@ -12,7 +12,7 @@ svg {
                         padding = 4
                         x = -4
                         Text {
-                            text = "Projects"
+                            text = "Datasets"
                             fontSize = 15
                             anchor = @anchor("b", "l")
                         }
