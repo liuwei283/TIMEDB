@@ -155,6 +155,7 @@ export default {
                 ],
                 articles3:[
                     {title:"How to Ask Us for Help", id:"4",key:["how","to","ask","us","for","help"]},
+                    {title:"Maintainance and Update",id:"5"}
                 ],
                 results:[],
                 results2:[],
@@ -176,8 +177,14 @@ export default {
 
         },
         showdetail2(a){
-            let url = '/tutorial/analysis/'+a.currentTarget.id;
-            window.location.href = url;
+            if(a.currentTarget.id ==5 ){
+                let url ="/tutorial/mub";
+                window.location.href = url;
+            }else{
+                let url = '/tutorial/analysis/'+a.currentTarget.id;
+                window.location.href = url;
+            }
+
 
         },
 
