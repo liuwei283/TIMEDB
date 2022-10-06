@@ -177,7 +177,7 @@
 
                                                     <div class = "row justify-content-center">
                                                         <label>
-                                                            <span>You can select a dataset: </span>
+                                                            <span>Or you can select a dataset: </span>
                                                             <i class="fa fa-question-circle" v-b-tooltip.rightbottom.hover title="You may choose one dataset with single project source to upload merged files"></i>
                                                         </label>
 

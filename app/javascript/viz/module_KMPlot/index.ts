@@ -62,7 +62,7 @@ function init() {
             
         },
         setup(){
-            registerEditorConfig(editorConfig(this), editorRef);
+            //registerEditorConfig(editorConfig(this), editorRef);
             registerEditorConfig(editorConfig(this), "getVue", "#task-output", editorRef);
             process(this)
         },

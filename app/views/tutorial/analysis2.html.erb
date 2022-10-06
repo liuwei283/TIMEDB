@@ -61,49 +61,104 @@
                             <div class="headers ">
                                 <br><hr><br>
                                 <h1>Analysis steps</h1>
-                                <p>TIMEDB analyses are used in much the same way. Let's take TIMEDB Deconv CIBERSORT as an example.</p>
-                                <h3>Step one: choose the analysis.</h3>
-                                <p>In TIMEDB, <a href="/submit/analysesCategory?cname=Regression+Tools">Regression tools</a> include ABIS, quanTIseq, CIBERSORT and other analyses. Users can select the analysis according to the number of datasets they upload and the analysis method.</p>
-                                <img src="/public/data/image/tutorial/a-2-1ppt.gif" class="page-image">
+                                <p>TIMEDB provides fruitful analysis for data exploration. The remaining part of this tutorial will take TIMEDB Deconv quanTIseq as an example to introduce the detailed procedure of task submission.</p>
+                                <br>
                                 <hr>
-                                <h3>Step 2 (optional): read the analysis helper, run the demo file.</h3>
-                                <p>After selecting one analysis, the user entering for the first time will directly see the analysis helper, where the file format and parameters will be explained in detail.</p>
-                                <img src="/public/data/image/tutorial/a-2-2ppt.gif" class="page-image">
-                                <p>In each anlaysis, TIMEDB provides a "RUN DEMO" button. Users can run the demo task with one just click. </p>
-                                <img src="/public/data/image/tutorial/a-2-3ppt.gif" class="page-image">
-                                <p>Users can also click the "Demo Result" button to directly view the visualizaiton result of demo task.</p>
-                                <img src="/public/data/image/tutorial/a-2-8ppt.gif" class="page-image">
+                                <h3>Step 1: choosing the analysis.</h3>
+                                <p>TIMEDB contains abundant different analyses, including regression tools, survival analysis, etc. Users can select the analysis they want to enter the detailed submission page.</p>
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <img src="/public/data/image/tutorial/analysis-select.png" class="border-image" style="width:420px; height: 300px;">
+                                    </div>
+                                    <div class="col-md-2">
+                                        
+                                    </div>
+                                    <div class="col-md-4">
+                                        <img src="/public/data/image/tutorial/analysis-detail.png"  class="border-image" style="width:420px; height: 300px;">
+                                    </div>
+                                </div>
+                                <br>
                                 <hr>
-                                <h3>Step three: upload the file</h3>
-                                <p>Users can prepare their own files for uploading or select TIMEDB DataSets directly. </p>
-                                <img src="/public/data/image/tutorial/a-2-4ppt.gif" class="page-image">
-                                <p>Users can check the file format and download the demo file in "upload page". </p>
-                                <img src="/public/data/image/tutorial/a-2-5ppt.gif" class="page-image">
-                                <p style="color: #00008b"><i >In the document submission section, all submitted file should be CSV format.</i></p>
+                                <h3>Step 2 (optional): reading the analysis helper and run the demo file.</h3>
+                                <p>After selecting one analysis, the corresponding analysis helper will be poped out, where the file format and parameters will be explained in detail.</p>
+                                <p>Each anlaysis provides a "RUN DEMO" button where users can run the demo task with one just click. </p>
+                                <p>Users can also click the "Demo Result" button to directly view the visualizaiton result of demo tasks.</p>
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <img src="/public/data/image/tutorial/analysis-tutorial.png" class="border-image" style="width:420px; height: 300px;">
+                                    </div>
+                                    <div class="col-md-2">
+                                        
+                                    </div>
+                                    <div class="col-md-4">
+                                        <img src="/public/data/image/tutorial/analysis-demo.png"  class="border-image" style="width:420px; height: 300px;">
+                                    </div>
+                                </div>
+                                <br>
                                 <hr>
-                                <h3>Step four: set parameters</h3>
-                                <p>Users can fill the desired analysis paramters guided by detailed paramter explaination.</p>
-                                <img src="/public/data/image/tutorial/a-2-6ppt.gif" class="page-image">
+                                <h3>Step 3: uploading the file</h3>
+                                <p>Users can prepare their own files to upload or select TIMEDB DataSets directly. TIMEDB provides demo files to help user get familiar with the file format.</p>
+                                <p style="color: #00008b"><i>Please ne noted that all submitted file should be of CSV format.</i></p>
+
+                                
+                                <img src="/public/data/image/tutorial/analysis-upload.png"  class="border-image" style="width: 300px; height: 200px;">
+                                  
+                                <img src="/public/data/image/tutorial/input-modal.png" class="border-image" style="width: 300px; height: 200px;">
+                                    
+                                <img src="/public/data/image/tutorial/select-dataset.png"  class="border-image" style="width: 300px; height: 200px;">
+                                    
+
+                                <br>
+                                <br>
                                 <hr>
-                                <h3>Step five: submit and view the results</h3>
-                                <p>After the task is submitted, the user gets a task id, which is automatically added to the user's workspace.</p>
-                                <img src="/public/data/image/tutorial/a-2-3ppt.gif" class="page-image">
-                                <p>In the workspace section, you can view the status of task. There are three task status: running, finished, and failed, which respectively indicate that the task is in progress, the task is completed and the task is failed. Click "check" to view the task results and interactive visualization.</p>
-                                <img src="/public/data/image/tutorial/a-2-7ppt.gif" class="page-image">
+                                <h3>Step 4: setting parameters</h3>
+                                <p>Users can fill analysis paramters guided by detailed paramter explaination.</p>
+                                <img src="/public/data/image/tutorial/analysis-parameter.png" class="page-image">
+                                <br>
+                                <br>
+                                <hr>
+                                <h3>Step 5: submit and view the results</h3>
+                                <p>After tasks are submitted, users will get corresponding task ids, which are automatically added to the user's workspace.</p>
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <img src="/public/data/image/tutorial/analysis-waiting.png" class="border-image" style="width:420px; height: 300px;">
+                                    </div>
+                                    <div class="col-md-2">
+                                        
+                                    </div>
+                                    <div class="col-md-4">
+                                        <img src="/public/data/image/tutorial/analysis-submitted.png"  class="border-image" style="width:420px; height: 300px;">
+                                    </div>
+                                </div>
+                                <p>In the workspace section, you can view the status of task. There are three task status: running, finished, and failed, which respectively indicate that the task is in progress, completed and is failed. Users can click "check" to view task results and interactive visualizations.</p>
+                                <img src="/public/data/image/tutorial/task-list.png" class="border-image" style="width: 300px; height: 200px;">
+                                <img src="/public/data/image/tutorial/ouput-list.png" class="border-image" style="width: 300px; height: 200px;">
+                                <img src="/public/data/image/tutorial/task-visualization.png" class="border-image" style="width: 300px; height: 200px;">
+                                <br>
                                 <br><hr><br>
                                 <h1>Directly submit the dataset for analysis in "Datasets page"</h3>
                                 <p>On the dataset page, TIME provide support to submit a dataset directly for analysis.</p>
-                                <h3>Step1: Choose one dataset and click "Run Analysis".<h3>
-                                <img src="/public/data/image/tutorial/a-2-9ppt.png" class="page-image">
+                                <h3>Step1: Choosing one dataset and click "Run Analysis".<h3>
+                                <img src="/public/data/image/tutorial/dataset-run-analysis.png" class="page-image">
 
-                                <h3>Step2: Choose one analysis.</h3>
-                                <img src="/public/data/image/tutorial/a-2-10ppt.png" class="page-image">
+                                <h3>Step2: Choosing one analysis.</h3>
+                                <img src="/public/data/image/tutorial/analysis-select.png" class="page-image">
 
-                                <h3>Step3: Check the dataset name.</h3>
-                                <img src="/public/data/image/tutorial/a-2-11ppt.png" class="page-image">
+                                <h3>Step3: Checking the dataset name.</h3>
+                                <img src="/public/data/image/tutorial/analysis-confirm-dataset.png" class="page-image">
 
-                                <h3>Step4: Set parameters and submit the analysis.</h4>
-                                <img src="/public/data/image/tutorial/a-2-12ppt.png" class="page-image">
+                                <h3>Step4: Setting parameters and submitting the analysis.</h4>
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <img src="/public/data/image/tutorial/analysis-parameter.png" class="border-image" style="width:420px; height: 300px;">
+                                    </div>
+                                    <div class="col-md-2">
+                                        
+                                    </div>
+                                    <div class="col-md-4">
+                                        <img src="/public/data/image/tutorial/analysis-submitted.png"  class="border-image" style="width:420px; height: 300px;">
+                                    </div>
+                                </div>
 
                             </div>
                             <br><br>

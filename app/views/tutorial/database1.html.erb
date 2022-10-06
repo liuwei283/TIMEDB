@@ -121,7 +121,7 @@
                                     <p>Users can look through the <a href="/database/overview">"Overview"</a> page to check a comprehensive panorama of the TIMEDB database. </p>
                                     <ul>
                                         <li>Users can click anatomy icons to query one specific cancer in detail.</li>
-                                            <img src="/public/data/image/tutorial/1-1ppt.gif" class="border-image" style="width:420px;height: 300px;">
+                                            <img src="/public/data/image/tutorial/database-overview-cancer.png" class="border-image" style="width:420px;height: 300px;">
 
                                             <%# <div class="row">
                                                 <div class="col-md-3"></div>
@@ -133,17 +133,33 @@
                                             <br><br>
                                             <li>Users can explore various visualizations.
                                                 <br>
-                                                <img src="/public/data/image/tutorial/1-2ppt.gif" class="high-image">
-                                                <img src="/public/data/image/tutorial/1-3ppt.gif" class="high-image">
-                                                <img src="/public/data/image/tutorial/1-4ppt.gif" class="high-image">
+                                                <img src="/public/data/image/tutorial/database-overview-pie.png" class="high-image">
+                                                <img src="/public/data/image/tutorial/database-overview-landscape.png" class="high-image">
+                                                <img src="/public/data/image/tutorial/database-overview-immunoregulator.png" class="high-image">
                                             </li>
 
                                     </ul>
                                     
                                     <h3 id="cancer">2. Cancers</h3>
                                     <br>
-                                    <p>Users can click <button class="btn btn-1"> details </button> button in the <a href="/cancers">"Cancers"</a> showing page to query one specific dataset. <br><p>
-                                    <img src="/public/data/image/tutorial/1-5ppt.gif" class="border-image" style="width:450px;height: 300px;">
+                                    <p>Users can have an overview about all <a href="/cancers">cancers</a> stored in TIMEDB database in the cancers indexing page.<p>
+                                    <p>Users can also click <button class="btn btn-1"> details </button> button in the some cancer showing pages to query one specific dataset. <br><p>
+
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <img src="/public/data/image/tutorial/cancer-index.png" class="border-image" style="width:420px; height: 300px;">
+                                        </div>
+                                        <div class="col-md-2">
+                                            
+                                        </div>
+                                        <div class="col-md-4">
+                                            <img src="/public/data/image/tutorial/cancer-show.png"  class="border-image" style="width:420px; height: 300px;">
+                                        </div>
+                                        
+                                    </div>
+
+                                    
+
                                     <%# <div class="row">
                                         <div class="col-md-3"></div>
                                         <div class="col-md-4">
@@ -154,8 +170,21 @@
 
                                     <h3 id="project">3. Datasets</h3>
                                     <br>
-                                    <p>Users can also explore one specific datasets from the <a href="/projects">"Dataset"</a> index page.</p>
-                                    <img src="/public/data/image/tutorial/1-6ppt.gif" class="border-image" style="width:500px;height: 280px;">
+                                    <p>Users can have an overview about all <a href="/cancers">datasets</a> stored in TIMEDB database in the datasets indexing page.<p>
+                                    <p>Users can also click <button class="btn btn-1"> Show </button> button in the dataset showing pages to query detailed information of samples belonging to this dataset. <br><p>
+
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <img src="/public/data/image/tutorial/dataset-index.png" class="border-image" style="width:420px; height: 300px;">
+                                        </div>
+                                        <div class="col-md-2">
+                                            
+                                        </div>
+                                        <div class="col-md-4">
+                                            <img src="/public/data/image/tutorial/dataset-show.png"  class="border-image" style="width:420px; height: 300px;">
+                                        </div>
+                                        
+                                    </div>
 
                                     
 
@@ -196,9 +225,9 @@
                                     <br>
                                     <h1>Interactive visualizations</h1>
                                     <p>The visualizations provided are interactive, whose features include changeing color and text size, rotating labels and multiple online adjustment options contained but not all listed.</p>
-                                    <img src="/public/data/image/tutorial/1-8ppt.gif" class="middle-image">
-                                    <img src="/public/data/image/tutorial/1-9ppt.gif" class="middle-image">
-                                    <img src="/public/data/image/tutorial/1-10ppt.gif" class="middle-image">
+                                    <img src="/public/data/image/tutorial/dataset-viz1.png" class="middle-image">
+                                    <img src="/public/data/image/tutorial/dataset-viz2.png" class="middle-image">
+                                    <img src="/public/data/image/tutorial/dataset-viz3.png" class="middle-image">
                                     <br>
                                     <br>
                                     <h1>
@@ -209,19 +238,21 @@
                                     </h1>
                                     <div id="detailed_citations" class="collapse">
                                     <br>
-                                    <em>[1] Vésteinn Thorsson, David L Gibbs, Scott D Brown, Denise Wolf, Dante S Bortone, TaiHsien Ou Yang, Eduard Porta-Pardo, Galen F Gao, Christopher L Plaisier, James A Eddy,et al. The immune landscape of cancer. Immunity, 51(2):411–412, 2019.</em><br>
-                                    <em>[2] Gianni Monaco, Bernett Lee, Weili Xu, Seri Mustafah, You Yi Hwang, Christophe Carré,Nicolas Burdin, Lucian Visan, Michele Ceccarelli, Michael Poidinger, et al. Rna-seq signatures normalized by mrna abundance allow absolute deconvolution of human immune cell types. Cell reports, 26(6):1627–1640, 2019.</em><br>
-                                    <em>[3] Aaron M Newman, Chih Long Liu, Michael R Green, Andrew J Gentles, Weiguo Feng, Yue Xu, Chuong D Hoang, Maximilian Diehn, and Ash A Alizadeh. Robust enumeration of cell subsets from tissue expression profiles. Nature methods, 12(5):453–457, 2015.</em><br>
-                                    <em>[4] A. M. Newman, C. B. Steen, C. L. Liu, A. J. Gentles, A. A. Chaudhuri, F. Scherer, M. S. Khodadoust, M. S. Esfahani, B. A. Luca, and D. Steiner. Determining cell type abundance and expression from bulk tissues with digital cytometry. Nature biotechnology, 37(7):773, 2019.</em><br>
-                                    <em>[5] J. Racle, Kaat De Jonge, P. Baumgaertner, D. E. Speiser, and D. Gfeller. Simultaneous enumeration of cancer and immune cell types from bulk tumor gene expression data. eLife,6,(2017-11-10), 6, 2017.</em><br>
-                                    <em>[6] Ya Ru Miao, Qiong Zhang, Qian Lei, Mei Luo, and An Yuan Guo. Immucellai: a unique method for comprehensive t-cell subsets abundance prediction and its application in cancer immunotherapy. 2019.</em><br>
-                                    <em>[7] Becht E, Giraldo NA, Lacroix L, Buttard B, Elarouci N, Petitprez F, Selves J, Laurent-Puig P, Sautès-Fridman C, Fridman WH, de Reyniès A. Estimating the population abundance of tissue-infiltrating immune and stromal cell populations using gene expression. Genome Biol. 2016 Oct 20;17(1):218.</em><br>
-                                    <em>[8] Alejandro Jiménez-Sánchez, Oliver Cast, and Martin L Miller. Comprehensive benchmarking and integration of tumor microenvironment cell estimation methods. Cancer Research, 79(24):6238–6246, 2019.</em><br>
-                                    <em>[9] T. Li, J. Fan, B. Wang, N. Traugh, Q. Chen, J. S. Liu, B. Li, and X. S. Liu. Timer: A web server for comprehensive analysis of tumor-infiltrating immune cells. Cancer Research, 77(21):e108, 2017.</em><br>
-                                    <em>[10] Francesca Finotello, Clemens Mayer, Christina Plattner, Gerhard Laschober, Dietmar Rieder, Hubert Hackl, Anne Krogsdam, Zuzana Loncova, Wilfried Posch, Doris Wilflingseder, et al. Molecular and pharmacological modulators of the tumor immune contexture revealed by deconvolution of rna-seq data. Genome medicine, 11(1):1–20, 2019.</em><br>
-                                    <em>[11] D. Aran, Z. Hu, and A. J. Butte. xcell: digitally portraying the tissue cellular heterogeneity landscape. Genome Biology, 18(1):220, 2017.</em><br>
-                                    <em>[12] David L Gibbs. Robust classification of immune subtypes in cancer. bioRxiv, 2020.</em><br>
-                                    <em>[13] James A Eddy, Vésteinn Thorsson, Andrew E Lamb, David L Gibbs, Carolina Heimann, Jia Xin Yu, Verena Chung, Yooree Chae, Kristen Dang, Benjamin G Vincent, et al. Criiatlas: an interactive portal for immuno-oncology research. F1000Research, 9, 2020.</em><br>
+                                    <ol>
+                                    <li>Vésteinn Thorsson, David L Gibbs, Scott D Brown, Denise Wolf, Dante S Bortone, TaiHsien Ou Yang, Eduard Porta-Pardo, Galen F Gao, Christopher L Plaisier, James A Eddy,et al. The immune landscape of cancer. Immunity, 51(2):411–412, 2019.</li>
+                                    <li>Gianni Monaco, Bernett Lee, Weili Xu, Seri Mustafah, You Yi Hwang, Christophe Carré,Nicolas Burdin, Lucian Visan, Michele Ceccarelli, Michael Poidinger, et al. Rna-seq signatures normalized by mrna abundance allow absolute deconvolution of human immune cell types. Cell reports, 26(6):1627–1640, 2019.</li>
+                                    <li>Aaron M Newman, Chih Long Liu, Michael R Green, Andrew J Gentles, Weiguo Feng, Yue Xu, Chuong D Hoang, Maximilian Diehn, and Ash A Alizadeh. Robust enumeration of cell subsets from tissue expression profiles. Nature methods, 12(5):453–457, 2015.</li>
+                                    <li>A. M. Newman, C. B. Steen, C. L. Liu, A. J. Gentles, A. A. Chaudhuri, F. Scherer, M. S. Khodadoust, M. S. Esfahani, B. A. Luca, and D. Steiner. Determining cell type abundance and expression from bulk tissues with digital cytometry. Nature biotechnology, 37(7):773, 2019.</li>
+                                    <li>J. Racle, Kaat De Jonge, P. Baumgaertner, D. E. Speiser, and D. Gfeller. Simultaneous enumeration of cancer and immune cell types from bulk tumor gene expression data. eLife,6,(2017-11-10), 6, 2017.</li>
+                                    <li>Ya Ru Miao, Qiong Zhang, Qian Lei, Mei Luo, and An Yuan Guo. Immucellai: a unique method for comprehensive t-cell subsets abundance prediction and its application in cancer immunotherapy. 2019.</li>
+                                    <li>Becht E, Giraldo NA, Lacroix L, Buttard B, Elarouci N, Petitprez F, Selves J, Laurent-Puig P, Sautès-Fridman C, Fridman WH, de Reyniès A. Estimating the population abundance of tissue-infiltrating immune and stromal cell populations using gene expression. Genome Biol. 2016 Oct 20;17(1):218.</li>
+                                    <li>Alejandro Jiménez-Sánchez, Oliver Cast, and Martin L Miller. Comprehensive benchmarking and integration of tumor microenvironment cell estimation methods. Cancer Research, 79(24):6238–6246, 2019.</li>
+                                    <li>T. Li, J. Fan, B. Wang, N. Traugh, Q. Chen, J. S. Liu, B. Li, and X. S. Liu. Timer: A web server for comprehensive analysis of tumor-infiltrating immune cells. Cancer Research, 77(21):e108, 2017.</li>
+                                    <li>Francesca Finotello, Clemens Mayer, Christina Plattner, Gerhard Laschober, Dietmar Rieder, Hubert Hackl, Anne Krogsdam, Zuzana Loncova, Wilfried Posch, Doris Wilflingseder, et al. Molecular and pharmacological modulators of the tumor immune contexture revealed by deconvolution of rna-seq data. Genome medicine, 11(1):1–20, 2019.</li>
+                                    <li>D. Aran, Z. Hu, and A. J. Butte. xcell: digitally portraying the tissue cellular heterogeneity landscape. Genome Biology, 18(1):220, 2017.</li>
+                                    <li>David L Gibbs. Robust classification of immune subtypes in cancer. bioRxiv, 2020.</li>
+                                    <li>James A Eddy, Vésteinn Thorsson, Andrew E Lamb, David L Gibbs, Carolina Heimann, Jia Xin Yu, Verena Chung, Yooree Chae, Kristen Dang, Benjamin G Vincent, et al. Criiatlas: an interactive portal for immuno-oncology research. F1000Research, 9, 2020.</li>
+                                    </ol>
                                     </div>
                                 </div>
 
