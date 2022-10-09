@@ -1,5 +1,16 @@
 <% content_for :title, 'Tutorial Database' %>
 
+<% content_for :head do %>
+  
+  <%= javascript_pack_tag "tutorial" %>
+<% end %>
+
+                <div class="top-reminder text-center">
+                    <p class="text-center">
+                    You can click images to enlarge them and check details.
+                    </p>
+                </div>
+
             <div class="row">
                 <nav id="sidebar" class="active">
                     <div class="sidebar-content">
@@ -48,6 +59,12 @@
                         </div>
                     </div>
                 </nav>
+
+                <div class="top-reminder text-center">
+                    <p class="text-center">
+                    You can click images to enlarge them and check details.
+                    </p>
+                </div>
 
                 <div class="col-md-8 offset-1">
                     <br><br>
@@ -121,7 +138,7 @@
                                     <p>Users can look through the <a href="/database/overview">"Overview"</a> page to check a comprehensive panorama of the TIMEDB database. </p>
                                     <ul>
                                         <li>Users can click anatomy icons to query one specific cancer in detail.</li>
-                                            <img src="/public/data/image/tutorial/database-overview-cancer.png" class="border-image" style="width:420px;height: 300px;">
+                                            <img src="/public/data/image/tutorial/database-overview-cancer.png" class="border-image enlargeImages" style="width:420px;height: 300px;">
 
                                             <%# <div class="row">
                                                 <div class="col-md-3"></div>
@@ -133,9 +150,9 @@
                                             <br><br>
                                             <li>Users can explore various visualizations.
                                                 <br>
-                                                <img src="/public/data/image/tutorial/database-overview-pie.png" class="high-image">
-                                                <img src="/public/data/image/tutorial/database-overview-landscape.png" class="high-image">
-                                                <img src="/public/data/image/tutorial/database-overview-immunoregulator.png" class="high-image">
+                                                <img src="/public/data/image/tutorial/database-overview-pie.png" class="high-image enlargeImages">
+                                                <img src="/public/data/image/tutorial/database-overview-landscape.png" class="high-image enlargeImages">
+                                                <img src="/public/data/image/tutorial/database-overview-immunoregulator.png" class="high-image enlargeImages">
                                             </li>
 
                                     </ul>
@@ -147,13 +164,13 @@
 
                                     <div class="row">
                                         <div class="col-md-4">
-                                            <img src="/public/data/image/tutorial/cancer-index.png" class="border-image" style="width:420px; height: 300px;">
+                                            <img src="/public/data/image/tutorial/cancer-index.png" class="border-image enlargeImages" style="width:420px; height: 300px;">
                                         </div>
                                         <div class="col-md-2">
                                             
                                         </div>
                                         <div class="col-md-4">
-                                            <img src="/public/data/image/tutorial/cancer-show.png"  class="border-image" style="width:420px; height: 300px;">
+                                            <img src="/public/data/image/tutorial/cancer-show.png"  class="border-image enlargeImages" style="width:420px; height: 300px;">
                                         </div>
                                         
                                     </div>
@@ -175,13 +192,13 @@
 
                                     <div class="row">
                                         <div class="col-md-4">
-                                            <img src="/public/data/image/tutorial/dataset-index.png" class="border-image" style="width:420px; height: 300px;">
+                                            <img src="/public/data/image/tutorial/dataset-index.png" class="border-image enlargeImages" style="width:420px; height: 300px;">
                                         </div>
                                         <div class="col-md-2">
                                             
                                         </div>
                                         <div class="col-md-4">
-                                            <img src="/public/data/image/tutorial/dataset-show.png"  class="border-image" style="width:420px; height: 300px;">
+                                            <img src="/public/data/image/tutorial/dataset-show.png"  class="border-image enlargeImages" style="width:420px; height: 300px;">
                                         </div>
                                         
                                     </div>
@@ -210,9 +227,9 @@
                                     <p>The Dataset visulization part has two sub-parts:</p>
                                     <ul>
                                         <li>C1_C6 subtyping overview: visualizations about immune subtype for tumor samples.</li>
-                                        <img src="/public/data/image/tutorial/5-2ppt.png" class="border-image" style="width: 500px; height: 280px;">
+                                        <img src="/public/data/image/tutorial/5-2ppt.png" class="border-image enlargeImages" style="width: 500px; height: 280px;">
                                         <li>TIME estimation overview: visualizations about TIME estimation.</li>
-                                        <img src="/public/data/image/tutorial/5-4ppt.png" class="border-image" style="width: 500px; height: 265px;">
+                                        <img src="/public/data/image/tutorial/5-4ppt.png" class="border-image enlargeImages" style="width: 500px; height: 265px;">
 
                                     </ul>
                                     <br><br>
@@ -225,9 +242,9 @@
                                     <br>
                                     <h1>Interactive visualizations</h1>
                                     <p>The visualizations provided are interactive, whose features include changeing color and text size, rotating labels and multiple online adjustment options contained but not all listed.</p>
-                                    <img src="/public/data/image/tutorial/dataset-viz1.png" class="middle-image">
-                                    <img src="/public/data/image/tutorial/dataset-viz2.png" class="middle-image">
-                                    <img src="/public/data/image/tutorial/dataset-viz3.png" class="middle-image">
+                                    <img src="/public/data/image/tutorial/dataset-viz1.png" class="middle-image enlargeImages">
+                                    <img src="/public/data/image/tutorial/dataset-viz2.png" class="middle-image enlargeImages">
+                                    <img src="/public/data/image/tutorial/dataset-viz3.png" class="middle-image enlargeImages">
                                     <br>
                                     <br>
                                     <h1>
@@ -259,6 +276,13 @@
                             </div>
 
                             <br><br>
+
+                        </div>
+
+                        <div id="imageModal" class="modal">
+                            <img class="modal-content" id="modalImage">
+                            <div id="caption"></div>
+                            <span class="close">&times;</span>
 
                         </div>
 

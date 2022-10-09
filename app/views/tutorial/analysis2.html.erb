@@ -1,5 +1,16 @@
 <% content_for :title, 'Tutorial Analysis' %>
 
+<% content_for :head do %>
+  
+  <%= javascript_pack_tag "tutorial" %>
+<% end %>
+
+                <div class="top-reminder text-center">
+                    <p class="text-center">
+                    You can click images to enlarge them and check details.
+                    </p>
+                </div>
+
             <div class="row">
                 <nav id="sidebar" class="active">
                     <div class="sidebar-content">
@@ -49,6 +60,12 @@
                     </div>
                 </nav>
 
+                <div class="top-reminder text-center">
+                    <p class="text-center">
+                    You can click images to enlarge them and check details.
+                    </p>
+                </div>
+
                 <div class="col-md-8 offset-1">
                             <br><br>
 
@@ -68,13 +85,13 @@
                                 <p>TIMEDB contains abundant different analyses, including regression tools, survival analysis, etc. Users can select the analysis they want to enter the detailed submission page.</p>
                                 <div class="row">
                                     <div class="col-md-4">
-                                        <img src="/public/data/image/tutorial/analysis-select.png" class="border-image" style="width:420px; height: 300px;">
+                                        <img src="/public/data/image/tutorial/analysis-select.png" class="border-image enlargeImages" style="width:420px; height: 300px;">
                                     </div>
                                     <div class="col-md-2">
                                         
                                     </div>
                                     <div class="col-md-4">
-                                        <img src="/public/data/image/tutorial/analysis-detail.png"  class="border-image" style="width:420px; height: 300px;">
+                                        <img src="/public/data/image/tutorial/analysis-detail.png"  class="border-image enlargeImages" style="width:420px; height: 300px;">
                                     </div>
                                 </div>
                                 <br>
@@ -85,27 +102,27 @@
                                 <p>Users can also click the "Demo Result" button to directly view the visualizaiton result of demo tasks.</p>
                                 <div class="row">
                                     <div class="col-md-4">
-                                        <img src="/public/data/image/tutorial/analysis-tutorial.png" class="border-image" style="width:420px; height: 300px;">
+                                        <img src="/public/data/image/tutorial/analysis-tutorial.png" class="border-image enlargeImages" style="width:420px; height: 300px;">
                                     </div>
                                     <div class="col-md-2">
                                         
                                     </div>
                                     <div class="col-md-4">
-                                        <img src="/public/data/image/tutorial/analysis-demo.png"  class="border-image" style="width:420px; height: 300px;">
+                                        <img src="/public/data/image/tutorial/analysis-demo.png"  class="border-image enlargeImages" style="width:420px; height: 300px;">
                                     </div>
                                 </div>
                                 <br>
                                 <hr>
                                 <h3>Step 3: uploading the file</h3>
                                 <p>Users can prepare their own files to upload or select TIMEDB DataSets directly. TIMEDB provides demo files to help user get familiar with the file format.</p>
-                                <p style="color: #00008b"><i>Please ne noted that all submitted file should be of CSV format.</i></p>
+                                <p style="color: #00008b"><i>Please be noted that all submitted file should be of CSV format.</i></p>
 
                                 
-                                <img src="/public/data/image/tutorial/analysis-upload.png"  class="border-image" style="width: 300px; height: 200px;">
+                                <img src="/public/data/image/tutorial/analysis-upload.png"  class="border-image enlargeImages" style="width: 300px; height: 200px;">
                                   
-                                <img src="/public/data/image/tutorial/input-modal.png" class="border-image" style="width: 300px; height: 200px;">
+                                <img src="/public/data/image/tutorial/input-modal.png" class="border-image enlargeImages" style="width: 300px; height: 200px;">
                                     
-                                <img src="/public/data/image/tutorial/select-dataset.png"  class="border-image" style="width: 300px; height: 200px;">
+                                <img src="/public/data/image/tutorial/select-dataset.png"  class="border-image enlargeImages" style="width: 300px; height: 200px;">
                                     
 
                                 <br>
@@ -113,7 +130,7 @@
                                 <hr>
                                 <h3>Step 4: setting parameters</h3>
                                 <p>Users can fill analysis paramters guided by detailed paramter explaination.</p>
-                                <img src="/public/data/image/tutorial/analysis-parameter.png" class="page-image">
+                                <img src="/public/data/image/tutorial/analysis-parameter.png" class="page-image enlargeImages">
                                 <br>
                                 <br>
                                 <hr>
@@ -121,47 +138,53 @@
                                 <p>After tasks are submitted, users will get corresponding task ids, which are automatically added to the user's workspace.</p>
                                 <div class="row">
                                     <div class="col-md-4">
-                                        <img src="/public/data/image/tutorial/analysis-waiting.png" class="border-image" style="width:420px; height: 300px;">
+                                        <img src="/public/data/image/tutorial/analysis-waiting.png" class="border-image enlargeImages" style="width:420px; height: 300px;">
                                     </div>
                                     <div class="col-md-2">
                                         
                                     </div>
                                     <div class="col-md-4">
-                                        <img src="/public/data/image/tutorial/analysis-submitted.png"  class="border-image" style="width:420px; height: 300px;">
+                                        <img src="/public/data/image/tutorial/analysis-submitted.png"  class="border-image enlargeImages" style="width:420px; height: 300px;">
                                     </div>
                                 </div>
                                 <p>In the workspace section, you can view the status of task. There are three task status: running, finished, and failed, which respectively indicate that the task is in progress, completed and is failed. Users can click "check" to view task results and interactive visualizations.</p>
-                                <img src="/public/data/image/tutorial/task-list.png" class="border-image" style="width: 300px; height: 200px;">
-                                <img src="/public/data/image/tutorial/ouput-list.png" class="border-image" style="width: 300px; height: 200px;">
-                                <img src="/public/data/image/tutorial/task-visualization.png" class="border-image" style="width: 300px; height: 200px;">
+                                <img src="/public/data/image/tutorial/task-list.png" class="border-image enlargeImages" style="width: 300px; height: 200px;">
+                                <img src="/public/data/image/tutorial/ouput-list.png" class="border-image enlargeImages" style="width: 300px; height: 200px;">
+                                <img src="/public/data/image/tutorial/task-visualization.png" class="border-image enlargeImages" style="width: 300px; height: 200px;">
                                 <br>
                                 <br><hr><br>
                                 <h1>Directly submit the dataset for analysis in "Datasets page"</h3>
                                 <p>On the dataset page, TIME provide support to submit a dataset directly for analysis.</p>
                                 <h3>Step1: Choosing one dataset and click "Run Analysis".<h3>
-                                <img src="/public/data/image/tutorial/dataset-run-analysis.png" class="page-image">
+                                <img src="/public/data/image/tutorial/dataset-run-analysis.png" class="page-image enlargeImages">
 
                                 <h3>Step2: Choosing one analysis.</h3>
-                                <img src="/public/data/image/tutorial/analysis-select.png" class="page-image">
+                                <img src="/public/data/image/tutorial/analysis-select.png" class="page-image enlargeImages">
 
                                 <h3>Step3: Checking the dataset name.</h3>
-                                <img src="/public/data/image/tutorial/analysis-confirm-dataset.png" class="page-image">
+                                <img src="/public/data/image/tutorial/analysis-confirm-dataset.png" class="page-image enlargeImages">
 
                                 <h3>Step4: Setting parameters and submitting the analysis.</h4>
                                 <div class="row">
                                     <div class="col-md-4">
-                                        <img src="/public/data/image/tutorial/analysis-parameter.png" class="border-image" style="width:420px; height: 300px;">
+                                        <img src="/public/data/image/tutorial/analysis-parameter.png" class="border-image enlargeImages" style="width:420px; height: 300px;">
                                     </div>
                                     <div class="col-md-2">
                                         
                                     </div>
                                     <div class="col-md-4">
-                                        <img src="/public/data/image/tutorial/analysis-submitted.png"  class="border-image" style="width:420px; height: 300px;">
+                                        <img src="/public/data/image/tutorial/analysis-submitted.png"  class="border-image enlargeImages" style="width:420px; height: 300px;">
                                     </div>
                                 </div>
 
                             </div>
                             <br><br>
+                        </div>
+                        <div id="imageModal" class="modal">
+                            <img class="modal-content" id="modalImage">
+                            <div id="caption"></div>
+                            <span class="close">&times;</span>
+
                         </div>
                     </div>
                 </div>

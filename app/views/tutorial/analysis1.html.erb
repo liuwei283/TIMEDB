@@ -1,150 +1,173 @@
 <% content_for :title, 'Tutorial Analysis' %>
 
-            <div class="row">
-                <nav id="sidebar" class="active">
-                    <div class="sidebar-content">
-                        <div>
-                            <a href="/tutorial">
-                            <p>
-                            <i class="fa fa-arrow-left"></i>Back to TIMEDB
-                            </p>
-                            </a>
-                        </div>
-                        <div class="sidebar-tutorial-toggle">
-                            <a href="#">
-                            <p style="color: #35478E">Database &nbsp<i class="fa fa-angle-down" id="arrow"></i>
-                            </p>
-                            </a>
-                            <ul id="side-tutorial-bar" class="">
-                                <a href="/tutorial/database/1" ><li style="color: #35478E">Database Introduction</li></a>
-                                <a href="/tutorial/database/2" ><li style="color: #35478E">How to View Database Information</li></a>
-                                <%# <a href="/tutorial/database/3"><li style="color: #35478E">How to Add Data to Your Workspace</li></a> %>
-                                <a href="/tutorial/database/3"><li style="color: #35478E">How to Download Database Data</li></a>
-                                <%# <a href="/tutorial/database/5"><li style="color: #35478E">How to View the Visualizations</li></a> %>
-                                <a href="/tutorial/database/4"><li style="color: #35478E">Visualizations in the Database</li></a>
-                            </ul>
-                        </div>
-                        <div class="sidebar-tutorial-toggle-1">
-                            <a href="#">
-                            <p style="color: #cc4f78">Analysis &nbsp<i class="fa fa-angle-down" id="arrow-1"></i>
-                            </p>
-                            </a>
-                            <ul id="side-tutorial-bar-1" class="">
-                                <a href="/tutorial/analysis/1"><li style="color: #cc4f78" class="active1">Analysis Introduction</li></a>
-                                <a href="/tutorial/analysis/2" ><li style="color: #cc4f78">How to Complete an Analysis</li></a>
-                                <a href="/tutorial/analysis/3"><li style="color: #cc4f78">What Analysis We Have</li></a>
-                            </ul>
-                        </div>
-                        <div class="">
-                            <a href="/tutorial/analysis/4">
-                            <p>Help
-                            </p>
-                            </a>
-                        </div>
-                        <div class="">
-                            <a href="/tutorial/mub">
-                                <p>Maintainance</p>
-                            </a>
-                        </div>
-                    </div>
-                </nav>
+<% content_for :head do %>
+  
+  <%= javascript_pack_tag "tutorial" %>
+<% end %>
 
-                <div class="col-md-8 offset-1">
-                <br><br>
-                    <div >
-
-                        <h1 class ="title">
-
-                            <a href="/tutorial"><i class="fa fa-backward"></i></a> Analysis Introduction
-                        </h1><br>
-                        <div class="page">
-                            <div class="headers">
-                                <br>
-                                <hr>
-                                <br>
-                                <h1>Welcome to TIMEDB Analysis</h1>
-                                <br>
-                                <p>TIMEDB provides 18 online tumor immune microenvironment analyses, details are shown in the following table:</p>
-                                <div>
-                                <table class="table table-border analysis-table">
-                                    <thead><tr>    <th style="border-left: 1px solid #ddd;">Analysis Category</th>  <th>Analysis</th> </tr><thead>
-                                    <tbody>
-                                    <tr>    <td rowspan="5" style="font-weight: bold;">Regression Tools</td>   <td>TIMEDB Decov CIBERSORT</td>  </tr>
-                                    <tr>    <td>TIMEDB Decov TIMER</td>  </tr>
-                                    <tr>    <td>TIMEDB Decov EPIC </td>  </tr>
-                                    <tr>    <td>TIMEDB Decov ABIS</td>  </tr>
-                                    <tr>    <td>TIMEDB Decov quanTIseq</td>  </tr>
-                                    <tr>    <td rowspan="3"  style="font-weight: bold;">Enrichment Tools</td>   <td>TIMEDB Decov xCell</td>  </tr>
-                                    <tr>    <td>TIMEDB Decov MCPcounter</td>  </tr>
-                                    <tr>    <td>TIMEDB Decov ConsensusTME</td>  </tr>
-                                    <tr>    <td  style="font-weight: bold;">Unsupervised Tools</td>   <td>TIMEDB Decov Linseed</td>  </tr>
-                                    <tr>    <td rowspan="2"  style="font-weight: bold;">Consensus Tools</td> <td>TIMEDB Consensus array</td>  </tr>
-                                    <tr>    <td>TIMEDB Consensus RNA-Seq</td>  </tr>
-                                    <tr>    <td  style="font-weight: bold;">Datasets Comparison</td> <td>TIMEDB Batch Effect</td>  </tr>
-                                    <tr>    <td rowspan="2"  style="font-weight: bold;">TIME Estimation Comparsion</td>   <td>TIMEDB Comparison array</td>  </tr>
-                                    <tr>    <td>TIMEDB Comparison RNA-Seq </td>  </tr>
-                                    <tr>    <td rowspan="2"  style="font-weight: bold;">Patient Subtyping</td>           <td>TIMEDB Cell Fraction Subtyping</td>  </tr>
-                                    <tr>    <td>TIMEDB C1-C6 Subtyping</td>  </tr>
-                                    <tr>    <td rowspan="2"  style="font-weight: bold;">Survival Analysis</td>   <td>TIMEDB HR OR</td>  </tr>
-                                    <tr>    <td>TIMEDB KM Estimator</td>  </tr>
-                                    <tr>    <td rowspan="2"  style="font-weight: bold;">Colrrelation Analysis</td>   <td>TIMEDB Cell Interaction</td>  </tr>
-                                    <tr>    <td>TIMEDB Cell Correlation</td>  </tr>
-                                    <tr>    <td  style="font-weight: bold;">Different Expression</td>   <td>TIMEDB Immunoregulator</td>  </tr>
-                                    <tbody>
-                                </table>
-                                </div>
-                                <br><hr>
-                                <br>
-                                <h1>Analysis submit and check</h1>
-                                <p>TIMEDB provides a friendly submission page to guides users across the whole task submission procedure step by step.</p>
-                                <p>Users could view detailed analysis tutorial as well as running demo and viewing demo results with one click. </p>
-                                <img src="/public/data/image/tutorial/a-1-1ppt.png" class="page-image">
-                                <br>
-                                <p>Task submission procedure has two parts, file uploading or TIMEDB dataset choosing, and parameter setting. In particular, users can upload their own files for analysis, or they can choose one dataset available in TIMEDB. We provide detailed descriptions for inputs and parameters as well as demo files to help users get familiar with input files format. Please noted that uploaded files should contain at least two samples. </p>
-                                <div class="row">
-                                    <div class="col-md-4">
-                                        <img src="/public/data/image/tutorial/analysis-tutorial.png" class="border-image" style="width:420px; height: 300px;">
-                                    </div>
-                                    <div class="col-md-2">
-                                        
-                                    </div>
-                                    <div class="col-md-4">
-                                        <img src="/public/data/image/tutorial/analysis-upload.png"  class="border-image" style="width:420px; height: 300px;">
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-md-4">
-                                        <img src="/public/data/image/tutorial/input-modal.png" class="border-image" style="width:420px; height: 300px;">
-                                    </div>
-                                    <div class="col-md-2">
-                                        
-                                    </div>
-                                    <div class="col-md-4">
-                                        <img src="/public/data/image/tutorial/select-dataset.png"  class="border-image" style="width:420px; height: 300px;">
-                                    </div>
-                                </div>
-                                <br>
-                                <p>Users can enter the workspace page to check status and results of submitted tasks if any. TIMEDB provides interfaces for downloading output files and corresponding interactive visualizations.</p>
-                                <img src="/public/data/image/tutorial/task-list.png" class="border-image" style="width: 300px; height: 200px;">
-                                <img src="/public/data/image/tutorial/ouput-list.png" class="border-image" style="width: 300px; height: 200px;">
-                                <img src="/public/data/image/tutorial/task-visualization.png" class="border-image" style="width: 300px; height: 200px;">
-                                <br>
-                                <p>Click to view the detailed steps of submitting the analysis.</p>
-                                <a href = "/tutorial/analysis/2">
-                                <button class="btn-1 btn" >Analysis Steps</button>
-                                </a>
-                                <br>
-                                <hr>
-                                <br>
-
-                                <h1>Contact with us if you meet some problems</h1>
-                                <p><a href="/tutorial/analysis/4">You may contact us:</a></p>
-                                <p>Dr LI, Shuaicheng</p>
-                                <p>Email: <a href="mailto:shuaicli@cityu.edu.hk">shuaicli@cityu.edu.hk</a></p>
-                            </div>
-                            <br><br>                           
-
-                        </div>
-                    </div>
+                <div class="top-reminder text-center">
+                    <p class="text-center">
+                    You can click images to enlarge them and check details.
+                    </p>
                 </div>
+
+<div class="row">
+    <nav id="sidebar" class="active">
+        <div class="sidebar-content">
+            <div>
+                <a href="/tutorial">
+                <p>
+                <i class="fa fa-arrow-left"></i>Back to TIMEDB
+                </p>
+                </a>
             </div>
+            <div class="sidebar-tutorial-toggle">
+                <a href="#">
+                <p style="color: #35478E">Database &nbsp<i class="fa fa-angle-down" id="arrow"></i>
+                </p>
+                </a>
+                <ul id="side-tutorial-bar" class="">
+                    <a href="/tutorial/database/1" ><li style="color: #35478E">Database Introduction</li></a>
+                    <a href="/tutorial/database/2" ><li style="color: #35478E">How to View Database Information</li></a>
+                    <%# <a href="/tutorial/database/3"><li style="color: #35478E">How to Add Data to Your Workspace</li></a> %>
+                    <a href="/tutorial/database/3"><li style="color: #35478E">How to Download Database Data</li></a>
+                    <%# <a href="/tutorial/database/5"><li style="color: #35478E">How to View the Visualizations</li></a> %>
+                    <a href="/tutorial/database/4"><li style="color: #35478E">Visualizations in the Database</li></a>
+                </ul>
+            </div>
+            <div class="sidebar-tutorial-toggle-1">
+                <a href="#">
+                <p style="color: #cc4f78">Analysis &nbsp<i class="fa fa-angle-down" id="arrow-1"></i>
+                </p>
+                </a>
+                <ul id="side-tutorial-bar-1" class="">
+                    <a href="/tutorial/analysis/1"><li style="color: #cc4f78" class="active1">Analysis Introduction</li></a>
+                    <a href="/tutorial/analysis/2" ><li style="color: #cc4f78">How to Complete an Analysis</li></a>
+                    <a href="/tutorial/analysis/3"><li style="color: #cc4f78">What Analysis We Have</li></a>
+                </ul>
+            </div>
+            <div class="">
+                <a href="/tutorial/analysis/4">
+                <p>Help
+                </p>
+                </a>
+            </div>
+            <div class="">
+                <a href="/tutorial/mub">
+                    <p>Maintainance</p>
+                </a>
+            </div>
+        </div>
+    </nav>
+    <div class="top-reminder text-center">
+        <p class="text-center">
+        You can click images to enlarge them and check details.
+        </p>
+    </div>
+
+    <div class="col-md-8 offset-1">
+    <br><br>
+        
+        <div>
+
+            <h1 class ="title">
+
+                <a href="/tutorial"><i class="fa fa-backward"></i></a> Analysis Introduction
+            </h1><br>
+            <div class="page">
+                <div class="headers">
+                    <br>
+                    <hr>
+                    <br>
+                    <h1>Welcome to TIMEDB Analysis</h1>
+                    <br>
+                    <p>TIMEDB provides 18 online tumor immune microenvironment analyses, details are shown in the following table:</p>
+                    <div>
+                    <table class="table table-border analysis-table">
+                        <thead><tr>    <th style="border-left: 1px solid #ddd;">Analysis Category</th>  <th>Analysis</th> </tr><thead>
+                        <tbody>
+                        <tr>    <td rowspan="5" style="font-weight: bold;">Regression Tools</td>   <td>TIMEDB Decov CIBERSORT</td>  </tr>
+                        <tr>    <td>TIMEDB Decov TIMER</td>  </tr>
+                        <tr>    <td>TIMEDB Decov EPIC </td>  </tr>
+                        <tr>    <td>TIMEDB Decov ABIS</td>  </tr>
+                        <tr>    <td>TIMEDB Decov quanTIseq</td>  </tr>
+                        <tr>    <td rowspan="3"  style="font-weight: bold;">Enrichment Tools</td>   <td>TIMEDB Decov xCell</td>  </tr>
+                        <tr>    <td>TIMEDB Decov MCPcounter</td>  </tr>
+                        <tr>    <td>TIMEDB Decov ConsensusTME</td>  </tr>
+                        <tr>    <td  style="font-weight: bold;">Unsupervised Tools</td>   <td>TIMEDB Decov Linseed</td>  </tr>
+                        <tr>    <td rowspan="2"  style="font-weight: bold;">Consensus Tools</td> <td>TIMEDB Consensus array</td>  </tr>
+                        <tr>    <td>TIMEDB Consensus RNA-Seq</td>  </tr>
+                        <tr>    <td  style="font-weight: bold;">Datasets Comparison</td> <td>TIMEDB Batch Effect</td>  </tr>
+                        <tr>    <td rowspan="2"  style="font-weight: bold;">TIME Estimation Comparsion</td>   <td>TIMEDB Comparison array</td>  </tr>
+                        <tr>    <td>TIMEDB Comparison RNA-Seq </td>  </tr>
+                        <tr>    <td rowspan="2"  style="font-weight: bold;">Patient Subtyping</td>           <td>TIMEDB Cell Fraction Subtyping</td>  </tr>
+                        <tr>    <td>TIMEDB C1-C6 Subtyping</td>  </tr>
+                        <tr>    <td rowspan="2"  style="font-weight: bold;">Survival Analysis</td>   <td>TIMEDB HR OR</td>  </tr>
+                        <tr>    <td>TIMEDB KM Estimator</td>  </tr>
+                        <tr>    <td rowspan="2"  style="font-weight: bold;">Colrrelation Analysis</td>   <td>TIMEDB Cell Interaction</td>  </tr>
+                        <tr>    <td>TIMEDB Cell Correlation</td>  </tr>
+                        <tr>    <td  style="font-weight: bold;">Different Expression</td>   <td>TIMEDB Immunoregulator</td>  </tr>
+                        <tbody>
+                    </table>
+                    </div>
+                    <br><hr>
+                    <br>
+                    <h1>Analysis submit and check</h1>
+                    <p>TIMEDB provides a friendly submission page to guides users across the whole task submission procedure step by step.</p>
+                    <p>Users could view detailed analysis tutorial as well as running demo and viewing demo results with one click. </p>
+                    <img src="/public/data/image/tutorial/a-1-1ppt.png" class="page-image enlargeImages">
+                    <br>
+                    <p>Task submission procedure has two parts, file uploading or TIMEDB dataset choosing, and parameter setting. In particular, users can upload their own files for analysis, or they can choose one dataset available in TIMEDB. We provide detailed descriptions for inputs and parameters as well as demo files to help users get familiar with input files format. Please be noted that uploaded files should contain at least two samples. </p>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <img src="/public/data/image/tutorial/analysis-tutorial.png" class="border-image enlargeImages" style="width:420px; height: 300px;">
+                        </div>
+                        <div class="col-md-2">
+                            
+                        </div>
+                        <div class="col-md-4">
+                            <img src="/public/data/image/tutorial/analysis-upload.png"  class="border-image enlargeImages" style="width:420px; height: 300px;">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <img src="/public/data/image/tutorial/input-modal.png" class="border-image enlargeImages" style="width:420px; height: 300px;">
+                        </div>
+                        <div class="col-md-2">
+                            
+                        </div>
+                        <div class="col-md-4">
+                            <img src="/public/data/image/tutorial/select-dataset.png"  class="border-image enlargeImages" style="width:420px; height: 300px;">
+                        </div>
+                    </div>
+                    <br>
+                    <p>Users can enter the workspace page to check status and results of submitted tasks if any. TIMEDB provides interfaces for downloading output files and corresponding interactive visualizations.</p>
+                    <img src="/public/data/image/tutorial/task-list.png" class="border-image enlargeImages" style="width: 300px; height: 200px;">
+                    <img src="/public/data/image/tutorial/ouput-list.png" class="border-image enlargeImages" style="width: 300px; height: 200px;">
+                    <img src="/public/data/image/tutorial/task-visualization.png" class="border-image enlargeImages" style="width: 300px; height: 200px;">
+                    <br>
+                    <p>Click to view the detailed steps of submitting the analysis.</p>
+                    <a href = "/tutorial/analysis/2">
+                    <button class="btn-1 btn" >Analysis Steps</button>
+                    </a>
+                    <br>
+                    <hr>
+                    <br>
+
+                    <h1>Contact with us if you meet some problems</h1>
+                    <p><a href="/tutorial/analysis/4">You may contact us:</a></p>
+                    <p>Dr LI, Shuaicheng</p>
+                    <p>Email: <a href="mailto:shuaicli@cityu.edu.hk">shuaicli@cityu.edu.hk</a></p>
+                </div>
+                <br><br>                           
+
+            </div>
+            <div id="imageModal" class="modal">
+                
+                <img class="modal-content" id="modalImage">
+                <div id="caption"></div>
+                <span class="close">&times;</span>
+            </div>
+        </div>
+    </div>
+</div>

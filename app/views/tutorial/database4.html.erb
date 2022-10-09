@@ -1,5 +1,16 @@
 <% content_for :title, 'Tutorial Database' %>
 
+<% content_for :head do %>
+  
+  <%= javascript_pack_tag "tutorial" %>
+<% end %>
+
+                <div class="top-reminder text-center">
+                    <p class="text-center">
+                    You can click images to enlarge them and check details.
+                    </p>
+                </div>
+
             <div class="row">
                 <nav id="sidebar" class="active">
                     <div class="sidebar-content">
@@ -49,6 +60,13 @@
                     </div>
                 </nav>
 
+                <div class="top-reminder text-center">
+                    <p class="text-center">
+                    You can click images to enlarge them and check details.
+                    </p>
+                </div>
+
+
                 <div class="col-md-8 offset-1">
                     <br><br>
 
@@ -64,9 +82,9 @@
                                     <br>
                                     <p> We provide several visualizations for the whole databse overview, including, bar charts for datasets and samples statistics, pie charts for cell composition estimation of each dataset and each state-of-art tool, C1-C6 landscape for subtyping data, and heatmaps for scaled gene expression profiles.
                                     </p>
-                                    <img src="/public/data/image/tutorial/database-viz1.png" class="border-image" style="width:300px; height: 220px;">
-                                    <img src="/public/data/image/tutorial/database-viz2.png" class="border-image" style="width:300px; height: 220px;">
-                                    <img src="/public/data/image/tutorial/database-viz3.png" class="border-image" style="width:300px; height: 220px;">
+                                    <img src="/public/data/image/tutorial/database-viz1.png" class="border-image enlargeImages" style="width:300px; height: 220px;">
+                                    <img src="/public/data/image/tutorial/database-viz2.png" class="border-image enlargeImages" style="width:300px; height: 220px;">
+                                    <img src="/public/data/image/tutorial/database-viz3.png" class="border-image enlargeImages" style="width:300px; height: 220px;">
                                     <br>
                                     <hr>
                                     <br>
@@ -77,13 +95,13 @@
                                     <p> "C1_C6 subtyping overview": visualization about immune subtype of tumor samples.</p>
                                     <div class="row">
                                         <div class="col-md-4">
-                                            <img src="/public/data/image/tutorial/5-2ppt.png" class="border-image" style="width:420px; height: 220px;">
+                                            <img src="/public/data/image/tutorial/5-2ppt.png" class="border-image enlargeImages" style="width:420px; height: 220px;">
                                         </div>
                                         <div class="col-md-2">
                                             
                                         </div>
                                         <div class="col-md-4">
-                                            <img src="/public/data/image/tutorial/5-4ppt.png" class="border-image" style="width:420px; height: 220px;">
+                                            <img src="/public/data/image/tutorial/5-4ppt.png" class="border-image enlargeImages" style="width:420px; height: 220px;">
                                         </div>
                                         
                                     </div>
@@ -97,7 +115,7 @@
                                     <h2>3. Samples cell Fraction</h2>
                                     <p>For each samples, we provid pie plots for TIC composition estimated from 10 state-of-art tools. Users can use selector to change different estimation results for horizontal comparisons.
                                     </p>
-                                    <img src="/public/data/image/tutorial/sample-viz.png" class="border-image"  style="width: 500px; height: 340px;">
+                                    <img src="/public/data/image/tutorial/sample-viz.png" class="border-image enlargeImages"  style="width: 500px; height: 340px;">
                                     <br>
                                     <hr>
                                     <br>
@@ -105,12 +123,19 @@
                                     <br>
 
                                     <p>All visualizations we provided are allowed to download. Users can click the button next to plot itself to easily download the corresponding visualizations. Specifically for individual dataset showing pages, user can download all visualizations together for futhur exploration.</p>
-                                    <img src="/public/data/image/tutorial/6-1ppt.png" class="border-image"  style="width: 500px; height: 340px;">
+                                    <img src="/public/data/image/tutorial/6-1ppt.png" class="border-image enlargeImages"  style="width: 500px; height: 340px;">
 
                                 </div>
                             </div>
                             <br><br>
                         </div> 
+
+                        <div id="imageModal" class="modal">
+                            <img class="modal-content" id="modalImage">
+                            <div id="caption"></div>
+                            <span class="close">&times;</span>
+
+                        </div>
 
                     </div>
                 </div>
