@@ -16,7 +16,6 @@
                 </div>
 
                 <div class="col-md-5">
-                    <!-- <%= image_tag src="icons brightmode12.png", class: "d-block w-100"%> -->
                     <img v-bind:src="require('../assets/images/icons brightmode12.png')" class="d-block w-100">
 
                 </div>
@@ -26,7 +25,6 @@
                 <hr>
                 <div class="row">
                     <div class="col-md-4 text-center">
-                        <!-- <%=image_tag src="icons brightmode12.png" ,class:  "d-block w-100"%> -->
                         <img v-bind:src="require('../assets/images/database1.png')" class="d-block w-100">
 
                     </div>
