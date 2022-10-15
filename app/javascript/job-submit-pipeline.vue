@@ -11,7 +11,6 @@
                         <p class="mt-5" style="color:gray;font-size:1.4em;"><i>This page may need some time to load data. Please wait for some seconds if there is no analysis available.</i></p>
 
                         <h2 class="display-2">
-                            <!-- Start Analysis -->
                             <button class = "btn btn-1" style="display:inline" >
                             <a href= "/tutorial/analysis/2">Submission Helper</a>
                             </button>

@@ -461,7 +461,7 @@ class SubmitController < ApplicationController
                 end
               end
 
-            end    
+            end   
           elsif file_names[input_id] == "Clinical data"
             unless uploaded_file.nil? || uploaded_file == "" || uploaded_file == []
               uploaded_files_array = Array(uploaded_file)

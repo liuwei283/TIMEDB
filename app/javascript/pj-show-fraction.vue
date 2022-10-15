@@ -25,13 +25,6 @@
 
             <div id = "fraction_pieBlock">
                 <div class="dropdown mb-5 mt-5">
-                    <!-- <button class="btn btn-secondary dropdown-toggle" type="button" id="fraction_pie_download_dropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        Download
-                    </button>
-                    <div class="dropdown-menu" aria-labelledby="fraction_pie_download_dropdwon">
-                        <a class="dropdown-item" :href="clinical_file_path"  id = "fraction_pie_clincial_download">Download clinical file</a>
-                        <a class="dropdown-item viz_download" id = "fraction-pie_viz_download" @click="down_graph($event)">Download fraction pie chart</a>
-                    </div> -->
                     <div id="db-toolbar-pie" class="mb-5">
                         <div class="db-tool-nav">
                             <div class="btn btn-outline-dark" data-toggle="collapse" data-target="#download_box-pie" aria-expanded="true" aria-controls="download_box-pie">
