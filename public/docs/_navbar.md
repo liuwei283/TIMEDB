@@ -1,21 +1,11 @@
-<!-- _navbar.md -->
-
-* [Home](/ ':target=_self')
-
+* [Home](https://timedb.deepomics.org/home/ ':target=_self')
 * Database
-
-  * [Sample Information](/database/sample ':target=_self')
-  * [Taxonomic Compositions](/database/tc ':target=_self')
-  * [Characteristics of Oral Microbiome](/database/char ':target=_self')
-  * [Functional Categories](/database/fc ':target=_self')
-  * [Antibiotic Abilities](/database/aa ':target=_self')
-
-* Submit
-
-  * [Taxonomic Compositions Analysis](/submit/592 ':target=_self')
-  * [Data Mount Evaluation](/submit/589 ':target=_self')
-  * [Job Query](/job-query ':target=_self')
-
-* [Tutorial](/README ':target=_self')
-
-* [Contact](/contact ':target=_self')
+  * [Database Information](https://timedb.deepomics.org/database/overview/ ':target=_self')
+  * [Cancers Detail](https://timedb.deepomics.org/cancers ':target=_self')
+  * [Datasets Detail](https://timedb.deepomics.org/projects ':target=_self')
+  * [Samples Detail](https://timedb.deepomics.org/samples ':target=_self')
+* [Analysis](https://timedb.deepomics.org/submit/analyses ':target=_self')
+* [Workspace](https://timedb.deepomics.org/submit/job-query ':target=_self')
+* [Download](https://timedb.deepomics.org/download ':target=_self')
+* [Tutorial](/ ':target=_self')
+* [Contact](https://timedb.deepomics.org/contact ':target=_self')

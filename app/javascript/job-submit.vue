@@ -1328,7 +1328,6 @@
                 }).catch((reason) => {
                     alertData = reason;
                 }).finally(() => {
-                    //$("#disable-fill").fadeOut(10);
                     this.isLoading = false;
                     console.log(alertData);
                     if (!!alertData) {

@@ -141,15 +141,6 @@
                                                                 v-model="ds_selected" name="selected-dataset"
                                                                 >
                                                     </model-select>
-                                                    <!-- <b-form-select @focus="updateStepToFile()" class="col-md-8" 
-                                                        name="selected-dataset"
-                                                        v-model="ds_selected"
-                                                    >
-                                                        <option value="" key="default">--Please select your own dataset--</option>
-                                                        <option v-for="(option, index) in select_box_option" :key="index" :value="option.value" :disabled="option.disabled">
-                                                            {{option.lable}}
-                                                        </option>
-                                                    </b-form-select> -->
                                                 </div>
                                             </div>
                                             <div v-else class = "row justify-content-center">
