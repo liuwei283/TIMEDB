@@ -23,7 +23,7 @@ TIMEDB provides fruitful analysis for data exploration. The remaining part of th
                                     
 - Step 4: setting parameters <br>Users can fill analysis paramters guided by detailed paramter explaination.
     
-    <img src="../data/image/tutorial/analysis-parameter.png" >
+    <img src="../data/image/tutorial/analysis-parameter.png" style="width:50%; margin: 15px;">
 
 - Step 5: submit and view the results<br>After tasks are submitted, users will get corresponding task ids, which are automatically added to the user's workspace.
     
@@ -38,27 +38,27 @@ TIMEDB provides fruitful analysis for data exploration. The remaining part of th
     <img src="../data/image/tutorial/ouput-list.png" style="width: 300px; height: 200px; margin: 15px;">
     <img src="../data/image/tutorial/task-visualization.png" style="width: 300px; height: 200px; margin: 15px;">
 
-## Directly submit in datasets pages
+## Submit a dataset directly for analysis
 
 On the dataset page, TIME provide support to submit an analysis task directly using one specific dataset.</p>
 
 - Step1: In the <a href="/projects">datasets</a> indexing page, users can select the target dataset and click the <button> details </button> button to enter the details page of the selected dataset.
     
-    <img src="../data/image/tutorial/dataset-index.png" style="width: 300px; height: 220px; margin: 15px;">
+    <img src="../data/image/tutorial/dataset-index-1.png" style="width: 50%; margin: 15px;">
 
 - Step2: Clicking "Run Analysis".
   
-    <img src="../data/image/tutorial/dataset-run-analysis.png" style="width: 60%;">
+    <img src="../data/image/tutorial/dataset-run-analysis.png" style="width: 50%; margin: 15px;">
 
 - Step3: Choosing one analysis.
   
-    <img src="../data/image/tutorial/analysis-select.png" style="width: 60%;">
+    <img src="../data/image/tutorial/analysis-select.png" style="width: 50%; margin: 15px;">
 
 - Step4: Checking the dataset name.
             
-    <img src="../data/image/tutorial/analysis-confirm-dataset.png" style="width: 60%;">
+    <img src="../data/image/tutorial/analysis-confirm-dataset.png" style="width: 50%; margin: 15px;">
 
 - Step5: Setting parameters and submitting the analysis.
-    
+
     <img src="../data/image/tutorial/analysis-parameter.png" style="width:420px; height: 300px; margin: 15px;">
     <img src="../data/image/tutorial/analysis-submitted.png" style="width:420px; height: 300px; margin: 15px;">
