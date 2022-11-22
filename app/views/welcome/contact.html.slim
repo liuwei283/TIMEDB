@@ -1,5 +1,28 @@
 - content_for :title
   | Contact 
+
+/   <div class="card">
+/   <div class="card-header">
+/     Featured
+/   </div>
+/   <div class="card-body">
+/     <h5 class="card-title">Special title treatment</h5>
+/     <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
+/     <a href="#" class="btn btn-primary">Go somewhere</a>
+/   </div>
+/ </div>
+#cite-info.container.p-5 style="font-size: 1.2em;"
+  .card
+    .card-header
+      p.card-title style="font-size: 1.2em;"
+        | If you want to use TIMEDB, 
+        b
+          =link_to "please cite our publication.","https://academic.oup.com/nar/advance-article/doi/10.1093/nar/gkac1006/6833242"
+    .card-body
+      p.card-text
+        | Xueying Wang, Lingxi Chen, Wei Liu, Yuanzheng Zhang, Dawei Liu, Chenxin Zhou, Shuai Shi, Jiajie Dong, Zhengtao Lai, Bingran Zhao, Wenjingyu Zhang, Haoyue Cheng, Shuaicheng Li, TIMEDB: tumor immune micro-environment cell composition database with automatic analysis and interactive visualization, Nucleic Acids Research, 2022;, gkac1006, https://doi.org/10.1093/nar/gkac1006
+    
+
 #introduction.container-fluid.container
   .row.d-md-blockrow.cols-xs-space.cols-sm-space.cols-md-space.text-center
     .col-md-5.col-lg-5.B.intro.flip-card
