@@ -161,7 +161,7 @@
                                                 </div> 
                                             </div> -->
 
-                                            <div class = "row submit-box justify-content-center">
+                                            <div class = "row submit-box justify-content-center" style="min-width: 500px;">
                                                 <div v-if="picked_single_multiple=='single'" class = "row justify-content-center">
                                                     <div class = "row justify-content-center">
                                                         <div class="text-center" v-for="input in displayedInputs" :key="input.id">

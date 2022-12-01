@@ -5,9 +5,6 @@
     <div v-if="!isLoading">
         <div v-if="!submitted"> <!---->
             <b-card class="text-center query-card">
-
-                
-
                 <div class="row justify-content-center">
                     <b-input-group class="justify-content-center">
 
