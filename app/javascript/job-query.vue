@@ -3,7 +3,7 @@
 <div id="job-query">
     <alert-center ref="alertCenter" />
     <div v-if="!isLoading">
-        <div v-if="!submitted"> <!---->
+        <div v-if="!submitted && !isDemo"> <!---->
             <b-card class="text-center query-card">
                 <div class="row justify-content-center">
                     <b-input-group class="justify-content-center">
@@ -161,17 +161,23 @@
                         <i v-if="!refreshEnd" class="fas fa-spinner fa-spin" style="font-size:24px"> </i>
                     </h3>
 
-                    <b-button class="btn btn-1 col-md-2" @click="returnQuery" @mouseover="backIcon=backColor" @mouseleave="backIcon=backWhite;">
+                    <b-button class="btn btn-1 col-md-2" v-if="!isDemo" @click="returnQuery" @mouseover="backIcon=backColor" @mouseleave="backIcon=backWhite;">
+                        <img v-bind:src="backIcon">
+                        Back to query
+                    </b-button>
+
+                    <b-button v-else class="btn btn-1 col-md-2" @click="returnSubmission" @mouseover="backIcon=backColor" @mouseleave="backIcon=backWhite;">
                         <img v-bind:src="backIcon">
                         Back
                     </b-button>
+
      
                     <b-button class="btn btn-1 col-md-2" @click="display=0" :class="{active:display==0}" @mouseover="monitorIcon=monitorColor" @mouseleave="monitorIcon=monitorWhite;">
                         <img v-bind:src="monitorIcon">
                         Task Monitor
                     </b-button>
 
-                    <b-button class="btn btn-1 col-md-2" @click="display=1" :class="{active:display==1}" v-if="job_status == 'finished'" @mouseover="visIcon=visColor" @mouseleave="visIcon=visWhite;">
+                    <b-button class="btn btn-1 col-md-2" @click="display=1" :class="{active:display==1}" v-if="jobName!='TCRanno_tcr2tcr' && job_status == 'finished'" @mouseover="visIcon=visColor" @mouseleave="visIcon=visWhite;">
                         <img v-bind:src="visIcon">
                         Visualization
                     </b-button><!---->
@@ -180,12 +186,12 @@
                         <img v-bind:src="visIcon">
                         Visualization
                     </b-button>
-                    <b-button class="btn btn-1 col-md-2" @click="rerunTask" @mouseover="rerunIcon=rerunColor" @mouseleave="rerunIcon=rerunWhite;">
+                    <b-button v-if="!isDemo" class="btn btn-1 col-md-2" @click="rerunTask" @mouseover="rerunIcon=rerunColor" @mouseleave="rerunIcon=rerunWhite;">
                         <img v-bind:src="rerunIcon">
                         Rerun Task
                     </b-button>
 
-                    <b-button class="btn btn-3 float-right col-md-2" @click="searchJob" @mouseover="refreshIcon=refreshColor" @mouseleave="refreshIcon=refreshWhite;">
+                    <b-button v-if="!isDemo" class="btn btn-3 float-right col-md-2" @click="searchJob" @mouseover="refreshIcon=refreshColor" @mouseleave="refreshIcon=refreshWhite;">
                         <img v-bind:src="refreshIcon">
                         Refresh Status
                     </b-button>
@@ -223,10 +229,18 @@
 
                 <b-card-body v-show="display==0" class="p-4" >
 
+                    <div v-if="!isDemo">
+                        <p>Please note that</p>
+                        <ul>
+                            <li>You can click refresh button to refresh task status.</li>
+                            <li>If the job is finished, visualization is avaliable through clicking the button above.</li>
+                            <li>You could rerun your task within 30 days.</li>
+                        </ul>
+                        <hr>
+                    </div>
+
                     <section id="inputs" class="mt-2 mb-4">
                         <h4 class="pb-1">Inputs</h4>
-                        <p> You can click refresh button to refresh task status.</p>
-                        <p> If the job is finished, visualization is avaliable through clicking the button above</p>
                         <b-list-group>
                             <b-list-group-item v-for="input in inputs" href="javascript:void(0)" v-b-toggle="`i-${input.id}`" :key="`i-${input.id}`">
                                 <i class="fa fa-file"></i> {{ input.name }}
@@ -587,13 +601,18 @@ export default {
         };
     },
     created() {
-        if (window.gon.isJobDemoPage) {
-            this.refreshEnd = true;
+        if (window.gon.isDemoJobPage == true) {
+            this.refreshEnd = false;
             this.isDemo = true;
-            this.getDemoJobs();
-        } else {
+            this.job_id = window.gon.demo_result_id;
+            this.searchJob();
+            this.jobName = window.gon.job_name
+        }
+        else {
+            // get all information of the table not real file
             this.refreshJobs();
         }
+
         // axios.get('/submit/job-query.json',).then(response => {this.analyses = response.data; console.log("Fetched analyses data:"); console.log(response.data)});
     },
 
@@ -1089,10 +1108,6 @@ export default {
                     alertCenter.add('danger', error);
                 });
         },
-        returnQuery(){
-            event.emit("GMT:reset-query", this);
-            this.submitted = false;
-        },
         token_search(token){
             this.job_id = token;
             this.searchJob();
@@ -1113,6 +1128,15 @@ export default {
             else if (aname == "Estimation Comparison") window.location.href = `/submit/pipelines?ptype=all`
             else window.location.href = `/submit/analyses/?aname=${aname}`;
         },
+
+        returnQuery(){
+            event.emit("GMT:reset-query", this);
+            this.submitted = false;
+        },
+        returnSubmission(){
+            window.location.href = '/';
+        },
+
         downloadFile(path, name) {
             window.open(`/api/download_target_file?file_path=/data/outputs${path}/${name}`);
         },

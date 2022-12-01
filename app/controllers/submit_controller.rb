@@ -158,7 +158,7 @@ class SubmitController < ApplicationController
     @jobName = params[:jobName]
     gon.push demo_result_id: demo_result_id
     gon.push job_name: @jobName
-
+    gon.push isDemoJobPage: true
   end
 
   def pipeline
