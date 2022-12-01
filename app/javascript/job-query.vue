@@ -212,7 +212,7 @@
                             class="tool-bar-el px-0 mb-1 col-md-3"/><!--v-if="data.outputs.length > 1"-->
 
                         <dropdown-select
-                            v-if="job_status == 'finished' && jobName!='TCRanno_aeo'"
+                            v-if="job_status == 'finished' && jobName=='TCRanno_aeo'"
                             right
                             v-model="chosenPicture"
                             :options="picture_names"
@@ -503,8 +503,8 @@ export default {
             data: {outputs: []},
             chosenOutput: null,
             chosenModule: 0,
-            module_names: [{value: 0, text: "fake module name 1"}, {value: 0, text: "fake module name 2"}],
-
+            //module_names: [{value: 0, text: "fake module name 1"}, {value: 0, text: "fake module name 2"}],
+            module_names: [],
             pictureViz: '',
             chosenPicture: "tcr2org_plot",
             picture_names: [{value: "tcr2org_plot", text: "tcr2org plot"}, {value: "tcr2ept_plot", text: "tcr2ept plot"}, {value: "tcr2ag_plot", text: "tcr2ag plot"}],
@@ -898,7 +898,14 @@ export default {
                     this.outputs = response.data.message.tasks;
                     this.params = response.data.message.node_records;
                 }
-            
+
+                if (this.jobName=="TCRanno_aeo") {
+                    console.log("Here outputing outputs data");
+                    console.log(this.outputs);
+                    var first_pic = this.outputs.find(x => x.name == "tcr2org_plot").files[0];
+                    this.pictureViz = first_pic.path + first_pic.name;
+                    console.log(first_pic.path + first_pic.name);
+                }
             }).catch((error) => {
                 const message = error.response && error.response.status === 404 ? "The task does not exist" : error;
                 alertCenter.add('danger', `${message}`);
@@ -1001,13 +1008,7 @@ export default {
                 registerViz(output.module_names[this.chosenModule][1]);
                 event.emit("GMT:query-finished", this);
             }
-            else if (this.jobName=="TCRanno_aeo") {
-                console.log("Here outputing outputs data");
-                console.log(this.outputs);
-                var first_pic = this.outputs.find(x => x.name == "tcr2org_plot").files[0];
-                this.pictureViz = first_pic.path + first_pic.name;
-                console.log(first_pic.path + first_pic.name);
-            }
+            
         },
         updateVis() {
             event.emit("GMT:reset-query", this);
