@@ -424,11 +424,6 @@ class SubmitController < ApplicationController
                   end
                 end
               end
-
-              Rails.logger.info file_names[input_id]
-              if file_names[input_id] == "Gene expression data"
-                
-              end
             end
           end
           

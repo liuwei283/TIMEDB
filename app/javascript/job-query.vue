@@ -204,11 +204,19 @@
                             class="tool-bar-el px-0 mb-1 col-md-3"/><!--v-if="data.outputs.length > 1"-->
                         
                         <dropdown-select
-                            v-if="job_status == 'finished' && module_names.length>1"
+                            v-if="job_status == 'finished' && module_names.length>1 && category!='New Category'"
                             right
                             v-model="chosenModule"
                             :options="module_names"
                             class="tool-bar-el px-0 mb-1 col-md-3"/><!--v-if="data.outputs.length > 1"-->
+
+                        <dropdown-select
+                            v-if="job_status == 'finished' && category!='New Category'"
+                            right
+                            v-model="chosenPicture"
+                            :options="picture_names"
+                            class="tool-bar-el px-0 mb-1 col-md-3"/><!--v-if="data.outputs.length > 1"-->
+
                         <p style="color:gray;font-size:1.4em;position:relative;left:20px;" v-if="job_status == 'finished' && taskOutputs.length>1" ><i>You could select different task outputs to check their visualizations.</i></p>
                     </div>
                 </b-card-header>
@@ -412,8 +420,11 @@
                 </b-card-body>
 
                 <b-card-body v-show="display==1" class="p-2">
-                   <div id = "viz-card"> 
+                    <div id = "viz-card" v-if="category!='New Category'"> 
                         <VApp/>
+                    </div>
+                    <div v-else>
+                        <img v-bind:src="pictureViz">
                     </div>
                 </b-card-body>
 
@@ -492,6 +503,11 @@ export default {
             chosenOutput: null,
             chosenModule: 0,
             module_names: [{value: 0, text: "fake module name 1"}, {value: 0, text: "fake module name 2"}],
+
+            pictureViz: "",
+            chosenPicture: "tcr2org_plot",
+            picture_names: [{value: "tcr2org_plot", text: "tcr2org plot"}, {value: "tcr2ept_plot", text: "tcr2ept plot"}, {value: "tcr2ag_plot", text: "tcr2ag plot"}],
+
             taskOutputs: [{value: 0, text: "Demo Files", secondaryText: ""}],
             refreshEnd: true,
             isDemo: false,
@@ -657,13 +673,19 @@ export default {
     watch: {
         chosenOutput:function() {
             if (this.submitted && this.job_status == "finished") {
-                
                 this.updateGon(this.data.outputs[this.chosenOutput]);
                 event.emit("GMT:query-finished", this);
             }
         },
         chosenModule:function() {
             this.updateVis();
+        },
+        chosenPicture:function() {
+            
+            var first_pic = this.outputs.find(x => x.name == chosenPicture).files[0];
+            this.pictureViz = require(first_pic.path + first_pic.name);
+            console.log(first_pic.path + first_pic.name);
+        
         },
         submitted:function(newValue) {
             if(newValue == true) {
@@ -976,6 +998,13 @@ export default {
             console.log(output.module_names[this.chosenModule][1]);
             registerViz(output.module_names[this.chosenModule][1]);
             event.emit("GMT:query-finished", this);
+
+            //////////
+            if (this.category=="New Category") {
+                var first_pic = this.outputs.find(x => x.name == "tcr2org_plot").files[0];
+                this.pictureViz = require(first_pic.path + first_pic.name);
+                console.log(first_pic.path + first_pic.name);
+            }
         },
         updateVis() {
             event.emit("GMT:reset-query", this);

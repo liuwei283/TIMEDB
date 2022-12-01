@@ -172,10 +172,9 @@
                                                                 <img v-bind:src="require('../assets/images/big_upload.png')" style="width:90%">
                                                             </div>
                                                         </div>
-                                                        
                                                     </div>
 
-                                                    <div class = "row justify-content-center">
+                                                    <div class = "row justify-content-center" v-if="direct_submit">
                                                         <label>
                                                             <span>Or you can select a dataset: </span>
                                                             <i class="fa fa-question-circle" v-b-tooltip.rightbottom.hover title="You may choose one dataset with single project source to upload merged files"></i>
@@ -374,7 +373,7 @@
                     <div class = "col-md-12 text-center">
                         <div>
                             <b-form-file
-                                accept=".csv"
+                                accept=".csv, .tsv"
                                 :id="`i-${input.id}`"
                                 v-model="files[`i-${input.id}`]"
                                 :state="inputValid[`i-${input.id}`]"
@@ -422,7 +421,7 @@
                                     <h6 v-if="input.name=='Clinical data'" style="color: gray;" class="p-2"><i>Please upload Clinical_*.csv if you use demo files for analysis</i></h6>
                                     <h6 v-if="input.name=='Gene expression data'" style="color: gray;" class="p-2"><i>Please upload RNA_*.csv if you use demo files for analysis</i></h6>
                                     <b-form-file
-                                        accept=".csv"
+                                        accept=".csv, .tsv"
                                         :id="`multiple-i-${input.id}-${input_idx}`"
                                         v-model="files[`multiple-i-${input.id}-${input_idx}`]"
                                         :placeholder="files[`multiple-i-${input.id}-${input_idx}`] ? files[`multiple-i-${input.id}-${input_idx}`].name : 'no file uploaded'"
@@ -446,7 +445,7 @@
                     <br>
                     <br>
 
-                    <div class = "col-md-8 justify-content-center submit-container">
+                    <div class = "col-md-8 justify-content-center submit-container" v-if="direct_submit">
                         <h4>
                             Or you can select a dataset:
                         </h4>
@@ -629,14 +628,19 @@
                     "array_none", "array_quantile", "RNA-Seq_TPM", "RNA-Seq_none"
                 ],
                 test_description: "<h5>There are something testing description</h5><ul><li>The first row is for something.</li><li>The first column is for something. It should be something.</li><li>Please be noted that the uploader is for something and somethind should be...</li></ul><p>This is the end of this line.</p>",
-
+                direct_submit:  false,
             };
         },
         created() {
             this.ds_info = window.gon.select_box_option;
-            if ( ['Regression Tools', 'Enrichment Tools', 'Consensus Tools', 'Unsupervised Tools'].indexOf( this.category_name) != -1 ) {
+            if ( ['Regression Tools', 'Enrichment Tools', 'Unsupervised Tools'].indexOf( this.category_name) != -1 ) {
                 this.isConv = true; //deconvolution analysis category are different from others
             }
+
+            if ( ['Regression Tools', 'Enrichment Tools', 'Datasets Comparison'].indexOf( this.category_name) != -1 ) {
+                this.direct_submit = true; //deconvolution analysis category are different from others
+            }
+
             this.updateApp(null, false);
             this.select_box_option = [];
 
@@ -1356,20 +1360,20 @@
                 document.getElementById("multiple-button").classList.toggle("btn-secondary");
                 document.getElementById("multiple-button").classList.toggle("btn-dark");
             },
-            resetMultipleUpload(input_idx) {
+            // resetMultipleUpload(input_idx) {
                 
-                for ( var k in this.app.inputs) {
-                    this.files["multiple-i-" + this.app.inputs[k].id + "-" + input_idx] = null;
-                }
+            //     for ( var k in this.app.inputs) {
+            //         this.files["multiple-i-" + this.app.inputs[k].id + "-" + input_idx] = null;
+            //     }
 
-                for ( var k in this.multiple_parameters) {
-                    this.parameters["multiple-p-" + this.multiple_parameters[k].id + "-" + input_idx] = null;
-                }
+            //     for ( var k in this.multiple_parameters) {
+            //         this.parameters["multiple-p-" + this.multiple_parameters[k].id + "-" + input_idx] = null;
+            //     }
 
                 
-                this.ds_selected[input_idx - 1] = "";
-                this.ds_param_selected[input_idx - 1] = "";
-            },
+            //     this.ds_selected[input_idx - 1] = "";
+            //     this.ds_param_selected[input_idx - 1] = "";
+            // },
             setSelectBox(){
                 var i = 0;
                 var s = "<option disabled vaule=''>Choose a file</option>";
