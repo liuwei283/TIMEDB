@@ -601,6 +601,8 @@ export default {
         };
     },
     created() {
+        this.refreshJobs();
+
         if (window.gon.isDemoJobPage == true) {
             this.refreshEnd = false;
             this.isDemo = true;
@@ -608,24 +610,20 @@ export default {
             this.jobName = window.gon.job_name
             this.searchJob();
         }
-        else {
-            // get all information of the table not real file
-            this.refreshJobs();
-        }
 
         // axios.get('/submit/job-query.json',).then(response => {this.analyses = response.data; console.log("Fetched analyses data:"); console.log(response.data)});
     },
 
     beforeMount() {
-        const getJobId = () => {
-            const urls = window.location.href.split('?');
-            if (urls.length <2) return;
-            else {
-                const params = urls[1].split("&").map(x => x.split("="));
-                return params.find(x => x[0]==="job_id")[1];
-            }
-        }
-        if (!this.job_id) this.job_id = getJobId();
+        // const getJobId = () => {
+        //     const urls = window.location.href.split('?');
+        //     if (urls.length <2) return;
+        //     else {
+        //         const params = urls[1].split("&").map(x => x.split("="));
+        //         return params.find(x => x[0]==="job_id")[1];
+        //     }
+        // }
+        // if (!this.job_id) this.job_id = getJobId();
     },
     mounted(){
         window.gon.viz_mode = "task-output";
