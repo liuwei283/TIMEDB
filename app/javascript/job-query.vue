@@ -601,14 +601,23 @@ export default {
         };
     },
     created() {
-        this.refreshJobs();
+        
 
         if (window.gon.isDemoJobPage == true) {
             this.refreshEnd = false;
             this.isDemo = true;
             this.job_id = window.gon.demo_result_id;
             this.jobName = window.gon.job_name
+
+            this.category = window.gon.category;
+            this.search_id = window.gon.search_id;
+            this.run_id = window.gon.run_id;
+
             this.searchJob();
+
+        }
+        else {
+            this.refreshJobs();
         }
 
         // axios.get('/submit/job-query.json',).then(response => {this.analyses = response.data; console.log("Fetched analyses data:"); console.log(response.data)});
@@ -885,6 +894,7 @@ export default {
                                 status: data.status};
         },
         refreshStatus() {
+            const { alertCenter } = this.$refs;
 
             console.log("Now refresh task", this.taskId)
             this.stdout = new Date() + " output test."
@@ -943,15 +953,17 @@ export default {
             if (this.job_id.length <= 0){
                 this.valid_name = false;
             }else {
-                this.all_jobs.forEach(j => {
-                    if (j.taskId === parseInt(this.job_id)) {
-                        this.jobName = j.taskName;
-                        this.category = j.category;
-                        this.search_id = j.analysis_id;
-                        this.run_id = j.run_id;
-                        console.log(this.category);
-                    }
-                })
+                if (this.isDemo != true) {
+                    this.all_jobs.forEach(j => {
+                        if (j.taskId === parseInt(this.job_id)) {
+                            this.jobName = j.taskName;
+                            this.category = j.category;
+                            this.search_id = j.analysis_id;
+                            this.run_id = j.run_id;
+                            console.log(this.category);
+                        }
+                    })
+                }
                 axios.post(
                     `/query-app-task/`,
                     objectToFormData({'job_id': this.job_id, 'is_demo': this.isDemo}),
@@ -1037,11 +1049,11 @@ export default {
             event.emit("GMT:query-finished", this);
 
         },
-        submitAll() {
+        // submitAll() {
 
             
 
-        },
+        // },
         refreshJobs() {
             this.refreshEnd = false;
             axios.post(
@@ -1065,28 +1077,28 @@ export default {
                     }, 1000);
             });
         },
-        getDemoJobs() {
-            axios.post(
-                `/query-demo-tasks/`,
-                null,
-            {  
-                headers: {
-                    'X-Requested-With': 'XMLHttpRequest',
-                    'X-CSRF-Token': document.head.querySelector('meta[name="csrf-token"]').content,
-                    'Content-Type': 'multipart/form-data',
-                },
-            })
-            .then(r => {
-                this.all_jobs = r.data.map((d, index) => {
-                    return  {index, ...d}
-                });
-            }).finally(() => {
-                // // wait 1 sec
-                //  setTimeout(() => {
-                //     this.refreshEnd = true;
-                //     }, 1000);
-            });
-        },
+        // getDemoJobs() {
+        //     axios.post(
+        //         `/query-demo-tasks/`,
+        //         null,
+        //     {  
+        //         headers: {
+        //             'X-Requested-With': 'XMLHttpRequest',
+        //             'X-CSRF-Token': document.head.querySelector('meta[name="csrf-token"]').content,
+        //             'Content-Type': 'multipart/form-data',
+        //         },
+        //     })
+        //     .then(r => {
+        //         this.all_jobs = r.data.map((d, index) => {
+        //             return  {index, ...d}
+        //         });
+        //     }).finally(() => {
+        //         // // wait 1 sec
+        //         //  setTimeout(() => {
+        //         //     this.refreshEnd = true;
+        //         //     }, 1000);
+        //     });
+        // },
         deleteJob(jobId){
             const { alertCenter } = this.$refs;
             axios.post(

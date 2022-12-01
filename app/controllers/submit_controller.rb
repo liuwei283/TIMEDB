@@ -156,6 +156,16 @@ class SubmitController < ApplicationController
   def query_demo
     demo_result_id = params[:demo_id]
     @jobName = params[:jobName]
+    @task = Task.find(demo_result_id)
+    gon.push run_id: @task.run_id
+    
+    if @task.analysis
+      gon.push search_id: @task.analysis.mid
+      gon.push category: @task.analysis.analysis_category.name
+    else
+      gon.push search_id: @task.pipeline.pid
+      gon.push category: ""
+    end
     gon.push demo_result_id: demo_result_id
     gon.push job_name: @jobName
     gon.push isDemoJobPage: true
