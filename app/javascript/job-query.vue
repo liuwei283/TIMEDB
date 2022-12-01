@@ -684,7 +684,7 @@ export default {
         chosenPicture:function(newValue) {
             
             var first_pic = this.outputs.find(x => x.name == newValue).files[0];
-            this.pictureViz = '/data/outputs' + first_pic.path + first_pic.name;
+            this.pictureViz = '/data/outputs' + first_pic.path + '/' + first_pic.name;
             console.log(first_pic.path + first_pic.name);
         
         },
@@ -903,7 +903,7 @@ export default {
                     console.log("Here outputing outputs data");
                     console.log(this.outputs);
                     var first_pic = this.outputs.find(x => x.name == "tcr2org_plot").files[0];
-                    this.pictureViz = '/data/outputs' + first_pic.path + first_pic.name;
+                    this.pictureViz = '/data/outputs' + first_pic.path + '/' + first_pic.name;
                     console.log(first_pic.path + first_pic.name);
                 }
             }).catch((error) => {
