@@ -204,14 +204,14 @@
                             class="tool-bar-el px-0 mb-1 col-md-3"/><!--v-if="data.outputs.length > 1"-->
                         
                         <dropdown-select
-                            v-if="job_status == 'finished' && module_names.length>1 && category!='New Category'"
+                            v-if="job_status == 'finished' && module_names.length>1"
                             right
                             v-model="chosenModule"
                             :options="module_names"
                             class="tool-bar-el px-0 mb-1 col-md-3"/><!--v-if="data.outputs.length > 1"-->
 
                         <dropdown-select
-                            v-if="job_status == 'finished' && category!='New Category'"
+                            v-if="job_status == 'finished' && jobName!='TCRanno_aeo'"
                             right
                             v-model="chosenPicture"
                             :options="picture_names"
@@ -423,8 +423,8 @@
                     <div id = "viz-card" v-if="category!='New Category'"> 
                         <VApp/>
                     </div>
-                    <div v-else>
-                        <img v-bind:src="pictureViz">
+                    <div v-else-if="jobName=='TCRanno_aeo'">
+                        <img v-bind:src="require(pictureViz)">
                     </div>
                 </b-card-body>
 
@@ -683,7 +683,7 @@ export default {
         chosenPicture:function() {
             
             var first_pic = this.outputs.find(x => x.name == chosenPicture).files[0];
-            this.pictureViz = require(first_pic.path + first_pic.name);
+            this.pictureViz = first_pic.path + first_pic.name;
             console.log(first_pic.path + first_pic.name);
         
         },
@@ -1000,9 +1000,11 @@ export default {
             event.emit("GMT:query-finished", this);
 
             //////////
-            if (this.category=="New Category") {
+            if (this.jobName=="TCRanno_aeo") {
+                console.log("Here outputing outputs data");
+                console.log(this.outputs);
                 var first_pic = this.outputs.find(x => x.name == "tcr2org_plot").files[0];
-                this.pictureViz = require(first_pic.path + first_pic.name);
+                this.pictureViz = first_pic.path + first_pic.name;
                 console.log(first_pic.path + first_pic.name);
             }
         },
