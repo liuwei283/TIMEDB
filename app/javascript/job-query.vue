@@ -605,8 +605,8 @@ export default {
             this.refreshEnd = false;
             this.isDemo = true;
             this.job_id = window.gon.demo_result_id;
-            this.searchJob();
             this.jobName = window.gon.job_name
+            this.searchJob();
         }
         else {
             // get all information of the table not real file
@@ -1134,7 +1134,7 @@ export default {
             this.submitted = false;
         },
         returnSubmission(){
-            window.location.href = '/';
+            window.location.href = '/submit/analyses';
         },
 
         downloadFile(path, name) {
