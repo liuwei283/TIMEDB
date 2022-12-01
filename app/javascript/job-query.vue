@@ -27,7 +27,7 @@
 
                     </b-input-group>
                     <p style="color:gray;font-size:1.4em;position:relative;right:30px;"><i>You could check the submitted task by Task ID.</i></p>
-                    <img v-bind:src="pictureViz">
+                    
                 </div>
 
                 <div class="local-jobs">
@@ -424,8 +424,8 @@
                     <div id = "viz-card" v-if="category!='New Category'"> 
                         <VApp/>
                     </div>
-                    <div v-else-if="jobName=='TCRanno_aeo'">
-                        <img v-bind:src="pictureViz">
+                    <div v-else-if="jobName=='TCRanno_aeo'" class="text-center">
+                        <img v-bind:src="pictureViz" style="width:80%;">
                     </div>
                 </b-card-body>
 
@@ -505,7 +505,7 @@ export default {
             chosenModule: 0,
             //module_names: [{value: 0, text: "fake module name 1"}, {value: 0, text: "fake module name 2"}],
             module_names: [],
-            pictureViz: '',
+            pictureViz: '/data/outputs/dir1/1.png',
             chosenPicture: "tcr2org_plot",
             picture_names: [{value: "tcr2org_plot", text: "tcr2org plot"}, {value: "tcr2ept_plot", text: "tcr2ept plot"}, {value: "tcr2ag_plot", text: "tcr2ag plot"}],
 
