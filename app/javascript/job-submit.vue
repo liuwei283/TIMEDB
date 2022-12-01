@@ -683,6 +683,10 @@
             console.log("Coming here here");
 
             console.log(this.analyses);
+
+            if (this.category_name == "New Category") {
+                document.getElementById("sidebar").style.display = "none";
+            }
         },
         computed: {
             displayedInputs() {
