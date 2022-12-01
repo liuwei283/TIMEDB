@@ -504,7 +504,7 @@ export default {
             chosenModule: 0,
             module_names: [{value: 0, text: "fake module name 1"}, {value: 0, text: "fake module name 2"}],
 
-            pictureViz: "",
+            pictureViz: '../assets/images/loading_icon.gif',
             chosenPicture: "tcr2org_plot",
             picture_names: [{value: "tcr2org_plot", text: "tcr2org plot"}, {value: "tcr2ept_plot", text: "tcr2ept plot"}, {value: "tcr2ag_plot", text: "tcr2ag plot"}],
 
@@ -986,21 +986,21 @@ export default {
         },
         updateGon(output) {
             event.emit("GMT:reset-query", this);
-            this.module_names = output.module_names.map((x, i) => ({value: i, text: x[0]}));
-            this.chosenModule = 0;
-            window.gon.module_name = output.module_names[this.chosenModule][1];
-            
-            window.gon.required_data = output.required_data;
-            if (!window.gon.urls) window.gon.urls = {};
-            window.gon.urls.chosen_file_paths = `/api/analysis/${output.analysis_id}/chosen_file_paths?visualizer=${this.chosenModule}`;
-            window.gon.urls.download_demo_file = `/api/analysis/${output.analysis_id}/download_demo_file?visualizer=${this.chosenModule}`;
-            console.log("outputing to be visualized plot:")
-            console.log(output.module_names[this.chosenModule][1]);
-            registerViz(output.module_names[this.chosenModule][1]);
-            event.emit("GMT:query-finished", this);
-
-            //////////
-            if (this.jobName=="TCRanno_aeo") {
+            if (this.category != "New Category") {
+                this.module_names = output.module_names.map((x, i) => ({value: i, text: x[0]}));
+                this.chosenModule = 0;
+                window.gon.module_name = output.module_names[this.chosenModule][1];
+                
+                window.gon.required_data = output.required_data;
+                if (!window.gon.urls) window.gon.urls = {};
+                window.gon.urls.chosen_file_paths = `/api/analysis/${output.analysis_id}/chosen_file_paths?visualizer=${this.chosenModule}`;
+                window.gon.urls.download_demo_file = `/api/analysis/${output.analysis_id}/download_demo_file?visualizer=${this.chosenModule}`;
+                console.log("outputing to be visualized plot:")
+                console.log(output.module_names[this.chosenModule][1]);
+                registerViz(output.module_names[this.chosenModule][1]);
+                event.emit("GMT:query-finished", this);
+            }
+            else if (this.jobName=="TCRanno_aeo") {
                 console.log("Here outputing outputs data");
                 console.log(this.outputs);
                 var first_pic = this.outputs.find(x => x.name == "tcr2org_plot").files[0];
