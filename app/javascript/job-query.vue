@@ -166,7 +166,12 @@
                         Back to query
                     </b-button>
 
-                    <b-button v-else class="btn btn-1 col-md-2" @click="returnSubmission" @mouseover="backIcon=backColor" @mouseleave="backIcon=backWhite;">
+                    <b-button v-else-if="isDemo && category!='New Category'" class="btn btn-1 col-md-2" @click="returnSubmission" @mouseover="backIcon=backColor" @mouseleave="backIcon=backWhite;">
+                        <img v-bind:src="backIcon">
+                        Back
+                    </b-button>
+
+                    <b-button v-else class="btn btn-1 col-md-2" @click="returnTCRSubmission" @mouseover="backIcon=backColor" @mouseleave="backIcon=backWhite;">
                         <img v-bind:src="backIcon">
                         Back
                     </b-button>
@@ -177,7 +182,7 @@
                         Task Monitor
                     </b-button>
 
-                    <b-button class="btn btn-1 col-md-2" @click="display=1" :class="{active:display==1}" v-if="jobName!='TCRanno_tcr2tcr' && job_status == 'finished'" @mouseover="visIcon=visColor" @mouseleave="visIcon=visWhite;">
+                    <b-button class="btn btn-1 col-md-2" @click="display=1" :class="{active:display==1}" v-if="jobName!='TCRanno Qualitative Annotation' && job_status == 'finished'" @mouseover="visIcon=visColor" @mouseleave="visIcon=visWhite;">
                         <img v-bind:src="visIcon">
                         Visualization
                     </b-button><!---->
@@ -215,7 +220,7 @@
                             class="tool-bar-el px-0 mb-1 col-md-3"/><!--v-if="data.outputs.length > 1"-->
 
                         <dropdown-select
-                            v-if="job_status == 'finished' && jobName=='TCRanno_aeo'"
+                            v-if="job_status == 'finished' && jobName=='TCRanno Qualitative+Quantitative Annotations'"
                             right
                             v-model="chosenPicture"
                             :options="picture_names"
@@ -233,8 +238,9 @@
                         <p>Please note that</p>
                         <ul>
                             <li>You can click refresh button to refresh task status.</li>
-                            <li>If the job is finished, visualization is avaliable through clicking the button above.</li>
+                            <li v-if="jobName!='TCRanno Qualitative Annotation'">If the job is finished, visualization is avaliable through clicking the button above.</li>
                             <li>You could rerun your task within 30 days.</li>
+                            <li>If the job is finished, an output file will be available for download (scroll down to the 'Outputs' tab)</li>
                         </ul>
                         <hr>
                     </div>
@@ -343,6 +349,7 @@
                                     <p class="font-italic">Console Output</p>
                                     <pre id="stdout" class="light">{{ taskDetails.tasks[taskDetails.activeTask].log.stdout }}</pre>
                                     <p class="font-italic">Error Message</p>
+                                    <p style="color:gray;font-size:0.8em;" ><i>Module loading and GATK-related errors are caused by server environment, please ignore them.</i></p>
                                     <pre id="stderr">{{ taskDetails.tasks[taskDetails.activeTask].log.stderr }}</pre>
                                 </div>
                             </div>
@@ -435,7 +442,7 @@
                     <div id = "viz-card" v-if="category!='New Category'"> 
                         <VApp/>
                     </div>
-                    <div v-else-if="jobName=='TCRanno_aeo'" class="text-center">
+                    <div v-else-if="jobName=='TCRanno Qualitative+Quantitative Annotations'" class="text-center">
                         <img v-bind:src="pictureViz" style="width:80%;">
                     </div>
                 </b-card-body>
@@ -923,7 +930,7 @@ export default {
                     this.params = response.data.message.node_records;
                 }
 
-                if (this.jobName=="TCRanno_aeo") {
+                if (this.jobName=="TCRanno Qualitative+Quantitative Annotations") {
                     console.log("Here outputing outputs data");
                     console.log(this.outputs);
                     var first_pic = this.outputs.find(x => x.name == "tcr2org_plot").files[0];
@@ -1146,7 +1153,9 @@ export default {
         returnSubmission(){
             window.location.href = '/submit/analyses';
         },
-
+        returnTCRSubmission() {
+            window.location.href = '/submit/tcrAnalyses';
+        },
         downloadFile(path, name) {
             window.open(`/api/download_target_file?file_path=/data/outputs${path}/${name}`);
         },

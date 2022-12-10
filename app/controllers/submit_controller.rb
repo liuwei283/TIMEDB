@@ -1,4 +1,5 @@
 class SubmitController < ApplicationController
+  skip_before_action :validate_cookie, only: [:tcrAnalyses]
   UID = 49
   PROJECT_ID = 393
   # $user_stor_dir = "#{Rails.root}/data/user"
@@ -18,6 +19,55 @@ class SubmitController < ApplicationController
       @analysis_categories = AnalysisCategory.order(:name)
       redirect_to action: "analysesCategory", cname: category1
     end
+  end
+
+  def tcrAnalyses
+
+    ### require cookie
+    unless session[:user_id]
+        @user = User.new
+        @user.dataset_n = 0
+        @user.save
+        session[:user_id] = @user.id
+    end
+    # check user
+    id = session[:user_id]
+    if User.exists? id
+        @user = User.find(id)
+        @user.touch
+
+    else 
+        # already expired
+        @user = User.new
+        @user.dataset_n = 0
+        @user.save
+        session[:user_id] = @user.id
+    end
+    ################################################################
+
+    @tcr_category = AnalysisCategory.find_by(name:"New Category")
+
+    gon.push cname: "New Category"
+    gon.push dark: session[:dark]
+    
+    @analyses = @tcr_category.analyses.all
+
+    # uid = session[:user_id]
+    # @user = User.find(uid)
+    # @datasets = @user.datasets
+    @datasets = Project.all.order(:project_name)
+    data = {}
+    @datasets.each do |ds|
+      ds_name = ds.project_name
+      # ps_num = ds.getProjectSources(ds_name).length
+      platform_name = ds.platform
+      # ds_dir = File.join(user_dir, ds_name)
+      # file_list = Dir.entries(ds_dir)[2..-1]
+      data[ds_name] = platform_name
+    end
+
+    gon.push select_box_option: data
+
   end
 
   def analysesCategory
@@ -163,7 +213,7 @@ class SubmitController < ApplicationController
       gon.push search_id: @task.analysis.mid
       gon.push category: @task.analysis.analysis_category.name
     else
-      gon.push search_id: @task.pipeline.pid
+      gon.push search_id: @task.analysis_pipeline.pid
       gon.push category: ""
     end
     gon.push demo_result_id: demo_result_id

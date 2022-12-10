@@ -49,9 +49,16 @@
                     </div>
                     <div class="index-banner">
                         <div class="container">
-                            <h2 class="display-4">
+                            <h2 style="font-size:5em;" v-if="category_name == 'New Category'">
+                                wTCRanno
+                            </h2>
+                            <h2 class="display-4" v-else>
                                 Analysis
                             </h2>
+                            <p style="color:gray;font-size:1.2em;" v-if="category_name == 'New Category'">The web implementation of TCRanno, provides basic qualitative and quantitative annotation functions for single input files.
+                            For advanced analyses (e.g. multi-sample analysis and group-wise comparisons) and more flexible parameters, 
+                            please utilize the tcranno Python package.
+                            </p>
                             <p class="lead mt-2">
                                 Please choose an analysis below:
                             </p>
@@ -117,17 +124,20 @@
                                         <!-- <div class = "col-md-3">
                                             <h4><i class="fa fa-caret-right fa-lg"></i>Run demo task</h4>
                                         </div> -->
-                                        <div @click="submitDemoTask()" class = "col-md-2" b-tooltip.hover :title="`Click here to run demo task for ${app.name}`">
-                                            <img class = "demoPng" id = "runDemoImage" v-bind:src="require('../assets/images/runDemo.png')" style="width:100%;">
-                                        </div>
                                         <div @click="checkDemoTask()" class = "col-md-2" b-tooltip.hover :title="`Click here to check demo task for ${app.name}`">
                                             <img class = "demoPng" id = "checkDemoImage" v-bind:src="require('../assets/images/checkDemo.png')" style="width:100%;">
+                                        </div>
+                                         <div @click="submitDemoTask()" class = "col-md-2" b-tooltip.hover :title="`Click here to run demo task for ${app.name}`">
+                                            <img class = "demoPng" id = "runDemoImage" v-bind:src="require('../assets/images/runDemo.png')" style="width:100%;">
                                         </div>
                                         <div class = "col-md-2">
                                         </div>
                                         <div class = "col-md-6">
                                             <h6 class="text-right">{{ app.name }}</h6>
                                             <h2 class = "text-right"> TASK SUBMISSISON </h2>
+                                        </div>
+                                        <div class="col-md-12">
+                                            <p style="color:black;font-size:1.1em;position:relative;left:25px;" >It takes a few minutes to <b style="color: #253959;">RUN DEMO</b>. Click <b style="color:#86e5e9;">DEMO RESULT</b> to see the precomputed demo results immediately</p>
                                         </div>
                                     </div>
                                         
@@ -337,12 +347,12 @@
                     <h1>Successfully</h1>
                     <h1>Submitted</h1>
                     <p>We are preparing your visualization,you can copy the code and check the status of your work in the <a ref = "goTo" :href = "`/submit/job-query`" id = "redirection-link">[workspace]</a>.</p>
-                    <div class = "row">
+                    <div class = "row justify-content-left">
                         
-                        <div class = "col-md-2">
-                            <b-btn :id = "copyButton" @click = "copyToClipboard" type = "button" class = "btn btn-dark">Copy</b-btn>
+                        <div class = "col-md-3">
+                            <b-btn :id = "copyButton" @click = "copyToClipboard" type = "button" class = "btn btn-dark">Copy the Task ID:</b-btn>
                         </div>
-                        <div class = "col-md-2">
+                        <div class = "col-md-1">
                             <button id = "jobIDButton" type = "button" class = "btn">{{jobID}}</button>
                         </div>
                     </div>

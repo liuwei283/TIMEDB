@@ -1,5 +1,5 @@
 class Admin::VisualizersController < ApplicationController
-  http_basic_authenticate_with name: "admin", password: "Lovelace"
+  http_basic_authenticate_with name: "admin", password: "timedbccc123456"
   before_action :set_visualizers
   before_action :set_visualizer, only: %w(edit update destroy)
 
