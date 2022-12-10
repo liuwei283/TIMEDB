@@ -151,7 +151,7 @@
                                         </div>
                                     </div> -->
                                     
-                                    <div id = "file-upload-step" class = "row justify-content-center submit-container-lg">
+                                    <div id = "file-upload-step" class = "justify-content-center submit-container-lg">
                                         <div>
                                             <h3 v-if="picked_single_multiple=='multiple'" class = "text-center">Batch effect config</h3>
                                             <h3 v-else class = "text-center">File Submission</h3>
@@ -171,10 +171,10 @@
                                                 </div> 
                                             </div> -->
 
-                                            <div class = "row submit-box justify-content-center" style="min-width: 500px;">
-                                                <div v-if="picked_single_multiple=='single'" class = "row justify-content-center">
+                                            <div class = "submit-box justify-content-center" style="min-width: 700px;">
+                                                <div v-if="picked_single_multiple=='single'" class = "justify-content-center">
                                                     <div class = "row justify-content-center">
-                                                        <div class="text-center" v-for="input in displayedInputs" :key="input.id">
+                                                        <div class="text-center col-md-6" v-for="input in displayedInputs" :key="input.id">
                                                             <label :for="`i-${input.id}`">{{ input.name }}
                                                                 <span v-if="input.required" class="required">*</span>
                                                             </label>
@@ -185,15 +185,17 @@
                                                     </div>
 
                                                     <div class = "row justify-content-center" v-if="direct_submit">
-                                                        <label>
-                                                            <span>Or you can select a dataset: </span>
-                                                            <i class="fa fa-question-circle" v-b-tooltip.rightbottom.hover title="You may choose one dataset with single project source to upload merged files"></i>
-                                                        </label>
+                                                        <div class= "col-md-8">
+                                                            <label>
+                                                                <span>Or you can select a dataset: </span>
+                                                                <i class="fa fa-question-circle" v-b-tooltip.rightbottom.hover title="You may choose one dataset with single project source to upload merged files"></i>
+                                                            </label>
 
-                                                        <model-select :options="select_box_option"
-                                                                                v-model="ds_selected"
-                                                                                >
-                                                        </model-select>
+                                                            <model-select :options="select_box_option"
+                                                                                    v-model="ds_selected"
+                                                                                    >
+                                                            </model-select>
+                                                        </div>
 
                                                         <!-- <b-form-select @focus="updateStepToFile()" class="col-md-8" 
                                                             name="selected-dataset"
@@ -237,13 +239,14 @@
                                         
                                     </div>
 
-                                    <div id="parameter-setting-step" class = "row justify-content-center submit-container-lg" v-if="displayedSingleParams.length>0 || parameters_input.length>0">
+                                    <div id="parameter-setting-step" class = "justify-content-center submit-container-lg" v-if="displayedSingleParams.length>0 || parameters_input.length>0">
                                         <div class="set-param-section">
 
                                             <h3 class = "text-center">Parameter setting</h3>
                                             <br>
 
-                                            <div class = "row submit-box justify-content-center;">
+                                            <div class = "submit-box justify-content-center;">
+                                                <div class="row">
                                                 <div v-if="displayedSingleParams.length > 0" class = "col-md-6">
 
                                                     <div class="row" style="height:350px; overflow-y:scroll; display:flex; flex-direction: row; justify-content: center; align-items:center;">
@@ -321,6 +324,7 @@
                                                 <div class = "col-md-6" style="height:350px; overflow:scroll; justify-content: center;">
                                                     <h2>Parameters description</h2>
                                                     <div id = "single_params_desc" v-html="single_params_desc"></div>
+                                                </div>
                                                 </div>
                                             </div>
                                             <p v-if="displayedSingleParams.length == 0">No Parameters.</p>
@@ -647,7 +651,7 @@
                 this.isConv = true; //deconvolution analysis category are different from others
             }
 
-            if ( ['Regression Tools', 'Enrichment Tools', 'Datasets Comparison'].indexOf( this.category_name) != -1 ) {
+            if ( ['Regression Tools', 'Enrichment Tools', 'Datasets Comparison', 'Unsupervised Tools', 'Differential Expression'].indexOf( this.category_name) != -1 ) {
                 this.direct_submit = true; //deconvolution analysis category are different from others
             }
 

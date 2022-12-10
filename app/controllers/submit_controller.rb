@@ -569,8 +569,9 @@ class SubmitController < ApplicationController
 
             @dataset = Project.find_by(project_name: ds_name)
 
-            
-            combine_inputs_array[file_names_revert['Clinical data']].push("/data/clinical/Clinical_#{ds_name}.csv")
+            if file_names_revert['Clinical data']
+              combine_inputs_array[file_names_revert['Clinical data']].push("/data/clinical/Clinical_#{ds_name}.csv")
+            end
             combine_inputs_array[file_names_revert['Gene expression data']].push("/data/rna/RNA_#{ds_name}.csv")
 
             # Rails.logger.debug "Sucess here - 1"
