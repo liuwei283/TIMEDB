@@ -229,6 +229,10 @@
 
                         <p style="color:gray;font-size:1.4em;position:relative;left:20px;" v-if="job_status == 'finished' && taskOutputs.length>1" ><i>You could select different task outputs to check their visualizations.</i></p>
                     </div>
+                    <p v-if="category!='New Category'" style="font-size:1.5em;">
+                        click <a href='https://timedb.deepomics.org/submit/tcrAnalyses'>here</a> to go back to wTCRanno main page.
+                    </p>
+
                 </b-card-header>
 
 
@@ -239,9 +243,9 @@
                         <p>Please note that</p>
                         <ul>
                             <li>You can click refresh button to refresh task status.</li>
-                            <li v-if="jobName!='TCRanno Qualitative Annotation'">If the job is finished, visualization is avaliable through clicking the button above.</li>
+                            <li v-if="jobName!='TCRanno Qualitative Annotation'">If the job is finished, visualization is available through clicking the 'Visualization' button above.</li>
                             <li>You could rerun your task within 30 days.</li>
-                            <li>If the job is finished, an output file will be available for download (scroll down to the 'Outputs' tab)</li>
+                            <li>If the job is finished, output files will be available for download (scroll down to the 'Outputs' tab)</li>
                         </ul>
                         <hr>
                     </div>
@@ -350,7 +354,7 @@
                                     <p class="font-italic">Console Output</p>
                                     <pre id="stdout" class="light">{{ taskDetails.tasks[taskDetails.activeTask].log.stdout }}</pre>
                                     <p class="font-italic">Error Message</p>
-                                    <p style="color:gray;font-size:0.8em;" ><i>Module loading and GATK-related errors are caused by server environment, please ignore them.</i></p>
+                                    <p style="color:gray;font-size:0.8em;" ><i>Module-loading, GATK-related and matplotlib-related errors do not affect the running, please ignore them.</i></p>
                                     <pre id="stderr">{{ taskDetails.tasks[taskDetails.activeTask].log.stderr }}</pre>
                                 </div>
                             </div>

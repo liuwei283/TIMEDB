@@ -672,7 +672,8 @@
             }
 
             axios.get('/submit/analysesCategory.json', { params: { cname: this.category_name}  }).then(response => {
-                this.analyses = response.data; console.log(response.data)
+                this.analyses = response.data; 
+                console.log(response.data);
             }).finally(() => {
                 if (this.analyses.length == 1) {
                     this.updateApp(this.analyses[0], true);
@@ -695,12 +696,7 @@
 
             this.multiple_completed = Array(10).fill(false)
             console.log("Coming here here");
-
             console.log(this.analyses);
-
-            if (this.category_name == "New Category") {
-                document.getElementById("sidebar").style.display = "none";
-            }
         },
         computed: {
             displayedInputs() {

@@ -47,6 +47,7 @@ class SubmitController < ApplicationController
 
     @tcr_category = AnalysisCategory.find_by(name:"New Category")
 
+
     gon.push cname: "New Category"
     gon.push dark: session[:dark]
     
