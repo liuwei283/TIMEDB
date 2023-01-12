@@ -200,8 +200,8 @@
                         <img v-bind:src="refreshIcon">
                         Refresh Status
                     </b-button>
-                    <p v-if="jobName=='TCRanno Qualitative Annotation'" style="color:gray;font-size:1.2em;">Scroll down to the 'Outputs' tab to download the demo output file</p>
-                    <p v-if="jobName=='TCRanno Qualitative and Quantitative Annotations'" style="color:gray;font-size:1.2em;">Click 'Visualization' to view the generated plots. Scroll down to the 'Outputs' tab to download all demo output files.</p>
+                    <p v-if="jobName=='TCRanno Qualitative Annotation'" style="color:gray;font-size:1.2em;margin-top: 5px;">Scroll down to the 'Outputs' tab to download the demo output file</p>
+                    <p v-if="jobName=='TCRanno Qualitative and Quantitative Annotations'" style="color:gray;font-size:1.2em;margin-top: 5px;">Click 'Visualization' to view the generated plots. Scroll down to the 'Outputs' tab to download all demo output files.</p>
                     
 
                     <div class="switchBtn mt-4 mb-4">
@@ -229,7 +229,7 @@
 
                         <p style="color:gray;font-size:1.4em;position:relative;left:20px;" v-if="job_status == 'finished' && taskOutputs.length>1" ><i>You could select different task outputs to check their visualizations.</i></p>
                     </div>
-                    <p v-if="category!='New Category'" style="font-size:1.5em;">
+                    <p v-if="category=='New Category'" style="font-size:1.5em;margin-top: 5px;">
                         click <a href='https://timedb.deepomics.org/submit/tcrAnalyses'>here</a> to go back to wTCRanno main page.
                     </p>
 
