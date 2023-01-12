@@ -7,15 +7,15 @@ We have developed admin pages to help maintain and update TIMEDB platform.</p>
 1. Permissions have been granted to administration accounts to perform multiple database operations, including but not limited to new project and sample records insertion, clinical data uploading, data file integration and reprocessing.
 <br>
 
-<img src="../data/image/tutorial/admin_f1.png" style="width:600px; height: 300px; margin: 15px;">
+<img src="../data/image/tutorial/admin_f1.png" style="width:600px; height: 400px; margin: 15px;">
 <br>
 
     
 2. New analysis modules and pipelines which have passed testing can be integrated with our platform easily to provide servies.
 <br>
 
-<img src="../data/image/tutorial/admin_f2.png" style="width:600px; height: 300px; margin: 15px;">
-<img src="../data/image/tutorial/admin_f3.png" style="width:600px; height: 300px; margin: 15px;">
+<img src="../data/image/tutorial/admin_f2.png" style="width:600px; height: 400px; margin: 15px;">
+<img src="../data/image/tutorial/admin_f3.png" style="width:600px; height: 400px; margin: 15px;">
 <br>
 
 
@@ -23,8 +23,8 @@ We have developed admin pages to help maintain and update TIMEDB platform.</p>
 <br>
 
 
-<img src="../data/image/tutorial/admin_f4.png" style="width:600px; height: 300px; margin: 15px;">
-<img src="../data/image/tutorial/admin_f5.png" style="width:600px; height: 300px; margin: 15px;">
+<img src="../data/image/tutorial/admin_f4.png" style="width:600px; height: 400px; margin: 15px;">
+<img src="../data/image/tutorial/admin_f5.png" style="width:600px; height: 400px; margin: 15px;">
 
 <br>
 

@@ -201,7 +201,7 @@
                         Refresh Status
                     </b-button>
                     <p v-if="jobName=='TCRanno Qualitative Annotation'" style="color:gray;font-size:1.2em;">Scroll down to the 'Outputs' tab to download the demo output file</p>
-                    <p v-if="jobName=='TCRanno Qualitative_Quantitative Annotations'" style="color:gray;font-size:1.2em;">Click 'Visualization' to view the generated plots. Scroll down to the 'Outputs' tab to download all demo output files.</p>
+                    <p v-if="jobName=='TCRanno Qualitative and Quantitative Annotations'" style="color:gray;font-size:1.2em;">Click 'Visualization' to view the generated plots. Scroll down to the 'Outputs' tab to download all demo output files.</p>
                     
 
                     <div class="switchBtn mt-4 mb-4">
@@ -221,7 +221,7 @@
                             class="tool-bar-el px-0 mb-1 col-md-3"/><!--v-if="data.outputs.length > 1"-->
 
                         <dropdown-select
-                            v-if="job_status == 'finished' && jobName=='TCRanno Qualitative_Quantitative Annotations'"
+                            v-if="job_status == 'finished' && jobName=='TCRanno Qualitative and Quantitative Annotations'"
                             right
                             v-model="chosenPicture"
                             :options="picture_names"
@@ -443,7 +443,7 @@
                     <div id = "viz-card" v-if="category!='New Category'"> 
                         <VApp/>
                     </div>
-                    <div v-else-if="jobName=='TCRanno Qualitative_Quantitative Annotations'" class="text-center">
+                    <div v-else-if="jobName=='TCRanno Qualitative and Quantitative Annotations'" class="text-center">
                         <img v-bind:src="pictureViz" style="width:80%;">
                     </div>
                 </b-card-body>
@@ -931,7 +931,7 @@ export default {
                     this.params = response.data.message.node_records;
                 }
 
-                if (this.jobName=="TCRanno Qualitative_Quantitative Annotations") {
+                if (this.jobName=="TCRanno Qualitative and Quantitative Annotations") {
                     console.log("Here outputing outputs data");
                     console.log(this.outputs);
                     var first_pic = this.outputs.find(x => x.name == "tcr2org_plot").files[0];
