@@ -1,4 +1,4 @@
-* [Home](https://timedb.deepomics.org/home/ ':target=_self')
+* [Home](https://timedb.deepomics.org/ ':target=_self')
 * Database
   * [Database Information](https://timedb.deepomics.org/database/overview/ ':target=_self')
   * [Cancers Detail](https://timedb.deepomics.org/cancers ':target=_self')
