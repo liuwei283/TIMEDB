@@ -181,6 +181,14 @@
                                                             <div v-b-modal="'single-upload-' + input.id" class="uploadPng text-center justify-content-center container" @click="updateStepToFile()">
                                                                 <img v-bind:src="require('../assets/images/big_upload.png')" style="width:90%">
                                                             </div>
+
+                                                            <div class = "text-center" v-if="files[`i-${input.id}`]">
+                                                                <i class="fa fa-check" aria-hidden="true" style="color:green"></i>
+                                                            </div>
+                                                            <div class = "text-center" v-else>
+                                                                <i class="fa fa-times" aria-hidden="true" style="color:red"></i>
+                                                            </div>
+
                                                         </div>
                                                     </div>
 
@@ -391,7 +399,7 @@
                                 :id="`i-${input.id}`"
                                 v-model="files[`i-${input.id}`]"
                                 :state="inputValid[`i-${input.id}`]"
-                                :placeholder="files[`i-${input.id}`]? files[`i-${input.id}`]:`Choose a file or drop it here...`"
+                                :placeholder="files[`i-${input.id}`]? files[`i-${input.id}`].name:`Choose a file or drop it here...`"
                                 drop-placeholder="Drop file here..." 
                                 :name="`i-${input.id}`"
                                 :disabled="picked_single_multiple=='single' && ds_selected != ''"
