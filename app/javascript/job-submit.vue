@@ -111,7 +111,6 @@
                             </div>
 
 
-                            <!-- <img v-if="!submittted" v-bind:src="require('../assets/images/nav-submit-gray.png')"> -->
                             <img v-if="submitted == true" v-bind:src="require('../assets/images/nav-submit-blue.png')">
                             <img v-else v-bind:src="require('../assets/images/nav-submit-gray.png')">
                             <br>                      
