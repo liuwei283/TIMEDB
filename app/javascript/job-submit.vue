@@ -49,15 +49,20 @@
                     </div>
                     <div class="index-banner">
                         <div class="container">
-                            <h2 style="font-size:5em;" v-if="category_name == 'New Category'">
+                            <h2 style="font-size:5em;" v-if="category_name == 'wTCRanno'">
                                 wTCRanno
+                            </h2>
+                            <h2 style="font-size:5em;" v-else-if="category_name == 'TCRclub'">
+                                TCRclub
                             </h2>
                             <h2 class="display-4" v-else>
                                 Analysis
                             </h2>
-                            <p style="color:gray;font-size:1.2em;" v-if="category_name == 'New Category'">The web implementation of TCRanno, provides basic qualitative and quantitative annotation functions for single input files.
+                            <p style="color:gray;font-size:1.2em;" v-if="category_name == 'wTCRanno'">The web implementation of TCRanno, provides basic qualitative and quantitative annotation functions for single input files.
                             For advanced analyses (e.g. multi-sample analysis and group-wise comparisons) and more flexible parameters, 
                             please utilize the tcranno Python package.
+                            </p>
+                            <p style="color:gray;font-size:1.2em;" v-else-if="category_name == 'TCRclub'">A tool to cluster T cells by integrating sc-RNA seq and sc-TCR seq on local harmony.
                             </p>
                             <p class="lead mt-2">
                                 Please choose an analysis below:

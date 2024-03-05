@@ -55,11 +55,10 @@ div class=('active' if !@analysis_category.blank? && @analysis_category.name == 
 div class=('active' if !@analysis_category.blank? && @analysis_category.name == "Differential Expression")
     p 
         = link_to "Differential Expression", {:controller => "submit", :action => "analysesCategory", :cname => "Differential Expression"}
-div class=('active' if !@analysis_category.blank? && @analysis_category.name == "New Category")
+div class=('active' if !@analysis_category.blank? && @analysis_category.name == "wTCRanno")
     p 
-        = link_to "TCR Analysis", {:controller => "submit", :action => "analysesCategory", :cname => "New Category"}
-    
-
-    
-
+        = link_to "wTCRanno", {:controller => "submit", :action => "analysesCategory", :cname => "wTCRanno"}
+div class=('active' if !@analysis_category.blank? && @analysis_category.name == "TCRclub")
+    p 
+        = link_to "TCRclub", {:controller => "submit", :action => "analysesCategory", :cname => "TCRclub"}
 

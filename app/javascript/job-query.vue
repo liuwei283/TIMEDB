@@ -166,7 +166,7 @@
                         Back to query
                     </b-button>
 
-                    <b-button v-else-if="isDemo && category!='New Category'" class="btn btn-1 col-md-2" @click="returnSubmission" @mouseover="backIcon=backColor" @mouseleave="backIcon=backWhite;">
+                    <b-button v-else-if="isDemo && category!='wTCRanno'" class="btn btn-1 col-md-2" @click="returnSubmission" @mouseover="backIcon=backColor" @mouseleave="backIcon=backWhite;">
                         <img v-bind:src="backIcon">
                         Back
                     </b-button>
@@ -182,12 +182,12 @@
                         Task Monitor
                     </b-button>
 
-                    <b-button class="btn btn-1 col-md-2" @click="display=1" :class="{active:display==1}" v-if="jobName!='TCRanno Qualitative Annotation' && job_status == 'finished'" @mouseover="visIcon=visColor" @mouseleave="visIcon=visWhite;">
+                    <b-button class="btn btn-1 col-md-2" @click="display=1" :class="{active:display==1}" v-if="jobName!='TCRanno Qualitative Annotation' && category != 'TCRclub' && job_status == 'finished'" @mouseover="visIcon=visColor" @mouseleave="visIcon=visWhite;">
                         <img v-bind:src="visIcon">
                         Visualization
                     </b-button><!---->
 
-                    <b-button class="btn btn-1 col-md-2" disabled v-else-if="jobName!='TCRanno Qualitative Annotation'" @mouseover="visIcon=visColor" @mouseleave="visIcon=visWhite;">
+                    <b-button class="btn btn-1 col-md-2" disabled v-else-if="jobName!='TCRanno Qualitative Annotation' && category != 'TCRclub'" @mouseover="visIcon=visColor" @mouseleave="visIcon=visWhite;">
                         <img v-bind:src="visIcon">
                         Visualization
                     </b-button>
@@ -229,7 +229,7 @@
 
                         <p style="color:gray;font-size:1.4em;position:relative;left:20px;" v-if="job_status == 'finished' && taskOutputs.length>1" ><i>You could select different task outputs to check their visualizations.</i></p>
                     </div>
-                    <p v-if="category=='New Category'" style="font-size:1.5em;margin-top: 5px;">
+                    <p v-if="category=='wTCRanno'" style="font-size:1.5em;margin-top: 5px;">
                         click <a href='https://timedb.deepomics.org/submit/tcrAnalyses'>here</a> to go back to wTCRanno main page.
                     </p>
 
@@ -444,7 +444,7 @@
                 </b-card-body>
 
                 <b-card-body v-show="display==1" class="p-2">
-                    <div id = "viz-card" v-if="category!='New Category'"> 
+                    <div id = "viz-card" v-if="category!='wTCRanno' && category!='TCRclub'"> 
                         <VApp/>
                     </div>
                     <div v-else-if="jobName=='TCRanno Qualitative and Quantitative Annotations'" class="text-center">
@@ -1032,7 +1032,7 @@ export default {
         },
         updateGon(output) {
             event.emit("GMT:reset-query", this);
-            if (this.category != "New Category") {
+            if (this.category != "wTCRanno" && this.category != 'TCRclub') {
                 this.module_names = output.module_names.map((x, i) => ({value: i, text: x[0]}));
                 this.chosenModule = 0;
                 window.gon.module_name = output.module_names[this.chosenModule][1];

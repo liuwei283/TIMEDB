@@ -45,10 +45,10 @@ class SubmitController < ApplicationController
     end
     ################################################################
 
-    @tcr_category = AnalysisCategory.find_by(name:"New Category")
+    @tcr_category = AnalysisCategory.find_by(name:"wTCRanno")
 
 
-    gon.push cname: "New Category"
+    gon.push cname: "wTCRanno"
     gon.push dark: session[:dark]
     
     @analyses = @tcr_category.analyses.all

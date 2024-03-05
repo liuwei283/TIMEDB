@@ -158,7 +158,7 @@
                     </td>
                     <td> 
                         <%if @csv_test[p.project_name]['Consensus']=='true'%>
-                        <%= link_to("#{p.project_name}_consensus.csv","/public/data/cell_data/#{p.project_name}_Consensus.csv")%>
+                        <%= link_to("#{p.project_name}_consensus.csv","/public/data/cell_data/Consensus/#{p.project_name}_Consensus.csv")%>
                         <% else %>No data
                         <% end %>
                     </td>
@@ -184,10 +184,9 @@
                         <%if @csv_test[p.project_name]['subtype']=='true'%>
                         <%= link_to("#{p.project_name}_c1_c6.csv","/public/data/subtype/c1_c6/project/#{p.project_name}_c1_c6.csv")%>
                         <% else %>No data
-                                <%if @msg_test[p.project_name+'C1-C6' ] %>
-                                    <%= @msg_test[p.project_name+'C1-C6']["reason"]%>
-                                <% end %>
-                        
+                            <%if @msg_test[p.project_name+'C1-C6' ] %>
+                                <%= @msg_test[p.project_name+'C1-C6']["reason"]%>
+                            <% end %>
                         <% end %>
                     </td>
                 </tr>
