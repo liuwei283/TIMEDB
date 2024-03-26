@@ -1,5 +1,5 @@
 class SubmitController < ApplicationController
-  skip_before_action :validate_cookie, only: [:tcrAnalyses]
+  skip_before_action :validate_cookie, only: [:tcrAnalyses, :tcrclub]
   UID = 49
   PROJECT_ID = 393
   # $user_stor_dir = "#{Rails.root}/data/user"
@@ -70,6 +70,54 @@ class SubmitController < ApplicationController
     gon.push select_box_option: data
 
   end
+
+  def tcrclub
+
+    ### require cookies
+    unless session[:user_id] # new users
+      @user = User.new
+      @user.dataset_n = 0
+      @user.save
+      session[:user_id] = @user.id
+    end
+    # check whether user has expired
+    user_id = session[:user_id]
+    if User.exists? user_id
+      @user = User.find(user_id)
+      @user.touch
+    else
+      @user = User.new
+      @user.dataset_n = 0
+      @user.save
+      session[:user_id] = @user.id
+    end
+
+    ################################################################
+    @tcrclub_cat = AnalysisCategory.find_by(name:"TCRclub")
+
+    gon.push cname: "TCRclub"
+    gon.push dark: session[:dark]
+    
+    @analyses = @tcrclub_cat.analyses.all
+
+    # uid = session[:user_id]
+    # @user = User.find(uid)
+    # @datasets = @user.datasets
+    @datasets = Project.all.order(:project_name)
+    data = {}
+    @datasets.each do |ds|
+      ds_name = ds.project_name
+      # ps_num = ds.getProjectSources(ds_name).length
+      platform_name = ds.platform
+      # ds_dir = File.join(user_dir, ds_name)
+      # file_list = Dir.entries(ds_dir)[2..-1]
+      data[ds_name] = platform_name
+    end
+
+    gon.push select_box_option: data
+
+  end
+
 
   def analysesCategory
 

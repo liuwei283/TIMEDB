@@ -166,12 +166,16 @@
                         Back to query
                     </b-button>
 
-                    <b-button v-else-if="isDemo && category!='wTCRanno'" class="btn btn-1 col-md-2" @click="returnSubmission" @mouseover="backIcon=backColor" @mouseleave="backIcon=backWhite;">
+                    <b-button v-else-if="isDemo && category!='wTCRanno' && category!='TCRclub'" class="btn btn-1 col-md-2" @click="returnSubmission" @mouseover="backIcon=backColor" @mouseleave="backIcon=backWhite;">
                         <img v-bind:src="backIcon">
                         Back
                     </b-button>
 
-                    <b-button v-else class="btn btn-1 col-md-2" @click="returnTCRSubmission" @mouseover="backIcon=backColor" @mouseleave="backIcon=backWhite;">
+                    <b-button v-else-if="isDemo && category=='wTCRanno'" class="btn btn-1 col-md-2" @click="returnTCRannoSubmission" @mouseover="backIcon=backColor" @mouseleave="backIcon=backWhite;">
+                        <img v-bind:src="backIcon">
+                        Back
+                    </b-button>
+                    <b-button v-else-if="isDemo && category=='TCRclub'" class="btn btn-1 col-md-2" @click="returnTCRclubSubmission" @mouseover="backIcon=backColor" @mouseleave="backIcon=backWhite;">
                         <img v-bind:src="backIcon">
                         Back
                     </b-button>
@@ -231,6 +235,9 @@
                     </div>
                     <p v-if="category=='wTCRanno'" style="font-size:1.5em;margin-top: 5px;">
                         click <a href='https://timedb.deepomics.org/submit/tcrAnalyses'>here</a> to go back to wTCRanno main page.
+                    </p>
+                    <p v-if="category=='TCRclub'" style="font-size:1.5em;margin-top: 5px;">
+                        click <a href='https://timedb.deepomics.org/submit/tcrclub'>here</a> to go back to TCRclub main page.
                     </p>
 
                 </b-card-header>
@@ -1158,8 +1165,11 @@ export default {
         returnSubmission(){
             window.location.href = '/submit/analyses';
         },
-        returnTCRSubmission() {
+        returnTCRannoSubmission() {
             window.location.href = '/submit/tcrAnalyses';
+        },
+        returnTCRclubSubmission() {
+            window.location.href = '/submit/tcrclub';
         },
         downloadFile(path, name) {
             window.open(`/api/download_target_file?file_path=/data/outputs${path}/${name}`);
